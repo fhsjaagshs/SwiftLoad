@@ -1,0 +1,64 @@
+//
+// Prefix header for all source files of the 'downloader' target in the 'downloader' project
+//
+
+#import <Availability.h>
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+    #import <DropboxSDK/DropboxSDK.h>
+    #import <MobileCoreServices/MobileCoreServices.h>
+    #import <QuartzCore/QuartzCore.h>
+    #import <MessageUI/MessageUI.h>
+    #import <AVFoundation/AVFoundation.h>
+    #import <MediaPlayer/MediaPlayer.h>
+    #import <GameKit/GameKit.h>
+    #import <AudioToolbox/AudioToolbox.h>
+    #import <CommonCrypto/CommonCrypto.h>
+
+    #import "NetworkUtils.h"
+
+    #import "UIViewController+AutoNib.h"
+    #import "UIAlertView+BlockExtensions.h"
+    #import "UIActionSheet+BlockExtensions.h"
+    #import "UIScrollView+UIScrollView_ZoomToPoint.h"
+
+    #import "HTTPServer.h"
+    #import "DAVConnection.h"
+    #import "MBProgressHUD.h"
+    #import "BKSessionController.h"
+    #import "PullToRefreshView.h"
+    #import "SCRFTPRequest.h"
+    #import "metadataRetriever.h"
+    #import "MIMEUtils.h"
+
+    #import "webDAVHelp.h"
+    #import "downloaderViewController.h"
+    #import "MyFilesViewDetailViewController.h"
+    #import "AudioPlayerViewController.h"
+    #import "pictureView.h"
+    #import "dedicatedTextEditor.h"
+    #import "moviePlayerView.h"
+    #import "fileInfo.h"
+    #import "webDAVViewController.h"
+    #import "webBrowser.h"
+    #import "MyFilesViewController.h"
+    #import "SettingsView.h"
+
+    #import "DTCustomColoredAccessory.h"
+    #import "HatchedView.h"
+    #import "ShadowedTableView.h"
+
+    #import "ZipFile.h"
+    #import "ZipException.h"
+    #import "FileInZipInfo.h"
+    #import "ZipWriteStream.h"
+    #import "ZipReadStream.h"
+
+    #import "AudioConverter.h"
+    #import "downloaderAppDelegate.h"
+    
+    #import "ZoomingImageView.h"
+
+#endif
