@@ -1,8 +1,8 @@
 
 *.xcuserstate
 <<<<<<< HEAD
-/SwiftLoad.xcodeproj/xcuserdata/[^.]*
-/SwiftLoad.xcodeproj/project.xcworkspace/[^.]*
+/SwiftLoad.xcodeproj/xcuserdata
+/SwiftLoad.xcodeproj/project.xcworkspace
 .DS_Store
 .DS_Store?
 ._*
