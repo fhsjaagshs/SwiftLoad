@@ -17,10 +17,22 @@
 
 @synthesize dirs, sideSwipeDirection, sideSwipeCell, sideSwipeView, animatingSideSwipe, drawer, drawerCopyButton, drawerPasteButton, editButton, theTableView, folderPathTitle, mtrButton, backButton, homeButton, filelist, movingFileFirst, pastingPath, docController, isCut, copiedList, perspectiveCopiedList;
 
+- (void)removeAllCheckmarks {
+    for (int i = 0; i < self.filelist.count; i++) {
+        UITableViewCell *cell = [self.theTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+        cell.editingAccessoryType = UITableViewCellEditingStyleNone;
+    }
+}
+
 - (void)pasteInLocation:(NSString *)location {
     for (NSString *oldPath in self.copiedList) {
         NSString *newPath = [location stringByAppendingPathComponent:[oldPath lastPathComponent]];
         NSError *error = nil;
+        
+        if ([[NSFileManager defaultManager]fileExistsAtPath:newPath]) {
+            NSString *ext = [newPath pathExtension];
+            
+        }
         
         if (self.isCut) {
             [[NSFileManager defaultManager]moveItemAtPath:oldPath toPath:newPath error:&error];
@@ -45,6 +57,8 @@
     [self.copiedList addObjectsFromArray:self.perspectiveCopiedList];
     [self flushPerspectiveCopyList];
     [self saveCopiedList];
+    [self updateCopyButtonState];
+    [self removeAllCheckmarks];
 }
 
 // BOOL value of YES is success adding to the array
@@ -130,7 +144,7 @@
     [self verifyCopiedList];
     [self verifyProspectiveCopyList];
     
-    NSMutableDictionary *changedDict = [[(NSDictionary *)notif mutableCopy]autorelease];
+    NSMutableDictionary *changedDict = [[(NSDictionary *)[notif object]mutableCopy]autorelease];
     
     NSString *old = [changedDict objectForKey:@"old"];
     NSString *new = [changedDict objectForKey:@"new"];
@@ -165,6 +179,7 @@
                 [self flushPerspectiveCopyList];
             }
         }
+        [self updateCopyButtonState];
     } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil]autorelease];
     
     actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
@@ -1625,8 +1640,9 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self resignFirstResponder];
-    [self saveCopiedList];
+    [self flushCopiedList];
     [self flushPerspectiveCopyList];
+    self.isCut = NO;
     [self saveIsCutBOOL];
 }
 
