@@ -19,14 +19,13 @@
     self.view = [[[UIView alloc]initWithFrame:screenBounds]autorelease];
     
     self.theTextField = [[[CustomTextField alloc]initWithFrame:CGRectMake(69, 7, screenBounds.size.width-75, 31)]autorelease];
-    [self.theTextField setAutocorrectionType:UITextAutocorrectionTypeNo];
-    [self.theTextField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
-    [self.theTextField setReturnKeyType:UIReturnKeyDone];
-    [self.theTextField setClearButtonMode:UITextFieldViewModeWhileEditing];
+    self.theTextField.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.theTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    self.theTextField.returnKeyType = UIReturnKeyGo;
+    self.theTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
     self.theTextField.adjustsFontSizeToFitWidth = YES;
     self.theTextField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.theTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    // self.theTextField.textAlignment = UITextAlignmentLeft;
     self.theTextField.delegate = self;
     self.theTextField.borderStyle = UITextBorderStyleNone;
     self.theTextField.backgroundColor = [UIColor clearColor];
@@ -106,7 +105,7 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-    [self.theTextField setText:[self.theWebView stringByEvaluatingJavaScriptFromString:@"window.location.href"]];
+    [self.theTextField setText:[[self.theWebView stringByEvaluatingJavaScriptFromString:@"window.location.href"]stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
