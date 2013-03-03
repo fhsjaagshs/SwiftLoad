@@ -1,12 +1,6 @@
 
 *.xcuserstate
-/SwiftLoad.xcodeproj/xcuserdata/
-/SwiftLoad.xcodeproj/project.xcworkspace/
+SwiftLoad.xcodeproj/xcuserdata/
+SwiftLoad.xcodeproj/project.xcworkspace/
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-Icon?
-ehthumbs.db
-Thumbs.db
+
