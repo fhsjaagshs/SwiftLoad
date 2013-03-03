@@ -19,6 +19,7 @@
     self.view = [[[HatchedView alloc]initWithFrame:screenBounds]autorelease];
     
     CustomNavBar *bar = [[CustomNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
+    bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"Settings"];
     topItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)]autorelease];
     [bar pushNavigationItem:topItem animated:NO];
@@ -27,8 +28,8 @@
     [bar release];
     [topItem release];
     
-    CGRect linkButtonFrame = CGRectMake(92, 189, 136, 37);
-    CGRect bmbFrame = CGRectMake(78, 265, 164, 37);
+    CGRect linkButtonFrame = CGRectMake(92, sanitizeMesurement(189), 136, 37);
+    CGRect bmbFrame = CGRectMake(78, sanitizeMesurement(265), 164, 37);
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         linkButtonFrame = CGRectMake(313, 396, 143, 37);
@@ -36,12 +37,14 @@
     }
     
     self.linkButton = [[[CustomButton alloc]initWithFrame:linkButtonFrame]autorelease];
+    self.linkButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     [self.linkButton addTarget:self action:@selector(linkOrUnlink) forControlEvents:UIControlEventTouchUpInside];
     [self.linkButton setTitle:@"Link Dropbox" forState:UIControlStateNormal];
     [self.view addSubview:self.linkButton];
     [self.view bringSubviewToFront:self.linkButton];
     
     CustomButton *bookmarkletButton = [[CustomButton alloc]initWithFrame:bmbFrame];
+    bookmarkletButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     [bookmarkletButton addTarget:self action:@selector(linkOrUnlink) forControlEvents:UIControlEventTouchUpInside];
     [bookmarkletButton setTitle:@"Install Bookmarklet" forState:UIControlStateNormal];
     [self.view addSubview:bookmarkletButton];
