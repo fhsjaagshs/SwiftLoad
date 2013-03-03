@@ -1,6 +1,0 @@
-.gitignore
-*.xcuserstate
-SwiftLoad.xcodeproj/xcuserdata/
-SwiftLoad.xcodeproj/project.xcworkspace/
-.DS_Store
-
