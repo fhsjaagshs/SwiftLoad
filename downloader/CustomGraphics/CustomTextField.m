@@ -17,16 +17,14 @@
     CGColorRef lightColor = [UIColor whiteColor].CGColor;
     CGColorRef darkColor = [UIColor colorWithWhite:0.75f alpha:1.0f].CGColor;
     
-    CGRect _coloredBoxRect = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
-    
     // Draw gloss and gradient
-    drawGlossAndGradient(context, _coloredBoxRect, lightColor, darkColor);
+    drawGlossAndGradient(context, self.bounds, lightColor, darkColor);
     
     // Draw stroke
     CGContextSetStrokeColorWithColor(context, [UIColor blackColor].CGColor);
     CGContextSetLineWidth(context, 1.5);
     CGContextSetLineCap(context, kCGLineCapRound);
-    CGContextStrokeRect(context, rectFor1PxStroke(_coloredBoxRect));
+    CGContextStrokeRect(context, rectFor1PxStroke(self.bounds));
 }
 
 - (void)setFrame:(CGRect)frame {
