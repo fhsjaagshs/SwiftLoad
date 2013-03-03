@@ -38,12 +38,8 @@
     self.isCut = cut;
     [self saveIsCutBOOL];
     [self verifyProspectiveCopyList];
-    [self verifyCopiedList];
-    for (id obj in self.perspectiveCopiedList) {
-        if (![self.copiedList containsObject:obj]) {
-            [self.copiedList addObject:obj];
-        }
-    }
+    [self flushCopiedList];
+    [self.copiedList addObjectsFromArray:self.perspectiveCopiedList];
     [self flushPerspectiveCopyList];
     [self saveCopiedList];
 }
@@ -66,6 +62,7 @@
 }
 
 - (void)removeItemFromPerspectiveCopyList:(NSString *)item {
+    [self verifyProspectiveCopyList];
     if ([self.perspectiveCopiedList containsObject:item]) {
         [self.perspectiveCopiedList removeObject:item];
     }
@@ -86,14 +83,6 @@
 - (void)flushPerspectiveCopyList {
     [self.perspectiveCopiedList removeAllObjects];
     [self saveProspectiveCopyList];
-}
-
-- (void)verifyAll {
-    
-}
-
-- (void)saveAll {
-    
 }
 
 - (void)verifyProspectiveCopyList {
@@ -155,17 +144,38 @@
     [self saveProspectiveCopyList];
 }
 
-- (void)showCopyPasteController {
+- (IBAction)showCopyPasteController {
     UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:nil completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         
+        NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
+        
+        if ([title isEqualToString:@"Copy"]) {
+            [self copyFilesWithIsCut:NO];
+        } else if ([title isEqualToString:@"Cut"]) {
+            [self copyFilesWithIsCut:YES];
+        } else if ([title isEqualToString:@"Paste"]) {
+            [self pasteInLocation:[kAppDelegate managerCurrentDir]];
+        } else if ([title isEqualToString:@"Cancel"]) {
+            [self verifyCopiedList];
+            if (self.copiedList.count > 0) {
+                [self flushCopiedList];
+                [self flushPerspectiveCopyList];
+            }
+        }
     } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Copy", @"Cut", @"Paste", nil]autorelease];
+    
+    actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+    
+    [self verifyCopiedList];
     
     if (self.copiedList.count == 0) {
         [actionSheet addButtonWithTitle:@"Copy"];
         [actionSheet addButtonWithTitle:@"Cut"];
     } else {
-        
+        [actionSheet addButtonWithTitle:@"Paste"];
     }
+    
+    [actionSheet addButtonWithTitle:@"Cancel"];
     
     actionSheet.cancelButtonIndex = actionSheet.numberOfButtons-1;
     
@@ -173,21 +183,20 @@
 }
 
 - (void)updateCopyButtonState {
-    if (self.perspectiveCopiedList.count > 0) {
-        // unhide button
+    
+    if (!self.editing) {
+        [self.copyAndPasteButton setHidden:YES];
+        return;
     }
     
-    if (self.copiedList.count > 0) {
-        // unhide the button
-    }
+    [self verifyProspectiveCopyList];
+    [self verifyCopiedList];
     
-    if (self.copiedList.count == 0) {
-        // hide the button
-    }
+    BOOL persCLGT = (self.perspectiveCopiedList.count > 0);
+    BOOL CLGT = (self.copiedList.count > 0);
+    BOOL shouldUnhide = ((persCLGT || CLGT) || (persCLGT && CLGT));
     
-    if (self.perspectiveCopiedList.count == 0) {
-        // hide the button
-    }
+    [self.copyAndPasteButton setHidden:!shouldUnhide];
 }
 
 - (void)reindexFilelist {
@@ -807,7 +816,8 @@
             
             if ([self.perspectiveCopiedList containsObject:file]) {
                 // remove the checkmark
-                asdf
+                [self removeItemFromPerspectiveCopyList:file];
+                cell.editingAccessoryType = UITableViewCellAccessoryNone;
             } else {
                 if ([self addItemToPerspectiveCopyList:file]) {
                     cell.editingAccessoryType = UITableViewCellAccessoryCheckmark;

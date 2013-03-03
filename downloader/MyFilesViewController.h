@@ -42,6 +42,7 @@
 @property (nonatomic, retain) IBOutlet UIView *drawer;
 @property (nonatomic, retain) IBOutlet UIButton *drawerCopyButton;
 @property (nonatomic, retain) IBOutlet UIButton *drawerPasteButton;
+@property (nonatomic, retain) IBOutlet UIButton *copyAndPasteButton;
 
 @property (nonatomic, retain) UIView *sideSwipeView;
 @property (nonatomic, assign) UITableViewCell *sideSwipeCell;
