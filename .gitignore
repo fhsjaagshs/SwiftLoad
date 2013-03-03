@@ -1,5 +1,6 @@
 
 *.xcuserstate
+<<<<<<< HEAD
 /SwiftLoad.xcodeproj/xcuserdata/*
 /SwiftLoad.xcodeproj/project.xcworkspace/*
 .DS_Store
@@ -10,3 +11,7 @@
 Icon?
 ehthumbs.db
 Thumbs.db
+=======
+/Users/nathaniel/Documents/Code/SwiftLoad/SwiftLoad.xcodeproj/xcuserdata/*
+/Users/nathaniel/Documents/Code/SwiftLoad/SwiftLoad.xcodeproj/project.xcworkspace/*
+>>>>>>> fuzz
