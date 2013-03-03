@@ -15,14 +15,28 @@
 
 @implementation MyFilesViewController
 
-@synthesize dirs, sideSwipeDirection, sideSwipeCell, sideSwipeView, animatingSideSwipe, drawer, drawerCopyButton, drawerPasteButton, editButton, theTableView, folderPathTitle, mtrButton, backButton, homeButton, filelist, movingFileFirst, pastingPath, docController;
+@synthesize dirs, sideSwipeDirection, sideSwipeCell, sideSwipeView, animatingSideSwipe, drawer, drawerCopyButton, drawerPasteButton, editButton, theTableView, folderPathTitle, mtrButton, backButton, homeButton, filelist, movingFileFirst, pastingPath, docController, isCut, copiedList, perspectiveCopiedList;
 
 - (void)pasteInLocation:(NSString *)location {
-    
+    for (NSString *oldPath in self.copiedList) {
+        NSString *newPath = [location stringByAppendingPathComponent:[oldPath lastPathComponent]];
+        NSError *error = nil;
+        [[NSFileManager defaultManager]moveItemAtPath:oldPath toPath:newPath error:&error];
+        
+        if (error) {
+            NSLog(@"error: %@ \n for file: %@",error, oldPath);
+        }
+        
+        if (self.isCut) {
+            [[NSFileManager defaultManager]removeItemAtPath:oldPath error:nil];
+        }
+    }
+    [self flushCopiedList];
 }
 
-- (void)copyFiles {
-    [self verifyIsCutBOOL];
+- (void)copyFilesWithIsCut:(BOOL)cut {
+    self.isCut = cut;
+    [self saveIsCutBOOL];
     [self verifyProspectiveCopyList];
     [self verifyCopiedList];
     for (id obj in self.perspectiveCopiedList) {
@@ -31,11 +45,7 @@
         }
     }
     [self flushPerspectiveCopyList];
-    
-}
-
-- (void)cutFiles {
-    
+    [self saveCopiedList];
 }
 
 - (void)saveIsCutBOOL {
@@ -45,7 +55,6 @@
 - (void)verifyIsCutBOOL {
     self.isCut = [[NSUserDefaults standardUserDefaults]boolForKey:@"isCutBool"];
 }
-
 
 - (void)saveProspectiveCopyList {
     [[NSUserDefaults standardUserDefaults]setObject:self.perspectiveCopiedList forKey:@"saved_copy_list_pers"];
@@ -69,7 +78,6 @@
         }
     }
 }
-
 
 - (void)flushCopiedList {
     [self.copiedList removeAllObjects];
@@ -103,6 +111,7 @@
     if ([self.copiedList containsObject:old]) {
         [self.copiedList replaceObjectAtIndex:[self.copiedList indexOfObject:old] withObject:new];
     }
+    [self saveCopiedList];
 }
 
 - (void)showCopyPasteController {
@@ -562,6 +571,8 @@
     
     animatingSideSwipe = NO;
     indexOfCheckmark = -1;
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(copiedListChanged:) name:@"copiedlistchanged" object:nil];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -1531,6 +1542,9 @@
 }
 
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+    [self setPerspectiveCopiedList:nil];
+    [self setCopiedList:nil];
     [self setDocController:nil];
     [self setMovingFileFirst:nil];
     [self setFilelist:nil];

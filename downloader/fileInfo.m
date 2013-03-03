@@ -100,13 +100,20 @@
 }
 
 - (void)rename {
-    NSString *newName = [[kAppDelegate managerCurrentDir] stringByAppendingPathComponent:self.fileName.text];
+    NSString *newName = [[[kAppDelegate openFile]stringByDeletingLastPathComponent]stringByAppendingPathComponent:self.fileName.text];
+    
+    NSMutableDictionary *newNameDict = [NSMutableDictionary dictionary];
+    [newNameDict setObject:[kAppDelegate openFile] forKey:@"old"];
+    [newNameDict setObject:newName forKey:@"new"];
 
     if ([[NSFileManager defaultManager]fileExistsAtPath:newName]) {
         CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Already Exists" message:@"A file already exists with the new name. Please try a different one." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [av show];
         [av release];
     } else if ([[NSFileManager defaultManager]isWritableFileAtPath:[kAppDelegate openFile]] && [[NSFileManager defaultManager]isReadableFileAtPath:[kAppDelegate openFile]]) {
+        
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"copiedlistchanged" object:newNameDict];
+        
         [[NSFileManager defaultManager]moveItemAtPath:[kAppDelegate openFile] toPath:newName error:nil];
         [kAppDelegate setOpenFile:newName];
         
