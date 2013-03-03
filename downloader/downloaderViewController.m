@@ -534,9 +534,9 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
     [self setTextField:nil];
     [self setAudioPlayer:nil];
-    [[NSNotificationCenter defaultCenter]removeObserver:self];
     NSLog(@"%@ dealloc'd", NSStringFromClass([self class]));
     [super dealloc];
 }

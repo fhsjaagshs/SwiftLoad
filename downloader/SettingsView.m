@@ -39,7 +39,6 @@
     self.linkButton = [[[CustomButton alloc]initWithFrame:linkButtonFrame]autorelease];
     self.linkButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     [self.linkButton addTarget:self action:@selector(linkOrUnlink) forControlEvents:UIControlEventTouchUpInside];
-    [self.linkButton setTitle:@"Link Dropbox" forState:UIControlStateNormal];
     [self.view addSubview:self.linkButton];
     [self.view bringSubviewToFront:self.linkButton];
     
@@ -62,8 +61,7 @@
     CustomAlertView *cav = [[CustomAlertView alloc]initWithTitle:@"Install Bookmarklet?" message:@"The bookmarklet allows you to download the open webpage or file from Safari.\n\nClicking \"sure\" will replace your clipboard's content." completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
         
         if (buttonIndex == 1) {
-            NSString *bookmarkString = @"JavaScript:string=document.URL;anotherString=string.replace('http://','swiftload://');window.open(anotherString);";
-            [[UIPasteboard generalPasteboard]setString:bookmarkString];
+            [[UIPasteboard generalPasteboard]setString:@"JavaScript:string=document.URL;anotherString=string.replace('http://','swiftload://');window.open(anotherString);"];
             CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Bookmarklet Copied!" message:@"Open Safari and create a bookmark, naming it \"SwiftLoad Download\". Enter editing mode in the bookmarks menu and tap the newly created bookmark. Paste the contents of the clipboard to the URL field of the newly created bookmark, replacing whatever is there. Tap done and exit editing mode. To download files, just navigate to a page and tap the bookmark." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [av show];
             [av release];
@@ -75,9 +73,8 @@
 }
 
 - (void)sessionDidReceiveAuthorizationFailure:(DBSession *)session userId:(NSString *)userId {
-    CustomAlertView *asdf = [[CustomAlertView alloc]initWithTitle:@"Login Failed" message:@"There was an error in trying to log into Dropbox. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    CustomAlertView *asdf = [[[CustomAlertView alloc]initWithTitle:@"Login Failed" message:@"There was an error in trying to log into Dropbox. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil]autorelease];
     [asdf show];
-    [asdf release];
 }
 
 - (void)linkOrUnlink {
@@ -89,15 +86,14 @@
     }
 }
 
-- (void)viewDidAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
 
     if ([[DBSession sharedSession]isLinked]) {
         [self.linkButton setTitle:@"Unlink Dropbox" forState:UIControlStateNormal];
     } else {
         [self.linkButton setTitle:@"Link Dropbox" forState:UIControlStateNormal];
     }
-    
-    [super viewDidAppear:animated];
 }
 
 - (void)dropboxAuthenticationFailed {

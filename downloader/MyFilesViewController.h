@@ -20,6 +20,11 @@
     MBProgressHUD *HUDZ;
 }
 
+// Copy/Cut/Paste
+@property (nonatomic, retain) NSMutableArray *copiedList;
+@property (nonatomic, retain) NSMutableArray *perspectiveCopiedList;
+@property (nonatomic, assign) BOOL isCut;
+
 @property (nonatomic, retain) UIDocumentInteractionController *docController;
 
 @property (nonatomic, retain) NSString *movingFileFirst;

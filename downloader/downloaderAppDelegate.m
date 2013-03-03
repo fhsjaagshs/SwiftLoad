@@ -66,72 +66,59 @@ float sanitizeMesurement(float measurement) {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     
     if (fileName.length > 14) {
-        NSString *fnZZ = [fileName substringToIndex:11];
-        fileName = [fnZZ stringByAppendingString:@"..."];
+        fileName = [[fileName substringToIndex:11]stringByAppendingString:@"..."];
     }
-    
-    NSString *alerttext = [[NSString alloc]initWithFormat:@"Finished downloading: %@",fileName];
+
     UILocalNotification *notification = [[UILocalNotification alloc]init];
     notification.fireDate = [NSDate date];
-    notification.alertBody = alerttext;
+    notification.alertBody = [NSString stringWithFormat:@"Finished downloading: %@",fileName];
     notification.soundName = UILocalNotificationDefaultSoundName;
     [[UIApplication sharedApplication]presentLocalNotificationNow:notification];
     [notification release];
-    [alerttext release];
     
-    UIImageView *checkmark = [[UIImageView alloc]initWithImage:getCheckmarkImage()];
     [self showHUDWithTitle:@"Completed"];
     [self setSecondaryTitleOfVisibleHUD:fileName];
-    [self setVisibleHudCustomView:checkmark];
+    [self setVisibleHudCustomView:[[[UIImageView alloc]initWithImage:getCheckmarkImage()]autorelease]];
     [self hideVisibleHudAfterDelay:1.5f];
-    [checkmark release];
 }
 
 - (void)showExistsAlertForFilename:(NSString *)fnZ {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     
     if (fnZ.length > 14) {
-        NSString *fnZZ = [fnZ substringToIndex:14];
-        fnZ = [fnZZ stringByAppendingString:@"..."];
+        fnZ = [[fnZ substringToIndex:11]stringByAppendingString:@"..."];
     }
     
-    NSString *alerttext = [[NSString alloc]initWithFormat:@"%@ already exists",fnZ];
     UILocalNotification *notification = [[UILocalNotification alloc]init];
     notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:0];
-    notification.alertBody = alerttext;
+    notification.alertBody = [NSString stringWithFormat:@"%@ already exists",fnZ];
     notification.soundName = UILocalNotificationDefaultSoundName;
     [[UIApplication sharedApplication]presentLocalNotificationNow:notification];
     [notification release];
-    [alerttext release];
-    
-    NSString *message = [[NSString alloc]initWithFormat:@"\"%@\" already exists.",fnZ];
-    CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"File Exists" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+
+    CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"File Exists" message:[NSString stringWithFormat:@"\"%@\" already exists.",fnZ] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [av show];
     [av release];
-    [message release];
 }
 
 - (void)showFailedAlertForFilename:(NSString *)fileName {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     
     if (fileName.length > 14) {
-        NSString *fnZZ = [fileName substringToIndex:11];
-        fileName = [fnZZ stringByAppendingString:@"..."];
+        fileName = [[fileName substringToIndex:11]stringByAppendingString:@"..."];
     }
     
-    NSString *alerttext = [[NSString alloc]initWithFormat:@"Download Failed: %@",fileName];
     UILocalNotification *notification = [[UILocalNotification alloc]init];
     notification.fireDate = [NSDate date];
-    notification.alertBody = alerttext;
+    notification.alertBody = [NSString stringWithFormat:@"Download Failed: %@",fileName];
     notification.soundName = UILocalNotificationDefaultSoundName;
     [[UIApplication sharedApplication]presentLocalNotificationNow:notification];
     [notification release];
-    [alerttext release];
     
-    NSString *message = [[NSString alloc]initWithFormat:@"SwiftLoad failed to download \"%@\". Please try again later.",fileName];
+    NSString *message = [NSString stringWithFormat:@"SwiftLoad failed to download \"%@\". Please try again later.",fileName];
     CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Oops..." message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [av show];
     [av release];
-    [message release];
 }
 
 - (void)downloadURL:(NSURL *)url {
@@ -142,8 +129,7 @@ float sanitizeMesurement(float measurement) {
     
     [NSURLConnection sendAsynchronousRequest:headReq queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
         if (!error) {
-            NSHTTPURLResponse *r = (NSHTTPURLResponse *)response;
-            NSDictionary *headers = [r allHeaderFields];
+            NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
             if (headers) {
                 if ([headers objectForKey:@"Content-Range"]) {
                     NSString *contentRange = [headers objectForKey:@"Content-Range"];
@@ -165,10 +151,10 @@ float sanitizeMesurement(float measurement) {
                 
                 [self.connection cancel];
                 [self.downloadedData setLength:0];
+                self.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
                 
                 [[UIApplication sharedApplication]setNetworkActivityIndicatorVisible:NO];
                 [[UIApplication sharedApplication]endBackgroundTask:self.backgroundTaskIdentifier];
-                self.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
             }];
         }
     }];
@@ -182,7 +168,7 @@ float sanitizeMesurement(float measurement) {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
     if (self.downloadedData.length == 0) {
-        [self setDownloadedData:[NSMutableData data]];
+        self.downloadedData = [NSMutableData data];
     }
     
     self.downloadedBytes = self.downloadedBytes+recievedData.length;
@@ -208,8 +194,7 @@ float sanitizeMesurement(float measurement) {
         NSString *fileInDocsDir = [kDocsDir stringByAppendingPathComponent:filename];
         if ([[NSFileManager defaultManager]fileExistsAtPath:fileInDocsDir]) {
             NSString *ext = [fileInDocsDir pathExtension];
-            NSString *filenameMinusExt = [filename stringByDeletingPathExtension];
-            NSString *duplicateFileName = [filenameMinusExt stringByAppendingString:@" copy"];
+            NSString *duplicateFileName = [[filename stringByDeletingPathExtension]stringByAppendingString:@" copy"];
             NSString *finalFilename = [duplicateFileName stringByAppendingPathExtension:ext];
             filePath = [kDocsDir stringByAppendingPathComponent:finalFilename];
         } else {
@@ -225,25 +210,27 @@ float sanitizeMesurement(float measurement) {
 }
 
 - (void)downloadFromAppDelegate:(NSString *)stouPrelim {
-    if (![stouPrelim hasPrefix:@"http://"] && ![stouPrelim hasPrefix:@"ftp://"]) {
-        NSString *http = @"http://";
-        NSString *final = [http stringByAppendingString:stouPrelim];
-        stouPrelim = final;
-    } 
-    
-    NSString *stou = stouPrelim;
-    NSURL *url = [NSURL URLWithString:stou];
+    if (![stouPrelim hasPrefix:@"http"]) {
+        
+        if ([stouPrelim hasPrefix:@"ftp"] || [stouPrelim hasPrefix:@"sftp"] || [stouPrelim hasPrefix:@"rsync"] || [stouPrelim hasPrefix:@"afp"]) {
+            [self showFailedAlertForFilename:[stouPrelim lastPathComponent]];
+            return;
+        }
+        
+        stouPrelim = [NSString stringWithFormat:@"http://%@",stouPrelim];
+    }
+
+    NSURL *url = [NSURL URLWithString:stouPrelim];
 
     if (url == nil) {
-        [self showFailedAlertForFilename:[stou lastPathComponent]];
+        [self showFailedAlertForFilename:[stouPrelim lastPathComponent]];
         return;
     }
     
-    NSString *fileName = [[stou lastPathComponent]stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *fileName = [[stouPrelim lastPathComponent]stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 
     if (fileName.length > 14) {
-        NSString *fnZZ = [fileName substringToIndex:14];
-        fileName = [fnZZ stringByAppendingString:@"..."];
+        fileName = [[fileName substringToIndex:11]stringByAppendingString:@"..."];
     }
     
     [self showHUDWithTitle:@"Downloading"];
@@ -292,6 +279,7 @@ float sanitizeMesurement(float measurement) {
 }
 
 - (void)restClient:(DBRestClient *)client loadMetadataFailedWithError:(NSError *)error {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [self hideHUD];
     NSString *message = [NSString stringWithFormat:@"The file you tried to upload failed because: %@",error];
     CustomAlertView *avdd = [[CustomAlertView alloc]initWithTitle:@"Failure Uploading" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -300,6 +288,7 @@ float sanitizeMesurement(float measurement) {
 }
 
 - (void)restClient:(DBRestClient *)client uploadProgress:(CGFloat)progress forFile:(NSString *)destPath from:(NSString *)srcPath {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     [self setProgressOfVisibleHUD:progress];
 }
 
@@ -356,9 +345,8 @@ float sanitizeMesurement(float measurement) {
     
     HatchedView *hatchedView = [[HatchedView alloc]initWithFrame:self.window.bounds];
     [self.window addSubview:hatchedView];
-    [hatchedView release];
-    
     [self.window sendSubviewToBack:hatchedView];
+    [hatchedView release];
     
     DBSession *session = [[DBSession alloc]initWithAppKey:@"ybpwmfq2z1jmaxi" appSecret:@"ua6hjow7hxx0y3a" root:kDBRootDropbox];
 	session.delegate = self;

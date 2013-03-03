@@ -19,6 +19,7 @@
     self.view = [[[UIView alloc]initWithFrame:screenBounds]autorelease];
     
     self.theTextField = [[[CustomTextField alloc]initWithFrame:CGRectMake(69, 7, screenBounds.size.width-75, 31)]autorelease];
+    self.theTextField.placeholder = @"Enter a URL...";
     self.theTextField.autocorrectionType = UITextAutocorrectionTypeNo;
     self.theTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     self.theTextField.returnKeyType = UIReturnKeyGo;

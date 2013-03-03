@@ -17,6 +17,101 @@
 
 @synthesize dirs, sideSwipeDirection, sideSwipeCell, sideSwipeView, animatingSideSwipe, drawer, drawerCopyButton, drawerPasteButton, editButton, theTableView, folderPathTitle, mtrButton, backButton, homeButton, filelist, movingFileFirst, pastingPath, docController;
 
+- (void)pasteInLocation:(NSString *)location {
+    
+}
+
+- (void)copyFiles {
+    [self verifyIsCutBOOL];
+    [self verifyProspectiveCopyList];
+    [self verifyCopiedList];
+    for (id obj in self.perspectiveCopiedList) {
+        if (![self.copiedList containsObject:obj]) {
+            [self.copiedList addObject:obj];
+        }
+    }
+    [self flushPerspectiveCopyList];
+    
+}
+
+- (void)cutFiles {
+    
+}
+
+- (void)saveIsCutBOOL {
+    [[NSUserDefaults standardUserDefaults]setBool:self.isCut forKey:@"isCutBool"];
+}
+
+- (void)verifyIsCutBOOL {
+    self.isCut = [[NSUserDefaults standardUserDefaults]boolForKey:@"isCutBool"];
+}
+
+
+- (void)saveProspectiveCopyList {
+    [[NSUserDefaults standardUserDefaults]setObject:self.perspectiveCopiedList forKey:@"saved_copy_list_pers"];
+}
+
+- (void)flushPerspectiveCopyList {
+    [self.perspectiveCopiedList removeAllObjects];
+    [self saveProspectiveCopyList];
+}
+
+- (void)verifyProspectiveCopyList {
+    if (self.perspectiveCopiedList.count == 0) {
+        self.perspectiveCopiedList = [NSMutableArray array];
+    }
+    
+    NSArray *listFromDefaults = [[NSUserDefaults standardUserDefaults]objectForKey:@"saved_copy_list_pers"];
+    
+    for (id obj in listFromDefaults) {
+        if (![self.perspectiveCopiedList containsObject:obj]) {
+            [self.perspectiveCopiedList addObject:obj];
+        }
+    }
+}
+
+
+- (void)flushCopiedList {
+    [self.copiedList removeAllObjects];
+    [self saveCopiedList];
+}
+
+- (void)saveCopiedList {
+    [[NSUserDefaults standardUserDefaults]setObject:self.copiedList forKey:@"saved_copied_list"];
+}
+
+- (void)verifyCopiedList {
+    if (self.copiedList.count == 0) {
+        self.copiedList = [NSMutableArray array];
+    }
+    
+    NSArray *listFromDefaults = [[NSUserDefaults standardUserDefaults]objectForKey:@"saved_copied_list"];
+    
+    for (id obj in listFromDefaults) {
+        if (![self.copiedList containsObject:obj]) {
+            [self.copiedList addObject:obj];
+        }
+    }
+}
+
+- (void)copiedListChanged:(NSNotification *)notif {
+    NSMutableDictionary *changedDict = [[(NSDictionary *)notif mutableCopy]autorelease];
+    
+    NSString *old = [changedDict objectForKey:@"old"];
+    NSString *new = [changedDict objectForKey:@"new"];
+    
+    if ([self.copiedList containsObject:old]) {
+        [self.copiedList replaceObjectAtIndex:[self.copiedList indexOfObject:old] withObject:new];
+    }
+}
+
+- (void)showCopyPasteController {
+    UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:nil completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+        
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Copy", @"Cut", @"Paste", nil]autorelease];
+    [actionSheet showInView:self.view];
+}
+
 - (void)reindexFilelist {
     if (self.filelist == nil) {
         [self setFilelist:[NSMutableArray array]];
