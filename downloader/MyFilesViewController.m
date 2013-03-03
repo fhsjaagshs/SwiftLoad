@@ -48,6 +48,29 @@
     [self saveCopiedList];
 }
 
+// BOOL value of YES is success adding to the array
+- (BOOL)addItemToPerspectiveCopyList:(NSString *)item {
+    [self verifyProspectiveCopyList];
+    [self verifyCopiedList];
+    
+    if (self.copiedList.count > 0) {
+        return NO;
+    }
+    
+    if (![self.perspectiveCopiedList containsObject:item]) {
+        [self.perspectiveCopiedList addObject:item];
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (void)removeItemFromPerspectiveCopyList:(NSString *)item {
+    if ([self.perspectiveCopiedList containsObject:item]) {
+        [self.perspectiveCopiedList removeObject:item];
+    }
+}
+
 - (void)saveIsCutBOOL {
     [[NSUserDefaults standardUserDefaults]setBool:self.isCut forKey:@"isCutBool"];
 }
@@ -63,6 +86,14 @@
 - (void)flushPerspectiveCopyList {
     [self.perspectiveCopiedList removeAllObjects];
     [self saveProspectiveCopyList];
+}
+
+- (void)verifyAll {
+    
+}
+
+- (void)saveAll {
+    
 }
 
 - (void)verifyProspectiveCopyList {
@@ -103,6 +134,10 @@
 }
 
 - (void)copiedListChanged:(NSNotification *)notif {
+    
+    [self verifyCopiedList];
+    [self verifyProspectiveCopyList];
+    
     NSMutableDictionary *changedDict = [[(NSDictionary *)notif mutableCopy]autorelease];
     
     NSString *old = [changedDict objectForKey:@"old"];
@@ -111,14 +146,48 @@
     if ([self.copiedList containsObject:old]) {
         [self.copiedList replaceObjectAtIndex:[self.copiedList indexOfObject:old] withObject:new];
     }
+    
+    if ([self.perspectiveCopiedList containsObject:old]) {
+        [self.perspectiveCopiedList replaceObjectAtIndex:[self.perspectiveCopiedList indexOfObject:old] withObject:new];
+    }
+    
     [self saveCopiedList];
+    [self saveProspectiveCopyList];
 }
 
 - (void)showCopyPasteController {
     UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:nil completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         
     } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Copy", @"Cut", @"Paste", nil]autorelease];
+    
+    if (self.copiedList.count == 0) {
+        [actionSheet addButtonWithTitle:@"Copy"];
+        [actionSheet addButtonWithTitle:@"Cut"];
+    } else {
+        
+    }
+    
+    actionSheet.cancelButtonIndex = actionSheet.numberOfButtons-1;
+    
     [actionSheet showInView:self.view];
+}
+
+- (void)updateCopyButtonState {
+    if (self.perspectiveCopiedList.count > 0) {
+        // unhide button
+    }
+    
+    if (self.copiedList.count > 0) {
+        // unhide the button
+    }
+    
+    if (self.copiedList.count == 0) {
+        // hide the button
+    }
+    
+    if (self.perspectiveCopiedList.count == 0) {
+        // hide the button
+    }
 }
 
 - (void)reindexFilelist {
@@ -635,15 +704,15 @@
         }
 
         cell.detailTextLabel.textColor = [UIColor blackColor];
-        
-        cell.selectionStyle = UITableViewCellSelectionStyleGray;
     }
     
-    if (indexOfCheckmark == indexPath.row) {
+   /* if (indexOfCheckmark == indexPath.row) {
         cell.editingAccessoryType = UITableViewCellAccessoryCheckmark;
     } else {
         cell.editingAccessoryType = UITableViewCellAccessoryNone;
-    }
+    }*/
+    
+    cell.editingAccessoryType = UITableViewCellAccessoryNone;
     
     for (UIGestureRecognizer *rec in cell.gestureRecognizers) {
         [cell removeGestureRecognizer:rec];
@@ -654,18 +723,23 @@
         cell.detailTextLabel.text = nil;
     } else {
         NSString *filesObjectAtIndex = [self.filelist objectAtIndex:indexPath.row];
-        NSString *file = [[kAppDelegate managerCurrentDir] stringByAppendingPathComponent:filesObjectAtIndex];
+        NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:filesObjectAtIndex];
 
         cell.textLabel.text = filesObjectAtIndex;
-
+        
         BOOL isZip = [[[file pathExtension]lowercaseString] isEqualToString:@"zip"];
         BOOL isDir;    
         BOOL exists = [[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir];
+        
+        if ([self.perspectiveCopiedList containsObject:cell.textLabel.text]) {
+            cell.editingAccessoryType = UITableViewCellAccessoryCheckmark;
+        } else {
+            cell.editingAccessoryType = UITableViewCellAccessoryNone;
+        }
 
         if (exists && isDir) {
             cell.detailTextLabel.text = @"Directory";
         } else {
-            
             UISwipeGestureRecognizer *rightSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeRight:)];
             rightSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
             [cell addGestureRecognizer:rightSwipeGestureRecognizer];
@@ -721,17 +795,30 @@
         [self showFileCreationAlertView];
     } else if (indexPath.row != cellCount) {
         NSString *cellName = cell.textLabel.text;
-        NSString *file = [[kAppDelegate managerCurrentDir] stringByAppendingPathComponent:cellName];
+        NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:cellName];
 
         [kAppDelegate setOpenFile:file];
         
-        BOOL result = [[[file pathExtension]lowercaseString] isEqualToString:@"zip"];
+        BOOL result = [[[file pathExtension]lowercaseString]isEqualToString:@"zip"];
         BOOL isDir;    
         BOOL directoryExists = [[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir];
     
         if (self.editing) {
-
-            if (self.movingFileFirst.length == 0) {
+            
+            if ([self.perspectiveCopiedList containsObject:file]) {
+                // remove the checkmark
+                asdf
+            } else {
+                if ([self addItemToPerspectiveCopyList:file]) {
+                    cell.editingAccessoryType = UITableViewCellAccessoryCheckmark;
+                } else {
+                    cell.editingAccessoryType = UITableViewCellAccessoryNone;
+                }
+            }
+            
+            [self updateCopyButtonState];
+            
+            /*if (self.movingFileFirst.length == 0) {
                 [tableView cellForRowAtIndexPath:indexPath].editingAccessoryType = UITableViewCellAccessoryCheckmark;
                 indexOfCheckmark = indexPath.row;
                 
@@ -779,7 +866,7 @@
                     [HUD release];
                     [objects release];
                 } 
-        }
+             }*/
     } else if (directoryExists && isDir) { 
         [self.backButton setHidden:NO];
         [self.homeButton setHidden:NO];
@@ -1511,6 +1598,9 @@
     [super viewWillAppear:YES];
     [self refreshTableViewWithAnimation:UITableViewRowAnimationNone];
     [self.theTableView flashScrollIndicators];
+    [self verifyIsCutBOOL];
+    [self verifyProspectiveCopyList];
+    [self verifyCopiedList];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -1521,6 +1611,9 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self resignFirstResponder];
+    [self saveCopiedList];
+    [self saveProspectiveCopyList];
+    [self saveIsCutBOOL];
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
