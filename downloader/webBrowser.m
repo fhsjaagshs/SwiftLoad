@@ -16,9 +16,9 @@
 
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     
-    self.view = [[[HatchedView alloc]initWithFrame:screenBounds]autorelease];
+    self.view = [[[UIView alloc]initWithFrame:screenBounds]autorelease];
     
-    self.theTextField = [[[UITextField alloc]initWithFrame:CGRectMake(69, 7, screenBounds.size.width-75, 31)]autorelease];
+    self.theTextField = [[[CustomTextField alloc]initWithFrame:CGRectMake(69, 7, screenBounds.size.width-75, 31)]autorelease];
     [self.theTextField setAutocorrectionType:UITextAutocorrectionTypeNo];
     [self.theTextField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     [self.theTextField setReturnKeyType:UIReturnKeyDone];
@@ -26,9 +26,11 @@
     self.theTextField.adjustsFontSizeToFitWidth = YES;
     self.theTextField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.theTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    self.theTextField.textAlignment = UITextAlignmentLeft;
+    // self.theTextField.textAlignment = UITextAlignmentLeft;
     self.theTextField.delegate = self;
-    self.theTextField.borderStyle = UITextBorderStyleRoundedRect;
+    self.theTextField.borderStyle = UITextBorderStyleNone;
+    self.theTextField.backgroundColor = [UIColor clearColor];
+    self.theTextField.textAlignment = UITextAlignmentCenter;
     
     UIBarButtonItem *close = [[[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(actionClose)]autorelease];
     UIBarButtonItem *textfield = [[[UIBarButtonItem alloc]initWithCustomView:self.theTextField]autorelease];
@@ -65,6 +67,9 @@
     [self.view addSubview:self.toolBar];
     [self.view bringSubviewToFront:self.toolBar];
     [self updateButtons];
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.google.com/"]];
+    [self.theWebView loadRequest:request];
 }
 
 - (void)stopLoad {
@@ -216,12 +221,6 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
     return YES;
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.google.com/"]];
-    [self.theWebView loadRequest:request];
 }
 
 - (void)dealloc {

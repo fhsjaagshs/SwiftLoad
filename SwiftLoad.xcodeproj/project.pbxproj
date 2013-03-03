@@ -18,6 +18,7 @@
 		9BFF2A0C15387C6E007ED9B1 /* ZipReadStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0615387C6E007ED9B1 /* ZipReadStream.m */; };
 		9BFF2A0D15387C6E007ED9B1 /* ZipWriteStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0815387C6E007ED9B1 /* ZipWriteStream.m */; };
 		F1122A76142E4E8B00A04CC6 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */; };
+		F119697616E3D0FC001139F1 /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = F119697516E3D0FB001139F1 /* CustomTextField.m */; };
 		F119CF0813F46DA6007D67E4 /* downloaderAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F119CF0713F46DA6007D67E4 /* downloaderAppDelegate.m */; };
 		F119CF0E13F46DA7007D67E4 /* downloaderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F119CF0D13F46DA7007D67E4 /* downloaderViewController.m */; };
 		F11C402E13F82F9D0077F5D1 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F11C402D13F82F9D0077F5D1 /* MessageUI.framework */; };
@@ -149,6 +150,8 @@
 		9BFF2A0715387C6E007ED9B1 /* ZipWriteStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipWriteStream.h; sourceTree = "<group>"; };
 		9BFF2A0815387C6E007ED9B1 /* ZipWriteStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZipWriteStream.m; sourceTree = "<group>"; };
 		F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		F119697416E3D0FB001139F1 /* CustomTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTextField.h; sourceTree = "<group>"; };
+		F119697516E3D0FB001139F1 /* CustomTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTextField.m; sourceTree = "<group>"; };
 		F119CEF313F46DA6007D67E4 /* SwiftLoad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftLoad.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F119CF0613F46DA6007D67E4 /* downloaderAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = downloaderAppDelegate.h; sourceTree = "<group>"; };
 		F119CF0713F46DA6007D67E4 /* downloaderAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = downloaderAppDelegate.m; sourceTree = "<group>"; };
@@ -616,6 +619,8 @@
 				F1693C3516DFAB6E006E3739 /* HatchedView.m */,
 				F1693C3616DFAB6E006E3739 /* ShadowedTableView.h */,
 				F1693C3716DFAB6E006E3739 /* ShadowedTableView.m */,
+				F119697416E3D0FB001139F1 /* CustomTextField.h */,
+				F119697516E3D0FB001139F1 /* CustomTextField.m */,
 			);
 			path = CustomGraphics;
 			sourceTree = "<group>";
@@ -886,6 +891,7 @@
 				F1693C6A16DFAC59006E3739 /* SCRFTPRequest.m in Sources */,
 				F1693C6B16DFAC59006E3739 /* ZoomingImageView.m in Sources */,
 				F19BB51C16E006CA0081C95B /* main.m in Sources */,
+				F119697616E3D0FC001139F1 /* CustomTextField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

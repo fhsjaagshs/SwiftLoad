@@ -49,6 +49,7 @@
     #import "DTCustomColoredAccessory.h"
     #import "HatchedView.h"
     #import "ShadowedTableView.h"
+    #import "CustomTextField.h"
 
     #import "ZipFile.h"
     #import "ZipException.h"
