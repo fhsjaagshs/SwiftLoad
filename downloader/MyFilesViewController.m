@@ -21,17 +21,20 @@
     for (NSString *oldPath in self.copiedList) {
         NSString *newPath = [location stringByAppendingPathComponent:[oldPath lastPathComponent]];
         NSError *error = nil;
-        [[NSFileManager defaultManager]moveItemAtPath:oldPath toPath:newPath error:&error];
+        
+        if (self.isCut) {
+            [[NSFileManager defaultManager]moveItemAtPath:oldPath toPath:newPath error:&error];
+        } else {
+            [[NSFileManager defaultManager]copyItemAtPath:oldPath toPath:newPath error:&error];
+        }
         
         if (error) {
             NSLog(@"error: %@ \n for file: %@",error, oldPath);
         }
-        
-        if (self.isCut) {
-            [[NSFileManager defaultManager]removeItemAtPath:oldPath error:nil];
-        }
     }
     [self flushCopiedList];
+    [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
+    [self updateCopyButtonState];
 }
 
 - (void)copyFilesWithIsCut:(BOOL)cut {
@@ -162,7 +165,7 @@
                 [self flushPerspectiveCopyList];
             }
         }
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Copy", @"Cut", @"Paste", nil]autorelease];
+    } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil]autorelease];
     
     actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     
@@ -984,7 +987,7 @@
             [cell setEditing:NO animated:YES];
             cell.editingAccessoryType = UITableViewCellEditingStyleNone;
         }
-        
+        [self flushPerspectiveCopyList];
         indexOfCheckmark = -1;
         [self setMovingFileFirst:nil];
     } else {
@@ -1001,6 +1004,7 @@
         }
         [self.theTableView insertRowsAtIndexPaths:[NSArray arrayWithObjects:[NSIndexPath indexPathForRow:self.filelist.count inSection:0], nil] withRowAnimation:UITableViewRowAnimationLeft];
     }
+    [self updateCopyButtonState];
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -1622,7 +1626,7 @@
     [super viewWillAppear:animated];
     [self resignFirstResponder];
     [self saveCopiedList];
-    [self saveProspectiveCopyList];
+    [self flushPerspectiveCopyList];
     [self saveIsCutBOOL];
 }
 
