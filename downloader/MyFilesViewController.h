@@ -10,12 +10,8 @@
 #import "ShadowedTableView.h"
 
 @interface MyFilesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, PullToRefreshViewDelegate, MBProgressHUDDelegate, UITextFieldDelegate, MFMailComposeViewControllerDelegate,  UIDocumentInteractionControllerDelegate> {
-    
     CustomAlertView *av;
     UITextField *tv;
-
-    int indexOfCheckmark;
-
     float totalProgress;
     MBProgressHUD *HUDZ;
 }
@@ -27,22 +23,16 @@
 
 @property (nonatomic, retain) UIDocumentInteractionController *docController;
 
-@property (nonatomic, retain) NSString *movingFileFirst;
-@property (nonatomic, retain) NSString *pastingPath;
-
 @property (nonatomic, retain) NSMutableArray *filelist;
 @property (nonatomic, retain) NSMutableArray *dirs;
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;
-@property (nonatomic, retain) IBOutlet UITextField *folderPathTitle;  
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *editButton;
 @property (nonatomic, retain) IBOutlet CustomButton *mtrButton;
 @property (nonatomic, retain) IBOutlet CustomButton *backButton;
 @property (nonatomic, retain) IBOutlet CustomButton *homeButton;
-@property (nonatomic, retain) IBOutlet UIView *drawer;
-@property (nonatomic, retain) IBOutlet UIButton *drawerCopyButton;
-@property (nonatomic, retain) IBOutlet UIButton *drawerPasteButton;
-@property (nonatomic, retain) IBOutlet UIButton *copyAndPasteButton;
+@property (nonatomic, retain) IBOutlet CustomNavBar *navBar;
+@property (nonatomic, retain) IBOutlet CustomButton *copyAndPasteButton;
 
 @property (nonatomic, retain) UIView *sideSwipeView;
 @property (nonatomic, assign) UITableViewCell *sideSwipeCell;

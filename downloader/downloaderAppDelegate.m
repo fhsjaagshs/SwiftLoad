@@ -13,6 +13,26 @@ float sanitizeMesurement(float measurement) {
     return ((measurement/460)*[[UIScreen mainScreen]applicationFrame].size.height);
 }
 
+NSString * getNonConflictingFilePathForPath(NSString *path) {
+    NSString *ext = [path pathExtension];
+    NSString *newPath = [[[path stringByDeletingPathExtension]stringByAppendingString:@" - 1"]stringByAppendingPathComponent:ext];
+    
+    int appendNumber = 2;
+    
+    do {
+        newPath = [[[path stringByDeletingPathExtension]stringByAppendingString:[NSString stringWithFormat:@" - %d",appendNumber]]stringByAppendingPathComponent:ext];
+        
+        if (![[NSFileManager defaultManager]fileExistsAtPath:newPath]) {
+            break;
+        }
+        
+        appendNumber = appendNumber+1;
+        
+    } while (YES);
+    
+    return newPath;
+}
+
 @implementation downloaderAppDelegate
 
 @synthesize sessionController, progressView, isReciever, nowPlayingFile, sessionControllerSending, openFile, managerCurrentDir, restClient, downloadedData, expectedDownloadingFileSize, downloadedBytes;

@@ -17,6 +17,7 @@
 #define myCyan [UIColor colorWithRed:46.0f/255.0f green:1.0f blue:1.0f alpha:1.0f]
 
 float sanitizeMesurement(float measurement);
+NSString * getNonConflictingFilePathForPath(NSString *path);
 
 @interface downloaderAppDelegate : UIResponder <UIApplicationDelegate, BKSessionControllerDelegate, GKSessionDelegate, DBSessionDelegate, DBRestClientDelegate, MBProgressHUDDelegate, GKPeerPickerControllerDelegate, UITextFieldDelegate, NSURLConnectionDelegate> {
     CustomAlertView *avL;

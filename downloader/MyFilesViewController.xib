@@ -19,7 +19,6 @@
 			<string>IBUINavigationBar</string>
 			<string>IBUINavigationItem</string>
 			<string>IBUITableView</string>
-			<string>IBUITextField</string>
 			<string>IBUIView</string>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
@@ -321,44 +320,11 @@
 						<int key="NSvFlags">290</int>
 						<object class="NSMutableArray" key="NSSubviews">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="IBUITextField" id="953887290">
-								<reference key="NSNextResponder" ref="754435373"/>
-								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{66, 7}, {193, 31}}</string>
-								<reference key="NSSuperview" ref="754435373"/>
-								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="743799435"/>
-								<string key="NSReuseIdentifierKey">_NS:294</string>
-								<bool key="IBUIOpaque">NO</bool>
-								<bool key="IBUIClipsSubviews">YES</bool>
-								<bool key="IBUIUserInteractionEnabled">NO</bool>
-								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<int key="IBUIContentVerticalAlignment">0</int>
-								<string key="IBUIText"/>
-								<reference key="IBUITextColor" ref="917805324"/>
-								<int key="IBUITextAlignment">1</int>
-								<bool key="IBUIAdjustsFontSizeToFit">YES</bool>
-								<float key="IBUIMinimumFontSize">4</float>
-								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
-									<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								</object>
-								<object class="IBUIFontDescription" key="IBUIFontDescription">
-									<string key="name">Helvetica-Bold</string>
-									<string key="family">Helvetica</string>
-									<int key="traits">2</int>
-									<double key="pointSize">22</double>
-								</object>
-								<object class="NSFont" key="IBUIFont">
-									<string key="NSName">Helvetica-Bold</string>
-									<double key="NSSize">22</double>
-									<int key="NSfFlags">16</int>
-								</object>
-							</object>
 						</object>
 						<string key="NSFrameSize">{320, 44}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="953887290"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:240</string>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<object class="NSColor" key="IBUITintColor">
@@ -375,7 +341,6 @@
 									<int key="IBUIStyle">2</int>
 									<reference key="IBUINavigationItem" ref="424107871"/>
 								</object>
-								<reference key="IBUITitleView" ref="953887290"/>
 								<object class="IBUIBarButtonItem" key="IBUIRightBarButtonItem" id="588531618">
 									<string key="IBUITitle">Edit</string>
 									<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -437,43 +402,11 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">drawer</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="889522771"/>
-					</object>
-					<int key="connectionID">155</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">editButton</string>
 						<reference key="source" ref="372490531"/>
 						<reference key="destination" ref="588531618"/>
 					</object>
 					<int key="connectionID">102</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">folderPathTitle</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="953887290"/>
-					</object>
-					<int key="connectionID">43</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">drawerCopyButton</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="936430538"/>
-					</object>
-					<int key="connectionID">166</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">drawerPasteButton</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="950322007"/>
-					</object>
-					<int key="connectionID">167</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
@@ -508,12 +441,20 @@
 					<int key="connectionID">181</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">navBar</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="754435373"/>
+					</object>
+					<int key="connectionID">183</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
-						<string key="label">back</string>
+						<string key="label">close</string>
 						<reference key="source" ref="217788097"/>
 						<reference key="destination" ref="372490531"/>
 					</object>
-					<int key="connectionID">144</int>
+					<int key="connectionID">184</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
@@ -550,48 +491,12 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
-						<string key="label">moveFileToRoot</string>
-						<reference key="source" ref="2907335"/>
-						<reference key="destination" ref="372490531"/>
-						<int key="IBEventType">7</int>
-					</object>
-					<int key="connectionID">146</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">goBackDir</string>
 						<reference key="source" ref="670490187"/>
 						<reference key="destination" ref="372490531"/>
 						<int key="IBEventType">7</int>
 					</object>
 					<int key="connectionID">147</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchEventConnection" key="connection">
-						<string key="label">copyTheFile</string>
-						<reference key="source" ref="936430538"/>
-						<reference key="destination" ref="372490531"/>
-						<int key="IBEventType">7</int>
-					</object>
-					<int key="connectionID">164</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchEventConnection" key="connection">
-						<string key="label">pasteTheFile</string>
-						<reference key="source" ref="950322007"/>
-						<reference key="destination" ref="372490531"/>
-						<int key="IBEventType">7</int>
-					</object>
-					<int key="connectionID">165</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchEventConnection" key="connection">
-						<string key="label">toggleDrawer</string>
-						<reference key="source" ref="743799435"/>
-						<reference key="destination" ref="372490531"/>
-						<int key="IBEventType">1</int>
-					</object>
-					<int key="connectionID">170</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
@@ -654,7 +559,6 @@
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="217788097"/>
-							<reference ref="953887290"/>
 							<reference ref="588531618"/>
 						</object>
 						<reference key="parent" ref="754435373"/>
@@ -704,11 +608,6 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">46</int>
 						<reference key="object" ref="588531618"/>
-						<reference key="parent" ref="424107871"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">42</int>
-						<reference key="object" ref="953887290"/>
 						<reference key="parent" ref="424107871"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -783,7 +682,6 @@
 					<string>180.IBPluginDependency</string>
 					<string>4.CustomClassName</string>
 					<string>4.IBPluginDependency</string>
-					<string>42.IBPluginDependency</string>
 					<string>46.IBPluginDependency</string>
 					<string>75.CustomClassName</string>
 					<string>75.IBPluginDependency</string>
@@ -818,7 +716,6 @@
 					<string>CustomNavBar</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>CustomButton</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<real value="0.0"/>
@@ -837,7 +734,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">182</int>
+			<int key="maxID">184</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -875,26 +772,20 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>backButton</string>
 							<string>copyAndPasteButton</string>
-							<string>drawer</string>
-							<string>drawerCopyButton</string>
-							<string>drawerPasteButton</string>
 							<string>editButton</string>
-							<string>folderPathTitle</string>
 							<string>homeButton</string>
 							<string>mtrButton</string>
+							<string>navBar</string>
 							<string>theTableView</string>
 						</object>
 						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>CustomButton</string>
-							<string>UIButton</string>
-							<string>UIView</string>
-							<string>UIButton</string>
-							<string>UIButton</string>
+							<string>CustomButton</string>
 							<string>UIBarButtonItem</string>
-							<string>UITextField</string>
 							<string>CustomButton</string>
 							<string>CustomButton</string>
+							<string>CustomNavBar</string>
 							<string>UITableView</string>
 						</object>
 					</object>
@@ -904,13 +795,10 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>backButton</string>
 							<string>copyAndPasteButton</string>
-							<string>drawer</string>
-							<string>drawerCopyButton</string>
-							<string>drawerPasteButton</string>
 							<string>editButton</string>
-							<string>folderPathTitle</string>
 							<string>homeButton</string>
 							<string>mtrButton</string>
+							<string>navBar</string>
 							<string>theTableView</string>
 						</object>
 						<object class="NSArray" key="dict.values">
@@ -921,27 +809,11 @@
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">copyAndPasteButton</string>
-								<string key="candidateClassName">UIButton</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">drawer</string>
-								<string key="candidateClassName">UIView</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">drawerCopyButton</string>
-								<string key="candidateClassName">UIButton</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">drawerPasteButton</string>
-								<string key="candidateClassName">UIButton</string>
+								<string key="candidateClassName">CustomButton</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">editButton</string>
 								<string key="candidateClassName">UIBarButtonItem</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">folderPathTitle</string>
-								<string key="candidateClassName">UITextField</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">homeButton</string>
@@ -950,6 +822,10 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">mtrButton</string>
 								<string key="candidateClassName">CustomButton</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">navBar</string>
+								<string key="candidateClassName">CustomNavBar</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">theTableView</string>

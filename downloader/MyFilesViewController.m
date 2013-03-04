@@ -15,7 +15,7 @@
 
 @implementation MyFilesViewController
 
-@synthesize dirs, sideSwipeDirection, sideSwipeCell, sideSwipeView, animatingSideSwipe, drawer, drawerCopyButton, drawerPasteButton, editButton, theTableView, folderPathTitle, mtrButton, backButton, homeButton, filelist, movingFileFirst, pastingPath, docController, isCut, copiedList, perspectiveCopiedList;
+@synthesize dirs, sideSwipeDirection, sideSwipeCell, sideSwipeView, animatingSideSwipe, editButton, theTableView, mtrButton, backButton, homeButton, filelist, docController, isCut, copiedList, perspectiveCopiedList;
 
 - (void)removeAllCheckmarks {
     for (int i = 0; i < self.filelist.count; i++) {
@@ -30,8 +30,7 @@
         NSError *error = nil;
         
         if ([[NSFileManager defaultManager]fileExistsAtPath:newPath]) {
-            NSString *ext = [newPath pathExtension];
-            
+            newPath = getNonConflictingFilePathForPath(newPath);
         }
         
         if (self.isCut) {
@@ -228,7 +227,7 @@
 }
 
 - (void)refreshTableViewWithAnimation:(UITableViewRowAnimation)rowAnim {
-    indexOfCheckmark = -1;
+   // indexOfCheckmark = -1;
     [self.filelist removeAllObjects];
     [self.theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:rowAnim];
 }
@@ -301,12 +300,10 @@
     [pool release];
 }
 
-- (void)compress:(NSArray *)objects {
+- (void)compressItem:(NSString *)theFile intoZipFile:(NSString *)file {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
     
     [UIApplication sharedApplication].idleTimerDisabled = YES;
-    NSString *theFile = [objects objectAtIndex:0]; // file to add
-    NSString *file = [objects objectAtIndex:1]; // zip file
     NSString *currentDir = [kAppDelegate managerCurrentDir];
     
     BOOL isDirMe;    
@@ -488,10 +485,7 @@
     }
     
     [self refreshTableViewWithAnimation:UITableViewRowAnimationNone];
-    
-    [self setMovingFileFirst:nil];
 
-    [self.mtrButton setHidden:YES];
     [UIApplication sharedApplication].idleTimerDisabled = NO;
     
     [pool release];
@@ -549,7 +543,7 @@
     
     [self.dirs removeAllObjects];
     
-    NSString *dirdisp = self.folderPathTitle.text;
+    NSString *dirdisp = self.navBar.topItem.title;
     
     NSArray *addPathComponents = [dirdisp pathComponents];
     int count = addPathComponents.count;
@@ -574,10 +568,8 @@
     
     [kAppDelegate setManagerCurrentDir:prevDir];
     [self.dirs removeObject:[self.dirs lastObject]];
-    
-    NSString *oldTfPath = self.folderPathTitle.text;
-    NSString *newTfPath = [oldTfPath stringByDeletingLastPathComponent];
-    [self.folderPathTitle setText:newTfPath];
+
+    self.navBar.topItem.title = [self.navBar.topItem.title stringByDeletingLastPathComponent];
 
     if ([prevDir isEqualToString:kDocsDir]) {
         [self.backButton setHidden:YES];
@@ -587,23 +579,11 @@
     [self refreshTableViewWithAnimation:UITableViewRowAnimationRight];
 }
 
-- (IBAction)moveFileToRoot {
-    NSString *theCorrectFile = [[kAppDelegate managerCurrentDir] stringByAppendingPathComponent:self.movingFileFirst];
-    NSString *docsDirPlusFile = [kDocsDir stringByAppendingPathComponent:self.movingFileFirst];
-    [[NSFileManager defaultManager]moveItemAtPath:theCorrectFile toPath:docsDirPlusFile error:nil];
-    
-    [self.theTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexOfCheckmark inSection:0]].editingAccessoryType = UITableViewCellAccessoryNone;
-    
-    [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
-    [self.mtrButton setHidden:YES];
-    [self setMovingFileFirst:nil];
-}
-
 - (IBAction)goHome {
     [self removeSideSwipeView:NO];
     
     [self.dirs removeAllObjects];
-    [self.folderPathTitle setText:@"/"];
+    self.navBar.topItem.title = @"/";
     [self.backButton setHidden:YES];
     
     [kAppDelegate setManagerCurrentDir:kDocsDir];
@@ -614,7 +594,7 @@
     [self.theTableView setContentOffset:CGPointMake(0, 0)];
 }
 
-- (IBAction)back {
+- (IBAction)close {
     [self removeSideSwipeView:NO];
     [self.dirs removeAllObjects];
     [self.filelist removeAllObjects];
@@ -636,16 +616,6 @@
     });
 }
 
-- (void)setDrawerShadow {
-    self.drawer.layer.cornerRadius = 5;
-    self.drawer.layer.shadowRadius = 0.3;
-    self.drawer.layer.shadowColor = [UIColor blackColor].CGColor;
-    self.drawer.layer.shadowOpacity = 0.5f;
-    self.drawer.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
-    self.drawer.layer.shadowRadius = 5.0f;
-    self.drawer.layer.shadowPath = [UIBezierPath bezierPathWithRect:CGRectMake(-1, -1, drawer.frame.size.width+2, drawer.frame.size.height+2)].CGPath;
-}
-
 - (void)viewDidLoad {       
     [super viewDidLoad];
     
@@ -663,10 +633,9 @@
 
     [kAppDelegate setManagerCurrentDir:kDocsDir];
 
-    [self.folderPathTitle setText:@"/"];
+    self.navBar.topItem.title = @"/";
     
     animatingSideSwipe = NO;
-    indexOfCheckmark = -1;
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(copiedListChanged:) name:@"copiedlistchanged" object:nil];
 }
@@ -732,12 +701,6 @@
 
         cell.detailTextLabel.textColor = [UIColor blackColor];
     }
-    
-   /* if (indexOfCheckmark == indexPath.row) {
-        cell.editingAccessoryType = UITableViewCellAccessoryCheckmark;
-    } else {
-        cell.editingAccessoryType = UITableViewCellAccessoryNone;
-    }*/
     
     cell.editingAccessoryType = UITableViewCellAccessoryNone;
     
@@ -826,14 +789,12 @@
 
         [kAppDelegate setOpenFile:file];
         
-        BOOL result = [[[file pathExtension]lowercaseString]isEqualToString:@"zip"];
+        BOOL isZip = [[[file pathExtension]lowercaseString]isEqualToString:@"zip"];
         BOOL isDir;    
         BOOL directoryExists = [[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir];
     
         if (self.editing) {
-            
             if ([self.perspectiveCopiedList containsObject:file]) {
-                // remove the checkmark
                 [self removeItemFromPerspectiveCopyList:file];
                 cell.editingAccessoryType = UITableViewCellAccessoryNone;
             } else {
@@ -846,116 +807,79 @@
             
             [self updateCopyButtonState];
             
-            /*if (self.movingFileFirst.length == 0) {
-                [tableView cellForRowAtIndexPath:indexPath].editingAccessoryType = UITableViewCellAccessoryCheckmark;
-                indexOfCheckmark = indexPath.row;
-                
-                [self setMovingFileFirst:cellName];
-
-                BOOL isDocsDir = [[kAppDelegate managerCurrentDir] isEqualToString:kDocsDir];
-                
-                if (isDocsDir == NO) {
-                    [self.mtrButton setHidden:NO];
-                }  
-                
-            } else {
-                NSString *folderDest = cellName;
-                NSString *theFile = [[kAppDelegate managerCurrentDir] stringByAppendingPathComponent:self.movingFileFirst];
-                NSString *theDestFolder = [[kAppDelegate managerCurrentDir] stringByAppendingPathComponent:folderDest];
-                NSString *theDest = [theDestFolder stringByAppendingPathComponent:self.movingFileFirst];
-                
-                BOOL destIsADir;
-                BOOL existsAtDest = [[NSFileManager defaultManager]fileExistsAtPath:theDest isDirectory:&destIsADir];
-                
-                if ([theFile isEqualToString:theDestFolder]) {
-                    [self.theTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexOfCheckmark inSection:0]].editingAccessoryType = UITableViewCellAccessoryNone;
-                    [self setMovingFileFirst:nil];
-                    [self.mtrButton setHidden:YES];
-                } else if (existsAtDest && !destIsADir) {
-                    NSString *destRelative = [[theDest stringByReplacingOccurrencesOfString:kDocsDir withString:@""]stringByDeletingLastPathComponent];
-                    NSString *message = [NSString stringWithFormat:@"The file \"%@\" already exists at %@.",self.movingFileFirst,destRelative];
-                    CustomAlertView *av1 = [[CustomAlertView alloc]initWithTitle:@"File Exists" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                    [av1 show];
-                    [av1 release];
-                } else if (isDir) { // move to new dir code (the newest cell click is a dir)
-                    [self.theTableView deselectRowAtIndexPath:indexPath animated:NO];
-                    [[NSFileManager defaultManager]moveItemAtPath:theFile toPath:theDest error:nil];
-                    [self setMovingFileFirst:nil];
-                    [self.mtrButton setHidden:YES];
-                    [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
-                } else if (result) {
-                    NSArray *objects = [[NSArray alloc]initWithObjects:theFile, file, nil];
-                    MBProgressHUD *HUD = [[MBProgressHUD alloc]initWithView:ad.window];
-                    [ad.window addSubview:HUD];
-                    HUD.delegate = self;
-                    HUD.mode = MBProgressHUDModeIndeterminate;
-                    HUD.labelText = @"Compressing...";
-                    [HUD showWhileExecuting:@selector(compress:) onTarget:self withObject:objects animated:YES];
-                    [HUD release];
-                    [objects release];
-                } 
-             }*/
-    } else if (directoryExists && isDir) { 
-        [self.backButton setHidden:NO];
-        [self.homeButton setHidden:NO];
+            // For archives, have option to decompress or add clipboard to the archive.
+            
+            // here is the old method for doing the compression:
+            /*NSArray *objects = [[NSArray alloc]initWithObjects:theFile, file, nil];
+             MBProgressHUD *HUD = [[MBProgressHUD alloc]initWithView:ad.window];
+             [ad.window addSubview:HUD];
+             HUD.delegate = self;
+             HUD.mode = MBProgressHUDModeIndeterminate;
+             HUD.labelText = @"Compressing...";
+             [HUD showWhileExecuting:@selector(compress:) onTarget:self withObject:objects animated:YES];
+             [HUD release];
+             [objects release];*/
+            
+        } else if (directoryExists && isDir) { 
+            [self.backButton setHidden:NO];
+            [self.homeButton setHidden:NO];
         
-        [self.folderPathTitle setText:[self.folderPathTitle.text stringByAppendingPathComponent:[file lastPathComponent]]];
+            self.navBar.topItem.title = [self.navBar.topItem.title stringByAppendingPathComponent:[file lastPathComponent]];
         
-        [kAppDelegate setManagerCurrentDir:file];
+            [kAppDelegate setManagerCurrentDir:file];
         
-        [self recalculateDirs];
+            [self recalculateDirs];
         
-        [self refreshTableViewWithAnimation:UITableViewRowAnimationLeft];
-        [self.theTableView flashScrollIndicators];
+            [self refreshTableViewWithAnimation:UITableViewRowAnimationLeft];
+            [self.theTableView flashScrollIndicators];
         
-    } else if (result) {
-        if (fileSize(file) > 0) {
-            HUDZ = [[MBProgressHUD alloc]initWithView:ad.window];
-            [ad.window addSubview:HUDZ];
-            HUDZ.delegate = self;
-            HUDZ.mode = MBProgressHUDModeDeterminate;
-            HUDZ.labelText = @"Inflating...";
-            HUDZ.detailsLabelText = [file lastPathComponent];
-            [HUDZ showWhileExecuting:@selector(inflate:) onTarget:self withObject:file animated:YES];
-            [HUDZ release];
-        }
-    } else {
-        BOOL isHTML = [MIMEUtils isHTMLFile:file];
-        
-        if ([MIMEUtils isAudioFile:file]) {
-            AudioPlayerViewController *audio = [[AudioPlayerViewController alloc]initWithAutoNib];
-            audio.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-            [self presentModalViewController:audio animated:YES];
-            [audio release];
-        } else if ([MIMEUtils isImageFile:file]) {
-            pictureView *pView = [pictureView viewController];
-            pView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-            [self presentModalViewController:pView animated:YES];
-        } else if ([MIMEUtils isTextFile:file] && !isHTML) {
-            dedicatedTextEditor *dte = [dedicatedTextEditor viewController];
-            dte.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-            [self presentModalViewController:dte animated:YES];
-        } else if ([MIMEUtils isVideoFile:file]) {
-            moviePlayerView *mpv = [moviePlayerView viewController];
-            mpv.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-            [self presentModalViewController:mpv animated:YES];
-        } else if ([MIMEUtils isDocumentFile:file] || isHTML) {
-            MyFilesViewDetailViewController *detail = [MyFilesViewDetailViewController viewController];
-            detail.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-            [self presentModalViewController:detail animated:YES];
+        } else if (isZip) {
+            if (fileSize(file) > 0) {
+                HUDZ = [[MBProgressHUD alloc]initWithView:ad.window];
+                [ad.window addSubview:HUDZ];
+                HUDZ.delegate = self;
+                HUDZ.mode = MBProgressHUDModeDeterminate;
+                HUDZ.labelText = @"Inflating...";
+                HUDZ.detailsLabelText = [file lastPathComponent];
+                [HUDZ showWhileExecuting:@selector(inflate:) onTarget:self withObject:file animated:YES];
+                [HUDZ release];
+            }
         } else {
-            NSString *fileName = [file lastPathComponent];
-            NSString *message = [NSString stringWithFormat:@"SwiftLoad cannot identify:\n%@\nPlease select what viewer to open it in.",fileName];
+            BOOL isHTML = [MIMEUtils isHTMLFile:file];
+        
+            if ([MIMEUtils isAudioFile:file]) {
+                AudioPlayerViewController *audio = [AudioPlayerViewController viewController];
+                audio.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+                [self presentModalViewController:audio animated:YES];
+            } else if ([MIMEUtils isImageFile:file]) {
+                pictureView *pView = [pictureView viewController];
+                pView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+                [self presentModalViewController:pView animated:YES];
+            } else if ([MIMEUtils isTextFile:file] && !isHTML) {
+                dedicatedTextEditor *dte = [dedicatedTextEditor viewController];
+                dte.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+                [self presentModalViewController:dte animated:YES];
+            } else if ([MIMEUtils isVideoFile:file]) {
+                moviePlayerView *mpv = [moviePlayerView viewController];
+                mpv.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+                [self presentModalViewController:mpv animated:YES];
+            } else if ([MIMEUtils isDocumentFile:file] || isHTML) {
+                MyFilesViewDetailViewController *detail = [MyFilesViewDetailViewController viewController];
+                detail.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+                [self presentModalViewController:detail animated:YES];
+            } else {
+                NSString *fileName = [file lastPathComponent];
+                NSString *message = [NSString stringWithFormat:@"SwiftLoad cannot identify:\n%@\nPlease select what viewer to open it in.",fileName];
             
-            UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-                [self actionSheetAction:actionSheet buttonIndex:buttonIndex];
-            } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Open In Text Editor", @"Open In Movie Player", @"Open In Picture Viewer", @"Open In Audio Player", @"Open In Document Viewer", @"Open In...", nil];
+                UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+                    [self actionSheetAction:actionSheet buttonIndex:buttonIndex];
+                } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Open in Text Editor", @"Open in Movie Player", @"Open in Picture Viewer", @"Open in Audio Player", @"Open in Document Viewer", @"Open In...", nil];
             
-            sheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
-            [sheet showInView:self.view];
-            [sheet release];
+                sheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+                [sheet showInView:self.view];
+                [sheet release];
+            }
         }
-    }
     }
     [self.theTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -1003,8 +927,8 @@
             cell.editingAccessoryType = UITableViewCellEditingStyleNone;
         }
         [self flushPerspectiveCopyList];
-        indexOfCheckmark = -1;
-        [self setMovingFileFirst:nil];
+        //indexOfCheckmark = -1;
+        //[self setMovingFileFirst:nil];
     } else {
         [self.editButton setTitle:@"Done"];
         [self.homeButton setHidden:YES];
@@ -1091,150 +1015,6 @@
     if (event.type == UIEventSubtypeMotionShake) {
         [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
         [self.theTableView flashScrollIndicators];
-    }
-}
-
-- (void)hideDrawerSubviews:(BOOL)hide {
-    for (UIView *view in drawer.subviews) {
-        [view setHidden:hide];
-    }
-}
-
-- (void)hideTheDrawer {
-    CGRect hiddenRect = CGRectMake(66, 0, 193, 44);
-    [self performSelector:@selector(hideTheDamnThing) withObject:nil afterDelay:0.61];
-    [self hideDrawerSubviews:YES];
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.5];
-    [UIView setAnimationDelay:0.1];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-    [self setDrawerShadow];
-    [self.drawer setFrame:hiddenRect];
-    [self setDrawerShadow];
-    [UIView commitAnimations];
-    [self setDrawerShadow];
-    for (UIView *view in self.view.subviews) {
-        view.userInteractionEnabled = YES;
-    }
-}
-
-- (IBAction)copyTheFile {
-    NSString *copyString = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:self.movingFileFirst];
-    [self refreshTableViewWithAnimation:UITableViewRowAnimationNone];
-    [self setPastingPath:copyString];
-    [self hideTheDrawer];
-}
-
-- (IBAction)pasteTheFile {
-    NSString *pastePath = [[kAppDelegate managerCurrentDir] stringByAppendingPathComponent:[self.pastingPath lastPathComponent]];
-    
-    if ([[NSFileManager defaultManager]fileExistsAtPath:pastePath]) {
-        NSString *lpc = [self.pastingPath lastPathComponent];
-        NSString *ext = [lpc pathExtension];
-        NSString *justName = [lpc stringByDeletingPathExtension];
-        NSString *newFilename = [[justName stringByAppendingString:@" (copy)."]stringByAppendingString:ext];
-        pastePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:newFilename];
-    }
-    
-    [[NSFileManager defaultManager]copyItemAtPath:self.pastingPath toPath:pastePath error:nil];
-    [self setPastingPath:nil];
-    
-    [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
-    [self hideTheDrawer];
-}
-
-- (void)hideTheDamnThing {
-    [self.drawer setHidden:YES];
-    [self setDrawerShadow];
-    for (UIView *view in self.view.subviews) {
-        view.userInteractionEnabled = YES;
-    }
-}
-
-- (void)unhideAnimation {
-    [self hideDrawerSubviews:NO];
-    
-    for (UIView *view in self.view.subviews) {
-        view.userInteractionEnabled = NO;
-        if (view.tag == 1) {
-            view.userInteractionEnabled = YES;
-        }
-    }
-    
-    self.drawer.userInteractionEnabled = YES;
-    self.drawerCopyButton.userInteractionEnabled = YES;
-    self.drawerPasteButton.userInteractionEnabled = YES;
-}
-
-- (IBAction)toggleDrawer {
-    
-    CGRect hiddenRect = CGRectMake(66, 0, 193, 44);
-    CGRect visibleRect = CGRectMake(66, 41, 193, 121);
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        hiddenRect = CGRectMake(288, 0, 193, 44);
-        visibleRect = CGRectMake(288, 41, 193, 121);
-    }
-
-    if (self.editing && self.movingFileFirst.length > 0) {
-        [self.drawerCopyButton setEnabled:YES];
-        [self.drawerCopyButton setAlpha:1.0];
-    } else {
-        [self.drawerCopyButton setEnabled:NO];
-        [self.drawerCopyButton setAlpha:0.5];
-    }
-    
-    if (self.pastingPath.length > 0) {
-        [self.drawerPasteButton setEnabled:YES];
-        [self.drawerPasteButton setAlpha:1.0];
-    } else {
-        [self.drawerPasteButton setEnabled:NO];
-        [self.drawerPasteButton setAlpha:0.5];
-    }
-
-    if (CGRectEqualToRect(hiddenRect, self.drawer.frame)) {
-        [self.drawer setHidden:NO];
-        [self hideDrawerSubviews:YES];
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.3];
-        [UIView setAnimationDelay:0.0];
-        [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-        [UIView setAnimationDelegate:self];
-        [UIView setAnimationDidStopSelector:@selector(unhideAnimation)];
-        [self setDrawerShadow];
-        [self.drawer setFrame:visibleRect];
-        [self setDrawerShadow];
-        [UIView commitAnimations];
-    } else {
-        [self hideDrawerSubviews:YES];
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.3];
-        [UIView setAnimationDelay:0.0];
-        [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-        [UIView setAnimationDelegate:self];
-        [UIView setAnimationDidStopSelector:@selector(hideTheDamnThing)];
-        [self setDrawerShadow];
-        [self.drawer setFrame:hiddenRect];
-        [self setDrawerShadow];
-        [UIView commitAnimations];
-    }
-}
-
-- (BOOL)canBecomeFirstResponder {
-    return YES;
-}
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    CGPoint location = [[[event allTouches]anyObject] locationInView:self.view];
-    
-    CGRect hiddenRect = CGRectMake(66, 0, 193, 44);
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        hiddenRect = CGRectMake(288, 0, 193, 44);
-    }
-  
-    if (!CGRectContainsPoint(self.drawer.frame, location) && !CGRectEqualToRect(hiddenRect, self.drawer.frame)) {
-        [self toggleDrawer];
     }
 }
 
@@ -1458,7 +1238,8 @@
 }
 
 - (UIImage *)imageFilledWith:(UIColor *)color using:(UIImage *)startImage {
-    CGRect imageRect = CGRectMake(0, 0, CGImageGetWidth(startImage.CGImage), CGImageGetHeight(startImage.CGImage));
+    //CGRect imageRect = CGRectMake(0, 0, CGImageGetWidth(startImage.CGImage), CGImageGetHeight(startImage.CGImage));
+    CGRect imageRect = CGRectMake(0, 0, startImage.size.width, startImage.size.height);
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef context = CGBitmapContextCreate(nil, imageRect.size.width, imageRect.size.height, 8, 0, colorSpace, kCGImageAlphaPremultipliedLast);
     
@@ -1669,12 +1450,8 @@
     [self setPerspectiveCopiedList:nil];
     [self setCopiedList:nil];
     [self setDocController:nil];
-    [self setMovingFileFirst:nil];
     [self setFilelist:nil];
     [self setDirs:nil];
-    [self setDrawer:nil];
-    [self setDrawerCopyButton:nil];
-    [self setDrawerPasteButton:nil];
     [self setEditButton:nil];
     [self setTheTableView:nil];
     [self setFolderPathTitle:nil];
