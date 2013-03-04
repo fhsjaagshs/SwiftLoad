@@ -295,6 +295,8 @@
     [unzipFile close];
     [unzipFile release];
     
+    [kAppDelegate hideHUD];
+    
     [UIApplication sharedApplication].idleTimerDisabled = NO;
     [self refreshTableViewWithAnimation:UITableViewRowAnimationNone];
     
@@ -628,8 +630,8 @@
 - (void)viewDidLoad {       
     [super viewDidLoad];
     
-    UIImage *bbiImage = [getButtonImage() resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
-    [self.editButton setBackgroundImage:bbiImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+   // UIImage *bbiImage = [getButtonImage() resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
+   // [self.editButton setBackgroundImage:bbiImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         self.theTableView.rowHeight = 60;
@@ -646,6 +648,8 @@
     
     animatingSideSwipe = NO;
     
+    UIImage *grayImage = [self imageFilledWith:[UIColor colorWithWhite:1.0f alpha:1.0f] using:[UIImage imageNamed:@"clipboard"]];
+    [self.copyAndPasteButton setImage:grayImage forState:UIControlStateNormal];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(copiedListChanged:) name:@"copiedlistchanged" object:nil];
 }
 
@@ -1236,7 +1240,7 @@
         button.layer.borderColor = [UIColor clearColor].CGColor;
         button.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
 
-        NSString *imagePathRetina = [[[[[NSBundle mainBundle]bundlePath] stringByAppendingPathComponent:[buttonInfo objectForKey:@"image"]] stringByDeletingPathExtension]stringByAppendingString:@"@2x.png"];
+        NSString *imagePathRetina = [[[[[NSBundle mainBundle]bundlePath]stringByAppendingPathComponent:[buttonInfo objectForKey:@"image"]] stringByDeletingPathExtension]stringByAppendingString:@"@2x.png"];
         
         UIImage *buttonImage = nil;
 

@@ -32,6 +32,8 @@
 		F149A685149176E60038F1FC /* moviePlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F149A683149176E60038F1FC /* moviePlayerView.m */; };
 		F15277D113F4B08800338673 /* MyFilesViewDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F15277CF13F4B08800338673 /* MyFilesViewDetailViewController.m */; };
 		F160738316DCEA6F0084C6A9 /* MyFilesViewController~iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F160738216DCEA6F0084C6A9 /* MyFilesViewController~iPad.xib */; };
+		F165C3E816E44244004B81F1 /* clipboard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F165C3E716E44244004B81F1 /* clipboard@2x.png */; };
+		F165C3EC16E445E5004B81F1 /* clipboard.png in Resources */ = {isa = PBXBuildFile; fileRef = F165C3EB16E445E5004B81F1 /* clipboard.png */; };
 		F166BBC414E2171A003E5A07 /* webDAVViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F166BBC214E2171A003E5A07 /* webDAVViewController.m */; };
 		F166BC1914E21973003E5A07 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F166BC1814E21973003E5A07 /* libxml2.dylib */; };
 		F1693BFC16DFAA08006E3739 /* DDData.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BC916DFAA08006E3739 /* DDData.m */; };
@@ -174,6 +176,8 @@
 		F15277CE13F4B08800338673 /* MyFilesViewDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyFilesViewDetailViewController.h; sourceTree = "<group>"; };
 		F15277CF13F4B08800338673 /* MyFilesViewDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFilesViewDetailViewController.m; sourceTree = "<group>"; };
 		F160738216DCEA6F0084C6A9 /* MyFilesViewController~iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MyFilesViewController~iPad.xib"; sourceTree = "<group>"; };
+		F165C3E716E44244004B81F1 /* clipboard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clipboard@2x.png"; sourceTree = "<group>"; };
+		F165C3EB16E445E5004B81F1 /* clipboard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clipboard.png; sourceTree = "<group>"; };
 		F166BBC114E2171A003E5A07 /* webDAVViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = webDAVViewController.h; sourceTree = "<group>"; };
 		F166BBC214E2171A003E5A07 /* webDAVViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = webDAVViewController.m; sourceTree = "<group>"; };
 		F166BC1814E21973003E5A07 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
@@ -696,6 +700,8 @@
 				F1EB833916D808AA009D7D2D /* nexttrack.png */,
 				F1EB833A16D808AA009D7D2D /* paperclip@2x.png */,
 				F1EB833B16D808AA009D7D2D /* prevtrack.png */,
+				F165C3EB16E445E5004B81F1 /* clipboard.png */,
+				F165C3E716E44244004B81F1 /* clipboard@2x.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -808,6 +814,8 @@
 				F1EB836316D808EC009D7D2D /* icon~iPad@2x.png in Resources */,
 				F1EB836416D808EC009D7D2D /* iTunesArtwork.png in Resources */,
 				F160738316DCEA6F0084C6A9 /* MyFilesViewController~iPad.xib in Resources */,
+				F165C3E816E44244004B81F1 /* clipboard@2x.png in Resources */,
+				F165C3EC16E445E5004B81F1 /* clipboard.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
