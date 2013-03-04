@@ -839,10 +839,6 @@
 
     int cellCount = [self.theTableView numberOfRowsInSection:0];
     
-    if (self.editing) {
-        cellCount = cellCount-1;
-    }
-    
     if (indexPath.row != cellCount) {
         NSString *cellName = cell.textLabel.text;
         NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:cellName];
@@ -855,7 +851,7 @@
     
         if (self.editing) {
             
-            if (indexPath.row == cellCount) {
+            if (indexPath.row == cellCount-1) {
                 [self showFileCreationAlertView];
             } else {
                 if ([self.perspectiveCopiedList containsObject:file]) {
@@ -1029,11 +1025,8 @@
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    [self reindexFilelist];
-
     NSString *textLabel = [self.theTableView cellForRowAtIndexPath:indexPath].textLabel.text;
-    NSString *file = [[kAppDelegate managerCurrentDir] stringByAppendingPathComponent:textLabel];
+    NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:textLabel];
     
     BOOL isDir;
     [[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir];
@@ -1046,6 +1039,7 @@
             return UITableViewCellEditingStyleNone;
         }
     } else if (self.editing) {
+        [self reindexFilelist];
         if (indexPath.row == self.filelist.count) {
             return UITableViewCellEditingStyleInsert;
         }
@@ -1057,11 +1051,8 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        
-        [self reindexFilelist];
-        
         NSString *cellName = [self.theTableView cellForRowAtIndexPath:indexPath].textLabel.text;
-        NSString *removePath = [[kAppDelegate managerCurrentDir] stringByAppendingPathComponent:cellName];
+        NSString *removePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:cellName];
         
         [[NSFileManager defaultManager]removeItemAtPath:removePath error:nil];
         [self.filelist removeAllObjects];
@@ -1191,23 +1182,20 @@
     } else if (number == 2) {
         [kAppDelegate showBTController];
         [self removeSideSwipeView:YES];
-        
     } else if (number == 3) {
-        BOOL sendsMail = [MFMailComposeViewController canSendMail];
-        if (sendsMail == NO) {
+        if (![MFMailComposeViewController canSendMail]) {
             CustomAlertView *avf = [[CustomAlertView alloc]initWithTitle:@"Mail Unavailable" message:@"In order to use this functionality, you must set up an email account in Settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [avf show];
             [avf release];
-        } else if (sendsMail == YES) {
+        } else {
             MFMailComposeViewController *controller = [[MFMailComposeViewController alloc]init];
             controller.mailComposeDelegate = self;
             [controller setSubject:@"Your file"];
-            NSData *myData = [[NSData alloc]initWithContentsOfFile:file];
+            NSData *myData = [NSData dataWithContentsOfFile:file];
             [controller addAttachmentData:myData mimeType:[MIMEUtils fileMIMEType:file] fileName:[file lastPathComponent]];
             [controller setMessageBody:@"" isHTML:NO];
             [self presentModalViewController:controller animated:YES];
             [controller release];
-            [myData release];
         }
         [self removeSideSwipeView:YES];
         
@@ -1217,9 +1205,6 @@
         UIActionSheet *popupQuery = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             
             if (buttonIndex == actionSheet.destructiveButtonIndex) {
-                
-                [self reindexFilelist];
-                
                 [[NSFileManager defaultManager]removeItemAtPath:file error:nil];
                 [self.filelist removeAllObjects];
                 NSIndexPath *indexPath = [self.theTableView indexPathForCell:self.sideSwipeCell];
