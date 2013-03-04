@@ -26,11 +26,11 @@
 @property (nonatomic, retain) NSMutableArray *dirs;
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *editButton;
+@property (nonatomic, retain) UIBarButtonItem *editButton;
 @property (nonatomic, retain) IBOutlet CustomButton *backButton;
-@property (nonatomic, retain) IBOutlet CustomButton *homeButton;
-@property (nonatomic, retain) IBOutlet CustomNavBar *navBar;
-@property (nonatomic, retain) IBOutlet CustomButton *copyAndPasteButton;
+@property (nonatomic, retain) CustomButton *homeButton;
+@property (nonatomic, retain) CustomNavBar *navBar;
+@property (nonatomic, retain) CustomButton *copyAndPasteButton;
 
 @property (nonatomic, retain) UIView *sideSwipeView;
 @property (nonatomic, assign) UITableViewCell *sideSwipeCell;

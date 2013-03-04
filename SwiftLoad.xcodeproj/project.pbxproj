@@ -31,7 +31,6 @@
 		F149A6781491686D0038F1FC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F149A6771491686D0038F1FC /* AudioToolbox.framework */; };
 		F149A685149176E60038F1FC /* moviePlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F149A683149176E60038F1FC /* moviePlayerView.m */; };
 		F15277D113F4B08800338673 /* MyFilesViewDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F15277CF13F4B08800338673 /* MyFilesViewDetailViewController.m */; };
-		F160738316DCEA6F0084C6A9 /* MyFilesViewController~iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F160738216DCEA6F0084C6A9 /* MyFilesViewController~iPad.xib */; };
 		F165C3E816E44244004B81F1 /* clipboard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F165C3E716E44244004B81F1 /* clipboard@2x.png */; };
 		F165C3EC16E445E5004B81F1 /* clipboard.png in Resources */ = {isa = PBXBuildFile; fileRef = F165C3EB16E445E5004B81F1 /* clipboard.png */; };
 		F166BBC414E2171A003E5A07 /* webDAVViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F166BBC214E2171A003E5A07 /* webDAVViewController.m */; };
@@ -125,7 +124,6 @@
 		F1F114C5142AA29F00199C3C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F114C4142AA29F00199C3C /* SystemConfiguration.framework */; };
 		F1F114C7142AA3F400199C3C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F114C6142AA3F400199C3C /* CFNetwork.framework */; };
 		F1F114E3142AA73F00199C3C /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F114E2142AA73F00199C3C /* MobileCoreServices.framework */; };
-		F1FA83DB13F870B70083FB4C /* MyFilesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1FA83DA13F870B70083FB4C /* MyFilesViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -175,7 +173,6 @@
 		F149A683149176E60038F1FC /* moviePlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = moviePlayerView.m; sourceTree = "<group>"; };
 		F15277CE13F4B08800338673 /* MyFilesViewDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyFilesViewDetailViewController.h; sourceTree = "<group>"; };
 		F15277CF13F4B08800338673 /* MyFilesViewDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFilesViewDetailViewController.m; sourceTree = "<group>"; };
-		F160738216DCEA6F0084C6A9 /* MyFilesViewController~iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MyFilesViewController~iPad.xib"; sourceTree = "<group>"; };
 		F165C3E716E44244004B81F1 /* clipboard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clipboard@2x.png"; sourceTree = "<group>"; };
 		F165C3EB16E445E5004B81F1 /* clipboard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clipboard.png; sourceTree = "<group>"; };
 		F166BBC114E2171A003E5A07 /* webDAVViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = webDAVViewController.h; sourceTree = "<group>"; };
@@ -328,7 +325,6 @@
 		F1F114C6142AA3F400199C3C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		F1F114E2142AA73F00199C3C /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		F1F114E4142AA74F00199C3C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		F1FA83DA13F870B70083FB4C /* MyFilesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyFilesViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -452,8 +448,6 @@
 				F1C92A34142D4F5500EFD2E6 /* Images */,
 				F11C405913F83CA20077F5D1 /* MyFilesViewController.h */,
 				F1EDE3F513F8708600C17B2A /* MyFilesViewController.m */,
-				F1FA83DA13F870B70083FB4C /* MyFilesViewController.xib */,
-				F160738216DCEA6F0084C6A9 /* MyFilesViewController~iPad.xib */,
 				F17DC660140C456E0015F613 /* AudioPlayerViewController.h */,
 				F17DC65E140C45690015F613 /* AudioPlayerViewController.m */,
 				F11FE414145F8218008ECC7E /* dedicatedTextEditor.h */,
@@ -787,7 +781,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F1FA83DB13F870B70083FB4C /* MyFilesViewController.xib in Resources */,
 				F1EB833C16D808AA009D7D2D /* action@2x.png in Resources */,
 				F1EB833D16D808AA009D7D2D /* bluetooth@2x.png in Resources */,
 				F1EB833E16D808AA009D7D2D /* config.png in Resources */,
@@ -813,7 +806,6 @@
 				F1EB836216D808EC009D7D2D /* icon~iPad.png in Resources */,
 				F1EB836316D808EC009D7D2D /* icon~iPad@2x.png in Resources */,
 				F1EB836416D808EC009D7D2D /* iTunesArtwork.png in Resources */,
-				F160738316DCEA6F0084C6A9 /* MyFilesViewController~iPad.xib in Resources */,
 				F165C3E816E44244004B81F1 /* clipboard@2x.png in Resources */,
 				F165C3EC16E445E5004B81F1 /* clipboard.png in Resources */,
 			);

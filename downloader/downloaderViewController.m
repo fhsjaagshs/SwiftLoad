@@ -483,10 +483,9 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 - (void)showFiles {
     [[UIApplication sharedApplication]cancelAllLocalNotifications];
-    MyFilesViewController *filesViewMe = [[MyFilesViewController alloc]initWithAutoNib];
+    MyFilesViewController *filesViewMe = [MyFilesViewController viewController];
     filesViewMe.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
 	[self presentModalViewController:filesViewMe animated:YES];
-    [filesViewMe release];
 }
 
 - (void)showWebBrowser {

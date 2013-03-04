@@ -17,6 +17,80 @@
 
 @synthesize dirs, sideSwipeDirection, sideSwipeCell, sideSwipeView, animatingSideSwipe, editButton, theTableView, backButton, homeButton, filelist, docController, isCut, copiedList, perspectiveCopiedList;
 
+- (void)loadView {
+    [super loadView];
+    
+    CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
+    BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
+    
+    self.view = [[[UIView alloc]initWithFrame:screenBounds]autorelease];
+    self.view.backgroundColor = [UIColor clearColor];
+    
+    self.navBar = [[[CustomNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
+    self.navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    UINavigationItem *topItem = [[[UINavigationItem alloc]initWithTitle:@"/"]autorelease];
+    // Will give you a nifty down-pointing arrow
+    // self.editButton = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:@"Edit" target:self action:@selector(editTable)]autorelease];
+    self.editButton = [[[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(editTable)]autorelease];
+    topItem.rightBarButtonItem = self.editButton;
+    topItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)]autorelease];
+    [self.navBar pushNavigationItem:topItem animated:YES];
+    [self.view addSubview:self.navBar];
+    [self.view bringSubviewToFront:self.navBar];
+    
+    ButtonBarView *bbv = [[[ButtonBarView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, 44)]autorelease];
+    bbv.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    [self.view addSubview:bbv];
+    
+    self.copyAndPasteButton = [[[CustomButton alloc]initWithFrame:iPad?CGRectMake(612, 6, 36, 36):CGRectMake(232, 5, 36, 36)]autorelease];
+    self.copyAndPasteButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
+    UIImage *grayImage = [self imageFilledWith:[UIColor colorWithWhite:1.0f alpha:1.0f] using:[UIImage imageNamed:@"clipboard"]];
+    [self.copyAndPasteButton setImage:grayImage forState:UIControlStateNormal];
+    [self.copyAndPasteButton addTarget:self action:@selector(showCopyPasteController) forControlEvents:UIControlEventTouchUpInside];
+    [bbv addSubview:self.copyAndPasteButton];
+    [self.copyAndPasteButton setHidden:YES];
+    
+    self.homeButton = [[[CustomButton alloc]initWithFrame:iPad?CGRectMake(358, 6, 62, 36):CGRectMake(123, 4, 62, 36)]autorelease];
+    [self.homeButton setTitle:@"Home" forState:UIControlStateNormal];
+    [self.homeButton addTarget:self action:@selector(goHome) forControlEvents:UIControlEventTouchUpInside];
+    self.homeButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
+    self.homeButton.titleLabel.shadowColor = [UIColor blackColor];
+    self.homeButton.titleLabel.shadowOffset = CGSizeMake(0, -1);
+    self.homeButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
+    [bbv addSubview:self.homeButton];
+    [self.homeButton setHidden:YES];
+    
+    self.backButton = [[[CustomButton alloc]initWithFrame:iPad?CGRectMake(117, 6, 62, 36):CGRectMake(53, 4, 62, 37)]autorelease];
+    [self.backButton setTitle:@"Back" forState:UIControlStateNormal];
+    [self.backButton addTarget:self action:@selector(goBackDir) forControlEvents:UIControlEventTouchUpInside];
+    self.backButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
+    self.backButton.titleLabel.shadowColor = [UIColor blackColor];
+    self.backButton.titleLabel.shadowOffset = CGSizeMake(0, -1);
+    self.backButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
+    [bbv addSubview:self.backButton];
+    [self.backButton setHidden:YES];
+    
+    self.theTableView = [[[ShadowedTableView alloc]initWithFrame:CGRectMake(0, 88, screenBounds.size.width, screenBounds.size.height-88) style:UITableViewStylePlain]autorelease];
+    self.theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    self.theTableView.backgroundColor = [UIColor clearColor];
+    self.theTableView.rowHeight = iPad?60:44;
+    self.theTableView.dataSource = self;
+    self.theTableView.delegate = self;
+    [self.view addSubview:self.theTableView];
+    
+    PullToRefreshView *pull = [[PullToRefreshView alloc]initWithScrollView:self.theTableView];
+    [pull setDelegate:self];
+    [self.theTableView addSubview:pull];
+    [pull release];
+    
+    [kAppDelegate setManagerCurrentDir:kDocsDir];
+    
+    animatingSideSwipe = NO;
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(copiedListChanged:) name:@"copiedlistchanged" object:nil];
+}
+
 - (void)removeAllCheckmarks {
     for (int i = 0; i < self.filelist.count; i++) {
         UITableViewCell *cell = [self.theTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
@@ -156,7 +230,7 @@
     [self saveProspectiveCopyList];
 }
 
-- (IBAction)showCopyPasteController {
+- (void)showCopyPasteController {
     UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:nil completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         
         NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
@@ -630,27 +704,7 @@
 - (void)viewDidLoad {       
     [super viewDidLoad];
     
-   // UIImage *bbiImage = [getButtonImage() resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
-   // [self.editButton setBackgroundImage:bbiImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        self.theTableView.rowHeight = 60;
-    } 
-    
-    PullToRefreshView *pull = [[PullToRefreshView alloc]initWithScrollView:self.theTableView];
-    [pull setDelegate:self];
-    [self.theTableView addSubview:pull];
-    [pull release];
-
-    [kAppDelegate setManagerCurrentDir:kDocsDir];
-
-    self.navBar.topItem.title = @"/";
-    
-    animatingSideSwipe = NO;
-    
-    UIImage *grayImage = [self imageFilledWith:[UIColor colorWithWhite:1.0f alpha:1.0f] using:[UIImage imageNamed:@"clipboard"]];
-    [self.copyAndPasteButton setImage:grayImage forState:UIControlStateNormal];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(copiedListChanged:) name:@"copiedlistchanged" object:nil];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
