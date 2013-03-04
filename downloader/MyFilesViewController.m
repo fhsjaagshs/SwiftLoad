@@ -15,7 +15,7 @@
 
 @implementation MyFilesViewController
 
-@synthesize dirs, sideSwipeDirection, sideSwipeCell, sideSwipeView, animatingSideSwipe, editButton, theTableView, mtrButton, backButton, homeButton, filelist, docController, isCut, copiedList, perspectiveCopiedList;
+@synthesize dirs, sideSwipeDirection, sideSwipeCell, sideSwipeView, animatingSideSwipe, editButton, theTableView, backButton, homeButton, filelist, docController, isCut, copiedList, perspectiveCopiedList;
 
 - (void)removeAllCheckmarks {
     for (int i = 0; i < self.filelist.count; i++) {
@@ -37,10 +37,6 @@
             [[NSFileManager defaultManager]moveItemAtPath:oldPath toPath:newPath error:&error];
         } else {
             [[NSFileManager defaultManager]copyItemAtPath:oldPath toPath:newPath error:&error];
-        }
-        
-        if (error) {
-            NSLog(@"error: %@ \n for file: %@",error, oldPath);
         }
     }
     [self flushCopiedList];
@@ -1454,7 +1450,6 @@
     [self setDirs:nil];
     [self setEditButton:nil];
     [self setTheTableView:nil];
-    [self setFolderPathTitle:nil];
     [self setMtrButton:nil];
     [self setBackButton:nil];
     [self setHomeButton:nil];

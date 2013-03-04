@@ -28,7 +28,6 @@
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *editButton;
-@property (nonatomic, retain) IBOutlet CustomButton *mtrButton;
 @property (nonatomic, retain) IBOutlet CustomButton *backButton;
 @property (nonatomic, retain) IBOutlet CustomButton *homeButton;
 @property (nonatomic, retain) IBOutlet CustomNavBar *navBar;
