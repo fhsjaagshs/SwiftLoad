@@ -13,7 +13,6 @@
     CustomAlertView *av;
     UITextField *tv;
     float totalProgress;
-    MBProgressHUD *HUDZ;
 }
 
 // Copy/Cut/Paste

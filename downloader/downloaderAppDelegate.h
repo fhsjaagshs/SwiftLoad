@@ -79,6 +79,8 @@ NSString * getNonConflictingFilePathForPath(NSString *path);
 - (void)showSelfHidingHudWithTitle:(NSString *)title;
 - (void)hideVisibleHudAfterDelay:(float)delay;
 - (MBProgressHUD *)getVisibleHUD;
+- (int)getTagOfVisibleHUD;
+- (void)setTagOfVisibleHUD:(int)tag;
 
 // Downloading-specific HUDs
 - (void)showFailedAlertForFilename:(NSString *)fileName;

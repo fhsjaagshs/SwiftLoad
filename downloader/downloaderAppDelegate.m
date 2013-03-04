@@ -484,6 +484,14 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
 // MBProgressHUD methods
 //
 
+- (int)getTagOfVisibleHUD {
+    return [MBProgressHUD HUDForView:self.window].tag;
+}
+
+- (void)setTagOfVisibleHUD:(int)tag {
+    [MBProgressHUD HUDForView:self.window].tag = tag;
+}
+
 - (MBProgressHUD *)getVisibleHUD {
     return [MBProgressHUD HUDForView:self.window];
 }

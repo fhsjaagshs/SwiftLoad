@@ -223,7 +223,6 @@
 }
 
 - (void)refreshTableViewWithAnimation:(UITableViewRowAnimation)rowAnim {
-   // indexOfCheckmark = -1;
     [self.filelist removeAllObjects];
     [self.theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:rowAnim];
 }
@@ -234,6 +233,12 @@
     [UIApplication sharedApplication].idleTimerDisabled = YES;
     ZipFile *unzipFile = [[ZipFile alloc] initWithFileName:file mode:ZipFileModeUnzip];
     NSArray *infos = [unzipFile listFileInZipInfos];
+    
+    MBProgressHUD *HUDZ = [kAppDelegate getVisibleHUD];
+    
+    if (HUDZ.tag != 5) {
+        HUDZ = nil;
+    }
     
     HUDZ.progress = 0;
     float unachivedBytes = 0;
@@ -294,6 +299,14 @@
     [self refreshTableViewWithAnimation:UITableViewRowAnimationNone];
     
     [pool release];
+}
+
+- (void)compressItems:(NSArray *)items intoZipFile:(NSString *)file {
+    for (NSString *theFile in items) {
+        [kAppDelegate setSecondaryTitleOfVisibleHUD:[theFile lastPathComponent]];
+        [self compressItem:theFile intoZipFile:file];
+    }
+    [kAppDelegate hideHUD];
 }
 
 - (void)compressItem:(NSString *)theFile intoZipFile:(NSString *)file {
@@ -803,19 +816,6 @@
             
             [self updateCopyButtonState];
             
-            // For archives, have option to decompress or add clipboard to the archive.
-            
-            // here is the old method for doing the compression:
-            /*NSArray *objects = [[NSArray alloc]initWithObjects:theFile, file, nil];
-             MBProgressHUD *HUD = [[MBProgressHUD alloc]initWithView:ad.window];
-             [ad.window addSubview:HUD];
-             HUD.delegate = self;
-             HUD.mode = MBProgressHUDModeIndeterminate;
-             HUD.labelText = @"Compressing...";
-             [HUD showWhileExecuting:@selector(compress:) onTarget:self withObject:objects animated:YES];
-             [HUD release];
-             [objects release];*/
-            
         } else if (directoryExists && isDir) { 
             [self.backButton setHidden:NO];
             [self.homeButton setHidden:NO];
@@ -830,16 +830,49 @@
             [self.theTableView flashScrollIndicators];
         
         } else if (isZip) {
-            if (fileSize(file) > 0) {
-                HUDZ = [[MBProgressHUD alloc]initWithView:ad.window];
-                [ad.window addSubview:HUDZ];
-                HUDZ.delegate = self;
-                HUDZ.mode = MBProgressHUDModeDeterminate;
-                HUDZ.labelText = @"Inflating...";
-                HUDZ.detailsLabelText = [file lastPathComponent];
-                [HUDZ showWhileExecuting:@selector(inflate:) onTarget:self withObject:file animated:YES];
-                [HUDZ release];
+            
+            [self verifyCopiedList];
+            
+            UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@",cellName] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+                
+                NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
+                
+                if ([title isEqualToString:@"Compress Copied Items"]) {
+                    if (self.copiedList.count > 0) {
+                        
+                        [ad showHUDWithTitle:@"Compressing..."];
+                        [ad setVisibleHudMode:MBProgressHUDModeIndeterminate];
+                        [ad setTagOfVisibleHUD:4];
+                        
+                        [self compressItems:self.copiedList intoZipFile:[ad.managerCurrentDir stringByAppendingPathComponent:[[actionSheet.title componentsSeparatedByString:@" "]lastObject]]];
+                        [self flushCopiedList];
+                        [self flushPerspectiveCopyList];
+                    }
+                } else if ([title isEqualToString:@"Decompress"]) {
+                    if (fileSize(file) > 0) {
+                        [ad showHUDWithTitle:@"Inflating..."];
+                        [ad setSecondaryTitleOfVisibleHUD:[file lastPathComponent]];
+                        [ad setVisibleHudMode:MBProgressHUDModeDeterminate];
+                        [ad setTagOfVisibleHUD:5];
+                        [NSThread detachNewThreadSelector:@selector(inflate:) toTarget:self withObject:file];
+                    }
+                }
+                
+                [self updateCopyButtonState];
+            } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil]autorelease];
+            
+            actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+            
+            if (self.copiedList.count > 0) {
+                [actionSheet addButtonWithTitle:@"Compress Copied Items"];
             }
+            
+            [actionSheet addButtonWithTitle:@"Decompress"];
+            [actionSheet addButtonWithTitle:@"Cancel"];
+            
+            actionSheet.cancelButtonIndex = actionSheet.numberOfButtons-1;
+            [actionSheet showInView:self.view];
+            
         } else {
             BOOL isHTML = [MIMEUtils isHTMLFile:file];
         
@@ -882,7 +915,7 @@
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *name = [self.theTableView cellForRowAtIndexPath:indexPath].textLabel.text;
-    NSString *file = [[kAppDelegate managerCurrentDir] stringByAppendingPathComponent:name];
+    NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:name];
     
     BOOL isDir;
     [[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir];
@@ -905,7 +938,6 @@
     
     if (self.editing) {
         [self.editButton setTitle:@"Edit"];
-        [self.mtrButton setHidden:YES];
 
         if (![[kAppDelegate managerCurrentDir] isEqualToString:kDocsDir]) {
             [self.backButton setHidden:NO];
@@ -923,8 +955,6 @@
             cell.editingAccessoryType = UITableViewCellEditingStyleNone;
         }
         [self flushPerspectiveCopyList];
-        //indexOfCheckmark = -1;
-        //[self setMovingFileFirst:nil];
     } else {
         [self.editButton setTitle:@"Done"];
         [self.homeButton setHidden:YES];
@@ -1234,8 +1264,7 @@
 }
 
 - (UIImage *)imageFilledWith:(UIColor *)color using:(UIImage *)startImage {
-    //CGRect imageRect = CGRectMake(0, 0, CGImageGetWidth(startImage.CGImage), CGImageGetHeight(startImage.CGImage));
-    CGRect imageRect = CGRectMake(0, 0, startImage.size.width, startImage.size.height);
+    CGRect imageRect = CGRectMake(0, 0, CGImageGetWidth(startImage.CGImage), CGImageGetHeight(startImage.CGImage));
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef context = CGBitmapContextCreate(nil, imageRect.size.width, imageRect.size.height, 8, 0, colorSpace, kCGImageAlphaPremultipliedLast);
     
@@ -1450,7 +1479,6 @@
     [self setDirs:nil];
     [self setEditButton:nil];
     [self setTheTableView:nil];
-    [self setMtrButton:nil];
     [self setBackButton:nil];
     [self setHomeButton:nil];
     [self setSideSwipeView:nil];
