@@ -15,7 +15,7 @@
 
 @implementation MyFilesViewController
 
-@synthesize dirs, sideSwipeDirection, sideSwipeCell, sideSwipeView, animatingSideSwipe, editButton, theTableView, backButton, homeButton, filelist, docController, isCut, copiedList, perspectiveCopiedList;
+@synthesize dirs, sideSwipeDirection, sideSwipeCell, sideSwipeView, animatingSideSwipe, editButton, theTableView, backButton, homeButton, filelist, docController, isCut, copiedList, perspectiveCopiedList, theCopyAndPasteButton;
 
 - (void)loadView {
     [super loadView];
@@ -42,13 +42,13 @@
     bbv.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [self.view addSubview:bbv];
     
-    self.copyAndPasteButton = [[[CustomButton alloc]initWithFrame:iPad?CGRectMake(612, 6, 36, 36):CGRectMake(232, 5, 36, 36)]autorelease];
-    self.copyAndPasteButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
+    self.theCopyAndPasteButton = [[[CustomButton alloc]initWithFrame:iPad?CGRectMake(612, 6, 36, 36):CGRectMake(232, 5, 36, 36)]autorelease];
+    self.theCopyAndPasteButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
     UIImage *grayImage = [self imageFilledWith:[UIColor colorWithWhite:1.0f alpha:1.0f] using:[UIImage imageNamed:@"clipboard"]];
-    [self.copyAndPasteButton setImage:grayImage forState:UIControlStateNormal];
-    [self.copyAndPasteButton addTarget:self action:@selector(showCopyPasteController) forControlEvents:UIControlEventTouchUpInside];
-    [bbv addSubview:self.copyAndPasteButton];
-    [self.copyAndPasteButton setHidden:YES];
+    [self.theCopyAndPasteButton setImage:grayImage forState:UIControlStateNormal];
+    [self.theCopyAndPasteButton addTarget:self action:@selector(showCopyPasteController) forControlEvents:UIControlEventTouchUpInside];
+    [bbv addSubview:self.theCopyAndPasteButton];
+    [self.theCopyAndPasteButton setHidden:YES];
     
     self.homeButton = [[[CustomButton alloc]initWithFrame:iPad?CGRectMake(358, 6, 62, 36):CGRectMake(123, 4, 62, 36)]autorelease];
     [self.homeButton setTitle:@"Home" forState:UIControlStateNormal];
@@ -273,7 +273,7 @@
 - (void)updateCopyButtonState {
     
     if (!self.editing) {
-        [self.copyAndPasteButton setHidden:YES];
+        [self.theCopyAndPasteButton setHidden:YES];
         return;
     }
     
@@ -284,7 +284,7 @@
     BOOL CLGT = (self.copiedList.count > 0);
     BOOL shouldUnhide = ((persCLGT || CLGT) || (persCLGT && CLGT));
     
-    [self.copyAndPasteButton setHidden:!shouldUnhide];
+    [self.theCopyAndPasteButton setHidden:!shouldUnhide];
 }
 
 - (void)reindexFilelist {

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ShadowedTableView.h"
 
-@interface MyFilesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, PullToRefreshViewDelegate, MBProgressHUDDelegate, UITextFieldDelegate, MFMailComposeViewControllerDelegate,  UIDocumentInteractionControllerDelegate> {
+@interface MyFilesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, PullToRefreshViewDelegate, UITextFieldDelegate, MFMailComposeViewControllerDelegate,  UIDocumentInteractionControllerDelegate> {
     CustomAlertView *av;
     UITextField *tv;
     float totalProgress;
@@ -25,12 +25,12 @@
 @property (nonatomic, retain) NSMutableArray *filelist;
 @property (nonatomic, retain) NSMutableArray *dirs;
 
-@property (nonatomic, retain) IBOutlet UITableView *theTableView;
+@property (nonatomic, retain) UITableView *theTableView;
 @property (nonatomic, retain) UIBarButtonItem *editButton;
-@property (nonatomic, retain) IBOutlet CustomButton *backButton;
+@property (nonatomic, retain) CustomButton *backButton;
 @property (nonatomic, retain) CustomButton *homeButton;
 @property (nonatomic, retain) CustomNavBar *navBar;
-@property (nonatomic, retain) CustomButton *copyAndPasteButton;
+@property (nonatomic, retain) CustomButton *theCopyAndPasteButton;
 
 @property (nonatomic, retain) UIView *sideSwipeView;
 @property (nonatomic, assign) UITableViewCell *sideSwipeCell;
