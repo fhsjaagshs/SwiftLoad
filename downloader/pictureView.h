@@ -10,7 +10,7 @@
 #import "CustomToolbar.h"
 #import "ZoomingImageView.h"
 
-@interface pictureView : UIViewController <MFMailComposeViewControllerDelegate, UIPrintInteractionControllerDelegate, UIGestureRecognizerDelegate>
+@interface pictureView : UIViewController <UIGestureRecognizerDelegate>
 
 @property (nonatomic, retain) UIActionSheet *popupQuery;
 @property (nonatomic, retain) ZoomingImageView *zoomingImageView;

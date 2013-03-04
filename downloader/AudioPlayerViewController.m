@@ -333,37 +333,13 @@
     }
 }
 
-- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
-    [self dismissModalViewControllerAnimated:YES];
-}
-
 - (void)showActionSheet:(id)sender {
         
     NSString *file = [kAppDelegate openFile];
-    NSString *fileName = [file lastPathComponent];
-    NSString *message = [NSString stringWithFormat:@"What would you like to do with %@?",fileName];
         
-    UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-        if (buttonIndex == actionSheet.cancelButtonIndex) {
-            return;
-        }
-            
+    self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",[file lastPathComponent]] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         if (buttonIndex == 0) {
-            if ([MFMailComposeViewController canSendMail]) {
-                MFMailComposeViewController *controller = [[MFMailComposeViewController alloc]init];
-                controller.mailComposeDelegate = self;
-                [controller setSubject:@"Your file"];
-                NSData *myData = [[NSData alloc]initWithContentsOfFile:file];
-                [controller addAttachmentData:myData mimeType:[MIMEUtils fileMIMEType:file] fileName:fileName];
-                [controller setMessageBody:@"" isHTML:NO];
-                [self presentModalViewController:controller animated:YES];
-                [controller release];
-                [myData release];
-            } else {
-                CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Mail Unavailable" message:@"In order to use this functionality, you must set up an email account in Settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                [av show];
-                [av release];
-            }
+            [kAppDelegate sendFileInEmail:file fromViewController:self];
         } else if (buttonIndex == 1) {
             [kAppDelegate showBTController];
         } else if (buttonIndex == 2) {
@@ -374,9 +350,6 @@
             [self startConverting];
         }
     } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Upload to Server", @"Upload to Dropbox", @"Convert to AAC", nil];
-    
-    [self setPopupQuery:sheet];
-    [sheet release];
     
     self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
 

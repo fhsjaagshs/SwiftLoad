@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface moviePlayerView : UIViewController <MFMailComposeViewControllerDelegate, MBProgressHUDDelegate> {
+@interface moviePlayerView : UIViewController {
     BOOL shouldUnpauseAudioPlayer;
 }
 

@@ -56,35 +56,14 @@
     [kAppDelegate setOpenFile:nil];
 }
 
-- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
-    [self dismissModalViewControllerAnimated:YES];
-}
-
 - (void)showActionSheet:(id)sender {
     NSString *file = [kAppDelegate openFile];
     NSString *fileName = [file lastPathComponent];
-    NSString *message = [[NSString alloc]initWithFormat:@"What would you like to do with %@?",fileName];
     
-    UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-        NSString *file = [kAppDelegate openFile];
-        NSString *fileName = [file lastPathComponent];
+    self.popupQuery = [[[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",fileName] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         
         if (buttonIndex == 0) {
-            if (![MFMailComposeViewController canSendMail]) {
-                CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Mail Unavailable" message:@"In order to use this functionality, you must set up an email account in Settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                [av show];
-                [av release];
-            } else {
-                MFMailComposeViewController *controller = [[MFMailComposeViewController alloc]init];
-                controller.mailComposeDelegate = self;
-                [controller setSubject:@"Your file"];
-                NSData *myData = [[NSData alloc]initWithContentsOfFile:file];
-                [controller addAttachmentData:myData mimeType:[MIMEUtils fileMIMEType:file] fileName:fileName];
-                [controller setMessageBody:@"" isHTML:NO];
-                [self presentModalViewController:controller animated:YES];
-                [controller release];
-                [myData release];
-            }
+            [kAppDelegate sendFileInEmail:file fromViewController:self];
         } else if (buttonIndex == 1) {
             if ([MIMEUtils isTextFile:file] == NO) {
                 NSString *title = [[NSString alloc]initWithFormat:@"Sorry, \"%@\" is not editable.", fileName];
@@ -93,7 +72,7 @@
                 [av release];
                 [title release];
             } else {
-                dedicatedTextEditor *textEditor = [[dedicatedTextEditor alloc]initWithAutoNib];
+                dedicatedTextEditor *textEditor = [dedicatedTextEditor viewController];
                 textEditor.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
                 [self presentModalViewController:textEditor animated:YES];
                 [textEditor release];
@@ -108,12 +87,7 @@
             [self uploadToDropbox];
         }
         
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Add to Photo Library", @"Print", @"Send Via Bluetooth", @"Upload to Server", @"Upload to Dropbox", nil];
-    
-    [message release];
-    
-    [self setPopupQuery:sheet];
-    [sheet release];
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Add to Photo Library", @"Print", @"Send Via Bluetooth", @"Upload to Server", @"Upload to Dropbox", nil]autorelease];
     
     self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
         

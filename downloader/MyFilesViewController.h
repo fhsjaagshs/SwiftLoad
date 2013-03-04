@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ShadowedTableView.h"
 
-@interface MyFilesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, PullToRefreshViewDelegate, UITextFieldDelegate, MFMailComposeViewControllerDelegate,  UIDocumentInteractionControllerDelegate> {
+@interface MyFilesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, PullToRefreshViewDelegate, UITextFieldDelegate, UIDocumentInteractionControllerDelegate> {
     CustomAlertView *av;
     UITextField *tv;
     float totalProgress;

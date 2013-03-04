@@ -19,7 +19,7 @@
 float sanitizeMesurement(float measurement);
 NSString * getNonConflictingFilePathForPath(NSString *path);
 
-@interface downloaderAppDelegate : UIResponder <UIApplicationDelegate, BKSessionControllerDelegate, GKSessionDelegate, DBSessionDelegate, DBRestClientDelegate, MBProgressHUDDelegate, GKPeerPickerControllerDelegate, UITextFieldDelegate, NSURLConnectionDelegate> {
+@interface downloaderAppDelegate : UIResponder <UIApplicationDelegate, BKSessionControllerDelegate, GKSessionDelegate, DBSessionDelegate, DBRestClientDelegate, MBProgressHUDDelegate, GKPeerPickerControllerDelegate, UITextFieldDelegate, NSURLConnectionDelegate, MFMailComposeViewControllerDelegate> {
     CustomAlertView *avL;
     UITextField *serverField;
     UITextField *usernameField;
@@ -46,6 +46,9 @@ NSString * getNonConflictingFilePathForPath(NSString *path);
 
 // Printing
 - (void)printFile:(NSString *)file fromView:(UIView *)view;
+
+// Emailing
+- (void)sendFileInEmail:(NSString *)file fromViewController:(UIViewController *)vc;
 
 // Audio Player
 @property (nonatomic, retain) NSString *nowPlayingFile;

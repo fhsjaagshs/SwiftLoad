@@ -38,6 +38,29 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
 @synthesize sessionController, progressView, isReciever, nowPlayingFile, sessionControllerSending, openFile, managerCurrentDir, restClient, downloadedData, expectedDownloadingFileSize, downloadedBytes;
 
 //
+// Emailing
+//
+
+- (void)sendFileInEmail:(NSString *)file fromViewController:(UIViewController *)vc {
+    if ([MFMailComposeViewController canSendMail]) {
+        MFMailComposeViewController *controller = [[MFMailComposeViewController alloc]initWithCompletionHandler:^(MFMailComposeViewController *controller, MFMailComposeResult result, NSError *error) {
+            [vc dismissModalViewControllerAnimated:YES];
+        }];
+        [controller setSubject:@"Your file"];
+        NSData *myData = [[NSData alloc]initWithContentsOfFile:file];
+        [controller addAttachmentData:myData mimeType:[MIMEUtils fileMIMEType:file] fileName:[file lastPathComponent]];
+        [controller setMessageBody:@"" isHTML:NO];
+        [vc presentModalViewController:controller animated:YES];
+        [controller release];
+        [myData release];
+    } else {
+        CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Mail Unavailable" message:@"In order to use this functionality, you must set up an email account in Settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [av show];
+        [av release];
+    }
+}
+
+//
 // Printing
 //
 

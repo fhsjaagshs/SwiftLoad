@@ -119,10 +119,6 @@
     }
 }
 
-- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
-    [self dismissModalViewControllerAnimated:YES];
-}
-
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result {
     [self dismissModalViewControllerAnimated:YES];
 }
@@ -169,59 +165,20 @@
 - (void)showActionSheet:(id)sender {
     
     NSString *file = [kAppDelegate openFile];
-    NSString *fileName = [file lastPathComponent];
-    NSString *message = [[NSString alloc]initWithFormat:@"What would you like to do with %@?",fileName];
     
-    UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-        
-        NSString *file = [kAppDelegate openFile];
-        NSString *fileName = [file lastPathComponent];
-        
+    self.popupQuery = [[[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",[file lastPathComponent]] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         if (buttonIndex == 0) {
-            BOOL sendsMail = [MFMailComposeViewController canSendMail];
-            if (sendsMail == NO) {
-                CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Mail Unavailable" message:@"In order to use this functionality, you must set up an email account in Settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                [av show];
-                [av release];
-            } else if (sendsMail == YES) {
-                MFMailComposeViewController *controller = [[MFMailComposeViewController alloc]init];
-                controller.mailComposeDelegate = self;
-                [controller setSubject:@"Your file"];
-                NSData *myData = [[NSData alloc]initWithContentsOfFile:file];
-                [controller addAttachmentData:myData mimeType:[MIMEUtils fileMIMEType:file] fileName:fileName];
-                [controller setMessageBody:@"" isHTML:NO];
-                [self presentModalViewController:controller animated:YES];
-                [controller release];
-                [myData release];
-            }
+            [kAppDelegate sendFileInEmail:file fromViewController:self];
         } else if (buttonIndex == 1) {
             [kAppDelegate showBTController];
         } else if (buttonIndex == 2) {
-            if ([MFMessageComposeViewController canSendText]) {
-                MFMessageComposeViewController *controller = [[MFMessageComposeViewController alloc]init];
-                controller.messageComposeDelegate = self;
-                NSString *body = [[NSString alloc]initWithContentsOfFile:file encoding:NSUTF8StringEncoding error:nil];
-                [controller setBody:body];
-                [body release];
-                [self presentModalViewController:controller animated:YES];
-                [controller release];
-            } else {
-                CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"SMS Unavailable" message:@"Please turn on iMessage or SMS in settings" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                [av show];
-                [av release];
-            }
+            [kAppDelegate sendFileInEmail:file fromViewController:self];
         } else if (buttonIndex == 3) {
             [kAppDelegate showFTPUploadController];
         } else if (buttonIndex == 4) {
             [self uploadToDropbox];
         }
-        
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Send as SMS", @"Upload to Server", @"Upload to Dropbox", nil];
-    
-    [message release];
-    
-    [self setPopupQuery:sheet];
-    [sheet release];
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Send as SMS", @"Upload to Server", @"Upload to Dropbox", nil]autorelease];
     
     self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
 

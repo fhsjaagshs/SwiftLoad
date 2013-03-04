@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface dedicatedTextEditor : UIViewController <MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate, UITextViewDelegate> {
+@interface dedicatedTextEditor : UIViewController <MFMessageComposeViewControllerDelegate, UITextViewDelegate> {
     NSStringEncoding theEncoding;
     BOOL hasEdited;
 }

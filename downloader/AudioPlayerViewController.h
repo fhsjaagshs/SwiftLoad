@@ -16,7 +16,7 @@
 
 #define _audioPlayer (AVAudioPlayer *)[[(downloaderAppDelegate *)[[UIApplication sharedApplication]delegate]viewController]audioPlayer]
 
-@interface AudioPlayerViewController : UIViewController <MFMailComposeViewControllerDelegate> {
+@interface AudioPlayerViewController : UIViewController {
     BOOL shouldStopCounter;
     BOOL notInPlayerView;
 }

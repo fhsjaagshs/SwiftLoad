@@ -104,11 +104,7 @@
 
 - (void)addToTheRoll {
     
-    MBProgressHUD *workingHUD = [[MBProgressHUD alloc]initWithView:[kAppDelegate window]];
-    [[kAppDelegate window]addSubview:workingHUD];
-    workingHUD.labelText = @"Working";
-    [workingHUD show:YES];
-    [workingHUD release];
+    [kAppDelegate showHUDWithTitle:@"Working..."];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
@@ -126,35 +122,24 @@
             NSString *fileName = [file lastPathComponent];
             
             if (fileName.length > 14) {
-                fileName = [[fileName substringToIndex:14]stringByAppendingString:@"..."];
+                fileName = [[fileName substringToIndex:11]stringByAppendingString:@"..."];
             }
             
             UIImageView *checkmark = [[UIImageView alloc]initWithImage:getCheckmarkImage()];
             
-            [workingHUD hide:YES];
+            [kAppDelegate hideHUD];
             
-            downloaderAppDelegate *ad = kAppDelegate;
-            
-            MBProgressHUD *HUD2 = [[MBProgressHUD alloc]initWithView:ad.window];
-            [ad.window addSubview:HUD2];
-            HUD2.customView = checkmark;
-            HUD2.mode = MBProgressHUDModeCustomView;
-            HUD2.labelText = @"Imported";
-            HUD2.detailsLabelText = fileName;
-            [HUD2 show:YES];
-            [HUD2 hide:YES afterDelay:1.0];
-            [HUD2 release];
+            [kAppDelegate showHUDWithTitle:@"Imported"];
+            [kAppDelegate setSecondaryTitleOfVisibleHUD:fileName];
+            [kAppDelegate setVisibleHudMode:MBProgressHUDModeCustomView];
+            [kAppDelegate setVisibleHudCustomView:checkmark];
+            [kAppDelegate hideVisibleHudAfterDelay:1.0f];
             [checkmark release];
-            
             [poolTwo release];
         });
         
         [pool release];
     });
-}
-
-- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
-    [self dismissModalViewControllerAnimated:YES];
 }
 
 - (void)close {
@@ -165,28 +150,11 @@
 - (void)showNoitcaSheet:(id)sender {
     NSString *file = [kAppDelegate openFile];
     NSString *fileName = [file lastPathComponent];
-    NSString *message = [NSString stringWithFormat:@"What would you like to do with %@?",fileName];
 
-    UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-        NSString *file = [kAppDelegate openFile];
-        NSString *fileName = [file lastPathComponent];
+    self.popupQuery = [[[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",fileName] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         
         if (buttonIndex == 0) {
-            if (![MFMailComposeViewController canSendMail]) {
-                CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Mail Unavailable" message:@"In order to use this functionality, you must set up an email account in Settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                [av show];
-                [av release];
-            } else {
-                MFMailComposeViewController *controller = [[MFMailComposeViewController alloc]init];
-                controller.mailComposeDelegate = self;
-                [controller setSubject:@"Your file"];
-                NSData *myData = [[NSData alloc]initWithContentsOfFile:file];
-                [controller addAttachmentData:myData mimeType:[MIMEUtils fileMIMEType:file] fileName:fileName];
-                [controller setMessageBody:@"" isHTML:NO];
-                [self presentModalViewController:controller animated:YES];
-                [controller release];
-                [myData release];
-            }
+            [kAppDelegate sendFileInEmail:file fromViewController:self];
         } else if (buttonIndex == 1) {
             if ([MIMEUtils isImageFile:file]) {
                 [self addToTheRoll];
@@ -206,10 +174,7 @@
         } else if (buttonIndex == 5) {
             [self uploadToDropbox];
         }
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Add to Photo Library", @"Print", @"Send Via Bluetooth", @"Upload to Server", @"Upload to Dropbox", nil];
-    
-    [self setPopupQuery:sheet];
-    [sheet release];
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Add to Photo Library", @"Print", @"Send Via Bluetooth", @"Upload to Server", @"Upload to Dropbox", nil]autorelease];
     
     self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     

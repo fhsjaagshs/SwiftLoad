@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "CustomAlertView.h"
 
-@interface MyFilesViewDetailViewController : UIViewController <MFMailComposeViewControllerDelegate, UIPrintInteractionControllerDelegate, UIWebViewDelegate>
+@interface MyFilesViewDetailViewController : UIViewController <UIWebViewDelegate>
 
 @property (nonatomic, retain) UIActionSheet *popupQuery;
 @property (nonatomic, retain) UIWebView *webView;

@@ -23,6 +23,7 @@
     #import "UIAlertView+BlockExtensions.h"
     #import "UIActionSheet+BlockExtensions.h"
     #import "UIScrollView+UIScrollView_ZoomToPoint.h"
+    #import "MFMailComposeViewController+BlockExtensions.h"
 
     #import "HTTPServer.h"
     #import "DAVConnection.h"

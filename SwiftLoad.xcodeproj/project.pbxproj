@@ -89,6 +89,7 @@
 		F17DC65F140C45690015F613 /* AudioPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F17DC65E140C45690015F613 /* AudioPlayerViewController.m */; };
 		F17DC662140C489B0015F613 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F17DC661140C489B0015F613 /* AVFoundation.framework */; };
 		F17F11231420017100CE45D7 /* fileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F17F11211420017100CE45D7 /* fileInfo.m */; };
+		F1847BBB16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F1847BBA16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m */; };
 		F19BB51C16E006CA0081C95B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F19BB51916E006CA0081C95B /* main.m */; };
 		F1A72948149876040049DBB6 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A72947149876040049DBB6 /* GameKit.framework */; };
 		F1A923FE140D4DDD003ACDAB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A923FD140D4DDD003ACDAB /* QuartzCore.framework */; };
@@ -286,6 +287,8 @@
 		F17DC661140C489B0015F613 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		F17F11201420017100CE45D7 /* fileInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fileInfo.h; sourceTree = "<group>"; };
 		F17F11211420017100CE45D7 /* fileInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = fileInfo.m; sourceTree = "<group>"; };
+		F1847BB916E538C600006C25 /* MFMailComposeViewController+BlockExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MFMailComposeViewController+BlockExtensions.h"; sourceTree = "<group>"; };
+		F1847BBA16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MFMailComposeViewController+BlockExtensions.m"; sourceTree = "<group>"; };
 		F19BB51916E006CA0081C95B /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F19BB51A16E006CA0081C95B /* SwiftLoad-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SwiftLoad-Info.plist"; sourceTree = "<group>"; };
 		F19BB51B16E006CA0081C95B /* SwiftLoad-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SwiftLoad-Prefix.pch"; sourceTree = "<group>"; };
@@ -634,6 +637,8 @@
 				F1693C4B16DFABA6006E3739 /* UIScrollView+UIScrollView_ZoomToPoint.m */,
 				F1693C4C16DFABA6006E3739 /* UIViewController+AutoNib.h */,
 				F1693C4D16DFABA6006E3739 /* UIViewController+AutoNib.m */,
+				F1847BB916E538C600006C25 /* MFMailComposeViewController+BlockExtensions.h */,
+				F1847BBA16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -892,6 +897,7 @@
 				F1693C6B16DFAC59006E3739 /* ZoomingImageView.m in Sources */,
 				F19BB51C16E006CA0081C95B /* main.m in Sources */,
 				F119697616E3D0FC001139F1 /* CustomTextField.m in Sources */,
+				F1847BBB16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

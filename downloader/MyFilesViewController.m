@@ -1122,7 +1122,7 @@
         
         [self setDocController:[UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:file]]];
         
-        BOOL opened;
+        BOOL opened = NO;
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             opened = [self.docController presentOpenInMenuFromRect:self.sideSwipeCell.frame inView:self.theTableView animated:YES];
@@ -1143,9 +1143,6 @@
 
 // slide to reveal actions
 
-- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
-    [self dismissModalViewControllerAnimated:YES];
-}
 
 - (void)touchUpInsideAction:(UIButton *)button {
     NSString *file = [[kAppDelegate managerCurrentDir] stringByAppendingPathComponent:self.sideSwipeCell.textLabel.text];
@@ -1183,20 +1180,7 @@
         [kAppDelegate showBTController];
         [self removeSideSwipeView:YES];
     } else if (number == 3) {
-        if (![MFMailComposeViewController canSendMail]) {
-            CustomAlertView *avf = [[CustomAlertView alloc]initWithTitle:@"Mail Unavailable" message:@"In order to use this functionality, you must set up an email account in Settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [avf show];
-            [avf release];
-        } else {
-            MFMailComposeViewController *controller = [[MFMailComposeViewController alloc]init];
-            controller.mailComposeDelegate = self;
-            [controller setSubject:@"Your file"];
-            NSData *myData = [NSData dataWithContentsOfFile:file];
-            [controller addAttachmentData:myData mimeType:[MIMEUtils fileMIMEType:file] fileName:[file lastPathComponent]];
-            [controller setMessageBody:@"" isHTML:NO];
-            [self presentModalViewController:controller animated:YES];
-            [controller release];
-        }
+        [kAppDelegate sendFileInEmail:file fromViewController:self];
         [self removeSideSwipeView:YES];
         
     } else if (number == 4) {
