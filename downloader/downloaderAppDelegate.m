@@ -15,22 +15,22 @@ float sanitizeMesurement(float measurement) {
 
 NSString * getNonConflictingFilePathForPath(NSString *path) {
     NSString *ext = [path pathExtension];
-    NSString *newPath = [[[path stringByDeletingPathExtension]stringByAppendingString:@" - 1"]stringByAppendingPathComponent:ext];
     
-    int appendNumber = 2;
+    int appendNumber = 1;
     
     do {
-        newPath = [[[path stringByDeletingPathExtension]stringByAppendingString:[NSString stringWithFormat:@" - %d",appendNumber]]stringByAppendingPathComponent:ext];
         
-        if (![[NSFileManager defaultManager]fileExistsAtPath:newPath]) {
+        if (![[NSFileManager defaultManager]fileExistsAtPath:path]) {
             break;
         }
+        
+        path = [[[path stringByDeletingPathExtension]stringByAppendingString:[NSString stringWithFormat:@" - %d",appendNumber]]stringByAppendingPathComponent:ext];
         
         appendNumber = appendNumber+1;
         
     } while (YES);
     
-    return newPath;
+    return path;
 }
 
 @implementation downloaderAppDelegate
@@ -232,18 +232,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     NSString *filename = [self.downloadingFileName stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
     if (self.downloadedData.length > 0) {
-        NSString *filePath = nil;
-        
-        NSString *fileInDocsDir = [kDocsDir stringByAppendingPathComponent:filename];
-        if ([[NSFileManager defaultManager]fileExistsAtPath:fileInDocsDir]) {
-            NSString *ext = [fileInDocsDir pathExtension];
-            NSString *duplicateFileName = [[filename stringByDeletingPathExtension]stringByAppendingString:@" copy"];
-            NSString *finalFilename = [duplicateFileName stringByAppendingPathExtension:ext];
-            filePath = [kDocsDir stringByAppendingPathComponent:finalFilename];
-        } else {
-            filePath = [kDocsDir stringByAppendingPathComponent:filename];
-        }
-        
+        NSString *filePath = getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:filename]);
         [[NSFileManager defaultManager]createFileAtPath:filePath contents:self.downloadedData attributes:nil];
         [self showFinishedAlertForFilename:filename];
         [self.downloadedData setLength:0];
@@ -459,17 +448,10 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     }
     
     if ([url isFileURL]) {
-        NSString *fileInDocsDir = [kDocsDir stringByAppendingPathComponent:[url.absoluteString lastPathComponent]];
+        NSString *fileInDocsDir = getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:[url.absoluteString lastPathComponent]]);
         NSString *inboxDir = [kDocsDir stringByAppendingPathComponent:@"Inbox"];
         NSString *fileInInboxDir = [inboxDir stringByAppendingPathComponent:[url.absoluteString lastPathComponent]];
-        if ([[NSFileManager defaultManager]fileExistsAtPath:fileInDocsDir]) {
-            NSString *duplicateFileName = [[[url.absoluteString lastPathComponent]stringByDeletingPathExtension] stringByAppendingString:@" (copy)"];
-            NSString *finalFilename = [duplicateFileName stringByAppendingPathExtension:[fileInDocsDir pathExtension]];
-            NSString *finalPath = [kDocsDir stringByAppendingPathComponent:finalFilename];
-            [[NSFileManager defaultManager]moveItemAtPath:fileInInboxDir toPath:finalPath error:nil];
-        } else {
-            [[NSFileManager defaultManager]moveItemAtPath:fileInInboxDir toPath:fileInDocsDir error:nil];
-        }
+        [[NSFileManager defaultManager]moveItemAtPath:fileInInboxDir toPath:fileInDocsDir error:nil];
         
         NSArray *filesInIndexDir = [[NSFileManager defaultManager]contentsOfDirectoryAtPath:inboxDir error:nil];
         
@@ -477,13 +459,8 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
             [[NSFileManager defaultManager]removeItemAtPath:inboxDir error:nil];
         } else {
             for (NSString *string in filesInIndexDir) {
-                NSString *newLocation = [kDocsDir stringByAppendingPathComponent:string];
+                NSString *newLocation = getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:string]);
                 NSString *oldLocation = [inboxDir stringByAppendingPathComponent:string];
-                if ([[NSFileManager defaultManager]fileExistsAtPath:newLocation]) {
-                    NSString *newFilename = [[string stringByDeletingPathExtension]stringByAppendingString:@" (copy)"];
-                    NSString *finalFilenamey = [newFilename stringByAppendingPathExtension:[newLocation pathExtension]];
-                    newLocation = [kDocsDir stringByAppendingPathComponent:finalFilenamey];
-                }
                 [[NSFileManager defaultManager]moveItemAtPath:oldLocation toPath:newLocation error:nil];
             }
             [[NSFileManager defaultManager]removeItemAtPath:inboxDir error:nil];
@@ -756,16 +733,8 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     
     CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Received" message:@"Your file has been successfully received." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     
-    NSString *finalLocation = [docsDir stringByAppendingPathComponent:name];
-    
-    if (![[NSFileManager defaultManager]fileExistsAtPath:finalLocation]) {
-        [[NSFileManager defaultManager]createFileAtPath:finalLocation contents:nil attributes:nil];
-        [file writeToFile:finalLocation atomically:YES];
-    } else {
-        NSString *ext = [finalLocation pathExtension];
-        finalLocation = [[[finalLocation stringByDeletingPathExtension]stringByAppendingString:@"-1"]stringByAppendingPathExtension:ext];
-        [[NSFileManager defaultManager]createFileAtPath:finalLocation contents:file attributes:nil];
-    }
+    NSString *finalLocation = getNonConflictingFilePathForPath([docsDir stringByAppendingPathComponent:name]);
+    [[NSFileManager defaultManager]createFileAtPath:finalLocation contents:file attributes:nil];
     
     [av show];
     [av release];
