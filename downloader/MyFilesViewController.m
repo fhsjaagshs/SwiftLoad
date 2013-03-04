@@ -755,22 +755,16 @@
         [accessory addTarget:self action:@selector(accessoryButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
         cell.accessoryView = accessory;
-    
-        float height = (cell.bounds.size.height)/2;
             
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            cell.accessoryView.center = CGPointMake(735, height);
+            cell.accessoryView.center = CGPointMake(735, (cell.bounds.size.height)/2);
             cell.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:27];
             cell.detailTextLabel.font = [UIFont systemFontOfSize:20.0];
         } else {
-            cell.accessoryView.center = CGPointMake(297.5, height);
+            cell.accessoryView.center = CGPointMake(297.5, (cell.bounds.size.height)/2);
             cell.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:20];
         }
-
-        cell.detailTextLabel.textColor = [UIColor blackColor];
     }
-    
-    cell.editingAccessoryType = UITableViewCellAccessoryNone;
     
     for (UIGestureRecognizer *rec in cell.gestureRecognizers) {
         [cell removeGestureRecognizer:rec];
@@ -779,35 +773,37 @@
     if (self.editing && indexPath.row == self.filelist.count) {
         cell.textLabel.text = @"Create New File/Directory";
         cell.detailTextLabel.text = nil;
+        cell.editingAccessoryType = UITableViewCellAccessoryNone;
     } else {
         NSString *filesObjectAtIndex = [self.filelist objectAtIndex:indexPath.row];
         NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:filesObjectAtIndex];
 
         cell.textLabel.text = filesObjectAtIndex;
         
-        BOOL isZip = [[[file pathExtension]lowercaseString] isEqualToString:@"zip"];
-        BOOL isDir;    
-        BOOL exists = [[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir];
+        [self verifyProspectiveCopyList];
         
-        if ([self.perspectiveCopiedList containsObject:cell.textLabel.text]) {
+        if ([self.perspectiveCopiedList containsObject:file]) {
             cell.editingAccessoryType = UITableViewCellAccessoryCheckmark;
         } else {
             cell.editingAccessoryType = UITableViewCellAccessoryNone;
         }
+        
+        BOOL isZip = [[[file pathExtension]lowercaseString] isEqualToString:@"zip"];
+        BOOL isDir;  
+        BOOL exists = [[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir];
 
         if (exists && isDir) {
             cell.detailTextLabel.text = @"Directory";
         } else {
-            UISwipeGestureRecognizer *rightSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeRight:)];
+            UISwipeGestureRecognizer *rightSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeRight:)];
             rightSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
             [cell addGestureRecognizer:rightSwipeGestureRecognizer];
             [rightSwipeGestureRecognizer release];
             
-            UISwipeGestureRecognizer *leftSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeLeft:)];
+            UISwipeGestureRecognizer *leftSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeLeft:)];
             leftSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
             [cell addGestureRecognizer:leftSwipeGestureRecognizer];
             [leftSwipeGestureRecognizer release];
-            
             
             NSString *detailTextLabelMe = nil;
             if (isZip == YES) {
@@ -833,8 +829,6 @@
             cell.detailTextLabel.text = detailTextLabelMe;
         }
     }
-
-    cell.textLabel.backgroundColor = [UIColor clearColor];
     return cell;
 }
 
@@ -848,12 +842,6 @@
     if (self.editing) {
         cellCount = cellCount-1;
     }
-
-    /*if (self.editing && indexPath.row == cellCount) {
-        [self showFileCreationAlertView];
-    } else*/
-    
-    NSLog(@"Cell Name = %@\nCell Count = %d\nIs Editing = %@",cell.textLabel.text,cellCount,self.editing?@"YES":@"NO");
     
     if (indexPath.row != cellCount) {
         NSString *cellName = cell.textLabel.text;

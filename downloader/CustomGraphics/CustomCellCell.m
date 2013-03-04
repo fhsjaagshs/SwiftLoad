@@ -19,6 +19,7 @@
         self.detailTextLabel.backgroundColor = [UIColor clearColor];    
         self.detailTextLabel.highlightedTextColor = [UIColor blackColor];
         self.selectionStyle = UITableViewCellSelectionStyleGray;
+        self.detailTextLabel.textColor = [UIColor blackColor];
     }
     return self;
 }
