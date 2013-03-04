@@ -77,6 +77,7 @@
     self.theTableView.rowHeight = iPad?60:44;
     self.theTableView.dataSource = self;
     self.theTableView.delegate = self;
+    self.theTableView.allowsSelectionDuringEditing = YES;
     [self.view addSubview:self.theTableView];
     
     PullToRefreshView *pull = [[PullToRefreshView alloc]initWithScrollView:self.theTableView];
@@ -644,7 +645,7 @@
     }
 }
 
-- (IBAction)goBackDir {  
+- (void)goBackDir {
     [self removeSideSwipeView:NO];
 
     [self recalculateDirs];
@@ -664,7 +665,7 @@
     [self refreshTableViewWithAnimation:UITableViewRowAnimationRight];
 }
 
-- (IBAction)goHome {
+- (void)goHome {
     [self removeSideSwipeView:NO];
     
     [self.dirs removeAllObjects];
@@ -679,7 +680,7 @@
     [self.theTableView setContentOffset:CGPointMake(0, 0)];
 }
 
-- (IBAction)close {
+- (void)close {
     [self removeSideSwipeView:NO];
     [self.dirs removeAllObjects];
     [self.filelist removeAllObjects];
@@ -848,9 +849,13 @@
         cellCount = cellCount-1;
     }
 
-    if (self.editing && indexPath.row == cellCount) {
+    /*if (self.editing && indexPath.row == cellCount) {
         [self showFileCreationAlertView];
-    } else if (indexPath.row != cellCount) {
+    } else*/
+    
+    NSLog(@"Cell Name = %@\nCell Count = %d\nIs Editing = %@",cell.textLabel.text,cellCount,self.editing?@"YES":@"NO");
+    
+    if (indexPath.row != cellCount) {
         NSString *cellName = cell.textLabel.text;
         NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:cellName];
 
@@ -861,18 +866,23 @@
         BOOL directoryExists = [[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir];
     
         if (self.editing) {
-            if ([self.perspectiveCopiedList containsObject:file]) {
-                [self removeItemFromPerspectiveCopyList:file];
-                cell.editingAccessoryType = UITableViewCellAccessoryNone;
-            } else {
-                if ([self addItemToPerspectiveCopyList:file]) {
-                    cell.editingAccessoryType = UITableViewCellAccessoryCheckmark;
-                } else {
-                    cell.editingAccessoryType = UITableViewCellAccessoryNone;
-                }
-            }
             
-            [self updateCopyButtonState];
+            if (indexPath.row == cellCount) {
+                [self showFileCreationAlertView];
+            } else {
+                if ([self.perspectiveCopiedList containsObject:file]) {
+                    [self removeItemFromPerspectiveCopyList:file];
+                    cell.editingAccessoryType = UITableViewCellAccessoryNone;
+                } else {
+                    if ([self addItemToPerspectiveCopyList:file]) {
+                        cell.editingAccessoryType = UITableViewCellAccessoryCheckmark;
+                    } else {
+                        cell.editingAccessoryType = UITableViewCellAccessoryNone;
+                    }
+                }
+                
+                [self updateCopyButtonState];
+            }
             
         } else if (directoryExists && isDir) { 
             [self.backButton setHidden:NO];
@@ -989,7 +999,7 @@
     }
 }
 
-- (IBAction)editTable {
+- (void)editTable {
     [self removeSideSwipeView:NO];
     
     [self reindexFilelist];
@@ -997,7 +1007,7 @@
     if (self.editing) {
         [self.editButton setTitle:@"Edit"];
 
-        if (![[kAppDelegate managerCurrentDir] isEqualToString:kDocsDir]) {
+        if (![[kAppDelegate managerCurrentDir]isEqualToString:kDocsDir]) {
             [self.backButton setHidden:NO];
             [self.homeButton setHidden:NO];
         }
