@@ -101,33 +101,35 @@
 
 - (void)rename {
     NSString *newName = [[[kAppDelegate openFile]stringByDeletingLastPathComponent]stringByAppendingPathComponent:self.fileName.text];
-    
-    NSMutableDictionary *newNameDict = [NSMutableDictionary dictionary];
-    [newNameDict setObject:[kAppDelegate openFile] forKey:@"old"];
-    [newNameDict setObject:newName forKey:@"new"];
 
     if ([[NSFileManager defaultManager]fileExistsAtPath:newName]) {
         CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Already Exists" message:@"A file already exists with the new name. Please try a different one." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [av show];
         [av release];
-    } else if ([[NSFileManager defaultManager]isWritableFileAtPath:[kAppDelegate openFile]] && [[NSFileManager defaultManager]isReadableFileAtPath:[kAppDelegate openFile]]) {
-        
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"copiedlistchanged" object:newNameDict];
-        
-        [[NSFileManager defaultManager]moveItemAtPath:[kAppDelegate openFile] toPath:newName error:nil];
-        [kAppDelegate setOpenFile:newName];
-        
-        if ([[kAppDelegate nowPlayingFile] isEqualToString:[kAppDelegate openFile]]) {
-            [kAppDelegate setNowPlayingFile:newName];
-        }
-        
+        [self.fileName becomeFirstResponder];
     } else {
-        NSString *message = [NSString stringWithFormat:@"You do not have the UNIX permissions to rename this file. Try chmod 777 %@ in Terminal on your Mac or Linux machine.", [[kAppDelegate openFile]lastPathComponent]];
-        CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Access Denied" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [av show];
-        [av release];
-        [self.fileName setText:[[kAppDelegate openFile]lastPathComponent]];
-    }
+        
+        if ([[NSFileManager defaultManager]isWritableFileAtPath:[kAppDelegate openFile]] && [[NSFileManager defaultManager]isReadableFileAtPath:[kAppDelegate openFile]]) {
+            NSMutableDictionary *newNameDict = [NSMutableDictionary dictionary];
+            [newNameDict setObject:[kAppDelegate openFile] forKey:@"old"];
+            [newNameDict setObject:newName forKey:@"new"];
+            
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"copiedlistchanged" object:newNameDict];
+            
+            [[NSFileManager defaultManager]moveItemAtPath:[kAppDelegate openFile] toPath:newName error:nil];
+            [kAppDelegate setOpenFile:newName];
+            
+            if ([[kAppDelegate nowPlayingFile] isEqualToString:[kAppDelegate openFile]]) {
+                [kAppDelegate setNowPlayingFile:newName];
+            }
+        } else {
+            NSString *message = [NSString stringWithFormat:@"You do not have the UNIX permissions to rename this file. Try chmod 777 %@ in Terminal on your Mac or Linux machine.", [[kAppDelegate openFile]lastPathComponent]];
+            CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Access Denied" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [av show];
+            [av release];
+            [self.fileName setText:[[kAppDelegate openFile]lastPathComponent]];
+        }
+    } 
 }
 
 - (void)removeRevertButtonFromBar {

@@ -101,12 +101,8 @@
 
 - (void)pasteInLocation:(NSString *)location {
     for (NSString *oldPath in self.copiedList) {
-        NSString *newPath = [location stringByAppendingPathComponent:[oldPath lastPathComponent]];
+        NSString *newPath = getNonConflictingFilePathForPath([location stringByAppendingPathComponent:[oldPath lastPathComponent]]);
         NSError *error = nil;
-        
-        if ([[NSFileManager defaultManager]fileExistsAtPath:newPath]) {
-            newPath = getNonConflictingFilePathForPath(newPath);
-        }
         
         if (self.isCut) {
             [[NSFileManager defaultManager]moveItemAtPath:oldPath toPath:newPath error:&error];

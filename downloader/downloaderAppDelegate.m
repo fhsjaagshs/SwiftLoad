@@ -15,7 +15,6 @@ float sanitizeMesurement(float measurement) {
 
 NSString * getNonConflictingFilePathForPath(NSString *path) {
     NSString *ext = [path pathExtension];
-    
     int appendNumber = 1;
     
     do {
@@ -25,9 +24,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
         }
         
         path = [[[path stringByDeletingPathExtension]stringByAppendingString:[NSString stringWithFormat:@" - %d",appendNumber]]stringByAppendingPathComponent:ext];
-        
         appendNumber = appendNumber+1;
-        
     } while (YES);
     
     return path;
@@ -568,20 +565,18 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     NSString *fileName = [self.openFile lastPathComponent];
     
     if (fileName.length > 14) {
-        NSString *fnZZ = [fileName substringToIndex:11];
-        fileName = [fnZZ stringByAppendingString:@"..."];
-        fileName = [fileName stringByAppendingString:self.openFile.pathExtension];
+        fileName = [[fileName substringToIndex:11] stringByAppendingString:@"..."];
     }
     
     [self setSecondaryTitleOfVisibleHUD:fileName];
     
     NSString *filePath = self.openFile;
     
-    if (filePath.length == 0 || filePath == nil) {
+    if (filePath.length == 0) {
         filePath = [self nowPlayingFile];
     }
     
-    if (filePath.length == 0 || filePath == nil) {
+    if (filePath.length == 0) {
         [self hideHUD];
         [self.sessionControllerSending disconnect];
         [self setSessionControllerSending:nil];
@@ -719,7 +714,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     NSArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:self.sessionController.receivedData];
     
     if (array.count == 0) {
-        CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Failure Sending File" message:@"The file you tried to send failed to send." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Failure" message:@"There has been an error trying to receive your file." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [av show];
         [av release];
         return;
@@ -731,14 +726,13 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     
     [self hideHUD];
     
-    CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Received" message:@"Your file has been successfully received." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    
     NSString *finalLocation = getNonConflictingFilePathForPath([docsDir stringByAppendingPathComponent:name]);
     [[NSFileManager defaultManager]createFileAtPath:finalLocation contents:file attributes:nil];
+    [self.sessionController.receivedData setLength:0];
     
+    CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Success" message:@"Your file has been successfully received." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [av show];
     [av release];
-    [self.sessionController.receivedData setLength:0];
 }
 
 //
@@ -794,13 +788,13 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
 
 - (void)showFTPUploadController {
     
-    avL = [[CustomAlertView alloc]initWithTitle:@"Enter FTP Info" message:@"\n\n\n\n\n" completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
+    avL = [[[CustomAlertView alloc]initWithTitle:@"Enter FTP Info" message:@"\n\n\n\n\n" completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
         if (buttonIndex == 1) {
             [self actuallySend];
         }
-    } cancelButtonTitle:@"Cancel" otherButtonTitles:@"Upload", nil];
+    } cancelButtonTitle:@"Cancel" otherButtonTitles:@"Upload", nil]autorelease];
 
-    serverField = [[UITextField alloc]initWithFrame:CGRectMake(13, 48, 257, 30)];
+    serverField = [[[UITextField alloc]initWithFrame:CGRectMake(13, 48, 257, 30)]autorelease];
     [serverField setKeyboardAppearance:UIKeyboardAppearanceAlert];
     [serverField setBorderStyle:UITextBorderStyleBezel];
     [serverField setBackgroundColor:[UIColor whiteColor]];
@@ -813,7 +807,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     [serverField setDelegate:self];
     [serverField setClearButtonMode:UITextFieldViewModeWhileEditing];
     
-    usernameField = [[UITextField alloc]initWithFrame:CGRectMake(13, 85, 257, 30)];
+    usernameField = [[[UITextField alloc]initWithFrame:CGRectMake(13, 85, 257, 30)]autorelease];
     [usernameField setKeyboardAppearance:UIKeyboardAppearanceAlert];
     [usernameField setBorderStyle:UITextBorderStyleBezel];
     [usernameField setBackgroundColor:[UIColor whiteColor]];
@@ -826,7 +820,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     usernameField.delegate = self;
     usernameField.clearButtonMode = UITextFieldViewModeWhileEditing;
     
-    passwordField = [[UITextField alloc]initWithFrame:CGRectMake(13, 122, 257, 30)];
+    passwordField = [[[UITextField alloc]initWithFrame:CGRectMake(13, 122, 257, 30)]autorelease];
     [passwordField setKeyboardAppearance:UIKeyboardAppearanceAlert];
     [passwordField setBorderStyle:UITextBorderStyleBezel];
     [passwordField setBackgroundColor:[UIColor whiteColor]];
@@ -844,10 +838,14 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     serverField.text = FTPPath;
     usernameField.text = FTPUsername;
     
-    if (serverField.text != nil || usernameField.text != nil) {
+    [serverField becomeFirstResponder];
+    
+    if (serverField.text.length > 0) {
+        [usernameField becomeFirstResponder];
+    }
+    
+    if (usernameField.text.length > 0) {
         [passwordField becomeFirstResponder];
-    } else {
-        [serverField becomeFirstResponder];
     }
     
     [serverField addTarget:self action:@selector(moveOnServerField) forControlEvents:UIControlEventEditingDidEndOnExit];
@@ -858,10 +856,6 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     [avL addSubview:usernameField];
     [avL addSubview:passwordField];
     [avL show];
-    [avL release];
-    [serverField release];
-    [usernameField release];
-    [passwordField release];
 }
 
 - (void)moveOnServerField {
