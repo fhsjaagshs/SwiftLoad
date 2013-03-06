@@ -20,6 +20,7 @@
     self.showsVerticalScrollIndicator = YES;
     self.showsHorizontalScrollIndicator = YES;
     self.backgroundColor = [UIColor clearColor];
+    self.contentMode = UIViewContentModeCenter;
     
     self.theImageView = [[[UIImageView alloc]initWithFrame:self.frame]autorelease];
     self.theImageView.backgroundColor = [UIColor clearColor];
@@ -65,18 +66,9 @@
 }
 
 - (void)loadImage:(UIImage *)image {
-    
     [self.theImageView setImage:image];
-   
     self.zoomScale = self.minimumZoomScale;
-    
-    CGRect photoImageViewFrame;
-    photoImageViewFrame.origin = CGPointZero;
-    photoImageViewFrame.size = image.size;
-    self.theImageView.frame = photoImageViewFrame;
-    self.contentSize = photoImageViewFrame.size;
-    
-    [self setMaxMinZoomScalesForCurrentBounds];
+    [self adjustFrame];
 }
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
@@ -93,10 +85,10 @@
 	if (self.theImageView.image == nil) {
         return;
     }
-
-    self.zoomScale = self.minimumZoomScale;
+    
 	self.maximumZoomScale = 1;
 	self.minimumZoomScale = 1;
+    self.zoomScale = self.minimumZoomScale;
 	
     CGSize boundsSize = self.bounds.size;
     CGSize imageSize = self.theImageView.frame.size;
@@ -124,13 +116,13 @@
     CGRect frameToCenter = self.theImageView.frame;
 
     if (frameToCenter.size.width < boundsSize.width) {
-        frameToCenter.origin.x = floorf((boundsSize.width - frameToCenter.size.width) / 2.0);
+        frameToCenter.origin.x = floorf((boundsSize.width-frameToCenter.size.width)/2.0);
 	} else {
         frameToCenter.origin.x = 0;
 	}
 
     if (frameToCenter.size.height < boundsSize.height) {
-        frameToCenter.origin.y = floorf((boundsSize.height - frameToCenter.size.height) / 2.0);
+        frameToCenter.origin.y = floorf((boundsSize.height-frameToCenter.size.height)/2.0);
 	} else {
         frameToCenter.origin.y = 0;
 	}

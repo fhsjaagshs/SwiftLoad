@@ -29,6 +29,7 @@
     [self.view bringSubviewToFront:self.navBar];
     
     self.toolBar = [[[CustomToolbar alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-44, screenBounds.size.width, 44)]autorelease];
+    self.toolBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     
     UIBarButtonItem *space = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil]autorelease];
     self.nextImg = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFastForward target:self action:@selector(nextImage)]autorelease];
@@ -41,17 +42,18 @@
     [self.view bringSubviewToFront:self.toolBar];
     
     self.zoomingImageView = [[[ZoomingImageView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-88)]autorelease];
-    self.zoomingImageView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin;
+    self.zoomingImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
+   // self.zoomingImageView.theImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
     [self.view addSubview:self.zoomingImageView];
     [self.view bringSubviewToFront:self.zoomingImageView];
     
-    if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad) {
+    /*if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad) {
         if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication]statusBarOrientation])) {
             [self.toolBar setHidden:YES];
             CGRect rectus = CGRectMake(0, 68, screenBounds.size.width, screenBounds.size.height-86);
             self.zoomingImageView.frame = rectus;
         }
-    }
+    }*/
     
     UITapGestureRecognizer *tt = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imageViewWasDoubleTapped:)];
     [tt setNumberOfTapsRequired:2];
@@ -92,6 +94,7 @@
     [imageFiles release];
 
     [self.zoomingImageView loadImage:[UIImage imageWithContentsOfFile:[kAppDelegate openFile]]];
+    NSLog(@"ContentSize: %@",NSStringFromCGSize(self.zoomingImageView.contentSize));
 }
 
 - (void)uploadToDropbox {
@@ -272,10 +275,12 @@
     if (UIInterfaceOrientationIsLandscape(fromInterfaceOrientation)) {
         if (self.zoomingImageView.zoomScale > 1) {
             [self.zoomingImageView zoomOut];
+            NSLog(@"adjusted");
         }
         [self.toolBar setHidden:NO];
-        CGRect rectus = CGRectMake(0, 44, self.view.bounds.size.width, self.view.bounds.size.height-88);
-        [self.zoomingImageView setFrame:rectus];
+        self.zoomingImageView.frame = CGRectMake(0, 44, self.view.bounds.size.width, self.view.bounds.size.height-88);
+        NSLog(@"ContentSize: %@",NSStringFromCGSize(self.zoomingImageView.contentSize));
+        NSLog(@"Image Size: %@",NSStringFromCGRect(self.zoomingImageView.theImageView.frame));
     }
 }
 
@@ -284,10 +289,14 @@
     if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation)) {
         if (self.zoomingImageView.zoomScale > 1) {
             [self.zoomingImageView zoomOut];
+            NSLog(@"adjusted");
         }
         [self.toolBar setHidden:YES];
-        CGRect rectus = CGRectMake(0, 68, self.view.bounds.size.width, self.view.bounds.size.height-64);
-        [self.zoomingImageView setFrame:rectus];
+        self.zoomingImageView.frame = CGRectMake(0, 44, self.view.bounds.size.width, self.view.bounds.size.height-44);
+        [self.zoomingImageView loadImage:[UIImage imageWithContentsOfFile:[kAppDelegate openFile]]];
+        NSLog(@"ContentSize: %@",NSStringFromCGSize(self.zoomingImageView.contentSize));
+        NSLog(@"ContentSize: %@",NSStringFromCGSize(self.zoomingImageView.contentSize));
+        NSLog(@"Image Size: %@",NSStringFromCGRect(self.zoomingImageView.theImageView.frame));
     }
 }
 
