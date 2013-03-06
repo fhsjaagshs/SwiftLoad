@@ -20,8 +20,7 @@
     self.showsVerticalScrollIndicator = YES;
     self.showsHorizontalScrollIndicator = YES;
     self.backgroundColor = [UIColor clearColor];
-    self.contentMode = UIViewContentModeCenter;
-    
+
     self.theImageView = [[[UIImageView alloc]initWithFrame:self.frame]autorelease];
     self.theImageView.backgroundColor = [UIColor clearColor];
     self.theImageView.contentMode = UIViewContentModeCenter;
@@ -42,16 +41,6 @@
     return self;
 }
 
-- (void)setFrame:(CGRect)frame {
-    [super setFrame:frame];
-    [self adjustFrame];
-}
-
-- (void)setAutoresizingMask:(UIViewAutoresizing)autoresizingMask {
-    [super setAutoresizingMask:autoresizingMask];
-    [self.theImageView setAutoresizingMask:autoresizingMask];
-}
-
 - (void)awakeFromNib {
     [self setup];
 }
@@ -67,7 +56,8 @@
 
 - (void)loadImage:(UIImage *)image {
     [self.theImageView setImage:image];
-    self.zoomScale = self.minimumZoomScale;
+    self.zoomScale = 1;
+  //  self.zoomScale = self.minimumZoomScale;
     [self adjustFrame];
 }
 
@@ -86,9 +76,11 @@
         return;
     }
     
-	self.maximumZoomScale = 1;
-	self.minimumZoomScale = 1;
     self.zoomScale = self.minimumZoomScale;
+    
+    self.maximumZoomScale = 1;
+    self.minimumZoomScale = 1;
+    self.contentSize = CGSizeMake(0, 0);
 	
     CGSize boundsSize = self.bounds.size;
     CGSize imageSize = self.theImageView.frame.size;

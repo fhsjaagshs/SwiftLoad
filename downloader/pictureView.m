@@ -43,17 +43,15 @@
     
     self.zoomingImageView = [[[ZoomingImageView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-88)]autorelease];
     self.zoomingImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
-   // self.zoomingImageView.theImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
     [self.view addSubview:self.zoomingImageView];
     [self.view bringSubviewToFront:self.zoomingImageView];
     
-    /*if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad) {
+    if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad) {
         if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication]statusBarOrientation])) {
             [self.toolBar setHidden:YES];
-            CGRect rectus = CGRectMake(0, 68, screenBounds.size.width, screenBounds.size.height-86);
-            self.zoomingImageView.frame = rectus;
+            self.zoomingImageView.frame = CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44);
         }
-    }*/
+    }
     
     UITapGestureRecognizer *tt = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imageViewWasDoubleTapped:)];
     [tt setNumberOfTapsRequired:2];
@@ -193,7 +191,6 @@
 }
 
 - (void)nextImage {
-    [self.zoomingImageView zoomOut];
     [self.prevImg setEnabled:YES];
     
     int oldImageNumber = [[NSUserDefaults standardUserDefaults]integerForKey:@"imageNumber"];
@@ -221,7 +218,7 @@
         [self.nextImg setEnabled:NO];
     }
     
-    [self.zoomingImageView loadImage:[UIImage imageWithContentsOfFile:[kAppDelegate openFile]]];
+    [self.zoomingImageView loadImage:[UIImage imageWithContentsOfFile:newImagePath]];
 
     [kAppDelegate setOpenFile:newImagePath];
     [[NSUserDefaults standardUserDefaults]setInteger:newImageNumber forKey:@"imageNumber"];
@@ -229,7 +226,6 @@
 }
 
 - (void)previousImage {
-    [self.zoomingImageView zoomOut];
     [self.nextImg setEnabled:YES];
     
     int oldImageNumber = [[NSUserDefaults standardUserDefaults]integerForKey:@"imageNumber"];
@@ -278,6 +274,7 @@
             NSLog(@"adjusted");
         }
         [self.toolBar setHidden:NO];
+        self.zoomingImageView.zoomScale = self.zoomingImageView.minimumZoomScale;
         self.zoomingImageView.frame = CGRectMake(0, 44, self.view.bounds.size.width, self.view.bounds.size.height-88);
         NSLog(@"ContentSize: %@",NSStringFromCGSize(self.zoomingImageView.contentSize));
         NSLog(@"Image Size: %@",NSStringFromCGRect(self.zoomingImageView.theImageView.frame));
@@ -292,8 +289,8 @@
             NSLog(@"adjusted");
         }
         [self.toolBar setHidden:YES];
+        self.zoomingImageView.zoomScale = self.zoomingImageView.minimumZoomScale;
         self.zoomingImageView.frame = CGRectMake(0, 44, self.view.bounds.size.width, self.view.bounds.size.height-44);
-        [self.zoomingImageView loadImage:[UIImage imageWithContentsOfFile:[kAppDelegate openFile]]];
         NSLog(@"ContentSize: %@",NSStringFromCGSize(self.zoomingImageView.contentSize));
         NSLog(@"ContentSize: %@",NSStringFromCGSize(self.zoomingImageView.contentSize));
         NSLog(@"Image Size: %@",NSStringFromCGRect(self.zoomingImageView.theImageView.frame));
