@@ -92,7 +92,6 @@
     [imageFiles release];
 
     [self.zoomingImageView loadImage:[UIImage imageWithContentsOfFile:[kAppDelegate openFile]]];
-    NSLog(@"ContentSize: %@",NSStringFromCGSize(self.zoomingImageView.contentSize));
 }
 
 - (void)uploadToDropbox {
@@ -252,7 +251,7 @@
     }
     
     [self.zoomingImageView loadImage:[UIImage imageWithContentsOfFile:newImagePath]];
-
+    
     [kAppDelegate setOpenFile:newImagePath];
     [[NSUserDefaults standardUserDefaults]setInteger:newImageNumber forKey:@"imageNumber"];
     self.navBar.topItem.title = [newImagePath lastPathComponent];
@@ -271,12 +270,10 @@
     if (UIInterfaceOrientationIsLandscape(fromInterfaceOrientation)) {
         if (self.zoomingImageView.zoomScale > 1) {
             [self.zoomingImageView zoomOut];
-            NSLog(@"adjusted");
         }
         [self.toolBar setHidden:NO];
         self.zoomingImageView.zoomScale = self.zoomingImageView.minimumZoomScale;
         self.zoomingImageView.frame = CGRectMake(0, 44, self.view.bounds.size.width, self.view.bounds.size.height-88);
-        NSLog(@"ContentSize: %@",NSStringFromCGSize(self.zoomingImageView.contentSize));
         NSLog(@"Image Size: %@",NSStringFromCGRect(self.zoomingImageView.theImageView.frame));
     }
 }
@@ -286,13 +283,10 @@
     if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation)) {
         if (self.zoomingImageView.zoomScale > 1) {
             [self.zoomingImageView zoomOut];
-            NSLog(@"adjusted");
         }
         [self.toolBar setHidden:YES];
         self.zoomingImageView.zoomScale = self.zoomingImageView.minimumZoomScale;
         self.zoomingImageView.frame = CGRectMake(0, 44, self.view.bounds.size.width, self.view.bounds.size.height-44);
-        NSLog(@"ContentSize: %@",NSStringFromCGSize(self.zoomingImageView.contentSize));
-        NSLog(@"ContentSize: %@",NSStringFromCGSize(self.zoomingImageView.contentSize));
         NSLog(@"Image Size: %@",NSStringFromCGRect(self.zoomingImageView.theImageView.frame));
     }
 }

@@ -57,7 +57,6 @@
 - (void)loadImage:(UIImage *)image {
     [self.theImageView setImage:image];
     self.zoomScale = 1;
-  //  self.zoomScale = self.minimumZoomScale;
     [self adjustFrame];
 }
 
@@ -103,7 +102,7 @@
 
 - (void)layoutSubviews {
 	[super layoutSubviews];
-
+    
     CGSize boundsSize = self.bounds.size;
     CGRect frameToCenter = self.theImageView.frame;
 
