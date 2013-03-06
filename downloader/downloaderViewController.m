@@ -113,6 +113,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryPlayback error:nil];
     [self.textField setText:[[NSUserDefaults standardUserDefaults]objectForKey:@"myDefaults"]];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillDisappear) name:UIKeyboardWillHideNotification object:nil];
+    [self turnOnAudioPlayerListeners];
 }
 
 //
@@ -158,17 +159,18 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     return YES;
 }
 
-- (void)viewDidAppear:(BOOL)animated {
+/*- (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
     [[UIApplication sharedApplication]beginReceivingRemoteControlEvents];
     
     if (![self isFirstResponder]) {
         [self becomeFirstResponder];
     }
     
-    AudioSessionRemovePropertyListenerWithUserData(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, self);
-    AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, self);
-}
+    AudioSessionRemovePropertyListenerWithUserData(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, __unsafe_unretained self);
+    AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, __unsafe_unretained self);
+}*/
 
 - (void)showArtworkForFile:(NSString *)file {
     [self artworksForFileAtPath:file block:^(NSArray *artworkImages) {
@@ -213,17 +215,19 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 - (void)turnOnAudioPlayerListeners {
+    [[AVAudioSession sharedInstance]setDelegate:self];
+    [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryPlayback error:nil];
     [[UIApplication sharedApplication]beginReceivingRemoteControlEvents];
     [self becomeFirstResponder];
-    id weakself = __unsafe_unretained self;
-    AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, weakself);
+    AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, __unsafe_unretained self);
 }
 
 - (void)turnOffAudioPlayerListeners {
+    [[AVAudioSession sharedInstance]setDelegate:nil];
+    [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryAmbient error:nil];
     [[UIApplication sharedApplication]endReceivingRemoteControlEvents];
     [self resignFirstResponder];
-    id weakself = __unsafe_unretained self;
-    AudioSessionRemovePropertyListenerWithUserData(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, weakself);
+    AudioSessionRemovePropertyListenerWithUserData(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, __unsafe_unretained self);
 }
 
 - (void)skipToPreviousTrack {
@@ -236,21 +240,16 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [AudioPlayerViewController notif_setNxtTrackHidden:NO];
 
     NSString *cellNameFileKey = [kAppDelegate nowPlayingFile];
-    
     NSString *currentDir = [cellNameFileKey stringByDeletingLastPathComponent];
-    
-    NSMutableArray *filesOfDir = [[[[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)]mutableCopy];
-    
+    NSArray *filesOfDir = [[[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
     NSMutableArray *audioFiles = [NSMutableArray array];
     
     for (NSString *object in filesOfDir) {
         NSString *newObject = [currentDir stringByAppendingPathComponent:object];
-        BOOL isAudio = [MIMEUtils isAudioFile:newObject];
-        if (isAudio) {
+        if ([MIMEUtils isAudioFile:newObject]) {
             [audioFiles addObject:newObject];
         }
     }
-    [filesOfDir release];
     
     int number = [audioFiles indexOfObject:cellNameFileKey]-1;
     
@@ -318,7 +317,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     NSString *cellNameFileKey = [kAppDelegate nowPlayingFile];
     NSString *currentDir = [cellNameFileKey stringByDeletingLastPathComponent];
     
-    NSArray *filesOfDir = [[[[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)]mutableCopy];
+    NSArray *filesOfDir = [[[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
     NSMutableArray *audioFiles = [NSMutableArray array];
     
     for (NSString *object in filesOfDir) {
@@ -327,7 +326,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
             [audioFiles addObject:newObject];
         }
     }
-    [filesOfDir release];
     
     int number = [audioFiles indexOfObject:cellNameFileKey]+1;
     
@@ -438,7 +436,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     NSString *cellNameFileKey = [kAppDelegate nowPlayingFile];
     NSString *currentDir = [cellNameFileKey stringByDeletingLastPathComponent];
     
-    NSArray *filesOfDir = [[[[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)]mutableCopy];
+    NSArray *filesOfDir = [[[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
     NSMutableArray *audioFiles = [NSMutableArray array];
     
     for (NSString *object in filesOfDir) {

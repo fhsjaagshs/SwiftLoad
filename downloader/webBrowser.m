@@ -28,7 +28,7 @@
     self.theTextField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.theTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     self.theTextField.delegate = self;
-    self.theTextField.borderStyle = UITextBorderStyleNone;
+    self.theTextField.borderStyle = UITextBorderStyleBezel;
     self.theTextField.backgroundColor = [UIColor clearColor];
     self.theTextField.textAlignment = UITextAlignmentCenter;
     

@@ -108,7 +108,6 @@
         [av release];
         [self.fileName becomeFirstResponder];
     } else {
-        
         if ([[NSFileManager defaultManager]isWritableFileAtPath:[kAppDelegate openFile]] && [[NSFileManager defaultManager]isReadableFileAtPath:[kAppDelegate openFile]]) {
             NSMutableDictionary *newNameDict = [NSMutableDictionary dictionary];
             [newNameDict setObject:[kAppDelegate openFile] forKey:@"old"];

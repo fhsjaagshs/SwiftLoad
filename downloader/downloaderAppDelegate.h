@@ -21,9 +21,9 @@ NSString * getNonConflictingFilePathForPath(NSString *path);
 
 @interface downloaderAppDelegate : UIResponder <UIApplicationDelegate, BKSessionControllerDelegate, GKSessionDelegate, DBSessionDelegate, DBRestClientDelegate, MBProgressHUDDelegate, GKPeerPickerControllerDelegate, UITextFieldDelegate, NSURLConnectionDelegate, MFMailComposeViewControllerDelegate> {
     CustomAlertView *avL;
-    UITextField *serverField;
-    UITextField *usernameField;
-    UITextField *passwordField;
+    CustomTextField *serverField;
+    CustomTextField *usernameField;
+    CustomTextField *passwordField;
 }
 
 @property (nonatomic, retain) UIWindow *window;

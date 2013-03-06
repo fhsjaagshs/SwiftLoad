@@ -18,7 +18,6 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     int appendNumber = 1;
     
     do {
-        
         if (![[NSFileManager defaultManager]fileExistsAtPath:path]) {
             break;
         }
@@ -794,10 +793,10 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
         }
     } cancelButtonTitle:@"Cancel" otherButtonTitles:@"Upload", nil]autorelease];
 
-    serverField = [[[UITextField alloc]initWithFrame:CGRectMake(13, 48, 257, 30)]autorelease];
+    serverField = [[[CustomTextField alloc]initWithFrame:CGRectMake(13, 48, 257, 30)]autorelease];
     [serverField setKeyboardAppearance:UIKeyboardAppearanceAlert];
     [serverField setBorderStyle:UITextBorderStyleBezel];
-    [serverField setBackgroundColor:[UIColor whiteColor]];
+    [serverField setBackgroundColor:[UIColor clearColor]];
     [serverField setReturnKeyType:UIReturnKeyNext];
     [serverField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     [serverField setAutocorrectionType:UITextAutocorrectionTypeNo];
@@ -806,8 +805,9 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     [serverField setAdjustsFontSizeToFitWidth:YES];
     [serverField setDelegate:self];
     [serverField setClearButtonMode:UITextFieldViewModeWhileEditing];
+    serverField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     
-    usernameField = [[[UITextField alloc]initWithFrame:CGRectMake(13, 85, 257, 30)]autorelease];
+    usernameField = [[[CustomTextField alloc]initWithFrame:CGRectMake(13, 85, 257, 30)]autorelease];
     [usernameField setKeyboardAppearance:UIKeyboardAppearanceAlert];
     [usernameField setBorderStyle:UITextBorderStyleBezel];
     [usernameField setBackgroundColor:[UIColor whiteColor]];
@@ -819,12 +819,13 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     [usernameField setAdjustsFontSizeToFitWidth:YES];
     usernameField.delegate = self;
     usernameField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    usernameField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     
-    passwordField = [[[UITextField alloc]initWithFrame:CGRectMake(13, 122, 257, 30)]autorelease];
+    passwordField = [[[CustomTextField alloc]initWithFrame:CGRectMake(13, 122, 257, 30)]autorelease];
     [passwordField setKeyboardAppearance:UIKeyboardAppearanceAlert];
     [passwordField setBorderStyle:UITextBorderStyleBezel];
     [passwordField setBackgroundColor:[UIColor whiteColor]];
-    [passwordField setReturnKeyType:UIReturnKeyDone];
+    [passwordField setReturnKeyType:UIReturnKeyNext];
     [passwordField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     [passwordField setAutocorrectionType:UITextAutocorrectionTypeNo];
     [passwordField setPlaceholder:@"Password"];
@@ -833,8 +834,11 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     passwordField.secureTextEntry = YES;
     passwordField.delegate = self;
     passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    passwordField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    
     NSString *FTPPath = [[NSUserDefaults standardUserDefaults]objectForKey:@"FTPPath"];
     NSString *FTPUsername = [[NSUserDefaults standardUserDefaults]objectForKey:@"FTPUsername"];
+    
     serverField.text = FTPPath;
     usernameField.text = FTPUsername;
     

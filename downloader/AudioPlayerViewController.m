@@ -55,7 +55,7 @@
     [self.stopButton addTarget:self action:@selector(stopAudio) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:stopButton];
     
-    self.infoField = [[[UITextView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, 65)]autorelease];
+    self.infoField = [[[UITextView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, sanitizeMesurement(65))]autorelease];
     self.infoField.textAlignment = UITextAlignmentCenter;
     self.infoField.textColor = [UIColor whiteColor];
     self.infoField.font = [UIFont boldSystemFontOfSize:15];

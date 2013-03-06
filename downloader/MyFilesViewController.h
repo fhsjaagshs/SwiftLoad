@@ -11,7 +11,7 @@
 
 @interface MyFilesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, PullToRefreshViewDelegate, UITextFieldDelegate, UIDocumentInteractionControllerDelegate> {
     CustomAlertView *av;
-    UITextField *tv;
+    CustomTextField *tv;
     float totalProgress;
 }
 

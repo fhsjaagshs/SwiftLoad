@@ -594,11 +594,11 @@
     [createDir setBackgroundColor:[UIColor clearColor]];
     createDir.titleLabel.shadowOffset = CGSizeMake(0, -1);
     
-    tv = [[UITextField alloc]initWithFrame:CGRectMake(43, 48, 200, 31)];
+    tv = [[CustomTextField alloc]initWithFrame:CGRectMake(43, 48, 200, 31)];
     [tv becomeFirstResponder];
     [tv setKeyboardAppearance:UIKeyboardAppearanceAlert];
     [tv setBorderStyle:UITextBorderStyleBezel];
-    [tv setBackgroundColor:[UIColor whiteColor]];
+    [tv setBackgroundColor:[UIColor clearColor]];
     [tv setReturnKeyType:UIReturnKeyDone];
     [tv setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     [tv setAutocorrectionType:UITextAutocorrectionTypeNo];
@@ -606,6 +606,7 @@
     [tv setFont:[UIFont boldSystemFontOfSize:18]];
     [tv setAdjustsFontSizeToFitWidth:YES];
     tv.clearButtonMode = UITextFieldViewModeWhileEditing;
+    [tv addTarget:self action:@selector(hideFileCreationKB) forControlEvents:UIControlEventEditingDidEndOnExit];
     
     [av addSubview:createFile];
     [av addSubview:createDir];
@@ -615,6 +616,10 @@
     [tv release];
     [createFile release];
     [createDir release];
+}
+
+- (void)hideFileCreationKB {
+    [tv resignFirstResponder];
 }
 
 - (void)recalculateDirs {

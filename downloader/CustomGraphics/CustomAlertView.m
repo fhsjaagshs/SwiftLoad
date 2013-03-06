@@ -19,7 +19,7 @@
 			[subview removeFromSuperview];
 		}
         
-        if ([subview isKindOfClass:[UIControl class]] && ![subview isMemberOfClass:[UITextField class]]) {
+        if ([subview isKindOfClass:[UIControl class]] && ![subview isKindOfClass:[UITextField class]]) {
             subview.frame = CGRectMake(subview.frame.origin.x+2.5, subview.frame.origin.y, subview.frame.size.width-5, 37);
             UIImage *buttonImage = [getUIButtonImageNonPressed(subview.frame.size.height) resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
             [(UIButton *)subview setBackgroundImage:buttonImage forState:UIControlStateNormal];

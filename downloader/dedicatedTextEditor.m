@@ -166,7 +166,7 @@
     
     NSString *file = [kAppDelegate openFile];
     
-    self.popupQuery = [[[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",[file lastPathComponent]] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+    UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",[file lastPathComponent]] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         if (buttonIndex == 0) {
             [kAppDelegate sendFileInEmail:file fromViewController:self];
         } else if (buttonIndex == 1) {
@@ -178,7 +178,10 @@
         } else if (buttonIndex == 4) {
             [self uploadToDropbox];
         }
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Send as SMS", @"Upload to Server", @"Upload to Dropbox", nil]autorelease];
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Send as SMS", @"Upload to Server", @"Upload to Dropbox", nil];
+    
+    [self setPopupQuery:sheet];
+    [sheet release];
     
     self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
 
@@ -220,13 +223,13 @@
 }
 
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter]removeObserver:self];
     [self setPopupQuery:nil];
     [self setStepperFontAdjustment:nil];
     [self setFontSizeLabel:nil];
     [self setTheTextView:nil];
     [self setNavBar:nil];
     [self setToolBar:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
     NSLog(@"%@ dealloc'd", NSStringFromClass([self class]));
     [super dealloc];
 }
