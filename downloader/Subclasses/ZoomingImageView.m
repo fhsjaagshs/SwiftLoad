@@ -21,7 +21,7 @@
     self.showsHorizontalScrollIndicator = YES;
     self.backgroundColor = [UIColor clearColor];
 
-    self.theImageView = [[[UIImageView alloc]initWithFrame:self.frame]autorelease];
+    self.theImageView = [[[UIImageView alloc]initWithFrame:self.bounds]autorelease];
     self.theImageView.backgroundColor = [UIColor clearColor];
     self.theImageView.contentMode = UIViewContentModeCenter;
     [self addSubview:self.theImageView];
@@ -41,15 +41,33 @@
     return self;
 }
 
+/*- (void)setFrame:(CGRect)frame {
+    [super setFrame:frame];
+    float widthRatio = frame.size.width/self.theImageView.bounds.size.width;
+    float heightRatio = frame.size.height/self.theImageView.bounds.size.height;
+    
+    CGRect framey;
+    framey.origin = self.theImageView.frame.origin;
+    frame.size = CGSizeMake(self.theImageView.bounds.size.width*widthRatio, self.theImageView.bounds.size.height*heightRatio);
+    self.theImageView.frame = framey;
+    [self layoutSubviews];
+    
+}*/
+
 - (void)awakeFromNib {
     [self setup];
 }
 
 - (void)adjustFrame {
+    self.maximumZoomScale = 1;
+    self.minimumZoomScale = 1;
+    self.zoomScale = 1;
+    self.contentSize = CGSizeMake(0, 0);
+    
     CGRect photoImageViewFrame;
     photoImageViewFrame.origin = CGPointZero;
     photoImageViewFrame.size = self.theImageView.image.size;
-    self.theImageView.frame = photoImageViewFrame;
+    self.theImageView.bounds = photoImageViewFrame;
     self.contentSize = photoImageViewFrame.size;
     [self setMaxMinZoomScalesForCurrentBounds];
 }
@@ -74,15 +92,15 @@
 	if (self.theImageView.image == nil) {
         return;
     }
-    
+
     self.zoomScale = self.minimumZoomScale;
-    
+
     self.maximumZoomScale = 1;
     self.minimumZoomScale = 1;
     self.contentSize = CGSizeMake(0, 0);
-	
+
     CGSize boundsSize = self.bounds.size;
-    CGSize imageSize = self.theImageView.frame.size;
+    CGSize imageSize = self.theImageView.bounds.size;
 
     CGFloat xScale = boundsSize.width/imageSize.width;
     CGFloat yScale = boundsSize.height/imageSize.height;
@@ -96,7 +114,7 @@
 	self.minimumZoomScale = minScale;
 	self.zoomScale = minScale;
 	
-	self.theImageView.frame = CGRectMake(0, 0, self.theImageView.frame.size.width, self.theImageView.frame.size.height);
+	self.theImageView.bounds = CGRectMake(0, 0, self.theImageView.bounds.size.width, self.theImageView.bounds.size.height);
     [self layoutSubviews];
 }
 

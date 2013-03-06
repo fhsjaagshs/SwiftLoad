@@ -217,6 +217,7 @@
         [self.nextImg setEnabled:NO];
     }
     
+    self.zoomingImageView.zoomScale = self.zoomingImageView.minimumZoomScale;
     [self.zoomingImageView loadImage:[UIImage imageWithContentsOfFile:newImagePath]];
 
     [kAppDelegate setOpenFile:newImagePath];
@@ -250,8 +251,9 @@
         [self.prevImg setEnabled:NO];
     }
     
+    self.zoomingImageView.zoomScale = self.zoomingImageView.minimumZoomScale;
     [self.zoomingImageView loadImage:[UIImage imageWithContentsOfFile:newImagePath]];
-    
+
     [kAppDelegate setOpenFile:newImagePath];
     [[NSUserDefaults standardUserDefaults]setInteger:newImageNumber forKey:@"imageNumber"];
     self.navBar.topItem.title = [newImagePath lastPathComponent];
@@ -274,7 +276,7 @@
         [self.toolBar setHidden:NO];
         self.zoomingImageView.zoomScale = self.zoomingImageView.minimumZoomScale;
         self.zoomingImageView.frame = CGRectMake(0, 44, self.view.bounds.size.width, self.view.bounds.size.height-88);
-        NSLog(@"Image Size: %@",NSStringFromCGRect(self.zoomingImageView.theImageView.frame));
+        NSLog(@"Image Size: %@",NSStringFromCGRect(self.zoomingImageView.theImageView.bounds));
     }
 }
 
@@ -287,7 +289,8 @@
         [self.toolBar setHidden:YES];
         self.zoomingImageView.zoomScale = self.zoomingImageView.minimumZoomScale;
         self.zoomingImageView.frame = CGRectMake(0, 44, self.view.bounds.size.width, self.view.bounds.size.height-44);
-        NSLog(@"Image Size: %@",NSStringFromCGRect(self.zoomingImageView.theImageView.frame));
+        [self.zoomingImageView adjustFrame];
+        NSLog(@"Image Size: %@",NSStringFromCGRect(self.zoomingImageView.theImageView.bounds));
     }
 }
 

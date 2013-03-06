@@ -14,6 +14,7 @@ float sanitizeMesurement(float measurement) {
 }
 
 NSString * getNonConflictingFilePathForPath(NSString *path) {
+    NSString *oldPath = path;
     NSString *ext = [path pathExtension];
     int appendNumber = 1;
     
@@ -22,7 +23,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
             break;
         }
         
-        path = [[[path stringByDeletingPathExtension]stringByAppendingString:[NSString stringWithFormat:@" - %d",appendNumber]]stringByAppendingPathComponent:ext];
+        path = [[[oldPath stringByDeletingPathExtension]stringByAppendingString:[NSString stringWithFormat:@" - %d",appendNumber]]stringByAppendingPathExtension:ext];
         appendNumber = appendNumber+1;
     } while (YES);
     
