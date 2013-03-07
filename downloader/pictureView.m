@@ -32,12 +32,12 @@
     self.toolBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     
     UIBarButtonItem *space = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil]autorelease];
-    self.nextImg = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFastForward target:self action:@selector(nextImage)]autorelease];
-    self.nextImg.style = UIBarButtonItemStyleBordered;
-    self.prevImg = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(previousImage)]autorelease];
-    self.prevImg.style = UIBarButtonItemStyleBordered;
+    self.nextImg = [[[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"ArrowRight"] style:UIBarButtonItemStylePlain target:self action:@selector(nextImage)]autorelease];
+    [self.nextImg setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    self.prevImg = [[[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"ArrowLeft"] style:UIBarButtonItemStylePlain target:self action:@selector(previousImage)]autorelease];
+    [self.prevImg setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     
-    self.toolBar.items = [NSArray arrayWithObjects:space, self.prevImg, self.nextImg, space, nil];
+    self.toolBar.items = [NSArray arrayWithObjects:space, self.prevImg, space, self.nextImg, space, nil];
     [self.view addSubview:self.toolBar];
     [self.view bringSubviewToFront:self.toolBar];
     
@@ -49,7 +49,10 @@
     if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad) {
         if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication]statusBarOrientation])) {
             [self.toolBar setHidden:YES];
-            self.zoomingImageView.frame = CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44);
+            [self.navBar setHidden:YES];
+            [[UIApplication sharedApplication]setStatusBarHidden:YES];
+            self.view.frame = [[UIScreen mainScreen]bounds];
+            self.zoomingImageView.frame = self.view.frame;
         }
     }
     
@@ -144,6 +147,8 @@
 
 - (void)close {
     [self dismissModalViewControllerAnimated:YES];
+    [[UIApplication sharedApplication]setStatusBarHidden:NO];
+    self.view.frame = [[UIScreen mainScreen]applicationFrame];
     [kAppDelegate setOpenFile:nil];
 }
 
@@ -270,28 +275,27 @@
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     // To Portrait
     if (UIInterfaceOrientationIsLandscape(fromInterfaceOrientation)) {
-        if (self.zoomingImageView.zoomScale > 1) {
-            [self.zoomingImageView zoomOut];
-        }
         [self.toolBar setHidden:NO];
-        self.zoomingImageView.zoomScale = self.zoomingImageView.minimumZoomScale;
+        [self.navBar setHidden:NO];
+        [[UIApplication sharedApplication]setStatusBarHidden:NO];
+        self.view.frame = [[UIScreen mainScreen]applicationFrame];
         self.zoomingImageView.frame = CGRectMake(0, 44, self.view.bounds.size.width, self.view.bounds.size.height-88);
-        NSLog(@"Image Size: %@",NSStringFromCGRect(self.zoomingImageView.theImageView.bounds));
     }
+    [self.zoomingImageView fixContentSize];
+    [self.zoomingImageView zoomOut];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     // To Landscape
     if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation)) {
-        if (self.zoomingImageView.zoomScale > 1) {
-            [self.zoomingImageView zoomOut];
-        }
         [self.toolBar setHidden:YES];
-        self.zoomingImageView.zoomScale = self.zoomingImageView.minimumZoomScale;
-        self.zoomingImageView.frame = CGRectMake(0, 44, self.view.bounds.size.width, self.view.bounds.size.height-44);
-        [self.zoomingImageView adjustFrame];
-        NSLog(@"Image Size: %@",NSStringFromCGRect(self.zoomingImageView.theImageView.bounds));
+        [self.navBar setHidden:YES];
+        [[UIApplication sharedApplication]setStatusBarHidden:YES];
+        self.view.frame = [[UIScreen mainScreen]bounds];
+        self.zoomingImageView.frame = self.view.frame;
     }
+    [self.zoomingImageView fixContentSize];
+    [self.zoomingImageView zoomOut];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {

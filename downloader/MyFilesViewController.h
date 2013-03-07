@@ -8,9 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "ShadowedTableView.h"
-#import "MWPhotoBrowser.h"
 
-@interface MyFilesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, PullToRefreshViewDelegate, UITextFieldDelegate, UIDocumentInteractionControllerDelegate, MWPhotoBrowserDelegate> {
+@interface MyFilesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, PullToRefreshViewDelegate, UITextFieldDelegate, UIDocumentInteractionControllerDelegate> {
     CustomAlertView *av;
     CustomTextField *tv;
     float totalProgress;

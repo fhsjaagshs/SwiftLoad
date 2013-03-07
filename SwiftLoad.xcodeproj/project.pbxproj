@@ -27,12 +27,6 @@
 		F11C403713F830780077F5D1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F11C403013F82FB40077F5D1 /* UIKit.framework */; };
 		F11FE417145F8218008ECC7E /* dedicatedTextEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = F11FE415145F8218008ECC7E /* dedicatedTextEditor.m */; };
 		F128A1DD157FDBFE001BC156 /* SettingsView.m in Sources */ = {isa = PBXBuildFile; fileRef = F128A1DB157FDBFE001BC156 /* SettingsView.m */; };
-		F139799B16E78EDC00F8B61B /* MWCaptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = F139798F16E78EDC00F8B61B /* MWCaptionView.m */; };
-		F139799C16E78EDC00F8B61B /* MWPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = F139799116E78EDC00F8B61B /* MWPhoto.m */; };
-		F139799D16E78EDC00F8B61B /* MWPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = F139799316E78EDC00F8B61B /* MWPhotoBrowser.m */; };
-		F139799E16E78EDC00F8B61B /* MWTapDetectingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F139799616E78EDC00F8B61B /* MWTapDetectingImageView.m */; };
-		F139799F16E78EDC00F8B61B /* MWTapDetectingView.m in Sources */ = {isa = PBXBuildFile; fileRef = F139799816E78EDC00F8B61B /* MWTapDetectingView.m */; };
-		F13979A016E78EDC00F8B61B /* MWZoomingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = F139799A16E78EDC00F8B61B /* MWZoomingScrollView.m */; };
 		F13979A516E78F4E00F8B61B /* ArrowLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A116E78F4E00F8B61B /* ArrowLeft.png */; };
 		F13979A616E78F4E00F8B61B /* ArrowLeft@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A216E78F4E00F8B61B /* ArrowLeft@2x.png */; };
 		F13979A716E78F4E00F8B61B /* ArrowRight.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A316E78F4E00F8B61B /* ArrowRight.png */; };
@@ -94,7 +88,6 @@
 		F1693C6816DFAC59006E3739 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C6116DFAC59006E3739 /* MBProgressHUD.m */; };
 		F1693C6916DFAC59006E3739 /* PullToRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C6316DFAC59006E3739 /* PullToRefreshView.m */; };
 		F1693C6A16DFAC59006E3739 /* SCRFTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C6516DFAC59006E3739 /* SCRFTPRequest.m */; };
-		F1693C6B16DFAC59006E3739 /* ZoomingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C6716DFAC59006E3739 /* ZoomingImageView.m */; };
 		F1693C7316DFB9B5006E3739 /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1693C7216DFB9B5006E3739 /* DropboxSDK.framework */; };
 		F17DC65F140C45690015F613 /* AudioPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F17DC65E140C45690015F613 /* AudioPlayerViewController.m */; };
 		F17DC662140C489B0015F613 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F17DC661140C489B0015F613 /* AVFoundation.framework */; };
@@ -105,6 +98,7 @@
 		F1A923FE140D4DDD003ACDAB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A923FD140D4DDD003ACDAB /* QuartzCore.framework */; };
 		F1B2489014E333E300C44E11 /* webDAVHelp.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B2488E14E333E200C44E11 /* webDAVHelp.m */; };
 		F1C0CEFC1661AEC6001B1B42 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F1C0CEFB1661AEC6001B1B42 /* libz.1.2.5.dylib */; };
+		F1C7A6B716E8178F0082D4D3 /* ZoomingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1C7A6B616E8178F0082D4D3 /* ZoomingImageView.m */; };
 		F1D3A573157A8F9E00A2D141 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1D3A572157A8F9E00A2D141 /* Security.framework */; };
 		F1EB833C16D808AA009D7D2D /* action@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833116D808AA009D7D2D /* action@2x.png */; };
 		F1EB833D16D808AA009D7D2D /* bluetooth@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833216D808AA009D7D2D /* bluetooth@2x.png */; };
@@ -177,19 +171,6 @@
 		F11FE415145F8218008ECC7E /* dedicatedTextEditor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = dedicatedTextEditor.m; sourceTree = "<group>"; };
 		F128A1DA157FDBFD001BC156 /* SettingsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsView.h; sourceTree = "<group>"; };
 		F128A1DB157FDBFE001BC156 /* SettingsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsView.m; sourceTree = "<group>"; };
-		F139798E16E78EDC00F8B61B /* MWCaptionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWCaptionView.h; sourceTree = "<group>"; };
-		F139798F16E78EDC00F8B61B /* MWCaptionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWCaptionView.m; sourceTree = "<group>"; };
-		F139799016E78EDC00F8B61B /* MWPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWPhoto.h; sourceTree = "<group>"; };
-		F139799116E78EDC00F8B61B /* MWPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWPhoto.m; sourceTree = "<group>"; };
-		F139799216E78EDC00F8B61B /* MWPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWPhotoBrowser.h; sourceTree = "<group>"; };
-		F139799316E78EDC00F8B61B /* MWPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWPhotoBrowser.m; sourceTree = "<group>"; };
-		F139799416E78EDC00F8B61B /* MWPhotoProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWPhotoProtocol.h; sourceTree = "<group>"; };
-		F139799516E78EDC00F8B61B /* MWTapDetectingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWTapDetectingImageView.h; sourceTree = "<group>"; };
-		F139799616E78EDC00F8B61B /* MWTapDetectingImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWTapDetectingImageView.m; sourceTree = "<group>"; };
-		F139799716E78EDC00F8B61B /* MWTapDetectingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWTapDetectingView.h; sourceTree = "<group>"; };
-		F139799816E78EDC00F8B61B /* MWTapDetectingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWTapDetectingView.m; sourceTree = "<group>"; };
-		F139799916E78EDC00F8B61B /* MWZoomingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWZoomingScrollView.h; sourceTree = "<group>"; };
-		F139799A16E78EDC00F8B61B /* MWZoomingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWZoomingScrollView.m; sourceTree = "<group>"; };
 		F13979A116E78F4E00F8B61B /* ArrowLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ArrowLeft.png; path = Images/ArrowLeft.png; sourceTree = "<group>"; };
 		F13979A216E78F4E00F8B61B /* ArrowLeft@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ArrowLeft@2x.png"; path = "Images/ArrowLeft@2x.png"; sourceTree = "<group>"; };
 		F13979A316E78F4E00F8B61B /* ArrowRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ArrowRight.png; path = Images/ArrowRight.png; sourceTree = "<group>"; };
@@ -306,8 +287,6 @@
 		F1693C6316DFAC59006E3739 /* PullToRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullToRefreshView.m; sourceTree = "<group>"; };
 		F1693C6416DFAC59006E3739 /* SCRFTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCRFTPRequest.h; sourceTree = "<group>"; };
 		F1693C6516DFAC59006E3739 /* SCRFTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCRFTPRequest.m; sourceTree = "<group>"; };
-		F1693C6616DFAC59006E3739 /* ZoomingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoomingImageView.h; sourceTree = "<group>"; };
-		F1693C6716DFAC59006E3739 /* ZoomingImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoomingImageView.m; sourceTree = "<group>"; };
 		F1693C7216DFB9B5006E3739 /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DropboxSDK.framework; path = downloader/DropboxSDK.framework; sourceTree = "<group>"; };
 		F17DC65E140C45690015F613 /* AudioPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioPlayerViewController.m; sourceTree = "<group>"; };
 		F17DC660140C456E0015F613 /* AudioPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPlayerViewController.h; sourceTree = "<group>"; };
@@ -324,6 +303,8 @@
 		F1B2488D14E333E200C44E11 /* webDAVHelp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = webDAVHelp.h; sourceTree = "<group>"; };
 		F1B2488E14E333E200C44E11 /* webDAVHelp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = webDAVHelp.m; sourceTree = "<group>"; };
 		F1C0CEFB1661AEC6001B1B42 /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
+		F1C7A6B516E8178F0082D4D3 /* ZoomingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoomingImageView.h; sourceTree = "<group>"; };
+		F1C7A6B616E8178F0082D4D3 /* ZoomingImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoomingImageView.m; sourceTree = "<group>"; };
 		F1D3A572157A8F9E00A2D141 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		F1EB833116D808AA009D7D2D /* action@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "action@2x.png"; path = "Images/action@2x.png"; sourceTree = "<group>"; };
 		F1EB833216D808AA009D7D2D /* bluetooth@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bluetooth@2x.png"; path = "Images/bluetooth@2x.png"; sourceTree = "<group>"; };
@@ -502,7 +483,6 @@
 				F166BBC214E2171A003E5A07 /* webDAVViewController.m */,
 				F1B2488D14E333E200C44E11 /* webDAVHelp.h */,
 				F1B2488E14E333E200C44E11 /* webDAVHelp.m */,
-				F139798D16E78EDC00F8B61B /* MWPhotoBrowser */,
 				F19BB51816E006680081C95B /* Supporting Files */,
 				9B9DA4CE15561D0100C260AD /* Custom Classes */,
 				F1693BC616DFAA08006E3739 /* HTTPServer */,
@@ -510,26 +490,6 @@
 				F1693C1316DFAA92006E3739 /* BKSessionController */,
 			);
 			path = downloader;
-			sourceTree = "<group>";
-		};
-		F139798D16E78EDC00F8B61B /* MWPhotoBrowser */ = {
-			isa = PBXGroup;
-			children = (
-				F139798E16E78EDC00F8B61B /* MWCaptionView.h */,
-				F139798F16E78EDC00F8B61B /* MWCaptionView.m */,
-				F139799016E78EDC00F8B61B /* MWPhoto.h */,
-				F139799116E78EDC00F8B61B /* MWPhoto.m */,
-				F139799216E78EDC00F8B61B /* MWPhotoBrowser.h */,
-				F139799316E78EDC00F8B61B /* MWPhotoBrowser.m */,
-				F139799416E78EDC00F8B61B /* MWPhotoProtocol.h */,
-				F139799516E78EDC00F8B61B /* MWTapDetectingImageView.h */,
-				F139799616E78EDC00F8B61B /* MWTapDetectingImageView.m */,
-				F139799716E78EDC00F8B61B /* MWTapDetectingView.h */,
-				F139799816E78EDC00F8B61B /* MWTapDetectingView.m */,
-				F139799916E78EDC00F8B61B /* MWZoomingScrollView.h */,
-				F139799A16E78EDC00F8B61B /* MWZoomingScrollView.m */,
-			);
-			path = MWPhotoBrowser;
 			sourceTree = "<group>";
 		};
 		F1693BC616DFAA08006E3739 /* HTTPServer */ = {
@@ -715,8 +675,8 @@
 				F1693C6316DFAC59006E3739 /* PullToRefreshView.m */,
 				F1693C6416DFAC59006E3739 /* SCRFTPRequest.h */,
 				F1693C6516DFAC59006E3739 /* SCRFTPRequest.m */,
-				F1693C6616DFAC59006E3739 /* ZoomingImageView.h */,
-				F1693C6716DFAC59006E3739 /* ZoomingImageView.m */,
+				F1C7A6B516E8178F0082D4D3 /* ZoomingImageView.h */,
+				F1C7A6B616E8178F0082D4D3 /* ZoomingImageView.m */,
 			);
 			path = Subclasses;
 			sourceTree = "<group>";
@@ -950,16 +910,10 @@
 				F1693C6816DFAC59006E3739 /* MBProgressHUD.m in Sources */,
 				F1693C6916DFAC59006E3739 /* PullToRefreshView.m in Sources */,
 				F1693C6A16DFAC59006E3739 /* SCRFTPRequest.m in Sources */,
-				F1693C6B16DFAC59006E3739 /* ZoomingImageView.m in Sources */,
 				F19BB51C16E006CA0081C95B /* main.m in Sources */,
 				F119697616E3D0FC001139F1 /* CustomTextField.m in Sources */,
 				F1847BBB16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m in Sources */,
-				F139799B16E78EDC00F8B61B /* MWCaptionView.m in Sources */,
-				F139799C16E78EDC00F8B61B /* MWPhoto.m in Sources */,
-				F139799D16E78EDC00F8B61B /* MWPhotoBrowser.m in Sources */,
-				F139799E16E78EDC00F8B61B /* MWTapDetectingImageView.m in Sources */,
-				F139799F16E78EDC00F8B61B /* MWTapDetectingView.m in Sources */,
-				F13979A016E78EDC00F8B61B /* MWZoomingScrollView.m in Sources */,
+				F1C7A6B716E8178F0082D4D3 /* ZoomingImageView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
