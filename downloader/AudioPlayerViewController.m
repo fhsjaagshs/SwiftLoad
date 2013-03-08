@@ -423,19 +423,11 @@
 }
 
 - (void)setNxtTrackHidden:(NSNotification *)notif {
-    if ([notif.object isEqualToString:@"YES"]) {
-        [self.nxtTrack setHidden:YES];
-    } else {
-        [self.nxtTrack setHidden:NO];
-    }
+    [self.nxtTrack setHidden:[notif.object isEqualToString:@"YES"]];
 }
 
 - (void)setPrevTrackHidden:(NSNotification *)notif {
-    if ([notif.object isEqualToString:@"YES"]) {
-        [self.prevTrack setHidden:YES];
-    } else {
-        [self.prevTrack setHidden:NO];
-    }
+    [self.prevTrack setHidden:[notif.object isEqualToString:@"YES"]];
 }
 
 - (void)setInfoFieldText:(NSNotification *)notif {
