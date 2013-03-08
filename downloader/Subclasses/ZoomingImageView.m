@@ -36,7 +36,6 @@
 }
 
 - (void)fixContentSize {
-    NSLog(@"%@",NSStringFromCGSize(self.contentSize));
     if ((self.theImageView.image.size.width < self.theImageView.image.size.height)) {
         float ratio = self.theImageView.image.size.height/self.theImageView.bounds.size.height;
         self.contentSize = CGSizeMake(self.theImageView.image.size.width/ratio, self.theImageView.image.size.height/ratio);
@@ -62,6 +61,11 @@
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
     return self.theImageView;
+}
+
+- (void)dealloc {
+    [self setTheImageView:nil];
+    [super dealloc];
 }
 
 @end
