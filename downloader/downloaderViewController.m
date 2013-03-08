@@ -113,7 +113,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryPlayback error:nil];
     [self.textField setText:[[NSUserDefaults standardUserDefaults]objectForKey:@"myDefaults"]];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillDisappear) name:UIKeyboardWillHideNotification object:nil];
-    [self turnOnAudioPlayerListeners];
 }
 
 //
@@ -155,23 +154,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     }];
 }
 
-- (BOOL)canBecomeFirstResponder {
-    return YES;
-}
-
-/*- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
-    [[UIApplication sharedApplication]beginReceivingRemoteControlEvents];
-    
-    if (![self isFirstResponder]) {
-        [self becomeFirstResponder];
-    }
-    
-    AudioSessionRemovePropertyListenerWithUserData(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, __unsafe_unretained self);
-    AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, __unsafe_unretained self);
-}*/
-
 - (void)showArtworkForFile:(NSString *)file {
     [self artworksForFileAtPath:file block:^(NSArray *artworkImages) {
         if (artworkImages.count > 0) {
@@ -212,22 +194,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     } else {
         [self.audioPlayer pause];
     }
-}
-
-- (void)turnOnAudioPlayerListeners {
-    [[AVAudioSession sharedInstance]setDelegate:self];
-    [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryPlayback error:nil];
-    [[UIApplication sharedApplication]beginReceivingRemoteControlEvents];
-    [self becomeFirstResponder];
-    AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, __unsafe_unretained self);
-}
-
-- (void)turnOffAudioPlayerListeners {
-    [[AVAudioSession sharedInstance]setDelegate:nil];
-    [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryAmbient error:nil];
-    [[UIApplication sharedApplication]endReceivingRemoteControlEvents];
-    [self resignFirstResponder];
-    AudioSessionRemovePropertyListenerWithUserData(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, __unsafe_unretained self);
 }
 
 - (void)skipToPreviousTrack {
@@ -387,24 +353,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     } else {
         [kAppDelegate setNowPlayingFile:nil];
         [AudioPlayerViewController notif_setControlsHidden:NO];
-    }
-}
-
-- (void)remoteControlReceivedWithEvent:(UIEvent *)event {
-    if (event.type == UIEventTypeRemoteControl) {
-        if (event.subtype == UIEventSubtypeRemoteControlPlay) {
-            [self.audioPlayer play];
-            [AudioPlayerViewController notif_setPausePlayTitlePause];
-        } else if (event.subtype == UIEventSubtypeRemoteControlPause) {
-            [self.audioPlayer pause];
-            [AudioPlayerViewController notif_setPausePlayTitlePlay];
-        } else if (event.subtype == UIEventSubtypeRemoteControlTogglePlayPause) {
-            [self togglePlayPause];
-        } else if (event.subtype == UIEventSubtypeRemoteControlNextTrack) {
-            [self skipToNextTrack];
-        } else if (event.subtype == UIEventSubtypeRemoteControlPreviousTrack) {
-            [self skipToPreviousTrack];
-        }
     }
 }
 

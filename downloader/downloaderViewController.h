@@ -16,6 +16,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 - (void)skipToPreviousTrack;
 - (void)skipToNextTrack;
+- (void)togglePlayPause;
 
 - (void)showArtworkForFile:(NSString *)file;
 - (void)showMetadataInLockscreenWithArtist:(NSString *)artist title:(NSString *)title album:(NSString *)album;

@@ -365,7 +365,30 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     [avD release];
 }
 
+- (void)remoteControlReceivedWithEvent:(UIEvent *)event {
+    if (event.type == UIEventTypeRemoteControl) {
+        if (event.subtype == UIEventSubtypeRemoteControlPlay) {
+            [_audioPlayer play];
+            [AudioPlayerViewController notif_setPausePlayTitlePause];
+        } else if (event.subtype == UIEventSubtypeRemoteControlPause) {
+            [_audioPlayer pause];
+            [AudioPlayerViewController notif_setPausePlayTitlePlay];
+        } else if (event.subtype == UIEventSubtypeRemoteControlTogglePlayPause) {
+            [self.viewController togglePlayPause];
+        } else if (event.subtype == UIEventSubtypeRemoteControlNextTrack) {
+            [self.viewController skipToNextTrack];
+        } else if (event.subtype == UIEventSubtypeRemoteControlPreviousTrack) {
+            [self.viewController skipToPreviousTrack];
+        }
+    }
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+
+    [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryPlayback error:nil];
+    [[UIApplication sharedApplication]beginReceivingRemoteControlEvents];
+    [self becomeFirstResponder];
+    AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, __unsafe_unretained self.viewController);
     
     self.window = [[[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]]autorelease];
     self.viewController = [downloaderViewController viewController];
