@@ -159,8 +159,16 @@
     self.popupQuery = [[[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",fileName] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         
         if (buttonIndex == 0) {
-            [kAppDelegate sendFileInEmail:file fromViewController:self];
+            [kAppDelegate printFile:file fromView:self.view];
         } else if (buttonIndex == 1) {
+            [kAppDelegate sendFileInEmail:file fromViewController:self];
+        } else if (buttonIndex == 2) {
+            [kAppDelegate showBTController];
+        } else if (buttonIndex == 3) {
+            [kAppDelegate showFTPUploadController];
+        } else if (buttonIndex == 4) {
+            [self uploadToDropbox];
+        } else if (buttonIndex == 5) {
             if ([MIMEUtils isImageFile:file]) {
                 [self addToTheRoll];
             } else {
@@ -170,16 +178,8 @@
                 [av release];
                 [message release];
             }
-        } else if (buttonIndex == 2) {
-            [kAppDelegate printFile:file fromView:self.view];
-        } else if (buttonIndex == 3) {
-            [kAppDelegate showBTController];
-        } else if (buttonIndex == 4) {
-            [kAppDelegate showFTPUploadController];
-        } else if (buttonIndex == 5) {
-            [self uploadToDropbox];
         }
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Add to Photo Library", @"Print", @"Send Via Bluetooth", @"Upload to Server", @"Upload to Dropbox", nil]autorelease];
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Print", @"Email File", @"Send Via Bluetooth", @"Upload to Server", @"Upload to Dropbox", @"Add to Photo Library", nil]autorelease];
     
     self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     

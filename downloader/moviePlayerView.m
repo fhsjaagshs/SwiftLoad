@@ -29,8 +29,8 @@
     
     shouldUnpauseAudioPlayer = NO;
     
-    if ([_audioPlayer isPlaying]) {
-        [_audioPlayer pause];
+    if ([[kAppDelegate audioPlayer]isPlaying]) {
+        [[kAppDelegate audioPlayer]pause];
         shouldUnpauseAudioPlayer = YES;
     }
     
@@ -71,8 +71,8 @@
     [self.moviePlayer stop];
     
     if (shouldUnpauseAudioPlayer) {
-        [_audioPlayer prepareToPlay];
-        [_audioPlayer play];
+        [[kAppDelegate audioPlayer]prepareToPlay];
+        [[kAppDelegate audioPlayer]play];
     }
 
     [self dismissModalViewControllerAnimated:YES];
@@ -133,18 +133,18 @@
         } else if (buttonIndex == 2) {
             [kAppDelegate showFTPUploadController];
         } else if (buttonIndex == 3) {
+            [self uploadToDropbox];
+        } else if (buttonIndex == 4) {
             if ([[[file pathExtension]lowercaseString]isEqualToString:@"mp4"]) {
                 [self addToTheRoll];
             } else {
-                NSString *message = [NSString stringWithFormat:@"Sorry, the file \"%@\" is not supported by this feature because it is not in MPEG-4 format.",fileName];
+                NSString *message = [NSString stringWithFormat:@"Sorry, the file \"%@\" cannot be added to the camera roll because it is not in MPEG-4 format.",fileName];
                 CustomAlertView *av = [[CustomAlertView alloc] initWithTitle:@"Failure Eporting Video" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                 [av show];
                 [av release];
             }
-        } else if (buttonIndex == 4) {
-            [self uploadToDropbox];
         }
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Upload to Server", @"Save to Camera Roll", @"Upload to Dropbox", nil]autorelease];
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Upload to Server", @"Upload to Dropbox", @"Save to Camera Roll", nil]autorelease];
     
     self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
 

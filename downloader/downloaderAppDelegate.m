@@ -30,9 +30,297 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     return path;
 }
 
+void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID inPropertyID, UInt32 inPropertyValueSize, const void *inPropertyValue) {
+    
+    if (inPropertyID == kAudioSessionProperty_AudioRouteChange) {
+        CFNumberRef routeChangeReasonRef = CFDictionaryGetValue((CFDictionaryRef)inPropertyValue, CFSTR(kAudioSession_AudioRouteChangeKey_Reason));
+        
+        SInt32 routeChangeReason;
+        CFNumberGetValue(routeChangeReasonRef, kCFNumberSInt32Type, &routeChangeReason);
+        
+        if (routeChangeReason == kAudioSessionRouteChangeReason_OldDeviceUnavailable) {
+            if ([[kAppDelegate audioPlayer]isPlaying]) {
+                [[kAppDelegate audioPlayer]pause];
+            }
+        }
+    }
+}
+
 @implementation downloaderAppDelegate
 
-@synthesize sessionController, progressView, isReciever, nowPlayingFile, sessionControllerSending, openFile, managerCurrentDir, restClient, downloadedData, expectedDownloadingFileSize, downloadedBytes;
+@synthesize sessionController, progressView, isReciever, nowPlayingFile, sessionControllerSending, openFile, managerCurrentDir, restClient, downloadedData, expectedDownloadingFileSize, downloadedBytes, audioPlayer;
+
+//
+// Audio Player
+//
+
+- (void)artworksForFileAtPath:(NSString *)path block:(void(^)(NSArray *artworkImages))block {
+    
+    if (block) {
+        return;
+    }
+    
+    AVURLAsset *asset = [AVURLAsset URLAssetWithURL:[NSURL fileURLWithPath:path] options:nil];
+    NSArray *keys = [NSArray arrayWithObjects:@"commonMetadata", nil];
+    [asset loadValuesAsynchronouslyForKeys:keys completionHandler:^{
+        NSArray *artworks = [AVMetadataItem metadataItemsFromArray:asset.commonMetadata withKey:AVMetadataCommonKeyArtwork keySpace:AVMetadataKeySpaceCommon];
+        
+        NSMutableArray *artworkImages = [NSMutableArray array];
+        for (AVMetadataItem *item in artworks) {
+            NSString *keySpace = item.keySpace;
+            
+            UIImage *image = nil;
+            
+            if ([keySpace isEqualToString:AVMetadataKeySpaceID3]) {
+                NSDictionary *d = [item.value copyWithZone:nil];
+                image = [UIImage imageWithData:[d objectForKey:@"data"]];
+                [d release];
+            } else if ([keySpace isEqualToString:AVMetadataKeySpaceiTunes]) {
+                NSData *data = [item.value copyWithZone:nil];
+                image = [UIImage imageWithData:data];
+                [data release];
+            }
+            
+            if (image != nil) {
+                [artworkImages addObject:image];
+            }
+        }
+    }];
+}
+
+- (void)showArtworkForFile:(NSString *)file {
+    [self artworksForFileAtPath:file block:^(NSArray *artworkImages) {
+        if (artworkImages.count > 0) {
+            UIImage *image = [artworkImages firstObjectCommonWithArray:artworkImages];
+            if (image != nil) {
+                MPNowPlayingInfoCenter *center = [MPNowPlayingInfoCenter defaultCenter];
+                MPMediaItemArtwork *artwork = [[MPMediaItemArtwork alloc]initWithImage:image];
+                NSMutableDictionary *dict = [center.nowPlayingInfo mutableCopy];
+                [dict setObject:artwork forKey:MPMediaItemPropertyArtwork];
+                [artwork release];
+                center.nowPlayingInfo = dict;
+                [dict release];
+            }
+        }
+    }];
+}
+
+- (void)showMetadataInLockscreenWithArtist:(NSString *)artist title:(NSString *)title album:(NSString *)album {
+    if ([artist isEqualToString:@"---"]) {
+        artist = nil;
+    }
+    
+    if ([title isEqualToString:@"---"]) {
+        title = nil;
+    }
+    
+    if ([album isEqualToString:@"---"]) {
+        album = nil;
+    }
+    
+    NSDictionary *songInfo = [NSDictionary dictionaryWithObjectsAndKeys:artist, MPMediaItemPropertyArtist, title, MPMediaItemPropertyTitle, album, MPMediaItemPropertyAlbumTitle, nil];
+    [[MPNowPlayingInfoCenter defaultCenter]setNowPlayingInfo:songInfo];
+}
+
+- (void)togglePlayPause {
+    if (!self.audioPlayer.isPlaying) {
+        [self.audioPlayer play];
+    } else {
+        [self.audioPlayer pause];
+    }
+}
+
+- (void)skipToPreviousTrack {
+    
+    if (self.audioPlayer.currentTime > 5) {
+        self.audioPlayer.currentTime = 0;
+        return;
+    }
+    
+    [AudioPlayerViewController notif_setNxtTrackHidden:NO];
+    
+    NSString *cellNameFileKey = [kAppDelegate nowPlayingFile];
+    NSString *currentDir = [cellNameFileKey stringByDeletingLastPathComponent];
+    NSArray *filesOfDir = [[[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+    NSMutableArray *audioFiles = [NSMutableArray array];
+    
+    for (NSString *object in filesOfDir) {
+        NSString *newObject = [currentDir stringByAppendingPathComponent:object];
+        if ([MIMEUtils isAudioFile:newObject]) {
+            [audioFiles addObject:newObject];
+        }
+    }
+    
+    int number = [audioFiles indexOfObject:cellNameFileKey]-1;
+    
+    if (number < 0) {
+        return;
+    }
+    
+    if (number+1 > audioFiles.count) {
+        [AudioPlayerViewController notif_setPrevTrackHidden:YES];
+        return;
+    }
+    
+    if (number == 0) {
+        [AudioPlayerViewController notif_setPrevTrackHidden:YES];
+    }
+    
+    NSString *newFile = [audioFiles objectAtIndex:number];
+    [kAppDelegate setOpenFile:newFile];
+    
+    NSError *playingError = nil;
+    
+    [self.audioPlayer stop];
+    self.audioPlayer = [[[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:newFile] error:&playingError]autorelease];
+    self.audioPlayer.delegate = self;
+    
+    [AudioPlayerViewController notif_setSongTitleText:[newFile lastPathComponent]];
+    
+    NSArray *iA = [metadataRetriever getMetadataForFile:newFile];
+    NSString *artist = [iA objectAtIndex:0];
+    NSString *title = [iA objectAtIndex:1];
+    NSString *album = [iA objectAtIndex:2];
+    NSString *metadata = [NSString stringWithFormat:@"%@\n%@\n%@",artist,title,album];
+    [AudioPlayerViewController notif_setInfoFieldText:metadata];
+    
+    [self showMetadataInLockscreenWithArtist:artist title:title album:album];
+    [self showArtworkForFile:newFile];
+    
+    NSString *savedLoop = [kLibDir stringByAppendingPathComponent:@"loop.txt"];
+    NSString *loopContents = [NSString stringWithContentsOfFile:savedLoop encoding:NSUTF8StringEncoding error:nil];
+    self.audioPlayer.numberOfLoops = [loopContents isEqualToString:@"loop"]?-1:0;
+    
+    [AudioPlayerViewController notif_setLoop];
+    
+    [self.audioPlayer play];
+    
+    if (playingError == nil) {
+        [kAppDelegate setNowPlayingFile:newFile];
+        [AudioPlayerViewController notif_setControlsHidden:NO];
+    } else {
+        [kAppDelegate setNowPlayingFile:nil];
+        [AudioPlayerViewController notif_setControlsHidden:YES];
+    }
+}
+
+- (void)skipToNextTrack {
+    
+    [AudioPlayerViewController notif_setPrevTrackHidden:NO];
+    
+    NSString *cellNameFileKey = [kAppDelegate nowPlayingFile];
+    NSString *currentDir = [cellNameFileKey stringByDeletingLastPathComponent];
+    
+    NSArray *filesOfDir = [[[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+    NSMutableArray *audioFiles = [NSMutableArray array];
+    
+    for (NSString *object in filesOfDir) {
+        NSString *newObject = [currentDir stringByAppendingPathComponent:object];
+        if ([MIMEUtils isAudioFile:newObject]) {
+            [audioFiles addObject:newObject];
+        }
+    }
+    
+    int number = [audioFiles indexOfObject:cellNameFileKey]+1;
+    
+    if (number < 0) {
+        return;
+    }
+    
+    if (number-1 > audioFiles.count) {
+        [AudioPlayerViewController notif_setNxtTrackHidden:YES];
+        return;
+    }
+    
+    if (number == audioFiles.count) {
+        return;
+    }
+    
+    if (number == audioFiles.count-1) {
+        [AudioPlayerViewController notif_setNxtTrackHidden:YES];
+    }
+    
+    NSString *newFile = [audioFiles objectAtIndex:number];
+    [kAppDelegate setOpenFile:newFile];
+    
+    NSError *playingError = nil;
+    
+    [self.audioPlayer stop];
+    self.audioPlayer = [[[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:newFile] error:&playingError]autorelease];
+    self.audioPlayer.delegate = self;
+    
+    [AudioPlayerViewController notif_setSongTitleText:[newFile lastPathComponent]];
+    
+    NSArray *iA = [metadataRetriever getMetadataForFile:newFile];
+    NSString *artist = [iA objectAtIndex:0];
+    NSString *title = [iA objectAtIndex:1];
+    NSString *album = [iA objectAtIndex:2];
+    NSString *metadata = [NSString stringWithFormat:@"%@\n%@\n%@",artist,title,album];
+    [AudioPlayerViewController notif_setInfoFieldText:metadata];
+    
+    [self showMetadataInLockscreenWithArtist:artist title:title album:album];
+    [self showArtworkForFile:newFile];
+    
+    NSString *savedLoop = [kLibDir stringByAppendingPathComponent:@"loop.txt"];
+    NSString *loopContents = [NSString stringWithContentsOfFile:savedLoop encoding:NSUTF8StringEncoding error:nil];
+    self.audioPlayer.numberOfLoops = [loopContents isEqualToString:@"loop"]?-1:0;
+    [AudioPlayerViewController notif_setLoop];
+    
+    [self.audioPlayer play];
+    
+    if (playingError == nil) {
+        [kAppDelegate setNowPlayingFile:newFile];
+        [AudioPlayerViewController notif_setControlsHidden:NO];
+    } else {
+        [kAppDelegate setNowPlayingFile:nil];
+        [AudioPlayerViewController notif_setControlsHidden:YES];
+    }
+}
+
+- (void)audioPlayerBeginInterruption:(AVAudioPlayer *)player {
+    if (self.audioPlayer.isPlaying) {
+        [self.audioPlayer pause];
+    }
+}
+
+- (void)audioPlayerEndInterruption:(AVAudioPlayer *)player {
+    if (!self.audioPlayer.isPlaying) {
+        [self.audioPlayer play];
+    }
+}
+
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
+    if (self.audioPlayer.numberOfLoops == 0) {
+        [self skipToNextTrack];
+    }
+    
+    if (![self nextTrackButtonShouldBeHidden]) {
+        [self.audioPlayer setCurrentTime:0];
+        [AudioPlayerViewController notif_setPausePlayTitlePlay];
+    }
+}
+
+- (BOOL)nextTrackButtonShouldBeHidden {
+    
+    NSString *cellNameFileKey = [kAppDelegate nowPlayingFile];
+    NSString *currentDir = [cellNameFileKey stringByDeletingLastPathComponent];
+    
+    NSArray *filesOfDir = [[[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+    NSMutableArray *audioFiles = [NSMutableArray array];
+    
+    for (NSString *object in filesOfDir) {
+        NSString *newObject = [currentDir stringByAppendingPathComponent:object];
+        if ([MIMEUtils isAudioFile:newObject]) {
+            [audioFiles addObject:newObject];
+        }
+    }
+    
+    if ([audioFiles indexOfObject:cellNameFileKey] == audioFiles.count-2) {
+        return YES;
+    }
+    return NO;
+}
+
 
 //
 // Emailing
@@ -44,12 +332,10 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
             [vc dismissModalViewControllerAnimated:YES];
         }];
         [controller setSubject:@"Your file"];
-        NSData *myData = [[NSData alloc]initWithContentsOfFile:file];
-        [controller addAttachmentData:myData mimeType:[MIMEUtils fileMIMEType:file] fileName:[file lastPathComponent]];
+        [controller addAttachmentData:[NSData dataWithContentsOfFile:file] mimeType:[MIMEUtils fileMIMEType:file] fileName:[file lastPathComponent]];
         [controller setMessageBody:@"" isHTML:NO];
         [vc presentModalViewController:controller animated:YES];
         [controller release];
-        [myData release];
     } else {
         CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Mail Unavailable" message:@"In order to use this functionality, you must set up an email account in Settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [av show];
@@ -368,17 +654,17 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
 - (void)remoteControlReceivedWithEvent:(UIEvent *)event {
     if (event.type == UIEventTypeRemoteControl) {
         if (event.subtype == UIEventSubtypeRemoteControlPlay) {
-            [_audioPlayer play];
+            [self.audioPlayer play];
             [AudioPlayerViewController notif_setPausePlayTitlePause];
         } else if (event.subtype == UIEventSubtypeRemoteControlPause) {
-            [_audioPlayer pause];
+            [self.audioPlayer pause];
             [AudioPlayerViewController notif_setPausePlayTitlePlay];
         } else if (event.subtype == UIEventSubtypeRemoteControlTogglePlayPause) {
-            [self.viewController togglePlayPause];
+            [self togglePlayPause];
         } else if (event.subtype == UIEventSubtypeRemoteControlNextTrack) {
-            [self.viewController skipToNextTrack];
+            [self skipToNextTrack];
         } else if (event.subtype == UIEventSubtypeRemoteControlPreviousTrack) {
-            [self.viewController skipToPreviousTrack];
+            [self skipToPreviousTrack];
         }
     }
 }
@@ -388,7 +674,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryPlayback error:nil];
     [[UIApplication sharedApplication]beginReceivingRemoteControlEvents];
     [self becomeFirstResponder];
-    AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, __unsafe_unretained self.viewController);
+    AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, nil);
     
     self.window = [[[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]]autorelease];
     self.viewController = [downloaderViewController viewController];

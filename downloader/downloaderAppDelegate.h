@@ -18,8 +18,9 @@
 
 float sanitizeMesurement(float measurement);
 NSString * getNonConflictingFilePathForPath(NSString *path);
+void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID inPropertyID, UInt32 inPropertyValueSize, const void *inPropertyValue);
 
-@interface downloaderAppDelegate : UIResponder <UIApplicationDelegate, BKSessionControllerDelegate, GKSessionDelegate, DBSessionDelegate, DBRestClientDelegate, MBProgressHUDDelegate, GKPeerPickerControllerDelegate, UITextFieldDelegate, NSURLConnectionDelegate, MFMailComposeViewControllerDelegate> {
+@interface downloaderAppDelegate : UIResponder <UIApplicationDelegate, BKSessionControllerDelegate, GKSessionDelegate, DBSessionDelegate, DBRestClientDelegate, MBProgressHUDDelegate, GKPeerPickerControllerDelegate, UITextFieldDelegate, NSURLConnectionDelegate, MFMailComposeViewControllerDelegate, AVAudioPlayerDelegate> {
     CustomAlertView *avL;
     CustomTextField *serverField;
     CustomTextField *usernameField;
@@ -31,6 +32,14 @@ NSString * getNonConflictingFilePathForPath(NSString *path);
 
 
 @property (nonatomic, retain) DBRestClient *restClient;
+
+// Audio Player
+@property (nonatomic, retain) AVAudioPlayer *audioPlayer;
+- (void)skipToPreviousTrack;
+- (void)skipToNextTrack;
+- (void)togglePlayPause;
+- (void)showArtworkForFile:(NSString *)file;
+- (void)showMetadataInLockscreenWithArtist:(NSString *)artist title:(NSString *)title album:(NSString *)album;
 
 // Downloading
 @property (nonatomic, retain) NSMutableData *downloadedData;

@@ -8,18 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID inPropertyID, UInt32 inPropertyValueSize, const void *inPropertyValue);
-
-@interface downloaderViewController : UIViewController <UIAlertViewDelegate, AVAudioPlayerDelegate>
-
-@property (nonatomic, retain) AVAudioPlayer *audioPlayer;
-
-- (void)skipToPreviousTrack;
-- (void)skipToNextTrack;
-- (void)togglePlayPause;
-
-- (void)showArtworkForFile:(NSString *)file;
-- (void)showMetadataInLockscreenWithArtist:(NSString *)artist title:(NSString *)title album:(NSString *)album;
+@interface downloaderViewController : UIViewController
 
 @property (nonatomic, retain) UITextField *textField;
 

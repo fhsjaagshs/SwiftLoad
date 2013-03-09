@@ -35,12 +35,12 @@
     
     self.prevTrack = [[[BackAndForwardButton alloc]initWithFrame:iPad?CGRectMake(20, 533, 142, 51):CGRectMake(20, sanitizeMesurement(299), 72, 37)]autorelease];
     [self.prevTrack setImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle]pathForResource:@"prevtrack" ofType:@"png"]] forState:UIControlStateNormal];
-    [self.prevTrack addTarget:mainVC action:@selector(skipToPreviousTrack) forControlEvents:UIControlEventTouchUpInside];
+    [self.prevTrack addTarget:kAppDelegate action:@selector(skipToPreviousTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.prevTrack];
     
     self.nxtTrack = [[[BackAndForwardButton alloc]initWithFrame:iPad?CGRectMake(599, 533, 142, 51):CGRectMake(228, sanitizeMesurement(299), 72, 37)]autorelease];
     [self.nxtTrack setImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle]pathForResource:@"nexttrack" ofType:@"png"]] forState:UIControlStateNormal];
-    [self.nxtTrack addTarget:mainVC action:@selector(skipToNextTrack) forControlEvents:UIControlEventTouchUpInside];
+    [self.nxtTrack addTarget:kAppDelegate action:@selector(skipToNextTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.nxtTrack];
     
     self.pausePlay = [[[CustomButton alloc]initWithFrame:iPad?CGRectMake(323, 481, 142, 51):CGRectMake(124, sanitizeMesurement(266), 72, 37)]autorelease];
@@ -137,43 +137,41 @@
 
     NSError *playingError = nil;
     
+    downloaderAppDelegate *ad = kAppDelegate;
+    
     if (![file isEqualToString:[kAppDelegate nowPlayingFile]]) {
-        NSURL *url = [NSURL fileURLWithPath:file];
-        AVAudioPlayer *ap = [[AVAudioPlayer alloc]initWithContentsOfURL:url error:&playingError];
-        [_audioPlayer stop];
-        [mainVC setAudioPlayer:ap];
-        [ap release];
-        [_audioPlayer setDelegate:mainVC];
+        [ad.audioPlayer stop];
+        ad.audioPlayer = [[[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:file] error:&playingError]autorelease];
+        [ad.audioPlayer setDelegate:ad];
     }
 
     NSArray *iA = [metadataRetriever getMetadataForFile:file];
     NSString *metadata = [NSString stringWithFormat:@"%@\n%@\n%@",[iA objectAtIndex:0],[iA objectAtIndex:1],[iA objectAtIndex:2]];
     
-    [mainVC showMetadataInLockscreenWithArtist:[iA objectAtIndex:0] title:[iA objectAtIndex:1] album:[iA objectAtIndex:2]];
+    [ad showMetadataInLockscreenWithArtist:[iA objectAtIndex:0] title:[iA objectAtIndex:1] album:[iA objectAtIndex:2]];
     [self.infoField setText:metadata];
     
-    [mainVC showArtworkForFile:file];
+    [ad showArtworkForFile:file];
     
     NSString *savedLoop = [kLibDir stringByAppendingPathComponent:@"loop.txt"];
     NSString *loopContents = [NSString stringWithContentsOfFile:savedLoop encoding:NSUTF8StringEncoding error:nil];
     
     if ([loopContents isEqualToString:@"loop"]) {
-        [_audioPlayer setNumberOfLoops:-1];
+        [ad.audioPlayer setNumberOfLoops:-1];
         [self.control setSelectedSegmentIndex:0];
     } else {
-        [_audioPlayer setNumberOfLoops:0];
+        [ad.audioPlayer setNumberOfLoops:0];
         [self.control setSelectedSegmentIndex:1];
     }
     
     if (!playingError) {
-        [self hideControls:YES];
-        if (_audioPlayer) {
-            [_audioPlayer play];
-            [kAppDelegate setNowPlayingFile:file];
+        [self hideControls:NO];
+        if (ad.audioPlayer) {
+            [ad.audioPlayer play];
+            [ad setNowPlayingFile:file];
         }
     } else {
-        [self.infoField setText:@""];
-        [self hideControls:NO];
+        [self hideControls:YES];
     }
     [self startUpdatingTime];
 }
@@ -205,12 +203,11 @@
             [ad hideHUD];
             
             if (error) {
-                CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Failed to Convert Audio File" message:@"Could not convert selected audio file" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Conversion Error" message:@"SwiftLoad could not convert the desired audio file." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
                 [av show];
                 [av release];
             } else {
-                UIImageView *checkmark = [[UIImageView alloc]initWithImage:getCheckmarkImage()];
-                
+                UIImageView *checkmark = [[[UIImageView alloc]initWithImage:getCheckmarkImage()]autorelease];
                 [ad showHUDWithTitle:@"Complete"];
                 [ad setSecondaryTitleOfVisibleHUD:fileName];
                 [ad setVisibleHudMode:MBProgressHUDModeCustomView];
@@ -232,50 +229,31 @@
 }
 
 - (void)hideControls:(BOOL)hide {
-    if (hide) {
-        [self.time setHidden:NO];
-        [self.pausePlay setHidden:NO];
-        [self.secondsRemaining setHidden:NO];
-        [self.control setHidden:NO];
-        [self.errorLabel setHidden:YES];
-        [self.secondsRemaining setHidden:NO];
-        [self.stopButton setHidden:NO];
-        [self.time setEnabled:YES];
-        [self.pausePlay setEnabled:YES];
-        [self.stopButton setEnabled:YES];
-    } else {
-        [self.time setHidden:YES];
-        [self.pausePlay setHidden:YES];
-        [self.secondsDisplay setHidden:YES];
-        [self.control setHidden:YES];
-        [self.errorLabel setHidden:NO];
-        [self.secondsRemaining setHidden:YES];
-        [self.stopButton setHidden:YES];
-        [self.time setEnabled:NO];
-        [self.pausePlay setEnabled:NO];
-        [self.stopButton setEnabled:NO];
-    }
-}
-
-- (void)nextTrack {
-    [mainVC skipToNextTrack];
+    [self.time setHidden:hide];
+    [self.pausePlay setHidden:hide];
+    [self.secondsRemaining setHidden:hide];
+    [self.secondsDisplay setHidden:hide];
+    [self.control setHidden:hide];
+    [self.stopButton setHidden:hide];
+    [self.infoField setHidden:hide];
+    [self.errorLabel setHidden:!hide];
 }
 
 - (void)setLoops {
     NSString *savedLoop = [kLibDir stringByAppendingPathComponent:@"loop.txt"];
     if (self.control.selectedSegmentIndex == 0 ) {
-        [_audioPlayer setNumberOfLoops:-1];
+        [[kAppDelegate audioPlayer]setNumberOfLoops:-1];
         [@"loop" writeToFile:savedLoop atomically:YES encoding:NSUTF8StringEncoding error:nil];
     } else {
-        [_audioPlayer setNumberOfLoops:0];
+        [[kAppDelegate audioPlayer]setNumberOfLoops:0];
         [@"dontLoop" writeToFile:savedLoop atomically:YES encoding:NSUTF8StringEncoding error:nil];
     }
 }
 
 - (void)close {
     if (![kAppDelegate nowPlayingFile]) {
-        [_audioPlayer stop];
-        [mainVC setAudioPlayer:nil];
+        [[kAppDelegate audioPlayer]stop];
+        [kAppDelegate setAudioPlayer:nil];
     }
     
     [self stopUpdatingTime];
@@ -285,17 +263,14 @@
 }
 
 - (NSString *)theTimeDisplay {
-    int theTime = [_audioPlayer currentTime];
-    float divBy60Float = theTime/60;
-    NSString *roundedInStringFormat = [NSString stringWithFormat:@"%.0f",divBy60Float];
-    int divBy60 = [roundedInStringFormat intValue];
-    int timeWithoutMinutes = theTime-(divBy60*60);
-    int lol = abs(timeWithoutMinutes);
+    int theTime = [[kAppDelegate audioPlayer]currentTime];
+    int divBy60 = floor((theTime/60)+0.5);
+    int timeWithoutMinutes = abs(theTime-(divBy60*60));
     
-    if (lol < 10) {
-        return [NSString stringWithFormat:@"%d:0%d",divBy60,lol];
+    if (timeWithoutMinutes < 10) {
+        return [NSString stringWithFormat:@"%d:0%d",divBy60,timeWithoutMinutes];
     } else {
-        return [NSString stringWithFormat:@"%d:%d",divBy60,lol];
+        return [NSString stringWithFormat:@"%d:%d",divBy60,timeWithoutMinutes];
     }
 }
 
@@ -324,8 +299,8 @@
 
 - (void)updateTime {
     
-    if ([_audioPlayer isPlaying]) {
-        self.time.value = [_audioPlayer currentTime]/[_audioPlayer duration];
+    if ([[kAppDelegate audioPlayer]isPlaying]) {
+        self.time.value = [[kAppDelegate audioPlayer]currentTime]/[[kAppDelegate audioPlayer]duration];
         [self.secondsDisplay setText:[self theTimeDisplay]];
         [self.pausePlay setTitle:@"Pause" forState:UIControlStateNormal];
     } else {
@@ -365,16 +340,16 @@
 }
 
 - (void)sliderChanged {
-    [_audioPlayer setCurrentTime:self.time.value*[_audioPlayer duration]];
+    [[kAppDelegate audioPlayer]setCurrentTime:self.time.value*[[kAppDelegate audioPlayer]duration]];
 }
 
 - (void)togglePause {
-    if ([_audioPlayer isPlaying]) {
-        [_audioPlayer pause];
+    if ([[kAppDelegate audioPlayer]isPlaying]) {
+        [[kAppDelegate audioPlayer]pause];
         [self.pausePlay setTitle:@"Play" forState:UIControlStateNormal];
         [self stopUpdatingTime];
     } else {
-        [_audioPlayer play];
+        [[kAppDelegate audioPlayer]play];
         [self.pausePlay setTitle:@"Pause" forState:UIControlStateNormal];
         [kAppDelegate setNowPlayingFile:[kAppDelegate openFile]];
         [self startUpdatingTime];
@@ -383,8 +358,8 @@
 
 - (void)stopAudio {
     [self stopUpdatingTime];
-    [_audioPlayer stop];
-    [_audioPlayer setCurrentTime:0.0f];
+    [[kAppDelegate audioPlayer]stop];
+    [[kAppDelegate audioPlayer]setCurrentTime:0.0f];
     [self.time setValue:0.0f];
     [self.secondsDisplay setText:@"0:00"];
     [kAppDelegate setNowPlayingFile:nil];
@@ -418,7 +393,6 @@
         [self hideControls:YES];
     } else {
         [self hideControls:NO];
-        [self.infoField setText:@""];
     }
 }
 
@@ -431,7 +405,7 @@
 }
 
 - (void)setInfoFieldText:(NSNotification *)notif {
-    [self.infoField setText:notif.object];
+    [self.infoField setText:(NSString *)notif.object];
 }
 
 - (void)setSongTitleText:(NSNotification *)notif {

@@ -14,8 +14,6 @@
 #import "CustomNavBar.h"
 #import "CustomSlider.h"
 
-#define _audioPlayer (AVAudioPlayer *)[[(downloaderAppDelegate *)[[UIApplication sharedApplication]delegate]viewController]audioPlayer]
-
 @interface AudioPlayerViewController : UIViewController {
     BOOL shouldStopCounter;
     BOOL notInPlayerView;

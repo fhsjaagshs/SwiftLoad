@@ -63,31 +63,18 @@
     self.popupQuery = [[[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",fileName] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         
         if (buttonIndex == 0) {
-            [kAppDelegate sendFileInEmail:file fromViewController:self];
-        } else if (buttonIndex == 1) {
-            if ([MIMEUtils isTextFile:file] == NO) {
-                NSString *title = [[NSString alloc]initWithFormat:@"Sorry, \"%@\" is not editable.", fileName];
-                CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:title message:@"Sorry, the file you have tried to edit is not editable in its current state." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                [av show];
-                [av release];
-                [title release];
-            } else {
-                dedicatedTextEditor *textEditor = [dedicatedTextEditor viewController];
-                textEditor.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-                [self presentModalViewController:textEditor animated:YES];
-                [textEditor release];
-            }
-        } else if (buttonIndex == 2) {
             [kAppDelegate printFile:file fromView:self.view];
-        } else if (buttonIndex == 3) {
+        } else if (buttonIndex == 1) {
+            [kAppDelegate sendFileInEmail:file fromViewController:self];
+        } else if (buttonIndex == 2) {
             [kAppDelegate showBTController];
-        } else if (buttonIndex == 4) {
+        } else if (buttonIndex == 3) {
             [kAppDelegate showFTPUploadController];
-        } else if (buttonIndex == 5) {
+        } else if (buttonIndex == 4) {
             [self uploadToDropbox];
         }
         
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Add to Photo Library", @"Print", @"Send Via Bluetooth", @"Upload to Server", @"Upload to Dropbox", nil]autorelease];
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Print", @"Email File", @"Send Via Bluetooth", @"Upload to Server", @"Upload to Dropbox", nil]autorelease];
     
     self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
         

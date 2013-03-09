@@ -11,13 +11,14 @@
 @implementation ZoomingImageView
 
 - (void)zoomOut {
+    [self zoomToRect:self.bounds animated:YES];
     self.zoomScale = 1;
 }
 
 - (void)setup {
     self.multipleTouchEnabled = YES;
-    self.maximumZoomScale = 5.0;
-    self.minimumZoomScale = 1.0;
+    self.maximumZoomScale = 5;
+    self.minimumZoomScale = 1;
     self.delegate = self;
     self.showsVerticalScrollIndicator = YES;
     self.showsHorizontalScrollIndicator = YES;

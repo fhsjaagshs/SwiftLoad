@@ -103,8 +103,6 @@
     for (NSString *oldPath in self.copiedList) {
         NSString *newPath = getNonConflictingFilePathForPath([location stringByAppendingPathComponent:[oldPath lastPathComponent]]);
         
-        NSLog(@"%@",newPath);
-        
         NSError *error = nil;
         
         if (self.isCut) {
