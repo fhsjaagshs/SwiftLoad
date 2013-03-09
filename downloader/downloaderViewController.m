@@ -120,6 +120,11 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 //
 
 - (void)artworksForFileAtPath:(NSString *)path block:(void(^)(NSArray *artworkImages))block {
+    
+    if (block) {
+        return;
+    }
+    
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:[NSURL fileURLWithPath:path] options:nil];
     NSArray *keys = [NSArray arrayWithObjects:@"commonMetadata", nil];
     [asset loadValuesAsynchronouslyForKeys:keys completionHandler:^{
@@ -144,10 +149,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
             if (image != nil) {
                 [artworkImages addObject:image];
             }
-        }
-        
-        if (block) {
-            block(artworkImages);
         }
     }];
 }
