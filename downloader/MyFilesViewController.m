@@ -935,22 +935,6 @@
                 audio.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
                 [self presentModalViewController:audio animated:YES];
             } else if ([MIMEUtils isImageFile:file]) {
-                /*
-                NSString *currentDir = [kAppDelegate managerCurrentDir];
-                NSMutableArray *imageFiles = [NSMutableArray array];
-                
-                for (NSString *object in self.filelist) {
-                    NSString *newObject = [currentDir stringByAppendingPathComponent:object];
-                    if ([MIMEUtils isImageFile:newObject]) {
-                        [imageFiles addObject:newObject];
-                    }
-                }
-                
-                int numberInArray = [imageFiles indexOfObject:[kAppDelegate openFile]];
-                
-                MWPhotoBrowser *browser = [[MWPhotoBrowser alloc]initWithDelegate:self];
-                browser.displayActionButton = YES;
-                [browser setInitialPageIndex:numberInArray];*/
                 pictureView *pView = [pictureView viewController];
                 pView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
                 [self presentModalViewController:pView animated:YES];
@@ -1512,34 +1496,6 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
     return YES;
 }
-
-/*- (NSUInteger)numberOfPhotosInPhotoBrowser:(MWPhotoBrowser *)photoBrowser {
-    
-    NSString *currentDir = [kAppDelegate managerCurrentDir];
-    NSMutableArray *imageFiles = [NSMutableArray array];
-    
-    for (NSString *object in self.filelist) {
-        NSString *newObject = [currentDir stringByAppendingPathComponent:object];
-        if ([MIMEUtils isImageFile:newObject]) {
-            [imageFiles addObject:newObject];
-        }
-    }
-    return imageFiles.count;
-}
-
-- (MWPhoto *)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index {
-    
-    NSString *currentDir = [kAppDelegate managerCurrentDir];
-    NSMutableArray *imageFiles = [NSMutableArray array];
-    
-    for (NSString *object in self.filelist) {
-        NSString *newObject = [currentDir stringByAppendingPathComponent:object];
-        if ([MIMEUtils isImageFile:newObject]) {
-            [imageFiles addObject:newObject];
-        }
-    }
-    return [MWPhoto photoWithFilePath:[imageFiles objectAtIndex:index]];
-}*/
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter]removeObserver:self];

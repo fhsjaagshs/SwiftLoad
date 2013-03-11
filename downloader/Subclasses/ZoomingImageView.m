@@ -11,7 +11,7 @@
 @implementation ZoomingImageView
 
 - (void)zoomOut {
-    [self zoomToRect:self.bounds animated:YES];
+    [self zoomToRect:self.frame animated:YES];
     self.zoomScale = 1;
 }
 
@@ -33,17 +33,11 @@
 
 - (void)loadImage:(UIImage *)image {
     self.theImageView.image = image;
-    [self fixContentSize];
+    self.contentSize = self.theImageView.image.size;
 }
 
-- (void)fixContentSize {
-    if ((self.theImageView.image.size.width < self.theImageView.image.size.height)) {
-        float ratio = self.theImageView.image.size.height/self.theImageView.bounds.size.height;
-        self.contentSize = CGSizeMake(self.theImageView.image.size.width/ratio, self.theImageView.image.size.height/ratio);
-    } else {
-        float ratio = self.theImageView.image.size.width/self.theImageView.bounds.size.width;
-        self.contentSize = CGSizeMake(self.theImageView.image.size.width/ratio, self.theImageView.image.size.height/ratio);
-    }
+- (void)resetAfterRotate {
+    self.zoomScale = 1;
 }
 
 - (id)init {

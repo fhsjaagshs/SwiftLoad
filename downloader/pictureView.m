@@ -281,8 +281,7 @@
         self.view.frame = [[UIScreen mainScreen]applicationFrame];
         self.zoomingImageView.frame = CGRectMake(0, 44, self.view.bounds.size.width, self.view.bounds.size.height-88);
     }
-    [self.zoomingImageView fixContentSize];
-    [self.zoomingImageView zoomOut];
+    [self.zoomingImageView resetAfterRotate];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
@@ -294,8 +293,7 @@
         self.view.frame = [[UIScreen mainScreen]bounds];
         self.zoomingImageView.frame = self.view.frame;
     }
-    [self.zoomingImageView fixContentSize];
-    [self.zoomingImageView zoomOut];
+    [self.zoomingImageView resetAfterRotate];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {

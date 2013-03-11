@@ -11,7 +11,7 @@
 @interface ZoomingImageView : UIScrollView <UIScrollViewDelegate>
 
 - (void)zoomOut;
-- (void)fixContentSize;
+- (void)resetAfterRotate;
 - (void)loadImage:(UIImage *)image;
 
 @property (nonatomic, retain) UIImageView *theImageView;

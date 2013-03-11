@@ -8,9 +8,6 @@
 
 #import "downloaderViewController.h"
 
-
-
-
 @implementation downloaderViewController
 
 @synthesize textField;
