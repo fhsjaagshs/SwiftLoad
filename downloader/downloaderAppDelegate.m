@@ -180,7 +180,12 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     NSString *metadata = [NSString stringWithFormat:@"%@\n%@\n%@",artist,title,album];
     [AudioPlayerViewController notif_setInfoFieldText:metadata];
     
-    [self showMetadataInLockscreenWithArtist:artist title:title album:album];
+    if ([artist isEqualToString:@"---"] && [title isEqualToString:@"---"] && [album isEqualToString:@"---"]) {
+        [self showMetadataInLockscreenWithArtist:@"" title:[newFile lastPathComponent] album:@""];
+    } else {
+        [self showMetadataInLockscreenWithArtist:artist title:title album:album];
+    }
+    
     [self showArtworkForFile:newFile];
     
     NSString *savedLoop = [kLibDir stringByAppendingPathComponent:@"loop.txt"];
@@ -249,12 +254,19 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     NSString *title = [iA objectAtIndex:1];
     NSString *album = [iA objectAtIndex:2];
     NSString *metadata = [NSString stringWithFormat:@"%@\n%@\n%@",artist,title,album];
+    
+    NSLog(@"metadata: %@",metadata);
     [AudioPlayerViewController notif_setInfoFieldText:metadata];
     
     NSString *savedLoop = [kLibDir stringByAppendingPathComponent:@"loop.txt"];
     NSString *loopContents = [NSString stringWithContentsOfFile:savedLoop encoding:NSUTF8StringEncoding error:nil];
     
-    [self showMetadataInLockscreenWithArtist:artist title:title album:album];
+    if ([artist isEqualToString:@"---"] && [title isEqualToString:@"---"] && [album isEqualToString:@"---"]) {
+        [self showMetadataInLockscreenWithArtist:@"" title:[newFile lastPathComponent] album:@""];
+    } else {
+        [self showMetadataInLockscreenWithArtist:artist title:title album:album];
+    }
+    
     [self showArtworkForFile:newFile];
     
     [self.audioPlayer stop];

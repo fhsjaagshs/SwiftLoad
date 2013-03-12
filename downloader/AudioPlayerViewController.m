@@ -124,7 +124,6 @@
     
     for (NSString *object in filesOfDir) {
         NSString *newObject = [currentDir stringByAppendingPathComponent:object];
-        
         if ([MIMEUtils isAudioFile:newObject]) {
             [audioFiles addObject:newObject];
         }
@@ -149,9 +148,19 @@
     }
 
     NSArray *iA = [metadataRetriever getMetadataForFile:file];
-    NSString *metadata = [NSString stringWithFormat:@"%@\n%@\n%@",[iA objectAtIndex:0],[iA objectAtIndex:1],[iA objectAtIndex:2]];
     
-    [ad showMetadataInLockscreenWithArtist:[iA objectAtIndex:0] title:[iA objectAtIndex:1] album:[iA objectAtIndex:2]];
+    NSString *artist = [iA objectAtIndex:0];
+    NSString *title = [iA objectAtIndex:1];
+    NSString *album = [iA objectAtIndex:2];
+    
+    NSString *metadata = [NSString stringWithFormat:@"%@\n%@\n%@",artist,title,album];
+    
+    if ([artist isEqualToString:@"---"] && [title isEqualToString:@"---"] && [album isEqualToString:@"---"]) {
+        [ad showMetadataInLockscreenWithArtist:@"" title:[file lastPathComponent] album:@""];
+    } else {
+        [ad showMetadataInLockscreenWithArtist:artist title:title album:album];
+    }
+    
     [self.infoField setText:metadata];
     
     [ad showArtworkForFile:file];
@@ -176,6 +185,7 @@
         }
     } else {
         [self hideControls:YES];
+        self.shouldStopPlayingAudio = YES;
     }
     [self startUpdatingTime];
 }
@@ -423,7 +433,7 @@
 }
 
 - (void)setStopPlayingAudioFileBool:(NSNotification *)notif {
-    self.shouldStopPlayingAudio = notif.object;
+    self.shouldStopPlayingAudio = [(NSString *)notif.object isEqualToString:@"YES"];
 }
 
 - (void)setupNotifs {
@@ -485,7 +495,7 @@
 }
 
 + (void)notif_setShouldStopPlayingAudio:(BOOL)flag {
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"stopPlayingAudio" object:flag?(id)kCFBooleanTrue:(id)kCFBooleanFalse];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"stopPlayingAudio" object:flag?@"YES":@"NO"];
 }
 
 + (void)notif_setShouldUpdateTime:(BOOL)flag {
