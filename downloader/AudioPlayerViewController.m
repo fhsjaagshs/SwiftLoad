@@ -53,9 +53,9 @@
     self.stopButton.titleLabel.font = [UIFont boldSystemFontOfSize:iPad?18:15];
     [self.stopButton setTitle:@"Stop" forState:UIControlStateNormal];
     [self.stopButton addTarget:self action:@selector(stopAudio) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:stopButton];
+    [self.view addSubview:self.stopButton];
     
-    self.infoField = [[[UITextView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, sanitizeMesurement(65))]autorelease];
+    self.infoField = [[[UITextView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, sanitizeMesurement(73))]autorelease];
     self.infoField.textAlignment = UITextAlignmentCenter;
     self.infoField.textColor = [UIColor whiteColor];
     self.infoField.font = [UIFont boldSystemFontOfSize:15];
@@ -90,8 +90,10 @@
     [self.view addSubview:self.errorLabel];
     
     CustomToolbar *toolBar = [[[CustomToolbar alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-44, screenBounds.size.width, 44)]autorelease];
+    toolBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     
     MPVolumeView *volView = [[[MPVolumeView alloc]initWithFrame:CGRectMake(0, 12, screenBounds.size.width-25, 20)]autorelease];
+    volView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     
     for (UIView *view in volView.subviews) {
         if ([[[view class]description]isEqualToString:@"MPVolumeSlider"]) {
@@ -279,6 +281,10 @@
 - (void)startUpdatingTime {
     
     shouldStopCounter = NO;
+    
+    if (isGoing) {
+        return;
+    }
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
@@ -287,10 +293,12 @@
             [NSThread sleepForTimeInterval:0.1f];
             dispatch_sync(dispatch_get_main_queue(), ^{
                 NSAutoreleasePool *poolTwo = [[NSAutoreleasePool alloc]init];
+                isGoing = YES;
                 [self updateTime];
                 [poolTwo release];
             });
         }
+        isGoing = NO;
         [pool release];
     });
 }
@@ -300,14 +308,9 @@
 }
 
 - (void)updateTime {
-    
-    if ([[kAppDelegate audioPlayer]isPlaying]) {
-        self.time.value = [[kAppDelegate audioPlayer]currentTime]/[[kAppDelegate audioPlayer]duration];
-        [self.secondsDisplay setText:[self theTimeDisplay]];
-        [self.pausePlay setTitle:@"Pause" forState:UIControlStateNormal];
-    } else {
-        [self.pausePlay setTitle:@"Play" forState:UIControlStateNormal];
-    }
+    [self.pausePlay setTitle:[[kAppDelegate audioPlayer]isPlaying]?@"Pause":@"Play" forState:UIControlStateNormal];
+    self.time.value = [[kAppDelegate audioPlayer]currentTime]/[[kAppDelegate audioPlayer]duration];
+    [self.secondsDisplay setText:[self theTimeDisplay]];
 }
 
 - (void)showActionSheet:(id)sender {
@@ -346,21 +349,20 @@
 }
 
 - (void)togglePause {
+    [self startUpdatingTime];
     if ([[kAppDelegate audioPlayer]isPlaying]) {
         [[kAppDelegate audioPlayer]pause];
         [self.pausePlay setTitle:@"Play" forState:UIControlStateNormal];
-        [self stopUpdatingTime];
     } else {
         [[kAppDelegate audioPlayer]play];
         [self.pausePlay setTitle:@"Pause" forState:UIControlStateNormal];
         [kAppDelegate setNowPlayingFile:[kAppDelegate openFile]];
         self.shouldStopPlayingAudio = NO;
-        [self startUpdatingTime];
     }
 }
 
 - (void)stopAudio {
-    [self stopUpdatingTime];
+   // [self stopUpdatingTime];
     [[kAppDelegate audioPlayer]stop];
     [[kAppDelegate audioPlayer]setCurrentTime:0.0f];
     [self.time setValue:0.0f];

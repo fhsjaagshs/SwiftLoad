@@ -17,6 +17,7 @@
 @interface AudioPlayerViewController : UIViewController {
     BOOL shouldStopCounter;
     BOOL notInPlayerView;
+    BOOL isGoing;
 }
 
 @property (nonatomic, retain) UILabel *secondsDisplay;

@@ -197,17 +197,10 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     
     [self.audioPlayer play];
     
-    if (playingError == nil) {
-        [kAppDelegate setNowPlayingFile:newFile];
-        [AudioPlayerViewController notif_setShouldStopPlayingAudio:NO];
-        [AudioPlayerViewController notif_setControlsHidden:NO];
-        [AudioPlayerViewController notif_setShouldUpdateTime:YES];
-    } else {
-        [kAppDelegate setNowPlayingFile:nil];
-        [AudioPlayerViewController notif_setShouldStopPlayingAudio:YES];
-        [AudioPlayerViewController notif_setControlsHidden:YES];
-        [AudioPlayerViewController notif_setShouldUpdateTime:NO];
-    }
+    [kAppDelegate setNowPlayingFile:newFile];
+    [AudioPlayerViewController notif_setShouldStopPlayingAudio:(playingError != nil)];
+    [AudioPlayerViewController notif_setControlsHidden:(playingError != nil)];
+    [AudioPlayerViewController notif_setShouldUpdateTime:(playingError == nil)];
 }
 
 - (void)skipToNextTrack {
@@ -273,17 +266,10 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [AudioPlayerViewController notif_setLoop];
     [self.audioPlayer play];
     
-    if (playingError == nil) {
-        [kAppDelegate setNowPlayingFile:newFile];
-        [AudioPlayerViewController notif_setShouldStopPlayingAudio:NO];
-        [AudioPlayerViewController notif_setControlsHidden:NO];
-        [AudioPlayerViewController notif_setShouldUpdateTime:YES];
-    } else {
-        [kAppDelegate setNowPlayingFile:nil];
-        [AudioPlayerViewController notif_setShouldStopPlayingAudio:YES];
-        [AudioPlayerViewController notif_setControlsHidden:YES];
-        [AudioPlayerViewController notif_setShouldUpdateTime:NO];
-    }
+    [kAppDelegate setNowPlayingFile:newFile];
+    [AudioPlayerViewController notif_setShouldStopPlayingAudio:(playingError != nil)];
+    [AudioPlayerViewController notif_setControlsHidden:(playingError != nil)];
+    [AudioPlayerViewController notif_setShouldUpdateTime:(playingError == nil)];
 }
 
 - (void)audioPlayerBeginInterruption:(AVAudioPlayer *)player {
