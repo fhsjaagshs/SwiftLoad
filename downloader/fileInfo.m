@@ -100,7 +100,10 @@
 }
 
 - (void)rename {
-    NSString *newName = [[[kAppDelegate openFile]stringByDeletingLastPathComponent]stringByAppendingPathComponent:self.fileName.text];
+    
+    NSString *file = [kAppDelegate openFile];
+    
+    NSString *newName = [[file stringByDeletingLastPathComponent]stringByAppendingPathComponent:self.fileName.text];
 
     if ([[NSFileManager defaultManager]fileExistsAtPath:newName]) {
         CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Already Exists" message:@"A file already exists with the new name. Please try a different one." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -108,17 +111,17 @@
         [av release];
         [self.fileName becomeFirstResponder];
     } else {
-        if ([[NSFileManager defaultManager]isWritableFileAtPath:[kAppDelegate openFile]] && [[NSFileManager defaultManager]isReadableFileAtPath:[kAppDelegate openFile]]) {
+        if ([[NSFileManager defaultManager]isWritableFileAtPath:file] && [[NSFileManager defaultManager]isReadableFileAtPath:file]) {
             NSMutableDictionary *newNameDict = [NSMutableDictionary dictionary];
-            [newNameDict setObject:[kAppDelegate openFile] forKey:@"old"];
+            [newNameDict setObject:file forKey:@"old"];
             [newNameDict setObject:newName forKey:@"new"];
             
             [[NSNotificationCenter defaultCenter]postNotificationName:@"copiedlistchanged" object:newNameDict];
             
-            [[NSFileManager defaultManager]moveItemAtPath:[kAppDelegate openFile] toPath:newName error:nil];
+            [[NSFileManager defaultManager]moveItemAtPath:file toPath:newName error:nil];
             [kAppDelegate setOpenFile:newName];
             
-            if ([[kAppDelegate nowPlayingFile] isEqualToString:[kAppDelegate openFile]]) {
+            if ([[kAppDelegate nowPlayingFile] isEqualToString:file]) {
                 [kAppDelegate setNowPlayingFile:newName];
             }
         } else {
@@ -156,9 +159,7 @@
 }
 
 - (void)textFieldDidEndOnExit {
-    if ([self.fileName isFirstResponder]) {
-        [self.fileName resignFirstResponder];
-    }
+    [self.fileName resignFirstResponder];
     
     if (![self.fileName.text isEqualToString:[[kAppDelegate openFile]lastPathComponent]]) {
         [self rename];
@@ -177,25 +178,34 @@
 
 - (void)revertAction {
     [self.fileName setText:[[kAppDelegate openFile]lastPathComponent]];
-    if (self.fileName.isFirstResponder) {
-        [self.fileName resignFirstResponder];
-    }
+    [self.fileName resignFirstResponder];
     [self removeRevertButtonFromBar];
 }
 
 - (void)close {
-    if (self.fileName.isFirstResponder) {
-        [self.fileName resignFirstResponder];
-    } 
+    [self.fileName resignFirstResponder];
     [self dismissModalViewControllerAnimated:YES];
 }
 
 - (void)doMD5 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+        NSData *fileData = [NSData dataWithContentsOfFile:[kAppDelegate openFile]];
+        unsigned char digest[CC_MD5_DIGEST_LENGTH];
+        CC_MD5(fileData.bytes, (CC_LONG)fileData.length, digest);
+        NSString *md5String = [NSString stringWithFormat:@"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x", digest[0], digest[1], digest[2], digest[3], digest[4], digest[5], digest[6], digest[7], digest[8], digest[9], digest[10], digest[11], digest[12], digest[13], digest[14], digest[15]];
         
-        NSString *file = [kAppDelegate openFile];
+        if (md5String.length > 0) {
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                NSAutoreleasePool *poolTwo = [[NSAutoreleasePool alloc]init];
+                [self.md5Field setText:md5String];
+                [poolTwo release];
+            });
+        }
         
+        [pool release];
+        
+        /*
         NSFileHandle *handle = [NSFileHandle fileHandleForReadingAtPath:file];
         if (!handle) {
             [self.md5Field setText:@"File corrupt or nonexistant"];
@@ -232,7 +242,7 @@
                 [poolTwo release];
             });
         }
-        [pool release];
+        [pool release];*/
     });
 }
 

@@ -113,7 +113,10 @@
     [self.view bringSubviewToFront:toolBar];
     
     [self setupNotifs];
-    NSString *file = [kAppDelegate openFile];
+    
+    downloaderAppDelegate *ad = kAppDelegate;
+    
+    NSString *file = ad.openFile;
     NSString *currentDir = [file stringByDeletingLastPathComponent];
     
     NSArray *filesOfDir = [[[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
@@ -139,9 +142,7 @@
 
     NSError *playingError = nil;
     
-    downloaderAppDelegate *ad = kAppDelegate;
-    
-    if (![file isEqualToString:[kAppDelegate nowPlayingFile]]) {
+    if (![file isEqualToString:ad.nowPlayingFile]) {
         [ad.audioPlayer stop];
         ad.audioPlayer = [[[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:file] error:&playingError]autorelease];
         [ad.audioPlayer setDelegate:ad];
@@ -181,14 +182,14 @@
 
 - (void)startConverting {
     
-    NSString *fileName = [[kAppDelegate openFile]lastPathComponent];
+    downloaderAppDelegate *ad = kAppDelegate;
+    
+    NSString *fileName = [ad.openFile lastPathComponent];
     
     if (fileName.length > 14) {
-        NSString *fnZZ = [fileName substringToIndex:14];
-        fileName = [fnZZ stringByAppendingString:@"..."];
+        fileName = [[fileName substringToIndex:11]stringByAppendingString:@"..."];
     }
 
-    downloaderAppDelegate *ad = kAppDelegate;
     [ad showHUDWithTitle:@"Converting"];
     [ad setSecondaryTitleOfVisibleHUD:fileName];
     [ad setVisibleHudMode:MBProgressHUDModeDeterminate];
@@ -254,15 +255,18 @@
 }
 
 - (void)close {
+    
+    downloaderAppDelegate *ad = kAppDelegate;
+    
     if (self.shouldStopPlayingAudio) {
-        [[kAppDelegate audioPlayer]stop];
-        [kAppDelegate setAudioPlayer:nil];
-        [kAppDelegate setNowPlayingFile:nil];
+        [ad.audioPlayer stop];
+        [ad setAudioPlayer:nil];
+        [ad setNowPlayingFile:nil];
     }
     
     [self stopUpdatingTime];
     
-    [kAppDelegate setOpenFile:nil];
+    [ad setOpenFile:nil];
     [self dismissModalViewControllerAnimated:YES];
 }
 
@@ -280,31 +284,31 @@
 
 - (void)startUpdatingTime {
     
-    shouldStopCounter = NO;
+    self.shouldStopCounter = NO;
     
-    if (isGoing) {
+    if (self.isGoing) {
         return;
     }
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
         
-        while (!shouldStopCounter) {
+        while (!self.shouldStopCounter) {
             [NSThread sleepForTimeInterval:0.1f];
             dispatch_sync(dispatch_get_main_queue(), ^{
                 NSAutoreleasePool *poolTwo = [[NSAutoreleasePool alloc]init];
-                isGoing = YES;
+                self.isGoing = YES;
                 [self updateTime];
                 [poolTwo release];
             });
         }
-        isGoing = NO;
+        self.isGoing = NO;
         [pool release];
     });
 }
 
 - (void)stopUpdatingTime {
-    shouldStopCounter = YES;
+    self.shouldStopCounter = YES;
 }
 
 - (void)updateTime {
@@ -345,6 +349,7 @@
 }
 
 - (void)sliderChanged {
+    [self.secondsDisplay setText:[self theTimeDisplay]];
     [[kAppDelegate audioPlayer]setCurrentTime:self.time.value*[[kAppDelegate audioPlayer]duration]];
 }
 
@@ -362,13 +367,12 @@
 }
 
 - (void)stopAudio {
-   // [self stopUpdatingTime];
+    [self stopUpdatingTime];
     [[kAppDelegate audioPlayer]stop];
     [[kAppDelegate audioPlayer]setCurrentTime:0.0f];
     [self.time setValue:0.0f];
     [self.secondsDisplay setText:@"0:00"];
     self.shouldStopPlayingAudio = YES;
-    //[kAppDelegate setNowPlayingFile:nil];
 }
 
 

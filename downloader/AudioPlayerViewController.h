@@ -14,11 +14,7 @@
 #import "CustomNavBar.h"
 #import "CustomSlider.h"
 
-@interface AudioPlayerViewController : UIViewController {
-    BOOL shouldStopCounter;
-    BOOL notInPlayerView;
-    BOOL isGoing;
-}
+@interface AudioPlayerViewController : UIViewController
 
 @property (nonatomic, retain) UILabel *secondsDisplay;
 @property (nonatomic, retain) UILabel *errorLabel;
@@ -35,6 +31,10 @@
 
 @property (nonatomic, retain) UIActionSheet *popupQuery;
 @property (nonatomic, assign) BOOL shouldStopPlayingAudio;
+
+@property (nonatomic, assign) BOOL shouldStopCounter;
+@property (nonatomic, assign) BOOL notInPlayerView;
+@property (nonatomic, assign) BOOL isGoing;
 
 + (void)notif_setPausePlayTitlePlay;
 + (void)notif_setPausePlayTitlePause;

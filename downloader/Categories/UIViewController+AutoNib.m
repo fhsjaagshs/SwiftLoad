@@ -13,14 +13,16 @@
 - (id)initWithAutoNib {
     BOOL isPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
     NSString *class = NSStringFromClass([self class]);
-
     self = [self initWithNibName:isPad?[class stringByAppendingString:@"~iPad"]:class bundle:nil];
-
     return self;
 }
 
 + (id)viewController {
     return [[[[self class]alloc]init]autorelease];
+}
+
++ (id)viewControllerNib {
+    return [[[[self class]alloc]initWithAutoNib]autorelease];
 }
 
 @end

@@ -56,7 +56,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 - (void)artworksForFileAtPath:(NSString *)path block:(void(^)(NSArray *artworkImages))block {
     
-    if (block) {
+    if (!block) {
         return;
     }
     
@@ -72,19 +72,17 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
             UIImage *image = nil;
             
             if ([keySpace isEqualToString:AVMetadataKeySpaceID3]) {
-                NSDictionary *d = [item.value copyWithZone:nil];
-                image = [UIImage imageWithData:[d objectForKey:@"data"]];
-                [d release];
+                image = [UIImage imageWithData:[(NSDictionary *)item.value objectForKey:@"data"]];
             } else if ([keySpace isEqualToString:AVMetadataKeySpaceiTunes]) {
-                NSData *data = [item.value copyWithZone:nil];
-                image = [UIImage imageWithData:data];
-                [data release];
+                image = [UIImage imageWithData:(NSData *)item.value];
             }
             
             if (image != nil) {
                 [artworkImages addObject:image];
             }
         }
+        
+        block(artworkImages);
     }];
 }
 

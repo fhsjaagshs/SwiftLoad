@@ -12,5 +12,6 @@
 
 - (id)initWithAutoNib;
 + (id)viewController;
++ (id)viewControllerNib;
 
 @end
