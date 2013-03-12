@@ -10,7 +10,7 @@
 
 @implementation AudioPlayerViewController
 
-@synthesize prevTrack, nxtTrack, secondsRemaining, stopButton, errorLabel, control, pausePlay, time, secondsDisplay, infoField, popupQuery;
+@synthesize prevTrack, nxtTrack, secondsRemaining, stopButton, errorLabel, control, pausePlay, time, secondsDisplay, infoField, popupQuery, shouldStopPlayingAudio;
 
 - (void)loadView {
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
@@ -169,6 +169,7 @@
         if (ad.audioPlayer) {
             [ad.audioPlayer play];
             [ad setNowPlayingFile:file];
+            self.shouldStopPlayingAudio = NO;
         }
     } else {
         [self hideControls:YES];
@@ -251,9 +252,10 @@
 }
 
 - (void)close {
-    if (![kAppDelegate nowPlayingFile]) {
+    if (self.shouldStopPlayingAudio) {
         [[kAppDelegate audioPlayer]stop];
         [kAppDelegate setAudioPlayer:nil];
+        [kAppDelegate setNowPlayingFile:nil];
     }
     
     [self stopUpdatingTime];
@@ -352,6 +354,7 @@
         [[kAppDelegate audioPlayer]play];
         [self.pausePlay setTitle:@"Pause" forState:UIControlStateNormal];
         [kAppDelegate setNowPlayingFile:[kAppDelegate openFile]];
+        self.shouldStopPlayingAudio = NO;
         [self startUpdatingTime];
     }
 }
@@ -362,7 +365,8 @@
     [[kAppDelegate audioPlayer]setCurrentTime:0.0f];
     [self.time setValue:0.0f];
     [self.secondsDisplay setText:@"0:00"];
-    [kAppDelegate setNowPlayingFile:nil];
+    self.shouldStopPlayingAudio = YES;
+    //[kAppDelegate setNowPlayingFile:nil];
 }
 
 
@@ -412,6 +416,10 @@
     self.navBar.topItem.title = notif.object;
 }
 
+- (void)setStopPlayingAudioFileBool:(NSNotification *)notif {
+    self.shouldStopPlayingAudio = notif.object;
+}
+
 - (void)setupNotifs {
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setPausePlayTitlePlay) name:@"setPausePlayTitlePlay" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setPausePlayTitlePause) name:@"setPausePlayTitlePause" object:nil];
@@ -421,6 +429,9 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setPrevTrackHidden:) name:@"setPrevTrackHidden:" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setInfoFieldText:) name:@"setInfoFieldText:" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setSongTitleText:) name:@"setSongTitleText:" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setStopPlayingAudioFileBool:) name:@"stopPlayingAudio" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(startUpdatingTime) name:@"updTime1" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(stopUpdatingTime) name:@"updTime2" object:nil];
 }
 
 + (void)notif_setPausePlayTitlePlay {
@@ -465,6 +476,18 @@
 
 + (void)notif_setSongTitleText:(NSString *)string {
     [[NSNotificationCenter defaultCenter]postNotificationName:@"setSongTitleText:" object:string];
+}
+
++ (void)notif_setShouldStopPlayingAudio:(BOOL)flag {
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"stopPlayingAudio" object:flag?(id)kCFBooleanTrue:(id)kCFBooleanFalse];
+}
+
++ (void)notif_setShouldUpdateTime:(BOOL)flag {
+    if (flag) {
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"updTime1" object:nil];
+    } else {
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"updTime2" object:nil];
+    }
 }
 
 - (NSUInteger)supportedInterfaceOrientations {

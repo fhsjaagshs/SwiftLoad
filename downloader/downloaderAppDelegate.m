@@ -123,6 +123,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 - (void)togglePlayPause {
+    [AudioPlayerViewController notif_setShouldStopPlayingAudio:NO];
     if (!self.audioPlayer.isPlaying) {
         [self.audioPlayer play];
     } else {
@@ -140,6 +141,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [AudioPlayerViewController notif_setNxtTrackHidden:NO];
     
     NSString *cellNameFileKey = [kAppDelegate nowPlayingFile];
+    
     NSString *currentDir = [cellNameFileKey stringByDeletingLastPathComponent];
     NSArray *filesOfDir = [[[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
     NSMutableArray *audioFiles = [NSMutableArray array];
@@ -171,10 +173,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     
     NSError *playingError = nil;
     
-    [self.audioPlayer stop];
-    self.audioPlayer = [[[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:newFile] error:&playingError]autorelease];
-    self.audioPlayer.delegate = self;
-    
     [AudioPlayerViewController notif_setSongTitleText:[newFile lastPathComponent]];
     
     NSArray *iA = [metadataRetriever getMetadataForFile:newFile];
@@ -189,6 +187,10 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     
     NSString *savedLoop = [kLibDir stringByAppendingPathComponent:@"loop.txt"];
     NSString *loopContents = [NSString stringWithContentsOfFile:savedLoop encoding:NSUTF8StringEncoding error:nil];
+    
+    [self.audioPlayer stop];
+    self.audioPlayer = [[[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:newFile] error:&playingError]autorelease];
+    self.audioPlayer.delegate = self;
     self.audioPlayer.numberOfLoops = [loopContents isEqualToString:@"loop"]?-1:0;
     
     [AudioPlayerViewController notif_setLoop];
@@ -197,10 +199,14 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     
     if (playingError == nil) {
         [kAppDelegate setNowPlayingFile:newFile];
+        [AudioPlayerViewController notif_setShouldStopPlayingAudio:NO];
         [AudioPlayerViewController notif_setControlsHidden:NO];
+        [AudioPlayerViewController notif_setShouldUpdateTime:YES];
     } else {
         [kAppDelegate setNowPlayingFile:nil];
+        [AudioPlayerViewController notif_setShouldStopPlayingAudio:YES];
         [AudioPlayerViewController notif_setControlsHidden:YES];
+        [AudioPlayerViewController notif_setShouldUpdateTime:NO];
     }
 }
 
@@ -245,10 +251,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     
     NSError *playingError = nil;
     
-    [self.audioPlayer stop];
-    self.audioPlayer = [[[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:newFile] error:&playingError]autorelease];
-    self.audioPlayer.delegate = self;
-    
     [AudioPlayerViewController notif_setSongTitleText:[newFile lastPathComponent]];
     
     NSArray *iA = [metadataRetriever getMetadataForFile:newFile];
@@ -258,22 +260,29 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     NSString *metadata = [NSString stringWithFormat:@"%@\n%@\n%@",artist,title,album];
     [AudioPlayerViewController notif_setInfoFieldText:metadata];
     
+    NSString *savedLoop = [kLibDir stringByAppendingPathComponent:@"loop.txt"];
+    NSString *loopContents = [NSString stringWithContentsOfFile:savedLoop encoding:NSUTF8StringEncoding error:nil];
+    
     [self showMetadataInLockscreenWithArtist:artist title:title album:album];
     [self showArtworkForFile:newFile];
     
-    NSString *savedLoop = [kLibDir stringByAppendingPathComponent:@"loop.txt"];
-    NSString *loopContents = [NSString stringWithContentsOfFile:savedLoop encoding:NSUTF8StringEncoding error:nil];
+    [self.audioPlayer stop];
+    self.audioPlayer = [[[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:newFile] error:&playingError]autorelease];
+    self.audioPlayer.delegate = self;
     self.audioPlayer.numberOfLoops = [loopContents isEqualToString:@"loop"]?-1:0;
     [AudioPlayerViewController notif_setLoop];
-    
     [self.audioPlayer play];
     
     if (playingError == nil) {
         [kAppDelegate setNowPlayingFile:newFile];
+        [AudioPlayerViewController notif_setShouldStopPlayingAudio:NO];
         [AudioPlayerViewController notif_setControlsHidden:NO];
+        [AudioPlayerViewController notif_setShouldUpdateTime:YES];
     } else {
         [kAppDelegate setNowPlayingFile:nil];
+        [AudioPlayerViewController notif_setShouldStopPlayingAudio:YES];
         [AudioPlayerViewController notif_setControlsHidden:YES];
+        [AudioPlayerViewController notif_setShouldUpdateTime:NO];
     }
 }
 
