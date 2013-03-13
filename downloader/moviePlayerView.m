@@ -118,11 +118,16 @@
 }
 
 - (void)showActionSheet:(id)sender {
-    NSString *file = [kAppDelegate openFile];
-    NSString *fileName = [file lastPathComponent];
-    NSString *message = [NSString stringWithFormat:@"What would you like to do with %@?",fileName];
     
-    self.popupQuery = [[[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+    if (self.popupQuery) {
+        [self.popupQuery dismissWithClickedButtonIndex:self.popupQuery.cancelButtonIndex animated:YES];
+        self.popupQuery = nil;
+        return;
+    }
+    
+    NSString *file = [kAppDelegate openFile];
+    
+    self.popupQuery = [[[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",[file lastPathComponent]] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         NSString *file = [kAppDelegate openFile];
         NSString *fileName = [file lastPathComponent];
         
@@ -148,14 +153,10 @@
     
     self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
 
-    if (!self.popupQuery.isVisible) {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            [self.popupQuery showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];
-        } else {
-            [self.popupQuery showInView:self.view];
-        }
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        [self.popupQuery showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];
     } else {
-        [self.popupQuery dismissWithClickedButtonIndex:[self.popupQuery cancelButtonIndex] animated:YES];
+        [self.popupQuery showInView:self.view];
     }
 }
 

@@ -164,6 +164,12 @@
 
 - (void)showActionSheet:(id)sender {
     
+    if (self.popupQuery) {
+        [self.popupQuery dismissWithClickedButtonIndex:self.popupQuery.cancelButtonIndex animated:YES];
+        self.popupQuery = nil;
+        return;
+    }
+    
     NSString *file = [kAppDelegate openFile];
     
     UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",[file lastPathComponent]] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
@@ -194,14 +200,10 @@
     
     self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
 
-    if (!self.popupQuery.isVisible) {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            [self.popupQuery showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];
-        } else {
-            [self.popupQuery showInView:self.view];
-        }
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        [self.popupQuery showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];
     } else {
-        [self.popupQuery dismissWithClickedButtonIndex:[self.popupQuery cancelButtonIndex] animated:YES];
+        [self.popupQuery showInView:self.view];
     }
 }
 

@@ -10,7 +10,7 @@
 
 @implementation AudioPlayerViewController
 
-@synthesize prevTrack, nxtTrack, secondsRemaining, stopButton, errorLabel, control, pausePlay, time, secondsDisplay, infoField, popupQuery, shouldStopPlayingAudio;
+@synthesize prevTrack, nxtTrack, secondsRemaining, stopButton, errorLabel, control, pausePlay, time, secondsDisplay, infoField, popupQuery, shouldStopPlayingAudio, isGoing, notInPlayerView;
 
 - (void)loadView {
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
@@ -79,6 +79,7 @@
     self.secondsDisplay.font = [UIFont boldSystemFontOfSize:iPad?39:24];
     self.secondsDisplay.textColor = [UIColor whiteColor];
     self.secondsDisplay.backgroundColor = [UIColor clearColor];
+    self.secondsDisplay.textAlignment = UITextAlignmentCenter;
     self.secondsDisplay.text = @"0:00";
     [self.view addSubview:self.secondsDisplay];
     
@@ -328,6 +329,12 @@
 }
 
 - (void)showActionSheet:(id)sender {
+    
+    if (self.popupQuery) {
+        [self.popupQuery dismissWithClickedButtonIndex:self.popupQuery.cancelButtonIndex animated:YES];
+        self.popupQuery = nil;
+        return;
+    }
         
     NSString *file = [kAppDelegate openFile];
         
@@ -346,15 +353,11 @@
     } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Upload to Server", @"Upload to Dropbox", @"Convert to AAC", nil];
     
     self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
-
-    if (!self.popupQuery.isVisible) {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            [self.popupQuery showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];
-        } else {
-            [self.popupQuery showInView:self.view];
-        }
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        [self.popupQuery showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];
     } else {
-        [self.popupQuery dismissWithClickedButtonIndex:[self.popupQuery cancelButtonIndex] animated:YES];
+        [self.popupQuery showInView:self.view];
     }
 }
 

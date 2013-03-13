@@ -33,6 +33,9 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 @property (nonatomic, retain) DBRestClient *restClient;
 
+// ActionSheets
+@property (nonatomic, assign) BOOL uiasVis;
+
 // Audio Player
 @property (nonatomic, retain) AVAudioPlayer *audioPlayer;
 - (void)skipToPreviousTrack;

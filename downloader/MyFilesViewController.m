@@ -42,7 +42,7 @@
     bbv.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [self.view addSubview:bbv];
     
-    self.theCopyAndPasteButton = [[[CustomButton alloc]initWithFrame:iPad?CGRectMake(612, 6, 36, 36):CGRectMake(232, 5, 36, 36)]autorelease];
+    self.theCopyAndPasteButton = [[[CustomButton alloc]initWithFrame:iPad?CGRectMake(612, 4, 36, 36):CGRectMake(232, 5, 36, 36)]autorelease];
     self.theCopyAndPasteButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
     UIImage *grayImage = [self imageFilledWith:[UIColor colorWithWhite:1.0f alpha:1.0f] using:[UIImage imageNamed:@"clipboard"]];
     [self.theCopyAndPasteButton setImage:grayImage forState:UIControlStateNormal];
@@ -50,7 +50,7 @@
     [bbv addSubview:self.theCopyAndPasteButton];
     [self.theCopyAndPasteButton setHidden:YES];
     
-    self.homeButton = [[[CustomButton alloc]initWithFrame:iPad?CGRectMake(358, 6, 62, 36):CGRectMake(123, 4, 62, 36)]autorelease];
+    self.homeButton = [[[CustomButton alloc]initWithFrame:iPad?CGRectMake(358, 4, 62, 36):CGRectMake(123, 4, 62, 36)]autorelease];
     [self.homeButton setTitle:@"Home" forState:UIControlStateNormal];
     [self.homeButton addTarget:self action:@selector(goHome) forControlEvents:UIControlEventTouchUpInside];
     self.homeButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
@@ -60,7 +60,7 @@
     [bbv addSubview:self.homeButton];
     [self.homeButton setHidden:YES];
     
-    self.backButton = [[[CustomButton alloc]initWithFrame:iPad?CGRectMake(117, 6, 62, 36):CGRectMake(53, 4, 62, 37)]autorelease];
+    self.backButton = [[[CustomButton alloc]initWithFrame:iPad?CGRectMake(117, 4, 62, 36):CGRectMake(53, 4, 62, 37)]autorelease];
     [self.backButton setTitle:@"Back" forState:UIControlStateNormal];
     [self.backButton addTarget:self action:@selector(goBackDir) forControlEvents:UIControlEventTouchUpInside];
     self.backButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;

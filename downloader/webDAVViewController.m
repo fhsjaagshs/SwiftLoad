@@ -28,7 +28,7 @@
     [self.view bringSubviewToFront:navBar];
     [topItem release];
     
-    self.onLabel = [[[UILabel alloc]initWithFrame:iPad?CGRectMake(234, sanitizeMesurement(102), 300, 83):CGRectMake(0, sanitizeMesurement(44), screenBounds.size.width, 91)]autorelease];
+    self.onLabel = [[[UILabel alloc]initWithFrame:iPad?CGRectMake(234, 100, 300, 83):CGRectMake(0, sanitizeMesurement(44), screenBounds.size.width, 91)]autorelease];
     self.onLabel.textAlignment = UITextAlignmentCenter;
     self.onLabel.backgroundColor = [UIColor clearColor];
     self.onLabel.textColor = [UIColor whiteColor];
