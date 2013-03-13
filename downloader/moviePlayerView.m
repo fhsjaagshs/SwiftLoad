@@ -119,7 +119,7 @@
 
 - (void)showActionSheet:(id)sender {
     
-    if (self.popupQuery) {
+    if (self.popupQuery && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         [self.popupQuery dismissWithClickedButtonIndex:self.popupQuery.cancelButtonIndex animated:YES];
         self.popupQuery = nil;
         return;
