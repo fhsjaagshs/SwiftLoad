@@ -632,7 +632,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [self hideHUD];
 
     CustomAlertView *avdd = [[CustomAlertView alloc]initWithTitle:[NSString stringWithFormat:@"Link For:\n%@",[path lastPathComponent]] message:link completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
-        if (buttonIndex == alertView.firstOtherButtonIndex) {
+        if (buttonIndex == 1) {
             [[UIPasteboard generalPasteboard]setString:alertView.message];
         }
     } cancelButtonTitle:@"OK" otherButtonTitles:@"Copy", nil];
