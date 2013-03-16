@@ -32,4 +32,9 @@
     [self setNeedsDisplay];
 }
 
+- (void)drawPlaceholderInRect:(CGRect)rect {
+    [UIColorFromRGB(0.5f, 0.5f, 0.5f) setFill];
+    [[self placeholder]drawInRect:rect withFont:self.font lineBreakMode:UILineBreakModeTailTruncation alignment:self.textAlignment];
+}
+
 @end
