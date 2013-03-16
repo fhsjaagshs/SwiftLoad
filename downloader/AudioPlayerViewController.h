@@ -30,7 +30,7 @@
 @property (nonatomic, retain) CustomNavBar *navBar;
 
 @property (nonatomic, retain) UIActionSheet *popupQuery;
-@property (nonatomic, assign) BOOL shouldStopPlayingAudio;
+//@property (nonatomic, assign) BOOL shouldStopPlayingAudio;
 
 @property (nonatomic, assign) BOOL shouldStopCounter;
 @property (nonatomic, assign) BOOL notInPlayerView;
@@ -44,7 +44,7 @@
 + (void)notif_setPrevTrackHidden:(BOOL)flag;
 + (void)notif_setInfoFieldText:(NSString *)string;
 + (void)notif_setSongTitleText:(NSString *)string;
-+ (void)notif_setShouldStopPlayingAudio:(BOOL)flag;
+//+ (void)notif_setShouldStopPlayingAudio:(BOOL)flag;
 + (void)notif_setShouldUpdateTime:(BOOL)flag;
 
 @end

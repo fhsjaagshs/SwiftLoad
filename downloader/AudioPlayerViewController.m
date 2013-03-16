@@ -10,7 +10,7 @@
 
 @implementation AudioPlayerViewController
 
-@synthesize prevTrack, nxtTrack, secondsRemaining, stopButton, errorLabel, control, pausePlay, time, secondsDisplay, infoField, popupQuery, shouldStopPlayingAudio, isGoing, notInPlayerView;
+@synthesize prevTrack, nxtTrack, secondsRemaining, stopButton, errorLabel, control, pausePlay, time, secondsDisplay, infoField, popupQuery, isGoing, notInPlayerView;
 
 - (void)loadView {
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
@@ -46,7 +46,7 @@
     self.pausePlay = [[[CustomButton alloc]initWithFrame:iPad?CGRectMake(323, 481, 142, 51):CGRectMake(124, sanitizeMesurement(266), 72, 37)]autorelease];
     [self.pausePlay setTitle:@"Pause" forState:UIControlStateNormal];
     self.pausePlay.titleLabel.font = [UIFont boldSystemFontOfSize:iPad?18:15];
-    [self.pausePlay addTarget:self action:@selector(togglePause) forControlEvents:UIControlEventTouchUpInside];
+    [self.pausePlay addTarget:kAppDelegate action:@selector(togglePlayPause) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.pausePlay];
     
     self.stopButton = [[[CustomButton alloc]initWithFrame:iPad?CGRectMake(323, 589, 142, 51):CGRectMake(124, sanitizeMesurement(332), 72, 37)]autorelease];
@@ -66,6 +66,7 @@
     self.control = [[[CustomSegmentedControl alloc]initWithFrame:iPad?CGRectMake(275, 163, 219, 44):CGRectMake(51, sanitizeMesurement(117), 219, 44)]autorelease];
     [self.control insertSegmentWithTitle:@"Loop" atIndex:0 animated:YES];
     [self.control insertSegmentWithTitle:@"Don't Loop" atIndex:1 animated:YES];
+    [self.control addTarget:self action:@selector(setLoops) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.control];
     
     self.secondsRemaining = [[[UILabel alloc]initWithFrame:iPad?CGRectMake(315, 220, 139, 35):CGRectMake(51, sanitizeMesurement(187), 112, 21)]autorelease];
@@ -79,7 +80,7 @@
     self.secondsDisplay.font = [UIFont boldSystemFontOfSize:iPad?39:24];
     self.secondsDisplay.textColor = [UIColor whiteColor];
     self.secondsDisplay.backgroundColor = [UIColor clearColor];
-    self.secondsDisplay.textAlignment = UITextAlignmentCenter;
+    self.secondsDisplay.textAlignment = iPad?UITextAlignmentCenter:UITextAlignmentLeft;
     self.secondsDisplay.text = @"0:00";
     [self.view addSubview:self.secondsDisplay];
     
@@ -131,14 +132,8 @@
     }
     
     int fileIndex = [audioFiles indexOfObject:file];
-    
-    if (fileIndex == 0) {
-        [self.prevTrack setHidden:YES];
-    }
-    
-    if (fileIndex == audioFiles.count-1) {
-        [self.nxtTrack setHidden:YES];
-    }
+    [self.prevTrack setHidden:(fileIndex == 0)];
+    [self.nxtTrack setHidden:(fileIndex == audioFiles.count-1)];
 
     NSError *playingError = nil;
     
@@ -168,27 +163,17 @@
     
     NSString *savedLoop = [kLibDir stringByAppendingPathComponent:@"loop.txt"];
     NSString *loopContents = [NSString stringWithContentsOfFile:savedLoop encoding:NSUTF8StringEncoding error:nil];
+    self.control.selectedSegmentIndex = [loopContents isEqualToString:@"loop"]?0:1;
+    ad.audioPlayer.numberOfLoops = [loopContents isEqualToString:@"loop"]?-1:0;
     
-    if ([loopContents isEqualToString:@"loop"]) {
-        [ad.audioPlayer setNumberOfLoops:-1];
-        [self.control setSelectedSegmentIndex:0];
-    } else {
-        [ad.audioPlayer setNumberOfLoops:0];
-        [self.control setSelectedSegmentIndex:1];
-    }
+    [self hideControls:(playingError != nil)];
+    
+    [ad.audioPlayer play];
+    [ad setNowPlayingFile:file];
     
     if (!playingError) {
-        [self hideControls:NO];
-        if (ad.audioPlayer) {
-            [ad.audioPlayer play];
-            [ad setNowPlayingFile:file];
-            self.shouldStopPlayingAudio = NO;
-        }
-    } else {
-        [self hideControls:YES];
-        self.shouldStopPlayingAudio = YES;
+        [self startUpdatingTime];
     }
-    [self startUpdatingTime];
 }
 
 - (void)startConverting {
@@ -255,21 +240,16 @@
 }
 
 - (void)setLoops {
+    [[kAppDelegate audioPlayer]setNumberOfLoops:(self.control.selectedSegmentIndex == 0)?-1:0];
     NSString *savedLoop = [kLibDir stringByAppendingPathComponent:@"loop.txt"];
-    if (self.control.selectedSegmentIndex == 0 ) {
-        [[kAppDelegate audioPlayer]setNumberOfLoops:-1];
-        [@"loop" writeToFile:savedLoop atomically:YES encoding:NSUTF8StringEncoding error:nil];
-    } else {
-        [[kAppDelegate audioPlayer]setNumberOfLoops:0];
-        [@"dontLoop" writeToFile:savedLoop atomically:YES encoding:NSUTF8StringEncoding error:nil];
-    }
+    [(self.control.selectedSegmentIndex == 0)?@"loop":@"dontLoop" writeToFile:savedLoop atomically:YES encoding:NSUTF8StringEncoding error:nil];
 }
 
 - (void)close {
     
     downloaderAppDelegate *ad = kAppDelegate;
     
-    if (self.shouldStopPlayingAudio) {
+    if (!ad.audioPlayer.isPlaying) {
         [ad.audioPlayer stop];
         [ad setAudioPlayer:nil];
         [ad setNowPlayingFile:nil];
@@ -285,12 +265,7 @@
     int theTime = [[kAppDelegate audioPlayer]currentTime];
     int divBy60 = floor((theTime/60)+0.5);
     int timeWithoutMinutes = abs(theTime-(divBy60*60));
-    
-    if (timeWithoutMinutes < 10) {
-        return [NSString stringWithFormat:@"%d:0%d",divBy60,timeWithoutMinutes];
-    } else {
-        return [NSString stringWithFormat:@"%d:%d",divBy60,timeWithoutMinutes];
-    }
+    return (timeWithoutMinutes < 10)?[NSString stringWithFormat:@"%d:0%d",divBy60,timeWithoutMinutes]:[NSString stringWithFormat:@"%d:%d",divBy60,timeWithoutMinutes];
 }
 
 - (void)startUpdatingTime {
@@ -303,7 +278,6 @@
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-        
         while (!self.shouldStopCounter) {
             [NSThread sleepForTimeInterval:0.1f];
             dispatch_sync(dispatch_get_main_queue(), ^{
@@ -366,7 +340,7 @@
     [[kAppDelegate audioPlayer]setCurrentTime:self.time.value*[[kAppDelegate audioPlayer]duration]];
 }
 
-- (void)togglePause {
+- (void)togglePaused {
     [self startUpdatingTime];
     if ([[kAppDelegate audioPlayer]isPlaying]) {
         [[kAppDelegate audioPlayer]pause];
@@ -375,7 +349,6 @@
         [[kAppDelegate audioPlayer]play];
         [self.pausePlay setTitle:@"Pause" forState:UIControlStateNormal];
         [kAppDelegate setNowPlayingFile:[kAppDelegate openFile]];
-        self.shouldStopPlayingAudio = NO;
     }
 }
 
@@ -385,7 +358,6 @@
     [[kAppDelegate audioPlayer]setCurrentTime:0.0f];
     [self.time setValue:0.0f];
     [self.secondsDisplay setText:@"0:00"];
-    self.shouldStopPlayingAudio = YES;
 }
 
 
@@ -435,10 +407,6 @@
     self.navBar.topItem.title = notif.object;
 }
 
-- (void)setStopPlayingAudioFileBool:(NSNotification *)notif {
-    self.shouldStopPlayingAudio = [(NSString *)notif.object isEqualToString:@"YES"];
-}
-
 - (void)setupNotifs {
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setPausePlayTitlePlay) name:@"setPausePlayTitlePlay" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setPausePlayTitlePause) name:@"setPausePlayTitlePause" object:nil];
@@ -448,7 +416,6 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setPrevTrackHidden:) name:@"setPrevTrackHidden:" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setInfoFieldText:) name:@"setInfoFieldText:" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setSongTitleText:) name:@"setSongTitleText:" object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setStopPlayingAudioFileBool:) name:@"stopPlayingAudio" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(startUpdatingTime) name:@"updTime1" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(stopUpdatingTime) name:@"updTime2" object:nil];
 }
@@ -495,10 +462,6 @@
 
 + (void)notif_setSongTitleText:(NSString *)string {
     [[NSNotificationCenter defaultCenter]postNotificationName:@"setSongTitleText:" object:string];
-}
-
-+ (void)notif_setShouldStopPlayingAudio:(BOOL)flag {
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"stopPlayingAudio" object:flag?@"YES":@"NO"];
 }
 
 + (void)notif_setShouldUpdateTime:(BOOL)flag {

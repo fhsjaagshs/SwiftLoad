@@ -121,11 +121,15 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 - (void)togglePlayPause {
-    [AudioPlayerViewController notif_setShouldStopPlayingAudio:NO];
     if (!self.audioPlayer.isPlaying) {
         [self.audioPlayer play];
+        self.nowPlayingFile = [[self.openFile copy]autorelease];
+        [AudioPlayerViewController notif_setPausePlayTitlePause];
+        [AudioPlayerViewController notif_setShouldUpdateTime:YES];
     } else {
         [self.audioPlayer pause];
+        [AudioPlayerViewController notif_setPausePlayTitlePlay];
+        [AudioPlayerViewController notif_setShouldUpdateTime:NO];
     }
 }
 
@@ -136,11 +140,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         return;
     }
     
-    [AudioPlayerViewController notif_setNxtTrackHidden:NO];
-    
-    NSString *cellNameFileKey = [kAppDelegate nowPlayingFile];
-    
-    NSString *currentDir = [cellNameFileKey stringByDeletingLastPathComponent];
+    NSString *currentDir = [self.nowPlayingFile stringByDeletingLastPathComponent];
     NSArray *filesOfDir = [[[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
     NSMutableArray *audioFiles = [NSMutableArray array];
     
@@ -150,24 +150,22 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
             [audioFiles addObject:newObject];
         }
     }
+
+    int nextIndex = [audioFiles indexOfObject:self.nowPlayingFile]-1;
     
-    int number = [audioFiles indexOfObject:cellNameFileKey]-1;
-    
-    if (number < 0) {
-        return;
-    }
-    
-    if (number+1 > audioFiles.count) {
+    if (nextIndex < 0) {
         [AudioPlayerViewController notif_setPrevTrackHidden:YES];
         return;
     }
     
-    if (number == 0) {
+    if (nextIndex == 0) {
         [AudioPlayerViewController notif_setPrevTrackHidden:YES];
     }
     
-    NSString *newFile = [audioFiles objectAtIndex:number];
-    [kAppDelegate setOpenFile:newFile];
+    [AudioPlayerViewController notif_setNxtTrackHidden:NO];
+    
+    NSString *newFile = [audioFiles objectAtIndex:nextIndex];
+    [self setOpenFile:newFile];
     
     NSError *playingError = nil;
     
@@ -200,18 +198,14 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     
     [self.audioPlayer play];
     
-    [kAppDelegate setNowPlayingFile:newFile];
-    [AudioPlayerViewController notif_setShouldStopPlayingAudio:(playingError != nil)];
+    [self setNowPlayingFile:newFile];
     [AudioPlayerViewController notif_setControlsHidden:(playingError != nil)];
     [AudioPlayerViewController notif_setShouldUpdateTime:(playingError == nil)];
 }
 
 - (void)skipToNextTrack {
-    
-    [AudioPlayerViewController notif_setPrevTrackHidden:NO];
-    
-    NSString *cellNameFileKey = [kAppDelegate nowPlayingFile];
-    NSString *currentDir = [cellNameFileKey stringByDeletingLastPathComponent];
+
+    NSString *currentDir = [self.nowPlayingFile stringByDeletingLastPathComponent];
     
     NSArray *filesOfDir = [[[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
     NSMutableArray *audioFiles = [NSMutableArray array];
@@ -222,28 +216,23 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
             [audioFiles addObject:newObject];
         }
     }
+
+    int maxIndex = audioFiles.count-1;
+    int nextIndex = [audioFiles indexOfObject:self.nowPlayingFile]+1;
     
-    int number = [audioFiles indexOfObject:cellNameFileKey]+1;
-    
-    if (number < 0) {
-        return;
-    }
-    
-    if (number-1 > audioFiles.count) {
+    if (nextIndex > maxIndex) {
         [AudioPlayerViewController notif_setNxtTrackHidden:YES];
         return;
     }
     
-    if (number == audioFiles.count) {
-        return;
-    }
-    
-    if (number == audioFiles.count-1) {
+    if (nextIndex == maxIndex) {
         [AudioPlayerViewController notif_setNxtTrackHidden:YES];
     }
     
-    NSString *newFile = [audioFiles objectAtIndex:number];
-    [kAppDelegate setOpenFile:newFile];
+    [AudioPlayerViewController notif_setPrevTrackHidden:NO];
+    
+    NSString *newFile = [audioFiles objectAtIndex:nextIndex];
+    [self setOpenFile:newFile];
     
     NSError *playingError = nil;
     
@@ -254,8 +243,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     NSString *title = [iA objectAtIndex:1];
     NSString *album = [iA objectAtIndex:2];
     NSString *metadata = [NSString stringWithFormat:@"%@\n%@\n%@",artist,title,album];
-    
-    NSLog(@"metadata: %@",metadata);
+
     [AudioPlayerViewController notif_setInfoFieldText:metadata];
     
     NSString *savedLoop = [kLibDir stringByAppendingPathComponent:@"loop.txt"];
@@ -276,8 +264,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [AudioPlayerViewController notif_setLoop];
     [self.audioPlayer play];
     
-    [kAppDelegate setNowPlayingFile:newFile];
-    [AudioPlayerViewController notif_setShouldStopPlayingAudio:(playingError != nil)];
+    [self setNowPlayingFile:newFile];
     [AudioPlayerViewController notif_setControlsHidden:(playingError != nil)];
     [AudioPlayerViewController notif_setShouldUpdateTime:(playingError == nil)];
 }
@@ -297,35 +284,11 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
     if (self.audioPlayer.numberOfLoops == 0) {
         [self skipToNextTrack];
-    }
-    
-    if (![self nextTrackButtonShouldBeHidden]) {
-        [self.audioPlayer setCurrentTime:0];
-        [AudioPlayerViewController notif_setPausePlayTitlePlay];
+    } else {
+        self.audioPlayer.currentTime = 0;
+        [self.audioPlayer play];
     }
 }
-
-- (BOOL)nextTrackButtonShouldBeHidden {
-    
-    NSString *cellNameFileKey = [kAppDelegate nowPlayingFile];
-    NSString *currentDir = [cellNameFileKey stringByDeletingLastPathComponent];
-    
-    NSArray *filesOfDir = [[[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-    NSMutableArray *audioFiles = [NSMutableArray array];
-    
-    for (NSString *object in filesOfDir) {
-        NSString *newObject = [currentDir stringByAppendingPathComponent:object];
-        if ([MIMEUtils isAudioFile:newObject]) {
-            [audioFiles addObject:newObject];
-        }
-    }
-    
-    if ([audioFiles indexOfObject:cellNameFileKey] == audioFiles.count-2) {
-        return YES;
-    }
-    return NO;
-}
-
 
 //
 // Emailing
@@ -1089,7 +1052,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [[NSUserDefaults standardUserDefaults]setObject:serverField.text forKey:@"FTPPath"];
     [[NSUserDefaults standardUserDefaults]setObject:usernameField.text forKey:@"FTPUsername"];
 
-    SCRFTPRequest *ftpRequest = [[SCRFTPRequest alloc]initWithURL:[NSURL URLWithString:serverField.text] toUploadFile:[kAppDelegate openFile]];
+    SCRFTPRequest *ftpRequest = [[SCRFTPRequest alloc]initWithURL:[NSURL URLWithString:serverField.text] toUploadFile:self.openFile];
     ftpRequest.username = usernameField.text;
     ftpRequest.password = passwordField.text;
     ftpRequest.delegate = self;
