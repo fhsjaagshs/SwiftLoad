@@ -703,25 +703,13 @@
     });
 }
 
-- (void)viewDidLoad {       
-    [super viewDidLoad];
-    
-    
-}
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
     [self reindexFilelist];
-    
-    if (self.editing){
-        return self.filelist.count+1;
-    } else {
-        return self.filelist.count;
-    }
+    return self.editing?self.filelist.count+1:self.filelist.count;
 }
 
 - (void)accessoryButtonPressed:(id)sender {
@@ -750,11 +738,9 @@
     if (cell == nil) {
         cell = [[[CustomCellCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier]autorelease];
         
-        DTCustomColoredAccessory *accessory = [DTCustomColoredAccessory accessoryWithColor:cell.textLabel.textColor];
-        accessory.accessoryColor = [UIColor whiteColor];
+        DTCustomColoredAccessory *accessory = [DTCustomColoredAccessory accessoryWithColor:[UIColor whiteColor]];
         accessory.highlightedColor = [UIColor darkGrayColor];
         [accessory addTarget:self action:@selector(accessoryButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        
         cell.accessoryView = accessory;
             
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
@@ -766,15 +752,15 @@
             cell.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:20];
         }
     }
-    
-    for (UIGestureRecognizer *rec in cell.gestureRecognizers) {
-        [cell removeGestureRecognizer:rec];
-    }
 
     if (self.editing && indexPath.row == self.filelist.count) {
         cell.textLabel.text = @"Create New File/Directory";
         cell.detailTextLabel.text = nil;
         cell.editingAccessoryType = UITableViewCellAccessoryNone;
+        
+        for (UIGestureRecognizer *rec in cell.gestureRecognizers) {
+            [cell removeGestureRecognizer:rec];
+        }
     } else {
         NSString *filesObjectAtIndex = [self.filelist objectAtIndex:indexPath.row];
         NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:filesObjectAtIndex];
@@ -789,45 +775,46 @@
             cell.editingAccessoryType = UITableViewCellAccessoryNone;
         }
         
-        BOOL isZip = [[[file pathExtension]lowercaseString] isEqualToString:@"zip"];
         BOOL isDir;  
         BOOL exists = [[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir];
 
         if (exists && isDir) {
             cell.detailTextLabel.text = @"Directory";
-        } else {
-            UISwipeGestureRecognizer *rightSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeRight:)];
-            rightSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
-            [cell addGestureRecognizer:rightSwipeGestureRecognizer];
-            [rightSwipeGestureRecognizer release];
             
-            UISwipeGestureRecognizer *leftSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeLeft:)];
-            leftSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
-            [cell addGestureRecognizer:leftSwipeGestureRecognizer];
-            [leftSwipeGestureRecognizer release];
-            
-            NSString *detailTextLabelMe = nil;
-            if (isZip == YES) {
-                detailTextLabelMe = @"Archive, ";
-            } else {
-                detailTextLabelMe = @"File, ";
+            for (UIGestureRecognizer *rec in cell.gestureRecognizers) {
+                [cell removeGestureRecognizer:rec];
             }
+        } else {
+            
+            if (cell.gestureRecognizers.count == 0) {
+                UISwipeGestureRecognizer *rightSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeRight:)];
+                rightSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
+                [cell addGestureRecognizer:rightSwipeGestureRecognizer];
+                [rightSwipeGestureRecognizer release];
+                
+                UISwipeGestureRecognizer *leftSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeLeft:)];
+                leftSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
+                [cell addGestureRecognizer:leftSwipeGestureRecognizer];
+                [leftSwipeGestureRecognizer release];
+            }
+
+            NSString *detailText = [[[file pathExtension]lowercaseString]isEqualToString:@"zip"]?@"Archive, ":@"File, ";
             
             float fileSize = fileSize(file);
             
             if (fileSize < 1024.0) {
-                detailTextLabelMe = [detailTextLabelMe stringByAppendingFormat:@"%.0f Bytes",fileSize];
+                detailText = [detailText stringByAppendingFormat:@"%.0f Bytes",fileSize];
                 if (fileSize == 1) {
-                    detailTextLabelMe = [detailTextLabelMe substringToIndex:(detailTextLabelMe.length-1)];
+                    detailText = [detailText substringToIndex:(detailText.length-1)];
                 }
             } else if (fileSize < (1024*1024) && fileSize > 1024.0 ) {
                 fileSize = fileSize/1014;
-                detailTextLabelMe = [detailTextLabelMe stringByAppendingFormat:@"%.0f KB",fileSize];
+                detailText = [detailText stringByAppendingFormat:@"%.0f KB",fileSize];
             } else if (fileSize < (1024*1024*1024) && fileSize > (1024*1024)) {
                 fileSize = fileSize/(1024*1024);
-                detailTextLabelMe = [detailTextLabelMe stringByAppendingFormat:@"%.0f MB",fileSize];                
+                detailText = [detailText stringByAppendingFormat:@"%.0f MB",fileSize];
             }
-            cell.detailTextLabel.text = detailTextLabelMe;
+            cell.detailTextLabel.text = detailText;
         }
     }
     return cell;
@@ -837,132 +824,127 @@
     
     downloaderAppDelegate *ad = kAppDelegate;
     UITableViewCell *cell = [self.theTableView cellForRowAtIndexPath:indexPath];
-
     int cellCount = [self.theTableView numberOfRowsInSection:0];
     
-    if (indexPath.row != cellCount) {
-        NSString *cellName = cell.textLabel.text;
-        NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:cellName];
+    NSString *cellName = cell.textLabel.text;
+    NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:cellName];
+    ad.openFile = file;
 
-        [kAppDelegate setOpenFile:file];
-        
-        BOOL isZip = [[[file pathExtension]lowercaseString]isEqualToString:@"zip"];
-        BOOL isDir;    
-        BOOL directoryExists = [[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir];
+    BOOL isDir;
     
-        if (self.editing) {
-            
-            if (indexPath.row == cellCount-1) {
-                [self showFileCreationAlertView];
-            } else {
-                if ([self.perspectiveCopiedList containsObject:file]) {
-                    [self removeItemFromPerspectiveCopyList:file];
-                    cell.editingAccessoryType = UITableViewCellAccessoryNone;
-                } else {
-                    if ([self addItemToPerspectiveCopyList:file]) {
-                        cell.editingAccessoryType = UITableViewCellAccessoryCheckmark;
-                    } else {
-                        cell.editingAccessoryType = UITableViewCellAccessoryNone;
-                    }
-                }
-                
-                [self updateCopyButtonState];
-            }
-            
-        } else if (directoryExists && isDir) { 
-            [self.backButton setHidden:NO];
-            [self.homeButton setHidden:NO];
+    if (self.editing) {
         
-            self.navBar.topItem.title = [self.navBar.topItem.title stringByAppendingPathComponent:[file lastPathComponent]];
-        
-            [kAppDelegate setManagerCurrentDir:file];
-        
-            [self recalculateDirs];
-        
-            [self refreshTableViewWithAnimation:UITableViewRowAnimationLeft];
-            [self.theTableView flashScrollIndicators];
-        
-        } else if (isZip) {
-            
-            [self verifyCopiedList];
-            
-            UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@",cellName] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-                
-                NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
-                
-                if ([title isEqualToString:@"Compress Copied Items"]) {
-                    if (self.copiedList.count > 0) {
-                        
-                        [ad showHUDWithTitle:@"Compressing..."];
-                        [ad setVisibleHudMode:MBProgressHUDModeIndeterminate];
-                        [ad setTagOfVisibleHUD:4];
-                        
-                        [self compressItems:self.copiedList intoZipFile:[ad.managerCurrentDir stringByAppendingPathComponent:[[actionSheet.title componentsSeparatedByString:@" "]lastObject]]];
-                        [self flushCopiedList];
-                        [self flushPerspectiveCopyList];
-                    }
-                } else if ([title isEqualToString:@"Decompress"]) {
-                    if (fileSize(file) > 0) {
-                        [ad showHUDWithTitle:@"Inflating..."];
-                        [ad setSecondaryTitleOfVisibleHUD:[file lastPathComponent]];
-                        [ad setVisibleHudMode:MBProgressHUDModeDeterminate];
-                        [ad setTagOfVisibleHUD:5];
-                        [NSThread detachNewThreadSelector:@selector(inflate:) toTarget:self withObject:file];
-                    }
-                }
-                
-                [self updateCopyButtonState];
-            } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil]autorelease];
-            
-            actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
-            
-            if (self.copiedList.count > 0) {
-                [actionSheet addButtonWithTitle:@"Compress Copied Items"];
-            }
-            
-            [actionSheet addButtonWithTitle:@"Decompress"];
-            [actionSheet addButtonWithTitle:@"Cancel"];
-            
-            actionSheet.cancelButtonIndex = actionSheet.numberOfButtons-1;
-            [actionSheet showInView:self.view];
-            
+        if (indexPath.row == cellCount-1) {
+            [self showFileCreationAlertView];
         } else {
-            BOOL isHTML = [MIMEUtils isHTMLFile:file];
-        
-            if ([MIMEUtils isAudioFile:file]) {
-                AudioPlayerViewController *audio = [AudioPlayerViewController viewController];
-                audio.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-                [self presentModalViewController:audio animated:YES];
-            } else if ([MIMEUtils isImageFile:file]) {
-                pictureView *pView = [pictureView viewController];
-                pView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-                [self presentModalViewController:pView animated:YES];
-            } else if ([MIMEUtils isTextFile:file] && !isHTML) {
-                dedicatedTextEditor *dte = [dedicatedTextEditor viewController];
-                dte.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-                [self presentModalViewController:dte animated:YES];
-            } else if ([MIMEUtils isVideoFile:file]) {
-                moviePlayerView *mpv = [moviePlayerView viewController];
-                mpv.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-                [self presentModalViewController:mpv animated:YES];
-            } else if ([MIMEUtils isDocumentFile:file] || isHTML) {
-                MyFilesViewDetailViewController *detail = [MyFilesViewDetailViewController viewController];
-                detail.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-                [self presentModalViewController:detail animated:YES];
+            if ([self.perspectiveCopiedList containsObject:file]) {
+                [self removeItemFromPerspectiveCopyList:file];
+                cell.editingAccessoryType = UITableViewCellAccessoryNone;
             } else {
-                NSString *fileName = [file lastPathComponent];
-                NSString *message = [NSString stringWithFormat:@"SwiftLoad cannot identify:\n%@\nPlease select what viewer to open it in.",fileName];
-            
-                UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-                    [self actionSheetAction:actionSheet buttonIndex:buttonIndex];
-                } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Open in Text Editor", @"Open in Movie Player", @"Open in Picture Viewer", @"Open in Audio Player", @"Open in Document Viewer", @"Open In...", nil];
-            
-                sheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
-                [sheet showInView:self.view];
-                [sheet release];
+                if ([self addItemToPerspectiveCopyList:file]) {
+                    cell.editingAccessoryType = UITableViewCellAccessoryCheckmark;
+                } else {
+                    cell.editingAccessoryType = UITableViewCellAccessoryNone;
+                }
             }
+            
+            [self updateCopyButtonState];
+        }
+        
+    } else if ([[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir] && isDir) {
+        [self.backButton setHidden:NO];
+        [self.homeButton setHidden:NO];
+        
+        self.navBar.topItem.title = [self.navBar.topItem.title stringByAppendingPathComponent:[file lastPathComponent]];
+        
+        [kAppDelegate setManagerCurrentDir:file];
+        
+        [self recalculateDirs];
+        
+        [self refreshTableViewWithAnimation:UITableViewRowAnimationLeft];
+        [self.theTableView flashScrollIndicators];
+        
+    } else if ([[[file pathExtension]lowercaseString]isEqualToString:@"zip"]) {
+        
+        [self verifyCopiedList];
+        
+        UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@",cellName] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+            
+            NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
+            
+            if ([title isEqualToString:@"Compress Copied Items"]) {
+                if (self.copiedList.count > 0) {
+                    
+                    [ad showHUDWithTitle:@"Compressing..."];
+                    [ad setVisibleHudMode:MBProgressHUDModeIndeterminate];
+                    [ad setTagOfVisibleHUD:4];
+                    
+                    [self compressItems:self.copiedList intoZipFile:[ad.managerCurrentDir stringByAppendingPathComponent:[[actionSheet.title componentsSeparatedByString:@" "]lastObject]]];
+                    [self flushCopiedList];
+                    [self flushPerspectiveCopyList];
+                }
+            } else if ([title isEqualToString:@"Decompress"]) {
+                if (fileSize(file) > 0) {
+                    [ad showHUDWithTitle:@"Inflating..."];
+                    [ad setSecondaryTitleOfVisibleHUD:[file lastPathComponent]];
+                    [ad setVisibleHudMode:MBProgressHUDModeDeterminate];
+                    [ad setTagOfVisibleHUD:5];
+                    [NSThread detachNewThreadSelector:@selector(inflate:) toTarget:self withObject:file];
+                }
+            }
+            
+            [self updateCopyButtonState];
+        } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil]autorelease];
+        
+        actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+        
+        if (self.copiedList.count > 0) {
+            [actionSheet addButtonWithTitle:@"Compress Copied Items"];
+        }
+        
+        [actionSheet addButtonWithTitle:@"Decompress"];
+        [actionSheet addButtonWithTitle:@"Cancel"];
+        
+        actionSheet.cancelButtonIndex = actionSheet.numberOfButtons-1;
+        [actionSheet showInView:self.view];
+        
+    } else {
+        BOOL isHTML = [MIMEUtils isHTMLFile:file];
+        
+        if ([MIMEUtils isAudioFile:file]) {
+            AudioPlayerViewController *audio = [AudioPlayerViewController viewController];
+            audio.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+            [self presentModalViewController:audio animated:YES];
+        } else if ([MIMEUtils isImageFile:file]) {
+            pictureView *pView = [pictureView viewController];
+            pView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+            [self presentModalViewController:pView animated:YES];
+        } else if ([MIMEUtils isTextFile:file] && !isHTML) {
+            dedicatedTextEditor *dte = [dedicatedTextEditor viewController];
+            dte.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+            [self presentModalViewController:dte animated:YES];
+        } else if ([MIMEUtils isVideoFile:file]) {
+            moviePlayerView *mpv = [moviePlayerView viewController];
+            mpv.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+            [self presentModalViewController:mpv animated:YES];
+        } else if ([MIMEUtils isDocumentFile:file] || isHTML) {
+            MyFilesViewDetailViewController *detail = [MyFilesViewDetailViewController viewController];
+            detail.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+            [self presentModalViewController:detail animated:YES];
+        } else {
+            NSString *fileName = [file lastPathComponent];
+            NSString *message = [NSString stringWithFormat:@"SwiftLoad cannot identify:\n%@\nPlease select what viewer to open it in.",fileName];
+            
+            UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+                [self actionSheetAction:actionSheet buttonIndex:buttonIndex];
+            } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Open in Text Editor", @"Open in Movie Player", @"Open in Picture Viewer", @"Open in Audio Player", @"Open in Document Viewer", @"Open In...", nil];
+            
+            sheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+            [sheet showInView:self.view];
+            [sheet release];
         }
     }
+    
     [self.theTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -970,17 +952,12 @@
     NSString *name = [self.theTableView cellForRowAtIndexPath:indexPath].textLabel.text;
     NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:name];
     
-    BOOL isDir;
-    [[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir];
-    
     if (self.editing) {
         return YES;
     } else {
-        if (isDir) {
-            return YES;
-        } else {  
-            return NO;
-        }
+        BOOL isDir;
+        [[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir];
+        return isDir;
     }
 }
 
@@ -1083,13 +1060,6 @@
     [[NSFileManager defaultManager]createDirectoryAtPath:thingToBeCreated withIntermediateDirectories:NO attributes:nil error:nil];
     [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
     [av dismissWithClickedButtonIndex:0 animated:YES];
-}
-
-- (void)motionBegan:(UIEventSubtype)motion withEvent:(UIEvent *)event {
-    if (event.type == UIEventSubtypeMotionShake) {
-        [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
-        [self.theTableView flashScrollIndicators];
-    }
 }
 
 - (void)actionSheetAction:(UIActionSheet *)actionSheet buttonIndex:(int)buttonIndex {
@@ -1420,14 +1390,8 @@
     [self verifyCopiedList];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    [self becomeFirstResponder];
-}
-
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self resignFirstResponder];
     [self flushCopiedList];
     [self flushPerspectiveCopyList];
     self.isCut = NO;
