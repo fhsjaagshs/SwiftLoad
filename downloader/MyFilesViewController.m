@@ -1141,13 +1141,8 @@
     [self removeSideSwipeView:YES];
 }
 
-
-// slide to reveal actions
-
-
 - (void)touchUpInsideAction:(UIButton *)button {
-    NSString *file = [[kAppDelegate managerCurrentDir] stringByAppendingPathComponent:self.sideSwipeCell.textLabel.text];
-    
+    NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:self.sideSwipeCell.textLabel.text];
     [kAppDelegate setOpenFile:file];
     
     int number = button.tag-1;
@@ -1251,17 +1246,13 @@
         button.layer.borderColor = [UIColor clearColor].CGColor;
         button.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
 
-        NSString *imagePathRetina = [[[[[NSBundle mainBundle]bundlePath]stringByAppendingPathComponent:[buttonInfo objectForKey:@"image"]] stringByDeletingPathExtension]stringByAppendingString:@"@2x.png"];
-        
         UIImage *buttonImage = nil;
 
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            CGFloat multiplier = 1.5;
-            UIImage *startImage = [UIImage imageWithContentsOfFile:imagePathRetina];
-            CGSize newFrame = CGSizeMake(startImage.size.width*multiplier, startImage.size.height*multiplier);
-            buttonImage = [UIImage imageWithImage:startImage scaledToSize:newFrame];
+            UIImage *startImage = [UIImage imageWithContentsOfFile:getResource([buttonInfo objectForKey:@"image"])];
+            buttonImage = [UIImage imageWithImage:startImage scaledToSize:CGSizeMake(startImage.size.width*1.5, startImage.size.height*1.5)];
         } else {
-            buttonImage = [UIImage imageWithContentsOfFile:imagePathRetina];
+            buttonImage = [UIImage imageWithContentsOfFile:getResource([buttonInfo objectForKey:@"image"])];
         }
 
         button.frame = CGRectMake([buttonData indexOfObject:buttonInfo]*((self.sideSwipeView.bounds.size.width)/buttonData.count), 0, ((self.sideSwipeView.bounds.size.width)/buttonData.count), self.sideSwipeView.bounds.size.height);
@@ -1373,8 +1364,6 @@
         return;
     }
     
-    NSLog(@"removed");
-    
     if (animated) {
         
         [UIView animateWithDuration:0.2 animations:^{
@@ -1451,14 +1440,9 @@
             [view setNeedsDisplay];
         }
     }
-    NSLog(@"Cell: %@",NSStringFromCGRect(self.sideSwipeCell.frame));
-    NSLog(@"View: %@",NSStringFromCGRect(self.sideSwipeView.frame));
-    //[self removeSideSwipeView:NO];
-    //[self setupSideSwipeView];
-}
 
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-   // [self removeSideSwipeView:NO];
+    [self removeSideSwipeView:NO];
+    [self setupSideSwipeView];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
