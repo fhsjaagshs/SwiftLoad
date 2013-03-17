@@ -751,6 +751,18 @@
             cell.accessoryView.center = CGPointMake(297.5, (cell.bounds.size.height)/2);
             cell.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:20];
         }
+        
+        if (cell.gestureRecognizers.count == 0) {
+            UISwipeGestureRecognizer *rightSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeRight:)];
+            rightSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
+            [cell addGestureRecognizer:rightSwipeGestureRecognizer];
+            [rightSwipeGestureRecognizer release];
+            
+            UISwipeGestureRecognizer *leftSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeLeft:)];
+            leftSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
+            [cell addGestureRecognizer:leftSwipeGestureRecognizer];
+            [leftSwipeGestureRecognizer release];
+        }
     }
 
     if (self.editing && indexPath.row == self.filelist.count) {
@@ -759,7 +771,7 @@
         cell.editingAccessoryType = UITableViewCellAccessoryNone;
         
         for (UIGestureRecognizer *rec in cell.gestureRecognizers) {
-            [cell removeGestureRecognizer:rec];
+            rec.enabled = NO;
         }
     } else {
         NSString *filesObjectAtIndex = [self.filelist objectAtIndex:indexPath.row];
@@ -776,26 +788,17 @@
         }
         
         BOOL isDir;  
-        BOOL exists = [[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir];
 
-        if (exists && isDir) {
+        if ([[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir] && isDir) {
             cell.detailTextLabel.text = @"Directory";
             
             for (UIGestureRecognizer *rec in cell.gestureRecognizers) {
-                [cell removeGestureRecognizer:rec];
+                rec.enabled = NO;
             }
         } else {
             
-            if (cell.gestureRecognizers.count == 0) {
-                UISwipeGestureRecognizer *rightSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeRight:)];
-                rightSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
-                [cell addGestureRecognizer:rightSwipeGestureRecognizer];
-                [rightSwipeGestureRecognizer release];
-                
-                UISwipeGestureRecognizer *leftSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeLeft:)];
-                leftSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
-                [cell addGestureRecognizer:leftSwipeGestureRecognizer];
-                [leftSwipeGestureRecognizer release];
+            for (UIGestureRecognizer *rec in cell.gestureRecognizers) {
+                rec.enabled = YES;
             }
 
             NSString *detailText = [[[file pathExtension]lowercaseString]isEqualToString:@"zip"]?@"Archive, ":@"File, ";
@@ -803,10 +806,7 @@
             float fileSize = fileSize(file);
             
             if (fileSize < 1024.0) {
-                detailText = [detailText stringByAppendingFormat:@"%.0f Bytes",fileSize];
-                if (fileSize == 1) {
-                    detailText = [detailText substringToIndex:(detailText.length-1)];
-                }
+                detailText = [detailText stringByAppendingFormat:@"%.0f Byte%@",fileSize,(fileSize > 1)?@"s":@""];
             } else if (fileSize < (1024*1024) && fileSize > 1024.0 ) {
                 fileSize = fileSize/1014;
                 detailText = [detailText stringByAppendingFormat:@"%.0f KB",fileSize];
