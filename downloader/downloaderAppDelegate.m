@@ -9,6 +9,10 @@
 #import "downloaderAppDelegate.h"
 #import "HatchedView.h"
 
+NSString * getResource(NSString *raw) {
+    return [[NSBundle mainBundle]pathForResource:[raw stringByDeletingPathExtension] ofType:[raw pathExtension]];
+}
+
 float sanitizeMesurement(float measurement) {
     return ((measurement/460)*[[UIScreen mainScreen]applicationFrame].size.height);
 }

@@ -104,7 +104,7 @@
 		F1EB833D16D808AA009D7D2D /* bluetooth@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833216D808AA009D7D2D /* bluetooth@2x.png */; };
 		F1EB833E16D808AA009D7D2D /* config.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833316D808AA009D7D2D /* config.png */; };
 		F1EB833F16D808AA009D7D2D /* delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833416D808AA009D7D2D /* delete@2x.png */; };
-		F1EB834016D808AA009D7D2D /* dotted-pattern@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833516D808AA009D7D2D /* dotted-pattern@2x.png */; };
+		F1EB834016D808AA009D7D2D /* dotted-pattern.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833516D808AA009D7D2D /* dotted-pattern.png */; };
 		F1EB834116D808AA009D7D2D /* dropbox@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833616D808AA009D7D2D /* dropbox@2x.png */; };
 		F1EB834216D808AA009D7D2D /* ftp@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833716D808AA009D7D2D /* ftp@2x.png */; };
 		F1EB834316D808AA009D7D2D /* inner-shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833816D808AA009D7D2D /* inner-shadow.png */; };
@@ -310,7 +310,7 @@
 		F1EB833216D808AA009D7D2D /* bluetooth@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bluetooth@2x.png"; path = "Images/bluetooth@2x.png"; sourceTree = "<group>"; };
 		F1EB833316D808AA009D7D2D /* config.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = config.png; path = Images/config.png; sourceTree = "<group>"; };
 		F1EB833416D808AA009D7D2D /* delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "delete@2x.png"; path = "Images/delete@2x.png"; sourceTree = "<group>"; };
-		F1EB833516D808AA009D7D2D /* dotted-pattern@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "dotted-pattern@2x.png"; path = "Images/dotted-pattern@2x.png"; sourceTree = "<group>"; };
+		F1EB833516D808AA009D7D2D /* dotted-pattern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "dotted-pattern.png"; path = "Images/dotted-pattern.png"; sourceTree = "<group>"; };
 		F1EB833616D808AA009D7D2D /* dropbox@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "dropbox@2x.png"; path = "Images/dropbox@2x.png"; sourceTree = "<group>"; };
 		F1EB833716D808AA009D7D2D /* ftp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ftp@2x.png"; path = "Images/ftp@2x.png"; sourceTree = "<group>"; };
 		F1EB833816D808AA009D7D2D /* inner-shadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "inner-shadow.png"; path = "Images/inner-shadow.png"; sourceTree = "<group>"; };
@@ -700,7 +700,7 @@
 				F1EB833216D808AA009D7D2D /* bluetooth@2x.png */,
 				F1EB833316D808AA009D7D2D /* config.png */,
 				F1EB833416D808AA009D7D2D /* delete@2x.png */,
-				F1EB833516D808AA009D7D2D /* dotted-pattern@2x.png */,
+				F1EB833516D808AA009D7D2D /* dotted-pattern.png */,
 				F1EB833616D808AA009D7D2D /* dropbox@2x.png */,
 				F1EB833716D808AA009D7D2D /* ftp@2x.png */,
 				F1EB833816D808AA009D7D2D /* inner-shadow.png */,
@@ -802,7 +802,7 @@
 				F1EB833D16D808AA009D7D2D /* bluetooth@2x.png in Resources */,
 				F1EB833E16D808AA009D7D2D /* config.png in Resources */,
 				F1EB833F16D808AA009D7D2D /* delete@2x.png in Resources */,
-				F1EB834016D808AA009D7D2D /* dotted-pattern@2x.png in Resources */,
+				F1EB834016D808AA009D7D2D /* dotted-pattern.png in Resources */,
 				F1EB834116D808AA009D7D2D /* dropbox@2x.png in Resources */,
 				F1EB834216D808AA009D7D2D /* ftp@2x.png in Resources */,
 				F1EB834316D808AA009D7D2D /* inner-shadow.png in Resources */,

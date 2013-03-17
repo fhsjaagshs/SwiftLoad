@@ -87,7 +87,7 @@
     
     [kAppDelegate setManagerCurrentDir:kDocsDir];
     
-    animatingSideSwipe = NO;
+    self.animatingSideSwipe = NO;
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(copiedListChanged:) name:@"copiedlistchanged" object:nil];
 }
@@ -303,7 +303,7 @@
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
     
     [UIApplication sharedApplication].idleTimerDisabled = YES;
-    ZipFile *unzipFile = [[ZipFile alloc] initWithFileName:file mode:ZipFileModeUnzip];
+    ZipFile *unzipFile = [[ZipFile alloc]initWithFileName:file mode:ZipFileModeUnzip];
     NSArray *infos = [unzipFile listFileInZipInfos];
     
     MBProgressHUD *HUDZ = [kAppDelegate getVisibleHUD];
@@ -325,10 +325,9 @@
         [unzipFile locateFileInZip:info.name];
         NSString *dirOfZip = [file stringByDeletingLastPathComponent];
         NSString *writeLocation = [dirOfZip stringByAppendingPathComponent:info.name];
-        NSString *dash = [info.name substringFromIndex:[info.name length]-1];
-        BOOL hasSlash = [dash isEqualToString:@"/"];
+        NSString *slash = [info.name substringFromIndex:[info.name length]-1];
         
-        if (hasSlash) {
+        if ([slash isEqualToString:@"/"]) {
             [[NSFileManager defaultManager]createDirectoryAtPath:writeLocation withIntermediateDirectories:NO attributes:nil error:nil];
         } else {
             if (![[NSFileManager defaultManager]fileExistsAtPath:writeLocation]) {
@@ -1208,28 +1207,17 @@
 - (void)setupSideSwipeView {
 
     if (self.sideSwipeView == nil) {
-        UIView *selfSwipeViewTempAlloc = [[UIView alloc]initWithFrame:CGRectMake(self.theTableView.frame.origin.x, self.theTableView.frame.origin.y, self.theTableView.frame.size.width, self.theTableView.rowHeight)];
-        [self setSideSwipeView:selfSwipeViewTempAlloc];
-        [selfSwipeViewTempAlloc release];
-        
-        self.sideSwipeView.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
-        
-        UIImage *patternImage = [[UIImage alloc]initWithContentsOfFile:[[NSBundle mainBundle]pathForResource:@"dotted-pattern@2x" ofType:@"png"]];
-        CGImageRef patternCI = patternImage.CGImage;
-        UIImage *patternImageScaled = [[UIImage alloc]initWithCGImage:patternCI scale:2.0 orientation:UIImageOrientationUp];
-        [patternImage release];
-        self.sideSwipeView.backgroundColor = [UIColor colorWithPatternImage:patternImageScaled];
-        [patternImageScaled release];
-        
-        UIImage *shadowNonStretchedImage = [[UIImage alloc]initWithContentsOfFile:[[NSBundle mainBundle]pathForResource:@"inner-shadow" ofType:@"png"]];
-        UIImage *shadow = [shadowNonStretchedImage stretchableImageWithLeftCapWidth:0 topCapHeight:0];
-        
-        [shadowNonStretchedImage release];
-        
+        self.sideSwipeView = [[[UIView alloc]initWithFrame:CGRectMake(self.theTableView.frame.origin.x, self.theTableView.frame.origin.y, self.theTableView.frame.size.width, self.theTableView.rowHeight)]autorelease];
+        self.sideSwipeView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
+
+        CGImageRef patternCI = [UIImage imageWithContentsOfFile:getResource(@"dotted-pattern.png")].CGImage;
+        UIImage *patternImage = [UIImage imageWithCGImage:patternCI scale:2.0 orientation:UIImageOrientationUp];
+        self.sideSwipeView.backgroundColor = [UIColor colorWithPatternImage:patternImage];
+
         UIImageView *shadowImageView = [[UIImageView alloc]initWithFrame:self.sideSwipeView.bounds];
         shadowImageView.alpha = 0.6;
-        shadowImageView.image = shadow;
-        shadowImageView.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        shadowImageView.image = [[UIImage imageWithContentsOfFile:getResource(@"inner-shadow.png")]stretchableImageWithLeftCapWidth:0 topCapHeight:0];
+        shadowImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         [self.sideSwipeView addSubview:shadowImageView];
         [shadowImageView release];
         
@@ -1237,7 +1225,7 @@
         rightSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
         [self.sideSwipeView addGestureRecognizer:rightSwipeGestureRecognizer];
         [rightSwipeGestureRecognizer release];
-        
+
         UISwipeGestureRecognizer *leftSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeLeft:)];
         leftSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
         [self.sideSwipeView addGestureRecognizer:leftSwipeGestureRecognizer];
@@ -1333,8 +1321,7 @@
         
         [self removeSideSwipeView:NO];
         
-        if (cell != self.sideSwipeCell && !animatingSideSwipe) {
-            [self setSideSwipeCell:cell];
+        if (cell != self.sideSwipeCell && !self.animatingSideSwipe) {
             [self setupSideSwipeView];
             [self addSwipeViewTo:cell direction:direction];
         }
@@ -1345,25 +1332,17 @@
     CGRect cellFrame = cell.frame;
     
     [self setSideSwipeCell:cell];
-    self.sideSwipeView.frame = cellFrame;
-    [self.theTableView insertSubview:sideSwipeView belowSubview:cell];
+    self.sideSwipeView.frame = CGRectMake(0, cellFrame.origin.y, cellFrame.size.width, cellFrame.size.height);
+    [self.theTableView insertSubview:self.sideSwipeView belowSubview:cell];
     self.sideSwipeDirection = direction;
     
-    self.sideSwipeView.frame = CGRectMake(0, cellFrame.origin.y, cellFrame.size.width, cellFrame.size.height);
+    self.animatingSideSwipe = YES;
     
-    animatingSideSwipe = YES;
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.2];
-    [UIView setAnimationDelegate:self];
-    [UIView setAnimationDidStopSelector:@selector(animationDidStopAddingSwipeView:finished:context:)];
-
-    cell.frame = CGRectMake(direction == UISwipeGestureRecognizerDirectionRight ? cellFrame.size.width : -cellFrame.size.width, cellFrame.origin.y, cellFrame.size.width, cellFrame.size.height);
-    
-    [UIView commitAnimations];
-}
-
-- (void)animationDidStopAddingSwipeView:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
-    animatingSideSwipe = NO;
+    [UIView animateWithDuration:0.2 animations:^{
+        cell.frame = CGRectMake(direction == UISwipeGestureRecognizerDirectionRight?cellFrame.size.width:-cellFrame.size.width, cellFrame.origin.y, cellFrame.size.width, cellFrame.size.height);
+    } completion:^(BOOL finished) {
+        self.animatingSideSwipe = NO;
+    }];
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -1382,7 +1361,7 @@
 
 - (void)removeSideSwipeView:(BOOL)animated {
     
-    if (animatingSideSwipe) {
+    if (self.animatingSideSwipe) {
         return;
     }
     
@@ -1394,20 +1373,41 @@
         return;
     }
     
+    NSLog(@"removed");
+    
     if (animated) {
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.2];
-        if (self.sideSwipeDirection == UISwipeGestureRecognizerDirectionRight) {
-            self.sideSwipeCell.frame = CGRectMake(BOUNCE_PIXELS, self.sideSwipeCell.frame.origin.y, self.sideSwipeCell.frame.size.width, self.sideSwipeCell.frame.size.height);
-        } else {
-            self.sideSwipeCell.frame = CGRectMake(-BOUNCE_PIXELS, self.sideSwipeCell.frame.origin.y, self.sideSwipeCell.frame.size.width, self.sideSwipeCell.frame.size.height);
-        }
-        animatingSideSwipe = YES;
-        [UIView setAnimationDelegate:self];
-        [UIView setAnimationDidStopSelector:@selector(animationDidStopOne:finished:context:)];
-        [UIView commitAnimations];
+        
+        [UIView animateWithDuration:0.2 animations:^{
+            if (self.sideSwipeDirection == UISwipeGestureRecognizerDirectionRight) {
+                self.sideSwipeCell.frame = CGRectMake(BOUNCE_PIXELS, self.sideSwipeCell.frame.origin.y, self.sideSwipeCell.frame.size.width, self.sideSwipeCell.frame.size.height);
+            } else {
+                self.sideSwipeCell.frame = CGRectMake(-BOUNCE_PIXELS, self.sideSwipeCell.frame.origin.y, self.sideSwipeCell.frame.size.width, self.sideSwipeCell.frame.size.height);
+            }
+            self.animatingSideSwipe = YES;
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.2 animations:^{
+                if (self.sideSwipeDirection == UISwipeGestureRecognizerDirectionRight) {
+                    self.sideSwipeCell.frame = CGRectMake(BOUNCE_PIXELS*2, self.sideSwipeCell.frame.origin.y, self.sideSwipeCell.frame.size.width, self.sideSwipeCell.frame.size.height);
+                } else {
+                    self.sideSwipeCell.frame = CGRectMake(-BOUNCE_PIXELS*2, self.sideSwipeCell.frame.origin.y, self.sideSwipeCell.frame.size.width, self.sideSwipeCell.frame.size.height);
+                }
+            } completion:^(BOOL finished) {
+                [UIView animateWithDuration:0.2 animations:^{
+                    if (self.sideSwipeDirection == UISwipeGestureRecognizerDirectionRight) {
+                        self.sideSwipeCell.frame = CGRectMake(0, self.sideSwipeCell.frame.origin.y, self.sideSwipeCell.frame.size.width, self.sideSwipeCell.frame.size.height);
+                    } else {
+                        self.sideSwipeCell.frame = CGRectMake(0, self.sideSwipeCell.frame.origin.y, self.sideSwipeCell.frame.size.width, self.sideSwipeCell.frame.size.height);
+                    }
+                } completion:^(BOOL finished) {
+                    [UIView animateWithDuration:0.2 animations:^{
+                        self.animatingSideSwipe = NO;
+                        [self removeSideSwipeView:NO];
+                    } completion:nil];
+                }];
+            }];
+        }];
     } else {
-        animatingSideSwipe = NO;
+        self.animatingSideSwipe = NO;
         
         if (self.sideSwipeView.superview != nil) {
             [self.sideSwipeView removeFromSuperview];
@@ -1420,40 +1420,6 @@
             [self setSideSwipeCell:nil];
         }
     }
-}
-
-- (void)animationDidStopOne:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.2];
-    if (self.sideSwipeDirection == UISwipeGestureRecognizerDirectionRight) {
-        self.sideSwipeCell.frame = CGRectMake(BOUNCE_PIXELS*2, self.sideSwipeCell.frame.origin.y, self.sideSwipeCell.frame.size.width, self.sideSwipeCell.frame.size.height);
-    } else {
-        self.sideSwipeCell.frame = CGRectMake(-BOUNCE_PIXELS*2, self.sideSwipeCell.frame.origin.y, self.sideSwipeCell.frame.size.width, self.sideSwipeCell.frame.size.height);
-    }
-    [UIView setAnimationDelegate:self];
-    [UIView setAnimationDidStopSelector:@selector(animationDidStopTwo:finished:context:)];
-    [UIView setAnimationCurve:UIViewAnimationCurveLinear];
-    [UIView commitAnimations];
-}
-
-- (void)animationDidStopTwo:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
-    [UIView commitAnimations];
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.2];
-    if (self.sideSwipeDirection == UISwipeGestureRecognizerDirectionRight) {
-        self.sideSwipeCell.frame = CGRectMake(0, self.sideSwipeCell.frame.origin.y, self.sideSwipeCell.frame.size.width, self.sideSwipeCell.frame.size.height);
-    } else {
-        self.sideSwipeCell.frame = CGRectMake(0, self.sideSwipeCell.frame.origin.y, self.sideSwipeCell.frame.size.width, self.sideSwipeCell.frame.size.height);
-    }
-    [UIView setAnimationDelegate:self];
-    [UIView setAnimationDidStopSelector:@selector(animationDidStopThree:finished:context:)];
-    [UIView setAnimationCurve:UIViewAnimationCurveLinear];
-    [UIView commitAnimations];
-}
-
-- (void)animationDidStopThree:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
-    animatingSideSwipe = NO;
-    [self removeSideSwipeView:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -1485,12 +1451,14 @@
             [view setNeedsDisplay];
         }
     }
-    [self removeSideSwipeView:NO];
-    [self setupSideSwipeView];
+    NSLog(@"Cell: %@",NSStringFromCGRect(self.sideSwipeCell.frame));
+    NSLog(@"View: %@",NSStringFromCGRect(self.sideSwipeView.frame));
+    //[self removeSideSwipeView:NO];
+    //[self setupSideSwipeView];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-    [self removeSideSwipeView:NO];
+   // [self removeSideSwipeView:NO];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {

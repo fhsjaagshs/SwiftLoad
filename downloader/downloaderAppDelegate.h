@@ -16,6 +16,7 @@
 #define KILL_TIMER(q) if (q) {[q invalidate]; q=nil;}
 #define myCyan [UIColor colorWithRed:46.0f/255.0f green:1.0f blue:1.0f alpha:1.0f]
 
+NSString * getResource(NSString *raw);
 float sanitizeMesurement(float measurement);
 NSString * getNonConflictingFilePathForPath(NSString *path);
 void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID inPropertyID, UInt32 inPropertyValueSize, const void *inPropertyValue);
