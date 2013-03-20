@@ -285,11 +285,8 @@
 }
 
 - (void)reindexFilelist {
-    if (self.filelist == nil) {
-        [self setFilelist:[NSMutableArray array]];
-    }
-    
     if (self.filelist.count == 0) {
+        [self setFilelist:[NSMutableArray array]];
         [self.filelist addObjectsFromArray:[[[NSFileManager defaultManager]contentsOfDirectoryAtPath:[kAppDelegate managerCurrentDir] error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)]];
     }
 }
@@ -777,6 +774,8 @@
         NSString *filesObjectAtIndex = [self.filelist objectAtIndex:indexPath.row];
         NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:filesObjectAtIndex];
 
+        BOOL shouldntCalcFilesize = [cell.textLabel.text isEqualToString:filesObjectAtIndex];
+        
         cell.textLabel.text = filesObjectAtIndex;
         
         [self verifyProspectiveCopyList];
@@ -800,21 +799,23 @@
             for (UIGestureRecognizer *rec in cell.gestureRecognizers) {
                 rec.enabled = YES;
             }
-
-            NSString *detailText = [[[file pathExtension]lowercaseString]isEqualToString:@"zip"]?@"Archive, ":@"File, ";
             
-            float fileSize = fileSize(file);
-            
-            if (fileSize < 1024.0) {
-                detailText = [detailText stringByAppendingFormat:@"%.0f Byte%@",fileSize,(fileSize > 1)?@"s":@""];
-            } else if (fileSize < (1024*1024) && fileSize > 1024.0 ) {
-                fileSize = fileSize/1014;
-                detailText = [detailText stringByAppendingFormat:@"%.0f KB",fileSize];
-            } else if (fileSize < (1024*1024*1024) && fileSize > (1024*1024)) {
-                fileSize = fileSize/(1024*1024);
-                detailText = [detailText stringByAppendingFormat:@"%.0f MB",fileSize];
+            if (!shouldntCalcFilesize) {
+                NSString *detailText = [[[file pathExtension]lowercaseString]isEqualToString:@"zip"]?@"Archive, ":@"File, ";
+                
+                float fileSize = fileSize(file);
+                
+                if (fileSize < 1024.0) {
+                    detailText = [detailText stringByAppendingFormat:@"%.0f Byte%@",fileSize,(fileSize > 1)?@"s":@""];
+                } else if (fileSize < (1024*1024) && fileSize > 1024.0 ) {
+                    fileSize = fileSize/1014;
+                    detailText = [detailText stringByAppendingFormat:@"%.0f KB",fileSize];
+                } else if (fileSize < (1024*1024*1024) && fileSize > (1024*1024)) {
+                    fileSize = fileSize/(1024*1024);
+                    detailText = [detailText stringByAppendingFormat:@"%.0f MB",fileSize];
+                }
+                cell.detailTextLabel.text = detailText;
             }
-            cell.detailTextLabel.text = detailText;
         }
     }
     return cell;
@@ -932,8 +933,7 @@
             detail.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
             [self presentModalViewController:detail animated:YES];
         } else {
-            NSString *fileName = [file lastPathComponent];
-            NSString *message = [NSString stringWithFormat:@"SwiftLoad cannot identify:\n%@\nPlease select what viewer to open it in.",fileName];
+            NSString *message = [NSString stringWithFormat:@"SwiftLoad cannot identify:\n%@\nPlease select what viewer to open it in.",file.lastPathComponent];
             
             UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
                 [self actionSheetAction:actionSheet buttonIndex:buttonIndex];
@@ -949,15 +949,13 @@
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *name = [self.theTableView cellForRowAtIndexPath:indexPath].textLabel.text;
-    NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:name];
-    
     if (self.editing) {
         return YES;
     } else {
+        [self reindexFilelist];
+        NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:[self.filelist objectAtIndex:indexPath.row]];
         BOOL isDir;
-        [[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir];
-        return isDir;
+        return ([[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir] && isDir);
     }
 }
 
@@ -1217,12 +1215,16 @@
         button.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
 
         UIImage *buttonImage = nil;
-
+        UIImage *startImage = [UIImage imageWithContentsOfFile:getResource([buttonInfo objectForKey:@"image"])];
+        
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            UIImage *startImage = [UIImage imageWithContentsOfFile:getResource([buttonInfo objectForKey:@"image"])];
             buttonImage = [UIImage imageWithImage:startImage scaledToSize:CGSizeMake(startImage.size.width*1.5, startImage.size.height*1.5)];
         } else {
-            buttonImage = [UIImage imageWithContentsOfFile:getResource([buttonInfo objectForKey:@"image"])];
+            if ([[UIScreen mainScreen]scale] == 2) {
+                buttonImage = startImage;
+            } else {
+                buttonImage = [UIImage imageWithImage:startImage scaledToSize:CGSizeMake(startImage.size.width*0.5, startImage.size.height*0.5)];
+            }
         }
 
         button.frame = CGRectMake([buttonData indexOfObject:buttonInfo]*((self.sideSwipeView.bounds.size.width)/buttonData.count), 0, ((self.sideSwipeView.bounds.size.width)/buttonData.count), self.sideSwipeView.bounds.size.height);
