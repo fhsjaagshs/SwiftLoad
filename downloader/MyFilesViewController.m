@@ -771,7 +771,7 @@
         NSString *filesObjectAtIndex = [self.filelist objectAtIndex:indexPath.row];
         NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:filesObjectAtIndex];
 
-        BOOL shouldntCalcFilesize = [cell.textLabel.text isEqualToString:filesObjectAtIndex];
+        BOOL isTheSame = [cell.textLabel.text isEqualToString:filesObjectAtIndex];
         
         cell.textLabel.text = filesObjectAtIndex;
         
@@ -797,7 +797,7 @@
                 rec.enabled = YES;
             }
             
-            if (!shouldntCalcFilesize) {
+            if (!isTheSame) {
                 NSString *detailText = [[[file pathExtension]lowercaseString]isEqualToString:@"zip"]?@"Archive, ":@"File, ";
                 
                 float fileSize = fileSize(file);
