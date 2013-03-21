@@ -997,20 +997,23 @@
             UITableViewCell *cell = [self.theTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
             [cell setEditing:YES animated:YES];
         }
-        
-        
     }
     [self updateCopyButtonState];
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *textLabel = [self.theTableView cellForRowAtIndexPath:indexPath].textLabel.text;
-    NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:textLabel];
     
-    BOOL isDir;
-    [[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir];
-    
-    if (!self.theTableView.editing || !indexPath) {
+    if (!indexPath) {
+        return UITableViewCellEditingStyleNone;
+    } else if (!self.theTableView.editing) {
+        
+        [self reindexFilelist];
+        
+        NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:[self.filelist objectAtIndex:indexPath.row]];
+        
+        BOOL isDir;
+        [[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir];
+        
         if (isDir) {
             [self removeSideSwipeView:YES];
             return UITableViewCellEditingStyleDelete;
@@ -1018,7 +1021,6 @@
             return UITableViewCellEditingStyleNone;
         }
     } else if (self.theTableView.editing) {
-        [self reindexFilelist];
         if (indexPath.row == self.filelist.count) {
             return UITableViewCellEditingStyleInsert;
         }
@@ -1175,11 +1177,11 @@
     if (self.sideSwipeView == nil) {
         self.sideSwipeView = [[[UIView alloc]initWithFrame:CGRectMake(self.theTableView.frame.origin.x, self.theTableView.frame.origin.y, self.theTableView.frame.size.width, self.theTableView.rowHeight)]autorelease];
         self.sideSwipeView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
-
+        
         CGImageRef patternCI = [UIImage imageWithContentsOfFile:getResource(@"dotted-pattern.png")].CGImage;
         UIImage *patternImage = [UIImage imageWithCGImage:patternCI scale:2.0 orientation:UIImageOrientationUp];
         self.sideSwipeView.backgroundColor = [UIColor colorWithPatternImage:patternImage];
-
+        
         UIImageView *shadowImageView = [[UIImageView alloc]initWithFrame:self.sideSwipeView.bounds];
         shadowImageView.alpha = 0.6;
         shadowImageView.image = [[UIImage imageWithContentsOfFile:getResource(@"inner-shadow.png")]stretchableImageWithLeftCapWidth:0 topCapHeight:0];
@@ -1197,51 +1199,55 @@
         [self.sideSwipeView addGestureRecognizer:leftSwipeGestureRecognizer];
         [leftSwipeGestureRecognizer release];
     }
-
+    
+    BOOL shouldAddButtons = YES;
+    
     for (UIView *view in self.sideSwipeView.subviews) {
-        if (![view isKindOfClass:[UIImageView class]]) {
-            [view removeFromSuperview];
+        if ([view isKindOfClass:[UIButton class]]) {
+            shouldAddButtons = NO;
+            break;
         }
     }
-
-    NSMutableArray *buttonData = [[NSMutableArray alloc]initWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"Action", @"title", @"action.png", @"image", nil], [NSDictionary dictionaryWithObjectsAndKeys:@"FTP", @"title", @"dropbox.png", @"image", nil], [NSDictionary dictionaryWithObjectsAndKeys:@"Bluetooth", @"title", @"bluetooth.png", @"image", nil], [NSDictionary dictionaryWithObjectsAndKeys:@"Email", @"title", @"paperclip.png", @"image", nil], [NSDictionary dictionaryWithObjectsAndKeys:@"Delete", @"title", @"delete.png", @"image", nil], nil];
     
-    NSString *filePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:self.sideSwipeCell.textLabel.text];
-    if ([filePath isEqualToString:[kAppDelegate nowPlayingFile]]) {
-        [buttonData removeObject:buttonData.lastObject];
-    }
-    
-    for (NSDictionary *buttonInfo in buttonData) {
-        UIButton *button = [[UIButton alloc]init];
-        button.layer.backgroundColor = [UIColor clearColor].CGColor;
-        button.layer.borderColor = [UIColor clearColor].CGColor;
-        button.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
-
-        UIImage *buttonImage = nil;
-        UIImage *startImage = [UIImage imageWithContentsOfFile:getResource([buttonInfo objectForKey:@"image"])];
+    if (shouldAddButtons) {
+        NSMutableArray *buttonData = [NSMutableArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"Action", @"title", @"action.png", @"image", nil], [NSDictionary dictionaryWithObjectsAndKeys:@"FTP", @"title", @"dropbox.png", @"image", nil], [NSDictionary dictionaryWithObjectsAndKeys:@"Bluetooth", @"title", @"bluetooth.png", @"image", nil], [NSDictionary dictionaryWithObjectsAndKeys:@"Email", @"title", @"paperclip.png", @"image", nil], [NSDictionary dictionaryWithObjectsAndKeys:@"Delete", @"title", @"delete.png", @"image", nil], nil];
         
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            buttonImage = [UIImage imageWithImage:startImage scaledToSize:CGSizeMake(startImage.size.width*1.5, startImage.size.height*1.5)];
-        } else {
-            if ([[UIScreen mainScreen]scale] == 2) {
-                buttonImage = startImage;
+        NSString *filePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:self.sideSwipeCell.textLabel.text];
+        
+        if ([filePath isEqualToString:[kAppDelegate nowPlayingFile]]) {
+            [buttonData removeObject:buttonData.lastObject];
+        }
+        
+        for (NSDictionary *buttonInfo in buttonData) {
+            UIButton *button = [[UIButton alloc]init];
+            button.layer.backgroundColor = [UIColor clearColor].CGColor;
+            button.layer.borderColor = [UIColor clearColor].CGColor;
+            button.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
+            
+            UIImage *buttonImage = nil;
+            UIImage *startImage = [UIImage imageWithContentsOfFile:getResource([buttonInfo objectForKey:@"image"])];
+            
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+                buttonImage = [UIImage imageWithImage:startImage scaledToSize:CGSizeMake(startImage.size.width*1.5, startImage.size.height*1.5)];
             } else {
-                buttonImage = [UIImage imageWithImage:startImage scaledToSize:CGSizeMake(startImage.size.width*0.5, startImage.size.height*0.5)];
+                if ([[UIScreen mainScreen]scale] == 2) {
+                    buttonImage = startImage;
+                } else {
+                    buttonImage = [UIImage imageWithImage:startImage scaledToSize:CGSizeMake(startImage.size.width*0.5, startImage.size.height*0.5)];
+                }
             }
+            
+            button.frame = CGRectMake([buttonData indexOfObject:buttonInfo]*((self.sideSwipeView.bounds.size.width)/buttonData.count), 0, ((self.sideSwipeView.bounds.size.width)/buttonData.count), self.sideSwipeView.bounds.size.height);
+            
+            UIImage *grayImage = [self imageFilledWith:[UIColor colorWithWhite:0.9 alpha:1.0] using:buttonImage];
+            [button setImage:grayImage forState:UIControlStateNormal];
+            [button setTag:[buttonData indexOfObject:buttonInfo]+1];
+            [button addTarget:self action:@selector(touchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
+            button.imageEdgeInsets = UIEdgeInsetsZero;
+            [self.sideSwipeView addSubview:button];
+            [button release];
         }
-
-        button.frame = CGRectMake([buttonData indexOfObject:buttonInfo]*((self.sideSwipeView.bounds.size.width)/buttonData.count), 0, ((self.sideSwipeView.bounds.size.width)/buttonData.count), self.sideSwipeView.bounds.size.height);
-        
-        UIImage *grayImage = [self imageFilledWith:[UIColor colorWithWhite:0.9 alpha:1.0] using:buttonImage];
-        [button setImage:grayImage forState:UIControlStateNormal];
-        [button setTag:[buttonData indexOfObject:buttonInfo]+1];
-        [button addTarget:self action:@selector(touchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
-        button.imageEdgeInsets = UIEdgeInsetsZero;
-        [self.sideSwipeView addSubview:button];
-        [button release];
     }
-    
-    [buttonData release];
 }
 
 - (UIImage *)imageFilledWith:(UIColor *)color using:(UIImage *)startImage {
