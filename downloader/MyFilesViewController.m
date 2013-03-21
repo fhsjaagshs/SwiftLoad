@@ -573,7 +573,12 @@
 
 - (void)showFileCreationAlertView {
     if (!self.av) {
-        self.av = [[[CustomAlertView alloc]initWithTitle:@"Create File or Directory" message:@"\n\n\n\n" delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:nil]autorelease];
+        self.av = [[[CustomAlertView alloc]initWithTitle:@"Create File or Directory" message:@"\n\n\n\n" completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
+            
+            [self setAv:nil];
+            
+        } cancelButtonTitle:@"Cancel" otherButtonTitles:nil]autorelease];
+       // self.av = [[[CustomAlertView alloc]initWithTitle:@"Create File or Directory" message:@"\n\n\n\n" delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:nil]autorelease];
         
         CustomButton *createFile = [[CustomButton alloc]initWithFrame:CGRectMake(12, 90, 126, 37)];
         [createFile setTitle:@"File" forState:UIControlStateNormal];
@@ -593,18 +598,21 @@
         [createDir setBackgroundColor:[UIColor clearColor]];
         createDir.titleLabel.shadowOffset = CGSizeMake(0, -1);
         
-        self.tv = [[[CustomTextField alloc]initWithFrame:CGRectMake(43, 48, 200, 31)]autorelease];
-        self.tv.keyboardAppearance = UIKeyboardAppearanceAlert;
-        self.tv.borderStyle = UITextBorderStyleBezel;
-        self.tv.backgroundColor = [UIColor clearColor];
-        self.tv.returnKeyType = UIReturnKeyDone;
-        self.tv.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        self.tv.autocorrectionType = UITextAutocorrectionTypeNo;
-        self.tv.placeholder = @"File/Directory Name";
-        self.tv.font = [UIFont boldSystemFontOfSize:18];
-        self.tv.adjustsFontSizeToFitWidth = YES;
-        self.tv.clearButtonMode = UITextFieldViewModeWhileEditing;
-        [self.tv addTarget:self.tv action:@selector(resignFirstResponder) forControlEvents:UIControlEventEditingDidEndOnExit];
+        if (!self.tv) {
+            self.tv = [[[CustomTextField alloc]initWithFrame:CGRectMake(43, 48, 200, 31)]autorelease];
+            self.tv.keyboardAppearance = UIKeyboardAppearanceAlert;
+            self.tv.borderStyle = UITextBorderStyleBezel;
+            self.tv.backgroundColor = [UIColor clearColor];
+            self.tv.returnKeyType = UIReturnKeyDone;
+            self.tv.autocapitalizationType = UITextAutocapitalizationTypeNone;
+            self.tv.autocorrectionType = UITextAutocorrectionTypeNo;
+            self.tv.placeholder = @"File/Directory Name";
+            self.tv.font = [UIFont boldSystemFontOfSize:18];
+            self.tv.adjustsFontSizeToFitWidth = YES;
+            self.tv.clearButtonMode = UITextFieldViewModeWhileEditing;
+            [self.tv addTarget:self.tv action:@selector(resignFirstResponder) forControlEvents:UIControlEventEditingDidEndOnExit];
+        }
+        self.tv.text = @"";
         
         [self.av addSubview:createFile];
         [self.av addSubview:createDir];
@@ -823,9 +831,8 @@
     downloaderAppDelegate *ad = kAppDelegate;
     UITableViewCell *cell = [self.theTableView cellForRowAtIndexPath:indexPath];
     int cellCount = [self.theTableView numberOfRowsInSection:0];
-    
-    NSString *cellName = cell.textLabel.text;
-    NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:cellName];
+
+    NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:cell.textLabel.text];
     ad.openFile = file;
 
     BOOL isDir;
@@ -866,7 +873,7 @@
         
         [self verifyCopiedList];
         
-        UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@",cellName] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+        UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@",cell.textLabel.text] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             
             NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
             
@@ -1051,6 +1058,7 @@
     [[NSFileManager defaultManager]createFileAtPath:thingToBeCreated contents:nil attributes:nil];
     [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
     [self.av dismissWithClickedButtonIndex:0 animated:YES];
+    [self setAv:nil];
 }
 
 - (void)createTheDir {
@@ -1062,6 +1070,7 @@
     [[NSFileManager defaultManager]createDirectoryAtPath:thingToBeCreated withIntermediateDirectories:NO attributes:nil error:nil];
     [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
     [self.av dismissWithClickedButtonIndex:0 animated:YES];
+    [self setAv:nil];
 }
 
 - (void)actionSheetAction:(UIActionSheet *)actionSheet buttonIndex:(int)buttonIndex {
