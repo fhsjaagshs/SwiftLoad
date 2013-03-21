@@ -10,8 +10,6 @@
 #import "ShadowedTableView.h"
 
 @interface MyFilesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, PullToRefreshViewDelegate, UITextFieldDelegate, UIDocumentInteractionControllerDelegate> {
-    CustomAlertView *av;
-    CustomTextField *tv;
     float totalProgress;
 }
 
@@ -19,6 +17,10 @@
 @property (nonatomic, retain) NSMutableArray *copiedList;
 @property (nonatomic, retain) NSMutableArray *perspectiveCopiedList;
 @property (nonatomic, assign) BOOL isCut;
+
+// File/Dir creation
+@property (nonatomic, retain) CustomAlertView *av;
+@property (nonatomic, retain) CustomTextField *tv;
 
 @property (nonatomic, retain) UIDocumentInteractionController *docController;
 
