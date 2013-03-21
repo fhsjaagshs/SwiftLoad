@@ -559,16 +559,15 @@
     
     // WUT?
     
-    int totalIndex = [self.theTableView numberOfSections]-1;
+   /* int totalIndex = [self.theTableView numberOfSections]-1; // always equal 0...
     
     for (int i = 0; i <= totalIndex; i++) {
-        [[self.theTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]]setEditingAccessoryType:UITableViewCellAccessoryNone];
-    }
+        [[self.theTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]]setEditingAccessoryType:UITableViewCellAccessoryNone]; // only called on the first cell.
+    }*/
     
     [self refreshTableViewWithAnimation:UITableViewRowAnimationNone];
 
     [UIApplication sharedApplication].idleTimerDisabled = NO;
-    
     [pool release];
 }
 
@@ -1413,6 +1412,7 @@
     for (UIView *view in self.view.subviews) {
         if ([view isKindOfClass:[ButtonBarView class]]) {
             [view setNeedsDisplay];
+            break;
         }
     }
 
