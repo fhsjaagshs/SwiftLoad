@@ -13,6 +13,7 @@
 #define kDocsDir [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 #define kLibDir [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 #define fileSize(file) (float)[[[NSFileManager defaultManager]attributesOfItemAtPath:file error:nil]fileSize]
+#define fileDate(file) [[[NSFileManager defaultManager]attributesOfFileSystemForPath:file error:nil]fileCreationDate]
 #define KILL_TIMER(q) if (q) {[q invalidate]; q=nil;}
 #define myCyan [UIColor colorWithRed:46.0f/255.0f green:1.0f blue:1.0f alpha:1.0f]
 

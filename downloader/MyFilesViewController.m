@@ -388,17 +388,11 @@
     BOOL isDirMe;    
     [[NSFileManager defaultManager]fileExistsAtPath:theFile isDirectory:&isDirMe];
     
-    ZipFile *zipFile = nil;
-    
-    if (fileSize(file) == 0) {
-        zipFile = [[ZipFile alloc]initWithFileName:file mode:ZipFileModeCreate];
-    } else {
-        zipFile = [[ZipFile alloc]initWithFileName:file mode:ZipFileModeAppend];
-    }
+    ZipFile *zipFile = [[ZipFile alloc]initWithFileName:file mode:(fileSize(file) == 0)?ZipFileModeCreate:ZipFileModeAppend];
 
     if (!isDirMe) {
         
-        ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:[theFile lastPathComponent] fileDate:[NSDate dateWithTimeIntervalSinceNow:-86400.0] compressionLevel:ZipCompressionLevelBest];
+        ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:[theFile lastPathComponent] fileDate:fileDate(file)/*[NSDate dateWithTimeIntervalSinceNow:-86400.0]*/ compressionLevel:ZipCompressionLevelBest];
         
         NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:theFile];
         
@@ -423,14 +417,12 @@
         
         NSString *origDir = [theFile lastPathComponent];
         NSString *dash = [origDir substringFromIndex:[origDir length]-1];
-            
-        BOOL hasSlash = [dash isEqualToString:@"/"];
-            
-        if (!hasSlash) {
+        
+        if (![dash isEqualToString:@"/"]) {
             origDir = [origDir stringByAppendingString:@"/"];
         }
         
-        ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:origDir fileDate:[NSDate dateWithTimeIntervalSinceNow:-86400.0] compressionLevel:ZipCompressionLevelBest];
+        ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:origDir fileDate:fileDate(theFile)/*[NSDate dateWithTimeIntervalSinceNow:-86400.0]*/ compressionLevel:ZipCompressionLevelBest];
         
         NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:theFile];
         
@@ -495,14 +487,12 @@
                 NSString *dirRelative = [dir stringByReplacingOccurrencesOfString:[currentDir stringByAppendingString:@"/"]withString:@""]; // gets current directory in zip
             
                 NSString *asdfasdf = [dirRelative substringFromIndex:[dirRelative length]-1];
-            
-                BOOL DRHasSlashAtEnd = [asdfasdf isEqualToString:@"/"];
-            
-                if (!DRHasSlashAtEnd) {
+
+                if (![asdfasdf isEqualToString:@"/"]) {
                     dirRelative = [dirRelative stringByAppendingString:@"/"];
                 }
 
-                ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:dirRelative fileDate:[NSDate dateWithTimeIntervalSinceNow:-86400.0] compressionLevel:ZipCompressionLevelBest];
+                ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:dirRelative fileDate:fileDate(dir)/*[NSDate dateWithTimeIntervalSinceNow:-86400.0]*/ compressionLevel:ZipCompressionLevelBest];
                 [stream1 writeData:[NSData dataWithContentsOfFile:dir]]; // okay not to chunk
                 [stream1 finishedWriting];
                 
@@ -519,8 +509,10 @@
                         [holdingArray addObject:lolz];
                     } else {
                         NSString *nameOfFile = [dirRelative stringByAppendingPathComponent:stringy];
-                        ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:nameOfFile fileDate:[NSDate dateWithTimeIntervalSinceNow:-86400.0] compressionLevel:ZipCompressionLevelBest]; 
+                        ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:nameOfFile fileDate:/*[NSDate dateWithTimeIntervalSinceNow:-86400.0]*/fileDate(lolz) compressionLevel:ZipCompressionLevelBest];
                     
+                        [[[NSFileManager defaultManager]attributesOfFileSystemForPath:lolz error:nil]fileCreationDate];
+                        
                         NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:lolz];
                         
                         do {
@@ -557,14 +549,6 @@
     [zipFile close];
     [zipFile release];
     
-    // WUT?
-    
-   /* int totalIndex = [self.theTableView numberOfSections]-1; // always equal 0...
-    
-    for (int i = 0; i <= totalIndex; i++) {
-        [[self.theTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]]setEditingAccessoryType:UITableViewCellAccessoryNone]; // only called on the first cell.
-    }*/
-    
     [self refreshTableViewWithAnimation:UITableViewRowAnimationNone];
 
     [UIApplication sharedApplication].idleTimerDisabled = NO;
@@ -572,54 +556,43 @@
 }
 
 - (void)showFileCreationAlertView {
-    if (!self.av) {
-        self.av = [[[CustomAlertView alloc]initWithTitle:@"Create File or Directory" message:@"\n\n\n\n" completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
-            
-            [self setAv:nil];
-            
-        } cancelButtonTitle:@"Cancel" otherButtonTitles:nil]autorelease];
-       // self.av = [[[CustomAlertView alloc]initWithTitle:@"Create File or Directory" message:@"\n\n\n\n" delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:nil]autorelease];
-        
-        CustomButton *createFile = [[CustomButton alloc]initWithFrame:CGRectMake(12, 90, 126, 37)];
-        [createFile setTitle:@"File" forState:UIControlStateNormal];
-        [createFile addTarget:self action:@selector(createTheFile) forControlEvents:UIControlEventTouchUpInside];
-        [createFile setTitleColor:[UIColor whiteColor]forState:UIControlStateNormal];
-        createFile.titleLabel.font = [UIFont boldSystemFontOfSize:18];
-        [createFile setTitleShadowColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [createFile setBackgroundColor:[UIColor clearColor]];
-        createFile.titleLabel.shadowOffset = CGSizeMake(0, -1);
-        
-        CustomButton *createDir = [[CustomButton alloc]initWithFrame:CGRectMake(145, 90, 126, 37)];
-        [createDir setTitle:@"Directory" forState:UIControlStateNormal];
-        [createDir addTarget:self action:@selector(createTheDir) forControlEvents:UIControlEventTouchUpInside];
-        [createDir setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        createDir.titleLabel.font = [UIFont boldSystemFontOfSize:18];
-        [createDir setTitleShadowColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [createDir setBackgroundColor:[UIColor clearColor]];
-        createDir.titleLabel.shadowOffset = CGSizeMake(0, -1);
-        
-        if (!self.tv) {
-            self.tv = [[[CustomTextField alloc]initWithFrame:CGRectMake(43, 48, 200, 31)]autorelease];
-            self.tv.keyboardAppearance = UIKeyboardAppearanceAlert;
-            self.tv.borderStyle = UITextBorderStyleBezel;
-            self.tv.backgroundColor = [UIColor clearColor];
-            self.tv.returnKeyType = UIReturnKeyDone;
-            self.tv.autocapitalizationType = UITextAutocapitalizationTypeNone;
-            self.tv.autocorrectionType = UITextAutocorrectionTypeNo;
-            self.tv.placeholder = @"File/Directory Name";
-            self.tv.font = [UIFont boldSystemFontOfSize:18];
-            self.tv.adjustsFontSizeToFitWidth = YES;
-            self.tv.clearButtonMode = UITextFieldViewModeWhileEditing;
-            [self.tv addTarget:self.tv action:@selector(resignFirstResponder) forControlEvents:UIControlEventEditingDidEndOnExit];
-        }
-        self.tv.text = @"";
-        
-        [self.av addSubview:createFile];
-        [self.av addSubview:createDir];
-        [self.av addSubview:self.tv];
-        [createFile release];
-        [createDir release];
-    }
+    self.av = [[[CustomAlertView alloc]initWithTitle:@"Create File or Directory" message:@"\n\n\n\n" delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:nil]autorelease];
+    
+    CustomButton *createFile = [[CustomButton alloc]initWithFrame:CGRectMake(12, 90, 126, 37)];
+    [createFile setTitle:@"File" forState:UIControlStateNormal];
+    [createFile addTarget:self action:@selector(createTheFile) forControlEvents:UIControlEventTouchUpInside];
+    [createFile setTitleColor:[UIColor whiteColor]forState:UIControlStateNormal];
+    createFile.titleLabel.font = [UIFont boldSystemFontOfSize:18];
+    [createFile setTitleShadowColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [createFile setBackgroundColor:[UIColor clearColor]];
+    createFile.titleLabel.shadowOffset = CGSizeMake(0, -1);
+    
+    CustomButton *createDir = [[CustomButton alloc]initWithFrame:CGRectMake(145, 90, 126, 37)];
+    [createDir setTitle:@"Directory" forState:UIControlStateNormal];
+    [createDir addTarget:self action:@selector(createTheDir) forControlEvents:UIControlEventTouchUpInside];
+    [createDir setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    createDir.titleLabel.font = [UIFont boldSystemFontOfSize:18];
+    [createDir setTitleShadowColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [createDir setBackgroundColor:[UIColor clearColor]];
+    createDir.titleLabel.shadowOffset = CGSizeMake(0, -1);
+
+    self.tv = [[[CustomTextField alloc]initWithFrame:CGRectMake(43, 48, 200, 31)]autorelease];
+    self.tv.keyboardAppearance = UIKeyboardAppearanceAlert;
+    self.tv.borderStyle = UITextBorderStyleBezel;
+    self.tv.backgroundColor = [UIColor clearColor];
+    self.tv.returnKeyType = UIReturnKeyDone;
+    self.tv.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    self.tv.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.tv.placeholder = @"File/Directory Name";
+    self.tv.font = [UIFont boldSystemFontOfSize:18];
+    self.tv.adjustsFontSizeToFitWidth = YES;
+    [self.tv addTarget:self.tv action:@selector(resignFirstResponder) forControlEvents:UIControlEventEditingDidEndOnExit];
+    
+    [self.av addSubview:createFile];
+    [self.av addSubview:createDir];
+    [self.av addSubview:self.tv];
+    [createFile release];
+    [createDir release];
     [self.av show];
     [self.tv becomeFirstResponder];
 }
