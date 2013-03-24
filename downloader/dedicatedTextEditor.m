@@ -178,16 +178,7 @@
         } else if (buttonIndex == 1) {
             [kAppDelegate showBTController];
         } else if (buttonIndex == 2) {
-            if ([MFMessageComposeViewController canSendText]) {
-                MFMessageComposeViewController *controller = [[MFMessageComposeViewController alloc]init];
-                [controller setBody:[NSString stringWithContentsOfFile:file encoding:theEncoding error:nil]];
-                [self presentModalViewController:controller animated:YES];
-                [controller release];
-            } else {
-                CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Mail Unavailable" message:@"In order to use this functionality, you must set up an email account in Settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                [av show];
-                [av release];
-            }
+            [kAppDelegate sendStringAsSMS:[NSString stringWithContentsOfFile:file encoding:theEncoding error:nil] fromViewController:self];
         } else if (buttonIndex == 3) {
             [kAppDelegate showFTPUploadController];
         } else if (buttonIndex == 4) {

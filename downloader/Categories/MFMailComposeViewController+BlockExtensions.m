@@ -27,3 +27,23 @@
 }
 
 @end
+
+@implementation MFMessageComposeViewController (BlockExtensions)
+
+- (id)initWithCompletionHandler:(void (^)(MFMessageComposeViewController *controller, MessageComposeResult result))block {
+    self = [super init];
+    if (self) {
+        objc_setAssociatedObject(self, "blockCallbackMessage", [block copy], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        self.messageComposeDelegate = self;
+    }
+    return self;
+}
+
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result {
+    void (^block)(MFMessageComposeViewController *controller, MessageComposeResult result) = objc_getAssociatedObject(self, "blockCallbackMessage");
+    block(controller, result);
+    Block_release(block);
+}
+
+
+@end

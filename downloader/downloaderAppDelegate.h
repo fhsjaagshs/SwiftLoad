@@ -63,6 +63,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 // Emailing
 - (void)sendFileInEmail:(NSString *)file fromViewController:(UIViewController *)vc;
+- (void)sendStringAsSMS:(NSString *)string fromViewController:(UIViewController *)vc;
 
 // Audio Player
 @property (nonatomic, retain) NSString *nowPlayingFile;

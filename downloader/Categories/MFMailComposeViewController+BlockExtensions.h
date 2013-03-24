@@ -13,3 +13,9 @@
 - (id)initWithCompletionHandler:(void (^)(MFMailComposeViewController *controller, MFMailComposeResult result, NSError *error))block;
 
 @end
+
+@interface MFMessageComposeViewController (BlockExtensions) <MFMessageComposeViewControllerDelegate>
+
+- (id)initWithCompletionHandler:(void (^)(MFMessageComposeViewController *controller, MessageComposeResult result))block;
+
+@end

@@ -316,6 +316,25 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 //
+// Texting
+//
+
+- (void)sendStringAsSMS:(NSString *)string fromViewController:(UIViewController *)vc {
+    if ([MFMessageComposeViewController canSendText]) {
+        MFMessageComposeViewController *controller = [[MFMessageComposeViewController alloc]initWithCompletionHandler:^(MFMessageComposeViewController *controller, MessageComposeResult result) {
+            [vc dismissModalViewControllerAnimated:YES];
+        }];
+        [controller setBody:string];
+        [vc presentModalViewController:controller animated:YES];
+        [controller release];
+    } else {
+        CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Mail Unavailable" message:@"In order to use this functionality, you must set up an email account in Settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [av show];
+        [av release];
+    }
+}
+
+//
 // Printing
 //
 
