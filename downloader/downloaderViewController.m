@@ -107,6 +107,8 @@
     if (self.textField.text.length > 0) {
         if ([self.textField.text hasPrefix:@"http"]) {
             [kAppDelegate downloadFromAppDelegate:self.textField.text];
+        } else if ([self.textField.text hasPrefix:@"ftp"]) {
+            [kAppDelegate downloadFileUsingFtp:self.textField.text];
         }
     }
 }

@@ -1036,16 +1036,55 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 //
+// FTP Download
+//
+
+- (void)downloadFileUsingFtp:(NSString *)url {
+    NSLog(@"fuck: %@",getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:[url lastPathComponent]]));
+    SCRFTPRequest *ftpRequest = [[SCRFTPRequest requestWithURL:[NSURL URLWithString:url] toDownloadFile:getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:[url lastPathComponent]])]retain];
+    ftpRequest.username = @"anonymous";
+    ftpRequest.password = @"";
+    ftpRequest.delegate = self;
+    ftpRequest.didFinishSelector = @selector(downloadFinished:);
+    ftpRequest.didFailSelector = @selector(downloadFailed:);
+    ftpRequest.willStartSelector = @selector(downloadWillStart:);
+    ftpRequest.bytesWrittenSelector = @selector(downloadBytesWritten:);
+    [ftpRequest startAsynchronous];
+}
+
+- (void)downloadFinished:(SCRFTPRequest *)request {
+    NSLog(@"asdf finish");
+    [self hideHUD];
+    [self showFinishedAlertForFilename:[request.ftpURL.absoluteString lastPathComponent]];
+}
+
+- (void)downloadFailed:(SCRFTPRequest *)request {
+    NSLog(@"asdf fail");
+    [self hideHUD];
+    CustomAlertView *avs = [[CustomAlertView alloc]initWithTitle:@"Download Failed" message:[[request.error localizedDescription] stringByAppendingString:@" This is probably because the server doesn't support anonymous FTP."] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [avs show];
+    [avs release];
+}
+
+- (void)downloadWillStart:(SCRFTPRequest *)request {
+    NSLog(@"asdf start");
+    [self showHUDWithTitle:@"Downloading..."];
+    [self setSecondaryTitleOfVisibleHUD:[request.ftpURL.absoluteString lastPathComponent]];
+    [self setVisibleHudMode:MBProgressHUDModeDeterminate];
+}
+
+- (void)downloadBytesWritten:(SCRFTPRequest *)request {
+    NSLog(@"asdf bytes written");
+    [self setProgressOfVisibleHUD:[MBProgressHUD HUDForView:self.window].progress+(request.bytesWritten/request.fileSize)];
+}
+
+//
 // FTP Upload
 //
 
 - (void)uploadFinished:(SCRFTPRequest *)request {
     [self hideHUD];
-    NSString *filename = [self.openFile lastPathComponent];
-    NSString *message = [NSString stringWithFormat:@"The file \"%@\" has sucessfully uploaded to the server.",filename];
-    CustomAlertView *avs = [[CustomAlertView alloc]initWithTitle:@"Success" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [avs show];
-    [avs release];
+    [self showFinishedAlertForFilename:[request.ftpURL.absoluteString lastPathComponent]];
     [request release];
 }
 
@@ -1060,10 +1099,12 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 - (void)uploadWillStart:(SCRFTPRequest *)request {
     [self showHUDWithTitle:@"Uploading..."];
+    [self setSecondaryTitleOfVisibleHUD:[request.ftpURL.absoluteString lastPathComponent]];
     [self setVisibleHudMode:MBProgressHUDModeDeterminate];
 }
 
 - (void)uploadBytesWritten:(SCRFTPRequest *)request {
+    NSLog(@"asdf");
     [self setProgressOfVisibleHUD:[MBProgressHUD HUDForView:self.window].progress+(request.bytesWritten/request.fileSize)];
 }
 
@@ -1075,7 +1116,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [[NSUserDefaults standardUserDefaults]setObject:serverField.text forKey:@"FTPPath"];
     [[NSUserDefaults standardUserDefaults]setObject:usernameField.text forKey:@"FTPUsername"];
 
-    SCRFTPRequest *ftpRequest = [[SCRFTPRequest alloc]initWithURL:[NSURL URLWithString:serverField.text] toUploadFile:self.openFile];
+    SCRFTPRequest *ftpRequest = [[SCRFTPRequest requestWithURL:[NSURL URLWithString:serverField.text] toUploadFile:self.openFile]retain];
     ftpRequest.username = usernameField.text;
     ftpRequest.password = passwordField.text;
     ftpRequest.delegate = self;

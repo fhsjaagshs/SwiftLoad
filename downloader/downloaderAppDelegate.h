@@ -83,8 +83,9 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 // Dropbox Uploading
 - (void)uploadLocalFile:(NSString *)localPath;
 
-// FTP Upload
+// FTP
 - (void)showFTPUploadController;
+- (void)downloadFileUsingFtp:(NSString *)url;
 
 // HUD management
 - (void)setVisibleHudCustomView:(UIView *)view;
