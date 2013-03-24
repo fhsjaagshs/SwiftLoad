@@ -160,6 +160,8 @@ extern NSString *const SCRFTPRequestErrorDomain;
 
 /** The url for this operation. */
 @property (nonatomic, retain) NSURL *ftpURL;
+/** A custom upload file name */
+@property (nonatomic, copy) NSString *customUploadFileName;
 /** Specifies the file to upload or to write the downloaded data to. */
 @property (nonatomic, copy) NSString *filePath;
 /** Denotes the directory to create. Specified when operation is SCRFTPRequestOperationCreateDirectory. */
