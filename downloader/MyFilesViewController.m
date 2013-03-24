@@ -555,46 +555,19 @@
     [pool release];
 }
 
-- (void)showFileCreationAlertView {
-    self.av = [[[CustomAlertView alloc]initWithTitle:@"Create File or Directory" message:@"\n\n\n\n" delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:nil]autorelease];
-    
-    CustomButton *createFile = [[CustomButton alloc]initWithFrame:CGRectMake(12, 90, 126, 37)];
-    [createFile setTitle:@"File" forState:UIControlStateNormal];
-    [createFile addTarget:self action:@selector(createTheFile) forControlEvents:UIControlEventTouchUpInside];
-    [createFile setTitleColor:[UIColor whiteColor]forState:UIControlStateNormal];
-    createFile.titleLabel.font = [UIFont boldSystemFontOfSize:18];
-    [createFile setTitleShadowColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [createFile setBackgroundColor:[UIColor clearColor]];
-    createFile.titleLabel.shadowOffset = CGSizeMake(0, -1);
-    
-    CustomButton *createDir = [[CustomButton alloc]initWithFrame:CGRectMake(145, 90, 126, 37)];
-    [createDir setTitle:@"Directory" forState:UIControlStateNormal];
-    [createDir addTarget:self action:@selector(createTheDir) forControlEvents:UIControlEventTouchUpInside];
-    [createDir setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    createDir.titleLabel.font = [UIFont boldSystemFontOfSize:18];
-    [createDir setTitleShadowColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [createDir setBackgroundColor:[UIColor clearColor]];
-    createDir.titleLabel.shadowOffset = CGSizeMake(0, -1);
-
-    self.tv = [[[CustomTextField alloc]initWithFrame:CGRectMake(43, 48, 200, 31)]autorelease];
-    self.tv.keyboardAppearance = UIKeyboardAppearanceAlert;
-    self.tv.borderStyle = UITextBorderStyleBezel;
-    self.tv.backgroundColor = [UIColor clearColor];
-    self.tv.returnKeyType = UIReturnKeyDone;
-    self.tv.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    self.tv.autocorrectionType = UITextAutocorrectionTypeNo;
-    self.tv.placeholder = @"File/Directory Name";
-    self.tv.font = [UIFont boldSystemFontOfSize:18];
-    self.tv.adjustsFontSizeToFitWidth = YES;
-    [self.tv addTarget:self.tv action:@selector(resignFirstResponder) forControlEvents:UIControlEventEditingDidEndOnExit];
-    
-    [self.av addSubview:createFile];
-    [self.av addSubview:createDir];
-    [self.av addSubview:self.tv];
-    [createFile release];
-    [createDir release];
-    [self.av show];
-    [self.tv becomeFirstResponder];
+- (void)showFileCreationDialogue {
+    FileCreationDialogue *chav = [[[FileCreationDialogue alloc]initWithCompletionBlock:^(FileCreationDialogueFileType fileType, NSString *fileName) {
+        if (fileType == FileCreationDialogueFileTypeFile) {
+            NSString *thingToBeCreated = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:fileName];
+            [[NSFileManager defaultManager]createFileAtPath:thingToBeCreated contents:nil attributes:nil];
+            [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
+        } else if (fileType == FileCreationDialogueFileTypeDirectory) {
+            NSString *thingToBeCreated = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:fileName];
+            [[NSFileManager defaultManager]createDirectoryAtPath:thingToBeCreated withIntermediateDirectories:NO attributes:nil error:nil];
+            [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
+        }
+    }]autorelease];
+    [chav show];
 }
 
 - (void)recalculateDirs {
@@ -813,7 +786,7 @@
     if (self.theTableView.editing) {
         
         if (indexPath.row == cellCount-1) {
-            [self showFileCreationAlertView];
+            [self showFileCreationDialogue];
         } else {
             if ([self.perspectiveCopiedList containsObject:file]) {
                 [self removeItemFromPerspectiveCopyList:file];
@@ -1018,32 +991,8 @@
         [self.filelist removeAllObjects];
         [self.theTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationRight];
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        [self showFileCreationAlertView];
+        [self showFileCreationDialogue];
     }
-}
-
-- (void)createTheFile {
-    if ([self.tv isFirstResponder]) {
-        [self.tv resignFirstResponder];
-    }
-    
-    NSString *thingToBeCreated = [[kAppDelegate managerCurrentDir] stringByAppendingPathComponent:self.tv.text];
-    [[NSFileManager defaultManager]createFileAtPath:thingToBeCreated contents:nil attributes:nil];
-    [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
-    [self.av dismissWithClickedButtonIndex:0 animated:YES];
-    [self setAv:nil];
-}
-
-- (void)createTheDir {
-    if ([self.tv isFirstResponder]) {
-        [self.tv resignFirstResponder];
-    }
-
-    NSString *thingToBeCreated = [[kAppDelegate managerCurrentDir] stringByAppendingPathComponent:self.tv.text];
-    [[NSFileManager defaultManager]createDirectoryAtPath:thingToBeCreated withIntermediateDirectories:NO attributes:nil error:nil];
-    [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
-    [self.av dismissWithClickedButtonIndex:0 animated:YES];
-    [self setAv:nil];
 }
 
 - (void)actionSheetAction:(UIActionSheet *)actionSheet buttonIndex:(int)buttonIndex {
@@ -1419,8 +1368,6 @@
     [self setHomeButton:nil];
     [self setSideSwipeView:nil];
     [self setSideSwipeCell:nil];
-    [self setAv:nil];
-    [self setTv:nil];
     NSLog(@"%@ dealloc'd", NSStringFromClass([self class]));
     [super dealloc];
 }

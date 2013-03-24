@@ -18,10 +18,6 @@
 @property (nonatomic, retain) NSMutableArray *perspectiveCopiedList;
 @property (nonatomic, assign) BOOL isCut;
 
-// File/Dir creation
-@property (nonatomic, retain) CustomAlertView *av;
-@property (nonatomic, retain) CustomTextField *tv;
-
 @property (nonatomic, retain) UIDocumentInteractionController *docController;
 
 @property (nonatomic, retain) NSMutableArray *filelist;

@@ -12,11 +12,15 @@
 @implementation CustomAlertView
 
 - (void)layoutSubviews {
-    
+
 	for (UIView *subview in self.subviews) {
+        
+        if ([subview isKindOfClass:NSClassFromString(@"UIAlertTextView")]) {
+            [subview setHidden:YES];
+        }
 		
 		if ([subview isMemberOfClass:[UIImageView class]]) {
-			[subview removeFromSuperview];
+            [subview setHidden:YES];
 		}
         
         if ([subview isKindOfClass:[UIControl class]] && ![subview isKindOfClass:[UITextField class]]) {
@@ -28,7 +32,7 @@
             [(UIButton *)subview setBackgroundImage:buttonImagePressed forState:UIControlStateHighlighted];
         }
         
-		if ([subview isMemberOfClass:[UILabel class]]) { //Point to UILabels To Change Text
+		if ([subview isKindOfClass:[UILabel class]]) { //Point to UILabels To Change Text
 			UILabel *label = (UILabel*)subview;	//Cast From UIView to UILabel
 			label.textColor = [UIColor colorWithRed:210.0f/255.0f green:210.0f/255.0f blue:210.0f/255.0f alpha:1.0f];
 			label.shadowColor = [UIColor blackColor];
