@@ -583,15 +583,13 @@
 
 - (void)showFileCreationDialogue {
     FileCreationDialogue *chav = [[[FileCreationDialogue alloc]initWithCompletionBlock:^(FileCreationDialogueFileType fileType, NSString *fileName) {
+        NSString *thingToBeCreated = getNonConflictingFilePathForPath([[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:fileName]);
         if (fileType == FileCreationDialogueFileTypeFile) {
-            NSString *thingToBeCreated = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:fileName];
             [[NSFileManager defaultManager]createFileAtPath:thingToBeCreated contents:nil attributes:nil];
-            [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
         } else if (fileType == FileCreationDialogueFileTypeDirectory) {
-            NSString *thingToBeCreated = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:fileName];
             [[NSFileManager defaultManager]createDirectoryAtPath:thingToBeCreated withIntermediateDirectories:NO attributes:nil error:nil];
-            [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
         }
+        [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
     }]autorelease];
     [chav show];
 }
