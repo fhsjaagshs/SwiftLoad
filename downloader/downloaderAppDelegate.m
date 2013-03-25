@@ -1040,42 +1040,61 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 //
 
 - (void)downloadFileUsingFtp:(NSString *)url {
-    NSLog(@"fuck: %@",getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:[url lastPathComponent]]));
-    SCRFTPRequest *ftpRequest = [[SCRFTPRequest requestWithURL:[NSURL URLWithString:url] toDownloadFile:getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:[url lastPathComponent]])]retain];
-    ftpRequest.username = @"anonymous";
-    ftpRequest.password = @"";
+    SCRFTPRequest *ftpRequest = [[SCRFTPRequest requestWithURL:[NSURL URLWithString:url] toDownloadFile:getNonConflictingFilePathForPath([[kDocsDir stringByAppendingPathComponent:[url lastPathComponent]]stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding])]retain];
     ftpRequest.delegate = self;
     ftpRequest.didFinishSelector = @selector(downloadFinished:);
     ftpRequest.didFailSelector = @selector(downloadFailed:);
     ftpRequest.willStartSelector = @selector(downloadWillStart:);
-    ftpRequest.bytesWrittenSelector = @selector(downloadBytesWritten:);
-    [ftpRequest startAsynchronous];
+    [ftpRequest startRequest];
 }
 
 - (void)downloadFinished:(SCRFTPRequest *)request {
-    NSLog(@"asdf finish");
     [self hideHUD];
-    [self showFinishedAlertForFilename:[request.ftpURL.absoluteString lastPathComponent]];
+    NSString *filename = [[request.ftpURL.absoluteString lastPathComponent]stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    if (filename.length > 14) {
+        filename = [[filename substringToIndex:11]stringByAppendingString:@"..."];
+    }
+    [self showFinishedAlertForFilename:filename];
+    [request release];
 }
 
 - (void)downloadFailed:(SCRFTPRequest *)request {
-    NSLog(@"asdf fail");
     [self hideHUD];
-    CustomAlertView *avs = [[CustomAlertView alloc]initWithTitle:@"Download Failed" message:[[request.error localizedDescription] stringByAppendingString:@" This is probably because the server doesn't support anonymous FTP."] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [avs show];
-    [avs release];
+    
+    if ([request.error.localizedDescription isEqualToString:@"FTP error 530"]) {
+        FTPLoginController *controller = [[[FTPLoginController alloc]initWithCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
+            SCRFTPRequest *ftpRequest = [[SCRFTPRequest requestWithURL:[NSURL URLWithString:url] toDownloadFile:[[kDocsDir stringByAppendingPathComponent:[url lastPathComponent]]stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]retain];
+            ftpRequest.username = username;
+            ftpRequest.password = password;
+            ftpRequest.delegate = self;
+            ftpRequest.didFinishSelector = @selector(downloadFinished:);
+            ftpRequest.didFailSelector = @selector(downloadFailed:);
+            ftpRequest.willStartSelector = @selector(downloadWillStart:);
+            [ftpRequest startRequest];
+        }]autorelease];
+        [controller setUrl:request.ftpURL.absoluteString isPredefined:YES];
+        [controller setType:FTPLoginControllerDownload];
+        [controller show];
+    } else {
+        CustomAlertView *avs = [[CustomAlertView alloc]initWithTitle:@"Download Failed" message:[request.error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [avs show];
+        [avs release];
+    }
+    [request release];
 }
 
 - (void)downloadWillStart:(SCRFTPRequest *)request {
-    NSLog(@"asdf start");
     [self showHUDWithTitle:@"Downloading..."];
-    [self setSecondaryTitleOfVisibleHUD:[request.ftpURL.absoluteString lastPathComponent]];
-    [self setVisibleHudMode:MBProgressHUDModeDeterminate];
-}
-
-- (void)downloadBytesWritten:(SCRFTPRequest *)request {
-    NSLog(@"asdf bytes written");
-    [self setProgressOfVisibleHUD:[MBProgressHUD HUDForView:self.window].progress+(request.bytesWritten/request.fileSize)];
+    
+    NSString *filename = [[request.ftpURL.absoluteString lastPathComponent]stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    if (filename.length > 14) {
+        filename = [[filename substringToIndex:11]stringByAppendingString:@"..."];
+    }
+    
+    [self setSecondaryTitleOfVisibleHUD:filename];
+    [self setVisibleHudMode:MBProgressHUDModeIndeterminate];
 }
 
 //
@@ -1104,124 +1123,23 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 - (void)uploadBytesWritten:(SCRFTPRequest *)request {
-    NSLog(@"asdf");
     [self setProgressOfVisibleHUD:[MBProgressHUD HUDForView:self.window].progress+(request.bytesWritten/request.fileSize)];
 }
 
-- (void)actuallySend {
-    [serverField resignFirstResponder];
-    [usernameField resignFirstResponder];
-    [passwordField resignFirstResponder];
-    
-    [[NSUserDefaults standardUserDefaults]setObject:serverField.text forKey:@"FTPPath"];
-    [[NSUserDefaults standardUserDefaults]setObject:usernameField.text forKey:@"FTPUsername"];
-
-    SCRFTPRequest *ftpRequest = [[SCRFTPRequest requestWithURL:[NSURL URLWithString:serverField.text] toUploadFile:self.openFile]retain];
-    ftpRequest.username = usernameField.text;
-    ftpRequest.password = passwordField.text;
-    ftpRequest.delegate = self;
-    ftpRequest.didFinishSelector = @selector(uploadFinished:);
-    ftpRequest.didFailSelector = @selector(uploadFailed:);
-    ftpRequest.willStartSelector = @selector(uploadWillStart:);
-    ftpRequest.bytesWrittenSelector = @selector(uploadBytesWritten:);
-    [ftpRequest startRequest];
-}
-
 - (void)showFTPUploadController {
-    
-    avL = [[[CustomAlertView alloc]initWithTitle:@"Enter FTP Info" message:@"\n\n\n\n\n" completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
-        if (buttonIndex == 1) {
-            [self actuallySend];
-        }
-    } cancelButtonTitle:@"Cancel" otherButtonTitles:@"Upload", nil]autorelease];
-
-    serverField = [[[CustomTextField alloc]initWithFrame:CGRectMake(13, 48, 257, 30)]autorelease];
-    [serverField setKeyboardAppearance:UIKeyboardAppearanceAlert];
-    [serverField setBorderStyle:UITextBorderStyleBezel];
-    [serverField setBackgroundColor:[UIColor clearColor]];
-    [serverField setReturnKeyType:UIReturnKeyNext];
-    [serverField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
-    [serverField setAutocorrectionType:UITextAutocorrectionTypeNo];
-    [serverField setPlaceholder:@"ftp://"];
-    [serverField setFont:[UIFont boldSystemFontOfSize:18]];
-    [serverField setAdjustsFontSizeToFitWidth:YES];
-    [serverField setDelegate:self];
-    [serverField setClearButtonMode:UITextFieldViewModeWhileEditing];
-    serverField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    
-    usernameField = [[[CustomTextField alloc]initWithFrame:CGRectMake(13, 85, 257, 30)]autorelease];
-    [usernameField setKeyboardAppearance:UIKeyboardAppearanceAlert];
-    [usernameField setBorderStyle:UITextBorderStyleBezel];
-    [usernameField setBackgroundColor:[UIColor whiteColor]];
-    [usernameField setReturnKeyType:UIReturnKeyNext];
-    [usernameField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
-    [usernameField setAutocorrectionType:UITextAutocorrectionTypeNo];
-    [usernameField setPlaceholder:@"Username"];
-    [usernameField setFont:[UIFont boldSystemFontOfSize:18]];
-    [usernameField setAdjustsFontSizeToFitWidth:YES];
-    usernameField.delegate = self;
-    usernameField.clearButtonMode = UITextFieldViewModeWhileEditing;
-    usernameField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    
-    passwordField = [[[CustomTextField alloc]initWithFrame:CGRectMake(13, 122, 257, 30)]autorelease];
-    [passwordField setKeyboardAppearance:UIKeyboardAppearanceAlert];
-    [passwordField setBorderStyle:UITextBorderStyleBezel];
-    [passwordField setBackgroundColor:[UIColor whiteColor]];
-    [passwordField setReturnKeyType:UIReturnKeyNext];
-    [passwordField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
-    [passwordField setAutocorrectionType:UITextAutocorrectionTypeNo];
-    [passwordField setPlaceholder:@"Password"];
-    [passwordField setFont:[UIFont boldSystemFontOfSize:18]];
-    [passwordField setAdjustsFontSizeToFitWidth:YES];
-    passwordField.secureTextEntry = YES;
-    passwordField.delegate = self;
-    passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
-    passwordField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    
-    NSString *FTPPath = [[NSUserDefaults standardUserDefaults]objectForKey:@"FTPPath"];
-    NSString *FTPUsername = [[NSUserDefaults standardUserDefaults]objectForKey:@"FTPUsername"];
-    
-    serverField.text = FTPPath;
-    usernameField.text = FTPUsername;
-    
-    [serverField becomeFirstResponder];
-    
-    if (serverField.text.length > 0) {
-        [usernameField becomeFirstResponder];
-    }
-    
-    if (usernameField.text.length > 0) {
-        [passwordField becomeFirstResponder];
-    }
-    
-    [serverField addTarget:self action:@selector(moveOnServerField) forControlEvents:UIControlEventEditingDidEndOnExit];
-    [usernameField addTarget:self action:@selector(moveOnUsernameField) forControlEvents:UIControlEventEditingDidEndOnExit];
-    [passwordField addTarget:self action:@selector(dismissavL) forControlEvents:UIControlEventEditingDidEndOnExit];
-    
-    [avL addSubview:serverField];
-    [avL addSubview:usernameField];
-    [avL addSubview:passwordField];
-    [avL show];
-}
-
-- (void)moveOnServerField {
-    if ([serverField isFirstResponder]) {
-        [serverField resignFirstResponder];
-    }
-    [usernameField becomeFirstResponder];
-}
-
-- (void)moveOnUsernameField {
-    if ([usernameField isFirstResponder]) {
-        [usernameField resignFirstResponder];
-    }
-    [passwordField becomeFirstResponder];
-}
-
-- (void)dismissavL {
-    if ([serverField isFirstResponder]) {
-        [serverField resignFirstResponder];
-    }
+    FTPLoginController *controller = [[[FTPLoginController alloc]initWithCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
+        SCRFTPRequest *ftpRequest = [[SCRFTPRequest requestWithURL:[NSURL URLWithString:url] toUploadFile:self.openFile]retain];
+        ftpRequest.username = username;
+        ftpRequest.password = password;
+        ftpRequest.delegate = self;
+        ftpRequest.didFinishSelector = @selector(uploadFinished:);
+        ftpRequest.didFailSelector = @selector(uploadFailed:);
+        ftpRequest.willStartSelector = @selector(uploadWillStart:);
+        ftpRequest.bytesWrittenSelector = @selector(uploadBytesWritten:);
+        [ftpRequest startRequest];
+    }]autorelease];
+    [controller setType:FTPLoginControllerUpload];
+    [controller show];
 }
 
 - (void)dealloc {

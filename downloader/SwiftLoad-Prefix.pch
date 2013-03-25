@@ -63,5 +63,6 @@
     
     #import "ZoomingImageView.h"
     #import "FileCreationDialogue.h"
+    #import "FTPLoginController.h"
 
 #endif

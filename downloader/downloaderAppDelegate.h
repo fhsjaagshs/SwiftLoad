@@ -22,16 +22,10 @@ float sanitizeMesurement(float measurement);
 NSString * getNonConflictingFilePathForPath(NSString *path);
 void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID inPropertyID, UInt32 inPropertyValueSize, const void *inPropertyValue);
 
-@interface downloaderAppDelegate : UIResponder <UIApplicationDelegate, BKSessionControllerDelegate, GKSessionDelegate, DBSessionDelegate, DBRestClientDelegate, MBProgressHUDDelegate, GKPeerPickerControllerDelegate, UITextFieldDelegate, NSURLConnectionDelegate, MFMailComposeViewControllerDelegate, AVAudioPlayerDelegate> {
-    CustomAlertView *avL;
-    CustomTextField *serverField;
-    CustomTextField *usernameField;
-    CustomTextField *passwordField;
-}
+@interface downloaderAppDelegate : UIResponder <UIApplicationDelegate, BKSessionControllerDelegate, GKSessionDelegate, DBSessionDelegate, DBRestClientDelegate, MBProgressHUDDelegate, GKPeerPickerControllerDelegate, UITextFieldDelegate, NSURLConnectionDelegate, MFMailComposeViewControllerDelegate, AVAudioPlayerDelegate>
 
 @property (nonatomic, retain) UIWindow *window;
 @property (nonatomic, retain) downloaderViewController *viewController;
-
 
 @property (nonatomic, retain) DBRestClient *restClient;
 
