@@ -85,17 +85,21 @@
 }
 
 - (BOOL)webView:(UIWebView*)webView shouldStartLoadWithRequest:(NSURLRequest*)request navigationType:(UIWebViewNavigationType)navigationType {
-    BOOL isHTTP = ([request.URL.scheme isEqualToString:@"http"] || [request.URL.scheme isEqualToString:@"https"]);
     BOOL isAudio = [MIMEUtils isAudioFile:request.URL.absoluteString];
     BOOL isImage = [MIMEUtils isImageFile:request.URL.absoluteString];
     BOOL isDocument = [MIMEUtils isDocumentFile:request.URL.absoluteString];
     BOOL isText = [MIMEUtils isTextFile_WebSafe:request.URL.absoluteString];
-    BOOL isDownloadable = (isAudio || isImage || isDocument || isText);
-
-    if (isHTTP && isDownloadable) {
-        [kAppDelegate downloadFromAppDelegate:request.URL.absoluteString];
-        [self.aiv stopAnimating];
-        return NO;
+    
+    if (isAudio || isImage || isDocument || isText) {
+        if ([request.URL.scheme isEqualToString:@"http"] || [request.URL.scheme isEqualToString:@"https"]) {
+            [kAppDelegate downloadFromAppDelegate:request.URL.absoluteString];
+            [self.aiv stopAnimating];
+            return NO;
+        } else if ([request.URL.scheme isEqualToString:@"ftp"]) {
+            [kAppDelegate downloadFileUsingFtp:request.URL.absoluteString];
+            [self.aiv stopAnimating];
+            return NO;
+        }
     }
     return YES;
 }

@@ -99,6 +99,10 @@
         void (^block)(NSString *username, NSString *password, NSString *url) = objc_getAssociatedObject(self, "blockCallback");
         block(self.usernameField.text, self.passwordField.text, server);
         Block_release(block);
+    } else {
+        void (^block)(NSString *username, NSString *password, NSString *url) = objc_getAssociatedObject(self, "blockCallback");
+        block(@"cancel", nil, (self.ftpURL.length == 0)?self.serverField.text:self.ftpURL);
+        Block_release(block);
     }
 }
 

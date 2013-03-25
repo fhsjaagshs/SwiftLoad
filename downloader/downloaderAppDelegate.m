@@ -1064,14 +1064,18 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     
     if ([request.error.localizedDescription isEqualToString:@"FTP error 530"]) {
         FTPLoginController *controller = [[[FTPLoginController alloc]initWithCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
-            SCRFTPRequest *ftpRequest = [[SCRFTPRequest requestWithURL:[NSURL URLWithString:url] toDownloadFile:[[kDocsDir stringByAppendingPathComponent:[url lastPathComponent]]stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]retain];
-            ftpRequest.username = username;
-            ftpRequest.password = password;
-            ftpRequest.delegate = self;
-            ftpRequest.didFinishSelector = @selector(downloadFinished:);
-            ftpRequest.didFailSelector = @selector(downloadFailed:);
-            ftpRequest.willStartSelector = @selector(downloadWillStart:);
-            [ftpRequest startRequest];
+            if ([username isEqualToString:@"cancel"]) {
+                [[NSFileManager defaultManager]removeItemAtPath:[kDocsDir stringByAppendingPathComponent:[url lastPathComponent]] error:nil];
+            } else {
+                SCRFTPRequest *ftpRequest = [[SCRFTPRequest requestWithURL:[NSURL URLWithString:url] toDownloadFile:[[kDocsDir stringByAppendingPathComponent:[url lastPathComponent]]stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]retain];
+                ftpRequest.username = username;
+                ftpRequest.password = password;
+                ftpRequest.delegate = self;
+                ftpRequest.didFinishSelector = @selector(downloadFinished:);
+                ftpRequest.didFailSelector = @selector(downloadFailed:);
+                ftpRequest.willStartSelector = @selector(downloadWillStart:);
+                [ftpRequest startRequest];
+            }
         }]autorelease];
         [controller setUrl:request.ftpURL.absoluteString isPredefined:YES];
         [controller setType:FTPLoginControllerDownload];
