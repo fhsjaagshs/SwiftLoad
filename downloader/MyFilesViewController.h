@@ -9,9 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ShadowedTableView.h"
 
-@interface MyFilesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, PullToRefreshViewDelegate, UITextFieldDelegate, UIDocumentInteractionControllerDelegate> {
-    float totalProgress;
-}
+@interface MyFilesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, PullToRefreshViewDelegate, UIDocumentInteractionControllerDelegate>
 
 // Copy/Cut/Paste
 @property (nonatomic, retain) NSMutableArray *copiedList;
@@ -23,8 +21,8 @@
 @property (nonatomic, retain) NSMutableArray *filelist;
 @property (nonatomic, retain) NSMutableArray *dirs;
 
-@property (nonatomic, retain) UITableView *theTableView;
 @property (nonatomic, retain) UIBarButtonItem *editButton;
+@property (nonatomic, retain) ShadowedTableView *theTableView;
 @property (nonatomic, retain) CustomButton *backButton;
 @property (nonatomic, retain) CustomButton *homeButton;
 @property (nonatomic, retain) CustomNavBar *navBar;

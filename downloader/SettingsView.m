@@ -88,7 +88,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
     if ([[DBSession sharedSession]isLinked]) {
         [self.linkButton setTitle:@"Unlink Dropbox" forState:UIControlStateNormal];
     } else {
