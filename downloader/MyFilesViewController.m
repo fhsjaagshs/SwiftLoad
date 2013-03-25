@@ -116,6 +116,16 @@
     [self updateCopyButtonState];
 }
 
+- (void)deleteItemsInClipboard {
+    for (NSString *file in self.perspectiveCopiedList) {
+        [[NSFileManager defaultManager]removeItemAtPath:file error:nil];
+    }
+    [self flushCopiedList];
+    [self flushPerspectiveCopyList];
+    [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
+    [self updateCopyButtonState];
+}
+
 - (void)copyFilesWithIsCut:(BOOL)cut {
     self.isCut = cut;
     [self saveIsCutBOOL];
@@ -245,7 +255,22 @@
                 [self flushCopiedList];
                 [self flushPerspectiveCopyList];
             }
+        } else if ([title isEqualToString:@"Delete"]) {
+            UIActionSheet *deleteConfirmation = [[[UIActionSheet alloc]initWithTitle:@"Are you Sure?" completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+                if (buttonIndex == 1) {
+                    [self verifyCopiedList];
+                    if (self.copiedList.count > 0) {
+                        [self flushCopiedList];
+                        [self flushPerspectiveCopyList];
+                    }
+                } else if (buttonIndex == 0) {
+                    [self deleteItemsInClipboard];
+                }
+            } cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Delete" otherButtonTitles:nil]autorelease];
+            deleteConfirmation.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+            [deleteConfirmation showInView:self.view];
         }
+        
         [self updateCopyButtonState];
     } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil]autorelease];
     
@@ -256,6 +281,7 @@
     if (self.copiedList.count == 0) {
         [actionSheet addButtonWithTitle:@"Copy"];
         [actionSheet addButtonWithTitle:@"Cut"];
+        [actionSheet addButtonWithTitle:@"Delete"];
     } else {
         [actionSheet addButtonWithTitle:@"Paste"];
     }
