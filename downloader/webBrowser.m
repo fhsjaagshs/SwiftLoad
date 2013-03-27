@@ -70,6 +70,8 @@
     
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.google.com/"]];
     [self.theWebView loadRequest:request];
+    
+    [self.theTextField addTarget:self action:@selector(goAction) forControlEvents:UIControlEventEditingDidEndOnExit];
 }
 
 - (void)stopLoad {
@@ -85,12 +87,9 @@
 }
 
 - (BOOL)webView:(UIWebView*)webView shouldStartLoadWithRequest:(NSURLRequest*)request navigationType:(UIWebViewNavigationType)navigationType {
-    BOOL isAudio = [MIMEUtils isAudioFile:request.URL.absoluteString];
-    BOOL isImage = [MIMEUtils isImageFile:request.URL.absoluteString];
-    BOOL isDocument = [MIMEUtils isDocumentFile:request.URL.absoluteString];
-    BOOL isText = [MIMEUtils isTextFile_WebSafe:request.URL.absoluteString];
-    
-    if (isAudio || isImage || isDocument || isText) {
+    NSString *url = request.URL.absoluteString;
+
+    if ([MIMEUtils isAudioFile:url] || [MIMEUtils isImageFile:url] || [MIMEUtils isDocumentFile:url] || [MIMEUtils isTextFile_WebSafe:url]) {
         if ([request.URL.scheme isEqualToString:@"http"] || [request.URL.scheme isEqualToString:@"https"]) {
             [kAppDelegate downloadFromAppDelegate:request.URL.absoluteString];
             [self.aiv stopAnimating];
@@ -147,8 +146,7 @@
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     
     if (!self.theTextField.isFirstResponder) {
-        NSString *theTitle = [self.theWebView stringByEvaluatingJavaScriptFromString:@"document.title"];
-        [self.theTextField setText:theTitle];
+        [self.theTextField setText:[self.theWebView stringByEvaluatingJavaScriptFromString:@"document.title"]];
     }
     
     [self updateButtons];
@@ -171,6 +169,7 @@
         [av show];
         [av release];
         [self.aiv stopAnimating];
+        [self.theTextField setText:title];
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         [self updateButtons];
         [self setRefreshButtonState:UIBarButtonSystemItemRefresh];
@@ -179,21 +178,15 @@
 
 - (void)goAction {
     [self.theWebView stopLoading];
-    NSString *text = self.theTextField.text;
     [self.theTextField resignFirstResponder];
     
-    if (![text hasPrefix:@"http://"] && (![text hasPrefix:@"https://"] || ![text hasPrefix:@"ftp://"] || ![text hasPrefix:@"afp://"])) {
-        text = [@"http://" stringByAppendingString:text];
+    if (![self.theTextField.text containsString:@"://"]) {
+        self.theTextField.text = [@"http://" stringByAppendingString:self.theTextField.text];
     }
     
-    NSURL *url = [NSURL URLWithString:text];
+    NSURL *url = [NSURL URLWithString:self.theTextField.text];
     NSURLRequest *requestObj = [NSURLRequest requestWithURL:url];
     [self.theWebView loadRequest:requestObj];
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [self goAction];
-    return YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated {

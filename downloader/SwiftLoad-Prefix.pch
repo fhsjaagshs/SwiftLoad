@@ -24,6 +24,7 @@
     #import "UIActionSheet+BlockExtensions.h"
     #import "UIScrollView+UIScrollView_ZoomToPoint.h"
     #import "MFMailComposeViewController+BlockExtensions.h"
+    #import "NSString+mods.h"
 
     #import "HTTPServer.h"
     #import "DAVConnection.h"

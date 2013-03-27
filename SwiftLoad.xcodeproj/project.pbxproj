@@ -126,6 +126,7 @@
 		F1EB836216D808EC009D7D2D /* icon~iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB835416D808EC009D7D2D /* icon~iPad.png */; };
 		F1EB836316D808EC009D7D2D /* icon~iPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB835516D808EC009D7D2D /* icon~iPad@2x.png */; };
 		F1EB836416D808EC009D7D2D /* iTunesArtwork.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB835616D808EC009D7D2D /* iTunesArtwork.png */; };
+		F1ED4B12170352D10056D55F /* NSString+mods.m in Sources */ = {isa = PBXBuildFile; fileRef = F1ED4B11170352D10056D55F /* NSString+mods.m */; };
 		F1EDE3F613F8708600C17B2A /* MyFilesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1EDE3F513F8708600C17B2A /* MyFilesViewController.m */; };
 		F1F114C5142AA29F00199C3C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F114C4142AA29F00199C3C /* SystemConfiguration.framework */; };
 		F1F114C7142AA3F400199C3C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F114C6142AA3F400199C3C /* CFNetwork.framework */; };
@@ -335,6 +336,8 @@
 		F1EB835416D808EC009D7D2D /* icon~iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon~iPad.png"; sourceTree = "<group>"; };
 		F1EB835516D808EC009D7D2D /* icon~iPad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon~iPad@2x.png"; sourceTree = "<group>"; };
 		F1EB835616D808EC009D7D2D /* iTunesArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iTunesArtwork.png; sourceTree = "<group>"; };
+		F1ED4B10170352D10056D55F /* NSString+mods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+mods.h"; sourceTree = "<group>"; };
+		F1ED4B11170352D10056D55F /* NSString+mods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+mods.m"; sourceTree = "<group>"; };
 		F1EDE3F513F8708600C17B2A /* MyFilesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFilesViewController.m; sourceTree = "<group>"; };
 		F1F114C4142AA29F00199C3C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		F1F114C6142AA3F400199C3C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -655,6 +658,8 @@
 		F1693C4516DFABA6006E3739 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				F1ED4B10170352D10056D55F /* NSString+mods.h */,
+				F1ED4B11170352D10056D55F /* NSString+mods.m */,
 				F1693C4616DFABA6006E3739 /* UIActionSheet+BlockExtensions.h */,
 				F1693C4716DFABA6006E3739 /* UIActionSheet+BlockExtensions.m */,
 				F1693C4816DFABA6006E3739 /* UIAlertView+BlockExtensions.h */,
@@ -930,6 +935,7 @@
 				F1C7A6B716E8178F0082D4D3 /* ZoomingImageView.m in Sources */,
 				F17CEDE116FE724C00E7E47B /* FileCreationDialogue.m in Sources */,
 				F1CB7DAE16FFE99A002693B5 /* FTPLoginController.m in Sources */,
+				F1ED4B12170352D10056D55F /* NSString+mods.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
