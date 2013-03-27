@@ -33,7 +33,6 @@
 
 - (void)loadImage:(UIImage *)image {
     self.theImageView.image = image;
-    self.contentSize = self.theImageView.image.size;
 }
 
 - (void)resetAfterRotate {
