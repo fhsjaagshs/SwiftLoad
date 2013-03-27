@@ -113,8 +113,12 @@
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
-    if ([[self.theTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:[[self.theWebView stringByEvaluatingJavaScriptFromString:@"window.location.href"]stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]]) {
-        [self.theTextField setText:[self.theWebView stringByEvaluatingJavaScriptFromString:@"document.title"]];
+    NSString *text = [self.theTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *href = [[self.theWebView stringByEvaluatingJavaScriptFromString:@"window.location.href"]stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *title = [[self.theWebView stringByEvaluatingJavaScriptFromString:@"document.title"]stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    if ([text isEqualToString:href] || text.length == 0) {
+        [self.theTextField setText:title];
     }
 }
 

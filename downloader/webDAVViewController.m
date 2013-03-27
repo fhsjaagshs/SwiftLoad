@@ -110,6 +110,7 @@
         [self.urlLabel setText:@"You are not connected to WiFi"];
         [self.onLabel setText:@"WebDAV server is OFF"];
         [self killServer];
+        [self performSelector:@selector(checkForNetworkChange) withObject:nil afterDelay:10.0];
     } else if (!self.httpServer.isRunning) {
         [self createServer];
         [self performSelector:@selector(checkForNetworkChange) withObject:nil afterDelay:5.0];
