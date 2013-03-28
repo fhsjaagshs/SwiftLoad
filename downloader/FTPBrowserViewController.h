@@ -14,6 +14,7 @@
 @property (nonatomic, retain) CustomButton *backButton;
 @property (nonatomic, retain) CustomButton *homeButton;
 @property (nonatomic, retain) CustomNavBar *navBar;
+@property (nonatomic, retain) PullToRefreshView *pull;
 
 @property (nonatomic, retain) NSString *currentFTPURL;
 @property (nonatomic, retain) NSMutableArray *filedicts;

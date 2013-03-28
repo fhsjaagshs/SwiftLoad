@@ -8,10 +8,7 @@
 
 #import "FTPBrowserViewController.h"
 #import "ButtonBarView.h"
-
-@interface FTPBrowserViewController ()
-
-@end
+#import "CustomCellCell.h"
 
 @implementation FTPBrowserViewController
 
@@ -66,21 +63,30 @@
     self.theTableView.allowsSelectionDuringEditing = YES;
     [self.view addSubview:self.theTableView];
     
-    PullToRefreshView *pull = [[PullToRefreshView alloc]initWithScrollView:self.theTableView];
-    [pull setDelegate:self];
-    [self.theTableView addSubview:pull];
-    [pull release];
+    self.pull = [[[PullToRefreshView alloc]initWithScrollView:self.theTableView]autorelease];
+    [self.pull setDelegate:self];
+    [self.theTableView addSubview:self.pull];
+}
+
+- (id)initWithURL:(NSString *)ftpurl {
+    self = [super init];
+    if (self) {
+        self.currentFTPURL = ftpurl;
+    }
+    return self;
 }
 
 - (void)listFinished:(SCRFTPRequest *)request {
     self.filedicts = [[request.directoryContents mutableCopy]autorelease];
     NSLog(@"Directory Contents: %@",request.directoryContents);
     [self.theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+    [self.pull finishedLoading];
     [request release];
 }
 
 - (void)listFailed:(SCRFTPRequest *)request {
     NSLog(@"Request Error: %@",request.error);
+    [self.pull finishedLoading];
     [request release];
 }
 
@@ -88,23 +94,255 @@
     NSLog(@"starting");
 }
 
-- (void)listFilesInRemoteDirectory:(NSString *)url {
-    FTPLoginController *controller = [[[FTPLoginController alloc]initWithCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
-        if ([username isEqualToString:@"cancel"]) {
-            [[NSFileManager defaultManager]removeItemAtPath:[kDocsDir stringByAppendingPathComponent:[url lastPathComponent]] error:nil];
-        } else {
-            SCRFTPRequest *ftpRequest = [[SCRFTPRequest requestWithURLToListDirectory:[NSURL URLWithString:url]]retain];
-            ftpRequest.delegate = self;
-            ftpRequest.didFinishSelector = @selector(listFinished:);
-            ftpRequest.didFailSelector = @selector(listFailed:);
-            ftpRequest.willStartSelector = @selector(listWillStart:);
-            [ftpRequest startRequest];
+- (void)removeCredsForURL:(NSURL *)ftpurl {
+    KeychainItemWrapper *keychain = [[KeychainItemWrapper alloc]initWithIdentifier:@"SwiftLoadFTPCreds" accessGroup:nil];
+    
+    NSString *keychainData = (NSString *)[keychain objectForKey:(id)kSecValueData];
+    
+    int index = -1;
+    
+    NSMutableArray *triples = [[[keychainData componentsSeparatedByString:@","]mutableCopy]autorelease];
+    
+    for (NSString *string in triples) {
+        NSArray *components = [keychainData componentsSeparatedByString:@":"];
+        NSString *host = [components objectAtIndex:2];
+        if ([host isEqualToString:ftpurl.host]) {
+            index = [triples indexOfObject:string];
+            break;
         }
-    }]autorelease];
-    [controller setType:FTPLoginControllerTypeLogin];
-    [controller show];
+    }
+    
+    [triples removeObjectAtIndex:index];
+    NSString *final = [triples componentsJoinedByString:@","];
+    [keychain setObject:final forKey:(id)kSecValueData];
+    
+    [keychain release];
 }
 
+- (void)saveUsername:(NSString *)username andPassword:(NSString *)password forURL:(NSURL *)ftpurl {
+    
+    KeychainItemWrapper *keychain = [[KeychainItemWrapper alloc]initWithIdentifier:@"SwiftLoadFTPCreds" accessGroup:nil];
+    
+    NSString *keychainData = (NSString *)[keychain objectForKey:(id)kSecValueData];
+    
+    int index = -1;
+    
+    NSMutableArray *triples = [[[keychainData componentsSeparatedByString:@","]mutableCopy]autorelease];
+    
+    for (NSString *string in triples) {
+        NSArray *components = [keychainData componentsSeparatedByString:@":"];
+        NSString *host = [components objectAtIndex:2];
+        if ([host isEqualToString:ftpurl.host]) {
+            index = [triples indexOfObject:string];
+            break;
+        }
+    }
+    
+    if (password.length == 0) {
+        password = @" ";
+    }
+    
+    if (index == -1) {
+        NSString *concatString = [NSString stringWithFormat:@"%@:%@:%@",username, password, ftpurl.host];
+        [triples addObject:concatString];
+    } else {
+        NSString *concatString = [NSString stringWithFormat:@"%@:%@:%@",username, password, ftpurl.host];
+        [triples replaceObjectAtIndex:index withObject:concatString];
+    }
+    
+    NSString *final = [triples componentsJoinedByString:@","];
+    [keychain setObject:final forKey:(id)kSecValueData];
+    
+    [keychain release];
+}
 
+- (NSDictionary *)getCredsForURL:(NSURL *)ftpurl {
+    KeychainItemWrapper *keychain = [[KeychainItemWrapper alloc]initWithIdentifier:@"SwiftLoadFTPCreds" accessGroup:nil];    
+    NSString *keychainData = (NSString *)[keychain objectForKey:(id)kSecValueData];
+    [keychain release];
+    
+    // username:password:host, username:password:host, username:password:host
+    
+    NSString *username = nil;
+    NSString *password = nil;
+    
+    NSArray *triples = [keychainData componentsSeparatedByString:@","];
+    
+    for (NSString *string in triples) {
+        NSArray *components = [keychainData componentsSeparatedByString:@":"];
+        NSString *host = [components objectAtIndex:2];
+        if ([host isEqualToString:ftpurl.host]) {
+            username = [components objectAtIndex:0];
+            password = [components objectAtIndex:1];
+            break;
+        }
+    }
+    
+    if (username.length > 0 && password.length > 0) {
+        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+        [dict setObject:username forKey:@"username"];
+        [dict setObject:password forKey:@"password"];
+        return dict;
+    }
+    return nil;
+}
+
+- (void)sendReqestForURL:(NSString *)url andUsename:(NSString *)username andPassword:(NSString *)password{
+    SCRFTPRequest *ftpRequest = [[SCRFTPRequest requestWithURLToListDirectory:[NSURL URLWithString:url]]retain];
+    ftpRequest.username = username;
+    ftpRequest.password = password;
+    ftpRequest.delegate = self;
+    ftpRequest.didFinishSelector = @selector(listFinished:);
+    ftpRequest.didFailSelector = @selector(listFailed:);
+    ftpRequest.willStartSelector = @selector(listWillStart:);
+    [ftpRequest startRequest];
+    [self.pull setState:PullToRefreshViewStateLoading];
+}
+
+- (void)listFilesInRemoteDirectory:(NSString *)url isInitialRequest:(BOOL)isInitialRequest {
+    
+    NSDictionary *creds = [self getCredsForURL:[NSURL URLWithString:url]];
+    
+    if (creds) {
+        NSString *username = [creds objectForKey:@"username"];
+        NSString *password = [creds objectForKey:@"password"];
+        
+        if (isInitialRequest) {
+            NSString *message = [NSString stringWithFormat:@"Do you want to use the username \"%@\" and the password \"%@\"?",username, password];
+            CustomAlertView *alertView = [[[CustomAlertView alloc]initWithTitle:@"Use Saved Credentials?" message:message completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
+                
+                if (buttonIndex == 0) {
+                    FTPLoginController *controller = [[[FTPLoginController alloc]initWithCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
+                        if ([username isEqualToString:@"cancel"]) {
+                            [self dismissModalViewControllerAnimated:YES];
+                        } else {
+                            [self sendReqestForURL:url andUsename:username andPassword:password];
+                        }
+                    }]autorelease];
+                    [controller setUrl:url isPredefined:YES];
+                    [controller setType:FTPLoginControllerTypeLogin];
+                    [controller show];
+                } else {
+                    [self sendReqestForURL:url andUsename:username andPassword:password];
+                }
+                
+            } cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil]autorelease];
+            [alertView show];
+        } else {
+            [self sendReqestForURL:url andUsename:username andPassword:password];
+        }
+    }
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.filedicts.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    static NSString *CellIdentifier = @"CellFTP";
+    
+    CustomCellCell *cell = (CustomCellCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
+    if (cell == nil) {
+        cell = [[[CustomCellCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier]autorelease];
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            cell.accessoryView.center = CGPointMake(735, (cell.bounds.size.height)/2);
+            cell.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:27];
+            cell.detailTextLabel.font = [UIFont systemFontOfSize:20.0];
+        } else {
+            cell.accessoryView.center = CGPointMake(297.5, (cell.bounds.size.height)/2);
+            cell.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:20];
+        }
+    }
+    
+    NSDictionary *fileDict = [self.filedicts objectAtIndex:indexPath.row];
+    NSString *filename = [fileDict objectForKey:NSFileName];
+    
+    cell.textLabel.text = filename;
+    
+    NSString *detailText = ([fileDict objectForKey:NSFileType] == NSFileTypeDirectory)?@"Directory, ":@"File, ";
+    
+    float fileSize = [[fileDict objectForKey:NSFileSize]intValue];
+    
+    if (fileSize < 1024.0) {
+        detailText = [detailText stringByAppendingFormat:@"%.0f Byte%@",fileSize,(fileSize > 1)?@"s":@""];
+    } else if (fileSize < (1024*1024) && fileSize > 1024.0 ) {
+        fileSize = fileSize/1014;
+        detailText = [detailText stringByAppendingFormat:@"%.0f KB",fileSize];
+    } else if (fileSize < (1024*1024*1024) && fileSize > (1024*1024)) {
+        fileSize = fileSize/(1024*1024);
+        detailText = [detailText stringByAppendingFormat:@"%.0f MB",fileSize];
+    }
+    cell.detailTextLabel.text = detailText;
+    
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSDictionary *fileDict = [self.filedicts objectAtIndex:indexPath.row];
+    NSString *filename = [fileDict objectForKey:NSFileName];
+    BOOL isDir = [fileDict objectForKey:NSFileType] == NSFileTypeDirectory;
+    
+    if (isDir) {
+        [self.backButton setHidden:NO];
+        [self.homeButton setHidden:NO];
+        self.navBar.topItem.title = [self.navBar.topItem.title stringByAppendingPathComponent:self.currentFTPURL];
+        self.currentFTPURL = [self.currentFTPURL stringByAppendingPathComponent:filename];
+        [self listFilesInRemoteDirectory:self.currentFTPURL isInitialRequest:NO];
+    } else {
+        UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:@"Do you wish to download " completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+            if (buttonIndex == 1) {
+                [kAppDelegate downloadFileUsingFtp:[self.currentFTPURL stringByAppendingPathComponent:filename]];
+            }
+        } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download", nil]autorelease];
+        actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+        [actionSheet showInView:self.view];
+    }
+    
+    [self.theTableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return NO;
+}
+
+- (void)pullToRefreshViewShouldRefresh:(PullToRefreshView *)view {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+        [NSThread sleepForTimeInterval:0.5f];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            NSAutoreleasePool *poolTwo = [[NSAutoreleasePool alloc]init];
+            [self listFilesInRemoteDirectory:self.currentFTPURL isInitialRequest:NO];
+            [poolTwo release];
+        });
+        [pool release];
+    });
+}
+
+- (void)cacheCurrentDir {
+    
+}
+
+- (void)goBackDir {
+    
+}
+
+- (void)dealloc {
+    [self setPull:nil];
+    [self setTheTableView:nil];
+    [self setBackButton:nil];
+    [self setHomeButton:nil];
+    [self setNavBar:nil];
+    [self setCurrentFTPURL:nil];
+    [self setFiledicts:nil];
+    [super dealloc];
+}
 
 @end

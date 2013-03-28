@@ -65,5 +65,6 @@
     #import "ZoomingImageView.h"
     #import "FileCreationDialogue.h"
     #import "FTPLoginController.h"
+    #import "KeychainItemWrapper.h"
 
 #endif

@@ -26,6 +26,8 @@ typedef enum {
 - (void)finishedLoading;
 - (id)initWithScrollView:(UIScrollView *)scrollView;
 
+- (void)setState:(PullToRefreshViewState)state_;
+
 @end
 
 @protocol PullToRefreshViewDelegate <NSObject>

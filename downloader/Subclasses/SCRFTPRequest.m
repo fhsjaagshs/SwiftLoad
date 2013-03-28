@@ -341,7 +341,7 @@ static NSOperationQueue *sharedRequestQueue = nil;
     if (newEntries.count != 0) {
         [self.directoryContents addObjectsFromArray:newEntries];
     }*/
-
+    
 	NSUInteger offset = 0;
     
     while (YES) {

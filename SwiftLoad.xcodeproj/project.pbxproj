@@ -96,6 +96,7 @@
 		F17F11231420017100CE45D7 /* fileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F17F11211420017100CE45D7 /* fileInfo.m */; };
 		F1847BBB16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F1847BBA16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m */; };
 		F19BB51C16E006CA0081C95B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F19BB51916E006CA0081C95B /* main.m */; };
+		F1A45E701704A15E00DD5FB9 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = F1A45E6F1704A15E00DD5FB9 /* KeychainItemWrapper.m */; };
 		F1A72948149876040049DBB6 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A72947149876040049DBB6 /* GameKit.framework */; };
 		F1A923FE140D4DDD003ACDAB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A923FD140D4DDD003ACDAB /* QuartzCore.framework */; };
 		F1B2489014E333E300C44E11 /* webDAVHelp.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B2488E14E333E200C44E11 /* webDAVHelp.m */; };
@@ -305,6 +306,8 @@
 		F19BB51916E006CA0081C95B /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F19BB51A16E006CA0081C95B /* SwiftLoad-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SwiftLoad-Info.plist"; sourceTree = "<group>"; };
 		F19BB51B16E006CA0081C95B /* SwiftLoad-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SwiftLoad-Prefix.pch"; sourceTree = "<group>"; };
+		F1A45E6E1704A15E00DD5FB9 /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
+		F1A45E6F1704A15E00DD5FB9 /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
 		F1A72947149876040049DBB6 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		F1A923FD140D4DDD003ACDAB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F1B2488D14E333E200C44E11 /* webDAVHelp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = webDAVHelp.h; sourceTree = "<group>"; };
@@ -697,6 +700,8 @@
 		F1693C5F16DFAC59006E3739 /* Subclasses */ = {
 			isa = PBXGroup;
 			children = (
+				F1A45E6E1704A15E00DD5FB9 /* KeychainItemWrapper.h */,
+				F1A45E6F1704A15E00DD5FB9 /* KeychainItemWrapper.m */,
 				F1693C6016DFAC59006E3739 /* MBProgressHUD.h */,
 				F1693C6116DFAC59006E3739 /* MBProgressHUD.m */,
 				F1693C6216DFAC59006E3739 /* PullToRefreshView.h */,
@@ -942,6 +947,7 @@
 				F1CB7DAE16FFE99A002693B5 /* FTPLoginController.m in Sources */,
 				F1ED4B12170352D10056D55F /* NSString+mods.m in Sources */,
 				F1270DD91703C7710012A293 /* FTPBrowserViewController.m in Sources */,
+				F1A45E701704A15E00DD5FB9 /* KeychainItemWrapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
