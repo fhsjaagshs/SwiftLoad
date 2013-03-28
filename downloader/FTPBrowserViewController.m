@@ -10,6 +10,20 @@
 #import "ButtonBarView.h"
 #import "CustomCellCell.h"
 
+@interface FTPBrowserViewController ()
+
+@property (nonatomic, retain) ShadowedTableView *theTableView;
+@property (nonatomic, retain) CustomButton *backButton;
+@property (nonatomic, retain) CustomButton *homeButton;
+@property (nonatomic, retain) CustomNavBar *navBar;
+@property (nonatomic, retain) PullToRefreshView *pull;
+
+@property (nonatomic, retain) NSString *currentFTPURL;
+@property (nonatomic, retain) NSString *originalFTPURL;
+@property (nonatomic, retain) NSMutableArray *filedicts;
+
+@end
+
 @implementation FTPBrowserViewController
 
 - (void)loadView {
@@ -72,12 +86,14 @@
     self = [super init];
     if (self) {
         self.currentFTPURL = ftpurl;
+        self.originalFTPURL = ftpurl;
     }
     return self;
 }
 
 - (void)listFinished:(SCRFTPRequest *)request {
     self.filedicts = [[request.directoryContents mutableCopy]autorelease];
+    [self cacheCurrentDir];
     NSLog(@"Directory Contents: %@",request.directoryContents);
     [self.theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     [self.pull finishedLoading];
@@ -291,11 +307,12 @@
     BOOL isDir = [fileDict objectForKey:NSFileType] == NSFileTypeDirectory;
     
     if (isDir) {
-        [self.backButton setHidden:NO];
-        [self.homeButton setHidden:NO];
         self.navBar.topItem.title = [self.navBar.topItem.title stringByAppendingPathComponent:self.currentFTPURL];
         self.currentFTPURL = [self.currentFTPURL stringByAppendingPathComponent:filename];
-        [self listFilesInRemoteDirectory:self.currentFTPURL isInitialRequest:NO];
+        [self loadCurrentDirectory];
+        if (self.currentFTPURL.length > self.originalFTPURL.length) {
+            [self setButtonsHidden:NO];
+        }
     } else {
         UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:@"Do you wish to download " completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             if (buttonIndex == 1) {
@@ -327,11 +344,45 @@
 }
 
 - (void)cacheCurrentDir {
+    NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"cachedFTPDirs.plist"];
+    NSMutableDictionary *savedDict = [NSMutableDictionary dictionaryWithContentsOfFile:cachePath];
+    [savedDict setObject:self.filedicts forKey:self.currentFTPURL];
+    [savedDict writeToFile:cachePath atomically:YES];
+}
+
+- (void)loadDirFromCacheForURL:(NSString *)url {
+    NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"cachedFTPDirs.plist"];
+    NSMutableDictionary *savedDict = [NSMutableDictionary dictionaryWithContentsOfFile:cachePath];
+    self.filedicts = [savedDict objectForKey:url];
+}
+
+- (void)loadCurrentDirectory {
+    NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"cachedFTPDirs.plist"];
+    NSMutableDictionary *savedDict = [NSMutableDictionary dictionaryWithContentsOfFile:cachePath];
     
+    if ([savedDict objectForKey:self.currentFTPURL]) {
+        self.filedicts = [savedDict objectForKey:self.currentFTPURL];
+    } else {
+        [self listFilesInRemoteDirectory:self.currentFTPURL isInitialRequest:NO];
+    }
+}
+
+- (void)setButtonsHidden:(BOOL)shouldHide {
+    [self.backButton setHidden:shouldHide];
+    [self.homeButton setHidden:shouldHide];
 }
 
 - (void)goBackDir {
-    
+    if (self.currentFTPURL.length > self.originalFTPURL.length) {
+        self.currentFTPURL = [self.currentFTPURL stringByDeletingLastPathComponent];
+        [self loadCurrentDirectory];
+        [self.theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+        [self.pull finishedLoading];
+        
+        if (self.currentFTPURL.length <= self.originalFTPURL.length) {
+            [self setButtonsHidden:YES];
+        }
+    } 
 }
 
 - (void)dealloc {
