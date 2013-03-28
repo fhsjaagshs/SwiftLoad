@@ -114,10 +114,18 @@
 }
 
 - (void)setType:(FTPLoginControllerType)type {
-    if (type == FTPLoginControllerDownload) {
-        [self addButtonWithTitle:@"Download"];
-    } else {
-        [self addButtonWithTitle:@"Upload"];
+    switch (type) {
+        case FTPLoginControllerTypeDownload:
+            [self addButtonWithTitle:@"Download"];
+            break;
+        case FTPLoginControllerTypeUpload:
+            [self addButtonWithTitle:@"Upload"];
+            break;
+        case FTPLoginControllerTypeLogin:
+            [self addButtonWithTitle:@"Login"];
+            break;
+        default:
+            break;
     }
 }
 

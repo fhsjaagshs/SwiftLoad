@@ -9,8 +9,9 @@
 #import "CustomAlertView.h"
 
 typedef enum {
-    FTPLoginControllerUpload,
-    FTPLoginControllerDownload
+    FTPLoginControllerTypeUpload,
+    FTPLoginControllerTypeDownload,
+    FTPLoginControllerTypeLogin
 } FTPLoginControllerType;
 
 @interface FTPLoginController : CustomAlertView

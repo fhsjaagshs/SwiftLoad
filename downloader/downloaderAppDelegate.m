@@ -1036,6 +1036,33 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 //
+// FTP File Listing
+//
+
+- (void)listFinished:(SCRFTPRequest *)request {
+    NSLog(@"Directory Contents: %@",request.directoryContents);
+    [request release];
+}
+
+- (void)listFailed:(SCRFTPRequest *)request {
+    NSLog(@"Request Error: %@",request.error);
+    [request release];
+}
+
+- (void)listWillStart:(SCRFTPRequest *)request {
+    NSLog(@"starting");
+}
+
+- (void)listFilesInRemoteDirectory:(NSString *)url {
+    SCRFTPRequest *ftpRequest = [[SCRFTPRequest requestWithURLToListDirectory:[NSURL URLWithString:url]]retain];
+    ftpRequest.delegate = self;
+    ftpRequest.didFinishSelector = @selector(listFinished:);
+    ftpRequest.didFailSelector = @selector(listFailed:);
+    ftpRequest.willStartSelector = @selector(listWillStart:);
+    [ftpRequest startRequest];
+}
+
+//
 // FTP Download
 //
 
@@ -1078,7 +1105,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
             }
         }]autorelease];
         [controller setUrl:request.ftpURL.absoluteString isPredefined:YES];
-        [controller setType:FTPLoginControllerDownload];
+        [controller setType:FTPLoginControllerTypeDownload];
         [controller show];
     } else {
         CustomAlertView *avs = [[CustomAlertView alloc]initWithTitle:@"Download Failed" message:[request.error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -1142,7 +1169,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         ftpRequest.bytesWrittenSelector = @selector(uploadBytesWritten:);
         [ftpRequest startRequest];
     }]autorelease];
-    [controller setType:FTPLoginControllerUpload];
+    [controller setType:FTPLoginControllerTypeUpload];
     [controller show];
 }
 

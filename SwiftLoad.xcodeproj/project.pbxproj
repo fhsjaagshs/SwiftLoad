@@ -26,6 +26,7 @@
 		F11C403613F830720077F5D1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F11C403213F82FD10077F5D1 /* Foundation.framework */; };
 		F11C403713F830780077F5D1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F11C403013F82FB40077F5D1 /* UIKit.framework */; };
 		F11FE417145F8218008ECC7E /* dedicatedTextEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = F11FE415145F8218008ECC7E /* dedicatedTextEditor.m */; };
+		F1270DD91703C7710012A293 /* FTPBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1270DD81703C7710012A293 /* FTPBrowserViewController.m */; };
 		F128A1DD157FDBFE001BC156 /* SettingsView.m in Sources */ = {isa = PBXBuildFile; fileRef = F128A1DB157FDBFE001BC156 /* SettingsView.m */; };
 		F13979A516E78F4E00F8B61B /* ArrowLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A116E78F4E00F8B61B /* ArrowLeft.png */; };
 		F13979A616E78F4E00F8B61B /* ArrowLeft@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A216E78F4E00F8B61B /* ArrowLeft@2x.png */; };
@@ -171,6 +172,8 @@
 		F11C405913F83CA20077F5D1 /* MyFilesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyFilesViewController.h; sourceTree = "<group>"; };
 		F11FE414145F8218008ECC7E /* dedicatedTextEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dedicatedTextEditor.h; sourceTree = "<group>"; };
 		F11FE415145F8218008ECC7E /* dedicatedTextEditor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = dedicatedTextEditor.m; sourceTree = "<group>"; };
+		F1270DD71703C7710012A293 /* FTPBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTPBrowserViewController.h; sourceTree = "<group>"; };
+		F1270DD81703C7710012A293 /* FTPBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTPBrowserViewController.m; sourceTree = "<group>"; };
 		F128A1DA157FDBFD001BC156 /* SettingsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsView.h; sourceTree = "<group>"; };
 		F128A1DB157FDBFE001BC156 /* SettingsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsView.m; sourceTree = "<group>"; };
 		F13979A116E78F4E00F8B61B /* ArrowLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ArrowLeft.png; path = Images/ArrowLeft.png; sourceTree = "<group>"; };
@@ -490,6 +493,8 @@
 				F166BBC214E2171A003E5A07 /* webDAVViewController.m */,
 				F1B2488D14E333E200C44E11 /* webDAVHelp.h */,
 				F1B2488E14E333E200C44E11 /* webDAVHelp.m */,
+				F1270DD71703C7710012A293 /* FTPBrowserViewController.h */,
+				F1270DD81703C7710012A293 /* FTPBrowserViewController.m */,
 				F19BB51816E006680081C95B /* Supporting Files */,
 				9B9DA4CE15561D0100C260AD /* Custom Classes */,
 				F1693BC616DFAA08006E3739 /* HTTPServer */,
@@ -936,6 +941,7 @@
 				F17CEDE116FE724C00E7E47B /* FileCreationDialogue.m in Sources */,
 				F1CB7DAE16FFE99A002693B5 /* FTPLoginController.m in Sources */,
 				F1ED4B12170352D10056D55F /* NSString+mods.m in Sources */,
+				F1270DD91703C7710012A293 /* FTPBrowserViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

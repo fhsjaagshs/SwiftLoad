@@ -153,6 +153,7 @@
     SettingsView *d = [SettingsView viewController];
     d.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     [self presentModalViewController:d animated:YES];
+    //[kAppDelegate listFilesInRemoteDirectory:@"ftp://nssdcftp.gsfc.nasa.gov/photo_gallery/image/spacecraft/"];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

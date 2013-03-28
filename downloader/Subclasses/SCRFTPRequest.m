@@ -86,7 +86,7 @@ static NSOperationQueue *sharedRequestQueue = nil;
 @synthesize timeOutSeconds = _timeOutSeconds;
 @synthesize timeOutDate = _timeOutDate;
 @synthesize cancelledLock = _cancelledLock;
-@synthesize customUploadFileName;
+@synthesize customUploadFileName, directoryContents;
 
 /* Private */
 @synthesize writeStream = _writeStream, readStream = _readStream;
@@ -162,6 +162,13 @@ static NSOperationQueue *sharedRequestQueue = nil;
 	return self;
 }
 
+- (id)initWithURLToListDirectory:(NSURL *)ftpURL {
+	if (self = [super init]) {
+		[self initializeComponentWithURL:ftpURL operation:SCRFTPRequestOperationListDirectory];
+	}
+	return self;
+}
+
 - (void)initializeComponentWithURL:(NSURL *)ftpURL operation:(SCRFTPRequestOperation)operation {
 	self.ftpURL = ftpURL;
 	self.operation = operation;
@@ -180,6 +187,210 @@ static NSOperationQueue *sharedRequestQueue = nil;
 + (id)requestWithURL:(NSURL *)ftpURL toCreateDirectory:(NSString *)directoryName {
 	return [[[self alloc]initWithURL:ftpURL toCreateDirectory:directoryName]autorelease];
 }
+
++ (id)requestWithURLToListDirectory:(NSURL *)ftpURL {
+    return [[[self alloc]initWithURLToListDirectory:ftpURL]autorelease];
+}
+
+
+#pragma mark * Core transfer code
+
+- (void)handleListEvent:(NSStreamEvent)eventCode {
+    switch (eventCode) {
+        case NSStreamEventOpenCompleted: {
+            [self setStatus:SCRFTPRequestStatusOpenNetworkConnection];
+        } break;
+        case NSStreamEventHasBytesAvailable: {
+            [self setStatus:SCRFTPRequestStatusReadingFromStream];
+            
+            uint8_t buffer[32768];
+            
+            NSInteger bytesRead = [self.readStream read:buffer maxLength:sizeof(buffer)];
+            if (bytesRead == -1) {
+                [self failWithError:[self constructErrorWithCode:SCRFTPConnectionFailureErrorType message:[NSString stringWithFormat:@"Cannot continue listing the remote directory: %@",self.ftpURL.absoluteString]]];
+                return;
+            } else if (bytesRead == 0) {
+                [self requestFinished];
+            } else {
+                NSData *dataToParse = [NSData dataWithBytes:buffer length:(NSUInteger)bytesRead];
+                [self parseListData:dataToParse];
+            }
+        } break;
+        case NSStreamEventHasSpaceAvailable: {
+            assert(NO);     // should never happen for the output stream
+        } break;
+        case NSStreamEventErrorOccurred: {
+            CFStreamError err = CFReadStreamGetError((CFReadStreamRef)self.readStream);
+            if (err.domain == kCFStreamErrorDomainFTP) {
+                [self failWithError:[self constructErrorWithCode:SCRFTPConnectionFailureErrorType message:[NSString stringWithFormat:@"FTP error %d", (int)err.error]]];
+            } else {
+				[self failWithError:[self constructErrorWithCode:SCRFTPConnectionFailureErrorType message:@"Cannot open FTP connection."]];
+            }
+        } break;
+        case NSStreamEventEndEncountered: {
+            // ignore
+        } break;
+        default: {
+            assert(NO);
+        } break;
+    }
+
+}
+
+- (void)startListDirectoriesRequest {
+    
+    if (!self.ftpURL) {
+		[self failWithError:SCRFTPUnableToCreateRequestError];
+		return;
+	}
+    
+    CFReadStreamRef readStreamRef = CFReadStreamCreateWithFTPURL(nil, (CFURLRef)self.ftpURL);
+    self.readStream = (NSInputStream *)readStreamRef;
+    CFRelease(readStreamRef);
+    
+    [self applyCredentials];
+    
+    if (self.willStartSelector && [self.delegate respondsToSelector:self.willStartSelector]) {
+        [self.delegate performSelectorOnMainThread:self.willStartSelector withObject:self waitUntilDone:[NSThread isMainThread]];
+    }
+    
+    self.directoryContents = [NSMutableArray array];
+    
+    self.readStream.delegate = self;
+    [self.readStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    [self.readStream open];
+}
+
+- (void)parseListData:(NSData *)listData {
+    
+    /*NSMutableArray *newEntries = [NSMutableArray array];
+    
+    NSUInteger offset = 0;
+    NSStringEncoding usedEncoding = 0; // First encoding is 0;
+    do {
+        CFDictionaryRef thisEntry = nil;
+        
+        CFIndex bytesConsumed = CFFTPCreateParsedResourceListing(NULL, &((const uint8_t *)listData.bytes)[offset], (CFIndex)([listData length]-offset), &thisEntry);
+        if (bytesConsumed > 0) {
+            
+            // Somtimes CFFTPCreateParsedResourceListing returns a positive number despite the fact that it parsed something. This happens when the parsed data is total bullshit. Thanks, Windows!!!
+            
+            // So please check for nil.
+            if (thisEntry != nil) {
+                
+                NSDictionary *entryToFix = (NSDictionary *)thisEntry;
+                
+                // Pull some shit to fix the encoding. Thanks, Apple!!
+                
+                NSString *newName = nil;
+                
+                NSString *name = [entryToFix objectForKey:(id)kCFFTPResourceName];
+                if (name != nil) {
+                    NSData *nameData = [name dataUsingEncoding:NSMacOSRomanStringEncoding];
+                    
+                    if (nameData.length > 0) {
+                        
+                        if (usedEncoding) { // The below already got us our encoding
+                            newName = [[[NSString alloc]initWithData:nameData encoding:usedEncoding]autorelease];
+                        } else { // Hey, lets do some C-style enumeration since we're working with NSStringEncoding (a plain enum) and apple decided to make said enum have erratic numbering, so we can't avoid the fucking C array approach.
+                            NSStringEncoding myEncodingToTest[] = { NSUTF8StringEncoding, NSWindowsCP1251StringEncoding, NSWindowsCP1252StringEncoding, NSWindowsCP1253StringEncoding, NSWindowsCP1254StringEncoding, NSWindowsCP1250StringEncoding, NSASCIIStringEncoding, NSUTF16BigEndianStringEncoding, NSUTF16LittleEndianStringEncoding, NSUTF16StringEncoding, NSUTF32BigEndianStringEncoding, NSUTF32LittleEndianStringEncoding, NSUTF32StringEncoding, NSNEXTSTEPStringEncoding, NSJapaneseEUCStringEncoding, NSISOLatin1StringEncoding, NSSymbolStringEncoding, NSNonLossyASCIIStringEncoding, NSShiftJISStringEncoding, NSISOLatin2StringEncoding, NSUnicodeStringEncoding, NSISO2022JPStringEncoding, NSUTF16BigEndianStringEncoding, NSUTF16LittleEndianStringEncoding, NSUTF32StringEncoding, NSUTF32BigEndianStringEncoding, NSUTF32LittleEndianStringEncoding };
+                            int howManyEncodings = sizeof(myEncodingToTest)/sizeof(NSStringEncoding);
+                            
+                            for (int i = 0; (i < howManyEncodings); i++) {
+                                
+                                NSStringEncoding theEncoding = myEncodingToTest[i];
+                                NSString *testString = [[[NSString alloc]initWithData:nameData encoding:theEncoding]autorelease];
+                                
+                                if (testString.length > 0 && testString != nil) {
+                                    newName = testString;
+                                    usedEncoding = theEncoding;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                if (newName.length == 0) { // Above failed, fuck it and return unmodified entry
+                    NSLog(@"SCRFTPRequest: Name Entry Re-Encoding didn't happen for filename: %@",name); // So you see what's going on.
+                    [newEntries addObject:entryToFix];
+                } else { // hey it worked! Cool, lets return the fixed one
+                    NSMutableDictionary *newEntry = [[entryToFix mutableCopy]autorelease];
+                    [newEntry setObject:newName forKey:(id)kCFFTPResourceName];
+                    [newEntries addObject:newEntry];
+                }
+            }
+            
+            // We consume the bytes regardless of whether we get an entry.
+            offset += (NSUInteger)bytesConsumed;
+        }
+        
+        if (thisEntry != nil) {
+            CFRelease(thisEntry);
+        }
+        
+        if (bytesConsumed == 0) {
+            break;
+        } else if (bytesConsumed < 0) {
+            // Apple *ahem* we totally failed to parse the listing. Fail.
+            [self failWithError:[self constructErrorWithCode:SCRFTPConnectionFailureErrorType message:[NSString stringWithFormat:@"Failed to parse directory contents at %@",self.ftpURL.absoluteString]]];
+            break;
+        }
+    } while (YES);
+    
+    if (newEntries.count != 0) {
+        [self.directoryContents addObjectsFromArray:newEntries];
+    }*/
+
+	NSUInteger offset = 0;
+    
+    while (YES) {
+        
+        CFDictionaryRef entry;
+        
+        CFIndex length = CFFTPCreateParsedResourceListing(kCFAllocatorDefault, (unsigned char *)listData.bytes+offset, listData.length-offset, &entry);
+        
+        if (length <= 0 || !entry) {
+            break;
+        }
+        
+        if (![(NSString *)CFDictionaryGetValue(entry, kCFFTPResourceName) isEqualToString:@"."] && ![(NSString *)CFDictionaryGetValue(entry, kCFFTPResourceName) isEqualToString:@".."]) {
+            
+            
+            NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+            
+            id name = (id)CFDictionaryGetValue(entry, kCFFTPResourceName);
+            
+            if (name) {
+                [dictionary setObject:name forKey:NSFileName];
+                
+                int type = [(NSNumber *)CFDictionaryGetValue(entry, kCFFTPResourceType) intValue];
+                
+                if (type == 8) {
+                    [dictionary setObject:NSFileTypeRegular forKey:NSFileType];
+                    
+                    id size = (id)CFDictionaryGetValue(entry, kCFFTPResourceSize);
+                    if (size) {
+                        [dictionary setObject:size forKey:NSFileSize];
+                    }
+                    
+                } else if(type == 4) {
+                    [dictionary setObject:NSFileTypeDirectory forKey:NSFileType];
+                }
+                
+                id date = (id)CFDictionaryGetValue(entry, kCFFTPResourceModDate);
+                if (date) {
+                    [dictionary setObject:date forKey:NSFileModificationDate];
+                }
+                [self.directoryContents addObject:dictionary];
+            }
+        }
+        
+        CFRelease(entry);
+        offset += length;
+    }
+}
+
 
 #pragma mark Request logic
 
@@ -290,6 +501,9 @@ static NSOperationQueue *sharedRequestQueue = nil;
         case SCRFTPRequestOperationDownload:
             [self startDownloadRequest];
             break;
+        case SCRFTPRequestOperationListDirectory:
+            [self startListDirectoriesRequest];
+            break;
 	}
 }
 
@@ -309,6 +523,9 @@ static NSOperationQueue *sharedRequestQueue = nil;
 			break;
         case SCRFTPRequestOperationDownload:
             [self handleDownloadEvent:eventCode];
+            break;
+        case SCRFTPRequestOperationListDirectory:
+            [self handleListEvent:eventCode];
             break;
 	}
 }
@@ -647,6 +864,8 @@ static NSOperationQueue *sharedRequestQueue = nil;
 }
 
 - (void)dealloc {
+    NSLog(@"SCRFTPRequest: kthnxbye");
+    [self setDirectoryContents:nil];
     [self setDelegate:nil];
     [self setError:nil];
     [self setUserInfo:nil];

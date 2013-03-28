@@ -12,7 +12,7 @@
 //  Copyright © 2009, 7touch Group, Inc.
 //  All rights reserved.
 //  
-//  Purpose
+//  Purpose:
 //  Performs requests to a FTP server and allows to list directories on the FTP server, create new directories, download and upload files.
 //  
 //  Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,9 @@
 //  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 //  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 //  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//  
+//
+
+#define NSFileName @"NSFileName"
 
 #if TARGET_IPHONE
 	#import <CFNetwork/CFNetwork.h>
@@ -47,7 +49,8 @@
 typedef enum {
 	SCRFTPRequestOperationDownload,
 	SCRFTPRequestOperationUpload,
-	SCRFTPRequestOperationCreateDirectory
+	SCRFTPRequestOperationCreateDirectory,
+    SCRFTPRequestOperationListDirectory
 } SCRFTPRequestOperation;
 
 typedef enum {
@@ -166,6 +169,8 @@ extern NSString *const SCRFTPRequestErrorDomain;
 @property (nonatomic, copy) NSString *filePath;
 /** Denotes the directory to create. Specified when operation is SCRFTPRequestOperationCreateDirectory. */
 @property (nonatomic, copy) NSString *directoryName;
+/** Filenames that were enumerated from the list directory operation*/
+@property (nonatomic, retain) NSMutableArray *directoryContents;
 
 @property (assign) NSTimeInterval timeOutSeconds;
 
@@ -174,10 +179,12 @@ extern NSString *const SCRFTPRequestErrorDomain;
 - (id)initWithURL:(NSURL *)ftpURL toDownloadFile:(NSString *)filePath;
 - (id)initWithURL:(NSURL *)ftpURL toUploadFile:(NSString *)filePath;
 - (id)initWithURL:(NSURL *)ftpURL toCreateDirectory:(NSString *)directoryName;
+- (id)initWithURLToListDirectory:(NSURL *)ftpURL;
 
 + (id)requestWithURL:(NSURL *)ftpURL toDownloadFile:(NSString *)filePath;
 + (id)requestWithURL:(NSURL *)ftpURL toUploadFile:(NSString *)filePath;
 + (id)requestWithURL:(NSURL *)ftpURL toCreateDirectory:(NSString *)directoryName;
++ (id)requestWithURLToListDirectory:(NSURL *)ftpURL;
 
 #pragma mark Request logic
 
