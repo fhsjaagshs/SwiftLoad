@@ -20,4 +20,7 @@ typedef enum {
 - (id)initWithCompletionHandler:(void (^)(NSString *username, NSString *password, NSString *url))block;
 - (void)setUrl:(NSString *)url isPredefined:(BOOL)isPredef;
 
+@property (nonatomic, assign) SEL didMoveOnSelector;
+@property (nonatomic, assign) id textFieldDelegate;
+
 @end

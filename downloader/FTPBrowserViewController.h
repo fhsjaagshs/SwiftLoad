@@ -10,6 +10,4 @@
 
 @interface FTPBrowserViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, PullToRefreshViewDelegate>
 
-- (id)initWithURL:(NSString *)ftpurl;
-
 @end

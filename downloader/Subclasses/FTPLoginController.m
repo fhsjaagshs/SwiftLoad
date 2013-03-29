@@ -21,7 +21,7 @@
 
 @implementation FTPLoginController
 
-@synthesize serverField, usernameField, passwordField, ftpURL, urlPredefined;
+@synthesize serverField, usernameField, passwordField, ftpURL, urlPredefined, textFieldDelegate;
 
 - (void)setupTextViews {
     self.serverField = [[[CustomTextField alloc]init]autorelease];
@@ -206,6 +206,10 @@
         [self.serverField resignFirstResponder];
     }
     [self.usernameField becomeFirstResponder];
+    
+    if (self.textFieldDelegate && [self.textFieldDelegate respondsToSelector:self.didMoveOnSelector]) {
+        [self.textFieldDelegate performSelector:self.didMoveOnSelector withObject:self];
+    }
 }
 
 - (void)moveOnUsernameField {
@@ -213,6 +217,11 @@
         [self.usernameField resignFirstResponder];
     }
     [self.passwordField becomeFirstResponder];
+}
+
+- (void)dealloc {
+    [self setTextFieldDelegate:nil];
+    [super dealloc];
 }
 
 @end
