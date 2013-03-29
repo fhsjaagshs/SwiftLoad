@@ -18,5 +18,8 @@
 - (NSString *)stringBySanitizingForFilename;
 - (NSString *)stringByTrimmingWhitespace;
 - (NSString *)stringByAppendingPathComponent_URLSafe:(NSString *)str;
+- (NSString *)stringByDeletingLastPathComponent_URLSafe;
+- (NSString *)stringByDeletingPathExtension_URLSafe;
+- (NSString *)stringByAppendingPathExtension_URLSafe:(NSString *)str;
 
 @end

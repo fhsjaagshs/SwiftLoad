@@ -5,7 +5,7 @@
 //  Created by Aleks Nesterow on 10/28/09.
 //  aleks.nesterow@gmail.com
 //
-//  Download support added by Nathaniel Symer on 3/24/13
+//  Download and Directory Listing support added by Nathaniel Symer on 3/24/13
 //  nate@natesymer.com
 //	
 //	Inspired by http://allseeing-i.com/ASIHTTPRequest/
@@ -222,6 +222,8 @@ static NSOperationQueue *sharedRequestQueue = nil;
         case NSStreamEventErrorOccurred: {
             CFStreamError err = CFReadStreamGetError((CFReadStreamRef)self.readStream);
             if (err.domain == kCFStreamErrorDomainFTP) {
+                NSLog(@"here to bang");
+                
                 [self failWithError:[self constructErrorWithCode:SCRFTPConnectionFailureErrorType message:[NSString stringWithFormat:@"FTP error %d", (int)err.error]]];
             } else {
 				[self failWithError:[self constructErrorWithCode:SCRFTPConnectionFailureErrorType message:@"Cannot open FTP connection."]];
@@ -244,7 +246,15 @@ static NSOperationQueue *sharedRequestQueue = nil;
 		return;
 	}
     
-    CFReadStreamRef readStreamRef = CFReadStreamCreateWithFTPURL(nil, (CFURLRef)self.ftpURL);
+    self.directoryContents = [NSMutableArray array];
+    
+    CFReadStreamRef readStreamRef = CFReadStreamCreateWithFTPURL(kCFAllocatorDefault, (CFURLRef)self.ftpURL);
+    
+    if (!readStreamRef) {
+        [self failWithError:[self constructErrorWithCode:SCRFTPUnableToCreateRequestErrorType message:[NSString stringWithFormat:@"Cannot open FTP connection to %@",self.ftpURL]]];
+        return;
+    }
+    
     self.readStream = (NSInputStream *)readStreamRef;
     CFRelease(readStreamRef);
     
@@ -253,8 +263,6 @@ static NSOperationQueue *sharedRequestQueue = nil;
     if (self.willStartSelector && [self.delegate respondsToSelector:self.willStartSelector]) {
         [self.delegate performSelectorOnMainThread:self.willStartSelector withObject:self waitUntilDone:[NSThread isMainThread]];
     }
-    
-    self.directoryContents = [NSMutableArray array];
     
     self.readStream.delegate = self;
     [self.readStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
@@ -397,24 +405,13 @@ static NSOperationQueue *sharedRequestQueue = nil;
 - (void)applyCredentials {
     
     if (self.operation == SCRFTPRequestOperationDownload || self.operation == SCRFTPRequestOperationListDirectory) {
-        if (self.username) {
-            if (![self.readStream setProperty:self.username forKey:(id)kCFStreamPropertyFTPUserName]) {
-                [self failWithError:[self constructErrorWithCode:SCRFTPInternalErrorWhileApplyingCredentialsType message:[NSString stringWithFormat:@"Cannot apply the username \"%@\" to the FTP stream.",self.username]]];
-                return;
-            }
-            if (![self.readStream setProperty:self.password forKey:(id)kCFStreamPropertyFTPPassword]) {
-                [self failWithError:[self constructErrorWithCode:SCRFTPInternalErrorWhileApplyingCredentialsType message:[NSString stringWithFormat:NSLocalizedString(@"Cannot apply the password \"%@\" to the FTP stream.", @""),self.password]]];
-                return;
-            }
-        } else {
-            if (![self.readStream setProperty:@"anonymous" forKey:(id)kCFStreamPropertyFTPUserName]) {
-                [self failWithError:[self constructErrorWithCode:SCRFTPInternalErrorWhileApplyingCredentialsType message:[NSString stringWithFormat:@"Cannot apply the username \"%@\" to the FTP stream.",self.username]]];
-                return;
-            }
-            if (![self.readStream setProperty:@"" forKey:(id)kCFStreamPropertyFTPPassword]) {
-                [self failWithError:[self constructErrorWithCode:SCRFTPInternalErrorWhileApplyingCredentialsType message:@"Cannot apply the desired to the FTP stream."]];
-                return;
-            }
+        if (![self.readStream setProperty:(self.username != nil)?self.username:@"anonymous" forKey:(id)kCFStreamPropertyFTPUserName]) {
+            [self failWithError:[self constructErrorWithCode:SCRFTPInternalErrorWhileApplyingCredentialsType message:[NSString stringWithFormat:@"Cannot apply the username \"%@\" to the FTP stream.",self.username]]];
+            return;
+        }
+        if (![self.readStream setProperty:(self.password != nil)?self.password:@"" forKey:(id)kCFStreamPropertyFTPPassword]) {
+            [self failWithError:[self constructErrorWithCode:SCRFTPInternalErrorWhileApplyingCredentialsType message:[NSString stringWithFormat:@"Cannot apply the password \"%@\" to the FTP stream.",self.password]]];
+            return;
         }
     } else {
         if (self.username) {
@@ -432,45 +429,41 @@ static NSOperationQueue *sharedRequestQueue = nil;
 
 - (void)cancel {
 	
-	[[self cancelledLock] lock];
+	[[self cancelledLock]lock];
 	
-	/* Request may already be complete. */
 	if ([self isComplete] || [self isCancelled]) {
 		return;
 	}
 	
 	[self cancelRequest];
 	
-	[[self cancelledLock] unlock];
+	[[self cancelledLock]unlock];
 	
 	[super cancel];
 }
 
 - (void)main {
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
 	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-	[[self cancelledLock] lock];
+	[[self cancelledLock]lock];
 	
 	[self startRequest];
 	[self resetTimeout];
 	
-	[[self cancelledLock] unlock];
+	[[self cancelledLock]unlock];
 	
-	/* Main loop */
 	while (![self isCancelled] && ![self isComplete]) {
 		
-		[[self cancelledLock] lock];
+		[[self cancelledLock]lock];
 		
-		/* Do we need to timeout? */
-		if ([[self timeOutDate] timeIntervalSinceNow] < 0) {
+		if ([[self timeOutDate]timeIntervalSinceNow] <= 0) {
 			[self failWithError:SCRFTPRequestTimedOutError];
 			break;
 		}
 		
-		[[self cancelledLock] unlock];
+		[[self cancelledLock]unlock];
 		
-		[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[self timeOutDate]];
+		[[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[self timeOutDate]];
 	}
 	
 	[pool release];
@@ -532,10 +525,6 @@ static NSOperationQueue *sharedRequestQueue = nil;
 
 #pragma mark Download logic
 
-- (BOOL)isReceiving {
-    return (self.readStream != nil);
-}
-
 - (void)handleDownloadEvent:(NSStreamEvent)eventCode {
     switch (eventCode) {
         case NSStreamEventOpenCompleted: {
@@ -578,7 +567,6 @@ static NSOperationQueue *sharedRequestQueue = nil;
             CFStreamError err = CFReadStreamGetError((CFReadStreamRef)self.readStream);
             if (err.domain == kCFStreamErrorDomainFTP) {
                 [self failWithError:[self constructErrorWithCode:SCRFTPConnectionFailureErrorType message:[NSString stringWithFormat:@"FTP error %d", (int)err.error]]];
-                //self.error = [NSError errorWithDomain:self.error.domain code:(int)err.error userInfo:self.error.userInfo];
             } else {
 				[self failWithError:[self constructErrorWithCode:SCRFTPConnectionFailureErrorType message:@"Cannot open FTP connection."]];
             }
@@ -604,7 +592,7 @@ static NSOperationQueue *sharedRequestQueue = nil;
     
     CFReadStreamRef readStreamTemp = CFReadStreamCreateWithFTPURL(kCFAllocatorDefault, (CFURLRef)self.ftpURL);
     if (!readStreamTemp) {
-        [self failWithError:[self constructErrorWithCode:SCRFTPUnableToCreateRequestErrorType message:[NSString stringWithFormat:NSLocalizedString(@"Cannot open FTP connection to %@", @""),self.ftpURL]]];
+        [self failWithError:[self constructErrorWithCode:SCRFTPUnableToCreateRequestErrorType message:[NSString stringWithFormat:@"Cannot open FTP connection to %@",self.ftpURL]]];
         return;
     }
     
@@ -705,8 +693,6 @@ static NSOperationQueue *sharedRequestQueue = nil;
                     _bufferLimit = bytesRead;
                 }
             }
-            
-            /* If we're not out of data completely, send the next chunk. */
             
             if (_bufferOffset != _bufferLimit) {
 				

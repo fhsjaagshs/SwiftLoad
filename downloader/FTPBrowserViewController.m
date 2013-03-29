@@ -78,17 +78,29 @@
     self.pull = [[[PullToRefreshView alloc]initWithScrollView:self.theTableView]autorelease];
     [self.pull setDelegate:self];
     [self.theTableView addSubview:self.pull];
-
+    
     [self showInitialLoginController];
 }
 
+- (NSString *)fixURL:(NSString *)url {
+    NSString *lastChar = [url substringFromIndex:url.length-1];
+    if (![lastChar isEqualToString:@"/"]) {
+        return [url stringByAppendingString:@"/"];
+    }
+    return url;
+}
+
 - (void)showInitialLoginController {
+    
+    NSString *browserURL = [[NSUserDefaults standardUserDefaults]objectForKey:@"FTPURLBrowser"];
+    
     FTPLoginController *controller = [[[FTPLoginController alloc]initWithCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
         if ([username isEqualToString:@"cancel"]) {
             [self dismissModalViewControllerAnimated:YES];
         } else {
-            self.currentFTPURL = url;
-            self.originalFTPURL = url;
+            self.currentFTPURL = [self fixURL:url];
+            self.originalFTPURL = [self fixURL:url];
+            [[NSUserDefaults standardUserDefaults]setObject:self.originalFTPURL forKey:@"FTPURLBrowser"];
             [self saveUsername:username andPassword:password forURL:[NSURL URLWithString:self.currentFTPURL]];
             [self sendReqestForCurrentURL];
         }
@@ -96,6 +108,11 @@
     [controller setType:FTPLoginControllerTypeLogin];
     controller.textFieldDelegate = self;
     controller.didMoveOnSelector = @selector(didMoveOn);
+    
+    if (browserURL.length > 0) {
+        [controller setUrl:browserURL isPredefined:NO];
+    }
+    
     [controller show];
 }
 
@@ -156,7 +173,6 @@
 
 - (void)removeCredsForURL:(NSURL *)ftpurl {
     KeychainItemWrapper *keychain = [[KeychainItemWrapper alloc]initWithIdentifier:@"SwiftLoadFTPCreds" accessGroup:nil];
-    
     NSString *keychainData = (NSString *)[keychain objectForKey:(id)kSecValueData];
     
     int index = -1;
@@ -183,7 +199,6 @@
     
     KeychainItemWrapper *keychain = [[KeychainItemWrapper alloc]initWithIdentifier:@"SwiftLoadFTPCreds" accessGroup:nil];
     NSString *keychainData = (NSString *)[keychain objectForKey:(id)kSecValueData];
-    
     int index = -1;
     
     NSMutableArray *triples = [NSMutableArray arrayWithArray:[keychainData componentsSeparatedByString:@","]];
@@ -195,7 +210,7 @@
             continue;
         }
         
-        NSArray *components = [keychainData componentsSeparatedByString:@":"];
+        NSArray *components = [string componentsSeparatedByString:@":"];
         
         NSString *host = [components objectAtIndex:2];
         if ([host isEqualToString:ftpurl.host]) {
@@ -240,13 +255,14 @@
     
     for (NSString *string in triples) {
         
-        NSArray *components = [keychainData componentsSeparatedByString:@":"];
+        NSArray *components = [string componentsSeparatedByString:@":"];
         
         if (components.count == 0) {
             continue;
         }
         
         NSString *host = [components objectAtIndex:2];
+        
         if ([host isEqualToString:ftpurl.host]) {
             username = [components objectAtIndex:0];
             password = [components objectAtIndex:1];
@@ -312,19 +328,22 @@
     
     cell.textLabel.text = filename;
     
-    NSString *detailText = ([fileDict objectForKey:NSFileType] == NSFileTypeDirectory)?@"Directory, ":@"File, ";
+    NSString *detailText = ([fileDict objectForKey:NSFileType] == NSFileTypeDirectory)?@"Directory":@"File, ";
     
-    float fileSize = [[fileDict objectForKey:NSFileSize]intValue];
-    
-    if (fileSize < 1024.0) {
-        detailText = [detailText stringByAppendingFormat:@"%.0f Byte%@",fileSize,(fileSize > 1)?@"s":@""];
-    } else if (fileSize < (1024*1024) && fileSize > 1024.0 ) {
-        fileSize = fileSize/1014;
-        detailText = [detailText stringByAppendingFormat:@"%.0f KB",fileSize];
-    } else if (fileSize < (1024*1024*1024) && fileSize > (1024*1024)) {
-        fileSize = fileSize/(1024*1024);
-        detailText = [detailText stringByAppendingFormat:@"%.0f MB",fileSize];
+    if ([fileDict objectForKey:NSFileType] == NSFileTypeRegular) {
+        float fileSize = [[fileDict objectForKey:NSFileSize]intValue];
+        
+        if (fileSize < 1024.0) {
+            detailText = [detailText stringByAppendingFormat:@"%.0f Byte%@",fileSize,(fileSize > 1)?@"s":@""];
+        } else if (fileSize < (1024*1024) && fileSize > 1024.0 ) {
+            fileSize = fileSize/1014;
+            detailText = [detailText stringByAppendingFormat:@"%.0f KB",fileSize];
+        } else if (fileSize < (1024*1024*1024) && fileSize > (1024*1024)) {
+            fileSize = fileSize/(1024*1024);
+            detailText = [detailText stringByAppendingFormat:@"%.0f MB",fileSize];
+        }
     }
+    
     cell.detailTextLabel.text = detailText;
     
     return cell;
@@ -337,8 +356,8 @@
     BOOL isDir = [fileDict objectForKey:NSFileType] == NSFileTypeDirectory;
     
     if (isDir) {
-        self.navBar.topItem.title = [self.navBar.topItem.title stringByAppendingPathComponent:self.currentFTPURL];
-        self.currentFTPURL = [self.currentFTPURL stringByAppendingPathComponent:filename];
+        self.currentFTPURL = [self fixURL:[self.currentFTPURL stringByAppendingPathComponent_URLSafe:filename]];
+        self.navBar.topItem.title = [self.navBar.topItem.title stringByAppendingPathComponent:filename];
         [self loadCurrentDirectory];
         if (self.currentFTPURL.length > self.originalFTPURL.length) {
             [self setButtonsHidden:NO];
@@ -367,7 +386,12 @@
 - (void)cacheCurrentDir {
     NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"cachedFTPDirs.plist"];
     NSMutableDictionary *savedDict = [NSMutableDictionary dictionaryWithContentsOfFile:cachePath];
-    [savedDict setObject:self.filedicts forKey:self.currentFTPURL];
+    
+    if (savedDict.count == 0) {
+        savedDict = [NSMutableDictionary dictionary];
+    }
+    
+    [savedDict setObject:self.filedicts forKey:[self fixURL:self.currentFTPURL]];
     [savedDict writeToFile:cachePath atomically:YES];
 }
 
@@ -381,11 +405,13 @@
     NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"cachedFTPDirs.plist"];
     NSMutableDictionary *savedDict = [NSMutableDictionary dictionaryWithContentsOfFile:cachePath];
     
-    if ([savedDict objectForKey:self.currentFTPURL]) {
+    NSLog(@"saved dict %@",savedDict);
+    
+    /*if ([savedDict objectForKey:[self fixURL:self.currentFTPURL]]) {
         self.filedicts = [savedDict objectForKey:self.currentFTPURL];
-    } else {
+    } else {*/
         [self sendReqestForCurrentURL];
-    }
+   // }
 }
 
 - (void)setButtonsHidden:(BOOL)shouldHide {
@@ -394,19 +420,18 @@
 }
 
 - (void)goHome {
-    self.currentFTPURL = self.originalFTPURL;
+    self.currentFTPURL = [self fixURL:self.originalFTPURL];
+    self.navBar.topItem.title = @"/";
     [self loadCurrentDirectory];
-    [self.theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-    [self.pull finishedLoading];
     [self setButtonsHidden:YES];
 }
 
 - (void)goBackDir {
     if (self.currentFTPURL.length > self.originalFTPURL.length) {
-        self.currentFTPURL = [self.currentFTPURL stringByDeletingLastPathComponent];
+        self.currentFTPURL = [self fixURL:[self.currentFTPURL stringByDeletingLastPathComponent_URLSafe]];
+        self.navBar.topItem.title = [self.navBar.topItem.title stringByDeletingLastPathComponent];
         [self loadCurrentDirectory];
-        [self.theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-        [self.pull finishedLoading];
+        [self.pull setState:PullToRefreshViewStateLoading];
         
         if (self.currentFTPURL.length <= self.originalFTPURL.length) {
             [self setButtonsHidden:YES];

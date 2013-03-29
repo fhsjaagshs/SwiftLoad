@@ -108,6 +108,7 @@
 
 - (void)setUrl:(NSString *)url isPredefined:(BOOL)isPredef {
     self.ftpURL = url;
+    self.serverField.text = url;
     [self.serverField setHidden:isPredef];
     self.urlPredefined = isPredef;
     self.message = isPredef?@"\n\n\n":self.message;
