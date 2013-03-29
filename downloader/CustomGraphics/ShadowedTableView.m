@@ -15,26 +15,25 @@
 
 @implementation ShadowedTableView
 
-@synthesize topShadow, bottomShadow;
 
-- (void)removeTopShadow {
+/*- (void)removeTopShadow {
     if (self.topShadow.superlayer) {
         [self.topShadow removeFromSuperlayer];
     }
-    [self setTopShadow:nil];
+    //[self setTopShadow:nil];
 }
 
 - (void)removeBottomShadow {
     if (self.bottomShadow.superlayer) {
         [self.bottomShadow removeFromSuperlayer];
     }
-    [self setBottomShadow:nil];
-}
+    //[self setBottomShadow:nil];
+}*/
 
 - (CAGradientLayer *)shadowAsInverse:(BOOL)inverse {
 	CAGradientLayer *newShadow = [[[CAGradientLayer alloc]init]autorelease];
-	newShadow.frame = CGRectMake(0, 0, self.frame.size.width,inverse ? SHADOW_INVERSE_HEIGHT : SHADOW_HEIGHT);
-	CGColorRef darkColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:inverse ? (SHADOW_INVERSE_HEIGHT / SHADOW_HEIGHT) * 0.5 : 0.5].CGColor;
+	newShadow.frame = CGRectMake(0, 0, self.frame.size.width,inverse?SHADOW_INVERSE_HEIGHT:SHADOW_HEIGHT);
+	CGColorRef darkColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:inverse?(SHADOW_INVERSE_HEIGHT/SHADOW_HEIGHT)*0.5:0.5].CGColor;
 	CGColorRef lightColor = [self.backgroundColor colorWithAlphaComponent:0.0].CGColor;
 	newShadow.colors = [NSArray arrayWithObjects:(id)(inverse?lightColor:darkColor), (id)(inverse?darkColor:lightColor), nil];
 	return newShadow;
@@ -42,11 +41,22 @@
 
 - (void)layoutSubviews {
 	[super layoutSubviews];
-	
-	NSArray *indexPathsForVisibleRows = [self indexPathsForVisibleRows];
-	if (indexPathsForVisibleRows.count == 0) {
-        [self removeBottomShadow];
-        [self removeTopShadow];
+    
+    if (!self.topShadow) {
+        self.topShadow = [self shadowAsInverse:YES];
+    }
+    
+    if (!self.bottomShadow) {
+        self.bottomShadow = [self shadowAsInverse:NO];
+    }
+    
+    NSArray *indexPathsForVisibleRows = [self indexPathsForVisibleRows];
+    
+    if (indexPathsForVisibleRows.count == 0) {
+        //[self removeBottomShadow];
+        // [self removeTopShadow];
+        [self.bottomShadow setHidden:YES];
+        [self.topShadow setHidden:YES];
 		return;
 	}
 	
@@ -59,12 +69,14 @@
 		} else if ([cell.layer.sublayers indexOfObjectIdenticalTo:self.topShadow] != 0) {
 			[cell.layer insertSublayer:self.topShadow atIndex:0];
 		}
+        [self.topShadow setHidden:NO];
 		CGRect shadowFrame = self.topShadow.frame;
 		shadowFrame.size.width = cell.frame.size.width;
 		shadowFrame.origin.y = -SHADOW_INVERSE_HEIGHT;
 		self.topShadow.frame = shadowFrame;
 	} else {
-        [self removeTopShadow];
+        //[self removeTopShadow];
+        [self.topShadow setHidden:YES];
 	}
 
 	NSIndexPath *lastRow = [indexPathsForVisibleRows lastObject];
@@ -76,12 +88,14 @@
 		} else if ([cell.layer.sublayers indexOfObjectIdenticalTo:self.bottomShadow] != 0) {
             [cell.layer insertSublayer:self.bottomShadow atIndex:0];
 		}
+        [self.bottomShadow setHidden:NO];
 		CGRect shadowFrame = self.bottomShadow.frame;
 		shadowFrame.size.width = cell.frame.size.width;
 		shadowFrame.origin.y = cell.frame.size.height;
 		self.bottomShadow.frame = shadowFrame;
 	} else {
-        [self removeBottomShadow];
+        //[self removeBottomShadow];
+        [self.bottomShadow setHidden:YES];
 	}
 }
 

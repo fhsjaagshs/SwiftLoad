@@ -359,7 +359,7 @@ static NSOperationQueue *sharedRequestQueue = nil;
             
             NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
             
-            id name = (id)CFDictionaryGetValue(entry, kCFFTPResourceName);
+            id name = (NSString *)CFDictionaryGetValue(entry, kCFFTPResourceName);
             
             if (name) {
                 [dictionary setObject:name forKey:NSFileName];
@@ -369,7 +369,7 @@ static NSOperationQueue *sharedRequestQueue = nil;
                 if (type == 8) {
                     [dictionary setObject:NSFileTypeRegular forKey:NSFileType];
                     
-                    id size = (id)CFDictionaryGetValue(entry, kCFFTPResourceSize);
+                    id size = (NSNumber *)CFDictionaryGetValue(entry, kCFFTPResourceSize);
                     if (size) {
                         [dictionary setObject:size forKey:NSFileSize];
                     }
@@ -378,9 +378,9 @@ static NSOperationQueue *sharedRequestQueue = nil;
                     [dictionary setObject:NSFileTypeDirectory forKey:NSFileType];
                 }
                 
-                id date = (id)CFDictionaryGetValue(entry, kCFFTPResourceModDate);
+                id date = (NSDate *)CFDictionaryGetValue(entry, kCFFTPResourceModDate);
                 if (date) {
-                    [dictionary setObject:date forKey:NSFileModificationDate];
+                    [dictionary setObject:(NSDate *)date forKey:NSFileModificationDate];
                 }
                 [self.directoryContents addObject:dictionary];
             }
@@ -602,7 +602,7 @@ static NSOperationQueue *sharedRequestQueue = nil;
     self.writeStream = [NSOutputStream outputStreamToFileAtPath:self.filePath append:NO];
     [self.writeStream open];
     
-    CFReadStreamRef readStreamTemp = CFReadStreamCreateWithFTPURL(NULL, (CFURLRef)self.ftpURL);
+    CFReadStreamRef readStreamTemp = CFReadStreamCreateWithFTPURL(kCFAllocatorDefault, (CFURLRef)self.ftpURL);
     if (!readStreamTemp) {
         [self failWithError:[self constructErrorWithCode:SCRFTPUnableToCreateRequestErrorType message:[NSString stringWithFormat:NSLocalizedString(@"Cannot open FTP connection to %@", @""),self.ftpURL]]];
         return;

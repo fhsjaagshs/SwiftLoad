@@ -58,4 +58,11 @@
     return [[self componentsSeparatedByCharactersInSet:illegalFileNameCharacters]componentsJoinedByString:@""];
 }
 
+- (NSString *)stringByAppendingPathComponent_URLSafe:(NSString *)str {
+    NSURL *url = [NSURL URLWithString:self];
+    NSString *newPath = [url.path stringByAppendingPathComponent:str];
+    NSURL *newURL = [[[NSURL alloc]initWithScheme:url.scheme host:url.host path:newPath]autorelease];
+    return newURL.absoluteString;
+}
+
 @end

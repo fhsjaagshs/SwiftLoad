@@ -151,10 +151,11 @@
 
 - (void)showSettings {
     //SettingsView *d = [SettingsView viewController];
-    FTPBrowserViewController *d = [[[FTPBrowserViewController alloc]initWithURL:@"ftp://nssdcftp.gsfc.nasa.gov/photo_gallery/image/spacecraft/"]autorelease];
+    FTPBrowserViewController *d = [FTPBrowserViewController viewController];
+    
+   // [[[FTPBrowserViewController alloc]initWithURL:@"ftp://nssdcftp.gsfc.nasa.gov/photo_gallery/image/spacecraft/"]autorelease];
     d.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     [self presentModalViewController:d animated:YES];
-    //[kAppDelegate listFilesInRemoteDirectory:@"ftp://nssdcftp.gsfc.nasa.gov/photo_gallery/image/spacecraft/"];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

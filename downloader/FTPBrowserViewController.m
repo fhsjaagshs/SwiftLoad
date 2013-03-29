@@ -16,7 +16,6 @@
 @property (nonatomic, retain) CustomButton *backButton;
 @property (nonatomic, retain) CustomButton *homeButton;
 @property (nonatomic, retain) CustomNavBar *navBar;
-@property (nonatomic, retain) PullToRefreshView *pull;
 
 @property (nonatomic, retain) NSString *currentFTPURL;
 @property (nonatomic, retain) NSString *originalFTPURL;
@@ -26,26 +25,25 @@
 
 @implementation FTPBrowserViewController
 
+@synthesize theTableView, backButton, homeButton, navBar, currentFTPURL, originalFTPURL, filedicts;
+
 - (void)loadView {
     [super loadView];
     
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
-    
-    self.view = [[[UIView alloc]initWithFrame:screenBounds]autorelease];
-    self.view.backgroundColor = [UIColor clearColor];
-    
+
     self.navBar = [[[CustomNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
     self.navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[[UINavigationItem alloc]initWithTitle:@"/"]autorelease];
+    topItem.rightBarButtonItem = nil;
     topItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)]autorelease];
     [self.navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:self.navBar];
-    [self.view bringSubviewToFront:self.navBar];
     
     ButtonBarView *bbv = [[[ButtonBarView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, 44)]autorelease];
     bbv.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    [self.view addSubview:bbv];
+   [self.view addSubview:bbv];
     
     self.homeButton = [[[CustomButton alloc]initWithFrame:iPad?CGRectMake(358, 4, 62, 36):CGRectMake(123, 4, 62, 36)]autorelease];
     [self.homeButton setTitle:@"Home" forState:UIControlStateNormal];
@@ -74,16 +72,18 @@
     self.theTableView.rowHeight = iPad?60:44;
     self.theTableView.dataSource = self;
     self.theTableView.delegate = self;
-    self.theTableView.allowsSelectionDuringEditing = YES;
     [self.view addSubview:self.theTableView];
     
-    self.pull = [[[PullToRefreshView alloc]initWithScrollView:self.theTableView]autorelease];
-    [self.pull setDelegate:self];
-    [self.theTableView addSubview:self.pull];
-    
-   // [self listFilesInRemoteDirectory:self.currentFTPURL isInitialRequest:YES];
-    [self sendReqestForURL:self.currentFTPURL andUsename:@"anonymous" andPassword:@""];
-    //[self loadCurrentDirectory];
+    PullToRefreshView *pull = [[PullToRefreshView alloc]initWithScrollView:self.theTableView];
+    [pull setDelegate:self];
+    [self.theTableView addSubview:pull];
+    [pull release];
+
+    //[self loadCurrentDirectoryWithIsInitialRequest:YES];
+}
+
+- (void)close {
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 - (id)initWithURL:(NSString *)ftpurl {
@@ -95,18 +95,25 @@
     return self;
 }
 
+- (void)finishedLoading {
+    for (UIView *view in self.theTableView.subviews) {
+        if ([view isKindOfClass:[PullToRefreshView class]]) {
+            [(PullToRefreshView *)view finishedLoading];
+        }
+    }
+}
+
 - (void)listFinished:(SCRFTPRequest *)request {
-    self.filedicts = [[request.directoryContents mutableCopy]autorelease];
+    self.filedicts = [NSMutableArray arrayWithArray:request.directoryContents];
     [self cacheCurrentDir];
-    NSLog(@"Directory Contents: %@",request.directoryContents);
     [self.theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-    [self.pull finishedLoading];
+    [self finishedLoading];
     [request release];
 }
 
 - (void)listFailed:(SCRFTPRequest *)request {
     NSLog(@"Request Error: %@",request.error);
-    [self.pull finishedLoading];
+    [self finishedLoading];
     [request release];
 }
 
@@ -121,7 +128,7 @@
     
     int index = -1;
     
-    NSMutableArray *triples = [[[keychainData componentsSeparatedByString:@","]mutableCopy]autorelease];
+   NSMutableArray *triples = [NSMutableArray arrayWithArray:[keychainData componentsSeparatedByString:@","]];
     
     for (NSString *string in triples) {
         NSArray *components = [keychainData componentsSeparatedByString:@":"];
@@ -142,15 +149,21 @@
 - (void)saveUsername:(NSString *)username andPassword:(NSString *)password forURL:(NSURL *)ftpurl {
     
     KeychainItemWrapper *keychain = [[KeychainItemWrapper alloc]initWithIdentifier:@"SwiftLoadFTPCreds" accessGroup:nil];
-    
     NSString *keychainData = (NSString *)[keychain objectForKey:(id)kSecValueData];
     
     int index = -1;
     
-    NSMutableArray *triples = [[[keychainData componentsSeparatedByString:@","]mutableCopy]autorelease];
+    NSMutableArray *triples = [NSMutableArray arrayWithArray:[keychainData componentsSeparatedByString:@","]];
     
-    for (NSString *string in triples) {
+    for (NSString *string in [[triples mutableCopy]autorelease]) {
+        
+        if (string.length == 0) {
+            [triples removeObject:string];
+            continue;
+        }
+        
         NSArray *components = [keychainData componentsSeparatedByString:@":"];
+        
         NSString *host = [components objectAtIndex:2];
         if ([host isEqualToString:ftpurl.host]) {
             index = [triples indexOfObject:string];
@@ -171,6 +184,7 @@
     }
     
     NSString *final = [triples componentsJoinedByString:@","];
+    
     [keychain setObject:final forKey:(id)kSecValueData];
     
     [keychain release];
@@ -193,6 +207,7 @@
     NSArray *triples = [keychainData componentsSeparatedByString:@","];
     
     for (NSString *string in triples) {
+        
         NSArray *components = [keychainData componentsSeparatedByString:@":"];
         
         if (components.count == 0) {
@@ -216,7 +231,7 @@
     return nil;
 }
 
-- (void)sendReqestForURL:(NSString *)url andUsename:(NSString *)username andPassword:(NSString *)password{
+- (void)sendReqestForURL:(NSString *)url andUsename:(NSString *)username andPassword:(NSString *)password {
     SCRFTPRequest *ftpRequest = [[SCRFTPRequest requestWithURLToListDirectory:[NSURL URLWithString:url]]retain];
     ftpRequest.username = username;
     ftpRequest.password = password;
@@ -225,7 +240,7 @@
     ftpRequest.didFailSelector = @selector(listFailed:);
     ftpRequest.willStartSelector = @selector(listWillStart:);
     [ftpRequest startRequest];
-    [self.pull setState:PullToRefreshViewStateLoading];
+    //[self.pull setState:PullToRefreshViewStateLoading];
 }
 
 - (void)listFilesInRemoteDirectory:(NSString *)url isInitialRequest:(BOOL)isInitialRequest {
@@ -245,6 +260,7 @@
                         if ([username isEqualToString:@"cancel"]) {
                             [self dismissModalViewControllerAnimated:YES];
                         } else {
+                            [self saveUsername:username andPassword:password forURL:[NSURL URLWithString:self.originalFTPURL]];
                             [self sendReqestForURL:url andUsename:username andPassword:password];
                         }
                     }]autorelease];
@@ -260,7 +276,23 @@
         } else {
             [self sendReqestForURL:url andUsename:username andPassword:password];
         }
+    } else {
+        FTPLoginController *controller = [[[FTPLoginController alloc]initWithCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
+            if ([username isEqualToString:@"cancel"]) {
+                [self dismissModalViewControllerAnimated:YES];
+            } else {
+                [self saveUsername:username andPassword:password forURL:[NSURL URLWithString:self.originalFTPURL]];
+                [self sendReqestForURL:url andUsename:username andPassword:password];
+            }
+        }]autorelease];
+        [controller setUrl:url isPredefined:YES];
+        [controller setType:FTPLoginControllerTypeLogin];
+        [controller show];
     }
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewCellEditingStyleNone;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -272,8 +304,8 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    static NSString *CellIdentifier = @"CellFTP";
+    
+    static NSString *CellIdentifier = @"Cell";
     
     CustomCellCell *cell = (CustomCellCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
@@ -320,14 +352,15 @@
     if (isDir) {
         self.navBar.topItem.title = [self.navBar.topItem.title stringByAppendingPathComponent:self.currentFTPURL];
         self.currentFTPURL = [self.currentFTPURL stringByAppendingPathComponent:filename];
-        [self loadCurrentDirectory];
+        [self loadCurrentDirectoryWithIsInitialRequest:NO];
         if (self.currentFTPURL.length > self.originalFTPURL.length) {
             [self setButtonsHidden:NO];
         }
     } else {
         UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:@"Do you wish to download " completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-            if (buttonIndex == 1) {
-                [kAppDelegate downloadFileUsingFtp:[self.currentFTPURL stringByAppendingPathComponent:filename]];
+            if (buttonIndex == 0) {
+                NSLog(@"%@",[self.currentFTPURL stringByAppendingPathComponent:filename]);
+                [kAppDelegate downloadFileUsingFtp:[self.currentFTPURL stringByAppendingPathComponent_URLSafe:filename]];
             }
         } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download", nil]autorelease];
         actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
@@ -358,14 +391,14 @@
     self.filedicts = [savedDict objectForKey:url];
 }
 
-- (void)loadCurrentDirectory {
+- (void)loadCurrentDirectoryWithIsInitialRequest:(BOOL)isInitialRequest {
     NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"cachedFTPDirs.plist"];
     NSMutableDictionary *savedDict = [NSMutableDictionary dictionaryWithContentsOfFile:cachePath];
     
     if ([savedDict objectForKey:self.currentFTPURL]) {
         self.filedicts = [savedDict objectForKey:self.currentFTPURL];
     } else {
-        [self listFilesInRemoteDirectory:self.currentFTPURL isInitialRequest:NO];
+        [self listFilesInRemoteDirectory:self.currentFTPURL isInitialRequest:isInitialRequest];
     }
 }
 
@@ -377,9 +410,9 @@
 - (void)goBackDir {
     if (self.currentFTPURL.length > self.originalFTPURL.length) {
         self.currentFTPURL = [self.currentFTPURL stringByDeletingLastPathComponent];
-        [self loadCurrentDirectory];
+        [self loadCurrentDirectoryWithIsInitialRequest:NO];
         [self.theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-        [self.pull finishedLoading];
+        [self finishedLoading];
         
         if (self.currentFTPURL.length <= self.originalFTPURL.length) {
             [self setButtonsHidden:YES];
@@ -388,14 +421,16 @@
 }
 
 - (void)dealloc {
-    [self setPull:nil];
-    [self setTheTableView:nil];
     [self setBackButton:nil];
     [self setHomeButton:nil];
     [self setNavBar:nil];
     [self setCurrentFTPURL:nil];
     [self setFiledicts:nil];
+    [self setOriginalFTPURL:nil];
+    [self setTheTableView:nil];
+    NSLog(@"%@ dealloc'd", NSStringFromClass([self class]));
     [super dealloc];
+    NSLog(@"After");
 }
 
 @end

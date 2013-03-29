@@ -10,10 +10,18 @@ typedef enum {
 
 @protocol PullToRefreshViewDelegate;
 
-@interface PullToRefreshView : UIView 
+@interface PullToRefreshView : UIView {
+	id<PullToRefreshViewDelegate> delegate;
+    UIScrollView *scrollView;
+	PullToRefreshViewState state;
 
+	UILabel *statusLabel;
+	CALayer *arrowImage;
+	UIActivityIndicatorView *activityView;
+}
+
+@property (nonatomic, readonly) UIScrollView *scrollView;
 @property (nonatomic, assign) id<PullToRefreshViewDelegate> delegate;
-@property (nonatomic, assign, setter=setState:) PullToRefreshViewState state;
 
 - (void)finishedLoading;
 - (id)initWithScrollView:(UIScrollView *)scrollView;
