@@ -59,7 +59,7 @@
         NSMutableDictionary *outDictionary = nil;
         
         if (!SecItemCopyMatching((CFDictionaryRef)tempQuery, (CFTypeRef *)&outDictionary) == noErr) {
-            [self resetKeychainItem];
+            self.keychainItemData = [NSMutableDictionary dictionary];
 			[self.keychainItemData setObject:identifier forKey:(id)kSecAttrGeneric];
 			if (accessGroup != nil) {
 				[self.keychainItemData setObject:accessGroup forKey:(id)kSecAttrAccessGroup];
@@ -144,6 +144,7 @@
     
     if (SecItemCopyMatching((CFDictionaryRef)self.genericPasswordQuery, (CFTypeRef *)&attributes) == noErr) {
         updateItem = [NSMutableDictionary dictionaryWithDictionary:attributes];
+        [attributes release];
         [updateItem setObject:[self.genericPasswordQuery objectForKey:(id)kSecClass] forKey:(id)kSecClass];
         NSMutableDictionary *tempCheck = [self dictionaryToSecItemFormat:self.keychainItemData];
         [tempCheck removeObjectForKey:(id)kSecClass];
