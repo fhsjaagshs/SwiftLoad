@@ -80,6 +80,10 @@
     self.pull = [[[PullToRefreshView alloc]initWithScrollView:self.theTableView]autorelease];
     [self.pull setDelegate:self];
     [self.theTableView addSubview:self.pull];
+    
+   // [self listFilesInRemoteDirectory:self.currentFTPURL isInitialRequest:YES];
+    [self sendReqestForURL:self.currentFTPURL andUsename:@"anonymous" andPassword:@""];
+    //[self loadCurrentDirectory];
 }
 
 - (id)initWithURL:(NSString *)ftpurl {
@@ -177,6 +181,10 @@
     NSString *keychainData = (NSString *)[keychain objectForKey:(id)kSecValueData];
     [keychain release];
     
+    if (keychainData.length == 0) {
+        return nil;
+    }
+    
     // username:password:host, username:password:host, username:password:host
     
     NSString *username = nil;
@@ -186,6 +194,11 @@
     
     for (NSString *string in triples) {
         NSArray *components = [keychainData componentsSeparatedByString:@":"];
+        
+        if (components.count == 0) {
+            continue;
+        }
+        
         NSString *host = [components objectAtIndex:2];
         if ([host isEqualToString:ftpurl.host]) {
             username = [components objectAtIndex:0];
@@ -268,11 +281,9 @@
         cell = [[[CustomCellCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier]autorelease];
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            cell.accessoryView.center = CGPointMake(735, (cell.bounds.size.height)/2);
             cell.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:27];
             cell.detailTextLabel.font = [UIFont systemFontOfSize:20.0];
         } else {
-            cell.accessoryView.center = CGPointMake(297.5, (cell.bounds.size.height)/2);
             cell.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:20];
         }
     }
@@ -331,16 +342,7 @@
 }
 
 - (void)pullToRefreshViewShouldRefresh:(PullToRefreshView *)view {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-        [NSThread sleepForTimeInterval:0.5f];
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            NSAutoreleasePool *poolTwo = [[NSAutoreleasePool alloc]init];
-            [self listFilesInRemoteDirectory:self.currentFTPURL isInitialRequest:NO];
-            [poolTwo release];
-        });
-        [pool release];
-    });
+    [self listFilesInRemoteDirectory:self.currentFTPURL isInitialRequest:NO];
 }
 
 - (void)cacheCurrentDir {

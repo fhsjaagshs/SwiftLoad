@@ -396,7 +396,7 @@ static NSOperationQueue *sharedRequestQueue = nil;
 
 - (void)applyCredentials {
     
-    if (self.operation == SCRFTPRequestOperationDownload) {
+    if (self.operation == SCRFTPRequestOperationDownload || self.operation == SCRFTPRequestOperationListDirectory) {
         if (self.username) {
             if (![self.readStream setProperty:self.username forKey:(id)kCFStreamPropertyFTPUserName]) {
                 [self failWithError:[self constructErrorWithCode:SCRFTPInternalErrorWhileApplyingCredentialsType message:[NSString stringWithFormat:@"Cannot apply the username \"%@\" to the FTP stream.",self.username]]];

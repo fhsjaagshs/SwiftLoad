@@ -47,6 +47,7 @@
     #import "webBrowser.h"
     #import "MyFilesViewController.h"
     #import "SettingsView.h"
+    #import "FTPBrowserViewController.h"
 
     #import "DTCustomColoredAccessory.h"
     #import "HatchedView.h"
