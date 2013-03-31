@@ -154,7 +154,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.filedicts.count;
+    return self.pathContents.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -174,7 +174,7 @@
         }
     }
     
-    NSDictionary *fileDict = [self.filedicts objectAtIndex:indexPath.row];
+    NSDictionary *fileDict = [[self getFiles]objectAtIndex:indexPath.row];
     NSString *filename = [fileDict objectForKey:NSFileName];
     
     cell.textLabel.text = filename;
@@ -208,13 +208,17 @@
     NSString *filetype = (NSString *)[fileDict objectForKey:NSFileType];
     
     if ([filetype isEqualToString:(NSString *)NSFileTypeDirectory]) {
-        self.navBar.topItem.title = [self.navBar.topItem.title stringByAppendingPathComponent:filename];
+        self.navBar.topItem.title = [fileDict objectForKey:NSFileDBPath];
         [self refreshStateWithAnimationStyle:UITableViewRowAnimationRight];
-    } else if ([filetype isEqualToString:(NSString *)NSFileTypeRegular]) {
+    } else {
         NSString *message = [NSString stringWithFormat:@"Do you wish to download \"%@\"?",filename];
         UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             if (buttonIndex == 0) {
-                // download
+                [DroppinBadassBlocks loadFile:[fileDict objectForKey:NSFileDBPath] intoPath:[kDocsDir stringByAppendingPathComponent:filename] withCompletionBlock:^(DBMetadata *metadata, NSError *error) {
+                    
+                } andProgressBlock:^(CGFloat progress) {
+                    
+                }];
             }
         } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download", nil]autorelease];
         actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
