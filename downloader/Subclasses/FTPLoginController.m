@@ -135,15 +135,15 @@
     
     if (self.urlPredefined) {
         if (self.usernameField.text.length > 0) {
-            [self.passwordField becomeFirstResponder];
+            [self moveOnUsernameField];
         } else {
             [self.usernameField becomeFirstResponder];
         }
     } else {
         if (self.serverField.text.length > 0) {
-            [self.usernameField becomeFirstResponder];
+            [self moveOnServerField];
         } else if (self.usernameField.text.length > 0) {
-            [self.passwordField becomeFirstResponder];
+            [self moveOnUsernameField];
         } else {
             [self.serverField becomeFirstResponder];
         }

@@ -40,6 +40,8 @@
 
 #import "SCRFTPRequest.h"
 
+#import <sys/dirent.h>
+
 NSString *const SCRFTPRequestErrorDomain = @"SCRFTPRequestErrorDomain";
 
 static NSError *SCRFTPRequestTimedOutError;
@@ -364,7 +366,6 @@ static NSOperationQueue *sharedRequestQueue = nil;
         
         if (![(NSString *)CFDictionaryGetValue(entry, kCFFTPResourceName) isEqualToString:@"."] && ![(NSString *)CFDictionaryGetValue(entry, kCFFTPResourceName) isEqualToString:@".."]) {
             
-            
             NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
             
             id name = (NSString *)CFDictionaryGetValue(entry, kCFFTPResourceName);
@@ -374,7 +375,19 @@ static NSOperationQueue *sharedRequestQueue = nil;
                 
                 int type = [(NSNumber *)CFDictionaryGetValue(entry, kCFFTPResourceType) intValue];
                 
-                if (type == 8) {
+                /*
+                 * File types from <sys/dirent.h>
+                 */
+                
+                if (type == 0) { // DT_UNKNOWN
+                    [dictionary setObject:NSFileTypeUnknown forKey:NSFileType];
+                } else if (type == 2) { // DT_CHR
+                    [dictionary setObject:NSFileTypeCharacterSpecial forKey:NSFileType];
+                } else if (type == 6) { // DT_BLK
+                    [dictionary setObject:NSFileTypeBlockSpecial forKey:NSFileType];
+                } else if (type == 4) { // DT_DIR
+                    [dictionary setObject:NSFileTypeDirectory forKey:NSFileType];
+                } else if (type == 8) { // DT_REG
                     [dictionary setObject:NSFileTypeRegular forKey:NSFileType];
                     
                     id size = (NSNumber *)CFDictionaryGetValue(entry, kCFFTPResourceSize);
@@ -382,9 +395,11 @@ static NSOperationQueue *sharedRequestQueue = nil;
                         [dictionary setObject:size forKey:NSFileSize];
                     }
                     
-                } else if(type == 4) {
-                    [dictionary setObject:NSFileTypeDirectory forKey:NSFileType];
-                }
+                } else if (type == 10) { // DT_LNK
+                    [dictionary setObject:NSFileTypeSymbolicLink forKey:NSFileType];
+                } else if (type == 12) { // DT_SOCK
+                    [dictionary setObject:NSFileTypeSocket forKey:NSFileType];
+                } 
                 
                 id date = (NSDate *)CFDictionaryGetValue(entry, kCFFTPResourceModDate);
                 if (date) {

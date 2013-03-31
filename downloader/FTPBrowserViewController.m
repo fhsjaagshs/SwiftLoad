@@ -33,6 +33,8 @@
     
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
+    
+    self.view = [[[HatchedView alloc]initWithFrame:screenBounds]autorelease];
 
     self.navBar = [[[CustomNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
     self.navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -152,25 +154,6 @@
     [self dismissModalViewControllerAnimated:YES];
 }
 
-- (void)listFinished:(SCRFTPRequest *)request {
-    self.filedicts = [NSMutableArray arrayWithArray:request.directoryContents];
-    [self cacheCurrentDir];
-    [self.theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-    [self.pull finishedLoading];
-    [request release];
-}
-
-- (void)listFailed:(SCRFTPRequest *)request {
-    NSLog(@"Request Error: %@",request.error);
-    [self.theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-    [self.pull finishedLoading];
-    [request release];
-}
-
-- (void)listWillStart:(SCRFTPRequest *)request {
-    NSLog(@"starting");
-}
-
 - (void)removeCredsForURL:(NSURL *)ftpurl {
     KeychainItemWrapper *keychain = [[KeychainItemWrapper alloc]initWithIdentifier:@"SwiftLoadFTPCreds" accessGroup:nil];
     NSString *keychainData = (NSString *)[keychain objectForKey:(id)kSecValueData];
@@ -279,6 +262,24 @@
     return nil;
 }
 
+- (void)listFinished:(SCRFTPRequest *)request {
+    self.filedicts = [NSMutableArray arrayWithArray:request.directoryContents];
+    [self cacheCurrentDir];
+    [self.theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+    [self.pull finishedLoading];
+    [request release];
+}
+
+- (void)listFailed:(SCRFTPRequest *)request {
+    CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"FTP Error" message:request.error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [av show];
+    [av release];
+    
+    [self.theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+    [self.pull finishedLoading];
+    [request release];
+}
+
 - (void)sendReqestForCurrentURL {
     NSDictionary *creds = [self getCredsForURL:[NSURL URLWithString:self.currentFTPURL]];
     NSString *username = [creds objectForKey:@"username"];
@@ -289,7 +290,6 @@
     ftpRequest.delegate = self;
     ftpRequest.didFinishSelector = @selector(listFinished:);
     ftpRequest.didFailSelector = @selector(listFailed:);
-    ftpRequest.willStartSelector = @selector(listWillStart:);
     [ftpRequest startRequest];
     [self.pull setState:PullToRefreshViewStateLoading];
 }
@@ -328,23 +328,23 @@
     
     cell.textLabel.text = filename;
     
-    NSString *detailText = ([fileDict objectForKey:NSFileType] == NSFileTypeDirectory)?@"Directory":@"File, ";
-    
-    if ([fileDict objectForKey:NSFileType] == NSFileTypeRegular) {
+    if ([(NSString *)[fileDict objectForKey:NSFileType] isEqualToString:(NSString *)NSFileTypeRegular]) {
         float fileSize = [[fileDict objectForKey:NSFileSize]intValue];
         
+        cell.detailTextLabel.text = @"File, ";
+        
         if (fileSize < 1024.0) {
-            detailText = [detailText stringByAppendingFormat:@"%.0f Byte%@",fileSize,(fileSize > 1)?@"s":@""];
+            cell.detailTextLabel.text = [cell.detailTextLabel.text stringByAppendingFormat:@"%.0f Byte%@",fileSize,(fileSize > 1)?@"s":@""];
         } else if (fileSize < (1024*1024) && fileSize > 1024.0 ) {
             fileSize = fileSize/1014;
-            detailText = [detailText stringByAppendingFormat:@"%.0f KB",fileSize];
+            cell.detailTextLabel.text = [cell.detailTextLabel.text stringByAppendingFormat:@"%.0f KB",fileSize];
         } else if (fileSize < (1024*1024*1024) && fileSize > (1024*1024)) {
             fileSize = fileSize/(1024*1024);
-            detailText = [detailText stringByAppendingFormat:@"%.0f MB",fileSize];
+            cell.detailTextLabel.text = [cell.detailTextLabel.text stringByAppendingFormat:@"%.0f MB",fileSize];
         }
+    } else {
+        cell.detailTextLabel.text = @"Directory";
     }
-    
-    cell.detailTextLabel.text = detailText;
     
     return cell;
 }
@@ -353,23 +353,33 @@
     
     NSDictionary *fileDict = [self.filedicts objectAtIndex:indexPath.row];
     NSString *filename = [fileDict objectForKey:NSFileName];
-    BOOL isDir = [fileDict objectForKey:NSFileType] == NSFileTypeDirectory;
     
-    if (isDir) {
+    if ([(NSString *)[fileDict objectForKey:NSFileType] isEqualToString:(NSString *)NSFileTypeDirectory]) {
         self.currentFTPURL = [self fixURL:[self.currentFTPURL stringByAppendingPathComponent_URLSafe:filename]];
         self.navBar.topItem.title = [self.navBar.topItem.title stringByAppendingPathComponent:filename];
         [self loadCurrentDirectory];
         if (self.currentFTPURL.length > self.originalFTPURL.length) {
             [self setButtonsHidden:NO];
         }
-    } else {
-        UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:@"Do you wish to download " completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+    } else if ([(NSString *)[fileDict objectForKey:NSFileType] isEqualToString:(NSString *)NSFileTypeRegular]) {
+        NSString *message = [NSString stringWithFormat:@"Do you wish to download \"%@\"?",filename];
+        UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             if (buttonIndex == 0) {
                 [kAppDelegate downloadFileUsingFtp:[self.currentFTPURL stringByAppendingPathComponent_URLSafe:filename]];
             }
         } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download", nil]autorelease];
         actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
         [actionSheet showInView:self.view];
+    } else {
+        NSString *message = [NSString stringWithFormat:@"What do you wish to do with \"%@\"?",filename];
+        UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+            if (buttonIndex == 0) {
+                [kAppDelegate downloadFileUsingFtp:[self.currentFTPURL stringByAppendingPathComponent_URLSafe:filename]];
+            }
+        } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Treat as File", @"Treat as Directory", nil]autorelease];
+        actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+        [actionSheet showInView:self.view];
+
     }
     
     [self.theTableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -398,20 +408,20 @@
 - (void)loadDirFromCacheForURL:(NSString *)url {
     NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"cachedFTPDirs.plist"];
     NSMutableDictionary *savedDict = [NSMutableDictionary dictionaryWithContentsOfFile:cachePath];
-    self.filedicts = [savedDict objectForKey:url];
+    self.filedicts = [NSMutableArray arrayWithArray:[savedDict objectForKey:url]];
 }
 
 - (void)loadCurrentDirectory {
     NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"cachedFTPDirs.plist"];
     NSMutableDictionary *savedDict = [NSMutableDictionary dictionaryWithContentsOfFile:cachePath];
     
-    NSLog(@"saved dict %@",savedDict);
-    
-    /*if ([savedDict objectForKey:[self fixURL:self.currentFTPURL]]) {
-        self.filedicts = [savedDict objectForKey:self.currentFTPURL];
-    } else {*/
+    if ([savedDict objectForKey:[self fixURL:self.currentFTPURL]]) {
+        self.filedicts = [NSMutableArray arrayWithArray:[savedDict objectForKey:[self fixURL:self.currentFTPURL]]];
+        [self.theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+        [self.pull finishedLoading];
+    } else {
         [self sendReqestForCurrentURL];
-   // }
+    }
 }
 
 - (void)setButtonsHidden:(BOOL)shouldHide {
@@ -431,7 +441,6 @@
         self.currentFTPURL = [self fixURL:[self.currentFTPURL stringByDeletingLastPathComponent_URLSafe]];
         self.navBar.topItem.title = [self.navBar.topItem.title stringByDeletingLastPathComponent];
         [self loadCurrentDirectory];
-        [self.pull setState:PullToRefreshViewStateLoading];
         
         if (self.currentFTPURL.length <= self.originalFTPURL.length) {
             [self setButtonsHidden:YES];

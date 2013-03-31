@@ -221,6 +221,7 @@
 
 - (void)dealloc {
 	[self.scrollView removeObserver:self forKeyPath:@"contentOffset"];
+    [self setDelegate:nil];
     [super dealloc];
 }
 

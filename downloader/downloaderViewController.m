@@ -27,7 +27,7 @@
     [topItem release];
     
     CustomToolbar *bottomBar = [[CustomToolbar alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-44, screenBounds.size.width, 44)];
-    bottomBar.items = [NSArray arrayWithObjects:[[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil]autorelease], [[[UIBarButtonItem alloc]initWithTitle:@"Settings" style:UIBarButtonItemStyleBordered target:self action:@selector(showSettings)]autorelease], nil];
+    bottomBar.items = [NSArray arrayWithObjects:[[[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"ArrowUp"] style:UIBarButtonItemStylePlain target:self action:@selector(showFileBrowsers)]autorelease], [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil]autorelease], [[[UIBarButtonItem alloc]initWithTitle:@"Settings" style:UIBarButtonItemStyleBordered target:self action:@selector(showSettings)]autorelease], nil];
     [self.view addSubview:bottomBar];
     [self.view bringSubviewToFront:bottomBar];
     [bottomBar release];
@@ -150,12 +150,25 @@
 }
 
 - (void)showSettings {
-    //SettingsView *d = [SettingsView viewController];
-    FTPBrowserViewController *d = [FTPBrowserViewController viewController];
-    
-   // [[[FTPBrowserViewController alloc]initWithURL:@"ftp://nssdcftp.gsfc.nasa.gov/photo_gallery/image/spacecraft/"]autorelease];
+    SettingsView *d = [SettingsView viewController];
     d.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     [self presentModalViewController:d animated:YES];
+}
+
+- (void)showFileBrowsers {
+    UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:nil completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+        
+        if (buttonIndex == 0) {
+            FTPBrowserViewController *d = [FTPBrowserViewController viewController];
+            d.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+            [self presentModalViewController:d animated:YES];
+        } else if (buttonIndex == 1) {
+            CustomAlertView *av = [[[CustomAlertView alloc]initWithTitle:@"Not yet" message:@"Give it a while, the Dropbox browser is coming soon." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil]autorelease];
+            [av show];
+        }
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"FTP Browser", @"Dropbox Browser", nil]autorelease];
+    actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+    [actionSheet showInView:self.view];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
