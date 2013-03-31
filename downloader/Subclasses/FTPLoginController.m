@@ -134,18 +134,23 @@
     [super show];
     
     if (self.urlPredefined) {
+        
+        [self.usernameField becomeFirstResponder];
+        
         if (self.usernameField.text.length > 0) {
             [self moveOnUsernameField];
-        } else {
-            [self.usernameField becomeFirstResponder];
         }
+        
     } else {
+        
+        [self.serverField becomeFirstResponder];
+        
         if (self.serverField.text.length > 0) {
             [self moveOnServerField];
-        } else if (self.usernameField.text.length > 0) {
+        }
+        
+        if (self.usernameField.text.length > 0) {
             [self moveOnUsernameField];
-        } else {
-            [self.serverField becomeFirstResponder];
         }
     }
 }

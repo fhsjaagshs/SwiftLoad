@@ -1067,7 +1067,13 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 //
 
 - (void)downloadFileUsingFtp:(NSString *)url {
+    [self downloadFileUsingFtp:url withUsername:@"anonymous" andPassword:@""];
+}
+
+- (void)downloadFileUsingFtp:(NSString *)url withUsername:(NSString *)username andPassword:(NSString *)password {
     SCRFTPRequest *ftpRequest = [[SCRFTPRequest requestWithURL:[NSURL URLWithString:url] toDownloadFile:getNonConflictingFilePathForPath([[kDocsDir stringByAppendingPathComponent:[url lastPathComponent]]stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding])]retain];
+    ftpRequest.username = username;
+    ftpRequest.password = password;
     ftpRequest.delegate = self;
     ftpRequest.didFinishSelector = @selector(downloadFinished:);
     ftpRequest.didFailSelector = @selector(downloadFailed:);

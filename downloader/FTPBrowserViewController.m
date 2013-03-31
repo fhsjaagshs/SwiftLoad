@@ -354,18 +354,21 @@
     NSDictionary *fileDict = [self.filedicts objectAtIndex:indexPath.row];
     NSString *filename = [fileDict objectForKey:NSFileName];
     
-    if ([(NSString *)[fileDict objectForKey:NSFileType] isEqualToString:(NSString *)NSFileTypeDirectory]) {
+    NSString *filetype = (NSString *)[fileDict objectForKey:NSFileType];
+    
+    if ([filetype isEqualToString:(NSString *)NSFileTypeDirectory]) {
         self.currentFTPURL = [self fixURL:[self.currentFTPURL stringByAppendingPathComponent_URLSafe:filename]];
         self.navBar.topItem.title = [self.navBar.topItem.title stringByAppendingPathComponent:filename];
         [self loadCurrentDirectory];
         if (self.currentFTPURL.length > self.originalFTPURL.length) {
             [self setButtonsHidden:NO];
         }
-    } else if ([(NSString *)[fileDict objectForKey:NSFileType] isEqualToString:(NSString *)NSFileTypeRegular]) {
+    } else if ([filetype isEqualToString:(NSString *)NSFileTypeRegular]) {
         NSString *message = [NSString stringWithFormat:@"Do you wish to download \"%@\"?",filename];
         UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             if (buttonIndex == 0) {
-                [kAppDelegate downloadFileUsingFtp:[self.currentFTPURL stringByAppendingPathComponent_URLSafe:filename]];
+                NSDictionary *creds = [self getCredsForURL:[NSURL URLWithString:[self fixURL:self.currentFTPURL]]];
+                [kAppDelegate downloadFileUsingFtp:[self.currentFTPURL stringByAppendingPathComponent_URLSafe:filename] withUsername:[creds objectForKey:@"username"] andPassword:[creds objectForKey:@"password"]];
             }
         } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download", nil]autorelease];
         actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
@@ -374,12 +377,19 @@
         NSString *message = [NSString stringWithFormat:@"What do you wish to do with \"%@\"?",filename];
         UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             if (buttonIndex == 0) {
-                [kAppDelegate downloadFileUsingFtp:[self.currentFTPURL stringByAppendingPathComponent_URLSafe:filename]];
+                NSDictionary *creds = [self getCredsForURL:[NSURL URLWithString:[self fixURL:self.currentFTPURL]]];
+                [kAppDelegate downloadFileUsingFtp:[self.currentFTPURL stringByAppendingPathComponent_URLSafe:filename] withUsername:[creds objectForKey:@"username"] andPassword:[creds objectForKey:@"password"]];
+            } else if (buttonIndex == 1) {
+                self.currentFTPURL = [self fixURL:[self.currentFTPURL stringByAppendingPathComponent_URLSafe:filename]];
+                self.navBar.topItem.title = [self.navBar.topItem.title stringByAppendingPathComponent:filename];
+                [self loadCurrentDirectory];
+                if (self.currentFTPURL.length > self.originalFTPURL.length) {
+                    [self setButtonsHidden:NO];
+                }
             }
-        } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Treat as File", @"Treat as Directory", nil]autorelease];
+        } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download", @"Treat as Directory", nil]autorelease];
         actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
         [actionSheet showInView:self.view];
-
     }
     
     [self.theTableView deselectRowAtIndexPath:indexPath animated:YES];

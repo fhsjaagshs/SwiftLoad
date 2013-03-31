@@ -81,6 +81,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 // FTP
 - (void)showFTPUploadController;
 - (void)downloadFileUsingFtp:(NSString *)url;
+- (void)downloadFileUsingFtp:(NSString *)url withUsername:(NSString *)username andPassword:(NSString *)password;
 
 // HUD management
 - (void)setVisibleHudCustomView:(UIView *)view;
