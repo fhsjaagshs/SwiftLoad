@@ -72,8 +72,8 @@
     self.theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.theTableView.backgroundColor = [UIColor clearColor];
     self.theTableView.rowHeight = iPad?60:44;
-    //self.theTableView.dataSource = self;
-    //self.theTableView.delegate = self;
+    self.theTableView.dataSource = self;
+    self.theTableView.delegate = self;
     [self.view addSubview:self.theTableView];
     
     self.pull = [[[PullToRefreshView alloc]initWithScrollView:self.theTableView]autorelease];
@@ -81,11 +81,18 @@
     [self.theTableView addSubview:self.pull];
 }
 
+- (void)pullToRefreshViewShouldRefresh:(PullToRefreshView *)view {
+    [self.pathContents removeAllObjects];
+    [self loadRoot];
+}
+
 - (void)viewDidAppear:(BOOL)animated {
     if (![[DBSession sharedSession]isLinked]) {
         [[DBSession sharedSession]linkFromController:self];
     } else {
-        [self loadRoot];
+        if (self.pathContents.count == 0) {
+            [self loadRoot];
+        }
     }
 }
 
@@ -98,17 +105,19 @@
     
     for (DBMetadata *item in metadata.contents) {
         
+        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+        
         if (item.isDirectory) {
             self.numberOfDirsToGo += 1;
+            [dict setObject:[item.path scr_stringByFixingForURL] forKey:NSFileDBPath];
             [self loadFilesForDBPath:[item.path scr_stringByFixingForURL]];
         }
         
-        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
         [dict setObject:item.isDirectory?NSFileTypeDirectory:NSFileTypeRegular forKey:NSFileType];
         [dict setObject:item.filename forKey:NSFileName];
         [dict setObject:[NSNumber numberWithLongLong:item.totalBytes] forKey:NSFileSize];
         [dict setObject:item.lastModifiedDate forKey:NSFileModificationDate];
-        [dict setObject:[item.path scr_stringByFixingForURL] forKey:NSFileDBPath];
+        [dict setObject:item.path forKey:NSFileDBPath];
         
         [items addObject:dict];
     }
@@ -120,6 +129,8 @@
 
 - (void)loadRoot {
     self.numberOfDirsToGo = 1;
+    
+    [self.pull setState:PullToRefreshViewStateLoading];
     
     [DroppinBadassBlocks loadMetadata:@"/" withCompletionBlock:^(DBMetadata *metadata, NSError *error) {
         [self parseMetadata:metadata];
@@ -142,7 +153,8 @@
 }
 
 - (void)finishedLoadingMetadata {
-    NSLog(@"Metadata: %@",self.pathContents);
+    [self.pull finishedLoading];
+    [self refreshStateWithAnimationStyle:UITableViewRowAnimationFade];
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -154,7 +166,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.pathContents.count;
+    return [[self getFiles]count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -209,15 +221,24 @@
     
     if ([filetype isEqualToString:(NSString *)NSFileTypeDirectory]) {
         self.navBar.topItem.title = [fileDict objectForKey:NSFileDBPath];
-        [self refreshStateWithAnimationStyle:UITableViewRowAnimationRight];
+        [self refreshStateWithAnimationStyle:UITableViewRowAnimationLeft];
     } else {
         NSString *message = [NSString stringWithFormat:@"Do you wish to download \"%@\"?",filename];
         UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             if (buttonIndex == 0) {
+                
+                [kAppDelegate showHUDWithTitle:@"Downloading"];
+                [kAppDelegate setVisibleHudMode:MBProgressHUDModeDeterminate];
+                [kAppDelegate setSecondaryTitleOfVisibleHUD:filename];
+                
                 [DroppinBadassBlocks loadFile:[fileDict objectForKey:NSFileDBPath] intoPath:[kDocsDir stringByAppendingPathComponent:filename] withCompletionBlock:^(DBMetadata *metadata, NSError *error) {
-                    
+                    if (error) {
+                        [kAppDelegate showFailedAlertForFilename:metadata.filename];
+                    } else {
+                        [kAppDelegate showFinishedAlertForFilename:metadata.filename];
+                    }
                 } andProgressBlock:^(CGFloat progress) {
-                    
+                    [kAppDelegate setProgressOfVisibleHUD:progress];
                 }];
             }
         } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download", nil]autorelease];
@@ -239,12 +260,12 @@
 
 - (void)goHome {
     self.navBar.topItem.title = @"/";
-    [self refreshStateWithAnimationStyle:UITableViewRowAnimationLeft];
+    [self refreshStateWithAnimationStyle:UITableViewRowAnimationRight];
 }
 
 - (void)goBackDir {
     self.navBar.topItem.title = [[self.navBar.topItem.title stringByDeletingLastPathComponent]scr_stringByFixingForURL];
-    [self refreshStateWithAnimationStyle:UITableViewRowAnimationLeft];
+    [self refreshStateWithAnimationStyle:UITableViewRowAnimationRight];
 }
 
 - (void)refreshStateWithAnimationStyle:(UITableViewRowAnimation)animation {
@@ -258,7 +279,7 @@
 }
 
 - (NSArray *)getFiles {
-    [self.pathContents objectForKey:[self.navBar.topItem.title scr_stringByFixingForURL]];
+    return [self.pathContents objectForKey:[self.navBar.topItem.title scr_stringByFixingForURL]];
 }
 
 - (void)close {

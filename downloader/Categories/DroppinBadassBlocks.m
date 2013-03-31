@@ -28,17 +28,27 @@ static NSString * const MetadataBlockStringKey = @"mbsk";
 static NSString * const DownloadProgressBlockStringKey = @"dbsk-1";
 static NSString * const DownloadBlockStringKey = @"dbsk";
 static NSString * const LinkBlockStringKey = @"lbsk";
+static NSString * const DeltaBlockStringKey = @"dbsk";
 
 static char const * const MetadataBlockKey = "mbk";
 static char const * const DownloadProgressBlockKey = "dbsk-1";
 static char const * const DownloadBlockKey = "dbk";
 static char const * const LinkBlockKey = "lbk";
+static char const * const DeltaBlockKey = "dbk";
 
 
-@interface DroppinBadassBlocks ()
-
+@interface DroppinBadassBlocks () <DBRestClientDelegate>
 + (id)getInstance;
-
++ (id)deltaBlock;
++ (void)setDeltaBlock:(id)newblock;
++ (id)linkBlock;
++ (void)setLinkBlock:(id)newblock;
++ (id)downloadProgressBlock;
++ (void)setDownloadProgressBlock:(id)newblock;
++ (id)downloadBlock;
++ (void)setDownloadBlock:(id)newblock;
++ (id)metadataBlock;
++ (void)setMetadataBlock:(id)newblock;
 @end
 
 @implementation DroppinBadassBlocks
@@ -47,6 +57,14 @@ static char const * const LinkBlockKey = "lbk";
     DroppinBadassBlocks *restClient = [[DroppinBadassBlocks alloc]initWithSession:[DBSession sharedSession]];
     restClient.delegate = restClient;
     return restClient;
+}
+
++ (id)deltaBlock {
+    return objc_getAssociatedObject(DeltaBlockStringKey, DeltaBlockKey);
+}
+
++ (void)setDeltaBlock:(id)newblock {
+    objc_setAssociatedObject(DeltaBlockStringKey, DeltaBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 + (id)linkBlock {
@@ -81,6 +99,24 @@ static char const * const LinkBlockKey = "lbk";
     objc_setAssociatedObject(MetadataBlockStringKey, MetadataBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
+//
+// Delta
+//
+
++ (void)loadDelta:(NSString *)cursor withCompletionHandler:(void(^)(NSArray *entries, NSString *cursor, NSError *error))block {
+    [DroppinBadassBlocks setDeltaBlock:block];
+    [[DroppinBadassBlocks getInstance]loadDelta:cursor];
+}
+
+- (void)restClient:(DBRestClient *)client loadedDeltaEntries:(NSArray *)entries reset:(BOOL)shouldReset cursor:(NSString *)cursor hasMore:(BOOL)hasMore {
+    void(^block)(NSArray *entries, NSString *cursor, NSError *error) = [DroppinBadassBlocks deltaBlock];
+    block(entries, cursor, nil);
+}
+
+- (void)restClient:(DBRestClient *)client loadDeltaFailedWithError:(NSError *)error {
+    void(^block)(NSArray *entries, NSString *cursor, NSError *error) = [DroppinBadassBlocks deltaBlock];
+    block(nil, nil, error);
+}
 
 //
 // Links
