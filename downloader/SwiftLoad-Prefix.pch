@@ -48,6 +48,7 @@
     #import "MyFilesViewController.h"
     #import "SettingsView.h"
     #import "FTPBrowserViewController.h"
+    #import "DropboxBrowserViewController.h"
 
     #import "DTCustomColoredAccessory.h"
     #import "HatchedView.h"
@@ -67,5 +68,6 @@
     #import "FileCreationDialogue.h"
     #import "FTPLoginController.h"
     #import "KeychainItemWrapper.h"
+    #import "DroppinBadassBlocks.h"
 
 #endif

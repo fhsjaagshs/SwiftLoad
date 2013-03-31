@@ -17,6 +17,8 @@
 		9BFF2A0B15387C6E007ED9B1 /* ZipFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0415387C6E007ED9B1 /* ZipFile.m */; };
 		9BFF2A0C15387C6E007ED9B1 /* ZipReadStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0615387C6E007ED9B1 /* ZipReadStream.m */; };
 		9BFF2A0D15387C6E007ED9B1 /* ZipWriteStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0815387C6E007ED9B1 /* ZipWriteStream.m */; };
+		F10CBC5A1707D6E700C82AFB /* DroppinBadassBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */; };
+		F10CBC5D17080C6600C82AFB /* DropboxBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */; };
 		F1122A76142E4E8B00A04CC6 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */; };
 		F119697616E3D0FC001139F1 /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = F119697516E3D0FB001139F1 /* CustomTextField.m */; };
 		F119CF0813F46DA6007D67E4 /* downloaderAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F119CF0713F46DA6007D67E4 /* downloaderAppDelegate.m */; };
@@ -160,6 +162,10 @@
 		9BFF2A0615387C6E007ED9B1 /* ZipReadStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZipReadStream.m; sourceTree = "<group>"; };
 		9BFF2A0715387C6E007ED9B1 /* ZipWriteStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipWriteStream.h; sourceTree = "<group>"; };
 		9BFF2A0815387C6E007ED9B1 /* ZipWriteStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZipWriteStream.m; sourceTree = "<group>"; };
+		F10CBC581707D6E700C82AFB /* DroppinBadassBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DroppinBadassBlocks.h; path = ../Categories/DroppinBadassBlocks.h; sourceTree = "<group>"; };
+		F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DroppinBadassBlocks.m; path = ../Categories/DroppinBadassBlocks.m; sourceTree = "<group>"; };
+		F10CBC5B17080C6600C82AFB /* DropboxBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxBrowserViewController.h; sourceTree = "<group>"; };
+		F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxBrowserViewController.m; sourceTree = "<group>"; };
 		F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		F119697416E3D0FB001139F1 /* CustomTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTextField.h; sourceTree = "<group>"; };
 		F119697516E3D0FB001139F1 /* CustomTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTextField.m; sourceTree = "<group>"; };
@@ -502,6 +508,8 @@
 				F1B2488E14E333E200C44E11 /* webDAVHelp.m */,
 				F1270DD71703C7710012A293 /* FTPBrowserViewController.h */,
 				F1270DD81703C7710012A293 /* FTPBrowserViewController.m */,
+				F10CBC5B17080C6600C82AFB /* DropboxBrowserViewController.h */,
+				F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */,
 				F19BB51816E006680081C95B /* Supporting Files */,
 				9B9DA4CE15561D0100C260AD /* Custom Classes */,
 				F1693BC616DFAA08006E3739 /* HTTPServer */,
@@ -704,6 +712,8 @@
 		F1693C5F16DFAC59006E3739 /* Subclasses */ = {
 			isa = PBXGroup;
 			children = (
+				F10CBC581707D6E700C82AFB /* DroppinBadassBlocks.h */,
+				F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */,
 				F1A45E6E1704A15E00DD5FB9 /* KeychainItemWrapper.h */,
 				F1A45E6F1704A15E00DD5FB9 /* KeychainItemWrapper.m */,
 				F1693C6016DFAC59006E3739 /* MBProgressHUD.h */,
@@ -956,6 +966,8 @@
 				F1ED4B12170352D10056D55F /* NSString+mods.m in Sources */,
 				F1270DD91703C7710012A293 /* FTPBrowserViewController.m in Sources */,
 				F1A45E701704A15E00DD5FB9 /* KeychainItemWrapper.m in Sources */,
+				F10CBC5A1707D6E700C82AFB /* DroppinBadassBlocks.m in Sources */,
+				F10CBC5D17080C6600C82AFB /* DropboxBrowserViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -163,8 +163,9 @@
             d.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
             [self presentModalViewController:d animated:YES];
         } else if (buttonIndex == 1) {
-            CustomAlertView *av = [[[CustomAlertView alloc]initWithTitle:@"Not yet" message:@"Give it a while, the Dropbox browser is coming soon." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil]autorelease];
-            [av show];
+            DropboxBrowserViewController *d = [DropboxBrowserViewController viewController];
+            d.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+            [self presentModalViewController:d animated:YES];
         }
     } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"FTP Browser", @"Dropbox Browser", nil]autorelease];
     actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
