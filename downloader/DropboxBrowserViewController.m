@@ -8,6 +8,7 @@
 
 #import "DropboxBrowserViewController.h"
 #import "ButtonBarView.h"
+#import <DropboxSDK/DropboxSDK.h>
 
 @interface DropboxBrowserViewController () <UITableViewDataSource, UITableViewDelegate, PullToRefreshViewDelegate>
 
@@ -17,7 +18,7 @@
 @property (nonatomic, retain) CustomNavBar *navBar;
 @property (nonatomic, retain) PullToRefreshView *pull;
 
-@property (nonatomic, retain) NSMutableArray *filedicts;
+@property (nonatomic, retain) NSMutableDictionary *pathContents;
 
 @end
 
@@ -85,9 +86,33 @@
     }
 }
 
+- (void)parseMetadata:(DBMetadata *)metadata {
+    if (self.pathContents.count == 0) {
+        self.pathContents = [NSMutableDictionary dictionary];
+    }
+    
+    NSMutableArray *items = [NSMutableArray array];
+    
+    for (DBMetadata *item in metadata.contents) {
+        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+        [dict setObject:item.isDirectory?NSFileTypeDirectory:NSFileTypeRegular forKey:NSFileType];
+        [dict setObject:item.filename forKey:NSFileName];
+        [dict setObject:[NSNumber numberWithLongLong:item.totalBytes] forKey:NSFileSize];
+        [dict setObject:item.lastModifiedDate forKey:NSFileModificationDate];
+        
+        [items addObject:dict];
+        
+        if (item.isDirectory) {
+            [self loadFilesForDBPath:[item.path scr_stringByFixingForURL]];
+        }
+    }
+    
+    [self.pathContents setObject:items forKey:metadata.path];
+}
+
 - (void)loadFilesForDBPath:(NSString *)path {
     [DroppinBadassBlocks loadMetadata:path withCompletionBlock:^(DBMetadata *metadata, NSError *error) {
-        NSLog(@"Metadata: %@",metadata);
+        [self parseMetadata:metadata];
     }];
 }
 

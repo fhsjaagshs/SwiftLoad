@@ -74,6 +74,18 @@ static NSOperationQueue *sharedRequestQueue = nil;
 
 @end
 
+@implementation NSString (SCRFTPRequest)
+
+- (NSString *)scr_stringByFixingForURL {
+    NSString *lastChar = [self substringFromIndex:self.length-1];
+    if (![lastChar isEqualToString:@"/"]) {
+        return [self stringByAppendingString:@"/"];
+    }
+    return self;
+}
+
+@end
+
 @implementation SCRFTPRequest
 
 @synthesize delegate = _delegate, didFinishSelector = _didFinishSelector, didFailSelector = _didFailSelector;

@@ -195,4 +195,12 @@ extern NSString *const SCRFTPRequestErrorDomain;
 
 + (NSOperationQueue *)sharedRequestQueue;
 
+#pragma mark URL Fixer
+
+@end
+
+@interface NSString (SCRFTPRequest)
+
+- (NSString *)scr_stringByFixingForURL;
+
 @end
