@@ -38,7 +38,8 @@
 //  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#define NSFileName @"NSFileName"
+static NSString * const NSFileName  = @"NSFileName";
+static NSString * const NSFileDBPath = @"NSFileDBPath";
 
 #if TARGET_IPHONE
 	#import <CFNetwork/CFNetwork.h>

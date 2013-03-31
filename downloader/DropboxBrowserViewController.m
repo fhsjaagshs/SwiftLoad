@@ -8,6 +8,7 @@
 
 #import "DropboxBrowserViewController.h"
 #import "ButtonBarView.h"
+#import "CustomCellCell.h"
 #import <DropboxSDK/DropboxSDK.h>
 
 @interface DropboxBrowserViewController () <UITableViewDataSource, UITableViewDelegate, PullToRefreshViewDelegate>
@@ -19,6 +20,8 @@
 @property (nonatomic, retain) PullToRefreshView *pull;
 
 @property (nonatomic, retain) NSMutableDictionary *pathContents;
+
+@property (nonatomic, assign) int numberOfDirsToGo;
 
 @end
 
@@ -82,7 +85,7 @@
     if (![[DBSession sharedSession]isLinked]) {
         [[DBSession sharedSession]linkFromController:self];
     } else {
-        [self loadFilesForDBPath:@"/"];
+        [self loadRoot];
     }
 }
 
@@ -94,20 +97,42 @@
     NSMutableArray *items = [NSMutableArray array];
     
     for (DBMetadata *item in metadata.contents) {
+        
+        if (item.isDirectory) {
+            self.numberOfDirsToGo += 1;
+            [self loadFilesForDBPath:[item.path scr_stringByFixingForURL]];
+        }
+        
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
         [dict setObject:item.isDirectory?NSFileTypeDirectory:NSFileTypeRegular forKey:NSFileType];
         [dict setObject:item.filename forKey:NSFileName];
         [dict setObject:[NSNumber numberWithLongLong:item.totalBytes] forKey:NSFileSize];
         [dict setObject:item.lastModifiedDate forKey:NSFileModificationDate];
+        [dict setObject:[item.path scr_stringByFixingForURL] forKey:NSFileDBPath];
         
         [items addObject:dict];
-        
-        if (item.isDirectory) {
-            [self loadFilesForDBPath:[item.path scr_stringByFixingForURL]];
-        }
     }
     
-    [self.pathContents setObject:items forKey:metadata.path];
+    self.numberOfDirsToGo -= 1;
+    
+    [self.pathContents setObject:items forKey:[metadata.path scr_stringByFixingForURL]];
+}
+
+- (void)loadRoot {
+    self.numberOfDirsToGo = 1;
+    
+    [DroppinBadassBlocks loadMetadata:@"/" withCompletionBlock:^(DBMetadata *metadata, NSError *error) {
+        [self parseMetadata:metadata];
+    }];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        while (YES) {
+            if (self.numberOfDirsToGo == 0) {
+                [self finishedLoadingMetadata];
+                break;
+            }
+        }
+    });
 }
 
 - (void)loadFilesForDBPath:(NSString *)path {
@@ -116,5 +141,124 @@
     }];
 }
 
+- (void)finishedLoadingMetadata {
+    NSLog(@"Metadata: %@",self.pathContents);
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewCellEditingStyleNone;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.filedicts.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    static NSString *CellIdentifier = @"Cell";
+    
+    CustomCellCell *cell = (CustomCellCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
+    if (cell == nil) {
+        cell = [[[CustomCellCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier]autorelease];
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            cell.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:27];
+            cell.detailTextLabel.font = [UIFont systemFontOfSize:20.0];
+        } else {
+            cell.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:20];
+        }
+    }
+    
+    NSDictionary *fileDict = [self.filedicts objectAtIndex:indexPath.row];
+    NSString *filename = [fileDict objectForKey:NSFileName];
+    
+    cell.textLabel.text = filename;
+    
+    if ([(NSString *)[fileDict objectForKey:NSFileType] isEqualToString:(NSString *)NSFileTypeRegular]) {
+        float fileSize = [[fileDict objectForKey:NSFileSize]intValue];
+        
+        cell.detailTextLabel.text = @"File, ";
+        
+        if (fileSize < 1024.0) {
+            cell.detailTextLabel.text = [cell.detailTextLabel.text stringByAppendingFormat:@"%.0f Byte%@",fileSize,(fileSize > 1)?@"s":@""];
+        } else if (fileSize < (1024*1024) && fileSize > 1024.0 ) {
+            fileSize = fileSize/1014;
+            cell.detailTextLabel.text = [cell.detailTextLabel.text stringByAppendingFormat:@"%.0f KB",fileSize];
+        } else if (fileSize < (1024*1024*1024) && fileSize > (1024*1024)) {
+            fileSize = fileSize/(1024*1024);
+            cell.detailTextLabel.text = [cell.detailTextLabel.text stringByAppendingFormat:@"%.0f MB",fileSize];
+        }
+    } else {
+        cell.detailTextLabel.text = @"Directory";
+    }
+    
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSDictionary *fileDict = [[self getFiles]objectAtIndex:indexPath.row];
+    NSString *filename = [fileDict objectForKey:NSFileName];
+    
+    NSString *filetype = (NSString *)[fileDict objectForKey:NSFileType];
+    
+    if ([filetype isEqualToString:(NSString *)NSFileTypeDirectory]) {
+        self.navBar.topItem.title = [self.navBar.topItem.title stringByAppendingPathComponent:filename];
+        [self refreshStateWithAnimationStyle:UITableViewRowAnimationRight];
+    } else if ([filetype isEqualToString:(NSString *)NSFileTypeRegular]) {
+        NSString *message = [NSString stringWithFormat:@"Do you wish to download \"%@\"?",filename];
+        UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+            if (buttonIndex == 0) {
+                // download
+            }
+        } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download", nil]autorelease];
+        actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+        [actionSheet showInView:self.view];
+    }
+    
+    [self.theTableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return NO;
+}
+
+- (void)setButtonsHidden:(BOOL)shouldHide {
+    [self.backButton setHidden:shouldHide];
+    [self.homeButton setHidden:shouldHide];
+}
+
+- (void)goHome {
+    self.navBar.topItem.title = @"/";
+    [self refreshStateWithAnimationStyle:UITableViewRowAnimationLeft];
+}
+
+- (void)goBackDir {
+    self.navBar.topItem.title = [[self.navBar.topItem.title stringByDeletingLastPathComponent]scr_stringByFixingForURL];
+    [self refreshStateWithAnimationStyle:UITableViewRowAnimationLeft];
+}
+
+- (void)refreshStateWithAnimationStyle:(UITableViewRowAnimation)animation {
+    [self.theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:animation];
+
+    if (self.navBar.topItem.title.length > 1) {
+        [self setButtonsHidden:NO];
+    } else {
+        [self setButtonsHidden:YES];
+    }
+}
+
+- (NSArray *)getFiles {
+    [self.pathContents objectForKey:[self.navBar.topItem.title scr_stringByFixingForURL]];
+}
+
+- (void)close {
+    [self dismissModalViewControllerAnimated:YES];
+}
 
 @end

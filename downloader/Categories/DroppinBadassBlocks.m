@@ -1,6 +1,6 @@
 //
-//  UIView+Dropbox_Blocks.m
-//  SwiftLoad
+//  DroppingBadassBlocks.m
+//  DroppingBadassBlocks
 //
 //  Created by Nathaniel Symer on 3/30/13.
 //  Copyright (c) 2013 Nathaniel Symer. All rights reserved.
@@ -24,14 +24,22 @@ assert(6 == [Foo count:4]);*/
 #import <DropboxSDK/DBRestClient.h>
 #import <objc/runtime.h>
 
-//void(^metadataBlock)(DBMetadata *metadata, NSError *error);
 static NSString * const MetadataBlockStringKey = @"mbsk";
+static NSString * const DownloadProgressBlockStringKey = @"dbsk-1";
 static NSString * const DownloadBlockStringKey = @"dbsk";
 static NSString * const LinkBlockStringKey = @"lbsk";
 
 static char const * const MetadataBlockKey = "mbk";
+static char const * const DownloadProgressBlockKey = "dbsk-1";
 static char const * const DownloadBlockKey = "dbk";
 static char const * const LinkBlockKey = "lbk";
+
+
+@interface DroppinBadassBlocks ()
+
++ (id)getInstance;
+
+@end
 
 @implementation DroppinBadassBlocks
 
@@ -46,7 +54,15 @@ static char const * const LinkBlockKey = "lbk";
 }
 
 + (void)setLinkBlock:(id)newblock {
-    objc_setAssociatedObject(LinkBlockStringKey, LinkBlockKey, [newblock copy], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(LinkBlockStringKey, LinkBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
++ (id)downloadProgressBlock {
+    return objc_getAssociatedObject(DownloadProgressBlockStringKey, DownloadProgressBlockKey);
+}
+
++ (void)setDownloadProgressBlock:(id)newblock {
+    objc_setAssociatedObject(DownloadBlockStringKey, DownloadBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 + (id)downloadBlock {
@@ -54,7 +70,7 @@ static char const * const LinkBlockKey = "lbk";
 }
 
 + (void)setDownloadBlock:(id)newblock {
-    objc_setAssociatedObject(DownloadBlockStringKey, DownloadBlockKey, [newblock copy], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(DownloadBlockStringKey, DownloadBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 + (id)metadataBlock {
@@ -65,27 +81,24 @@ static char const * const LinkBlockKey = "lbk";
     objc_setAssociatedObject(MetadataBlockStringKey, MetadataBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
+
 //
 // Links
 //
 
 + (void)loadSharableLinkForFile:(NSString *)path andCompletionBlock:(void(^)(NSString *link, NSString *path, NSError *error))block {
-    objc_setAssociatedObject(kAppDelegate, "loadSharableLinkForFile:", [block copy], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [DroppinBadassBlocks setLinkBlock:block];
     [[DroppinBadassBlocks getInstance]loadSharableLinkForFile:path shortUrl:YES];
 }
 
 - (void)restClient:(DBRestClient *)restClient loadedSharableLink:(NSString *)link forFile:(NSString *)path {
-    void(^block)(NSString *link, NSString *path, NSError *error) = objc_getAssociatedObject(kAppDelegate, "loadSharableLinkForFile:");
+    void(^block)(NSString *link, NSString *path, NSError *error) = [DroppinBadassBlocks linkBlock];
     block(link, path, nil);
-    Block_release(block);
-    objc_removeAssociatedObjects(kAppDelegate);
 }
 
 - (void)restClient:(DBRestClient *)restClient loadSharableLinkFailedWithError:(NSError *)error {
-    void(^block)(NSString *link, NSString *path, NSError *error) = objc_getAssociatedObject(kAppDelegate, "loadSharableLinkForFile:");
+    void(^block)(NSString *link, NSString *path, NSError *error) = [DroppinBadassBlocks linkBlock];
     block(nil, nil, error);
-    Block_release(block);
-    objc_removeAssociatedObjects(kAppDelegate);
 }
 
 //
@@ -93,30 +106,24 @@ static char const * const LinkBlockKey = "lbk";
 //
 
 + (void)loadFile:(NSString *)path intoPath:(NSString *)destinationPath withCompletionBlock:(void(^)(DBMetadata *metadata, NSError *error))block andProgressBlock:(void(^)(CGFloat progress))progBlock {
-    objc_setAssociatedObject(kAppDelegate, "loadFile:intoPath: main", [block copy], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    objc_setAssociatedObject(kAppDelegate, "loadFile:intoPath: progress", [progBlock copy], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [DroppinBadassBlocks setDownloadBlock:block];
+    [DroppinBadassBlocks setDownloadProgressBlock:progBlock];
     [[DroppinBadassBlocks getInstance]loadFile:path intoPath:destinationPath];
 }
 
 - (void)restClient:(DBRestClient *)client loadedFile:(NSString *)destPath contentType:(NSString *)contentType metadata:(DBMetadata *)metadata {
-    void(^block)(DBMetadata *metadata, NSError *error) = objc_getAssociatedObject(kAppDelegate, "loadFile:intoPath: main");
+    void(^block)(DBMetadata *metadata, NSError *error) = [DroppinBadassBlocks downloadBlock];
     block(metadata, nil);
-    Block_release(block);
-    objc_removeAssociatedObjects(kAppDelegate);
 }
 
 - (void)restClient:(DBRestClient *)client loadProgress:(CGFloat)progress forFile:(NSString *)destPath {
-    void(^block)(CGFloat progress) = objc_getAssociatedObject(kAppDelegate, "loadFile:intoPath: progress");
+    void(^block)(CGFloat progress) = [DroppinBadassBlocks downloadProgressBlock];
     block(progress);
-    Block_release(block);
-    objc_removeAssociatedObjects(kAppDelegate);
 }
 
 - (void)restClient:(DBRestClient *)client loadFileFailedWithError:(NSError *)error {
-    void(^block)(DBMetadata *metadata, NSError *error) = objc_getAssociatedObject(kAppDelegate, "loadFile:intoPath: main");
+    void(^block)(DBMetadata *metadata, NSError *error) = [DroppinBadassBlocks downloadBlock];
     block(nil, error);
-    Block_release(block);
-    objc_removeAssociatedObjects(kAppDelegate);
 }
 
 
