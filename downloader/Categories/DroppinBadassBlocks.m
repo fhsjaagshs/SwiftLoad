@@ -53,6 +53,14 @@ static char const * const DeltaBlockKey = "dbk";
 
 @implementation DroppinBadassBlocks
 
++ (NSMutableArray *)deltaArray {
+    return objc_getAssociatedObject(@"deltaArray", "deltaArray");
+}
+
++ (void)setDeltaArray:(NSArray *)newDeltaArray {
+    objc_setAssociatedObject(@"deltaArray", "deltaArray", newDeltaArray, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
 + (id)getInstance {
     DroppinBadassBlocks *restClient = [[DroppinBadassBlocks alloc]initWithSession:[DBSession sharedSession]];
     restClient.delegate = restClient;
@@ -80,7 +88,7 @@ static char const * const DeltaBlockKey = "dbk";
 }
 
 + (void)setDownloadProgressBlock:(id)newblock {
-    objc_setAssociatedObject(DownloadBlockStringKey, DownloadBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
+    objc_setAssociatedObject(DownloadProgressBlockStringKey, DownloadProgressBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 + (id)downloadBlock {
@@ -103,14 +111,23 @@ static char const * const DeltaBlockKey = "dbk";
 // Delta
 //
 
-+ (void)loadDelta:(NSString *)cursor withCompletionHandler:(void(^)(NSArray *entries, NSString *cursor, NSError *error))block {
++ (void)loadDelta:(NSString *)cursor withCompletionHandler:(void(^)(NSArray *entries, NSString *cursor, BOOL hasMore, BOOL shouldReset, NSError *error))block {
     [DroppinBadassBlocks setDeltaBlock:block];
     [[DroppinBadassBlocks getInstance]loadDelta:cursor];
 }
 
 - (void)restClient:(DBRestClient *)client loadedDeltaEntries:(NSArray *)entries reset:(BOOL)shouldReset cursor:(NSString *)cursor hasMore:(BOOL)hasMore {
-    void(^block)(NSArray *entries, NSString *cursor, NSError *error) = [DroppinBadassBlocks deltaBlock];
-    block(entries, cursor, nil);
+    
+    void(^block)(NSArray *entries, NSString *cursor, BOOL hasMore, BOOL shouldReset, NSError *error) = [DroppinBadassBlocks deltaBlock];
+   /*
+    if (hasMore) {
+        [DroppinBadassBlocks setDeltaBlock:block];
+        [[DroppinBadassBlocks getInstance]loadDelta:cursor];
+    }
+    
+    NSLog(@"Has More %@",hasMore?@"YES":@"NO");
+    */
+    block(entries, cursor, hasMore, shouldReset, nil);
 }
 
 - (void)restClient:(DBRestClient *)client loadDeltaFailedWithError:(NSError *)error {
@@ -141,7 +158,7 @@ static char const * const DeltaBlockKey = "dbk";
 // File Downloading
 //
 
-+ (void)loadFile:(NSString *)path intoPath:(NSString *)destinationPath withCompletionBlock:(void(^)(DBMetadata *metadata, NSError *error))block andProgressBlock:(void(^)(CGFloat progress))progBlock {
++ (void)loadFile:(NSString *)path intoPath:(NSString *)destinationPath withCompletionBlock:(void(^)(DBMetadata *metadata, NSError *error))block andProgressBlock:(void(^)(float progress))progBlock {
     [DroppinBadassBlocks setDownloadBlock:block];
     [DroppinBadassBlocks setDownloadProgressBlock:progBlock];
     [[DroppinBadassBlocks getInstance]loadFile:path intoPath:destinationPath];
@@ -153,7 +170,7 @@ static char const * const DeltaBlockKey = "dbk";
 }
 
 - (void)restClient:(DBRestClient *)client loadProgress:(CGFloat)progress forFile:(NSString *)destPath {
-    void(^block)(CGFloat progress) = [DroppinBadassBlocks downloadProgressBlock];
+    void(^block)(float progress) = [DroppinBadassBlocks downloadProgressBlock];
     block(progress);
 }
 

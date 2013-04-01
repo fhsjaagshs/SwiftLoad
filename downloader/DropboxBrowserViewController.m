@@ -20,6 +20,7 @@
 @property (nonatomic, retain) PullToRefreshView *pull;
 
 @property (nonatomic, retain) NSMutableDictionary *pathContents;
+@property (nonatomic, retain) NSMutableArray *currentPathItems;
 
 @property (nonatomic, assign) int numberOfDirsToGo;
 
@@ -79,82 +80,91 @@
     self.pull = [[[PullToRefreshView alloc]initWithScrollView:self.theTableView]autorelease];
     [self.pull setDelegate:self];
     [self.theTableView addSubview:self.pull];
+    NSUserDefaultsOFKKill(@"DBCursor");
 }
 
 - (void)pullToRefreshViewShouldRefresh:(PullToRefreshView *)view {
-    [self.pathContents removeAllObjects];
-    [self loadRoot];
+    [self.pull setState:PullToRefreshViewStateLoading];
+    [self updateFileListing];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     if (![[DBSession sharedSession]isLinked]) {
         [[DBSession sharedSession]linkFromController:self];
     } else {
-        if (self.pathContents.count == 0) {
-            [self loadRoot];
-        }
+        [self.pull setState:PullToRefreshViewStateLoading];
+        [self updateFileListing];
     }
 }
 
-- (void)parseMetadata:(DBMetadata *)metadata {
-    if (self.pathContents.count == 0) {
-        self.pathContents = [NSMutableDictionary dictionary];
+- (void)cacheFiles {
+    NSArray *credStore = [[DBSession sharedSession]userIds];
+    
+    NSLog(@"Creds: %@",credStore);
+    
+    if (credStore.count > 0) {
+        NSString *userID = [credStore objectAtIndex:0];
+        NSString *fileCacheName = [NSString stringWithFormat:@"dbcache-%@.plist",userID];
+        NSString *filePath = [kCachesDir stringByAppendingPathComponent:fileCacheName];
+        [self.pathContents writeToFile:filePath atomically:YES];
     }
-    
-    NSMutableArray *items = [NSMutableArray array];
-    
-    for (DBMetadata *item in metadata.contents) {
-        
-        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-        
-        if (item.isDirectory) {
-            self.numberOfDirsToGo += 1;
-            [dict setObject:[item.path scr_stringByFixingForURL] forKey:NSFileDBPath];
-            [self loadFilesForDBPath:[item.path scr_stringByFixingForURL]];
-        }
-        
-        [dict setObject:item.isDirectory?NSFileTypeDirectory:NSFileTypeRegular forKey:NSFileType];
-        [dict setObject:item.filename forKey:NSFileName];
-        [dict setObject:[NSNumber numberWithLongLong:item.totalBytes] forKey:NSFileSize];
-        [dict setObject:item.lastModifiedDate forKey:NSFileModificationDate];
-        [dict setObject:item.path forKey:NSFileDBPath];
-        
-        [items addObject:dict];
-    }
-    
-    self.numberOfDirsToGo -= 1;
-    
-    [self.pathContents setObject:items forKey:[metadata.path scr_stringByFixingForURL]];
 }
 
-- (void)loadRoot {
-    self.numberOfDirsToGo = 1;
+- (void)updateFileListing {
     
-    [self.pull setState:PullToRefreshViewStateLoading];
-    
-    [DroppinBadassBlocks loadMetadata:@"/" withCompletionBlock:^(DBMetadata *metadata, NSError *error) {
-        [self parseMetadata:metadata];
-    }];
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        while (YES) {
-            if (self.numberOfDirsToGo == 0) {
-                [self finishedLoadingMetadata];
-                break;
+    [DroppinBadassBlocks loadDelta:NSUserDefaultsOFK(@"DBCursor") withCompletionHandler:^(NSArray *entries, NSString *cursor, BOOL hasMore, BOOL shouldReset, NSError *error) {
+        
+        if (error) {
+            NSLog(@"Error: %@",error);
+        } else {
+            // do the deed
+            [[NSUserDefaults standardUserDefaults]setObject:cursor forKey:@"DBCursor"];
+            
+            if (self.pathContents.count == 0) {
+                NSArray *credStore = [[DBSession sharedSession]userIds];
+                
+                if (credStore.count < 0) {
+                    NSString *userID = [credStore objectAtIndex:0];
+                    NSString *fileCacheName = [NSString stringWithFormat:@"dbcache-%@.plist",userID];
+                    NSString *filePath = [kCachesDir stringByAppendingPathComponent:fileCacheName];
+                    self.pathContents = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
+                } else {
+                    self.pathContents = [NSMutableDictionary dictionary];
+                }
+                
+            }
+            
+            if (shouldReset) {
+                NSLog(@"Resetting");
+                [self.pathContents removeAllObjects];
+            }
+            
+            for (DBDeltaEntry *entry in entries) {
+                if (entry.metadata == nil) {
+                    [self.pathContents removeObjectForKey:entry.lowercasePath];
+                } else {
+                    DBMetadata *item = entry.metadata;
+                    
+                    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+                    [dict setObject:item.isDirectory?NSFileTypeDirectory:NSFileTypeRegular forKey:NSFileType];
+                    [dict setObject:item.filename forKey:NSFileName];
+                    [dict setObject:[NSNumber numberWithLongLong:item.totalBytes] forKey:NSFileSize];
+                    [dict setObject:item.lastModifiedDate forKey:NSFileModificationDate];
+                    [dict setObject:item.isDirectory?[item.path scr_stringByFixingForURL]:item.path forKey:NSFileDBPath];
+                    [self.pathContents setObject:dict forKey:entry.lowercasePath];
+                }
+            }
+            
+            if (hasMore) {
+                NSLog(@"Continuing");
+                [self updateFileListing];
+            } else {
+                NSLog(@"done");
+                [self cacheFiles];
+                [self refreshStateWithAnimationStyle:UITableViewRowAnimationFade];
             }
         }
-    });
-}
-
-- (void)loadFilesForDBPath:(NSString *)path {
-    [DroppinBadassBlocks loadMetadata:path withCompletionBlock:^(DBMetadata *metadata, NSError *error) {
-        [self parseMetadata:metadata];
     }];
-}
-
-- (void)finishedLoadingMetadata {
-    [self.pull finishedLoading];
-    [self refreshStateWithAnimationStyle:UITableViewRowAnimationFade];
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -166,7 +176,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [[self getFiles]count];
+    return [self.currentPathItems count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -186,7 +196,8 @@
         }
     }
     
-    NSDictionary *fileDict = [[self getFiles]objectAtIndex:indexPath.row];
+    //NSDictionary *fileDict = [[self getFiles]objectAtIndex:indexPath.row];
+    NSDictionary *fileDict = [self.currentPathItems objectAtIndex:indexPath.row];
     NSString *filename = [fileDict objectForKey:NSFileName];
     
     cell.textLabel.text = filename;
@@ -214,7 +225,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSDictionary *fileDict = [[self getFiles]objectAtIndex:indexPath.row];
+    //NSDictionary *fileDict = [[self getFilesForPath:self.navBar.topItem.title]objectAtIndex:indexPath.row];
+    NSDictionary *fileDict = [self.currentPathItems objectAtIndex:indexPath.row];
     NSString *filename = [fileDict objectForKey:NSFileName];
     
     NSString *filetype = (NSString *)[fileDict objectForKey:NSFileType];
@@ -231,15 +243,16 @@
                 [kAppDelegate setVisibleHudMode:MBProgressHUDModeDeterminate];
                 [kAppDelegate setSecondaryTitleOfVisibleHUD:filename];
                 
-                [DroppinBadassBlocks loadFile:[fileDict objectForKey:NSFileDBPath] intoPath:[kDocsDir stringByAppendingPathComponent:filename] withCompletionBlock:^(DBMetadata *metadata, NSError *error) {
+                [DroppinBadassBlocks loadFile:[fileDict objectForKey:NSFileDBPath] intoPath:getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:filename]) withCompletionBlock:^(DBMetadata *metadata, NSError *error) {
                     if (error) {
                         [kAppDelegate showFailedAlertForFilename:metadata.filename];
                     } else {
                         [kAppDelegate showFinishedAlertForFilename:metadata.filename];
                     }
-                } andProgressBlock:^(CGFloat progress) {
+                } andProgressBlock:^(float progress) {
                     [kAppDelegate setProgressOfVisibleHUD:progress];
                 }];
+                
             }
         } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download", nil]autorelease];
         actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
@@ -264,11 +277,12 @@
 }
 
 - (void)goBackDir {
-    self.navBar.topItem.title = [[self.navBar.topItem.title stringByDeletingLastPathComponent]scr_stringByFixingForURL];
+    self.navBar.topItem.title = [self.navBar.topItem.title stringByDeletingLastPathComponent];
     [self refreshStateWithAnimationStyle:UITableViewRowAnimationRight];
 }
 
 - (void)refreshStateWithAnimationStyle:(UITableViewRowAnimation)animation {
+    [self updateCurrentDirContentsWithPath:self.navBar.topItem.title];
     [self.theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:animation];
 
     if (self.navBar.topItem.title.length > 1) {
@@ -276,10 +290,32 @@
     } else {
         [self setButtonsHidden:YES];
     }
+    
+    [self.pull finishedLoading];
 }
 
-- (NSArray *)getFiles {
-    return [self.pathContents objectForKey:[self.navBar.topItem.title scr_stringByFixingForURL]];
+- (void)updateCurrentDirContentsWithPath:(NSString *)path {
+    [self.currentPathItems removeAllObjects];
+    self.currentPathItems = [NSMutableArray array];
+    
+    NSString *pathy = [path lowercaseString];
+    
+    NSMutableArray *workedArray = [NSMutableArray array];
+    
+    for (NSString *lowercasePath in self.pathContents.allKeys) {
+        if ([lowercasePath hasPrefix:pathy]) {
+            int maxComponents = [pathy pathComponents].count+1;
+            if ([lowercasePath pathComponents].count <= maxComponents) {
+                [workedArray addObject:lowercasePath];
+            }
+        }
+    }
+    
+    workedArray = [[[workedArray sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)]mutableCopy]autorelease];
+    
+    for (id obj in workedArray) {
+        [self.currentPathItems addObject:[self.pathContents objectForKey:obj]];
+    }
 }
 
 - (void)close {
