@@ -15,13 +15,12 @@
 @property (nonatomic, retain) CustomTextField *usernameField;
 @property (nonatomic, retain) CustomTextField *passwordField;
 @property (nonatomic, assign) BOOL urlPredefined;
-@property (nonatomic, retain) NSString *ftpURL;
 
 @end
 
 @implementation FTPLoginController
 
-@synthesize serverField, usernameField, passwordField, ftpURL, urlPredefined, textFieldDelegate;
+@synthesize serverField, usernameField, passwordField, urlPredefined, textFieldDelegate;
 
 - (void)setupTextViews {
     self.serverField = [[[CustomTextField alloc]init]autorelease];
@@ -93,7 +92,7 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 1) {
-        NSString *server = (self.ftpURL.length == 0)?self.serverField.text:self.ftpURL;
+        NSString *server = self.serverField.text;
         [[NSUserDefaults standardUserDefaults]setObject:server forKey:@"FTPPath"];
         [[NSUserDefaults standardUserDefaults]setObject:self.usernameField.text forKey:@"FTPUsername"];
         void (^block)(NSString *username, NSString *password, NSString *url) = objc_getAssociatedObject(self, "blockCallback");
@@ -101,13 +100,12 @@
         Block_release(block);
     } else {
         void (^block)(NSString *username, NSString *password, NSString *url) = objc_getAssociatedObject(self, "blockCallback");
-        block(@"cancel", nil, (self.ftpURL.length == 0)?self.serverField.text:self.ftpURL);
+        block(@"cancel", nil, self.serverField.text);
         Block_release(block);
     }
 }
 
 - (void)setUrl:(NSString *)url isPredefined:(BOOL)isPredef {
-    self.ftpURL = url;
     self.serverField.text = url;
     [self.serverField setHidden:isPredef];
     self.urlPredefined = isPredef;

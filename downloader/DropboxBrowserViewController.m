@@ -108,14 +108,14 @@
 }
 
 - (void)updateFileListing {
-    
-    [DroppinBadassBlocks loadDelta:NSUserDefaultsOFK(@"DBCursor") withCompletionHandler:^(NSArray *entries, NSString *cursor, BOOL hasMore, BOOL shouldReset, NSError *error) {
+
+    [DroppinBadassBlocks loadDelta:NSUserDefaultsOFK(@"DBCursorKey") withCompletionHandler:^(NSArray *entries, NSString *cursor, BOOL hasMore, BOOL shouldReset, NSError *error) {
         
         if (error) {
             NSLog(@"Error: %@",error);
         } else {
             // do the deed
-            [[NSUserDefaults standardUserDefaults]setObject:cursor forKey:@"DBCursor"];
+            [[NSUserDefaults standardUserDefaults]setObject:cursor forKey:@"DBCursorKey"];
             
             if (self.pathContents.count == 0) {
                 NSArray *credStore = [[DBSession sharedSession]userIds];
@@ -133,7 +133,9 @@
             
             if (shouldReset) {
                 NSLog(@"Resetting");
+                NSUserDefaultsOFKKill(@"DBCursorKey");
                 [self.pathContents removeAllObjects];
+                [self cacheFiles];
             }
             
             for (DBDeltaEntry *entry in entries) {

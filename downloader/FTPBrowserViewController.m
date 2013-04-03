@@ -101,6 +101,7 @@
             [self dismissModalViewControllerAnimated:YES];
         } else {
             self.currentFTPURL = [self fixURL:url];
+            NSLog(@"URL: %@",url);
             self.originalFTPURL = [self fixURL:url];
             [[NSUserDefaults standardUserDefaults]setObject:self.originalFTPURL forKey:@"FTPURLBrowser"];
             [self saveUsername:username andPassword:password forURL:[NSURL URLWithString:self.currentFTPURL]];
