@@ -40,12 +40,18 @@
         err = ExtAudioFileOpenURL((CFURLRef)[NSURL fileURLWithPath:source], &sourceFile);
         
         if (err != noErr) {
+            if ([[NSFileManager defaultManager]fileExistsAtPath:destination]) {
+                [[NSFileManager defaultManager]removeItemAtPath:destination error:nil];
+            }
             return [NSError errorWithDomain:@"Failed to open audio file." code:1 userInfo:nil];
         }
         
         err = ExtAudioFileGetProperty(sourceFile, kExtAudioFileProperty_FileDataFormat, &size, &sourceFormat);
 
         if (err != noErr) {
+            if ([[NSFileManager defaultManager]fileExistsAtPath:destination]) {
+                [[NSFileManager defaultManager]removeItemAtPath:destination error:nil];
+            }
             return [NSError errorWithDomain:@"Failed to get source information about audio file." code:1 userInfo:nil];
         }
         
@@ -58,6 +64,9 @@
         err = AudioFormatGetProperty(kAudioFormatProperty_FormatInfo, 0, nil, &size, &destinationFormat);
         
         if (err != noErr) {
+            if ([[NSFileManager defaultManager]fileExistsAtPath:destination]) {
+                [[NSFileManager defaultManager]removeItemAtPath:destination error:nil];
+            }
             return [NSError errorWithDomain:@"Failed to setup destination format." code:1 userInfo:nil];
         }
         
@@ -68,6 +77,9 @@
         err = ExtAudioFileCreateWithURL((CFURLRef)[NSURL fileURLWithPath:destination], kAudioFileM4AType, &destinationFormat, NULL, kAudioFileFlags_EraseFile, &destinationFile);
         
         if (err != noErr) {
+            if ([[NSFileManager defaultManager]fileExistsAtPath:destination]) {
+                [[NSFileManager defaultManager]removeItemAtPath:destination error:nil];
+            }
             return [NSError errorWithDomain:@"Couldn't open the source file." code:1 userInfo:nil];
         }
 
@@ -97,6 +109,11 @@
             }
             
             ExtAudioFileDispose(destinationFile);
+            
+            if ([[NSFileManager defaultManager]fileExistsAtPath:destination]) {
+                [[NSFileManager defaultManager]removeItemAtPath:destination error:nil];
+            }
+            
             return [NSError errorWithDomain:@"Couldn't setup intermediate conversion format." code:1 userInfo:nil];
         }
         
@@ -107,6 +124,9 @@
         err = ExtAudioFileGetProperty(destinationFile, kExtAudioFileProperty_AudioConverter, &size, &converter);
         
         if (err != noErr) {
+            if ([[NSFileManager defaultManager]fileExistsAtPath:destination]) {
+                [[NSFileManager defaultManager]removeItemAtPath:destination error:nil];
+            }
             return [NSError errorWithDomain:@"Failed to setup converter." code:1 userInfo:nil];
         }
         
