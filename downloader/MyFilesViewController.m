@@ -107,6 +107,9 @@
         
         if (self.isCut) {
             [[NSFileManager defaultManager]moveItemAtPath:oldPath toPath:newPath error:&error];
+            if ([oldPath isEqualToString:[kAppDelegate nowPlayingFile]]) {
+                [kAppDelegate setNowPlayingFile:newPath];
+            }
         } else {
             [[NSFileManager defaultManager]copyItemAtPath:oldPath toPath:newPath error:&error];
         }
