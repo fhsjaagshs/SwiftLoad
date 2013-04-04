@@ -52,7 +52,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 @implementation downloaderAppDelegate
 
-@synthesize sessionController, progressView, isReciever, nowPlayingFile, sessionControllerSending, openFile, managerCurrentDir, restClient, downloadedData, expectedDownloadingFileSize, downloadedBytes, audioPlayer;
+@synthesize sessionController, progressView, isReciever, nowPlayingFile, sessionControllerSending, openFile, managerCurrentDir, downloadedData, expectedDownloadingFileSize, downloadedBytes, audioPlayer;
 
 //
 // Audio Player
@@ -554,86 +554,76 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 // 
 
 - (void)uploadLocalFile:(NSString *)localPath {
-    [self setOpenFile:localPath];
     [self showHUDWithTitle:@"Preparing"];
     [self setVisibleHudMode:MBProgressHUDModeIndeterminate];
-    [self.restClient loadMetadata:@"/"];
-}
-
-- (void)restClient:(DBRestClient *)client loadedMetadata:(DBMetadata *)metadata {
     
-    NSString *rev = nil;
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
-    if (metadata.isDirectory) {
-        for (DBMetadata *file in metadata.contents) {
-            if (file.isDirectory) {
-                continue;
-            }
-            
-            if ([file.filename isEqualToString:[self.openFile lastPathComponent]]) {
-                [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-                rev = file.rev;
-                break;
-            }
-        }
+    [DroppinBadassBlocks loadMetadata:@"/" withCompletionBlock:^(DBMetadata *metadata, NSError *error) {
         
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-        [self setVisibleHudMode:MBProgressHUDModeDeterminate];
-        [self setTitleOfVisibleHUD:@"Uploading..."];
-        [self.restClient uploadFile:[self.openFile lastPathComponent] toPath:@"/" withParentRev:rev fromPath:self.openFile];
-    }
-}
-
-- (void)restClient:(DBRestClient *)client loadMetadataFailedWithError:(NSError *)error {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    [self hideHUD];
-    NSString *message = [NSString stringWithFormat:@"The file you tried to upload failed because: %@",error];
-    CustomAlertView *avdd = [[CustomAlertView alloc]initWithTitle:@"Failure Uploading" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [avdd show];
-    [avdd release];
-}
-
-- (void)restClient:(DBRestClient *)client uploadProgress:(CGFloat)progress forFile:(NSString *)destPath from:(NSString *)srcPath {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    [self setProgressOfVisibleHUD:progress];
-}
-
-- (void)restClient:(DBRestClient *)client uploadedFile:(NSString *)destPath from:(NSString *)srcPath metadata:(DBMetadata *)metadata {
-    [self.restClient loadSharableLinkForFile:metadata.path];
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-}
-
-- (void)restClient:(DBRestClient *)client uploadFileFailedWithError:(NSError *)error {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    [self hideHUD];
-    NSString *message = [[NSString alloc]initWithFormat:@"The file you tried to upload failed because: %@",error];
-    CustomAlertView *avdd = [[CustomAlertView alloc]initWithTitle:@"Failure Uploading" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [avdd show];
-    [avdd release];
-    [message release];
-}
-
-- (void)restClient:(DBRestClient *)client loadedSharableLink:(NSString *)link forFile:(NSString *)path {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    [self hideHUD];
-
-    CustomAlertView *avdd = [[CustomAlertView alloc]initWithTitle:[NSString stringWithFormat:@"Link For:\n%@",[path lastPathComponent]] message:link completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
-        if (buttonIndex == 1) {
-            [[UIPasteboard generalPasteboard]setString:alertView.message];
+        if (error) {
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            [self hideHUD];
+            NSString *message = [NSString stringWithFormat:@"The file you tried to upload failed because: %@",error];
+            CustomAlertView *avdd = [[CustomAlertView alloc]initWithTitle:@"Failure Uploading" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [avdd show];
+            [avdd release];
+        } else {
+            NSString *rev = nil;
+            
+            if (metadata.isDirectory) {
+                for (DBMetadata *file in metadata.contents) {
+                    if (file.isDirectory) {
+                        continue;
+                    }
+                    
+                    if ([file.filename isEqualToString:[self.openFile lastPathComponent]]) {
+                        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+                        rev = file.rev;
+                        break;
+                    }
+                }
+                
+                [self setVisibleHudMode:MBProgressHUDModeDeterminate];
+                [self setTitleOfVisibleHUD:@"Uploading..."];
+                [DroppinBadassBlocks uploadFile:[self.openFile lastPathComponent] toPath:@"/" withParentRev:rev fromPath:localPath withBlock:^(NSString *destPath, NSString *srcPath, DBMetadata *metadata, NSError *error) {
+                    
+                    if (error) {
+                        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+                        [self hideHUD];
+                        NSString *message = [[NSString alloc]initWithFormat:@"The file you tried to upload failed because: %@",error];
+                        CustomAlertView *avdd = [[CustomAlertView alloc]initWithTitle:@"Failure Uploading" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        [avdd show];
+                        [avdd release];
+                        [message release];
+                    } else {
+                        [DroppinBadassBlocks loadSharableLinkForFile:metadata.path andCompletionBlock:^(NSString *link, NSString *path, NSError *error) {
+                            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+                            [self hideHUD];
+                            
+                            if (error) {
+                                CustomAlertView *avdd = [[CustomAlertView alloc]initWithTitle:@"Success Uploading" message:@"Upload succeeded, but there was a problem generating a sharable link." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                                [avdd show];
+                                [avdd release];
+                            } else {
+                                CustomAlertView *avdd = [[CustomAlertView alloc]initWithTitle:[NSString stringWithFormat:@"Link For:\n%@",[path lastPathComponent]] message:link completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
+                                    if (buttonIndex == 1) {
+                                        [[UIPasteboard generalPasteboard]setString:alertView.message];
+                                    }
+                                } cancelButtonTitle:@"OK" otherButtonTitles:@"Copy", nil];
+                                
+                                [avdd show];
+                                [avdd release];
+                            }
+                        }];
+                    }
+                    
+                } andProgressBlock:^(CGFloat progress, NSString *destPath, NSString *scrPath) {
+                    [self setProgressOfVisibleHUD:progress];
+                }];
+            }
         }
-    } cancelButtonTitle:@"OK" otherButtonTitles:@"Copy", nil];
-
-    [avdd show];
-    [avdd release];
-}
-
-- (void)restClient:(DBRestClient *)client loadSharableLinkFailedWithError:(NSError *)error {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    [self setProgressOfVisibleHUD:1.0f];
-    [self hideHUD];
-    CustomAlertView *avdd = [[CustomAlertView alloc]initWithTitle:@"Success Uploading" message:@"Upload succeeded, but there was a problem generating a sharable link." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [avdd show];
-    [avdd release];
+    }];
 }
 
 - (void)sessionDidReceiveAuthorizationFailure:(DBSession *)session userId:(NSString *)userId {
@@ -681,11 +671,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 	session.delegate = self;
 	[DBSession setSharedSession:session];
     [session release];
-    
-    DBRestClient *rc = [[DBRestClient alloc]initWithSession:[DBSession sharedSession]];
-    [self setRestClient:rc];
-    [rc release];
-    [self.restClient setDelegate:self];
     
     if (self.sessionController.session && !self.isReciever) {
         [self killSession];
@@ -1185,7 +1170,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [self setConnection:nil];
     [self setDownloadingFileName:nil];
     [self setDownloadedData:nil];
-    [self setRestClient:nil];
     [self setSessionController:nil];
     [self setSessionControllerSending:nil];
     [self setOpenFile:nil];

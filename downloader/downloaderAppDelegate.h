@@ -30,7 +30,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 @property (nonatomic, retain) UIWindow *window;
 @property (nonatomic, retain) downloaderViewController *viewController;
 
-@property (nonatomic, retain) DBRestClient *restClient;
+//@property (nonatomic, retain) DBRestClient *restClient;
 
 // ActionSheets
 @property (nonatomic, assign) BOOL uiasVis;

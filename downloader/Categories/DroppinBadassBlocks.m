@@ -29,16 +29,24 @@ static NSString * const DownloadProgressBlockStringKey = @"dbsk-1";
 static NSString * const DownloadBlockStringKey = @"dbsk";
 static NSString * const LinkBlockStringKey = @"lbsk";
 static NSString * const DeltaBlockStringKey = @"dbsk";
+static NSString * const UploadBlockStringKey = @"ubsk";
+static NSString * const UploadProgressBlockStringKey = @"ubsk-1";
 
 static char const * const MetadataBlockKey = "mbk";
 static char const * const DownloadProgressBlockKey = "dbsk-1";
 static char const * const DownloadBlockKey = "dbk";
 static char const * const LinkBlockKey = "lbk";
 static char const * const DeltaBlockKey = "dbk";
+static char const * const UploadBlockKey = "ubk";
+static char const * const UploadProgressBlockKey = "ubk-1";
 
 
 @interface DroppinBadassBlocks () <DBRestClientDelegate>
 + (id)getInstance;
++ (id)uploadBlock;
++ (void)setUploadBlock:(id)newblock;
++ (id)uploadProgressBlock;
++ (void)setUploadProgressBlock:(id)newblock;
 + (id)deltaBlock;
 + (void)setDeltaBlock:(id)newblock;
 + (id)linkBlock;
@@ -53,18 +61,34 @@ static char const * const DeltaBlockKey = "dbk";
 
 @implementation DroppinBadassBlocks
 
-+ (NSMutableArray *)deltaArray {
+/*+ (NSMutableArray *)deltaArray {
     return objc_getAssociatedObject(@"deltaArray", "deltaArray");
 }
 
 + (void)setDeltaArray:(NSArray *)newDeltaArray {
     objc_setAssociatedObject(@"deltaArray", "deltaArray", newDeltaArray, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
+}*/
 
 + (id)getInstance {
     DroppinBadassBlocks *restClient = [[DroppinBadassBlocks alloc]initWithSession:[DBSession sharedSession]];
     restClient.delegate = restClient;
     return restClient;
+}
+
++ (id)uploadBlock {
+    return objc_getAssociatedObject(UploadBlockStringKey, UploadBlockKey);
+}
+
++ (void)setUploadBlock:(id)newblock {
+    objc_setAssociatedObject(UploadBlockStringKey, UploadBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
++ (id)uploadProgressBlock {
+    return objc_getAssociatedObject(UploadProgressBlockStringKey, UploadProgressBlockKey);
+}
+
++ (void)setUploadProgressBlock:(id)newblock {
+    objc_setAssociatedObject(UploadProgressBlockStringKey, UploadProgressBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 + (id)deltaBlock {
@@ -108,6 +132,33 @@ static char const * const DeltaBlockKey = "dbk";
 }
 
 //
+// Uploading
+//
+
++ (void)uploadFile:(NSString *)filename toPath:(NSString *)path withParentRev:(NSString *)parentRev fromPath:(NSString *)sourcePath withBlock:(void(^)(NSString *destPath, NSString *srcPath, DBMetadata *metadata, NSError *error))block andProgressBlock:(void(^)(CGFloat progress, NSString *destPath, NSString *scrPath))pBlock {
+    [DroppinBadassBlocks setUploadBlock:block];
+    [DroppinBadassBlocks setUploadProgressBlock:pBlock];
+    [[DroppinBadassBlocks getInstance]uploadFile:filename toPath:path withParentRev:parentRev fromPath:sourcePath];
+}
+
+- (void)restClient:(DBRestClient *)client uploadedFile:(NSString *)destPath from:(NSString *)srcPath metadata:(DBMetadata *)metadata {
+    void(^block)(NSString *destPath, NSString *srcPath, DBMetadata *metadata, NSError *error) = [DroppinBadassBlocks uploadBlock];
+    block(destPath, srcPath, metadata, nil);
+}
+
+- (void)restClient:(DBRestClient *)client uploadFileFailedWithError:(NSError *)error {
+    void(^block)(NSString *destPath, NSString *srcPath, DBMetadata *metadata, NSError *error) = [DroppinBadassBlocks uploadBlock];
+    block(nil, nil, nil, error);
+}
+
+- (void)restClient:(DBRestClient *)client uploadProgress:(CGFloat)progress forFile:(NSString *)destPath from:(NSString *)srcPath {
+    void(^block)(CGFloat progress, NSString *destPath, NSString *scrPath) = [DroppinBadassBlocks uploadProgressBlock];
+    block(progress, destPath, srcPath);
+}
+
+
+
+//
 // Delta
 //
 
@@ -117,16 +168,7 @@ static char const * const DeltaBlockKey = "dbk";
 }
 
 - (void)restClient:(DBRestClient *)client loadedDeltaEntries:(NSArray *)entries reset:(BOOL)shouldReset cursor:(NSString *)cursor hasMore:(BOOL)hasMore {
-    
     void(^block)(NSArray *entries, NSString *cursor, BOOL hasMore, BOOL shouldReset, NSError *error) = [DroppinBadassBlocks deltaBlock];
-   /*
-    if (hasMore) {
-        [DroppinBadassBlocks setDeltaBlock:block];
-        [[DroppinBadassBlocks getInstance]loadDelta:cursor];
-    }
-    
-    NSLog(@"Has More %@",hasMore?@"YES":@"NO");
-    */
     block(entries, cursor, hasMore, shouldReset, nil);
 }
 
