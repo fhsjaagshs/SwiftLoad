@@ -1021,33 +1021,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 //
-// FTP File Listing
-//
-
-- (void)listFinished:(SCRFTPRequest *)request {
-    NSLog(@"Directory Contents: %@",request.directoryContents);
-    [request release];
-}
-
-- (void)listFailed:(SCRFTPRequest *)request {
-    NSLog(@"Request Error: %@",request.error);
-    [request release];
-}
-
-- (void)listWillStart:(SCRFTPRequest *)request {
-    NSLog(@"starting");
-}
-
-- (void)listFilesInRemoteDirectory:(NSString *)url {
-    SCRFTPRequest *ftpRequest = [[SCRFTPRequest requestWithURLToListDirectory:[NSURL URLWithString:url]]retain];
-    ftpRequest.delegate = self;
-    ftpRequest.didFinishSelector = @selector(listFinished:);
-    ftpRequest.didFailSelector = @selector(listFailed:);
-    ftpRequest.willStartSelector = @selector(listWillStart:);
-    [ftpRequest startRequest];
-}
-
-//
 // FTP Download
 //
 

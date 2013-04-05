@@ -65,7 +65,7 @@
     btf.text = @"This WebDAV server is only active as long as this screen is open.";
     [self.view addSubview:btf];
     
-    [self performSelector:@selector(checkForNetworkChange) withObject:nil afterDelay:5.0];
+    [self checkForNetworkChange];
     [self createServer];
 }
 
