@@ -100,23 +100,43 @@
 }
 
 - (void)pasteInLocation:(NSString *)location {
-    for (NSString *oldPath in self.copiedList) {
-        NSString *newPath = getNonConflictingFilePathForPath([location stringByAppendingPathComponent:[oldPath lastPathComponent]]);
+    
+    [kAppDelegate showHUDWithTitle:self.isCut?@"Moving Files...":@"Copying Files..."];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
         
-        NSError *error = nil;
-        
-        if (self.isCut) {
-            [[NSFileManager defaultManager]moveItemAtPath:oldPath toPath:newPath error:&error];
-            if ([oldPath isEqualToString:[kAppDelegate nowPlayingFile]]) {
-                [kAppDelegate setNowPlayingFile:newPath];
+        for (NSString *oldPath in self.copiedList) {
+            [kAppDelegate setSecondaryTitleOfVisibleHUD:[oldPath lastPathComponent]];
+            NSString *newPath = getNonConflictingFilePathForPath([location stringByAppendingPathComponent:[oldPath lastPathComponent]]);
+            
+            NSError *error = nil;
+            
+            NSFileManager *fm = [[NSFileManager alloc]init];
+            
+            if (self.isCut) {
+                [fm moveItemAtPath:oldPath toPath:newPath error:&error];
+                if ([oldPath isEqualToString:[kAppDelegate nowPlayingFile]]) {
+                    [kAppDelegate setNowPlayingFile:newPath];
+                }
+            } else {
+                [fm copyItemAtPath:oldPath toPath:newPath error:&error];
             }
-        } else {
-            [[NSFileManager defaultManager]copyItemAtPath:oldPath toPath:newPath error:&error];
+            [fm release];
         }
-    }
-    [self flushCopiedList];
-    [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
-    [self updateCopyButtonState];
+        
+        [self flushCopiedList];
+        
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            NSAutoreleasePool *mainPool = [[NSAutoreleasePool alloc]init];
+            [kAppDelegate hideHUD];
+            [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
+            [self updateCopyButtonState];
+            [mainPool release];
+        });
+        
+        [pool release];
+    });
 }
 
 - (void)deleteItemsInClipboard {
@@ -1014,9 +1034,28 @@
         NSString *cellName = [self.theTableView cellForRowAtIndexPath:indexPath].textLabel.text;
         NSString *removePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:cellName];
         
-        [[NSFileManager defaultManager]removeItemAtPath:removePath error:nil];
-        [self.filelist removeAllObjects];
-        [self.theTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationRight];
+        [kAppDelegate showHUDWithTitle:@"Deleting"];
+        [kAppDelegate setTitleOfVisibleHUD:cellName];
+        [kAppDelegate setVisibleHudMode:MBProgressHUDModeIndeterminate];
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+            NSFileManager *fm = [[NSFileManager alloc]init];
+            [fm removeItemAtPath:removePath error:nil];
+            [fm release];
+            
+            [self.filelist removeAllObjects];
+            
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                NSAutoreleasePool *mainPool = [[NSAutoreleasePool alloc]init];
+                [kAppDelegate hideHUD];
+                [self.theTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationRight];
+                [mainPool release];
+            });
+            
+            [pool release];
+        });
+        
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
         [self showFileCreationDialogue];
     }
@@ -1115,11 +1154,33 @@
         UIActionSheet *popupQuery = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             
             if (buttonIndex == actionSheet.destructiveButtonIndex) {
-                [[NSFileManager defaultManager]removeItemAtPath:file error:nil];
-                [self.filelist removeAllObjects];
-                NSIndexPath *indexPath = [self.theTableView indexPathForCell:self.sideSwipeCell];
-                [self removeSideSwipeView:NO];
-                [self.theTableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationLeft];
+                
+                [kAppDelegate showHUDWithTitle:@"Deleting"];
+                [kAppDelegate setTitleOfVisibleHUD:file.lastPathComponent];
+                [kAppDelegate setVisibleHudMode:MBProgressHUDModeIndeterminate];
+                
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+                    NSFileManager *fm = [[NSFileManager alloc]init];
+                    [fm removeItemAtPath:file error:nil];
+                    [fm release];
+                    
+                    [self.filelist removeAllObjects];
+                    
+                    NSIndexPath *indexPath = [self.theTableView indexPathForCell:self.sideSwipeCell];
+                    
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        NSAutoreleasePool *mainPool = [[NSAutoreleasePool alloc]init];
+                        [kAppDelegate hideHUD];
+                        [self removeSideSwipeView:NO];
+                        [self.theTableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationLeft];
+                        [mainPool release];
+                    });
+                    
+                    [pool release];
+                });
+
+                
             }
             
         } cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"I'm sure, Delete" otherButtonTitles:nil];
