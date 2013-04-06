@@ -272,21 +272,21 @@
             [self copyFilesWithIsCut:YES];
         } else if ([title isEqualToString:@"Paste"]) {
             [self pasteInLocation:[kAppDelegate managerCurrentDir]];
-        } else if ([title isEqualToString:@"Cancel"]) {
+        } /*else if ([title isEqualToString:@"Cancel"]) {
             [self verifyCopiedList];
             if (self.copiedList.count > 0) {
                 [self flushCopiedList];
                 [self flushPerspectiveCopyList];
             }
-        } else if ([title isEqualToString:@"Delete"]) {
+        }*/ else if ([title isEqualToString:@"Delete"]) {
             UIActionSheet *deleteConfirmation = [[[UIActionSheet alloc]initWithTitle:@"Are you Sure?" completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-                if (buttonIndex == 1) {
+                /*if (buttonIndex == 1) {
                     [self verifyCopiedList];
                     if (self.copiedList.count > 0) {
                         [self flushCopiedList];
                         [self flushPerspectiveCopyList];
                     }
-                } else if (buttonIndex == 0) {
+                } else*/ if (buttonIndex == 0) {
                     [self deleteItemsInClipboard];
                 }
             } cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Delete" otherButtonTitles:nil]autorelease];
