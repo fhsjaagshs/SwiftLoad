@@ -1,0 +1,300 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		9BA39E341573AECE003B1E5C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BA39E331573AECE003B1E5C /* UIKit.framework */; };
+		9BA39E361573AECE003B1E5C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BA39E351573AECE003B1E5C /* Foundation.framework */; };
+		9BA39E381573AECE003B1E5C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BA39E371573AECE003B1E5C /* CoreGraphics.framework */; };
+		9BA39E3E1573AECE003B1E5C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9BA39E3C1573AECE003B1E5C /* InfoPlist.strings */; };
+		9BA39E401573AECE003B1E5C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BA39E3F1573AECE003B1E5C /* main.m */; };
+		9BA39E441573AECE003B1E5C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BA39E431573AECE003B1E5C /* AppDelegate.m */; };
+		9BA39E471573AECE003B1E5C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BA39E461573AECE003B1E5C /* ViewController.m */; };
+		9BA39E4A1573AECE003B1E5C /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BA39E481573AECE003B1E5C /* ViewController.xib */; };
+		9BA39E521573AEEE003B1E5C /* Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BA39E511573AEEE003B1E5C /* Common.m */; };
+		9BA39E541573B1C0003B1E5C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BA39E531573B1C0003B1E5C /* QuartzCore.framework */; };
+		9BA39E561573B1C4003B1E5C /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BA39E551573B1C4003B1E5C /* CoreText.framework */; };
+		9BA39E61157420B9003B1E5C /* UIImage+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BA39E60157420B9003B1E5C /* UIImage+Additions.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		9BA39E2F1573AECE003B1E5C /* SwiftLoad icon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftLoad icon.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9BA39E331573AECE003B1E5C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		9BA39E351573AECE003B1E5C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		9BA39E371573AECE003B1E5C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		9BA39E3B1573AECE003B1E5C /* SwiftLoad icon-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SwiftLoad icon-Info.plist"; sourceTree = "<group>"; };
+		9BA39E3D1573AECE003B1E5C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		9BA39E3F1573AECE003B1E5C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		9BA39E411573AECE003B1E5C /* SwiftLoad icon-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SwiftLoad icon-Prefix.pch"; sourceTree = "<group>"; };
+		9BA39E421573AECE003B1E5C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		9BA39E431573AECE003B1E5C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		9BA39E451573AECE003B1E5C /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		9BA39E461573AECE003B1E5C /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		9BA39E491573AECE003B1E5C /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
+		9BA39E501573AEEE003B1E5C /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
+		9BA39E511573AEEE003B1E5C /* Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Common.m; sourceTree = "<group>"; };
+		9BA39E531573B1C0003B1E5C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		9BA39E551573B1C4003B1E5C /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		9BA39E5F157420B9003B1E5C /* UIImage+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Additions.h"; sourceTree = "<group>"; };
+		9BA39E60157420B9003B1E5C /* UIImage+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Additions.m"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		9BA39E2C1573AECE003B1E5C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9BA39E561573B1C4003B1E5C /* CoreText.framework in Frameworks */,
+				9BA39E541573B1C0003B1E5C /* QuartzCore.framework in Frameworks */,
+				9BA39E341573AECE003B1E5C /* UIKit.framework in Frameworks */,
+				9BA39E361573AECE003B1E5C /* Foundation.framework in Frameworks */,
+				9BA39E381573AECE003B1E5C /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		9BA39E241573AECE003B1E5C = {
+			isa = PBXGroup;
+			children = (
+				9BA39E551573B1C4003B1E5C /* CoreText.framework */,
+				9BA39E531573B1C0003B1E5C /* QuartzCore.framework */,
+				9BA39E391573AECE003B1E5C /* SwiftLoad icon */,
+				9BA39E321573AECE003B1E5C /* Frameworks */,
+				9BA39E301573AECE003B1E5C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		9BA39E301573AECE003B1E5C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9BA39E2F1573AECE003B1E5C /* SwiftLoad icon.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9BA39E321573AECE003B1E5C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9BA39E331573AECE003B1E5C /* UIKit.framework */,
+				9BA39E351573AECE003B1E5C /* Foundation.framework */,
+				9BA39E371573AECE003B1E5C /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9BA39E391573AECE003B1E5C /* SwiftLoad icon */ = {
+			isa = PBXGroup;
+			children = (
+				9BA39E421573AECE003B1E5C /* AppDelegate.h */,
+				9BA39E431573AECE003B1E5C /* AppDelegate.m */,
+				9BA39E451573AECE003B1E5C /* ViewController.h */,
+				9BA39E461573AECE003B1E5C /* ViewController.m */,
+				9BA39E481573AECE003B1E5C /* ViewController.xib */,
+				9BA39E501573AEEE003B1E5C /* Common.h */,
+				9BA39E511573AEEE003B1E5C /* Common.m */,
+				9BA39E5F157420B9003B1E5C /* UIImage+Additions.h */,
+				9BA39E60157420B9003B1E5C /* UIImage+Additions.m */,
+				9BA39E3A1573AECE003B1E5C /* Supporting Files */,
+			);
+			path = "SwiftLoad icon";
+			sourceTree = "<group>";
+		};
+		9BA39E3A1573AECE003B1E5C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				9BA39E3B1573AECE003B1E5C /* SwiftLoad icon-Info.plist */,
+				9BA39E3C1573AECE003B1E5C /* InfoPlist.strings */,
+				9BA39E3F1573AECE003B1E5C /* main.m */,
+				9BA39E411573AECE003B1E5C /* SwiftLoad icon-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		9BA39E2E1573AECE003B1E5C /* SwiftLoad icon */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9BA39E4D1573AECE003B1E5C /* Build configuration list for PBXNativeTarget "SwiftLoad icon" */;
+			buildPhases = (
+				9BA39E2B1573AECE003B1E5C /* Sources */,
+				9BA39E2C1573AECE003B1E5C /* Frameworks */,
+				9BA39E2D1573AECE003B1E5C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "SwiftLoad icon";
+			productName = "SwiftLoad icon";
+			productReference = 9BA39E2F1573AECE003B1E5C /* SwiftLoad icon.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9BA39E261573AECE003B1E5C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+			};
+			buildConfigurationList = 9BA39E291573AECE003B1E5C /* Build configuration list for PBXProject "SwiftLoad icon" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 9BA39E241573AECE003B1E5C;
+			productRefGroup = 9BA39E301573AECE003B1E5C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				9BA39E2E1573AECE003B1E5C /* SwiftLoad icon */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		9BA39E2D1573AECE003B1E5C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9BA39E3E1573AECE003B1E5C /* InfoPlist.strings in Resources */,
+				9BA39E4A1573AECE003B1E5C /* ViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9BA39E2B1573AECE003B1E5C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9BA39E401573AECE003B1E5C /* main.m in Sources */,
+				9BA39E441573AECE003B1E5C /* AppDelegate.m in Sources */,
+				9BA39E471573AECE003B1E5C /* ViewController.m in Sources */,
+				9BA39E521573AEEE003B1E5C /* Common.m in Sources */,
+				9BA39E61157420B9003B1E5C /* UIImage+Additions.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		9BA39E3C1573AECE003B1E5C /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9BA39E3D1573AECE003B1E5C /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		9BA39E481573AECE003B1E5C /* ViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9BA39E491573AECE003B1E5C /* en */,
+			);
+			name = ViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		9BA39E4B1573AECE003B1E5C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		9BA39E4C1573AECE003B1E5C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		9BA39E4E1573AECE003B1E5C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SwiftLoad icon/SwiftLoad icon-Prefix.pch";
+				INFOPLIST_FILE = "SwiftLoad icon/SwiftLoad icon-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		9BA39E4F1573AECE003B1E5C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SwiftLoad icon/SwiftLoad icon-Prefix.pch";
+				INFOPLIST_FILE = "SwiftLoad icon/SwiftLoad icon-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		9BA39E291573AECE003B1E5C /* Build configuration list for PBXProject "SwiftLoad icon" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9BA39E4B1573AECE003B1E5C /* Debug */,
+				9BA39E4C1573AECE003B1E5C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9BA39E4D1573AECE003B1E5C /* Build configuration list for PBXNativeTarget "SwiftLoad icon" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9BA39E4E1573AECE003B1E5C /* Debug */,
+				9BA39E4F1573AECE003B1E5C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 9BA39E261573AECE003B1E5C /* Project object */;
+}
