@@ -98,6 +98,14 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillDisappear) name:UIKeyboardWillHideNotification object:nil];
 }
 
+/*- (void)viewDidAppear:(BOOL)animated {
+    HUDProgressView *pv = [HUDProgressView progressView];
+   // pv.progress = 0.8;
+    pv.isIndeterminate = YES;
+    [pv setText:@"Downloading: some_song.mp3"];
+    [pv show];
+}*/
+
 - (void)keyboardWillDisappear {
     [[NSUserDefaults standardUserDefaults]setObject:self.textField.text forKey:@"myDefaults"];
 }

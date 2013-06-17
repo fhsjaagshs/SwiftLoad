@@ -17,6 +17,7 @@
     #import <AudioToolbox/AudioToolbox.h>
     #import <CommonCrypto/CommonCrypto.h>
 
+    #import "HUDProgressView.h"
     #import "NetworkUtils.h"
 
     #import "UIViewController+AutoNib.h"

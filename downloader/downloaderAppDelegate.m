@@ -451,13 +451,14 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
                 if ([headers objectForKey:@"Content-Range"]) {
                     NSString *contentRange = [headers objectForKey:@"Content-Range"];
                     NSRange range = [contentRange rangeOfString:@"/"];
-                    NSString *totalBytesCount = [contentRange substringFromIndex: range.location + 1];
+                    NSString *totalBytesCount = [contentRange substringFromIndex:range.location+1];
                     self.expectedDownloadingFileSize = [totalBytesCount floatValue];
                 } else if ([headers objectForKey:@"Content-Length"]) {
                     self.expectedDownloadingFileSize = [[headers objectForKey:@"Content-Length"]floatValue];
                 } else {
                     self.expectedDownloadingFileSize = -1;
-                    [self setVisibleHudMode:MBProgressHUDModeIndeterminate];
+                    [[HUDProgressView progressView]setIndeterminate:YES];
+                    //[self setVisibleHudMode:MBProgressHUDModeIndeterminate];
                 }
             }
             
@@ -491,18 +492,21 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     self.downloadedBytes = self.downloadedBytes+recievedData.length;
     [self.downloadedData appendData:recievedData];
     float progress = self.downloadedData.length/self.expectedDownloadingFileSize;
-    [self setProgressOfVisibleHUD:progress];
+    [[HUDProgressView progressView]setProgress:progress];
+    //[self setProgressOfVisibleHUD:progress];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    [self hideHUD];
+    [[HUDProgressView progressView]hide];
+    //[self hideHUD];
     [self showFailedAlertForFilename:[self.downloadingFileName stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    [self hideHUD];
+    [[HUDProgressView progressView]hide];
+    //[self hideHUD];
     NSString *filename = [self.downloadingFileName stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
     if (self.downloadedData.length > 0) {
@@ -535,13 +539,17 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     
     NSString *fileName = [[stouPrelim lastPathComponent]stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 
-    if (fileName.length > 14) {
+    /*if (fileName.length > 14) {
         fileName = [[fileName substringToIndex:11]stringByAppendingString:@"..."];
-    }
+    }*/
     
-    [self showHUDWithTitle:@"Downloading"];
-    [self setVisibleHudMode:MBProgressHUDModeDeterminate];
-    [self setSecondaryTitleOfVisibleHUD:fileName];
+    HUDProgressView *pv = [HUDProgressView progressView];
+    pv.text = [NSString stringWithFormat:@"Downloading: %@",fileName];
+    [pv show];
+    
+  //  [self showHUDWithTitle:@"Downloading"];
+   // [self setVisibleHudMode:MBProgressHUDModeDeterminate];
+   // [self setSecondaryTitleOfVisibleHUD:fileName];
     [self downloadURL:url];
 }
 
@@ -651,7 +659,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-
+    
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryPlayback error:nil];
     [[UIApplication sharedApplication]beginReceivingRemoteControlEvents];
     [self becomeFirstResponder];

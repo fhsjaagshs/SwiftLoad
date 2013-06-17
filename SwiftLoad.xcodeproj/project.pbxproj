@@ -34,6 +34,7 @@
 		F13979A616E78F4E00F8B61B /* ArrowLeft@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A216E78F4E00F8B61B /* ArrowLeft@2x.png */; };
 		F13979A716E78F4E00F8B61B /* ArrowRight.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A316E78F4E00F8B61B /* ArrowRight.png */; };
 		F13979A816E78F4E00F8B61B /* ArrowRight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A416E78F4E00F8B61B /* ArrowRight@2x.png */; };
+		F13B58A7176D2C7E007EF22B /* HUDProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = F13B58A6176D2C7E007EF22B /* HUDProgressView.m */; };
 		F1444581145A04A30026CDB7 /* pictureView.m in Sources */ = {isa = PBXBuildFile; fileRef = F144457F145A04A30026CDB7 /* pictureView.m */; };
 		F149A6781491686D0038F1FC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F149A6771491686D0038F1FC /* AudioToolbox.framework */; };
 		F149A685149176E60038F1FC /* moviePlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F149A683149176E60038F1FC /* moviePlayerView.m */; };
@@ -189,6 +190,8 @@
 		F13979A216E78F4E00F8B61B /* ArrowLeft@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ArrowLeft@2x.png"; path = "Images/ArrowLeft@2x.png"; sourceTree = "<group>"; };
 		F13979A316E78F4E00F8B61B /* ArrowRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ArrowRight.png; path = Images/ArrowRight.png; sourceTree = "<group>"; };
 		F13979A416E78F4E00F8B61B /* ArrowRight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ArrowRight@2x.png"; path = "Images/ArrowRight@2x.png"; sourceTree = "<group>"; };
+		F13B58A5176D2C7E007EF22B /* HUDProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HUDProgressView.h; path = ../HUDProgressView.h; sourceTree = "<group>"; };
+		F13B58A6176D2C7E007EF22B /* HUDProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HUDProgressView.m; path = ../HUDProgressView.m; sourceTree = "<group>"; };
 		F144457E145A04A30026CDB7 /* pictureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pictureView.h; sourceTree = "<group>"; };
 		F144457F145A04A30026CDB7 /* pictureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pictureView.m; sourceTree = "<group>"; };
 		F149A6771491686D0038F1FC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -391,7 +394,8 @@
 		9B9DA4CE15561D0100C260AD /* Custom Classes */ = {
 			isa = PBXGroup;
 			children = (
-				F1693C1D16DFAB6E006E3739 /* CustomGraphics */,
+				F1DA5247176E8181009A43CD /* Libraries */,
+				F1693C1D16DFAB6E006E3739 /* Graphics */,
 				F1693C4516DFABA6006E3739 /* Categories */,
 				F1693C5216DFAC0E006E3739 /* Utility Classes */,
 				F1693C5F16DFAC59006E3739 /* Subclasses */,
@@ -510,11 +514,8 @@
 				F1270DD81703C7710012A293 /* FTPBrowserViewController.m */,
 				F10CBC5B17080C6600C82AFB /* DropboxBrowserViewController.h */,
 				F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */,
-				F19BB51816E006680081C95B /* Supporting Files */,
 				9B9DA4CE15561D0100C260AD /* Custom Classes */,
-				F1693BC616DFAA08006E3739 /* HTTPServer */,
-				9BFF29FE15387C6E007ED9B1 /* Objective-Zip */,
-				F1693C1316DFAA92006E3739 /* BKSessionController */,
+				F19BB51816E006680081C95B /* Supporting Files */,
 			);
 			path = downloader;
 			sourceTree = "<group>";
@@ -640,7 +641,7 @@
 			path = BKSessionController;
 			sourceTree = "<group>";
 		};
-		F1693C1D16DFAB6E006E3739 /* CustomGraphics */ = {
+		F1693C1D16DFAB6E006E3739 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
 				F1693C1E16DFAB6E006E3739 /* BackAndForwardButton.h */,
@@ -672,6 +673,7 @@
 				F119697416E3D0FB001139F1 /* CustomTextField.h */,
 				F119697516E3D0FB001139F1 /* CustomTextField.m */,
 			);
+			name = Graphics;
 			path = CustomGraphics;
 			sourceTree = "<group>";
 		};
@@ -712,6 +714,8 @@
 		F1693C5F16DFAC59006E3739 /* Subclasses */ = {
 			isa = PBXGroup;
 			children = (
+				F13B58A5176D2C7E007EF22B /* HUDProgressView.h */,
+				F13B58A6176D2C7E007EF22B /* HUDProgressView.m */,
 				F10CBC581707D6E700C82AFB /* DroppinBadassBlocks.h */,
 				F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */,
 				F1A45E6E1704A15E00DD5FB9 /* KeychainItemWrapper.h */,
@@ -761,6 +765,16 @@
 				F1D643091706806B008B4BD1 /* ArrowUp@2x.png */,
 			);
 			name = Images;
+			sourceTree = "<group>";
+		};
+		F1DA5247176E8181009A43CD /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				F1693C1316DFAA92006E3739 /* BKSessionController */,
+				9BFF29FE15387C6E007ED9B1 /* Objective-Zip */,
+				F1693BC616DFAA08006E3739 /* HTTPServer */,
+			);
+			name = Libraries;
 			sourceTree = "<group>";
 		};
 		F1EB834716D808EB009D7D2D /* Default Screens */ = {
@@ -968,6 +982,7 @@
 				F1A45E701704A15E00DD5FB9 /* KeychainItemWrapper.m in Sources */,
 				F10CBC5A1707D6E700C82AFB /* DroppinBadassBlocks.m in Sources */,
 				F10CBC5D17080C6600C82AFB /* DropboxBrowserViewController.m in Sources */,
+				F13B58A7176D2C7E007EF22B /* HUDProgressView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
