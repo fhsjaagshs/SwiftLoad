@@ -20,6 +20,7 @@
 - (void)redrawGreen;
 
 + (HUDProgressView *)progressView;
++ (HUDProgressView *)progressViewWithTag:(int)tag;
 
 @property (nonatomic, assign) float progress;
 @property (nonatomic, strong, setter=setText:) NSString *text;

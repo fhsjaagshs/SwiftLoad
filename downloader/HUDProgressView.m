@@ -93,6 +93,18 @@
     return self;
 }
 
++ (HUDProgressView *)progressViewWithTag:(int)tag {
+    UIWindow *window = [((downloaderAppDelegate *)[[UIApplication sharedApplication]delegate])window];
+    HUDProgressView *pview = (HUDProgressView *)[window viewWithTag:tag];
+    
+    if (!pview) {
+        pview = [[[[self class]alloc]init]autorelease];
+        pview.tag = tag;
+        pview.frame = CGRectMake(10, [UIScreen mainScreen].bounds.size.height-60-(60*tag), [UIScreen mainScreen].applicationFrame.size.width-20, 50);
+    }
+    return pview;
+}
+
 + (HUDProgressView *)progressView {
     
     UIWindow *window = [((downloaderAppDelegate *)[[UIApplication sharedApplication]delegate])window];

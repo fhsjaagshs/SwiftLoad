@@ -19,6 +19,8 @@
 
     #import "HUDProgressView.h"
     #import "NetworkUtils.h"
+    #import "Download.h"
+    #import "Downloads.h"
 
     #import "UIViewController+AutoNib.h"
     #import "UIAlertView+BlockExtensions.h"

@@ -52,7 +52,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 @implementation downloaderAppDelegate
 
-@synthesize sessionController, progressView, isReciever, nowPlayingFile, sessionControllerSending, openFile, managerCurrentDir, downloadedData, expectedDownloadingFileSize, downloadedBytes, audioPlayer;
+//@synthesize sessionController, progressView, isReciever, nowPlayingFile, sessionControllerSending, openFile, managerCurrentDir, downloadedData, expectedDownloadingFileSize, downloadedBytes, audioPlayer;
 
 //
 // Audio Player
@@ -393,8 +393,8 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [[UIApplication sharedApplication]presentLocalNotificationNow:notification];
     [notification release];
     
-    [[HUDProgressView progressView]redrawGreen];
-    [[HUDProgressView progressView]hideAfterDelay:1.5f];
+    [[HUDProgressView progressViewWithTag:0]redrawGreen];
+    [[HUDProgressView progressViewWithTag:0]hideAfterDelay:1.5f];
 }
 
 - (void)showExistsAlertForFilename:(NSString *)fnZ {
@@ -455,7 +455,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
                     self.expectedDownloadingFileSize = [[headers objectForKey:@"Content-Length"]floatValue];
                 } else {
                     self.expectedDownloadingFileSize = -1;
-                    [[HUDProgressView progressView]setIndeterminate:YES];
+                    [[HUDProgressView progressViewWithTag:0]setIndeterminate:YES];
                 }
             }
             
@@ -489,13 +489,13 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     self.downloadedBytes = self.downloadedBytes+recievedData.length;
     [self.downloadedData appendData:recievedData];
     float progress = self.downloadedData.length/self.expectedDownloadingFileSize;
-    [[HUDProgressView progressView]setProgress:progress];
+    [[HUDProgressView progressViewWithTag:0]setProgress:progress];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    [[HUDProgressView progressView]redrawRed];
-    [[HUDProgressView progressView]hideAfterDelay:1.5f];
+    [[HUDProgressView progressViewWithTag:0]redrawRed];
+    [[HUDProgressView progressViewWithTag:0]hideAfterDelay:1.5f];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection {
@@ -509,8 +509,8 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         [self showFinishedAlertForFilename:filename];
         [self.downloadedData setLength:0];
     } else {
-        [[HUDProgressView progressView]redrawRed];
-        [[HUDProgressView progressView]hideAfterDelay:1.5f];
+        [[HUDProgressView progressViewWithTag:0]redrawRed];
+        [[HUDProgressView progressViewWithTag:0]hideAfterDelay:1.5f];
     }
 }
 
