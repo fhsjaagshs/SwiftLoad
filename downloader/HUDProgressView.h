@@ -16,6 +16,9 @@
 
 - (void)setText:(NSString *)text;
 
+- (void)redrawRed;
+- (void)redrawGreen;
+
 + (HUDProgressView *)progressView;
 
 @property (nonatomic, assign) float progress;

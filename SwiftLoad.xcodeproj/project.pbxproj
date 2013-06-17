@@ -39,6 +39,11 @@
 		F149A6781491686D0038F1FC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F149A6771491686D0038F1FC /* AudioToolbox.framework */; };
 		F149A685149176E60038F1FC /* moviePlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F149A683149176E60038F1FC /* moviePlayerView.m */; };
 		F15277D113F4B08800338673 /* MyFilesViewDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F15277CF13F4B08800338673 /* MyFilesViewDetailViewController.m */; };
+		F15507D5176EAFE50024FF03 /* action@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F15507D4176EAFE50024FF03 /* action@2x.png */; };
+		F15507D7176EB0290024FF03 /* bluetooth@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F15507D6176EB0290024FF03 /* bluetooth@2x.png */; };
+		F15507D9176EB04D0024FF03 /* delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F15507D8176EB04D0024FF03 /* delete@2x.png */; };
+		F15507DC176EB0A90024FF03 /* dropbox@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F15507DA176EB0A90024FF03 /* dropbox@2x.png */; };
+		F15507DD176EB0A90024FF03 /* paperclip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F15507DB176EB0A90024FF03 /* paperclip@2x.png */; };
 		F165C3E816E44244004B81F1 /* clipboard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F165C3E716E44244004B81F1 /* clipboard@2x.png */; };
 		F165C3EC16E445E5004B81F1 /* clipboard.png in Resources */ = {isa = PBXBuildFile; fileRef = F165C3EB16E445E5004B81F1 /* clipboard.png */; };
 		F166BBC414E2171A003E5A07 /* webDAVViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F166BBC214E2171A003E5A07 /* webDAVViewController.m */; };
@@ -199,6 +204,11 @@
 		F149A683149176E60038F1FC /* moviePlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = moviePlayerView.m; sourceTree = "<group>"; };
 		F15277CE13F4B08800338673 /* MyFilesViewDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyFilesViewDetailViewController.h; sourceTree = "<group>"; };
 		F15277CF13F4B08800338673 /* MyFilesViewDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFilesViewDetailViewController.m; sourceTree = "<group>"; };
+		F15507D4176EAFE50024FF03 /* action@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "action@2x.png"; path = "Images/action@2x.png"; sourceTree = "<group>"; };
+		F15507D6176EB0290024FF03 /* bluetooth@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bluetooth@2x.png"; path = "Images/bluetooth@2x.png"; sourceTree = "<group>"; };
+		F15507D8176EB04D0024FF03 /* delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "delete@2x.png"; path = "Images/delete@2x.png"; sourceTree = "<group>"; };
+		F15507DA176EB0A90024FF03 /* dropbox@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "dropbox@2x.png"; path = "Images/dropbox@2x.png"; sourceTree = "<group>"; };
+		F15507DB176EB0A90024FF03 /* paperclip@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "paperclip@2x.png"; path = "Images/paperclip@2x.png"; sourceTree = "<group>"; };
 		F165C3E716E44244004B81F1 /* clipboard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clipboard@2x.png"; sourceTree = "<group>"; };
 		F165C3EB16E445E5004B81F1 /* clipboard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clipboard.png; sourceTree = "<group>"; };
 		F166BBC114E2171A003E5A07 /* webDAVViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = webDAVViewController.h; sourceTree = "<group>"; };
@@ -524,10 +534,15 @@
 			isa = PBXGroup;
 			children = (
 				F1EB833116D808AA009D7D2D /* action.png */,
+				F15507D4176EAFE50024FF03 /* action@2x.png */,
 				F1EB833216D808AA009D7D2D /* bluetooth.png */,
+				F15507D6176EB0290024FF03 /* bluetooth@2x.png */,
 				F1EB833416D808AA009D7D2D /* delete.png */,
+				F15507D8176EB04D0024FF03 /* delete@2x.png */,
 				F1EB833616D808AA009D7D2D /* dropbox.png */,
+				F15507DA176EB0A90024FF03 /* dropbox@2x.png */,
 				F1EB833A16D808AA009D7D2D /* paperclip.png */,
+				F15507DB176EB0A90024FF03 /* paperclip@2x.png */,
 				F1EB833516D808AA009D7D2D /* dotted-pattern.png */,
 				F1EB833816D808AA009D7D2D /* inner-shadow.png */,
 			);
@@ -890,6 +905,11 @@
 				F13979A816E78F4E00F8B61B /* ArrowRight@2x.png in Resources */,
 				F1D6430A1706806B008B4BD1 /* ArrowUp.png in Resources */,
 				F1D6430B1706806B008B4BD1 /* ArrowUp@2x.png in Resources */,
+				F15507D5176EAFE50024FF03 /* action@2x.png in Resources */,
+				F15507D7176EB0290024FF03 /* bluetooth@2x.png in Resources */,
+				F15507D9176EB04D0024FF03 /* delete@2x.png in Resources */,
+				F15507DC176EB0A90024FF03 /* dropbox@2x.png in Resources */,
+				F15507DD176EB0A90024FF03 /* paperclip@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

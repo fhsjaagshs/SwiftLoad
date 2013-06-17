@@ -1228,7 +1228,7 @@
     }
     
     if (shouldAddButtons) {
-        NSMutableArray *buttonData = [NSMutableArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"Action", @"title", @"action.png", @"image", nil], [NSDictionary dictionaryWithObjectsAndKeys:@"FTP", @"title", @"dropbox.png", @"image", nil], [NSDictionary dictionaryWithObjectsAndKeys:@"Bluetooth", @"title", @"bluetooth.png", @"image", nil], [NSDictionary dictionaryWithObjectsAndKeys:@"Email", @"title", @"paperclip.png", @"image", nil], [NSDictionary dictionaryWithObjectsAndKeys:@"Delete", @"title", @"delete.png", @"image", nil], nil];
+        NSMutableArray *buttonData = [NSMutableArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"Action", @"title", @"action", @"image", nil], [NSDictionary dictionaryWithObjectsAndKeys:@"FTP", @"title", @"dropbox", @"image", nil], [NSDictionary dictionaryWithObjectsAndKeys:@"Bluetooth", @"title", @"bluetooth", @"image", nil], [NSDictionary dictionaryWithObjectsAndKeys:@"Email", @"title", @"paperclip", @"image", nil], [NSDictionary dictionaryWithObjectsAndKeys:@"Delete", @"title", @"delete", @"image", nil], nil];
         
         NSString *filePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:self.sideSwipeCell.textLabel.text];
         
@@ -1241,23 +1241,10 @@
             button.layer.backgroundColor = [UIColor clearColor].CGColor;
             button.layer.borderColor = [UIColor clearColor].CGColor;
             button.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
-            
-            UIImage *buttonImage = nil;
-            UIImage *startImage = [UIImage imageWithContentsOfFile:getResource([buttonInfo objectForKey:@"image"])];
-            
-            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-                buttonImage = [UIImage imageWithImage:startImage scaledToSize:CGSizeMake(startImage.size.width*1.5, startImage.size.height*1.5)];
-            } else {
-                if ([[UIScreen mainScreen]scale] == 2) {
-                    buttonImage = startImage;
-                } else {
-                    buttonImage = [UIImage imageWithImage:startImage scaledToSize:CGSizeMake(startImage.size.width*0.5, startImage.size.height*0.5)];
-                }
-            }
-            
+
             button.frame = CGRectMake([buttonData indexOfObject:buttonInfo]*((self.sideSwipeView.bounds.size.width)/buttonData.count), 0, ((self.sideSwipeView.bounds.size.width)/buttonData.count), self.sideSwipeView.bounds.size.height);
             
-            UIImage *grayImage = [self imageFilledWith:[UIColor colorWithWhite:0.9 alpha:1.0] using:buttonImage];
+            UIImage *grayImage = [self imageFilledWith:[UIColor colorWithWhite:0.9 alpha:1.0] using:[UIImage imageNamed:[buttonInfo objectForKey:@"image"]]];
             [button setImage:grayImage forState:UIControlStateNormal];
             [button setTag:[buttonData indexOfObject:buttonInfo]+1];
             [button addTarget:self action:@selector(touchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];

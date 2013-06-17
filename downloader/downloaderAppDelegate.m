@@ -393,10 +393,8 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [[UIApplication sharedApplication]presentLocalNotificationNow:notification];
     [notification release];
     
-    [self showHUDWithTitle:@"Completed"];
-    [self setSecondaryTitleOfVisibleHUD:fileName];
-    [self setVisibleHudCustomView:[[[UIImageView alloc]initWithImage:getCheckmarkImage()]autorelease]];
-    [self hideVisibleHudAfterDelay:1.5f];
+    [[HUDProgressView progressView]redrawGreen];
+    [[HUDProgressView progressView]hideAfterDelay:1.5f];
 }
 
 - (void)showExistsAlertForFilename:(NSString *)fnZ {
@@ -458,7 +456,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
                 } else {
                     self.expectedDownloadingFileSize = -1;
                     [[HUDProgressView progressView]setIndeterminate:YES];
-                    //[self setVisibleHudMode:MBProgressHUDModeIndeterminate];
                 }
             }
             
@@ -493,20 +490,17 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [self.downloadedData appendData:recievedData];
     float progress = self.downloadedData.length/self.expectedDownloadingFileSize;
     [[HUDProgressView progressView]setProgress:progress];
-    //[self setProgressOfVisibleHUD:progress];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    [[HUDProgressView progressView]hide];
-    //[self hideHUD];
-    [self showFailedAlertForFilename:[self.downloadingFileName stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+    [[HUDProgressView progressView]redrawRed];
+    [[HUDProgressView progressView]hideAfterDelay:1.5f];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    [[HUDProgressView progressView]hide];
-    //[self hideHUD];
+   // [[HUDProgressView progressView]hide];
     NSString *filename = [self.downloadingFileName stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
     if (self.downloadedData.length > 0) {
@@ -515,15 +509,17 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         [self showFinishedAlertForFilename:filename];
         [self.downloadedData setLength:0];
     } else {
-        [self showFailedAlertForFilename:filename];
+        [[HUDProgressView progressView]redrawRed];
+        [[HUDProgressView progressView]hideAfterDelay:1.5f];
     }
 }
 
 - (void)downloadFromAppDelegate:(NSString *)stouPrelim {
     if (![stouPrelim hasPrefix:@"http"]) {
         
-        if ([stouPrelim hasPrefix:@"ftp"] || [stouPrelim hasPrefix:@"sftp"] || [stouPrelim hasPrefix:@"rsync"] || [stouPrelim hasPrefix:@"afp"]) {
-            [self showFailedAlertForFilename:[stouPrelim lastPathComponent]];
+        if ([stouPrelim hasPrefix:@"sftp"] || [stouPrelim hasPrefix:@"rsync"] || [stouPrelim hasPrefix:@"afp"]) {
+            UIAlertView *av = [[[UIAlertView alloc]initWithTitle:@"Invalid URL" message:@"The URL you have provided is not HTTP or FTP." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil]autorelease];
+            [av show];
             return;
         }
         
@@ -533,23 +529,17 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     NSURL *url = [NSURL URLWithString:stouPrelim];
 
     if (url == nil) {
-        [self showFailedAlertForFilename:[stouPrelim lastPathComponent]];
+        UIAlertView *av = [[[UIAlertView alloc]initWithTitle:@"Invalid URL" message:@"The URL you have provided is somehow bogus." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil]autorelease];
+        [av show];
         return;
     }
     
     NSString *fileName = [[stouPrelim lastPathComponent]stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-
-    /*if (fileName.length > 14) {
-        fileName = [[fileName substringToIndex:11]stringByAppendingString:@"..."];
-    }*/
     
     HUDProgressView *pv = [HUDProgressView progressView];
     pv.text = [NSString stringWithFormat:@"Downloading: %@",fileName];
     [pv show];
-    
-  //  [self showHUDWithTitle:@"Downloading"];
-   // [self setVisibleHudMode:MBProgressHUDModeDeterminate];
-   // [self setSecondaryTitleOfVisibleHUD:fileName];
+
     [self downloadURL:url];
 }
 
