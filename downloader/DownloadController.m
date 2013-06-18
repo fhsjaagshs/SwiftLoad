@@ -19,6 +19,7 @@ static NSString * const cellId = @"acellid";
 @property (nonatomic, retain) UIActivityIndicatorView *activity;
 
 @property (nonatomic, retain) UITableView *theTableView;
+@property (nonatomic, retain) UIView *mainView;
 
 @end
 
@@ -38,9 +39,14 @@ static NSString * const cellId = @"acellid";
 //
 
 - (void)setupTableView {
+    
+    self.mainView = [[[UIView alloc]initWithFrame:CGRectZero]autorelease];
+    
     self.theTableView = [[UITableView alloc]initWithFrame:self.bounds];
     _theTableView.dataSource = self;
     _theTableView.delegate = self;
+    _theTableView.allowsSelection = NO;
+    _theTableView.backgroundColor = [UIColor clearColor];
 }
 
 - (void)strikedownTableView {
@@ -82,7 +88,6 @@ static NSString * const cellId = @"acellid";
     Download *download = [[Downloads sharedDownloads]downloadAtIndex:indexPath.row];
     download.delegate = cell;
     cell.titleLabel.text = [[download.url lastPathComponent]stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    
     return cell;
 }
 
@@ -92,9 +97,7 @@ static NSString * const cellId = @"acellid";
 
 - (void)showTableViewer {
     [self setHidden:YES];
-    
     [self setupTableView];
-    
 }
 
 - (void)tableBrowserWasHidden {

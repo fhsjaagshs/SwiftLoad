@@ -34,6 +34,10 @@
         
         [self.contentView addSubview:_titleLabel];
         [self.contentView addSubview:_progressView];
+        
+        self.contentView.backgroundColor = [UIColor clearColor];
+        self.backgroundView.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
