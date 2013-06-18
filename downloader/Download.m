@@ -34,6 +34,7 @@ NSString * const kDownloadChanged = @"downloadDone";
 }
 
 - (void)stop {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     self.complete = YES;
     self.succeeded = NO;
     [_connection cancel];
