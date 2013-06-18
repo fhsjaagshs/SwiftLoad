@@ -79,6 +79,10 @@ static NSString * const cellId = @"acellid";
         cell = [[[DownloadingCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId]autorelease];
     }
     
+    Download *download = [[Downloads sharedDownloads]downloadAtIndex:indexPath.row];
+    download.delegate = cell;
+    cell.titleLabel.text = [[download.url lastPathComponent]stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
     return cell;
 }
 
@@ -118,6 +122,7 @@ static NSString * const cellId = @"acellid";
 - (id)init {
     self = [super init];
     if (self) {
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notifReceived:) name:kDownloadChanged object:nil];
         self.activity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         self.button = [UIButton buttonWithType:UIButtonTypeCustom];
         float awidth = _activity.frame.size.width;
@@ -173,6 +178,11 @@ static NSString * const cellId = @"acellid";
 
 - (NSUInteger)retainCount {
     return NSUIntegerMax;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+    [super dealloc];
 }
 
 @end

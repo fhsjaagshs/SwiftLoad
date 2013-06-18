@@ -7,6 +7,9 @@
 //
 
 #import "Download.h"
+#import "DownloadingCell.h"
+
+NSString * const kDownloadChanged = @"downloadDone";
 
 @interface Download ()
 
@@ -30,7 +33,17 @@
     return self;
 }
 
+- (void)stopharmless {
+    [_connection cancel];
+    [_downloadedData setLength:0];
+    self.downloadedBytes = 0;
+    self.fileName = nil;
+    self.fileSize = 0;
+}
+
 - (void)stop {
+    self.complete = YES;
+    self.succeeded = NO;
     [_connection cancel];
     [_downloadedData setLength:0];
     self.downloadedBytes = 0;
@@ -39,6 +52,7 @@
 }
 
 - (void)start {
+    self.complete = NO;
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
     NSMutableURLRequest *headReq = [NSMutableURLRequest requestWithURL:_url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:30.0];
@@ -81,6 +95,9 @@
             
             [[UIApplication sharedApplication]endBackgroundTask:background_task];
             background_task = UIBackgroundTaskInvalid;
+        } else {
+            self.complete = YES;
+            self.succeeded = NO;
         }
     }];
 }
@@ -121,8 +138,7 @@
     [_downloadedData appendData:recievedData];
     float progress = _downloadedData.length/_fileSize;
     
-    // Redo this somehow
-    [[HUDProgressView progressViewWithTag:0]setProgress:progress];
+    [_delegate setProgress:progress];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
@@ -134,18 +150,30 @@
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     NSString *filename = [_fileName stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
+    self.complete = YES;
+    
     if (_downloadedData.length > 0) {
         NSString *filePath = getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:filename]);
         [[NSFileManager defaultManager]createFileAtPath:filePath contents:_downloadedData attributes:nil];
         [self showSuccessForFilename:filename];
+        self.succeeded = YES;
     } else {
+        self.succeeded = NO;
         [self showFailure];
     }
     
-    // send notif to refresh the main tableView
+    [[NSNotificationCenter defaultCenter]postNotificationName:kDownloadChanged object:self];
     
     [[Downloads sharedDownloads]removeDownload:self];
 }
 
+- (void)dealloc {
+    [self setDelegate:nil];
+    [self setFileName:nil];
+    [self setUrl:nil];
+    [self setConnection:nil];
+    [self setDownloadedData:nil];
+    [super dealloc];
+}
 
 @end

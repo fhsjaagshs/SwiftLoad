@@ -29,7 +29,7 @@ static Downloads *sharedInstance = nil;
 }
 
 - (void)removeDownload:(Download *)download {
-    [download stop];
+    [download stopharmless];
     [_downloadObjs removeObject:download];
 }
 
@@ -40,6 +40,10 @@ static Downloads *sharedInstance = nil;
 
 - (void)removeDownloadAtIndex:(int)index {
     [self removeDownload:[_downloadObjs objectAtIndex:index]];
+}
+
+- (Download *)downloadAtIndex:(int)index {
+    return [_downloadObjs objectAtIndex:index];
 }
 
 - (int)tagForDownload:(Download *)download {
@@ -54,7 +58,10 @@ static Downloads *sharedInstance = nil;
     return self;
 }
 
-// The shared* class method
+//
+// Singleton Stuff
+//
+
 + (Downloads *)sharedDownloads {
     @synchronized (self) {
         if (sharedInstance == nil) {
@@ -64,7 +71,6 @@ static Downloads *sharedInstance = nil;
     return sharedInstance;
 }
 
-// Override stuff to make sure that the singleton is never dealloc'd. Fun.
 + (id)allocWithZone:(NSZone *)zone {
     @synchronized(self) {
         if (sharedInstance == nil) {
