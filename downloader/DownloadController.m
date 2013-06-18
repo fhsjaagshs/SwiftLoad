@@ -59,7 +59,7 @@ static NSString * const cellId = @"acellid";
 //
 
 - (void)updateSizes {
-    float height = ([[Downloads sharedDownloads]numberDownloads]+1)*45;
+    float height = ([[Downloads sharedDownloads]numberDownloads]*45)+40;
     _mainView.frame = CGRectMake(_mainView.frame.origin.x, [[UIScreen mainScreen]bounds].size.height-5-height, _mainView.frame.size.width, height);
     _theTableView.frame = CGRectMake(0, 40, _mainView.frame.size.width, ([[Downloads sharedDownloads]numberDownloads]*45));
 }
@@ -69,7 +69,7 @@ static NSString * const cellId = @"acellid";
     CGSize screenSize = [[UIScreen mainScreen]bounds].size;
     float padding = 5;
     
-    float height = ([[Downloads sharedDownloads]numberDownloads]+1)*45;
+    float height = ([[Downloads sharedDownloads]numberDownloads]*45)+40;
     
     self.mainView = [[[UIView alloc]initWithFrame:CGRectMake(padding, screenSize.height-5-height, screenSize.width-(padding*2), height)]autorelease];
     _mainView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.6f];
@@ -77,7 +77,7 @@ static NSString * const cellId = @"acellid";
     
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
     backButton.frame = CGRectMake(5, 5, 50, 30);
-    backButton.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.6f];
+    backButton.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.8f];
     backButton.layer.cornerRadius = 7;
     [backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [backButton setBackgroundImage:imageWithColorAndSize([UIColor colorWithWhite:0.5f alpha:0.6f], backButton.frame.size) forState:UIControlStateHighlighted];
@@ -85,12 +85,20 @@ static NSString * const cellId = @"acellid";
     [backButton addTarget:self action:@selector(strikedownTableView) forControlEvents:UIControlEventTouchUpInside];
     [_mainView addSubview:backButton];
     
+    UILabel *dl = [[UILabel alloc]initWithFrame:CGRectMake(60, 5, _mainView.bounds.size.width-100, 30)];
+    dl.text = @"Downloads";
+    dl.font = [UIFont boldSystemFontOfSize:20];
+    dl.backgroundColor = [UIColor clearColor];
+    dl.textColor = [UIColor whiteColor];
+    dl.textAlignment = UITextAlignmentCenter;
+    [_mainView addSubview:dl];
     
-    self.theTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 40, _mainView.bounds.size.width, ([[Downloads sharedDownloads]numberDownloads]*45))];
+    self.theTableView = [[[UITableView alloc]initWithFrame:CGRectMake(0, 40, _mainView.bounds.size.width, ([[Downloads sharedDownloads]numberDownloads]*45))]autorelease];
     _theTableView.dataSource = self;
     _theTableView.delegate = self;
     _theTableView.allowsSelection = NO;
     _theTableView.backgroundColor = [UIColor clearColor];
+    _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [_mainView addSubview:_theTableView];
 
     [[((downloaderAppDelegate *)[[UIApplication sharedApplication]delegate])window]addSubview:_mainView];
@@ -122,10 +130,10 @@ static NSString * const cellId = @"acellid";
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [[Downloads sharedDownloads]removeDownloadAtIndex:indexPath.row];
         [_theTableView beginUpdates];
         [_theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
         [_theTableView endUpdates];
+        [[Downloads sharedDownloads]removeDownloadAtIndex:indexPath.row];
     }
 }
 

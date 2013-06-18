@@ -132,10 +132,14 @@ NSString * const kDownloadChanged = @"downloadDone";
     [_delegate setProgress:progress];
 }
 
+- (void)clearOutMyself {
+    [[Downloads sharedDownloads]removeDownload:self];
+    [[NSNotificationCenter defaultCenter]postNotificationName:kDownloadChanged object:self];
+}
+
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [self showFailure];
-    [[NSNotificationCenter defaultCenter]postNotificationName:kDownloadChanged object:self];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection {
@@ -153,9 +157,7 @@ NSString * const kDownloadChanged = @"downloadDone";
         self.succeeded = NO;
         [self showFailure];
     }
-    
-    [[Downloads sharedDownloads]removeDownload:self];
-    [[NSNotificationCenter defaultCenter]postNotificationName:kDownloadChanged object:self];
+    [self performSelector:@selector(clearOutMyself) withObject:nil afterDelay:0.6f];
 }
 
 - (void)dealloc {
