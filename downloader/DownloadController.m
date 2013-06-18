@@ -133,7 +133,7 @@ static NSString * const cellId = @"acellid";
     DownloadingCell *cell = (DownloadingCell *)[_theTableView dequeueReusableCellWithIdentifier:cellId];
     
     if (!cell) {
-        cell = [[[DownloadingCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId]autorelease];
+        cell = [[[DownloadingCell alloc]initWithReuseIdentifier:cellId]autorelease];
     }
     
     Download *download = [[Downloads sharedDownloads]downloadAtIndex:indexPath.row];
