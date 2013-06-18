@@ -86,7 +86,7 @@ static NSString * const cellId = @"acellid";
         [backButton addTarget:self action:@selector(strikedownTableView) forControlEvents:UIControlEventTouchUpInside];
         [_mainView addSubview:backButton];
         
-        UILabel *dl = [[UILabel alloc]initWithFrame:CGRectMake(60, 5, _mainView.bounds.size.width-100, 30)];
+        UILabel *dl = [[[UILabel alloc]initWithFrame:CGRectMake(60, 5, _mainView.bounds.size.width-100, 30)]autorelease];
         dl.text = @"Downloads";
         dl.font = [UIFont boldSystemFontOfSize:20];
         dl.backgroundColor = [UIColor clearColor];
@@ -201,7 +201,7 @@ static NSString * const cellId = @"acellid";
     if (self) {
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notifReceived:) name:kDownloadChanged object:nil];
         
-        self.activity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        self.activity = [[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge]autorelease];
         self.button = [UIButton buttonWithType:UIButtonTypeCustom];
         
         float awidth = _activity.frame.size.width;

@@ -9,7 +9,7 @@
 #import "DropboxBrowserViewController.h"
 #import "ButtonBarView.h"
 #import "CustomCellCell.h"
-#import <DropboxSDK/DropboxSDK.h>
+//#import <DropboxSDK/DropboxSDK.h>
 
 @interface DropboxBrowserViewController () <UITableViewDataSource, UITableViewDelegate, PullToRefreshViewDelegate>
 
@@ -351,6 +351,7 @@
 }
 
 - (void)close {
+    [DroppinBadassBlocks cancel];
     [self dismissModalViewControllerAnimated:YES];
 }
 

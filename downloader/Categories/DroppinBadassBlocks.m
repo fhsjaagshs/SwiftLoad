@@ -245,5 +245,13 @@ static char const * const UploadProgressBlockKey = "ubk-1";
     void(^metadataBlock)(DBMetadata *metadata, NSError *error) = [DroppinBadassBlocks metadataBlock];
     metadataBlock(nil, error);
 }
+
+//
+// Cancellation
+//
+
++ (void)cancel {
+    [[DroppinBadassBlocks getInstance]cancelAllOperations];
+}
             
 @end

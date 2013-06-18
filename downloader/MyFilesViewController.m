@@ -25,58 +25,33 @@
     self.view.backgroundColor = [UIColor clearColor];
     
     self.navBar = [[[CustomNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
-    self.navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[[UINavigationItem alloc]initWithTitle:@"/"]autorelease];
-    // Will give you a nifty down-pointing arrow
-    // self.editButton = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:@"Edit" target:self action:@selector(editTable)]autorelease];
-    self.editButton = [[[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(editTable)]autorelease];
-    topItem.rightBarButtonItem = self.editButton;
-    topItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)]autorelease];
-    [self.navBar pushNavigationItem:topItem animated:YES];
-    [self.view addSubview:self.navBar];
-    [self.view bringSubviewToFront:self.navBar];
+    _editButton = [[[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(editTable)]autorelease];
+    topItem.rightBarButtonItem = _editButton;
+    topItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showOptionsSheet:)]autorelease];
+    [_navBar pushNavigationItem:topItem animated:YES];
+    [self.view addSubview:_navBar];
+    [self.view bringSubviewToFront:_navBar];
     
-    ButtonBarView *bbv = [[[ButtonBarView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, 44)]autorelease];
-    bbv.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    [self.view addSubview:bbv];
-    
-    self.theCopyAndPasteButton = [[[CustomButton alloc]initWithFrame:iPad?CGRectMake(612, 4, 36, 36):CGRectMake(232, 5, 36, 36)]autorelease];
-    self.theCopyAndPasteButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
+    self.theCopyAndPasteButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _theCopyAndPasteButton.frame = CGRectMake(screenBounds.size.width-41, 85-36, 36, 36);
+    _theCopyAndPasteButton.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.6f];
+    _theCopyAndPasteButton.layer.cornerRadius = 7;
+    _theCopyAndPasteButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
     UIImage *grayImage = [self imageFilledWith:[UIColor colorWithWhite:1.0f alpha:1.0f] using:[UIImage imageNamed:@"clipboard"]];
-    [self.theCopyAndPasteButton setImage:grayImage forState:UIControlStateNormal];
-    [self.theCopyAndPasteButton addTarget:self action:@selector(showCopyPasteController) forControlEvents:UIControlEventTouchUpInside];
-    [bbv addSubview:self.theCopyAndPasteButton];
-    [self.theCopyAndPasteButton setHidden:YES];
+    [_theCopyAndPasteButton setImage:grayImage forState:UIControlStateNormal];
+    [_theCopyAndPasteButton addTarget:self action:@selector(showCopyPasteController) forControlEvents:UIControlEventTouchUpInside];
     
-    self.homeButton = [[[CustomButton alloc]initWithFrame:iPad?CGRectMake(358, 4, 62, 36):CGRectMake(123, 4, 62, 36)]autorelease];
-    [self.homeButton setTitle:@"Home" forState:UIControlStateNormal];
-    [self.homeButton addTarget:self action:@selector(goHome) forControlEvents:UIControlEventTouchUpInside];
-    self.homeButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
-    self.homeButton.titleLabel.shadowColor = [UIColor blackColor];
-    self.homeButton.titleLabel.shadowOffset = CGSizeMake(0, -1);
-    self.homeButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
-    [bbv addSubview:self.homeButton];
-    [self.homeButton setHidden:YES];
-    
-    self.backButton = [[[CustomButton alloc]initWithFrame:iPad?CGRectMake(117, 4, 62, 36):CGRectMake(53, 4, 62, 37)]autorelease];
-    [self.backButton setTitle:@"Back" forState:UIControlStateNormal];
-    [self.backButton addTarget:self action:@selector(goBackDir) forControlEvents:UIControlEventTouchUpInside];
-    self.backButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
-    self.backButton.titleLabel.shadowColor = [UIColor blackColor];
-    self.backButton.titleLabel.shadowOffset = CGSizeMake(0, -1);
-    self.backButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
-    [bbv addSubview:self.backButton];
-    [self.backButton setHidden:YES];
-    
-    self.theTableView = [[[ShadowedTableView alloc]initWithFrame:CGRectMake(0, 88, screenBounds.size.width, screenBounds.size.height-88) style:UITableViewStylePlain]autorelease];
-    self.theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    self.theTableView.backgroundColor = [UIColor clearColor];
-    self.theTableView.rowHeight = iPad?60:44;
-    self.theTableView.dataSource = self;
-    self.theTableView.delegate = self;
-    self.theTableView.allowsSelectionDuringEditing = YES;
-    [self.view addSubview:self.theTableView];
+    self.theTableView = [[[CoolRefreshTableView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44) style:UITableViewStylePlain]autorelease];
+    _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    _theTableView.backgroundColor = [UIColor clearColor];
+    _theTableView.rowHeight = iPad?60:44;
+    _theTableView.dataSource = self;
+    _theTableView.delegate = self;
+    _theTableView.allowsSelectionDuringEditing = YES;
+    [self.view addSubview:_theTableView];
     
     PullToRefreshView *pull = [[PullToRefreshView alloc]initWithScrollView:self.theTableView];
     [pull setDelegate:self];
@@ -91,21 +66,34 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(downloadsChanged) name:kDownloadChanged object:nil];
 }
 
+- (void)setCPButtonHidden:(BOOL)hidden {
+    if (hidden) {
+        if (_theCopyAndPasteButton.superview) {
+            [_theCopyAndPasteButton removeFromSuperview];
+        }
+    } else {
+        if (!_theCopyAndPasteButton.superview) {
+            [self.view addSubview:_theCopyAndPasteButton];
+            [self.view bringSubviewToFront:_theCopyAndPasteButton];
+        }
+    }
+}
+
 - (void)removeAllCheckmarks {
-    for (int i = 0; i < self.filelist.count; i++) {
-        UITableViewCell *cell = [self.theTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+    for (int i = 0; i < _filelist.count; i++) {
+        UITableViewCell *cell = [_theTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
         cell.editingAccessoryType = UITableViewCellEditingStyleNone;
     }
 }
 
 - (void)pasteInLocation:(NSString *)location {
     
-    [kAppDelegate showHUDWithTitle:self.isCut?@"Moving Files...":@"Copying Files..."];
+    [kAppDelegate showHUDWithTitle:_isCut?@"Moving Files...":@"Copying Files..."];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
         
-        for (NSString *oldPath in self.copiedList) {
+        for (NSString *oldPath in _copiedList) {
             [kAppDelegate setSecondaryTitleOfVisibleHUD:[oldPath lastPathComponent]];
             NSString *newPath = getNonConflictingFilePathForPath([location stringByAppendingPathComponent:[oldPath lastPathComponent]]);
             
@@ -113,7 +101,7 @@
             
             NSFileManager *fm = [[NSFileManager alloc]init];
             
-            if (self.isCut) {
+            if (_isCut) {
                 [fm moveItemAtPath:oldPath toPath:newPath error:&error];
                 if ([oldPath isEqualToString:[kAppDelegate nowPlayingFile]]) {
                     [kAppDelegate setNowPlayingFile:newPath];
@@ -139,7 +127,7 @@
 }
 
 - (void)deleteItemsInClipboard {
-    for (NSString *file in self.perspectiveCopiedList) {
+    for (NSString *file in _perspectiveCopiedList) {
         [[NSFileManager defaultManager]removeItemAtPath:file error:nil];
     }
     [self flushCopiedList];
@@ -153,7 +141,7 @@
     [self saveIsCutBOOL];
     [self verifyProspectiveCopyList];
     [self flushCopiedList];
-    [self.copiedList addObjectsFromArray:self.perspectiveCopiedList];
+    [_copiedList addObjectsFromArray:self.perspectiveCopiedList];
     [self flushPerspectiveCopyList];
     [self saveCopiedList];
     [self updateCopyButtonState];
@@ -165,12 +153,12 @@
     [self verifyProspectiveCopyList];
     [self verifyCopiedList];
     
-    if (self.copiedList.count > 0) {
+    if (_copiedList.count > 0) {
         return NO;
     }
     
-    if (![self.perspectiveCopiedList containsObject:item]) {
-        [self.perspectiveCopiedList addObject:item];
+    if (![_perspectiveCopiedList containsObject:item]) {
+        [_perspectiveCopiedList addObject:item];
         return YES;
     }
     
@@ -179,13 +167,13 @@
 
 - (void)removeItemFromPerspectiveCopyList:(NSString *)item {
     [self verifyProspectiveCopyList];
-    if ([self.perspectiveCopiedList containsObject:item]) {
-        [self.perspectiveCopiedList removeObject:item];
+    if ([_perspectiveCopiedList containsObject:item]) {
+        [_perspectiveCopiedList removeObject:item];
     }
 }
 
 - (void)saveIsCutBOOL {
-    [[NSUserDefaults standardUserDefaults]setBool:self.isCut forKey:@"isCutBool"];
+    [[NSUserDefaults standardUserDefaults]setBool:_isCut forKey:@"isCutBool"];
 }
 
 - (void)verifyIsCutBOOL {
@@ -193,30 +181,30 @@
 }
 
 - (void)saveProspectiveCopyList {
-    [[NSUserDefaults standardUserDefaults]setObject:self.perspectiveCopiedList forKey:@"saved_copy_list_pers"];
+    [[NSUserDefaults standardUserDefaults]setObject:_perspectiveCopiedList forKey:@"saved_copy_list_pers"];
 }
 
 - (void)flushPerspectiveCopyList {
-    [self.perspectiveCopiedList removeAllObjects];
+    [_perspectiveCopiedList removeAllObjects];
     [self saveProspectiveCopyList];
 }
 
 - (void)verifyProspectiveCopyList {
-    if (self.perspectiveCopiedList.count == 0) {
+    if (_perspectiveCopiedList.count == 0) {
         self.perspectiveCopiedList = [NSMutableArray array];
     }
     
     NSArray *listFromDefaults = [[NSUserDefaults standardUserDefaults]objectForKey:@"saved_copy_list_pers"];
     
     for (id obj in listFromDefaults) {
-        if (![self.perspectiveCopiedList containsObject:obj]) {
-            [self.perspectiveCopiedList addObject:obj];
+        if (![_perspectiveCopiedList containsObject:obj]) {
+            [_perspectiveCopiedList addObject:obj];
         }
     }
 }
 
 - (void)flushCopiedList {
-    [self.copiedList removeAllObjects];
+    [_copiedList removeAllObjects];
     [self saveCopiedList];
 }
 
@@ -225,15 +213,15 @@
 }
 
 - (void)verifyCopiedList {
-    if (self.copiedList.count == 0) {
+    if (_copiedList.count == 0) {
         self.copiedList = [NSMutableArray array];
     }
     
     NSArray *listFromDefaults = [[NSUserDefaults standardUserDefaults]objectForKey:@"saved_copied_list"];
     
     for (id obj in listFromDefaults) {
-        if (![self.copiedList containsObject:obj]) {
-            [self.copiedList addObject:obj];
+        if (![_copiedList containsObject:obj]) {
+            [_copiedList addObject:obj];
         }
     }
 }
@@ -318,7 +306,7 @@
 - (void)updateCopyButtonState {
     
     if (!self.theTableView.editing) {
-        [self.theCopyAndPasteButton setHidden:YES];
+        [self setCPButtonHidden:YES];
         return;
     }
     
@@ -329,7 +317,7 @@
     BOOL CLGT = (self.copiedList.count > 0);
     BOOL shouldUnhide = ((persCLGT || CLGT) || (persCLGT && CLGT));
     
-    [self.theCopyAndPasteButton setHidden:!shouldUnhide];
+    [self setCPButtonHidden:!shouldUnhide];
 }
 
 - (void)reindexFilelist {
@@ -656,49 +644,56 @@
 
     self.navBar.topItem.title = [self.navBar.topItem.title stringByDeletingLastPathComponent];
 
-    if ([prevDir isEqualToString:kDocsDir]) {
-        [self.backButton setHidden:YES];
-        [self.homeButton setHidden:YES];
-    }
-
-    [self refreshTableViewWithAnimation:UITableViewRowAnimationRight];
+    [self refreshTableViewWithAnimation:UITableViewRowAnimationBottom];
 }
 
-- (void)goHome {
+- (void)showOptionsSheet:(id)sender {
+    UIActionSheet *as = [[[UIActionSheet alloc]initWithTitle:nil completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+        if (buttonIndex == 0) {
+            URLInputController *chav = [[[URLInputController alloc]initWithCompletionBlock:^(NSString *url) {
+                if (url.length > 0) {
+                    NSLog(@"URL: %@",url);
+                    if ([url hasPrefix:@"http"]) {
+                        [kAppDelegate downloadFromAppDelegate:url];
+                    } else if ([url hasPrefix:@"ftp"]) {
+                        [kAppDelegate downloadFileUsingFtp:url];
+                    }
+                }
+            }]autorelease];
+            [chav show];
+        } else if (buttonIndex == 1) {
+            webDAVViewController *advc = [webDAVViewController viewController];
+            advc.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+            [self presentModalViewController:advc animated:YES];
+        } else if (buttonIndex == 2) {
+            DropboxBrowserViewController *d = [DropboxBrowserViewController viewController];
+            d.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+            [self presentModalViewController:d animated:YES];
+        } else if (buttonIndex == 3) {
+            FTPBrowserViewController *d = [FTPBrowserViewController viewController];
+            d.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+            [self presentModalViewController:d animated:YES];
+        } else if (buttonIndex == 4) {
+            SettingsView *d = [SettingsView viewController];
+            d.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+            [self presentModalViewController:d animated:YES];
+        }
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download URL", @"WebDAV Server", @"Browse Dropbox", @"Browse FTP", @"Settings", nil]autorelease];
+    
+    as.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+    
+    [as showFromBarButtonItem:sender animated:YES];
+    
     [self removeSideSwipeView:NO];
-    
-    [self.dirs removeAllObjects];
-    self.navBar.topItem.title = @"/";
-    [self.backButton setHidden:YES];
-    
-    [kAppDelegate setManagerCurrentDir:kDocsDir];
-
-    [self.homeButton setHidden:YES];
-    
-    [self refreshTableViewWithAnimation:UITableViewRowAnimationRight];
-    [self.theTableView setContentOffset:CGPointMake(0, 0)];
-}
-
-- (void)close {
-    [self removeSideSwipeView:NO];
-    [self.dirs removeAllObjects];
-    [self.filelist removeAllObjects];
-    
-    [self dismissModalViewControllerAnimated:YES];
 }
 
 - (void)pullToRefreshViewShouldRefresh:(PullToRefreshView *)view {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-        [NSThread sleepForTimeInterval:0.5f];
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            NSAutoreleasePool *poolTwo = [[NSAutoreleasePool alloc]init];
-            [view finishedLoading];
-            [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
-            [poolTwo release];
-        });
-        [pool release];
-    });
+   // if (![[kAppDelegate managerCurrentDir]isEqualToString:kDocsDir]) {
+        [self goBackDir];
+        [view finishedLoading];
+        [self.filelist removeAllObjects];
+        [_theTableView reloadDataWithCoolAnimationType:CoolRefreshAnimationStyleBackward];
+   // }
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -853,8 +848,6 @@
         }
         
     } else if ([[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir] && isDir) {
-        [self.backButton setHidden:NO];
-        [self.homeButton setHidden:NO];
         
         self.navBar.topItem.title = [self.navBar.topItem.title stringByAppendingPathComponent:[file lastPathComponent]];
         
@@ -862,7 +855,10 @@
         
         [self recalculateDirs];
         
-        [self refreshTableViewWithAnimation:UITableViewRowAnimationLeft];
+        [_filelist removeAllObjects];
+        [_theTableView reloadDataWithCoolAnimationType:CoolRefreshAnimationStyleForward];
+        
+        //[self refreshTableViewWithAnimation:UITableViewRowAnimationLeft];
         [self.theTableView flashScrollIndicators];
         
     } else if ([[[file pathExtension]lowercaseString]isEqualToString:@"zip"]) {
@@ -966,11 +962,6 @@
     
     if (self.theTableView.editing) {
         [self.editButton setTitle:@"Edit"];
-
-        if (![[kAppDelegate managerCurrentDir]isEqualToString:kDocsDir]) {
-            [self.backButton setHidden:NO];
-            [self.homeButton setHidden:NO];
-        }
         
         [self.theTableView beginUpdates];
         [self.theTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:self.filelist.count inSection:0]] withRowAnimation:UITableViewRowAnimationLeft];
@@ -987,8 +978,6 @@
         
     } else {
         [self.editButton setTitle:@"Done"];
-        [self.homeButton setHidden:YES];
-        [self.backButton setHidden:YES];
 
         [self.theTableView beginUpdates];
         [self.theTableView setEditing:YES animated:YES];
@@ -1442,8 +1431,6 @@
     [self setDirs:nil];
     [self setEditButton:nil];
     [self setTheTableView:nil];
-    [self setBackButton:nil];
-    [self setHomeButton:nil];
     [self setSideSwipeView:nil];
     [self setSideSwipeCell:nil];
     NSLog(@"%@ dealloc'd", NSStringFromClass([self class]));

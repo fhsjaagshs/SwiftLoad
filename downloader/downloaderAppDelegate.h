@@ -28,7 +28,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 @interface downloaderAppDelegate : UIResponder <UIApplicationDelegate, BKSessionControllerDelegate, GKSessionDelegate, DBSessionDelegate, DBRestClientDelegate, MBProgressHUDDelegate, GKPeerPickerControllerDelegate, AVAudioPlayerDelegate>
 
 @property (nonatomic, retain) UIWindow *window;
-@property (nonatomic, retain) downloaderViewController *viewController;
+@property (nonatomic, retain) MyFilesViewController *viewController;
 
 //@property (nonatomic, retain) DBRestClient *restClient;
 

@@ -131,11 +131,11 @@
 	[self presentModalViewController:filesViewMe animated:YES];
 }
 
-- (void)showWebBrowser {
+/*- (void)showWebBrowser {
     webBrowser *wb = [webBrowser viewController];
     wb.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
     [self presentModalViewController:wb animated:YES];
-}
+}*/
 
 - (void)showWebDAVController {
     webDAVViewController *advc = [webDAVViewController viewController];

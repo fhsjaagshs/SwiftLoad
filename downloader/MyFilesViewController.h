@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ShadowedTableView.h"
+#import "CoolRefreshTableView.h"
 
 @interface MyFilesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, PullToRefreshViewDelegate, UIDocumentInteractionControllerDelegate>
 
@@ -22,11 +23,9 @@
 @property (nonatomic, retain) NSMutableArray *dirs;
 
 @property (nonatomic, retain) UIBarButtonItem *editButton;
-@property (nonatomic, retain) ShadowedTableView *theTableView;
-@property (nonatomic, retain) CustomButton *backButton;
-@property (nonatomic, retain) CustomButton *homeButton;
+@property (nonatomic, retain) CoolRefreshTableView *theTableView;
 @property (nonatomic, retain) CustomNavBar *navBar;
-@property (nonatomic, retain) CustomButton *theCopyAndPasteButton;
+@property (nonatomic, retain) UIButton *theCopyAndPasteButton;
 
 @property (nonatomic, retain) UIView *sideSwipeView;
 @property (nonatomic, assign) UITableViewCell *sideSwipeCell;

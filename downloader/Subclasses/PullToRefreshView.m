@@ -117,7 +117,7 @@
 		self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.backgroundColor = [UIColor clearColor];
         
-        self.statusLabel = [[[UILabel alloc]initWithFrame:CGRectMake(0.0f, frame.size.height - 38.0f, self.frame.size.width, 20.0f)]autorelease];
+      /*  self.statusLabel = [[[UILabel alloc]initWithFrame:CGRectMake(0.0f, frame.size.height - 38.0f, self.frame.size.width, 20.0f)]autorelease];
 		self.statusLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
@@ -134,7 +134,7 @@
 		[self addSubview:self.statusLabel];
         
 		self.arrowImage = [[[CALayer alloc]init]autorelease];
-        self.arrowImage.frame = CGRectMake(25.0f, frame.size.height - 60.0f, 30.7f, 52.0f); // 30.7f was 24.0f
+        self.arrowImage.frame = CGRectMake(25.0f, frame.size.height - 50.0f, 30.7f, 52.0f); // 30.7f was 24.0f
 		self.arrowImage.contentsGravity = kCAGravityCenter;
         self.arrowImage.contentsScale = 2; // scale down the image regardless of retina. The image is by default the retina size.
         self.arrowImage.contents = (id)[self getArrowImage].CGImage;
@@ -142,7 +142,7 @@
 
         self.activityView = [[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite]autorelease];
 		self.activityView.frame = CGRectMake(30.0f, frame.size.height - 38.0f, 20.0f, 20.0f);
-		[self addSubview:self.activityView];
+		[self addSubview:self.activityView];*/
 
 		[self setState:PullToRefreshViewStateNormal];
     }
@@ -184,16 +184,16 @@
     if ([keyPath isEqualToString:@"contentOffset"]) {
         if (self.scrollView.isDragging) {
             if (self.state == PullToRefreshViewStateReady) {
-                if (self.scrollView.contentOffset.y > -65.0f && self.scrollView.contentOffset.y < 0.0f)
+                if (self.scrollView.contentOffset.y > -32.0f && self.scrollView.contentOffset.y < 0.0f)
                     [self setState:PullToRefreshViewStateNormal];
             } else if (self.state == PullToRefreshViewStateNormal) {
-                if (self.scrollView.contentOffset.y < -65.0f)
+                if (self.scrollView.contentOffset.y < -32.0f)
                     [self setState:PullToRefreshViewStateReady];
             } else if (self.state == PullToRefreshViewStateLoading) {
                 if (self.scrollView.contentOffset.y >= 0) {
                     self.scrollView.contentInset = UIEdgeInsetsZero;
                 } else {
-                    self.scrollView.contentInset = UIEdgeInsetsMake(MIN(-self.scrollView.contentOffset.y, 60.0f), 0, 0, 0);
+                    self.scrollView.contentInset = UIEdgeInsetsMake(MIN(-self.scrollView.contentOffset.y, 30.0f), 0, 0, 0);
                 }
             }
         } else {

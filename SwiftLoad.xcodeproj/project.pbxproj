@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9BCBA38E155A042F00CA15AA /* webBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BCBA38C155A042E00CA15AA /* webBrowser.m */; };
 		9BFF29FA15387C67007ED9B1 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF29F215387C67007ED9B1 /* ioapi.c */; };
 		9BFF29FB15387C67007ED9B1 /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF29F415387C67007ED9B1 /* mztools.c */; };
 		9BFF29FC15387C67007ED9B1 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF29F615387C67007ED9B1 /* unzip.c */; };
@@ -22,7 +21,6 @@
 		F1122A76142E4E8B00A04CC6 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */; };
 		F119697616E3D0FC001139F1 /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = F119697516E3D0FB001139F1 /* CustomTextField.m */; };
 		F119CF0813F46DA6007D67E4 /* downloaderAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F119CF0713F46DA6007D67E4 /* downloaderAppDelegate.m */; };
-		F119CF0E13F46DA7007D67E4 /* downloaderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F119CF0D13F46DA7007D67E4 /* downloaderViewController.m */; };
 		F11C402E13F82F9D0077F5D1 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F11C402D13F82F9D0077F5D1 /* MessageUI.framework */; };
 		F11C403513F82FE00077F5D1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F11C403413F82FE00077F5D1 /* CoreGraphics.framework */; };
 		F11C403613F830720077F5D1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F11C403213F82FD10077F5D1 /* Foundation.framework */; };
@@ -148,12 +146,12 @@
 		F1F114C5142AA29F00199C3C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F114C4142AA29F00199C3C /* SystemConfiguration.framework */; };
 		F1F114C7142AA3F400199C3C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F114C6142AA3F400199C3C /* CFNetwork.framework */; };
 		F1F114E3142AA73F00199C3C /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F114E2142AA73F00199C3C /* MobileCoreServices.framework */; };
+		F1FCF12A17710BAA004A42B8 /* URLInputController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1FCF12917710BAA004A42B8 /* URLInputController.m */; };
+		F1FCF12D17711DE3004A42B8 /* CoolRefreshTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1FCF12C17711DE3004A42B8 /* CoolRefreshTableView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		9B50F4E51613C4CD0040F394 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
-		9BCBA38B155A042E00CA15AA /* webBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = webBrowser.h; sourceTree = "<group>"; };
-		9BCBA38C155A042E00CA15AA /* webBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = webBrowser.m; sourceTree = "<group>"; };
 		9BFF29F115387C67007ED9B1 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
 		9BFF29F215387C67007ED9B1 /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
 		9BFF29F315387C67007ED9B1 /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
@@ -183,8 +181,6 @@
 		F119CEF313F46DA6007D67E4 /* SwiftLoad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftLoad.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F119CF0613F46DA6007D67E4 /* downloaderAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = downloaderAppDelegate.h; sourceTree = "<group>"; };
 		F119CF0713F46DA6007D67E4 /* downloaderAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = downloaderAppDelegate.m; sourceTree = "<group>"; };
-		F119CF0C13F46DA6007D67E4 /* downloaderViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = downloaderViewController.h; sourceTree = "<group>"; };
-		F119CF0D13F46DA7007D67E4 /* downloaderViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = downloaderViewController.m; sourceTree = "<group>"; };
 		F11C402D13F82F9D0077F5D1 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		F11C403013F82FB40077F5D1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F11C403213F82FD10077F5D1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -387,6 +383,10 @@
 		F1F114C6142AA3F400199C3C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		F1F114E2142AA73F00199C3C /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		F1F114E4142AA74F00199C3C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		F1FCF12817710BAA004A42B8 /* URLInputController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URLInputController.h; sourceTree = "<group>"; };
+		F1FCF12917710BAA004A42B8 /* URLInputController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URLInputController.m; sourceTree = "<group>"; };
+		F1FCF12B17711DE3004A42B8 /* CoolRefreshTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoolRefreshTableView.h; sourceTree = "<group>"; };
+		F1FCF12C17711DE3004A42B8 /* CoolRefreshTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoolRefreshTableView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -523,12 +523,8 @@
 				F15277CF13F4B08800338673 /* MyFilesViewDetailViewController.m */,
 				F119CF0613F46DA6007D67E4 /* downloaderAppDelegate.h */,
 				F119CF0713F46DA6007D67E4 /* downloaderAppDelegate.m */,
-				F119CF0C13F46DA6007D67E4 /* downloaderViewController.h */,
-				F119CF0D13F46DA7007D67E4 /* downloaderViewController.m */,
 				F128A1DA157FDBFD001BC156 /* SettingsView.h */,
 				F128A1DB157FDBFE001BC156 /* SettingsView.m */,
-				9BCBA38B155A042E00CA15AA /* webBrowser.h */,
-				9BCBA38C155A042E00CA15AA /* webBrowser.m */,
 				F17F11201420017100CE45D7 /* fileInfo.h */,
 				F17F11211420017100CE45D7 /* fileInfo.m */,
 				F166BBC114E2171A003E5A07 /* webDAVViewController.h */,
@@ -761,10 +757,14 @@
 				F1693C6516DFAC59006E3739 /* SCRFTPRequest.m */,
 				F1C7A6B516E8178F0082D4D3 /* ZoomingImageView.h */,
 				F1C7A6B616E8178F0082D4D3 /* ZoomingImageView.m */,
+				F1FCF12817710BAA004A42B8 /* URLInputController.h */,
+				F1FCF12917710BAA004A42B8 /* URLInputController.m */,
 				F17CEDDF16FE724C00E7E47B /* FileCreationDialogue.h */,
 				F17CEDE016FE724C00E7E47B /* FileCreationDialogue.m */,
 				F1CB7DAC16FFE99A002693B5 /* FTPLoginController.h */,
 				F1CB7DAD16FFE99A002693B5 /* FTPLoginController.m */,
+				F1FCF12B17711DE3004A42B8 /* CoolRefreshTableView.h */,
+				F1FCF12C17711DE3004A42B8 /* CoolRefreshTableView.m */,
 			);
 			path = Subclasses;
 			sourceTree = "<group>";
@@ -954,7 +954,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F119CF0813F46DA6007D67E4 /* downloaderAppDelegate.m in Sources */,
-				F119CF0E13F46DA7007D67E4 /* downloaderViewController.m in Sources */,
 				F15277D113F4B08800338673 /* MyFilesViewDetailViewController.m in Sources */,
 				F1EDE3F613F8708600C17B2A /* MyFilesViewController.m in Sources */,
 				F17DC65F140C45690015F613 /* AudioPlayerViewController.m in Sources */,
@@ -973,7 +972,6 @@
 				9BFF2A0B15387C6E007ED9B1 /* ZipFile.m in Sources */,
 				9BFF2A0C15387C6E007ED9B1 /* ZipReadStream.m in Sources */,
 				9BFF2A0D15387C6E007ED9B1 /* ZipWriteStream.m in Sources */,
-				9BCBA38E155A042F00CA15AA /* webBrowser.m in Sources */,
 				F128A1DD157FDBFE001BC156 /* SettingsView.m in Sources */,
 				F1693BFC16DFAA08006E3739 /* DDData.m in Sources */,
 				F1693BFD16DFAA08006E3739 /* DDNumber.m in Sources */,
@@ -1041,6 +1039,8 @@
 				F14478381770826A00C5204A /* DownloadController.m in Sources */,
 				F144783E177092B800C5204A /* DownloadingCell.m in Sources */,
 				F14478411770B25900C5204A /* WhiteProgressView.m in Sources */,
+				F1FCF12A17710BAA004A42B8 /* URLInputController.m in Sources */,
+				F1FCF12D17711DE3004A42B8 /* CoolRefreshTableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

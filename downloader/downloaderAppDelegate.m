@@ -461,6 +461,8 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         stouPrelim = [NSString stringWithFormat:@"http://%@",stouPrelim];
     }
     
+    NSLog(@"URL in AppDelegate: %@",url);
+    
     Download *download = [Download downloadWithURL:url];
     [[Downloads sharedDownloads]addDownload:download];
 }
@@ -572,13 +574,17 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    // Trust me
+    [Downloads sharedDownloads];
+    [DownloadController sharedController];
+    
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryPlayback error:nil];
     [[UIApplication sharedApplication]beginReceivingRemoteControlEvents];
     [self becomeFirstResponder];
     AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, nil);
     
     self.window = [[[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]]autorelease];
-    self.viewController = [downloaderViewController viewController];
+    self.viewController = [MyFilesViewController viewController];
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
     
