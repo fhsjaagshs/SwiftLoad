@@ -57,7 +57,7 @@
     UIBezierPath *outsidePath = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:10];
     CGRect smallerBounds = CGRectMake(5, 5, self.bounds.size.width-10, self.bounds.size.height-10);
     UIBezierPath *insidePath = [UIBezierPath bezierPathWithRoundedRect:smallerBounds cornerRadius:10];
-    CGRect finalSmallBounds = CGRectMake(6.5, 6.5, self.bounds.size.width-13, self.bounds.size.height-13);
+    CGRect finalSmallBounds = CGRectMake(6, 6, self.bounds.size.width-12, self.bounds.size.height-12);
     UIBezierPath *smallestPath = [UIBezierPath bezierPathWithRoundedRect:finalSmallBounds cornerRadius:10];
     
     CGContextSaveGState(context);
