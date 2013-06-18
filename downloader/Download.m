@@ -133,6 +133,7 @@ NSString * const kDownloadChanged = @"downloadDone";
 }
 
 - (void)clearOutMyself {
+    [_delegate reset];
     [[Downloads sharedDownloads]removeDownload:self];
     [[NSNotificationCenter defaultCenter]postNotificationName:kDownloadChanged object:self];
 }

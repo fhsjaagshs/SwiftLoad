@@ -16,6 +16,10 @@
 
 @implementation DownloadingCell
 
+- (void)reset {
+    [self setProgress:0.0f];
+}
+
 - (void)drawGreen {
     [_progressView drawGreen];
 }

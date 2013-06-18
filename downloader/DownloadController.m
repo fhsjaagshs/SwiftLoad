@@ -110,6 +110,11 @@ static NSString * const cellId = @"acellid";
     [UIView animateWithDuration:0.25 animations:^{
         [_mainView removeFromSuperview];
         [self setHidden:NO];
+        if ([[Downloads sharedDownloads]numberDownloads] == 0) {
+            [_theTableView removeFromSuperview];
+            [self setMainView:nil];
+            [self setTheTableView:nil];
+        }
     }];
 }
 
