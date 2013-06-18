@@ -25,8 +25,6 @@ extern NSString * const kDownloadChanged;
 - (void)stop;
 - (void)start;
 
-- (void)stopharmless;
-
 - (id)initWithURL:(NSURL *)aUrl;
 + (Download *)downloadWithURL:(NSURL *)aURL;
 

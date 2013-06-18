@@ -33,14 +33,6 @@ NSString * const kDownloadChanged = @"downloadDone";
     return self;
 }
 
-- (void)stopharmless {
-    [_connection cancel];
-    [_downloadedData setLength:0];
-    self.downloadedBytes = 0;
-    self.fileName = nil;
-    self.fileSize = 0;
-}
-
 - (void)stop {
     self.complete = YES;
     self.succeeded = NO;
@@ -52,6 +44,7 @@ NSString * const kDownloadChanged = @"downloadDone";
 }
 
 - (void)start {
+    [[NSNotificationCenter defaultCenter]postNotificationName:kDownloadChanged object:self];
     self.complete = NO;
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
@@ -71,7 +64,6 @@ NSString * const kDownloadChanged = @"downloadDone";
                     self.fileSize = [[headers objectForKey:@"Content-Length"]floatValue];
                 } else {
                     self.fileSize = -1;
-                    [[HUDProgressView progressViewWithTag:0]setIndeterminate:YES];
                 }
             }
             
@@ -103,8 +95,7 @@ NSString * const kDownloadChanged = @"downloadDone";
 }
 
 - (void)showFailure {
-    [[HUDProgressView progressViewWithTag:0]redrawRed];
-    [[HUDProgressView progressViewWithTag:0]hideAfterDelay:1.5f];
+    [_delegate drawRed];
 }
 
 - (void)showSuccessForFilename:(NSString *)fileName {
@@ -119,8 +110,7 @@ NSString * const kDownloadChanged = @"downloadDone";
     [[UIApplication sharedApplication]presentLocalNotificationNow:notification];
     [notification release];
     
-    [[HUDProgressView progressViewWithTag:0]redrawGreen];
-    [[HUDProgressView progressViewWithTag:0]hideAfterDelay:1.5f];
+    [_delegate drawGreen];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSHTTPURLResponse *)response {
@@ -136,7 +126,8 @@ NSString * const kDownloadChanged = @"downloadDone";
     
     self.downloadedBytes += recievedData.length;
     [_downloadedData appendData:recievedData];
-    float progress = _downloadedData.length/_fileSize;
+    
+    float progress = (_fileSize == -1)?1:_downloadedData.length/_fileSize;
     
     [_delegate setProgress:progress];
 }
@@ -144,6 +135,7 @@ NSString * const kDownloadChanged = @"downloadDone";
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [self showFailure];
+    [[NSNotificationCenter defaultCenter]postNotificationName:kDownloadChanged object:self];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection {
@@ -162,9 +154,8 @@ NSString * const kDownloadChanged = @"downloadDone";
         [self showFailure];
     }
     
-    [[NSNotificationCenter defaultCenter]postNotificationName:kDownloadChanged object:self];
-    
     [[Downloads sharedDownloads]removeDownload:self];
+    [[NSNotificationCenter defaultCenter]postNotificationName:kDownloadChanged object:self];
 }
 
 - (void)dealloc {

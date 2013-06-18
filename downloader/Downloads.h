@@ -17,6 +17,7 @@
 - (void)removeDownloadAtIndex:(int)index;
 
 - (Download *)downloadAtIndex:(int)index;
+- (int)indexOfDownload:(Download *)download;
 
 - (int)numberDownloads;
 

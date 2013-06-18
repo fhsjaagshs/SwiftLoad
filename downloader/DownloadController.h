@@ -17,6 +17,4 @@
 
 + (DownloadController *)sharedController;
 
-- (void)tableBrowserWasHidden;
-
 @end

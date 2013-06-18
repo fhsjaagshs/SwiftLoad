@@ -16,6 +16,14 @@
 
 @implementation DownloadingCell
 
+- (void)drawGreen {
+    [_progressView drawGreen];
+}
+
+- (void)drawRed {
+    [_progressView drawRed];
+}
+
 - (void)setProgress:(float)progress {
     _progress = progress;
     _progressView.progress = progress;
@@ -45,10 +53,10 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    Class UILabel = [UILabel class];
+    Class labelclass = [UILabel class];
     
     for (UIView *view in self.subviews) {
-        if ([view isKindOfClass:UILabel] && view.tag != 69) {
+        if ([view isKindOfClass:labelclass] && view.tag != 69) {
             [view removeFromSuperview];
         }
     }

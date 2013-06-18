@@ -10,6 +10,9 @@
 
 @interface DownloadingCell : UITableViewCell
 
+- (void)drawGreen;
+- (void)drawRed;
+
 @property (nonatomic, assign, setter = setProgress:) float progress;
 @property (nonatomic, retain) UILabel *titleLabel;
 

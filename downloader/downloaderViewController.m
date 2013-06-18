@@ -98,6 +98,10 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillDisappear) name:UIKeyboardWillHideNotification object:nil];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [DownloadController sharedController];
+}
+
 - (void)keyboardWillDisappear {
     [[NSUserDefaults standardUserDefaults]setObject:self.textField.text forKey:@"myDefaults"];
 }
