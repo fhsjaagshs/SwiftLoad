@@ -15,8 +15,6 @@
 
 @implementation MyFilesViewController
 
-@synthesize dirs, sideSwipeDirection, sideSwipeCell, sideSwipeView, animatingSideSwipe, editButton, theTableView, backButton, homeButton, filelist, docController, isCut, copiedList, perspectiveCopiedList, theCopyAndPasteButton;
-
 - (void)loadView {
     [super loadView];
     
@@ -90,6 +88,7 @@
     self.animatingSideSwipe = NO;
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(copiedListChanged:) name:@"copiedlistchanged" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(downloadsChanged) name:kDownloadChanged object:nil];
 }
 
 - (void)removeAllCheckmarks {
@@ -338,6 +337,10 @@
         [self setFilelist:[NSMutableArray array]];
         [self.filelist addObjectsFromArray:[[[NSFileManager defaultManager]contentsOfDirectoryAtPath:[kAppDelegate managerCurrentDir] error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)]];
     }
+}
+
+- (void)downloadsChanged {
+    [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
 }
 
 - (void)refreshTableViewWithAnimation:(UITableViewRowAnimation)rowAnim {

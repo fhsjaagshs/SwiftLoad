@@ -253,6 +253,10 @@ static NSString * const cellId = @"acellid";
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter]removeObserver:self];
+    [self setButton:nil];
+    [self setActivity:nil];
+    [self setTheTableView:nil];
+    [self setMainView:nil];
     [super dealloc];
 }
 

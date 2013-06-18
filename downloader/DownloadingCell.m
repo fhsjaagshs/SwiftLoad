@@ -62,4 +62,10 @@
     }
 }
 
+- (void)dealloc {
+    [self setTitleLabel:nil];
+    [self setProgressView:nil];
+    [super dealloc];
+}
+
 @end
