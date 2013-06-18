@@ -16,6 +16,8 @@
 
 - (void)removeDownloadAtIndex:(int)index;
 
+- (int)numberDownloads;
+
 + (Downloads *)sharedDownloads;
 
 @end

@@ -18,20 +18,32 @@ static Downloads *sharedInstance = nil;
 
 @implementation Downloads
 
+- (int)numberDownloads {
+    return _downloadObjs.count;
+}
+
 - (void)removeAllDownloads {
-    
+    for (Download *download in _downloadObjs) {
+        [self removeDownload:download];
+    }
 }
 
 - (void)removeDownload:(Download *)download {
-    
+    [download stop];
+    [_downloadObjs removeObject:download];
 }
 
 - (void)addDownload:(Download *)download {
-    
+    [download start];
+    [_downloadObjs addObject:download];
 }
 
 - (void)removeDownloadAtIndex:(int)index {
-    
+    [self removeDownload:[_downloadObjs objectAtIndex:index]];
+}
+
+- (int)tagForDownload:(Download *)download {
+    return [_downloadObjs indexOfObject:download];
 }
 
 - (id)init {

@@ -21,6 +21,7 @@
     #import "NetworkUtils.h"
     #import "Download.h"
     #import "Downloads.h"
+    #import "DownloadController.h"
 
     #import "UIViewController+AutoNib.h"
     #import "UIAlertView+BlockExtensions.h"

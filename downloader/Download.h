@@ -12,5 +12,12 @@
 
 @property (nonatomic, assign) float fileSize;
 @property (nonatomic, strong) NSString *fileName;
+@property (nonatomic, strong) NSURL *url;
+
+- (void)stop;
+- (void)start;
+
+- (id)initWithURL:(NSURL *)aUrl;
++ (Download *)downloadWithURL:(NSURL *)aURL;
 
 @end

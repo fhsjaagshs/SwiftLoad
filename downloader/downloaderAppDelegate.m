@@ -406,14 +406,16 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     
     UILocalNotification *notification = [[UILocalNotification alloc]init];
     notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:0];
-    notification.alertBody = [NSString stringWithFormat:@"%@ already exists",fnZ];
+    notification.alertBody = [NSString stringWithFormat:@"Already Exists: %@",fnZ];
     notification.soundName = UILocalNotificationDefaultSoundName;
     [[UIApplication sharedApplication]presentLocalNotificationNow:notification];
     [notification release];
 
-    CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"File Exists" message:[NSString stringWithFormat:@"\"%@\" already exists.",fnZ] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [av show];
-    [av release];
+    if ([self isInForground]) {
+        CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"File Exists" message:[NSString stringWithFormat:@"\"%@\" already exists.",fnZ] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [av show];
+        [av release];
+    }
 }
 
 - (void)showFailedAlertForFilename:(NSString *)fileName {
@@ -430,91 +432,24 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [[UIApplication sharedApplication]presentLocalNotificationNow:notification];
     [notification release];
     
-    NSString *message = [NSString stringWithFormat:@"SwiftLoad failed to download \"%@\". Please try again later.",fileName];
-    CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Oops..." message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [av show];
-    [av release];
-}
-
-- (void)downloadURL:(NSURL *)url {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    
-    NSMutableURLRequest *headReq = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:30.0];
-    [headReq setHTTPMethod:@"HEAD"];
-    
-    [NSURLConnection sendAsynchronousRequest:headReq queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
-        if (!error) {
-            NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
-            if (headers) {
-                if ([headers objectForKey:@"Content-Range"]) {
-                    NSString *contentRange = [headers objectForKey:@"Content-Range"];
-                    NSRange range = [contentRange rangeOfString:@"/"];
-                    NSString *totalBytesCount = [contentRange substringFromIndex:range.location+1];
-                    self.expectedDownloadingFileSize = [totalBytesCount floatValue];
-                } else if ([headers objectForKey:@"Content-Length"]) {
-                    self.expectedDownloadingFileSize = [[headers objectForKey:@"Content-Length"]floatValue];
-                } else {
-                    self.expectedDownloadingFileSize = -1;
-                    [[HUDProgressView progressViewWithTag:0]setIndeterminate:YES];
-                }
-            }
-            
-            NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:30.0];
-            [theRequest setHTTPMethod:@"GET"];
-            self.connection = [[[NSURLConnection alloc]initWithRequest:theRequest delegate:self]autorelease];
-            self.backgroundTaskIdentifier = [[UIApplication sharedApplication]beginBackgroundTaskWithExpirationHandler:^{
-                
-                [self.connection cancel];
-                [self.downloadedData setLength:0];
-                self.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
-                
-                [[UIApplication sharedApplication]setNetworkActivityIndicatorVisible:NO];
-                [[UIApplication sharedApplication]endBackgroundTask:self.backgroundTaskIdentifier];
-            }];
-        }
-    }];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSHTTPURLResponse *)response {
-    self.downloadingFileName = [response.URL.absoluteString lastPathComponent];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)recievedData {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    
-    if (self.downloadedData.length == 0) {
-        self.downloadedData = [NSMutableData data];
-    }
-    
-    self.downloadedBytes = self.downloadedBytes+recievedData.length;
-    [self.downloadedData appendData:recievedData];
-    float progress = self.downloadedData.length/self.expectedDownloadingFileSize;
-    [[HUDProgressView progressViewWithTag:0]setProgress:progress];
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    [[HUDProgressView progressViewWithTag:0]redrawRed];
-    [[HUDProgressView progressViewWithTag:0]hideAfterDelay:1.5f];
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-   // [[HUDProgressView progressView]hide];
-    NSString *filename = [self.downloadingFileName stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    
-    if (self.downloadedData.length > 0) {
-        NSString *filePath = getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:filename]);
-        [[NSFileManager defaultManager]createFileAtPath:filePath contents:self.downloadedData attributes:nil];
-        [self showFinishedAlertForFilename:filename];
-        [self.downloadedData setLength:0];
-    } else {
-        [[HUDProgressView progressViewWithTag:0]redrawRed];
-        [[HUDProgressView progressViewWithTag:0]hideAfterDelay:1.5f];
+    if ([self isInForground]) {
+        NSString *message = [NSString stringWithFormat:@"SwiftLoad failed to download \"%@\". Please try again later.",fileName];
+        CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Oops..." message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [av show];
+        [av release];
     }
 }
 
 - (void)downloadFromAppDelegate:(NSString *)stouPrelim {
+    
+    NSURL *url = [NSURL URLWithString:stouPrelim];
+    
+    if (url == nil) {
+        UIAlertView *av = [[[UIAlertView alloc]initWithTitle:@"Invalid URL" message:@"The URL you have provided is somehow bogus." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil]autorelease];
+        [av show];
+        return;
+    }
+    
     if (![stouPrelim hasPrefix:@"http"]) {
         
         if ([stouPrelim hasPrefix:@"sftp"] || [stouPrelim hasPrefix:@"rsync"] || [stouPrelim hasPrefix:@"afp"]) {
@@ -525,22 +460,9 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         
         stouPrelim = [NSString stringWithFormat:@"http://%@",stouPrelim];
     }
-
-    NSURL *url = [NSURL URLWithString:stouPrelim];
-
-    if (url == nil) {
-        UIAlertView *av = [[[UIAlertView alloc]initWithTitle:@"Invalid URL" message:@"The URL you have provided is somehow bogus." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil]autorelease];
-        [av show];
-        return;
-    }
     
-    NSString *fileName = [[stouPrelim lastPathComponent]stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    
-    HUDProgressView *pv = [HUDProgressView progressView];
-    pv.text = [NSString stringWithFormat:@"Downloading: %@",fileName];
-    [pv show];
-
-    [self downloadURL:url];
+    Download *download = [Download downloadWithURL:url];
+    [[Downloads sharedDownloads]addDownload:download];
 }
 
 - (BOOL)isInForground {
@@ -1138,9 +1060,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (void)dealloc {
     [self setWindow:nil];
     [self setViewController:nil];
-    [self setConnection:nil];
-    [self setDownloadingFileName:nil];
-    [self setDownloadedData:nil];
     [self setSessionController:nil];
     [self setSessionControllerSending:nil];
     [self setOpenFile:nil];

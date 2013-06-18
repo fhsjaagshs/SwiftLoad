@@ -25,7 +25,7 @@ float sanitizeMesurement(float measurement);
 NSString * getNonConflictingFilePathForPath(NSString *path);
 void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID inPropertyID, UInt32 inPropertyValueSize, const void *inPropertyValue);
 
-@interface downloaderAppDelegate : UIResponder <UIApplicationDelegate, BKSessionControllerDelegate, GKSessionDelegate, DBSessionDelegate, DBRestClientDelegate, MBProgressHUDDelegate, GKPeerPickerControllerDelegate, NSURLConnectionDelegate, AVAudioPlayerDelegate>
+@interface downloaderAppDelegate : UIResponder <UIApplicationDelegate, BKSessionControllerDelegate, GKSessionDelegate, DBSessionDelegate, DBRestClientDelegate, MBProgressHUDDelegate, GKPeerPickerControllerDelegate, AVAudioPlayerDelegate>
 
 @property (nonatomic, retain) UIWindow *window;
 @property (nonatomic, retain) downloaderViewController *viewController;
@@ -43,13 +43,13 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (void)showArtworkForFile:(NSString *)file;
 - (void)showMetadataInLockscreenWithArtist:(NSString *)artist title:(NSString *)title album:(NSString *)album;
 
-// Downloading
+/*// Downloading
 @property (nonatomic, retain) NSMutableData *downloadedData;
 @property (nonatomic, assign) float expectedDownloadingFileSize;
 @property (nonatomic, retain) NSString *downloadingFileName;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
 @property (nonatomic, retain) NSURLConnection *connection;
-@property (nonatomic, assign) float downloadedBytes;
+@property (nonatomic, assign) float downloadedBytes;*/
 
 // File tracking
 @property (nonatomic, retain) NSString *openFile;
@@ -104,7 +104,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (void)showFinishedAlertForFilename:(NSString *)fileName;
 
 // Downloading
-- (void)downloadURL:(NSURL *)url;
+//- (void)downloadURL:(NSURL *)url;
 - (void)downloadFromAppDelegate:(NSString *)stouPrelim;
 
 @end

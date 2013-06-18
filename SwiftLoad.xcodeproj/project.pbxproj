@@ -36,6 +36,8 @@
 		F13979A816E78F4E00F8B61B /* ArrowRight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A416E78F4E00F8B61B /* ArrowRight@2x.png */; };
 		F13B58A7176D2C7E007EF22B /* HUDProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = F13B58A6176D2C7E007EF22B /* HUDProgressView.m */; };
 		F1444581145A04A30026CDB7 /* pictureView.m in Sources */ = {isa = PBXBuildFile; fileRef = F144457F145A04A30026CDB7 /* pictureView.m */; };
+		F14478381770826A00C5204A /* DownloadController.m in Sources */ = {isa = PBXBuildFile; fileRef = F14478371770826A00C5204A /* DownloadController.m */; };
+		F144783E177092B800C5204A /* DownloadingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F144783D177092B800C5204A /* DownloadingCell.m */; };
 		F149A6781491686D0038F1FC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F149A6771491686D0038F1FC /* AudioToolbox.framework */; };
 		F149A685149176E60038F1FC /* moviePlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F149A683149176E60038F1FC /* moviePlayerView.m */; };
 		F15277D113F4B08800338673 /* MyFilesViewDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F15277CF13F4B08800338673 /* MyFilesViewDetailViewController.m */; };
@@ -201,6 +203,10 @@
 		F13B58A6176D2C7E007EF22B /* HUDProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HUDProgressView.m; path = ../HUDProgressView.m; sourceTree = "<group>"; };
 		F144457E145A04A30026CDB7 /* pictureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pictureView.h; sourceTree = "<group>"; };
 		F144457F145A04A30026CDB7 /* pictureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pictureView.m; sourceTree = "<group>"; };
+		F14478361770826A00C5204A /* DownloadController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadController.h; sourceTree = "<group>"; };
+		F14478371770826A00C5204A /* DownloadController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadController.m; sourceTree = "<group>"; };
+		F144783C177092B800C5204A /* DownloadingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadingCell.h; sourceTree = "<group>"; };
+		F144783D177092B800C5204A /* DownloadingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadingCell.m; sourceTree = "<group>"; };
 		F149A6771491686D0038F1FC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		F149A682149176E60038F1FC /* moviePlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = moviePlayerView.h; sourceTree = "<group>"; };
 		F149A683149176E60038F1FC /* moviePlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = moviePlayerView.m; sourceTree = "<group>"; };
@@ -775,6 +781,10 @@
 				F1BE07E0176F793F00C4F038 /* Downloads.m */,
 				F1BE07E2176F7A1100C4F038 /* Download.h */,
 				F1BE07E3176F7A1100C4F038 /* Download.m */,
+				F14478361770826A00C5204A /* DownloadController.h */,
+				F14478371770826A00C5204A /* DownloadController.m */,
+				F144783C177092B800C5204A /* DownloadingCell.h */,
+				F144783D177092B800C5204A /* DownloadingCell.m */,
 			);
 			name = "Download Controller";
 			sourceTree = "<group>";
@@ -1023,6 +1033,8 @@
 				F13B58A7176D2C7E007EF22B /* HUDProgressView.m in Sources */,
 				F1BE07E1176F793F00C4F038 /* Downloads.m in Sources */,
 				F1BE07E4176F7A1100C4F038 /* Download.m in Sources */,
+				F14478381770826A00C5204A /* DownloadController.m in Sources */,
+				F144783E177092B800C5204A /* DownloadingCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
