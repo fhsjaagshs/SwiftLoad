@@ -10,8 +10,6 @@
 
 @implementation webDAVViewController
 
-@synthesize urlLabel, onLabel, httpServer;
-
 - (void)loadView {
     [super loadView];
     BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
@@ -29,14 +27,14 @@
     [topItem release];
     
     self.onLabel = [[[UILabel alloc]initWithFrame:iPad?CGRectMake(234, 100, 300, 83):CGRectMake(0, sanitizeMesurement(44), screenBounds.size.width, 91)]autorelease];
-    self.onLabel.textAlignment = UITextAlignmentCenter;
-    self.onLabel.backgroundColor = [UIColor clearColor];
-    self.onLabel.textColor = [UIColor whiteColor];
-    self.onLabel.text = @"WebDAV server is ON";
-    self.onLabel.font = [UIFont boldSystemFontOfSize:iPad?28:23];
-    self.onLabel.shadowColor = [UIColor darkGrayColor];
-    self.onLabel.shadowOffset = CGSizeMake(-1, -1);
-    [self.view addSubview:self.onLabel];
+    _onLabel.textAlignment = UITextAlignmentCenter;
+    _onLabel.backgroundColor = [UIColor clearColor];
+    _onLabel.textColor = [UIColor whiteColor];
+    _onLabel.text = @"WebDAV server is ON";
+    _onLabel.font = [UIFont boldSystemFontOfSize:iPad?28:23];
+    _onLabel.shadowColor = [UIColor darkGrayColor];
+    _onLabel.shadowOffset = CGSizeMake(-1, -1);
+    [self.view addSubview:_onLabel];
     
     UITextView *tf = [[[UITextView alloc]initWithFrame:iPad?CGRectMake(158, 235, 453, 83):CGRectMake(40, sanitizeMesurement(160), 240, 83)]autorelease];
     tf.text = @"Use a WebDAV client like CyberDuck or Interarchy to connect to the following URL using the non-SSL protocol:";
@@ -48,13 +46,13 @@
     [self.view addSubview:tf];
     
     self.urlLabel = [[[UILabel alloc]initWithFrame:iPad?CGRectMake(20, 379, 728, 86):CGRectMake(0, sanitizeMesurement(283), screenBounds.size.width, 21)]autorelease];
-    self.urlLabel.textColor = myCyan;
-    self.urlLabel.backgroundColor = [UIColor clearColor];
-    self.urlLabel.font = [UIFont boldSystemFontOfSize:iPad?31:18];
-    self.urlLabel.shadowColor = [UIColor darkGrayColor];
-    self.urlLabel.shadowOffset = CGSizeMake(-1, -1);
-    self.urlLabel.textAlignment = UITextAlignmentCenter;
-    [self.view addSubview:self.urlLabel];
+    _urlLabel.textColor = myCyan;
+    _urlLabel.backgroundColor = [UIColor clearColor];
+    _urlLabel.font = [UIFont boldSystemFontOfSize:iPad?31:18];
+    _urlLabel.shadowColor = [UIColor darkGrayColor];
+    _urlLabel.shadowOffset = CGSizeMake(-1, -1);
+    _urlLabel.textAlignment = UITextAlignmentCenter;
+    [self.view addSubview:_urlLabel];
     
     UITextView *btf = [[[UITextView alloc]initWithFrame:iPad?CGRectMake(158, 512, 453, 61):CGRectMake(40, sanitizeMesurement(326), 240, 50)]autorelease];
     btf.backgroundColor = [UIColor clearColor];
@@ -66,7 +64,6 @@
     [self.view addSubview:btf];
     
     [self checkForNetworkChange];
-    [self createServer];
 }
 
 - (void)killServer {
@@ -79,27 +76,31 @@
         return;
     }
     
+    if (_httpServer.isRunning) {
+        return;
+    }
+    
     [UIApplication sharedApplication].idleTimerDisabled = YES;
 
     self.httpServer = [[[HTTPServer alloc]init]autorelease];
-    [self.httpServer setType:@"_http._tcp."];
-    [self.httpServer setConnectionClass:[DAVConnection class]];
-    [self.httpServer setPort:8080];
-    [self.httpServer setName:[[UIDevice currentDevice]name]];
-	[self.httpServer setDocumentRoot:kDocsDir];
+    [_httpServer setType:@"_http._tcp."];
+    [_httpServer setConnectionClass:[DAVConnection class]];
+    [_httpServer setPort:8080];
+    [_httpServer setName:[[UIDevice currentDevice]name]];
+	[_httpServer setDocumentRoot:kDocsDir];
     
     NSError *error;
-    [self.httpServer start:&error];
+    [_httpServer start:&error];
 	if (error != nil) {
-        [self.urlLabel setText:@"Error starting server"];
-        [self.onLabel setText:@"WebDAV server is OFF"];
+        _urlLabel.text = @"Error starting server";
+        _onLabel.text = @"WebDAV server is OFF";
 	} else {
         NSString *rawIP = [NetworkUtils getIPAddress];
         if (rawIP.length == 0) {
-            [self.urlLabel setText:@"Unable to establish server"];
-            [self.onLabel setText:@"WebDAV server is OFF"];
+            _urlLabel.text = @"Unable to establish server";
+            _onLabel.text = @"WebDAV server is OFF";
         } else {
-            [self.onLabel setText:@"WebDAV server is ON"];
+            _onLabel.text = @"WebDAV server is ON";
             [self.urlLabel setText:[NSString stringWithFormat:@"http://%@:8080/",rawIP]];
         }
     }
@@ -107,14 +108,14 @@
 
 - (void)checkForNetworkChange {
     if (![NetworkUtils isConnectedToWifi]) {
-        [self.urlLabel setText:@"You are not connected to WiFi"];
-        [self.onLabel setText:@"WebDAV server is OFF"];
+        _urlLabel.text = @"You are not connected to WiFi";
+        _onLabel.text = @"WebDAV server is OFF";
         [self killServer];
-        [self performSelector:@selector(checkForNetworkChange) withObject:nil afterDelay:10.0];
-    } else if (!self.httpServer.isRunning) {
+    } else if (!_httpServer.isRunning) {
         [self createServer];
-        [self performSelector:@selector(checkForNetworkChange) withObject:nil afterDelay:5.0];
     }
+    
+    [self performSelector:@selector(checkForNetworkChange) withObject:nil afterDelay:5.0];
 }
 
 - (void)close {
