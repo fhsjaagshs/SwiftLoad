@@ -25,6 +25,7 @@
 @property (nonatomic, assign) int numberOfDirsToGo;
 
 @property (nonatomic, retain) NSString *userID;
+@property (nonatomic, retain) NSString *cursor;
 
 @end
 
@@ -84,11 +85,41 @@
     [self.theTableView addSubview:self.pull];
     
     self.pathContents = [NSMutableDictionary dictionary];
+    self.currentPathItems = [NSMutableArray array];
 }
 
 - (void)pullToRefreshViewShouldRefresh:(PullToRefreshView *)view {
     [self.pull setState:PullToRefreshViewStateLoading];
-    [self updateFileListing];
+    [self loadCachesThenUpdateFileListing];
+}
+
+- (void)loadCachesThenUpdateFileListing {
+    if (_userID.length == 0) {
+        [DroppinBadassBlocks loadAccountInfoWithCompletionBlock:^(DBAccountInfo *info, NSError *error) {
+            self.userID = info.userId;
+            [self loadCachesThenUpdateFileListing];
+        }];
+    } else {
+        NSString *fileCacheName = [NSString stringWithFormat:@"dbcache-%@.plist",_userID];
+        NSString *filePath = [kCachesDir stringByAppendingPathComponent:fileCacheName];
+        NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:filePath];
+        
+        NSString *cursor = [dict objectForKey:@"cursor"];
+        NSMutableDictionary *pathContentsTemp = [dict objectForKey:@"pathContents"];
+        
+        if (cursor.length > 0) {
+            
+            self.cursor = cursor;
+            
+            if (pathContentsTemp.allKeys.count > 0) {
+                self.pathContents = [NSMutableDictionary dictionaryWithDictionary:pathContentsTemp];
+            }
+        } else {
+            self.cursor = nil;
+        }
+        
+        [self updateFileListing];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -96,60 +127,40 @@
         [[DBSession sharedSession]linkFromController:self];
     } else {
         [self.pull setState:PullToRefreshViewStateLoading];
-        [self updateFileListing];
+        [self loadCachesThenUpdateFileListing];
     }
 }
 
 - (void)cacheFiles {
-    NSArray *credStore = [[DBSession sharedSession]userIds];
-
-    if (credStore.count > 0) {
-        NSString *userID = [credStore objectAtIndex:0];
-        NSString *fileCacheName = [NSString stringWithFormat:@"dbcache-%@.plist",userID];
+    if (_userID.length == 0) {
+        [DroppinBadassBlocks loadAccountInfoWithCompletionBlock:^(DBAccountInfo *info, NSError *error) {
+            self.userID = info.userId;
+            [self cacheFiles];
+        }];
+    } else {
+        NSString *fileCacheName = [NSString stringWithFormat:@"dbcache-%@.plist",_userID];
         NSString *filePath = [kCachesDir stringByAppendingPathComponent:fileCacheName];
-        [self.pathContents writeToFile:filePath atomically:YES];
+        NSDictionary *dict = @{@"cursor": (_cursor.length == 0)?@"":_cursor, @"pathContents": _pathContents};
+        [dict writeToFile:filePath atomically:YES];
     }
 }
 
-static int lol = 0;
-
 - (void)updateFileListing {
     
-    if (lol == 0) {
-        NSUserDefaultsOFKKill(@"DBCursorKey");
-        lol = 69;
-    }
-    
-    [DroppinBadassBlocks loadDelta:NSUserDefaultsOFK(@"DBCursorKey") withCompletionHandler:^(NSArray *entries, NSString *cursor, BOOL hasMore, BOOL shouldReset, NSError *error) {
+    [DroppinBadassBlocks loadDelta:_cursor withCompletionHandler:^(NSArray *entries, NSString *cursor, BOOL hasMore, BOOL shouldReset, NSError *error) {
         
         if (error) {
             NSLog(@"Error: %@",error);
         } else {
             
-            [DroppinBadassBlocks load]
-            
-            /*if (self.pathContents.count == 0) {
-                NSArray *credStore = [[DBSession sharedSession]userIds];
-                
-                if (credStore.count > 0) {
-                    NSString *userID = [credStore objectAtIndex:0];
-                    NSString *fileCacheName = [NSString stringWithFormat:@"dbcache-%@.plist",userID];
-                    NSString *filePath = [kCachesDir stringByAppendingPathComponent:fileCacheName];
-                    self.pathContents = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
-                } else {
-                    self.pathContents = [NSMutableDictionary dictionary];
-                }
-                
-            }*/
-            
             if (shouldReset) {
                 NSLog(@"Resetting");
-                NSUserDefaultsOFKKill(@"DBCursorKey");
-                [self.pathContents removeAllObjects];
+                self.cursor = nil;
+                [_pathContents removeAllObjects];
                 [self cacheFiles];
             }
 
-            [[NSUserDefaults standardUserDefaults]setObject:cursor forKey:@"DBCursorKey"];
+            self.cursor = cursor;
             
             for (DBDeltaEntry *entry in entries) {
                 if (entry.metadata == nil) {
@@ -367,6 +378,19 @@ static int lol = 0;
 - (void)close {
     [DroppinBadassBlocks cancel];
     [self dismissModalViewControllerAnimated:YES];
+}
+
+- (void)dealloc {
+    [self setTheTableView:nil];
+    [self setHomeButton:nil];
+    [self setBackButton:nil];
+    [self setNavBar:nil];
+    [self setPull:nil];
+    [self setPathContents:nil];
+    [self setCurrentPathItems:nil];
+    [self setUserID:nil];
+    [self setCursor:nil];
+    [super dealloc];
 }
 
 @end

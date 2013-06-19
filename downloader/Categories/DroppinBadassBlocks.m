@@ -71,17 +71,6 @@ static char const * const loadAccountInfoBlockKey = "laick";
     return restClient;
 }
 
-+ (void)removeAllBlocks {
-    objc_removeAssociatedObjects(MetadataBlockStringKey);
-    objc_removeAssociatedObjects(DownloadProgressBlockStringKey);
-    objc_removeAssociatedObjects(DownloadBlockStringKey);
-    objc_removeAssociatedObjects(LinkBlockStringKey);
-    objc_removeAssociatedObjects(DeltaBlockStringKey);
-    objc_removeAssociatedObjects(UploadBlockStringKey);
-    objc_removeAssociatedObjects(UploadProgressBlockStringKey);
-    objc_removeAssociatedObjects(loadAccountInfoBlockStringKey);
-}
-
 + (id)uploadBlock {
     return objc_getAssociatedObject(UploadBlockStringKey, UploadBlockKey);
 }
@@ -159,19 +148,16 @@ static char const * const loadAccountInfoBlockKey = "laick";
 - (void)restClient:(DBRestClient *)client uploadedFile:(NSString *)destPath from:(NSString *)srcPath metadata:(DBMetadata *)metadata {
     void(^block)(NSString *destPath, NSString *srcPath, DBMetadata *metadata, NSError *error) = [DroppinBadassBlocks uploadBlock];
     block(destPath, srcPath, metadata, nil);
-    [DroppinBadassBlocks removeAllBlocks];
 }
 
 - (void)restClient:(DBRestClient *)client uploadFileFailedWithError:(NSError *)error {
     void(^block)(NSString *destPath, NSString *srcPath, DBMetadata *metadata, NSError *error) = [DroppinBadassBlocks uploadBlock];
     block(nil, nil, nil, error);
-    [DroppinBadassBlocks removeAllBlocks];
 }
 
 - (void)restClient:(DBRestClient *)client uploadProgress:(CGFloat)progress forFile:(NSString *)destPath from:(NSString *)srcPath {
     void(^block)(CGFloat progress, NSString *destPath, NSString *scrPath) = [DroppinBadassBlocks uploadProgressBlock];
     block(progress, destPath, srcPath);
-    [DroppinBadassBlocks removeAllBlocks];
 }
 
 
@@ -188,13 +174,11 @@ static char const * const loadAccountInfoBlockKey = "laick";
 - (void)restClient:(DBRestClient *)client loadedDeltaEntries:(NSArray *)entries reset:(BOOL)shouldReset cursor:(NSString *)cursor hasMore:(BOOL)hasMore {
     void(^block)(NSArray *entries, NSString *cursor, BOOL hasMore, BOOL shouldReset, NSError *error) = [DroppinBadassBlocks deltaBlock];
     block(entries, cursor, hasMore, shouldReset, nil);
-    [DroppinBadassBlocks removeAllBlocks];
 }
 
 - (void)restClient:(DBRestClient *)client loadDeltaFailedWithError:(NSError *)error {
     void(^block)(NSArray *entries, NSString *cursor, NSError *error) = [DroppinBadassBlocks deltaBlock];
     block(nil, nil, error);
-    [DroppinBadassBlocks removeAllBlocks];
 }
 
 //
@@ -209,13 +193,11 @@ static char const * const loadAccountInfoBlockKey = "laick";
 - (void)restClient:(DBRestClient *)restClient loadedSharableLink:(NSString *)link forFile:(NSString *)path {
     void(^block)(NSString *link, NSString *path, NSError *error) = [DroppinBadassBlocks linkBlock];
     block(link, path, nil);
-    [DroppinBadassBlocks removeAllBlocks];
 }
 
 - (void)restClient:(DBRestClient *)restClient loadSharableLinkFailedWithError:(NSError *)error {
     void(^block)(NSString *link, NSString *path, NSError *error) = [DroppinBadassBlocks linkBlock];
     block(nil, nil, error);
-    [DroppinBadassBlocks removeAllBlocks];
 }
 
 //
@@ -231,19 +213,16 @@ static char const * const loadAccountInfoBlockKey = "laick";
 - (void)restClient:(DBRestClient *)client loadedFile:(NSString *)destPath contentType:(NSString *)contentType metadata:(DBMetadata *)metadata {
     void(^block)(DBMetadata *metadata, NSError *error) = [DroppinBadassBlocks downloadBlock];
     block(metadata, nil);
-    [DroppinBadassBlocks removeAllBlocks];
 }
 
 - (void)restClient:(DBRestClient *)client loadProgress:(CGFloat)progress forFile:(NSString *)destPath {
     void(^block)(float progress) = [DroppinBadassBlocks downloadProgressBlock];
     block(progress);
-    [DroppinBadassBlocks removeAllBlocks];
 }
 
 - (void)restClient:(DBRestClient *)client loadFileFailedWithError:(NSError *)error {
     void(^block)(DBMetadata *metadata, NSError *error) = [DroppinBadassBlocks downloadBlock];
     block(nil, error);
-    [DroppinBadassBlocks removeAllBlocks];
 }
 
 
@@ -264,20 +243,18 @@ static char const * const loadAccountInfoBlockKey = "laick";
 - (void)restClient:(DBRestClient *)client loadedMetadata:(DBMetadata *)metadata {
     void(^metadataBlock)(DBMetadata *metadata, NSError *error) = [DroppinBadassBlocks metadataBlock];
     metadataBlock(metadata, nil);
-    [DroppinBadassBlocks removeAllBlocks];
 }
 
 - (void)restClient:(DBRestClient*)client loadMetadataFailedWithError:(NSError *)error {
     void(^metadataBlock)(DBMetadata *metadata, NSError *error) = [DroppinBadassBlocks metadataBlock];
     metadataBlock(nil, error);
-    [DroppinBadassBlocks removeAllBlocks];
 }
 
 //
 // Account Info Loading
 //
 
-+ (void)loadAccountInfoWithCompletionBlock:(void(^)(DBAccountInfo *, NSError *))block {
++ (void)loadAccountInfoWithCompletionBlock:(void(^)(DBAccountInfo *info, NSError *error))block {
     [DroppinBadassBlocks setAccountInfoBlock:block];
     [[DroppinBadassBlocks getInstance]loadAccountInfo];
 }
@@ -285,13 +262,11 @@ static char const * const loadAccountInfoBlockKey = "laick";
 - (void)restClient:(DBRestClient *)client loadedAccountInfo:(DBAccountInfo *)info {
     void(^block)(DBAccountInfo *, NSError *) = [DroppinBadassBlocks loadAccountInfoBlock];
     block(info, nil);
-    [DroppinBadassBlocks removeAllBlocks];
 }
 
 - (void)restClient:(DBRestClient *)client loadAccountInfoFailedWithError:(NSError *)error {
     void(^block)(DBAccountInfo *, NSError *) = [DroppinBadassBlocks loadAccountInfoBlock];
     block(nil, error);
-    [DroppinBadassBlocks removeAllBlocks];
 }
 
 //
