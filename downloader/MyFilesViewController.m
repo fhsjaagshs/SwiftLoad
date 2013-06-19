@@ -16,7 +16,6 @@
 @interface MyFilesViewController ()
 
 @property (nonatomic, assign) BOOL watchdogCanGo;
-@property (nonatomic, retain) UILongPressGestureRecognizer *rec;
 
 @end
 
@@ -67,14 +66,7 @@
     [kAppDelegate setManagerCurrentDir:kDocsDir];
     
     self.animatingSideSwipe = NO;
-    
     self.watchdogCanGo = YES;
-    
-    self.rec = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(setWatchdogCanGoYES)];
-    _rec.minimumPressDuration = 0.001;
-    _rec.numberOfTapsRequired = 1;
-    
-    //[[[[UIApplication sharedApplication]delegate]window]addGestureRecognizer:rec];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(copiedListChanged:) name:@"copiedlistchanged" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(downloadsChanged) name:kDownloadChanged object:nil];
@@ -750,8 +742,6 @@
     
     if (cell == nil) {
         cell = [[[CustomCellCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier]autorelease];
-        
-        [cell addGestureRecognizer:_rec];
         
         DTCustomColoredAccessory *accessory = [DTCustomColoredAccessory accessoryWithColor:[UIColor whiteColor]];
         accessory.highlightedColor = [UIColor darkGrayColor];
@@ -1446,7 +1436,6 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter]removeObserver:self];
-    [self setRec:nil];
     [self setPerspectiveCopiedList:nil];
     [self setCopiedList:nil];
     [self setDocController:nil];
