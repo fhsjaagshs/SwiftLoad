@@ -37,7 +37,7 @@
     [self setNeedsDisplay];
 }
 
-- (void)setIsIndeterminate:(float)isIndeterminate {
+- (void)setIndeterminate:(BOOL)isIndeterminate {
     _isIndeterminate = isIndeterminate;
     [self setNeedsDisplay];
 }

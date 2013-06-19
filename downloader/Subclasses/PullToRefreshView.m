@@ -119,13 +119,7 @@
         
         self.statusLabel = [[[UILabel alloc]initWithFrame:CGRectMake(0.0f, frame.size.height - 38.0f, self.frame.size.width, 20.0f)]autorelease];
 		self.statusLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            self.statusLabel.font = [UIFont boldSystemFontOfSize:18.0f];
-        } else {
-            self.statusLabel.font = [UIFont boldSystemFontOfSize:13.0f];
-        }
-
+        self.statusLabel.font = [UIFont boldSystemFontOfSize:(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)?18:13];
 		self.statusLabel.textColor = [UIColor whiteColor];
 		self.statusLabel.shadowColor = [UIColor darkGrayColor];
 		self.statusLabel.shadowOffset = CGSizeMake(-1, -1);
@@ -184,10 +178,10 @@
     if ([keyPath isEqualToString:@"contentOffset"]) {
         if (self.scrollView.isDragging) {
             if (self.state == PullToRefreshViewStateReady) {
-                if (self.scrollView.contentOffset.y > -32.0f && self.scrollView.contentOffset.y < 0.0f)
+                if (self.scrollView.contentOffset.y > -65.0f && self.scrollView.contentOffset.y < 0.0f)
                     [self setState:PullToRefreshViewStateNormal];
             } else if (self.state == PullToRefreshViewStateNormal) {
-                if (self.scrollView.contentOffset.y < -32.0f)
+                if (self.scrollView.contentOffset.y < -65.0f)
                     [self setState:PullToRefreshViewStateReady];
             } else if (self.state == PullToRefreshViewStateLoading) {
                 if (self.scrollView.contentOffset.y >= 0) {

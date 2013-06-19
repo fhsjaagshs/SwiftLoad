@@ -24,6 +24,8 @@
 
 @property (nonatomic, assign) int numberOfDirsToGo;
 
+@property (nonatomic, retain) NSString *userID;
+
 @end
 
 @implementation DropboxBrowserViewController
@@ -80,6 +82,8 @@
     self.pull = [[[PullToRefreshView alloc]initWithScrollView:self.theTableView]autorelease];
     [self.pull setDelegate:self];
     [self.theTableView addSubview:self.pull];
+    
+    self.pathContents = [NSMutableDictionary dictionary];
 }
 
 - (void)pullToRefreshViewShouldRefresh:(PullToRefreshView *)view {
@@ -107,17 +111,24 @@
     }
 }
 
-- (void)updateFileListing {
+static int lol = 0;
 
+- (void)updateFileListing {
+    
+    if (lol == 0) {
+        NSUserDefaultsOFKKill(@"DBCursorKey");
+        lol = 69;
+    }
+    
     [DroppinBadassBlocks loadDelta:NSUserDefaultsOFK(@"DBCursorKey") withCompletionHandler:^(NSArray *entries, NSString *cursor, BOOL hasMore, BOOL shouldReset, NSError *error) {
         
         if (error) {
             NSLog(@"Error: %@",error);
         } else {
-            // do the deed
-            [[NSUserDefaults standardUserDefaults]setObject:cursor forKey:@"DBCursorKey"];
             
-            if (self.pathContents.count == 0) {
+            [DroppinBadassBlocks load]
+            
+            /*if (self.pathContents.count == 0) {
                 NSArray *credStore = [[DBSession sharedSession]userIds];
                 
                 if (credStore.count > 0) {
@@ -129,7 +140,7 @@
                     self.pathContents = [NSMutableDictionary dictionary];
                 }
                 
-            }
+            }*/
             
             if (shouldReset) {
                 NSLog(@"Resetting");
@@ -137,6 +148,8 @@
                 [self.pathContents removeAllObjects];
                 [self cacheFiles];
             }
+
+            [[NSUserDefaults standardUserDefaults]setObject:cursor forKey:@"DBCursorKey"];
             
             for (DBDeltaEntry *entry in entries) {
                 if (entry.metadata == nil) {
@@ -299,16 +312,16 @@
 }
 
 - (void)refreshStateWithAnimationStyle:(UITableViewRowAnimation)animation {
-    [self updateCurrentDirContentsWithPath:self.navBar.topItem.title];
+    [self updateCurrentDirContentsWithPath:_navBar.topItem.title];
     [self.theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:animation];
 
-    if (self.navBar.topItem.title.length > 1) {
+    if (_navBar.topItem.title.length > 1) {
         [self setButtonsHidden:NO];
     } else {
         [self setButtonsHidden:YES];
     }
     
-    [self.pull finishedLoading];
+    [_pull finishedLoading];
 }
 
 - (int)getNumberOfPathComponents:(NSString *)path {
@@ -337,6 +350,7 @@
     for (NSString *lowercasePath in self.pathContents.allKeys) {
         if ([lowercasePath hasPrefix:pathy]) {
             int maxComponents = pathyPathCount+1;
+            
             if ([self getNumberOfPathComponents:lowercasePath] == maxComponents) {
                 [workedArray addObject:lowercasePath];
             }

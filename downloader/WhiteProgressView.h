@@ -11,7 +11,7 @@
 @interface WhiteProgressView : UIView
 
 @property (nonatomic, assign) float progress;
-@property (nonatomic, assign) float isIndeterminate;
+@property (nonatomic, assign, setter = setIndeterminate:) BOOL isIndeterminate;
 
 - (void)drawGreen;
 - (void)drawRed;
