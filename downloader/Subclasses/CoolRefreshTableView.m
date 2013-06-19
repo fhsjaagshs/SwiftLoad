@@ -8,17 +8,33 @@
 
 #import "CoolRefreshTableView.h"
 
+@interface CoolRefreshTableView ()
+
+@property (nonatomic, assign) CoolRefreshAnimationStyle animationStyle;
+
+@end
+
 @implementation CoolRefreshTableView
 
-- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
-    [UIView animateWithDuration:0.1 animations:^{
+- (void)animationDidStart:(CAAnimation *)anim {
+    if (_animationStyle == CoolRefreshAnimationStyleForward) {
         self.contentOffset = CGPointZero;
-    }];
+    }
+}
+
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
+    if (_animationStyle == CoolRefreshAnimationStyleBackward) {
+        [UIView animateWithDuration:0.1 animations:^{
+            self.contentOffset = CGPointZero;
+        }];
+    }
 }
 
 - (void)reloadDataWithCoolAnimationType:(CoolRefreshAnimationStyle)style {
     
     [self reloadData];
+    
+    self.animationStyle = style;
     
     if (style == CoolRefreshAnimationStyleNone) {
         return;
