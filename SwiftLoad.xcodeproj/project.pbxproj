@@ -110,6 +110,7 @@
 		F1A72948149876040049DBB6 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A72947149876040049DBB6 /* GameKit.framework */; };
 		F1A923FE140D4DDD003ACDAB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A923FD140D4DDD003ACDAB /* QuartzCore.framework */; };
 		F1B2489014E333E300C44E11 /* webDAVHelp.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B2488E14E333E200C44E11 /* webDAVHelp.m */; };
+		F1BC30CA17715DF300DAFA0A /* Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BC30C917715DF300DAFA0A /* Hack.m */; };
 		F1BE07E1176F793F00C4F038 /* Downloads.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BE07E0176F793F00C4F038 /* Downloads.m */; };
 		F1BE07E4176F7A1100C4F038 /* Download.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BE07E3176F7A1100C4F038 /* Download.m */; };
 		F1C0CEFC1661AEC6001B1B42 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F1C0CEFB1661AEC6001B1B42 /* libz.1.2.5.dylib */; };
@@ -343,6 +344,8 @@
 		F1A923FD140D4DDD003ACDAB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F1B2488D14E333E200C44E11 /* webDAVHelp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = webDAVHelp.h; sourceTree = "<group>"; };
 		F1B2488E14E333E200C44E11 /* webDAVHelp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = webDAVHelp.m; sourceTree = "<group>"; };
+		F1BC30C817715DF300DAFA0A /* Hack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hack.h; sourceTree = "<group>"; };
+		F1BC30C917715DF300DAFA0A /* Hack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Hack.m; sourceTree = "<group>"; };
 		F1BE07DF176F793F00C4F038 /* Downloads.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Downloads.h; sourceTree = "<group>"; };
 		F1BE07E0176F793F00C4F038 /* Downloads.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Downloads.m; sourceTree = "<group>"; };
 		F1BE07E2176F7A1100C4F038 /* Download.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Download.h; sourceTree = "<group>"; };
@@ -428,6 +431,8 @@
 				F1693C4516DFABA6006E3739 /* Categories */,
 				F1693C5216DFAC0E006E3739 /* Utility Classes */,
 				F1693C5F16DFAC59006E3739 /* Subclasses */,
+				F1BC30C817715DF300DAFA0A /* Hack.h */,
+				F1BC30C917715DF300DAFA0A /* Hack.m */,
 			);
 			name = "Custom Classes";
 			sourceTree = "<group>";
@@ -1047,6 +1052,7 @@
 				F1FCF12D17711DE3004A42B8 /* CoolRefreshTableView.m in Sources */,
 				F118C74517713DAA00ED7384 /* ContentOffsetWatchdog.m in Sources */,
 				F118C7481771425F00ED7384 /* PullToRefreshView.m in Sources */,
+				F1BC30CA17715DF300DAFA0A /* Hack.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

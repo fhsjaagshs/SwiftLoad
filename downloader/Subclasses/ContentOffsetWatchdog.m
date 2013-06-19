@@ -8,7 +8,7 @@
 
 #import "ContentOffsetWatchdog.h"
 
-@interface ContentOffsetWatchdog ()
+@interface ContentOffsetWatchdog () <UIScrollViewDelegate>
 
 @property (nonatomic, retain) UIScrollView *scrollView;
 
@@ -32,7 +32,7 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([keyPath isEqualToString:@"contentOffset"]) {
-        if (_scrollView.isDragging) {
+        if ((_scrollView.isDecelerating || _scrollView.isDragging) || (_scrollView.isDragging && _scrollView.isDecelerating)) {
             if (_scrollView.contentOffset.y < -30) {
                 if ([_delegate respondsToSelector:@selector(shouldTripWatchdog)]) {
                     if ([_delegate shouldTripWatchdog] && [_delegate respondsToSelector:@selector(watchdogWasTripped)]) {

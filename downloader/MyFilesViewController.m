@@ -13,6 +13,13 @@
 
 #define BOUNCE_PIXELS 5.0
 
+@interface MyFilesViewController ()
+
+@property (nonatomic, assign) BOOL watchdogCanGo;
+@property (nonatomic, retain) UILongPressGestureRecognizer *rec;
+
+@end
+
 @implementation MyFilesViewController
 
 - (void)loadView {
@@ -51,6 +58,7 @@
     _theTableView.dataSource = self;
     _theTableView.delegate = self;
     _theTableView.allowsSelectionDuringEditing = YES;
+    _theTableView.canCancelContentTouches = NO;
     [self.view addSubview:_theTableView];
     
     ContentOffsetWatchdog *watchdog = [ContentOffsetWatchdog watchdogWithScrollView:_theTableView];
@@ -60,8 +68,20 @@
     
     self.animatingSideSwipe = NO;
     
+    self.watchdogCanGo = YES;
+    
+    self.rec = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(setWatchdogCanGoYES)];
+    _rec.minimumPressDuration = 0.001;
+    _rec.numberOfTapsRequired = 1;
+    
+    //[[[[UIApplication sharedApplication]delegate]window]addGestureRecognizer:rec];
+    
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(copiedListChanged:) name:@"copiedlistchanged" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(downloadsChanged) name:kDownloadChanged object:nil];
+}
+
+- (void)setWatchdogCanGoYES {
+    self.watchdogCanGo = YES;
 }
 
 - (void)setCPButtonHidden:(BOOL)hidden {
@@ -686,13 +706,14 @@
 }
 
 - (BOOL)shouldTripWatchdog {
-    return (![[kAppDelegate managerCurrentDir]isEqualToString:kDocsDir]);
+    return (![[kAppDelegate managerCurrentDir]isEqualToString:kDocsDir] && _watchdogCanGo && !_theTableView.isDecelerating);
 }
 
 - (void)watchdogWasTripped {
     [self goBackDir];
     [self.filelist removeAllObjects];
     [_theTableView reloadDataWithCoolAnimationType:CoolRefreshAnimationStyleBackward];
+    self.watchdogCanGo = NO;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -729,6 +750,8 @@
     
     if (cell == nil) {
         cell = [[[CustomCellCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier]autorelease];
+        
+        [cell addGestureRecognizer:_rec];
         
         DTCustomColoredAccessory *accessory = [DTCustomColoredAccessory accessoryWithColor:[UIColor whiteColor]];
         accessory.highlightedColor = [UIColor darkGrayColor];
@@ -1423,6 +1446,7 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter]removeObserver:self];
+    [self setRec:nil];
     [self setPerspectiveCopiedList:nil];
     [self setCopiedList:nil];
     [self setDocController:nil];

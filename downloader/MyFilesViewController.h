@@ -32,4 +32,6 @@
 @property (nonatomic, assign) UISwipeGestureRecognizerDirection sideSwipeDirection;
 @property (nonatomic, assign) BOOL animatingSideSwipe;
 
+- (void)setWatchdogCanGoYES;
+
 @end

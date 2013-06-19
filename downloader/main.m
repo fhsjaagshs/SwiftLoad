@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Hack.h"
 
 int main(int argc, char *argv[]) {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-    int retVal = UIApplicationMain(argc, argv, nil, @"downloaderAppDelegate");
+    int retVal = UIApplicationMain(argc, argv, @"Hack", @"downloaderAppDelegate");
     [pool release];
     return retVal;
 }
