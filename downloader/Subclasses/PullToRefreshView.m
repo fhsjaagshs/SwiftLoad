@@ -117,7 +117,7 @@
 		self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.backgroundColor = [UIColor clearColor];
         
-      /*  self.statusLabel = [[[UILabel alloc]initWithFrame:CGRectMake(0.0f, frame.size.height - 38.0f, self.frame.size.width, 20.0f)]autorelease];
+        self.statusLabel = [[[UILabel alloc]initWithFrame:CGRectMake(0.0f, frame.size.height - 38.0f, self.frame.size.width, 20.0f)]autorelease];
 		self.statusLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
@@ -142,7 +142,7 @@
 
         self.activityView = [[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite]autorelease];
 		self.activityView.frame = CGRectMake(30.0f, frame.size.height - 38.0f, 20.0f, 20.0f);
-		[self addSubview:self.activityView];*/
+		[self addSubview:self.activityView];
 
 		[self setState:PullToRefreshViewStateNormal];
     }
@@ -213,7 +213,7 @@
 - (void)finishedLoading {
     if (self.state == PullToRefreshViewStateLoading) {
         [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:0.3f];
+        [UIView setAnimationDuration:0.1f]; // 0.3f
         [self setState:PullToRefreshViewStateNormal];
         [UIView commitAnimations];
     }

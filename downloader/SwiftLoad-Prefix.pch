@@ -36,6 +36,7 @@
     #import "MBProgressHUD.h"
     #import "BKSessionController.h"
     #import "PullToRefreshView.h"
+    #import "ContentOffsetWatchdog.h"
     #import "SCRFTPRequest.h"
     #import "metadataRetriever.h"
     #import "MIMEUtils.h"

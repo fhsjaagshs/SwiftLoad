@@ -10,6 +10,12 @@
 
 @implementation CoolRefreshTableView
 
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
+    [UIView animateWithDuration:0.1 animations:^{
+        self.contentOffset = CGPointZero;
+    }];
+}
+
 - (void)reloadDataWithCoolAnimationType:(CoolRefreshAnimationStyle)style {
     
     [self reloadData];
@@ -19,6 +25,8 @@
     }
     
     CATransition *animation = [CATransition animation];
+    [animation setDelegate:self];
+    
     [animation setType:kCATransitionPush];
     [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
     [animation setFillMode:kCAFillModeBoth];

@@ -36,7 +36,7 @@
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.progressView = [[[WhiteProgressView alloc]initWithFrame:CGRectMake(10, 5, self.frame.size.width-20, 20)]autorelease];
+        self.progressView = [[[WhiteProgressView alloc]initWithFrame:CGRectMake(5, 5, self.contentView.frame.size.width-10, 20)]autorelease];
         self.titleLabel = [[[UILabel alloc]initWithFrame:CGRectMake(0, 25, self.frame.size.width, 20)]autorelease];
         _titleLabel.tag = 69;
         _titleLabel.backgroundColor = [UIColor clearColor];

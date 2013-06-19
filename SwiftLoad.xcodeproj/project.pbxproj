@@ -19,6 +19,8 @@
 		F10CBC5A1707D6E700C82AFB /* DroppinBadassBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */; };
 		F10CBC5D17080C6600C82AFB /* DropboxBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */; };
 		F1122A76142E4E8B00A04CC6 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */; };
+		F118C74517713DAA00ED7384 /* ContentOffsetWatchdog.m in Sources */ = {isa = PBXBuildFile; fileRef = F118C74417713DAA00ED7384 /* ContentOffsetWatchdog.m */; };
+		F118C7481771425F00ED7384 /* PullToRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = F118C7471771425F00ED7384 /* PullToRefreshView.m */; };
 		F119697616E3D0FC001139F1 /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = F119697516E3D0FB001139F1 /* CustomTextField.m */; };
 		F119CF0813F46DA6007D67E4 /* downloaderAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F119CF0713F46DA6007D67E4 /* downloaderAppDelegate.m */; };
 		F11C402E13F82F9D0077F5D1 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F11C402D13F82F9D0077F5D1 /* MessageUI.framework */; };
@@ -96,7 +98,6 @@
 		F1693C5D16DFAC0E006E3739 /* MIMEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C5816DFAC0E006E3739 /* MIMEUtils.m */; };
 		F1693C5E16DFAC0E006E3739 /* NetworkUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C5A16DFAC0E006E3739 /* NetworkUtils.m */; };
 		F1693C6816DFAC59006E3739 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C6116DFAC59006E3739 /* MBProgressHUD.m */; };
-		F1693C6916DFAC59006E3739 /* PullToRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C6316DFAC59006E3739 /* PullToRefreshView.m */; };
 		F1693C6A16DFAC59006E3739 /* SCRFTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C6516DFAC59006E3739 /* SCRFTPRequest.m */; };
 		F1693C7316DFB9B5006E3739 /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1693C7216DFB9B5006E3739 /* DropboxSDK.framework */; };
 		F17CEDE116FE724C00E7E47B /* FileCreationDialogue.m in Sources */ = {isa = PBXBuildFile; fileRef = F17CEDE016FE724C00E7E47B /* FileCreationDialogue.m */; };
@@ -176,6 +177,10 @@
 		F10CBC5B17080C6600C82AFB /* DropboxBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxBrowserViewController.h; sourceTree = "<group>"; };
 		F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxBrowserViewController.m; sourceTree = "<group>"; };
 		F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		F118C74317713DAA00ED7384 /* ContentOffsetWatchdog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentOffsetWatchdog.h; sourceTree = "<group>"; };
+		F118C74417713DAA00ED7384 /* ContentOffsetWatchdog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentOffsetWatchdog.m; sourceTree = "<group>"; };
+		F118C7461771425F00ED7384 /* PullToRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullToRefreshView.h; sourceTree = "<group>"; };
+		F118C7471771425F00ED7384 /* PullToRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullToRefreshView.m; sourceTree = "<group>"; };
 		F119697416E3D0FB001139F1 /* CustomTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTextField.h; sourceTree = "<group>"; };
 		F119697516E3D0FB001139F1 /* CustomTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTextField.m; sourceTree = "<group>"; };
 		F119CEF313F46DA6007D67E4 /* SwiftLoad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftLoad.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -317,8 +322,6 @@
 		F1693C5A16DFAC0E006E3739 /* NetworkUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkUtils.m; sourceTree = "<group>"; };
 		F1693C6016DFAC59006E3739 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		F1693C6116DFAC59006E3739 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
-		F1693C6216DFAC59006E3739 /* PullToRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullToRefreshView.h; sourceTree = "<group>"; };
-		F1693C6316DFAC59006E3739 /* PullToRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullToRefreshView.m; sourceTree = "<group>"; };
 		F1693C6416DFAC59006E3739 /* SCRFTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCRFTPRequest.h; sourceTree = "<group>"; };
 		F1693C6516DFAC59006E3739 /* SCRFTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCRFTPRequest.m; sourceTree = "<group>"; };
 		F1693C7216DFB9B5006E3739 /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DropboxSDK.framework; path = downloader/DropboxSDK.framework; sourceTree = "<group>"; };
@@ -419,6 +422,7 @@
 		9B9DA4CE15561D0100C260AD /* Custom Classes */ = {
 			isa = PBXGroup;
 			children = (
+				F1BE07E5176F7A1B00C4F038 /* Download Controller */,
 				F1DA5247176E8181009A43CD /* Libraries */,
 				F1693C1D16DFAB6E006E3739 /* Graphics */,
 				F1693C4516DFABA6006E3739 /* Categories */,
@@ -535,7 +539,6 @@
 				F1270DD81703C7710012A293 /* FTPBrowserViewController.m */,
 				F10CBC5B17080C6600C82AFB /* DropboxBrowserViewController.h */,
 				F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */,
-				F1BE07E5176F7A1B00C4F038 /* Download Controller */,
 				9B9DA4CE15561D0100C260AD /* Custom Classes */,
 				F19BB51816E006680081C95B /* Supporting Files */,
 			);
@@ -751,8 +754,10 @@
 				F1A45E6F1704A15E00DD5FB9 /* KeychainItemWrapper.m */,
 				F1693C6016DFAC59006E3739 /* MBProgressHUD.h */,
 				F1693C6116DFAC59006E3739 /* MBProgressHUD.m */,
-				F1693C6216DFAC59006E3739 /* PullToRefreshView.h */,
-				F1693C6316DFAC59006E3739 /* PullToRefreshView.m */,
+				F118C74317713DAA00ED7384 /* ContentOffsetWatchdog.h */,
+				F118C74417713DAA00ED7384 /* ContentOffsetWatchdog.m */,
+				F118C7461771425F00ED7384 /* PullToRefreshView.h */,
+				F118C7471771425F00ED7384 /* PullToRefreshView.m */,
 				F1693C6416DFAC59006E3739 /* SCRFTPRequest.h */,
 				F1693C6516DFAC59006E3739 /* SCRFTPRequest.m */,
 				F1C7A6B516E8178F0082D4D3 /* ZoomingImageView.h */,
@@ -1020,7 +1025,6 @@
 				F1693C5D16DFAC0E006E3739 /* MIMEUtils.m in Sources */,
 				F1693C5E16DFAC0E006E3739 /* NetworkUtils.m in Sources */,
 				F1693C6816DFAC59006E3739 /* MBProgressHUD.m in Sources */,
-				F1693C6916DFAC59006E3739 /* PullToRefreshView.m in Sources */,
 				F1693C6A16DFAC59006E3739 /* SCRFTPRequest.m in Sources */,
 				F19BB51C16E006CA0081C95B /* main.m in Sources */,
 				F119697616E3D0FC001139F1 /* CustomTextField.m in Sources */,
@@ -1041,6 +1045,8 @@
 				F14478411770B25900C5204A /* WhiteProgressView.m in Sources */,
 				F1FCF12A17710BAA004A42B8 /* URLInputController.m in Sources */,
 				F1FCF12D17711DE3004A42B8 /* CoolRefreshTableView.m in Sources */,
+				F118C74517713DAA00ED7384 /* ContentOffsetWatchdog.m in Sources */,
+				F118C7481771425F00ED7384 /* PullToRefreshView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

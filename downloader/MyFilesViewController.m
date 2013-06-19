@@ -53,10 +53,8 @@
     _theTableView.allowsSelectionDuringEditing = YES;
     [self.view addSubview:_theTableView];
     
-    PullToRefreshView *pull = [[PullToRefreshView alloc]initWithScrollView:self.theTableView];
-    [pull setDelegate:self];
-    [self.theTableView addSubview:pull];
-    [pull release];
+    ContentOffsetWatchdog *watchdog = [ContentOffsetWatchdog watchdogWithScrollView:_theTableView];
+    watchdog.delegate = self;
     
     [kAppDelegate setManagerCurrentDir:kDocsDir];
     
@@ -687,13 +685,14 @@
     [self removeSideSwipeView:NO];
 }
 
-- (void)pullToRefreshViewShouldRefresh:(PullToRefreshView *)view {
-   // if (![[kAppDelegate managerCurrentDir]isEqualToString:kDocsDir]) {
-        [self goBackDir];
-        [view finishedLoading];
-        [self.filelist removeAllObjects];
-        [_theTableView reloadDataWithCoolAnimationType:CoolRefreshAnimationStyleBackward];
-   // }
+- (BOOL)shouldTripWatchdog {
+    return (![[kAppDelegate managerCurrentDir]isEqualToString:kDocsDir]);
+}
+
+- (void)watchdogWasTripped {
+    [self goBackDir];
+    [self.filelist removeAllObjects];
+    [_theTableView reloadDataWithCoolAnimationType:CoolRefreshAnimationStyleBackward];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

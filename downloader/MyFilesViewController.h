@@ -10,7 +10,7 @@
 #import "ShadowedTableView.h"
 #import "CoolRefreshTableView.h"
 
-@interface MyFilesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, PullToRefreshViewDelegate, UIDocumentInteractionControllerDelegate>
+@interface MyFilesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIDocumentInteractionControllerDelegate, ContentOffsetWatchdogDelegate>
 
 // Copy/Cut/Paste
 @property (nonatomic, retain) NSMutableArray *copiedList;

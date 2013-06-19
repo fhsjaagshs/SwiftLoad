@@ -143,6 +143,7 @@ NSString * const kDownloadChanged = @"downloadDone";
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [self showFailure];
+    [self performSelector:@selector(clearOutMyself) withObject:nil afterDelay:0.6f];
     [[UIApplication sharedApplication]endBackgroundTask:_bgtask];
     self.bgtask = UIBackgroundTaskInvalid;
 }
