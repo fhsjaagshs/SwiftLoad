@@ -63,16 +63,21 @@
     btf.text = @"This WebDAV server is only active as long as this screen is open.";
     [self.view addSubview:btf];
     
-    [self checkForNetworkChange];
+    [self createServer];
 }
 
 - (void)killServer {
-    [self.httpServer stop];
+    [_httpServer stop];
     [UIApplication sharedApplication].idleTimerDisabled = NO;
+    _onLabel.text = @"WebDAV server is OFF";
 }
 
 - (void)createServer {
+    
     if (![NetworkUtils isConnectedToWifi]) {
+        _onLabel.text = @"WebDAV server is OFF";
+        _urlLabel.text = @"You are not connected to WiFi";
+        [self killServer];
         return;
     }
     
@@ -104,30 +109,17 @@
             [self.urlLabel setText:[NSString stringWithFormat:@"http://%@:8080/",rawIP]];
         }
     }
-}
-
-- (void)checkForNetworkChange {
-    if (![NetworkUtils isConnectedToWifi]) {
-        _urlLabel.text = @"You are not connected to WiFi";
-        _onLabel.text = @"WebDAV server is OFF";
-        [self killServer];
-    } else if (!_httpServer.isRunning) {
-        [self createServer];
-    }
-    
-    [self performSelector:@selector(checkForNetworkChange) withObject:nil afterDelay:5.0];
+    [self performSelector:@selector(createServer) withObject:nil afterDelay:5.0];
 }
 
 - (void)close {
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(checkForNetworkChange) object:nil];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
     [self killServer];
     [self dismissModalViewControllerAnimated:YES];
 }
 
 - (void)showHelp {
-    webDAVHelp *wdh = [webDAVHelp viewController];
-    wdh.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-    [self presentModalViewController:wdh animated:YES];
+    [self presentModalViewController:[webDAVHelp viewController] animated:YES];
 }
 
 - (NSUInteger)supportedInterfaceOrientations {
