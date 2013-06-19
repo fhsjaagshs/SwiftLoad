@@ -16,6 +16,7 @@ NSString * const kDownloadChanged = @"downloadDone";
 @property (nonatomic, strong) NSURLConnection *connection;
 @property (nonatomic, retain) NSMutableData *downloadedData;
 @property (nonatomic, assign) float downloadedBytes;
+@property (nonatomic, assign) UIBackgroundTaskIdentifier bgtask;
 
 @end
 
@@ -69,12 +70,12 @@ NSString * const kDownloadChanged = @"downloadDone";
             }
             
             
-            __block UIBackgroundTaskIdentifier background_task = [[UIApplication sharedApplication]beginBackgroundTaskWithExpirationHandler:^{
+            self.bgtask = [[UIApplication sharedApplication]beginBackgroundTaskWithExpirationHandler:^{
                 [_connection cancel];
                 [_downloadedData setLength:0];
                 
-                [[UIApplication sharedApplication]endBackgroundTask:background_task];
-                background_task = UIBackgroundTaskInvalid;
+                [[UIApplication sharedApplication]endBackgroundTask:_bgtask];
+                self.bgtask = UIBackgroundTaskInvalid;
             }];
             
             NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:_url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:30.0];
@@ -84,10 +85,10 @@ NSString * const kDownloadChanged = @"downloadDone";
                 self.connection = [[[NSURLConnection alloc]initWithRequest:theRequest delegate:self]autorelease];
             } else {
                 [self showFailure];
+                [[UIApplication sharedApplication]endBackgroundTask:_bgtask];
+                self.bgtask = UIBackgroundTaskInvalid;
             }
             
-            [[UIApplication sharedApplication]endBackgroundTask:background_task];
-            background_task = UIBackgroundTaskInvalid;
         } else {
             self.complete = YES;
             self.succeeded = NO;
@@ -142,6 +143,8 @@ NSString * const kDownloadChanged = @"downloadDone";
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [self showFailure];
+    [[UIApplication sharedApplication]endBackgroundTask:_bgtask];
+    self.bgtask = UIBackgroundTaskInvalid;
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection {
@@ -160,6 +163,8 @@ NSString * const kDownloadChanged = @"downloadDone";
         [self showFailure];
     }
     [self performSelector:@selector(clearOutMyself) withObject:nil afterDelay:0.6f];
+    [[UIApplication sharedApplication]endBackgroundTask:_bgtask];
+    self.bgtask = UIBackgroundTaskInvalid;
 }
 
 - (void)dealloc {

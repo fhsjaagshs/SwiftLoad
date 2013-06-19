@@ -29,6 +29,7 @@
         _tv.font = [UIFont systemFontOfSize:13];
         _tv.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         _tv.adjustsFontSizeToFitWidth = YES;
+        _tv.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tv.text = [[NSUserDefaults standardUserDefaults]objectForKey:@"myDefaults"];
         [_tv addTarget:self action:@selector(donePressed) forControlEvents:UIControlEventEditingDidEndOnExit];
 
