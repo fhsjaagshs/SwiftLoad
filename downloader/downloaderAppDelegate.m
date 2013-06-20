@@ -577,6 +577,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     // Trust me
     [Downloads sharedDownloads];
     [DownloadController sharedController];
+    [BGProcFactory sharedFactory];
     
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryPlayback error:nil];
     [[UIApplication sharedApplication]beginReceivingRemoteControlEvents];
@@ -633,6 +634,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
+    [[BGProcFactory sharedFactory]endAllTasks];
     [self killSession];
 }
 
@@ -802,6 +804,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     NSArray *array = [NSArray arrayWithObjects:fileNameSending, file, nil];
     NSData *finalData = [NSKeyedArchiver archivedDataWithRootObject:array];
     [self.sessionControllerSending sendDataToAllPeers:finalData];
+    [[BGProcFactory sharedFactory]startProcForKey:@"Bluetooth" andExpirationHandler:nil];
 }
 
 - (void)peerPickerController:(GKPeerPickerController *)picker didConnectPeer:(NSString *)peerID toSession:(GKSession *)session {
@@ -849,6 +852,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [self.sessionControllerSending disconnect];
     [self setSessionControllerSending:nil];
     [self makeSessionAvailable];
+    [[BGProcFactory sharedFactory]endProcForKey:@"Bluetooth"];
 }
 
 - (void)sessionControllerPeerDidDisconnect:(NSNotification *)aNotification {
@@ -859,6 +863,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [self.sessionControllerSending.session disconnectFromAllPeers];
     [self setSessionControllerSending:nil];
     [self makeSessionAvailable];
+    [[BGProcFactory sharedFactory]endProcForKey:@"Bluetooth"];
 }
 
 //
@@ -910,6 +915,9 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 - (void)sessionControllerReceiverWillStartReceivingData:(NSNotification *)aNotification {
+    
+    [[BGProcFactory sharedFactory]startProcForKey:@"bt_rec" andExpirationHandler:nil];
+    
     self.isReciever = YES;
     
     [self showHUDWithTitle:@"Receiving File..."];
@@ -940,6 +948,8 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     NSString *finalLocation = getNonConflictingFilePathForPath([docsDir stringByAppendingPathComponent:name]);
     [[NSFileManager defaultManager]createFileAtPath:finalLocation contents:file attributes:nil];
     [self.sessionController.receivedData setLength:0];
+    
+    [[BGProcFactory sharedFactory]endProcForKey:@"bt_rec"];
     
     CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Success" message:@"Your file has been successfully received." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [av show];

@@ -185,6 +185,8 @@
     if (fileName.length > 14) {
         fileName = [[fileName substringToIndex:11]stringByAppendingString:@"..."];
     }
+    
+    [[BGProcFactory sharedFactory]startProcForKey:@"audio" andExpirationHandler:nil];
 
     [ad showHUDWithTitle:@"Converting"];
     [ad setSecondaryTitleOfVisibleHUD:fileName];
@@ -195,6 +197,8 @@
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
         
         NSError *error = [AudioConverter convertAudioFileAtPath:ad.openFile progressObject:[ad getVisibleHUD]];
+        
+        [[BGProcFactory sharedFactory]endProcForKey:@"audio"];
         
         dispatch_sync(dispatch_get_main_queue(), ^{
             

@@ -17,6 +17,7 @@
     #import <AudioToolbox/AudioToolbox.h>
     #import <CommonCrypto/CommonCrypto.h>
 
+    #import "BGProcFactory.h"
     #import "WhiteProgressView.h"
     #import "HUDProgressView.h"
     #import "NetworkUtils.h"
