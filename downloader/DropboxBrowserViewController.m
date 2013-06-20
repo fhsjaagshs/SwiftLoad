@@ -9,7 +9,6 @@
 #import "DropboxBrowserViewController.h"
 #import "ButtonBarView.h"
 #import "CustomCellCell.h"
-//#import <DropboxSDK/DropboxSDK.h>
 
 @interface DropboxBrowserViewController () <UITableViewDataSource, UITableViewDelegate, PullToRefreshViewDelegate>
 
@@ -95,6 +94,7 @@
 
 - (void)loadCachesThenUpdateFileListing {
     if (_userID.length == 0) {
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
         [DroppinBadassBlocks loadAccountInfoWithCompletionBlock:^(DBAccountInfo *info, NSError *error) {
             self.userID = info.userId;
             [self loadCachesThenUpdateFileListing];
@@ -133,7 +133,9 @@
 
 - (void)cacheFiles {
     if (_userID.length == 0) {
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
         [DroppinBadassBlocks loadAccountInfoWithCompletionBlock:^(DBAccountInfo *info, NSError *error) {
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
             self.userID = info.userId;
             [self cacheFiles];
         }];
@@ -146,9 +148,9 @@
 }
 
 - (void)updateFileListing {
-    
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     [DroppinBadassBlocks loadDelta:_cursor withCompletionHandler:^(NSArray *entries, NSString *cursor, BOOL hasMore, BOOL shouldReset, NSError *error) {
-        
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         if (error) {
             NSLog(@"Error: %@",error);
         } else {
@@ -185,6 +187,7 @@
                 NSLog(@"done");
                 [self cacheFiles];
                 [self refreshStateWithAnimationStyle:UITableViewRowAnimationFade];
+                [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
             }
         }
     }];
@@ -376,6 +379,7 @@
 }
 
 - (void)close {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [DroppinBadassBlocks cancel];
     [self dismissModalViewControllerAnimated:YES];
 }

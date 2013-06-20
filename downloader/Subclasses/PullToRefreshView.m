@@ -128,7 +128,7 @@
 		[self addSubview:self.statusLabel];
         
 		self.arrowImage = [[[CALayer alloc]init]autorelease];
-        self.arrowImage.frame = CGRectMake(25.0f, frame.size.height - 50.0f, 30.7f, 52.0f); // 30.7f was 24.0f
+        self.arrowImage.frame = CGRectMake(25.0f, frame.size.height - 60.0f, 30.7f, 52.0f); // 30.7f was 24.0f
 		self.arrowImage.contentsGravity = kCAGravityCenter;
         self.arrowImage.contentsScale = 2; // scale down the image regardless of retina. The image is by default the retina size.
         self.arrowImage.contents = (id)[self getArrowImage].CGImage;
