@@ -19,7 +19,7 @@
     self.view = [[[UIView alloc]initWithFrame:screenBounds]autorelease];
     self.view.backgroundColor = [UIColor clearColor];
     
-    self.navBar = [[[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
+    self.navBar = [[[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
     self.navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]]autorelease];
     topItem.rightBarButtonItem = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showNoitcaSheet:)]autorelease];
@@ -28,7 +28,7 @@
     [self.view addSubview:self.navBar];
     [self.view bringSubviewToFront:self.navBar];
     
-    self.toolBar = [[[UIToolbar alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-44, screenBounds.size.width, 44)]autorelease];
+    self.toolBar = [[[ShadowedToolbar alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-44, screenBounds.size.width, 44)]autorelease];
     self.toolBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     
     UIBarButtonItem *space = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil]autorelease];

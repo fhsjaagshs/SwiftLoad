@@ -30,7 +30,7 @@
     self.view = [[[UIView alloc]initWithFrame:screenBounds]autorelease];
     self.view.backgroundColor = [UIColor clearColor];
     
-    self.navBar = [[[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
+    self.navBar = [[[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
     _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[[UINavigationItem alloc]initWithTitle:@"/"]autorelease];
     _editButton = [[[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(editTable)]autorelease];

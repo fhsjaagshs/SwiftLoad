@@ -7,7 +7,6 @@
 //
 
 #import "downloaderAppDelegate.h"
-#import "HatchedView.h"
 
 NSString * getResource(NSString *raw) {
     return [[NSBundle mainBundle]pathForResource:[raw stringByDeletingPathExtension] ofType:[raw pathExtension]];
@@ -621,6 +620,14 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
                                                 UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(-0.5, -0.5)]*/};
     
     [[UINavigationBar appearance]setTitleTextAttributes:navbarTitleTextAttributes];
+    
+    CALayer *navlayer = [(UINavigationBar *)[UINavigationBar appearance] layer];
+    
+    navlayer.shadowColor = [UIColor blackColor].CGColor;
+    navlayer.shadowOffset = CGSizeMake(0.0, 4);
+    navlayer.shadowOpacity = 0.25;
+    navlayer.masksToBounds = NO;
+    navlayer.shouldRasterize = YES;
     
     return YES;
 }

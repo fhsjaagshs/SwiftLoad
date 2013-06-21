@@ -27,7 +27,7 @@
 @property (nonatomic, retain) BackAndForwardButton *prevTrack;
 @property (nonatomic, retain) UITextView *infoField;
 @property (nonatomic, retain) CustomSlider *time;
-@property (nonatomic, retain) UINavigationBar *navBar;
+@property (nonatomic, retain) ShadowedNavBar *navBar;
 
 @property (nonatomic, retain) UIActionSheet *popupQuery;
 

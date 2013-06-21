@@ -19,7 +19,7 @@
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     self.view = [[[UIView alloc]initWithFrame:screenBounds]autorelease];
     
-    UINavigationBar *navBar = [[[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
+    UINavigationBar *navBar = [[[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
     navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"File Details"];
     topItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)]autorelease];
@@ -28,7 +28,7 @@
     [self.view bringSubviewToFront:navBar];
     [topItem release];
     
-    CustomToolbar *bar = [[[CustomToolbar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
+    UIToolbar *bar = [[[ShadowedToolbar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
     self.revertButton = [[[UIBarButtonItem alloc]initWithTitle:@"Revert" style:UIBarButtonItemStyleBordered target:self action:@selector(revertAction)]autorelease];
     bar.items = [NSArray arrayWithObjects:[[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil]autorelease], nil];
     

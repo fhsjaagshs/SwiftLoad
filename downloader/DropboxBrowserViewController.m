@@ -15,7 +15,7 @@
 @property (nonatomic, retain) ShadowedTableView *theTableView;
 @property (nonatomic, retain) CustomButton *backButton;
 @property (nonatomic, retain) CustomButton *homeButton;
-@property (nonatomic, retain) UINavigationBar *navBar;
+@property (nonatomic, retain) ShadowedNavBar *navBar;
 @property (nonatomic, retain) PullToRefreshView *pull;
 
 @property (nonatomic, retain) NSMutableDictionary *pathContents;
@@ -38,7 +38,7 @@
     
     self.view = [StyleFactory backgroundImageView];
     
-    self.navBar = [[[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
+    self.navBar = [[[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
     self.navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[[UINavigationItem alloc]initWithTitle:@"/"]autorelease];
     topItem.rightBarButtonItem = nil;

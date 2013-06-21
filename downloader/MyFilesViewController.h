@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ShadowedTableView.h"
+#import "ShadowedNavBar.h"
 #import "CoolRefreshTableView.h"
 
 @interface MyFilesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIDocumentInteractionControllerDelegate, ContentOffsetWatchdogDelegate>
@@ -24,7 +25,7 @@
 
 @property (nonatomic, retain) UIBarButtonItem *editButton;
 @property (nonatomic, retain) CoolRefreshTableView *theTableView;
-@property (nonatomic, retain) UINavigationBar *navBar;
+@property (nonatomic, retain) ShadowedNavBar *navBar;
 @property (nonatomic, retain) UIButton *theCopyAndPasteButton;
 
 @property (nonatomic, retain) UIView *sideSwipeView;

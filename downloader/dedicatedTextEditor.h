@@ -17,7 +17,7 @@
 @property (nonatomic, retain) UITextView *theTextView;
 @property (nonatomic, retain) UIStepper *stepperFontAdjustment;
 @property (nonatomic, retain) UILabel *fontSizeLabel;
-@property (nonatomic, retain) UINavigationBar *navBar;
-@property (nonatomic, retain) UIToolbar *toolBar;
+@property (nonatomic, retain) ShadowedNavBar *navBar;
+@property (nonatomic, retain) ShadowedToolbar *toolBar;
 
 @end

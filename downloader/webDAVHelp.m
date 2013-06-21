@@ -14,9 +14,9 @@
     [super loadView];
     BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
-    self.view = [[[HatchedView alloc]initWithFrame:screenBounds]autorelease];
+    self.view = [StyleFactory backgroundImageView];
     
-    UINavigationBar *navBar = [[[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
+    UINavigationBar *navBar = [[[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
     navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"WebDAV Setup"];
     topItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)]autorelease];
