@@ -127,6 +127,11 @@
 		F1E9F7781773F49000EC345C /* background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F7731773F49000EC345C /* background@2x.png */; };
 		F1E9F7791773F49000EC345C /* background@2x~iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F7741773F49000EC345C /* background@2x~iPad.png */; };
 		F1E9F77A1773F49000EC345C /* background~iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F7751773F49000EC345C /* background~iPad.png */; };
+		F1E9F77D1773F6BA00EC345C /* toolbar_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F77B1773F6BA00EC345C /* toolbar_icon.png */; };
+		F1E9F77E1773F6BA00EC345C /* toolbar_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F77C1773F6BA00EC345C /* toolbar_icon@2x.png */; };
+		F1E9F7821773FDC900EC345C /* arrow_disclosure.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F7801773FDC900EC345C /* arrow_disclosure.png */; };
+		F1E9F7831773FDC900EC345C /* arrow_disclosure@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F7811773FDC900EC345C /* arrow_disclosure@2x.png */; };
+		F1E9F7861773FDF300EC345C /* DisclosureButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F1E9F7851773FDF300EC345C /* DisclosureButton.m */; };
 		F1EB833C16D808AA009D7D2D /* action.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833116D808AA009D7D2D /* action.png */; };
 		F1EB833D16D808AA009D7D2D /* bluetooth.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833216D808AA009D7D2D /* bluetooth.png */; };
 		F1EB833E16D808AA009D7D2D /* config.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833316D808AA009D7D2D /* config.png */; };
@@ -375,6 +380,12 @@
 		F1E9F7731773F49000EC345C /* background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background@2x.png"; sourceTree = "<group>"; };
 		F1E9F7741773F49000EC345C /* background@2x~iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background@2x~iPad.png"; sourceTree = "<group>"; };
 		F1E9F7751773F49000EC345C /* background~iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background~iPad.png"; sourceTree = "<group>"; };
+		F1E9F77B1773F6BA00EC345C /* toolbar_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = toolbar_icon.png; sourceTree = "<group>"; };
+		F1E9F77C1773F6BA00EC345C /* toolbar_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toolbar_icon@2x.png"; sourceTree = "<group>"; };
+		F1E9F7801773FDC900EC345C /* arrow_disclosure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_disclosure.png; sourceTree = "<group>"; };
+		F1E9F7811773FDC900EC345C /* arrow_disclosure@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow_disclosure@2x.png"; sourceTree = "<group>"; };
+		F1E9F7841773FDF300EC345C /* DisclosureButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisclosureButton.h; sourceTree = "<group>"; };
+		F1E9F7851773FDF300EC345C /* DisclosureButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisclosureButton.m; sourceTree = "<group>"; };
 		F1EB833116D808AA009D7D2D /* action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = action.png; path = Images/action.png; sourceTree = "<group>"; };
 		F1EB833216D808AA009D7D2D /* bluetooth.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bluetooth.png; path = Images/bluetooth.png; sourceTree = "<group>"; };
 		F1EB833316D808AA009D7D2D /* config.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = config.png; path = Images/config.png; sourceTree = "<group>"; };
@@ -534,7 +545,7 @@
 		F119CEFD13F46DA6007D67E4 /* downloader */ = {
 			isa = PBXGroup;
 			children = (
-				F1C92A34142D4F5500EFD2E6 /* Images */,
+				F1E9F76C1773F46E00EC345C /* Assets */,
 				F11C405913F83CA20077F5D1 /* MyFilesViewController.h */,
 				F1EDE3F513F8708600C17B2A /* MyFilesViewController.m */,
 				F17DC660140C456E0015F613 /* AudioPlayerViewController.h */,
@@ -766,6 +777,8 @@
 		F1693C5F16DFAC59006E3739 /* Subclasses */ = {
 			isa = PBXGroup;
 			children = (
+				F1E9F7841773FDF300EC345C /* DisclosureButton.h */,
+				F1E9F7851773FDF300EC345C /* DisclosureButton.m */,
 				F144783F1770B25900C5204A /* WhiteProgressView.h */,
 				F14478401770B25900C5204A /* WhiteProgressView.m */,
 				F13B58A5176D2C7E007EF22B /* HUDProgressView.h */,
@@ -823,28 +836,6 @@
 			name = "Download Controller";
 			sourceTree = "<group>";
 		};
-		F1C92A34142D4F5500EFD2E6 /* Images */ = {
-			isa = PBXGroup;
-			children = (
-				F1E9F76C1773F46E00EC345C /* Assets */,
-				F1EB834716D808EB009D7D2D /* Default Screens */,
-				F1EB835116D808EC009D7D2D /* Icons */,
-				F14333E516F610DE00B279F9 /* PullToReveal */,
-				F1EB833316D808AA009D7D2D /* config.png */,
-				F1EB833916D808AA009D7D2D /* nexttrack.png */,
-				F1EB833B16D808AA009D7D2D /* prevtrack.png */,
-				F165C3EB16E445E5004B81F1 /* clipboard.png */,
-				F165C3E716E44244004B81F1 /* clipboard@2x.png */,
-				F13979A116E78F4E00F8B61B /* ArrowLeft.png */,
-				F13979A216E78F4E00F8B61B /* ArrowLeft@2x.png */,
-				F13979A316E78F4E00F8B61B /* ArrowRight.png */,
-				F13979A416E78F4E00F8B61B /* ArrowRight@2x.png */,
-				F1D643081706806B008B4BD1 /* ArrowUp.png */,
-				F1D643091706806B008B4BD1 /* ArrowUp@2x.png */,
-			);
-			name = Images;
-			sourceTree = "<group>";
-		};
 		F1DA5247176E8181009A43CD /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -858,15 +849,41 @@
 		F1E9F76C1773F46E00EC345C /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				F1EB835116D808EC009D7D2D /* Icons */,
+				F14333E516F610DE00B279F9 /* PullToReveal */,
+				F1E9F77F1773FA3700EC345C /* Old */,
 				F1E9F7711773F49000EC345C /* background.png */,
 				F1E9F7721773F49000EC345C /* background-586.png */,
 				F1E9F7731773F49000EC345C /* background@2x.png */,
 				F1E9F7741773F49000EC345C /* background@2x~iPad.png */,
 				F1E9F7751773F49000EC345C /* background~iPad.png */,
+				F1E9F7801773FDC900EC345C /* arrow_disclosure.png */,
+				F1E9F7811773FDC900EC345C /* arrow_disclosure@2x.png */,
 				F1E9F76D1773F48500EC345C /* statusbar.png */,
 				F1E9F76E1773F48500EC345C /* statusbar@2x.png */,
+				F1E9F77B1773F6BA00EC345C /* toolbar_icon.png */,
+				F1E9F77C1773F6BA00EC345C /* toolbar_icon@2x.png */,
 			);
 			name = Assets;
+			sourceTree = "<group>";
+		};
+		F1E9F77F1773FA3700EC345C /* Old */ = {
+			isa = PBXGroup;
+			children = (
+				F1EB834716D808EB009D7D2D /* Default Screens */,
+				F1EB833316D808AA009D7D2D /* config.png */,
+				F1EB833916D808AA009D7D2D /* nexttrack.png */,
+				F1EB833B16D808AA009D7D2D /* prevtrack.png */,
+				F165C3EB16E445E5004B81F1 /* clipboard.png */,
+				F165C3E716E44244004B81F1 /* clipboard@2x.png */,
+				F13979A116E78F4E00F8B61B /* ArrowLeft.png */,
+				F13979A216E78F4E00F8B61B /* ArrowLeft@2x.png */,
+				F13979A316E78F4E00F8B61B /* ArrowRight.png */,
+				F13979A416E78F4E00F8B61B /* ArrowRight@2x.png */,
+				F1D643081706806B008B4BD1 /* ArrowUp.png */,
+				F1D643091706806B008B4BD1 /* ArrowUp@2x.png */,
+			);
+			name = Old;
 			sourceTree = "<group>";
 		};
 		F1EB834716D808EB009D7D2D /* Default Screens */ = {
@@ -994,6 +1011,10 @@
 				F1E9F7781773F49000EC345C /* background@2x.png in Resources */,
 				F1E9F7791773F49000EC345C /* background@2x~iPad.png in Resources */,
 				F1E9F77A1773F49000EC345C /* background~iPad.png in Resources */,
+				F1E9F77D1773F6BA00EC345C /* toolbar_icon.png in Resources */,
+				F1E9F77E1773F6BA00EC345C /* toolbar_icon@2x.png in Resources */,
+				F1E9F7821773FDC900EC345C /* arrow_disclosure.png in Resources */,
+				F1E9F7831773FDC900EC345C /* arrow_disclosure@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1095,6 +1116,7 @@
 				F118C7481771425F00ED7384 /* PullToRefreshView.m in Sources */,
 				F1BC30CA17715DF300DAFA0A /* Hack.m in Sources */,
 				F1BA8C7E17728500007AAF85 /* BGProcFactory.m in Sources */,
+				F1E9F7861773FDF300EC345C /* DisclosureButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

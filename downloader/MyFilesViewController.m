@@ -714,7 +714,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     [self reindexFilelist];
-    return self.theTableView.editing?self.filelist.count+1:self.filelist.count;
+    return _theTableView.editing?_filelist.count+1:_filelist.count;
 }
 
 - (void)accessoryButtonPressed:(id)sender {

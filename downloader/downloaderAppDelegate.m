@@ -589,32 +589,37 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
     
-    HatchedView *hatchedView = [[HatchedView alloc]initWithFrame:self.window.bounds];
+    UIImageView *background = [[UIImageView alloc]initWithFrame:_window.bounds];
+    [background setImage:[UIImage imageNamed:@"background"]];
+    [_window addSubview:background];
+    [_window sendSubviewToBack:background];
+    [background release];
+    
+    /*HatchedView *hatchedView = [[HatchedView alloc]initWithFrame:self.window.bounds];
     [self.window addSubview:hatchedView];
     [self.window sendSubviewToBack:hatchedView];
-    [hatchedView release];
+    [hatchedView release];*/
     
     DBSession *session = [[DBSession alloc]initWithAppKey:@"ybpwmfq2z1jmaxi" appSecret:@"ua6hjow7hxx0y3a" root:kDBRootDropbox];
 	session.delegate = self;
 	[DBSession setSharedSession:session];
     [session release];
     
-    if (self.sessionController.session && !self.isReciever) {
+    if (_sessionController.session && !_isReciever) {
         [self killSession];
         [self startSession];
-    } else if (!self.sessionController.session) {
+    } else if (!_sessionController.session) {
         [self startSession];
     }
 
-    UIImage *bbiImage = [getButtonImage() resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
+    UIImage *bbiImage = [[UIImage imageNamed:@"toolbar_icon"]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 4, 0, 4)];    
     [[UIBarButtonItem appearance]setBackgroundImage:bbiImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    
-    //UIImage *navBarImage = [getNavBarImage() resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
-    
+
     UIImage *navBarImage = [[UIImage imageNamed:@"statusbar"]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 150, 0, 150)];
-    
     [[UINavigationBar appearance]setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
-    NSDictionary *navbarTitleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], UITextAttributeTextColor, [UIColor blackColor], UITextAttributeTextShadowColor, [NSValue valueWithUIOffset:UIOffsetMake(-0.5, -0.5)], UITextAttributeTextShadowOffset, nil];
+    NSDictionary *navbarTitleTextAttributes = @{UITextAttributeTextColor: [UIColor whiteColor],
+                                                UITextAttributeTextShadowColor: [UIColor blackColor],
+                                                UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(-0.5, -0.5)]};
     
     [[UINavigationBar appearance]setTitleTextAttributes:navbarTitleTextAttributes];
     

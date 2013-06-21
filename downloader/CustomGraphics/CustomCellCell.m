@@ -27,16 +27,23 @@
 - (void)drawRect:(CGRect)rect {
     CGContextRef context = UIGraphicsGetCurrentContext();
     
-    CGColorRef whiteColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0].CGColor; 
+    CGColorRef whiteColor = [UIColor whiteColor].CGColor;
     CGColorRef lightGrayColor = [UIColor colorWithRed:230.0/255.0 green:230.0/255.0 blue:230.0/255.0 alpha:1.0].CGColor;
     CGColorRef separatorColor = [UIColor colorWithRed:208.0/255.0 green:208.0/255.0 blue:208.0/255.0 alpha:1.0].CGColor;
     
-    // Fill with gradient
+    /*// Fill with gradient
     if (self.selected) {
         drawLinearGradient(context, self.bounds, lightGrayColor, separatorColor);
     } else {
         drawLinearGradient(context, self.bounds, whiteColor, lightGrayColor);
-    }
+    }*/
+    
+    CGContextSaveGState(context);
+    
+    CGContextSetFillColorWithColor(context, whiteColor);
+    CGContextFillRect(context, self.bounds);
+    
+    CGContextRestoreGState(context);
     
     // Add white 1 px stroke
     CGRect strokeRect = self.bounds;
