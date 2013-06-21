@@ -15,7 +15,7 @@
 @property (nonatomic, retain) ShadowedTableView *theTableView;
 @property (nonatomic, retain) CustomButton *backButton;
 @property (nonatomic, retain) CustomButton *homeButton;
-@property (nonatomic, retain) CustomNavBar *navBar;
+@property (nonatomic, retain) UINavigationBar *navBar;
 @property (nonatomic, retain) PullToRefreshView *pull;
 
 @property (nonatomic, retain) NSMutableDictionary *pathContents;
@@ -36,9 +36,9 @@
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
     
-    self.view = [[[HatchedView alloc]initWithFrame:screenBounds]autorelease];
+    self.view = [StyleFactory backgroundImageView];
     
-    self.navBar = [[[CustomNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
+    self.navBar = [[[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
     self.navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[[UINavigationItem alloc]initWithTitle:@"/"]autorelease];
     topItem.rightBarButtonItem = nil;
@@ -46,9 +46,13 @@
     [self.navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:self.navBar];
     
-    ButtonBarView *bbv = [[[ButtonBarView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, 44)]autorelease];
-    bbv.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    UIImageView *bbv = [StyleFactory buttonBarImageView];
+    bbv.frame = CGRectMake(0, 44, screenBounds.size.width, 44);
     [self.view addSubview:bbv];
+    
+    /*ButtonBarView *bbv = [[[ButtonBarView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, 44)]autorelease];
+    bbv.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    [self.view addSubview:bbv];*/
     
     self.homeButton = [[[CustomButton alloc]initWithFrame:iPad?CGRectMake(358, 4, 62, 36):CGRectMake(123, 4, 62, 36)]autorelease];
     [self.homeButton setTitle:@"Home" forState:UIControlStateNormal];

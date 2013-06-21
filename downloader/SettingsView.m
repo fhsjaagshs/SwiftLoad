@@ -16,7 +16,7 @@
     [super loadView];
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     
-    self.view = [[StyleFactory sharedFactory]backgroundImageView]; // [[[HatchedView alloc]initWithFrame:screenBounds]autorelease];
+    self.view = [StyleFactory backgroundImageView]; // [[[HatchedView alloc]initWithFrame:screenBounds]autorelease];
     
     UINavigationBar *bar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;

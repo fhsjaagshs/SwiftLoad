@@ -589,7 +589,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
     
-    UIImageView *background = [[StyleFactory sharedFactory]backgroundImageView];
+    UIImageView *background = [StyleFactory backgroundImageView];
     [_window addSubview:background];
     [_window sendSubviewToBack:background];
     

@@ -8,49 +8,18 @@
 
 #import "StyleFactory.h"
 
-static StyleFactory *sharedInstance = nil;
-
 @implementation StyleFactory
 
-- (UIImageView *)backgroundImageView {
++ (UIImageView *)buttonBarImageView {
+    UIImageView *buttonBar = [[[UIImageView alloc]initWithFrame:[UIApplication sharedApplication].delegate.window.bounds]autorelease];
+    [buttonBar setImage:[UIImage imageNamed:@"buttonbarBG"]];
+    return buttonBar;
+}
+
++ (UIImageView *)backgroundImageView {
     UIImageView *background = [[[UIImageView alloc]initWithFrame:[UIApplication sharedApplication].delegate.window.bounds]autorelease];
-    [background setImage:[UIImage imageNamed:@"background"]];
+    [background setImage:[UIImage imageNamed:@"Default"]];
     return background;
-}
-
-+ (StyleFactory *)sharedFactory {
-    @synchronized (self) {
-        if (sharedInstance == nil) {
-            [[self alloc]init];
-        }
-    }
-    return sharedInstance;
-}
-
-+ (id)allocWithZone:(NSZone *)zone {
-    @synchronized(self) {
-        if (sharedInstance == nil) {
-            sharedInstance = [super allocWithZone:zone];
-            return sharedInstance;
-        }
-    }
-    return nil;
-}
-
-- (id)retain {
-    return self;
-}
-
-- (oneway void)release {
-    // Do nothing
-}
-
-- (id)autorelease {
-    return self;
-}
-
-- (NSUInteger)retainCount {
-    return NSUIntegerMax;
 }
 
 @end
