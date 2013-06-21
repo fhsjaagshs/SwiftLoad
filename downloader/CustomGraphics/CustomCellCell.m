@@ -28,7 +28,7 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     CGColorRef whiteColor = [UIColor whiteColor].CGColor;
-    CGColorRef lightGrayColor = [UIColor colorWithRed:230.0/255.0 green:230.0/255.0 blue:230.0/255.0 alpha:1.0].CGColor;
+   // CGColorRef lightGrayColor = [UIColor colorWithRed:230.0/255.0 green:230.0/255.0 blue:230.0/255.0 alpha:1.0].CGColor;
     CGColorRef separatorColor = [UIColor colorWithRed:208.0/255.0 green:208.0/255.0 blue:208.0/255.0 alpha:1.0].CGColor;
     
     /*// Fill with gradient
