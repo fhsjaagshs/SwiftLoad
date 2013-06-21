@@ -14,7 +14,6 @@
 
 - (void)loadView {
     [super loadView];
-    self.view.backgroundColor = [UIColor clearColor];
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     UINavigationBar *bar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;

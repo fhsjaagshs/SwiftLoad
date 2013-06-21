@@ -11,14 +11,14 @@
 @implementation StyleFactory
 
 + (UIImageView *)buttonBarImageView {
-    UIImageView *buttonBar = [[[UIImageView alloc]initWithFrame:[UIScreen mainScreen].applicationFrame]autorelease];
+    UIImageView *buttonBar = [[[UIImageView alloc]initWithFrame:[UIScreen mainScreen].bounds]autorelease];
     [buttonBar setImage:[UIImage imageNamed:@"buttonbarBG"]];
     buttonBar.userInteractionEnabled = YES;
     return buttonBar;
 }
 
 + (UIImageView *)backgroundImageView {
-    UIImageView *background = [[[UIImageView alloc]initWithFrame:[UIScreen mainScreen].applicationFrame]autorelease];
+    UIImageView *background = [[[UIImageView alloc]initWithFrame:[UIScreen mainScreen].bounds]autorelease];
     [background setImage:[UIImage imageNamed:@"Default"]];
     background.userInteractionEnabled = YES;
     return background;

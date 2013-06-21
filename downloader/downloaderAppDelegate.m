@@ -583,20 +583,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [self becomeFirstResponder];
     AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, nil);
     
-    self.window = [[[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]]autorelease];
-    self.viewController = [MyFilesViewController viewController];
-    self.window.rootViewController = self.viewController;
-    [self.window makeKeyAndVisible];
-    
-    UIImageView *background = [StyleFactory backgroundImageView];
-    [_window addSubview:background];
-    [_window sendSubviewToBack:background];
-    
-    /*HatchedView *hatchedView = [[HatchedView alloc]initWithFrame:self.window.bounds];
-    [self.window addSubview:hatchedView];
-    [self.window sendSubviewToBack:hatchedView];
-    [hatchedView release];*/
-    
     DBSession *session = [[DBSession alloc]initWithAppKey:@"ybpwmfq2z1jmaxi" appSecret:@"ua6hjow7hxx0y3a" root:kDBRootDropbox];
 	session.delegate = self;
 	[DBSession setSharedSession:session];
@@ -608,6 +594,15 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     } else if (!_sessionController.session) {
         [self startSession];
     }
+    
+    self.window = [[[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]]autorelease];
+    self.viewController = [MyFilesViewController viewController];
+    _window.rootViewController = self.viewController;
+    [_window makeKeyAndVisible];
+    
+    UIImageView *background = [StyleFactory backgroundImageView];
+    [_window addSubview:background];
+    [_window sendSubviewToBack:background];
 
     UIImage *bbiImage = [[UIImage imageNamed:@"toolbar_icon"]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 4, 0, 4)];    
     [[UIBarButtonItem appearance]setBackgroundImage:bbiImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
@@ -615,19 +610,9 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     UIImage *navBarImage = [[UIImage imageNamed:@"statusbar"]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 150, 0, 150)];
     [[UINavigationBar appearance]setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
     [[UIToolbar appearance]setBackgroundImage:navBarImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
-    NSDictionary *navbarTitleTextAttributes = @{UITextAttributeTextColor: [UIColor whiteColor]/*,
-                                                UITextAttributeTextShadowColor: [UIColor blackColor],
-                                                UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(-0.5, -0.5)]*/};
+    NSDictionary *navbarTitleTextAttributes = @{ UITextAttributeTextColor: [UIColor whiteColor] };
     
     [[UINavigationBar appearance]setTitleTextAttributes:navbarTitleTextAttributes];
-    
-    CALayer *navlayer = [(UINavigationBar *)[UINavigationBar appearance] layer];
-    
-    navlayer.shadowColor = [UIColor blackColor].CGColor;
-    navlayer.shadowOffset = CGSizeMake(0.0, 4);
-    navlayer.shadowOpacity = 0.25;
-    navlayer.masksToBounds = NO;
-    navlayer.shouldRasterize = YES;
     
     return YES;
 }
