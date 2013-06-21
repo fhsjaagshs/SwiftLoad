@@ -609,7 +609,10 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     UIImage *bbiImage = [getButtonImage() resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
     [[UIBarButtonItem appearance]setBackgroundImage:bbiImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     
-    UIImage *navBarImage = [getNavBarImage() resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
+    //UIImage *navBarImage = [getNavBarImage() resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
+    
+    UIImage *navBarImage = [[UIImage imageNamed:@"statusbar"]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 150, 0, 150)];
+    
     [[UINavigationBar appearance]setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
     NSDictionary *navbarTitleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], UITextAttributeTextColor, [UIColor blackColor], UITextAttributeTextShadowColor, [NSValue valueWithUIOffset:UIOffsetMake(-0.5, -0.5)], UITextAttributeTextShadowOffset, nil];
     

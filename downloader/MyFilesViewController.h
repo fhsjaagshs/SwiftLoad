@@ -24,7 +24,7 @@
 
 @property (nonatomic, retain) UIBarButtonItem *editButton;
 @property (nonatomic, retain) CoolRefreshTableView *theTableView;
-@property (nonatomic, retain) CustomNavBar *navBar;
+@property (nonatomic, retain) UINavigationBar *navBar;
 @property (nonatomic, retain) UIButton *theCopyAndPasteButton;
 
 @property (nonatomic, retain) UIView *sideSwipeView;

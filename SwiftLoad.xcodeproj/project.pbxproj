@@ -120,6 +120,13 @@
 		F1D3A573157A8F9E00A2D141 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1D3A572157A8F9E00A2D141 /* Security.framework */; };
 		F1D6430A1706806B008B4BD1 /* ArrowUp.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D643081706806B008B4BD1 /* ArrowUp.png */; };
 		F1D6430B1706806B008B4BD1 /* ArrowUp@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D643091706806B008B4BD1 /* ArrowUp@2x.png */; };
+		F1E9F76F1773F48500EC345C /* statusbar.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F76D1773F48500EC345C /* statusbar.png */; };
+		F1E9F7701773F48500EC345C /* statusbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F76E1773F48500EC345C /* statusbar@2x.png */; };
+		F1E9F7761773F49000EC345C /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F7711773F49000EC345C /* background.png */; };
+		F1E9F7771773F49000EC345C /* background-586.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F7721773F49000EC345C /* background-586.png */; };
+		F1E9F7781773F49000EC345C /* background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F7731773F49000EC345C /* background@2x.png */; };
+		F1E9F7791773F49000EC345C /* background@2x~iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F7741773F49000EC345C /* background@2x~iPad.png */; };
+		F1E9F77A1773F49000EC345C /* background~iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F7751773F49000EC345C /* background~iPad.png */; };
 		F1EB833C16D808AA009D7D2D /* action.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833116D808AA009D7D2D /* action.png */; };
 		F1EB833D16D808AA009D7D2D /* bluetooth.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833216D808AA009D7D2D /* bluetooth.png */; };
 		F1EB833E16D808AA009D7D2D /* config.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833316D808AA009D7D2D /* config.png */; };
@@ -361,6 +368,13 @@
 		F1D3A572157A8F9E00A2D141 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		F1D643081706806B008B4BD1 /* ArrowUp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ArrowUp.png; path = Images/ArrowUp.png; sourceTree = "<group>"; };
 		F1D643091706806B008B4BD1 /* ArrowUp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ArrowUp@2x.png"; path = "Images/ArrowUp@2x.png"; sourceTree = "<group>"; };
+		F1E9F76D1773F48500EC345C /* statusbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = statusbar.png; sourceTree = "<group>"; };
+		F1E9F76E1773F48500EC345C /* statusbar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "statusbar@2x.png"; sourceTree = "<group>"; };
+		F1E9F7711773F49000EC345C /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
+		F1E9F7721773F49000EC345C /* background-586.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background-586.png"; sourceTree = "<group>"; };
+		F1E9F7731773F49000EC345C /* background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background@2x.png"; sourceTree = "<group>"; };
+		F1E9F7741773F49000EC345C /* background@2x~iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background@2x~iPad.png"; sourceTree = "<group>"; };
+		F1E9F7751773F49000EC345C /* background~iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background~iPad.png"; sourceTree = "<group>"; };
 		F1EB833116D808AA009D7D2D /* action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = action.png; path = Images/action.png; sourceTree = "<group>"; };
 		F1EB833216D808AA009D7D2D /* bluetooth.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bluetooth.png; path = Images/bluetooth.png; sourceTree = "<group>"; };
 		F1EB833316D808AA009D7D2D /* config.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = config.png; path = Images/config.png; sourceTree = "<group>"; };
@@ -812,6 +826,7 @@
 		F1C92A34142D4F5500EFD2E6 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				F1E9F76C1773F46E00EC345C /* Assets */,
 				F1EB834716D808EB009D7D2D /* Default Screens */,
 				F1EB835116D808EC009D7D2D /* Icons */,
 				F14333E516F610DE00B279F9 /* PullToReveal */,
@@ -838,6 +853,20 @@
 				F1693BC616DFAA08006E3739 /* HTTPServer */,
 			);
 			name = Libraries;
+			sourceTree = "<group>";
+		};
+		F1E9F76C1773F46E00EC345C /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				F1E9F7711773F49000EC345C /* background.png */,
+				F1E9F7721773F49000EC345C /* background-586.png */,
+				F1E9F7731773F49000EC345C /* background@2x.png */,
+				F1E9F7741773F49000EC345C /* background@2x~iPad.png */,
+				F1E9F7751773F49000EC345C /* background~iPad.png */,
+				F1E9F76D1773F48500EC345C /* statusbar.png */,
+				F1E9F76E1773F48500EC345C /* statusbar@2x.png */,
+			);
+			name = Assets;
 			sourceTree = "<group>";
 		};
 		F1EB834716D808EB009D7D2D /* Default Screens */ = {
@@ -958,6 +987,13 @@
 				F15507D9176EB04D0024FF03 /* delete@2x.png in Resources */,
 				F15507DC176EB0A90024FF03 /* dropbox@2x.png in Resources */,
 				F15507DD176EB0A90024FF03 /* paperclip@2x.png in Resources */,
+				F1E9F76F1773F48500EC345C /* statusbar.png in Resources */,
+				F1E9F7701773F48500EC345C /* statusbar@2x.png in Resources */,
+				F1E9F7761773F49000EC345C /* background.png in Resources */,
+				F1E9F7771773F49000EC345C /* background-586.png in Resources */,
+				F1E9F7781773F49000EC345C /* background@2x.png in Resources */,
+				F1E9F7791773F49000EC345C /* background@2x~iPad.png in Resources */,
+				F1E9F77A1773F49000EC345C /* background~iPad.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
