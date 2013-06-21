@@ -743,10 +743,13 @@
     if (cell == nil) {
         cell = [[[CustomCellCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier]autorelease];
         
-        DTCustomColoredAccessory *accessory = [DTCustomColoredAccessory accessoryWithColor:[UIColor whiteColor]];
+        DisclosureButton *button = [DisclosureButton button];
+        [button addTarget:self action:@selector(accessoryButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        cell.accessoryView = button;
+        /*DTCustomColoredAccessory *accessory = [DTCustomColoredAccessory accessoryWithColor:[UIColor whiteColor]];
         accessory.highlightedColor = [UIColor darkGrayColor];
         [accessory addTarget:self action:@selector(accessoryButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        cell.accessoryView = accessory;
+        cell.accessoryView = accessory;*/
             
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             cell.accessoryView.center = CGPointMake(735, (cell.bounds.size.height)/2);

@@ -16,7 +16,7 @@
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     self.view = [[[HatchedView alloc]initWithFrame:screenBounds]autorelease];
     
-    CustomNavBar *navBar = [[[CustomNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
+    UINavigationBar *navBar = [[[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
     navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"WebDAV Server"];
     topItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)]autorelease];
@@ -29,7 +29,7 @@
     self.onLabel = [[[UILabel alloc]initWithFrame:iPad?CGRectMake(234, 100, 300, 83):CGRectMake(0, sanitizeMesurement(44), screenBounds.size.width, 91)]autorelease];
     _onLabel.textAlignment = UITextAlignmentCenter;
     _onLabel.backgroundColor = [UIColor clearColor];
-    _onLabel.textColor = [UIColor whiteColor];
+    _onLabel.textColor = [UIColor blackColor];
     _onLabel.text = @"WebDAV server is ON";
     _onLabel.font = [UIFont boldSystemFontOfSize:iPad?28:23];
     _onLabel.shadowColor = [UIColor darkGrayColor];
@@ -38,7 +38,7 @@
     
     UITextView *tf = [[[UITextView alloc]initWithFrame:iPad?CGRectMake(158, 235, 453, 83):CGRectMake(40, sanitizeMesurement(160), 240, 83)]autorelease];
     tf.text = @"Use a WebDAV client like CyberDuck or Interarchy to connect to the following URL using the non-SSL protocol:";
-    tf.textColor = [UIColor whiteColor];
+    tf.textColor = [UIColor blackColor];
     tf.backgroundColor = [UIColor clearColor];
     tf.font = [UIFont systemFontOfSize:iPad?17:15];
     tf.editable = NO;
@@ -58,7 +58,7 @@
     btf.backgroundColor = [UIColor clearColor];
     btf.editable = NO;
     btf.textAlignment = UITextAlignmentCenter;
-    btf.textColor = [UIColor whiteColor];
+    btf.textColor = [UIColor blackColor];
     btf.font = [UIFont systemFontOfSize:iPad?19:14];
     btf.text = @"This WebDAV server is only active as long as this screen is open.";
     [self.view addSubview:btf];

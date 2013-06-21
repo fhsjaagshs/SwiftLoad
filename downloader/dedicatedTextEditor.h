@@ -18,6 +18,6 @@
 @property (nonatomic, retain) UIStepper *stepperFontAdjustment;
 @property (nonatomic, retain) UILabel *fontSizeLabel;
 @property (nonatomic, retain) UINavigationBar *navBar;
-@property (nonatomic, retain) CustomToolbar *toolBar;
+@property (nonatomic, retain) UIToolbar *toolBar;
 
 @end

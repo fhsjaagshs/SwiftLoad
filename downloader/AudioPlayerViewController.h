@@ -27,10 +27,9 @@
 @property (nonatomic, retain) BackAndForwardButton *prevTrack;
 @property (nonatomic, retain) UITextView *infoField;
 @property (nonatomic, retain) CustomSlider *time;
-@property (nonatomic, retain) CustomNavBar *navBar;
+@property (nonatomic, retain) UINavigationBar *navBar;
 
 @property (nonatomic, retain) UIActionSheet *popupQuery;
-//@property (nonatomic, assign) BOOL shouldStopPlayingAudio;
 
 @property (nonatomic, assign) BOOL shouldStopCounter;
 @property (nonatomic, assign) BOOL notInPlayerView;

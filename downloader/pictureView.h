@@ -16,7 +16,7 @@
 @property (nonatomic, retain) ZoomingImageView *zoomingImageView;
 @property (nonatomic, retain) UIBarButtonItem *prevImg;
 @property (nonatomic, retain) UIBarButtonItem *nextImg;
-@property (nonatomic, retain) CustomNavBar *navBar;
-@property (nonatomic, retain) CustomToolbar *toolBar;
+@property (nonatomic, retain) UINavigationBar *navBar;
+@property (nonatomic, retain) UIToolbar *toolBar;
 
 @end

@@ -17,6 +17,7 @@
     #import <AudioToolbox/AudioToolbox.h>
     #import <CommonCrypto/CommonCrypto.h>
 
+    #import "StyleFactory.h"
     #import "BGProcFactory.h"
     #import "WhiteProgressView.h"
     #import "HUDProgressView.h"
@@ -55,6 +56,7 @@
     #import "FTPBrowserViewController.h"
     #import "DropboxBrowserViewController.h"
 
+    #import "DisclosureButton.h"
     #import "DTCustomColoredAccessory.h"
     #import "HatchedView.h"
     #import "ShadowedTableView.h"

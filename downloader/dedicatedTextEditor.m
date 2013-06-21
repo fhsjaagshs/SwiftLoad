@@ -19,7 +19,7 @@
     
     self.view.backgroundColor = [UIColor clearColor];
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
-    self.navBar = [[[CustomNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
+    self.navBar = [[[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
     self.navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]];
     topItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)]autorelease];
@@ -35,7 +35,7 @@
     self.theTextView.delegate = self;
     self.theTextView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-    self.toolBar = [[[CustomToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 44)]autorelease];
+    self.toolBar = [[[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 44)]autorelease];
     UIBarButtonItem *space = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil]autorelease];
     UIBarButtonItem *hideKeyboard = [[[UIBarButtonItem alloc]initWithTitle:@"Hide" style:UIBarButtonItemStyleBordered target:self action:@selector(dismissKeyboard)]autorelease];
     UIBarButtonItem *stepper = [[[UIBarButtonItem alloc]initWithCustomView:self.stepperFontAdjustment]autorelease];

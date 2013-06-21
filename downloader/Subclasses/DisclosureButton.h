@@ -10,4 +10,6 @@
 
 @interface DisclosureButton : UIControl
 
++ (DisclosureButton *)button;
+
 @end

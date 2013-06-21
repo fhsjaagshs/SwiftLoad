@@ -16,7 +16,7 @@
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     self.view = [[[HatchedView alloc]initWithFrame:screenBounds]autorelease];
     
-    CustomNavBar *navBar = [[[CustomNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
+    UINavigationBar *navBar = [[[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
     navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"WebDAV Setup"];
     topItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)]autorelease];
@@ -28,7 +28,7 @@
     UITextView *textView = [[[UITextView alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-(iPad?200:200), screenBounds.size.width, iPad?200:150)]autorelease];
     textView.text = @"Server: IP address of iPhone\nPort: 8080\nConnection type: Non-SSL WebDAV\nUsername and password: Anything";
     textView.backgroundColor = [UIColor clearColor];
-    textView.textColor = [UIColor whiteColor];
+    textView.textColor = [UIColor blackColor];
     textView.font = [UIFont boldSystemFontOfSize:18];
     textView.textAlignment = UITextAlignmentCenter;
     textView.editable = NO;

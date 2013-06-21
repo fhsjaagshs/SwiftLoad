@@ -19,7 +19,7 @@
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     self.view = [[[UIView alloc]initWithFrame:screenBounds]autorelease];
     
-    CustomNavBar *navBar = [[[CustomNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
+    UINavigationBar *navBar = [[[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
     navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"File Details"];
     topItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)]autorelease];
@@ -204,45 +204,6 @@
         }
         
         [pool release];
-        
-        /*
-        NSFileHandle *handle = [NSFileHandle fileHandleForReadingAtPath:file];
-        if (!handle) {
-            [self.md5Field setText:@"File corrupt or nonexistant"];
-            [pool release];
-            return;
-        }
-        
-        CC_MD5_CTX md5;
-        CC_MD5_Init(&md5);
-        
-        double sizeOfFile = [[[NSFileManager defaultManager]attributesOfItemAtPath:file error:nil]fileSize];
-        double timesDivisible = floor((sizeOfFile/1024));
-        double sizeDivisibleBy1024 = timesDivisible*1024;
-        double remainder = sizeOfFile-sizeDivisibleBy1024;
-        
-        for (int i = 0; i <= timesDivisible; i++) {
-            if (i != timesDivisible) {
-                NSData *fileData = [handle readDataOfLength:1024];
-                CC_MD5_Update(&md5, fileData.bytes, fileData.length);
-            } else {
-                NSData *fileData = [handle readDataOfLength:remainder];
-                CC_MD5_Update(&md5, fileData.bytes, fileData.length);
-            }
-        }
-        
-        unsigned char digest[CC_MD5_DIGEST_LENGTH];
-        CC_MD5_Final(digest, &md5);
-        NSString *md5String = [NSString stringWithFormat:@"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x", digest[0], digest[1], digest[2], digest[3], digest[4], digest[5], digest[6], digest[7], digest[8], digest[9], digest[10], digest[11], digest[12], digest[13], digest[14], digest[15]];
-        
-        if (md5String.length > 0) {
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                NSAutoreleasePool *poolTwo = [[NSAutoreleasePool alloc]init];
-                [self.md5Field setText:md5String];
-                [poolTwo release];
-            });
-        }
-        [pool release];*/
     });
 }
 

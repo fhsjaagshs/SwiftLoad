@@ -16,9 +16,9 @@
     [super loadView];
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     
-    self.view = [[[HatchedView alloc]initWithFrame:screenBounds]autorelease];
+    self.view = [[StyleFactory sharedFactory]backgroundImageView]; // [[[HatchedView alloc]initWithFrame:screenBounds]autorelease];
     
-    CustomNavBar *bar = [[CustomNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
+    UINavigationBar *bar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"Settings"];
     topItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)]autorelease];

@@ -18,7 +18,7 @@
     self.view = [[[UIView alloc]initWithFrame:screenBounds]autorelease];
     self.view.backgroundColor = [UIColor clearColor];
     
-    self.navBar = [[[CustomNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
+    self.navBar = [[[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
     self.navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]]autorelease];
     topItem.rightBarButtonItem = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)]autorelease];
@@ -57,8 +57,8 @@
     
     self.infoField = [[[UITextView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, sanitizeMesurement(73))]autorelease];
     self.infoField.textAlignment = UITextAlignmentCenter;
-    self.infoField.textColor = [UIColor whiteColor];
-    self.infoField.font = [UIFont boldSystemFontOfSize:15];
+    self.infoField.textColor = [UIColor blackColor];
+    self.infoField.font = [UIFont systemFontOfSize:15];
     self.infoField.editable = NO;
     self.infoField.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.infoField];
@@ -72,13 +72,13 @@
     self.secondsRemaining = [[[UILabel alloc]initWithFrame:iPad?CGRectMake(315, 220, 139, 35):CGRectMake(51, sanitizeMesurement(187), 112, 21)]autorelease];
     self.secondsRemaining.text = @"Time Elapsed:";
     self.secondsRemaining.backgroundColor = [UIColor clearColor];
-    self.secondsRemaining.textColor = [UIColor whiteColor];
+    self.secondsRemaining.textColor = [UIColor blackColor];
     self.secondsRemaining.font = iPad?[UIFont boldSystemFontOfSize:20]:[UIFont systemFontOfSize:17];
     [self.view addSubview:self.secondsRemaining];
     
     self.secondsDisplay = [[[UILabel alloc]initWithFrame:iPad?CGRectMake(0, 263, 768, 55):CGRectMake(164, sanitizeMesurement(185), 136, 27)]autorelease];
     self.secondsDisplay.font = [UIFont boldSystemFontOfSize:iPad?39:24];
-    self.secondsDisplay.textColor = [UIColor whiteColor];
+    self.secondsDisplay.textColor = [UIColor blackColor];
     self.secondsDisplay.backgroundColor = [UIColor clearColor];
     self.secondsDisplay.textAlignment = iPad?UITextAlignmentCenter:UITextAlignmentLeft;
     self.secondsDisplay.text = @"0:00";
@@ -87,11 +87,11 @@
     self.errorLabel = [[[UILabel alloc]initWithFrame:iPad?CGRectMake(14, 311, 727, 113):CGRectMake(4, sanitizeMesurement(149), 313, 57)]autorelease];
     self.errorLabel.text = @"Error Playing Audio";
     self.errorLabel.backgroundColor = [UIColor clearColor];
-    self.errorLabel.textColor = [UIColor whiteColor];
+    self.errorLabel.textColor = [UIColor blackColor];
     self.errorLabel.font = [UIFont boldSystemFontOfSize:iPad?72:33];
     [self.view addSubview:self.errorLabel];
     
-    CustomToolbar *toolBar = [[[CustomToolbar alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-44, screenBounds.size.width, 44)]autorelease];
+    UIToolbar *toolBar = [[[UIToolbar alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-44, screenBounds.size.width, 44)]autorelease];
     toolBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     
     MPVolumeView *volView = [[[MPVolumeView alloc]initWithFrame:CGRectMake(0, 12, screenBounds.size.width-25, 20)]autorelease];

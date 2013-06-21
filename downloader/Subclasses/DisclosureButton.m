@@ -10,17 +10,18 @@
 
 @implementation DisclosureButton
 
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
+- (void)drawRect:(CGRect)rect {
+    if (self.highlighted) {
+        [[UIImage imageNamed:@"arrow_disclosure_highlighted"]drawInRect:self.bounds];
+    } else {
+        [[UIImage imageNamed:@"arrow_disclosure"]drawInRect:self.bounds];
     }
-    return self;
 }
 
 + (DisclosureButton *)button {
-    return [[[[self class]alloc]initWithFrame:CGRectMake(0, 0, 44, 44)]autorelease];
+    DisclosureButton *ret = [[[[self class]alloc]initWithFrame:CGRectMake(11, 11, 22, 22)]autorelease];
+    ret.backgroundColor = [UIColor clearColor];
+    return ret;
 }
 
 - (void)setHighlighted:(BOOL)highlighted {

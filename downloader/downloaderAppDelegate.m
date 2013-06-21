@@ -589,11 +589,9 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
     
-    UIImageView *background = [[UIImageView alloc]initWithFrame:_window.bounds];
-    [background setImage:[UIImage imageNamed:@"background"]];
+    UIImageView *background = [[StyleFactory sharedFactory]backgroundImageView];
     [_window addSubview:background];
     [_window sendSubviewToBack:background];
-    [background release];
     
     /*HatchedView *hatchedView = [[HatchedView alloc]initWithFrame:self.window.bounds];
     [self.window addSubview:hatchedView];
@@ -617,9 +615,10 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
     UIImage *navBarImage = [[UIImage imageNamed:@"statusbar"]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 150, 0, 150)];
     [[UINavigationBar appearance]setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
-    NSDictionary *navbarTitleTextAttributes = @{UITextAttributeTextColor: [UIColor whiteColor],
+    [[UIToolbar appearance]setBackgroundImage:navBarImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+    NSDictionary *navbarTitleTextAttributes = @{UITextAttributeTextColor: [UIColor whiteColor]/*,
                                                 UITextAttributeTextShadowColor: [UIColor blackColor],
-                                                UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(-0.5, -0.5)]};
+                                                UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(-0.5, -0.5)]*/};
     
     [[UINavigationBar appearance]setTitleTextAttributes:navbarTitleTextAttributes];
     
