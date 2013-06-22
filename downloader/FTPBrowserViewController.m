@@ -13,8 +13,8 @@
 @interface FTPBrowserViewController ()
 
 @property (nonatomic, retain) ShadowedTableView *theTableView;
-@property (nonatomic, retain) CustomButton *backButton;
-@property (nonatomic, retain) CustomButton *homeButton;
+@property (nonatomic, retain) UIButton *backButton;
+@property (nonatomic, retain) UIButton *homeButton;
 @property (nonatomic, retain) ShadowedNavBar *navBar;
 @property (nonatomic, retain) PullToRefreshView *pull;
 
@@ -45,25 +45,28 @@
     [self.view addSubview:self.navBar];
     
     UIImageView *bbv = [StyleFactory buttonBarImageView];
+    bbv.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     bbv.frame = CGRectMake(0, 44, screenBounds.size.width, 44);
     [self.view addSubview:bbv];
     
-    self.homeButton = [[[CustomButton alloc]initWithFrame:iPad?CGRectMake(358, 4, 62, 36):CGRectMake(123, 4, 62, 36)]autorelease];
+    UIImage *buttonImage = [[UIImage imageNamed:@"button_icon"]resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4)];
+    
+    self.homeButton = [[[UIButton alloc]initWithFrame:iPad?CGRectMake(358, 4, 62, 36):CGRectMake(123, 4, 62, 36)]autorelease];
+    [self.homeButton setImage:buttonImage forState:UIControlStateNormal];
+    [self.homeButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.homeButton setTitle:@"Home" forState:UIControlStateNormal];
     [self.homeButton addTarget:self action:@selector(goHome) forControlEvents:UIControlEventTouchUpInside];
     self.homeButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
-    self.homeButton.titleLabel.shadowColor = [UIColor blackColor];
-    self.homeButton.titleLabel.shadowOffset = CGSizeMake(0, -1);
     self.homeButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
     [bbv addSubview:self.homeButton];
     [self.homeButton setHidden:YES];
     
-    self.backButton = [[[CustomButton alloc]initWithFrame:iPad?CGRectMake(117, 4, 62, 36):CGRectMake(53, 4, 62, 37)]autorelease];
+    self.backButton = [[[UIButton alloc]initWithFrame:iPad?CGRectMake(117, 4, 62, 36):CGRectMake(53, 4, 62, 37)]autorelease];
     [self.backButton setTitle:@"Back" forState:UIControlStateNormal];
     [self.backButton addTarget:self action:@selector(goBackDir) forControlEvents:UIControlEventTouchUpInside];
+    [self.backButton setImage:buttonImage forState:UIControlStateNormal];
+    [self.backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     self.backButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
-    self.backButton.titleLabel.shadowColor = [UIColor blackColor];
-    self.backButton.titleLabel.shadowOffset = CGSizeMake(0, -1);
     self.backButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
     [bbv addSubview:self.backButton];
     [self.backButton setHidden:YES];

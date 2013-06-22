@@ -31,23 +31,18 @@
     [self.time addTarget:self action:@selector(sliderChanged) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.time];
     
-    UIImage *buttonImage = [[UIImage imageNamed:@"button_icon"]resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4)];
-    
     self.prevTrack = [[[UIButton alloc]initWithFrame:iPad?CGRectMake(20, 533, 142, 51):CGRectMake(20, sanitizeMesurement(299), 72, 37)]autorelease];
-    [self.prevTrack setBackgroundImage:buttonImage forState:UIControlStateNormal];
-    [self.prevTrack setImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle]pathForResource:@"prevtrack" ofType:@"png"]] forState:UIControlStateNormal];
+    [self.prevTrack setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
     [self.prevTrack addTarget:kAppDelegate action:@selector(skipToPreviousTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.prevTrack];
     
     self.nxtTrack = [[[UIButton alloc]initWithFrame:iPad?CGRectMake(599, 533, 142, 51):CGRectMake(228, sanitizeMesurement(299), 72, 37)]autorelease];
-    [self.nxtTrack setBackgroundImage:buttonImage forState:UIControlStateNormal];
-    [self.nxtTrack setImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle]pathForResource:@"nexttrack" ofType:@"png"]] forState:UIControlStateNormal];
+    [self.nxtTrack setImage:[UIImage imageNamed:@"next_button"] forState:UIControlStateNormal];
     [self.nxtTrack addTarget:kAppDelegate action:@selector(skipToNextTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.nxtTrack];
     
     self.pausePlay = [[[UIButton alloc]initWithFrame:iPad?CGRectMake(323, 533, 142, 51):CGRectMake(124, sanitizeMesurement(299), 72, 37)]autorelease];
-    [self.pausePlay setBackgroundImage:buttonImage forState:UIControlStateNormal];
-    [self.pausePlay setTitle:@"Pause" forState:UIControlStateNormal];
+    [self.pausePlay setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
     self.pausePlay.titleLabel.font = [UIFont boldSystemFontOfSize:iPad?18:15];
     [self.pausePlay setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.pausePlay addTarget:kAppDelegate action:@selector(togglePlayPause) forControlEvents:UIControlEventTouchUpInside];
@@ -299,7 +294,7 @@
 }
 
 - (void)updateTime {
-    [self.pausePlay setTitle:[[kAppDelegate audioPlayer]isPlaying]?@"Pause":@"Play" forState:UIControlStateNormal];
+    [self.pausePlay setImage:[UIImage imageNamed:[[kAppDelegate audioPlayer]isPlaying]?@"pause":@"play"] forState:UIControlStateNormal];
     self.time.value = [[kAppDelegate audioPlayer]currentTime]/[[kAppDelegate audioPlayer]duration];
     [self.secondsDisplay setText:[self theTimeDisplay]];
 }
@@ -346,33 +341,24 @@
     [self startUpdatingTime];
     if ([[kAppDelegate audioPlayer]isPlaying]) {
         [[kAppDelegate audioPlayer]pause];
-        [self.pausePlay setTitle:@"Play" forState:UIControlStateNormal];
+        [self.pausePlay setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
     } else {
         [[kAppDelegate audioPlayer]play];
-        [self.pausePlay setTitle:@"Pause" forState:UIControlStateNormal];
+        [self.pausePlay setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
         [kAppDelegate setNowPlayingFile:[kAppDelegate openFile]];
     }
 }
-
-- (void)stopAudio {
-    [self stopUpdatingTime];
-    [[kAppDelegate audioPlayer]stop];
-    [[kAppDelegate audioPlayer]setCurrentTime:0.0f];
-    [self.time setValue:0.0f];
-    [self.secondsDisplay setText:@"0:00"];
-}
-
 
 //
 // NSNotifications
 //
 
 - (void)setPausePlayTitlePlay {
-    [self.pausePlay setTitle:@"Play" forState:UIControlStateNormal];
+    [self.pausePlay setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
 }
 
 - (void)setPausePlayTitlePause {
-    [self.pausePlay setTitle:@"Pause" forState:UIControlStateNormal];
+    [self.pausePlay setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
 }
 
 - (void)setLoopNotif {
