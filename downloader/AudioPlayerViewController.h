@@ -21,10 +21,10 @@
 @property (nonatomic, retain) UILabel *secondsRemaining;
 @property (nonatomic, retain) CustomSegmentedControl *control;
 
-@property (nonatomic, retain) CustomButton *pausePlay;
-@property (nonatomic, retain) CustomButton *stopButton;
-@property (nonatomic, retain) BackAndForwardButton *nxtTrack;
-@property (nonatomic, retain) BackAndForwardButton *prevTrack;
+@property (nonatomic, retain) UIButton *pausePlay;
+@property (nonatomic, retain) UIButton *stopButton;
+@property (nonatomic, retain) UIButton *nxtTrack;
+@property (nonatomic, retain) UIButton *prevTrack;
 @property (nonatomic, retain) UITextView *infoField;
 @property (nonatomic, retain) CustomSlider *time;
 @property (nonatomic, retain) ShadowedNavBar *navBar;

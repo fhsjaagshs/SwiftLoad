@@ -48,6 +48,8 @@
 		F15507D9176EB04D0024FF03 /* delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F15507D8176EB04D0024FF03 /* delete@2x.png */; };
 		F15507DC176EB0A90024FF03 /* dropbox@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F15507DA176EB0A90024FF03 /* dropbox@2x.png */; };
 		F15507DD176EB0A90024FF03 /* paperclip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F15507DB176EB0A90024FF03 /* paperclip@2x.png */; };
+		F16187A517760311005D4568 /* button_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = F16187A317760311005D4568 /* button_icon.png */; };
+		F16187A617760311005D4568 /* button_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F16187A417760311005D4568 /* button_icon@2x.png */; };
 		F165C3E816E44244004B81F1 /* clipboard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F165C3E716E44244004B81F1 /* clipboard@2x.png */; };
 		F165C3EC16E445E5004B81F1 /* clipboard.png in Resources */ = {isa = PBXBuildFile; fileRef = F165C3EB16E445E5004B81F1 /* clipboard.png */; };
 		F166BBC414E2171A003E5A07 /* webDAVViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F166BBC214E2171A003E5A07 /* webDAVViewController.m */; };
@@ -233,6 +235,8 @@
 		F15507D8176EB04D0024FF03 /* delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "delete@2x.png"; path = "Images/delete@2x.png"; sourceTree = "<group>"; };
 		F15507DA176EB0A90024FF03 /* dropbox@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "dropbox@2x.png"; path = "Images/dropbox@2x.png"; sourceTree = "<group>"; };
 		F15507DB176EB0A90024FF03 /* paperclip@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "paperclip@2x.png"; path = "Images/paperclip@2x.png"; sourceTree = "<group>"; };
+		F16187A317760311005D4568 /* button_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_icon.png; sourceTree = "<group>"; };
+		F16187A417760311005D4568 /* button_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_icon@2x.png"; sourceTree = "<group>"; };
 		F165C3E716E44244004B81F1 /* clipboard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clipboard@2x.png"; sourceTree = "<group>"; };
 		F165C3EB16E445E5004B81F1 /* clipboard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clipboard.png; sourceTree = "<group>"; };
 		F166BBC114E2171A003E5A07 /* webDAVViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = webDAVViewController.h; sourceTree = "<group>"; };
@@ -883,6 +887,8 @@
 				F1E9F76E1773F48500EC345C /* statusbar@2x.png */,
 				F1E9F77B1773F6BA00EC345C /* toolbar_icon.png */,
 				F1E9F77C1773F6BA00EC345C /* toolbar_icon@2x.png */,
+				F16187A317760311005D4568 /* button_icon.png */,
+				F16187A417760311005D4568 /* button_icon@2x.png */,
 				F1E9F78E1774052D00EC345C /* buttonbarBG.png */,
 				F1E9F78F1774052D00EC345C /* buttonbarBG@2x.png */,
 				F1EB833316D808AA009D7D2D /* config.png */,
@@ -991,6 +997,8 @@
 				F1E9F7CD1774114D00EC345C /* icon@2x.png in Resources */,
 				F1E9F7CE1774114D00EC345C /* icon~iPad.png in Resources */,
 				F1E9F7CF1774114D00EC345C /* icon~iPad@2x.png in Resources */,
+				F16187A517760311005D4568 /* button_icon.png in Resources */,
+				F16187A617760311005D4568 /* button_icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,8 +10,6 @@
 
 @implementation dedicatedTextEditor
 
-@synthesize theTextView, fontSizeLabel, stepperFontAdjustment, navBar, popupQuery;
-
 - (void)loadView {
     [super loadView];
     
@@ -29,6 +27,15 @@
     [topItem release];
     
     self.stepperFontAdjustment = [[[UIStepper alloc]initWithFrame:CGRectMake(0, 0, 94, 27)]autorelease];
+    
+    /*for (UIView *view in self.stepperFontAdjustment.subviews) {
+        if ([view isKindOfClass:[UIButton class]]) {
+            UIButton *button = (UIButton *)view;
+            UIImage *toobarImage = [[UIImage imageNamed:@"toolbar_icon"]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 4, 0, 4)];
+            [button setBackgroundImage:toobarImage forState:UIControlStateNormal];
+            [button setBackgroundImage:toobarImage forState:UIControlStateHighlighted];
+        }
+    }*/
 
     self.theTextView = [[[UITextView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44)]autorelease];
     self.theTextView.delegate = self;

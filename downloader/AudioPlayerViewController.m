@@ -31,27 +31,27 @@
     [self.time addTarget:self action:@selector(sliderChanged) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.time];
     
-    self.prevTrack = [[[BackAndForwardButton alloc]initWithFrame:iPad?CGRectMake(20, 533, 142, 51):CGRectMake(20, sanitizeMesurement(299), 72, 37)]autorelease];
+    UIImage *buttonImage = [[UIImage imageNamed:@"button_icon"]resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4)];
+    
+    self.prevTrack = [[[UIButton alloc]initWithFrame:iPad?CGRectMake(20, 533, 142, 51):CGRectMake(20, sanitizeMesurement(299), 72, 37)]autorelease];
+    [self.prevTrack setBackgroundImage:buttonImage forState:UIControlStateNormal];
     [self.prevTrack setImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle]pathForResource:@"prevtrack" ofType:@"png"]] forState:UIControlStateNormal];
     [self.prevTrack addTarget:kAppDelegate action:@selector(skipToPreviousTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.prevTrack];
     
-    self.nxtTrack = [[[BackAndForwardButton alloc]initWithFrame:iPad?CGRectMake(599, 533, 142, 51):CGRectMake(228, sanitizeMesurement(299), 72, 37)]autorelease];
+    self.nxtTrack = [[[UIButton alloc]initWithFrame:iPad?CGRectMake(599, 533, 142, 51):CGRectMake(228, sanitizeMesurement(299), 72, 37)]autorelease];
+    [self.nxtTrack setBackgroundImage:buttonImage forState:UIControlStateNormal];
     [self.nxtTrack setImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle]pathForResource:@"nexttrack" ofType:@"png"]] forState:UIControlStateNormal];
     [self.nxtTrack addTarget:kAppDelegate action:@selector(skipToNextTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.nxtTrack];
     
-    self.pausePlay = [[[CustomButton alloc]initWithFrame:iPad?CGRectMake(323, 481, 142, 51):CGRectMake(124, sanitizeMesurement(266), 72, 37)]autorelease];
+    self.pausePlay = [[[UIButton alloc]initWithFrame:iPad?CGRectMake(323, 533, 142, 51):CGRectMake(124, sanitizeMesurement(299), 72, 37)]autorelease];
+    [self.pausePlay setBackgroundImage:buttonImage forState:UIControlStateNormal];
     [self.pausePlay setTitle:@"Pause" forState:UIControlStateNormal];
     self.pausePlay.titleLabel.font = [UIFont boldSystemFontOfSize:iPad?18:15];
+    [self.pausePlay setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.pausePlay addTarget:kAppDelegate action:@selector(togglePlayPause) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.pausePlay];
-    
-    self.stopButton = [[[CustomButton alloc]initWithFrame:iPad?CGRectMake(323, 589, 142, 51):CGRectMake(124, sanitizeMesurement(332), 72, 37)]autorelease];
-    self.stopButton.titleLabel.font = [UIFont boldSystemFontOfSize:iPad?18:15];
-    [self.stopButton setTitle:@"Stop" forState:UIControlStateNormal];
-    [self.stopButton addTarget:self action:@selector(stopAudio) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.stopButton];
     
     self.infoField = [[[UITextView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, sanitizeMesurement(73))]autorelease];
     self.infoField.textAlignment = UITextAlignmentCenter;
