@@ -13,6 +13,7 @@
 @synthesize prevTrack, nxtTrack, secondsRemaining, stopButton, errorLabel, control, pausePlay, time, secondsDisplay, infoField, popupQuery, isGoing, notInPlayerView;
 
 - (void)loadView {
+    [super loadView];
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     
     self.navBar = [[[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];

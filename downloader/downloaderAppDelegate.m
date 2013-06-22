@@ -598,11 +598,8 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     self.window = [[[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]]autorelease];
     self.viewController = [MyFilesViewController viewController];
     _window.rootViewController = self.viewController;
+    _window.backgroundColor = [UIColor colorWithRed:240.0f/255.0f green:248.0f/255.0f blue:1.0f alpha:1.0f];
     [_window makeKeyAndVisible];
-    
-    UIImageView *background = [StyleFactory backgroundImageView];
-    [_window addSubview:background];
-    [_window sendSubviewToBack:background];
 
     UIImage *bbiImage = [[UIImage imageNamed:@"toolbar_icon"]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 4, 0, 4)];    
     [[UIBarButtonItem appearance]setBackgroundImage:bbiImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];

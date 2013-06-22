@@ -19,6 +19,7 @@
 		F10CBC5A1707D6E700C82AFB /* DroppinBadassBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */; };
 		F10CBC5D17080C6600C82AFB /* DropboxBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */; };
 		F1122A76142E4E8B00A04CC6 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */; };
+		F1178B6F1775245400337813 /* TransparentAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = F1178B6E1775245400337813 /* TransparentAlert.m */; };
 		F118C74517713DAA00ED7384 /* ContentOffsetWatchdog.m in Sources */ = {isa = PBXBuildFile; fileRef = F118C74417713DAA00ED7384 /* ContentOffsetWatchdog.m */; };
 		F118C7481771425F00ED7384 /* PullToRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = F118C7471771425F00ED7384 /* PullToRefreshView.m */; };
 		F119697616E3D0FC001139F1 /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = F119697516E3D0FB001139F1 /* CustomTextField.m */; };
@@ -186,6 +187,8 @@
 		F10CBC5B17080C6600C82AFB /* DropboxBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxBrowserViewController.h; sourceTree = "<group>"; };
 		F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxBrowserViewController.m; sourceTree = "<group>"; };
 		F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		F1178B6D1775245400337813 /* TransparentAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransparentAlert.h; sourceTree = "<group>"; };
+		F1178B6E1775245400337813 /* TransparentAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransparentAlert.m; sourceTree = "<group>"; };
 		F118C74317713DAA00ED7384 /* ContentOffsetWatchdog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentOffsetWatchdog.h; sourceTree = "<group>"; };
 		F118C74417713DAA00ED7384 /* ContentOffsetWatchdog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentOffsetWatchdog.m; sourceTree = "<group>"; };
 		F118C7461771425F00ED7384 /* PullToRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullToRefreshView.h; sourceTree = "<group>"; };
@@ -766,6 +769,7 @@
 		F1693C5F16DFAC59006E3739 /* Subclasses */ = {
 			isa = PBXGroup;
 			children = (
+				F1C86EEB1775024100136624 /* DopeController */,
 				F1E9F7841773FDF300EC345C /* DisclosureButton.h */,
 				F1E9F7851773FDF300EC345C /* DisclosureButton.m */,
 				F144783F1770B25900C5204A /* WhiteProgressView.h */,
@@ -845,6 +849,15 @@
 				F144783D177092B800C5204A /* DownloadingCell.m */,
 			);
 			name = "Download Controller";
+			sourceTree = "<group>";
+		};
+		F1C86EEB1775024100136624 /* DopeController */ = {
+			isa = PBXGroup;
+			children = (
+				F1178B6D1775245400337813 /* TransparentAlert.h */,
+				F1178B6E1775245400337813 /* TransparentAlert.m */,
+			);
+			name = DopeController;
 			sourceTree = "<group>";
 		};
 		F1DA5247176E8181009A43CD /* Libraries */ = {
@@ -1081,6 +1094,7 @@
 				F1E9F78D177402B600EC345C /* StyleFactory.m in Sources */,
 				F1798EAF1774177400310C37 /* ShadowedNavBar.m in Sources */,
 				F1798EB2177417CF00310C37 /* ShadowedToolbar.m in Sources */,
+				F1178B6F1775245400337813 /* TransparentAlert.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1111,9 +1125,11 @@
 				INFOPLIST_FILE = "/Users/nathaniel/Documents/Code/SwiftLoad/downloader/SupportingFiles/SwiftLoad-Info.plist";
 				INFOPLIST_PREFIX_HEADER = "/Users/nathaniel/Documents/Code/SwiftLoad/downloader/SupportingFiles/SwiftLoad-Prefix.pch";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_LDFLAGS = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "AED9C462-0F79-46ED-9182-106437775B8F";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = armv7;
 			};
 			name = Debug;
@@ -1136,9 +1152,11 @@
 				INFOPLIST_PREFIX_HEADER = "/Users/nathaniel/Documents/Code/SwiftLoad/downloader/SupportingFiles/SwiftLoad-Prefix.pch";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				OTHER_LDFLAGS = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0786489C-1F43-4466-BC04-669FD8CE2E6C";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = armv7;
 			};
@@ -1169,6 +1187,7 @@
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "AED9C462-0F79-46ED-9182-106437775B8F";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = armv7;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1199,6 +1218,7 @@
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0786489C-1F43-4466-BC04-669FD8CE2E6C";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = armv7;
 				WRAPPER_EXTENSION = app;
 			};
