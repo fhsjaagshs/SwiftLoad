@@ -26,6 +26,8 @@
     if (self) {
         [self addTarget:self action:@selector(touchDown) forControlEvents:UIControlEventTouchDown];
         [self addTarget:self action:@selector(touchUp) forControlEvents:UIControlEventTouchUpInside];
+        [self addTarget:self action:@selector(touchesMovedOutside) forControlEvents:UIControlEventTouchDragOutside];
+        [self addTarget:self action:@selector(touchesCameBackIn) forControlEvents:UIControlEventTouchDragInside];
     }
     return self;
 }
@@ -35,8 +37,20 @@
     if (self) {
         [self addTarget:self action:@selector(touchDown) forControlEvents:UIControlEventTouchDown];
         [self addTarget:self action:@selector(touchUp) forControlEvents:UIControlEventTouchUpInside];
+        [self addTarget:self action:@selector(touchesMovedOutside) forControlEvents:UIControlEventTouchDragOutside];
+        [self addTarget:self action:@selector(touchesCameBackIn) forControlEvents:UIControlEventTouchDragInside];
     }
     return self;
+}
+
+- (void)touchesCameBackIn {
+    self.isCurrentlyPressed = YES;
+    [self setNeedsDisplay];
+}
+
+- (void)touchesMovedOutside {
+    self.isCurrentlyPressed = NO;
+    [self setNeedsDisplay];
 }
 
 - (void)touchUp {
