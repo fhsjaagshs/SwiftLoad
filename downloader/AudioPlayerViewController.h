@@ -19,7 +19,7 @@
 @property (nonatomic, retain) UILabel *secondsDisplay;
 @property (nonatomic, retain) UILabel *errorLabel;
 @property (nonatomic, retain) UILabel *secondsRemaining;
-@property (nonatomic, retain) CustomSegmentedControl *control;
+// @property (nonatomic, retain) CustomSegmentedControl *control;
 
 @property (nonatomic, retain) UIButton *pausePlay;
 @property (nonatomic, retain) UIButton *stopButton;
@@ -29,11 +29,14 @@
 @property (nonatomic, retain) CustomSlider *time;
 @property (nonatomic, retain) ShadowedNavBar *navBar;
 
+@property (nonatomic, retain) ToggleControl *loopControl;
+
 @property (nonatomic, retain) UIActionSheet *popupQuery;
 
 @property (nonatomic, assign) BOOL shouldStopCounter;
 @property (nonatomic, assign) BOOL notInPlayerView;
 @property (nonatomic, assign) BOOL isGoing;
+@property (nonatomic, assign) BOOL isLooped;
 
 + (void)notif_setPausePlayTitlePlay;
 + (void)notif_setPausePlayTitlePause;
@@ -43,7 +46,6 @@
 + (void)notif_setPrevTrackHidden:(BOOL)flag;
 + (void)notif_setInfoFieldText:(NSString *)string;
 + (void)notif_setSongTitleText:(NSString *)string;
-//+ (void)notif_setShouldStopPlayingAudio:(BOOL)flag;
 + (void)notif_setShouldUpdateTime:(BOOL)flag;
 
 @end

@@ -10,8 +10,6 @@
 
 @implementation AudioPlayerViewController
 
-@synthesize prevTrack, nxtTrack, secondsRemaining, stopButton, errorLabel, control, pausePlay, time, secondsDisplay, infoField, popupQuery, isGoing, notInPlayerView;
-
 - (void)loadView {
     [super loadView];
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
@@ -31,20 +29,24 @@
     [self.time addTarget:self action:@selector(sliderChanged) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.time];
     
-    self.prevTrack = [[[UIButton alloc]initWithFrame:iPad?CGRectMake(20, 533, 142, 51):CGRectMake(20, sanitizeMesurement(299), 72, 37)]autorelease];
+    self.prevTrack = [[[UIButton alloc]initWithFrame:iPad?CGRectMake(20, 533, 142, 51):CGRectMake(20, sanitizeMesurement(270), 72, 45)]autorelease];
+    self.prevTrack.backgroundColor = [UIColor clearColor];
     [self.prevTrack setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
+    [self.prevTrack setImage:[UIImage imageNamed:@"back_button_pressed"] forState:UIControlStateHighlighted];
     [self.prevTrack addTarget:kAppDelegate action:@selector(skipToPreviousTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.prevTrack];
     
-    self.nxtTrack = [[[UIButton alloc]initWithFrame:iPad?CGRectMake(599, 533, 142, 51):CGRectMake(228, sanitizeMesurement(299), 72, 37)]autorelease];
+    self.nxtTrack = [[[UIButton alloc]initWithFrame:iPad?CGRectMake(599, 533, 142, 51):CGRectMake(228, sanitizeMesurement(270), 72, 45)]autorelease];
+    self.nxtTrack.backgroundColor = [UIColor clearColor];
     [self.nxtTrack setImage:[UIImage imageNamed:@"next_button"] forState:UIControlStateNormal];
+    [self.nxtTrack setImage:[UIImage imageNamed:@"next_button_pressed"] forState:UIControlStateHighlighted];
     [self.nxtTrack addTarget:kAppDelegate action:@selector(skipToNextTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.nxtTrack];
     
-    self.pausePlay = [[[UIButton alloc]initWithFrame:iPad?CGRectMake(323, 533, 142, 51):CGRectMake(124, sanitizeMesurement(299), 72, 37)]autorelease];
+    self.pausePlay = [[[UIButton alloc]initWithFrame:iPad?CGRectMake(323, 533, 142, 51):CGRectMake(124, sanitizeMesurement(270), 72, 45)]autorelease];
+    self.pausePlay.backgroundColor = [UIColor clearColor];
     [self.pausePlay setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
-    self.pausePlay.titleLabel.font = [UIFont boldSystemFontOfSize:iPad?18:15];
-    [self.pausePlay setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.pausePlay setImage:[UIImage imageNamed:@"pause_selected"] forState:UIControlStateHighlighted];
     [self.pausePlay addTarget:kAppDelegate action:@selector(togglePlayPause) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.pausePlay];
     
@@ -56,11 +58,16 @@
     self.infoField.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.infoField];
     
-    self.control = [[[CustomSegmentedControl alloc]initWithFrame:iPad?CGRectMake(275, 163, 219, 44):CGRectMake(51, sanitizeMesurement(117), 219, 44)]autorelease];
-    [self.control insertSegmentWithTitle:@"Loop" atIndex:0 animated:YES];
-    [self.control insertSegmentWithTitle:@"Don't Loop" atIndex:1 animated:YES];
-    [self.control addTarget:self action:@selector(setLoops) forControlEvents:UIControlEventValueChanged];
-    [self.view addSubview:self.control];
+    self.loopControl = [[[ToggleControl alloc]initWithFrame:CGRectMake(self.view.bounds.size.width-50, self.view.bounds.size.height-50-44, 40, 40)]autorelease];
+    [_loopControl addTarget:self action:@selector(refreshLoops) forControlEvents:UIControlEventTouchUpInside];
+    self.loopControl.backgroundColor = [UIColor clearColor];
+    [_loopControl setImage:[UIImage imageNamed:@"loop_on"] forState:ToggleControlModeOn];
+    [_loopControl setImage:[UIImage imageNamed:@"loop_off"] forState:ToggleControlModeOff];
+    [_loopControl setImage:[UIImage imageNamed:@"loop_pressed"] forState:ToggleControlModeIntermediate];
+    [self.view addSubview:_loopControl];
+
+    NSString *loopContents = [NSString stringWithContentsOfFile:[kLibDir stringByAppendingPathComponent:@"loop.txt"] encoding:NSUTF8StringEncoding error:nil];
+    [self setLoopOn:[loopContents isEqualToString:@"loop"]];
     
     self.secondsRemaining = [[[UILabel alloc]initWithFrame:iPad?CGRectMake(315, 220, 139, 35):CGRectMake(51, sanitizeMesurement(187), 112, 21)]autorelease];
     self.secondsRemaining.text = @"Time Elapsed:";
@@ -154,11 +161,6 @@
     
     [ad showArtworkForFile:file];
     
-    NSString *savedLoop = [kLibDir stringByAppendingPathComponent:@"loop.txt"];
-    NSString *loopContents = [NSString stringWithContentsOfFile:savedLoop encoding:NSUTF8StringEncoding error:nil];
-    self.control.selectedSegmentIndex = [loopContents isEqualToString:@"loop"]?0:1;
-    ad.audioPlayer.numberOfLoops = [loopContents isEqualToString:@"loop"]?-1:0;
-    
     [self hideControls:(playingError != nil)];
     
     [ad.audioPlayer play];
@@ -167,6 +169,18 @@
     if (!playingError) {
         [self startUpdatingTime];
     }
+}
+
+- (void)refreshLoops {
+    self.isLooped = (_loopControl.currentMode == ToggleControlModeOn);
+    [[kAppDelegate audioPlayer]setNumberOfLoops:self.isLooped?-1:0];
+    [self.isLooped?@"loop":@"dloop" writeToFile:[kLibDir stringByAppendingPathComponent:@"loop.txt"] atomically:YES encoding:NSUTF8StringEncoding error:nil];
+}
+
+- (void)setLoopOn:(BOOL)on {
+    [kAppDelegate audioPlayer].numberOfLoops = on?-1:0;
+    self.isLooped = on;
+    [_loopControl setCurrentMode:on?ToggleControlModeOn:ToggleControlModeOff];
 }
 
 - (void)startConverting {
@@ -230,16 +244,15 @@
     [self.pausePlay setHidden:hide];
     [self.secondsRemaining setHidden:hide];
     [self.secondsDisplay setHidden:hide];
-    [self.control setHidden:hide];
+    [self.loopControl setHidden:hide];
     [self.stopButton setHidden:hide];
     [self.infoField setHidden:hide];
     [self.errorLabel setHidden:!hide];
 }
 
 - (void)setLoops {
-    [[kAppDelegate audioPlayer]setNumberOfLoops:(self.control.selectedSegmentIndex == 0)?-1:0];
-    NSString *savedLoop = [kLibDir stringByAppendingPathComponent:@"loop.txt"];
-    [(self.control.selectedSegmentIndex == 0)?@"loop":@"dontLoop" writeToFile:savedLoop atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    [[kAppDelegate audioPlayer]setNumberOfLoops:self.isLooped?-1:0];
+    [self.isLooped?@"loop":@"dloop" writeToFile:[kLibDir stringByAppendingPathComponent:@"loop.txt"] atomically:YES encoding:NSUTF8StringEncoding error:nil];
 }
 
 - (void)close {
@@ -295,6 +308,7 @@
 
 - (void)updateTime {
     [self.pausePlay setImage:[UIImage imageNamed:[[kAppDelegate audioPlayer]isPlaying]?@"pause":@"play"] forState:UIControlStateNormal];
+    [self.pausePlay setImage:[UIImage imageNamed:[[kAppDelegate audioPlayer]isPlaying]?@"pause_pressed":@"play_pressed"] forState:UIControlStateHighlighted];
     self.time.value = [[kAppDelegate audioPlayer]currentTime]/[[kAppDelegate audioPlayer]duration];
     [self.secondsDisplay setText:[self theTimeDisplay]];
 }
@@ -342,9 +356,11 @@
     if ([[kAppDelegate audioPlayer]isPlaying]) {
         [[kAppDelegate audioPlayer]pause];
         [self.pausePlay setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+        [self.pausePlay setImage:[UIImage imageNamed:@"play_pressed"] forState:UIControlStateHighlighted];
     } else {
         [[kAppDelegate audioPlayer]play];
         [self.pausePlay setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
+        [self.pausePlay setImage:[UIImage imageNamed:@"pause_pressed"] forState:UIControlStateHighlighted];
         [kAppDelegate setNowPlayingFile:[kAppDelegate openFile]];
     }
 }
@@ -355,20 +371,17 @@
 
 - (void)setPausePlayTitlePlay {
     [self.pausePlay setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+    [self.pausePlay setImage:[UIImage imageNamed:@"play_pressed"] forState:UIControlStateHighlighted];
 }
 
 - (void)setPausePlayTitlePause {
     [self.pausePlay setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
+    [self.pausePlay setImage:[UIImage imageNamed:@"pause_pressed"] forState:UIControlStateHighlighted];
 }
 
 - (void)setLoopNotif {
     NSString *loopContents = [NSString stringWithContentsOfFile:[kLibDir stringByAppendingPathComponent:@"loop.txt"] encoding:NSUTF8StringEncoding error:nil];
-    
-    if ([loopContents isEqualToString:@"loop"]) {
-        [self.control setSelectedSegmentIndex:0];
-    } else {
-        [self.control setSelectedSegmentIndex:1];
-    }
+    [self setLoopOn:[loopContents isEqualToString:@"loop"]];
 }
 
 - (void)hideControlsString:(NSNotification *)notif {
@@ -476,7 +489,8 @@
     [self setSecondsRemaining:nil];
     [self setStopButton:nil];
     [self setErrorLabel:nil];
-    [self setControl:nil];
+    // [self setControl:nil];
+    [self setLoopControl:nil];
     [self setPausePlay:nil];
     [self setTime:nil];
     [self setSecondsDisplay:nil];

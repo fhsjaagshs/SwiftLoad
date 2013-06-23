@@ -33,6 +33,8 @@
     #import "MFMailComposeViewController+BlockExtensions.h"
     #import "NSString+mods.h"
 
+    #import "ToggleControl.h"
+
     #import "ShadowedNavBar.h"
     #import "ShadowedToolBar.h"
 
