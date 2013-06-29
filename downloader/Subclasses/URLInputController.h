@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface URLInputController : CustomAlertView
+@interface URLInputController : TransparentAlert
 
 - (id)initWithCompletionBlock:(void (^)(NSString *url))block;
 

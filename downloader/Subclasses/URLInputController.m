@@ -12,7 +12,7 @@
 @implementation URLInputController
 
 - (id)initWithCompletionBlock:(void (^)(NSString *fileName))block {
-    self = [super initWithTitle:@"Create File or Directory" message:@"\n\n\n\n" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Download",nil];
+    self = [super initWithTitle:@"Enter URL to Download" message:@"\n\n\n\n" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Download",nil];
     if (self) {
         objc_setAssociatedObject(self, "blockCallback", block, OBJC_ASSOCIATION_COPY_NONATOMIC);
         

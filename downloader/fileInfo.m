@@ -106,7 +106,7 @@
     NSString *newName = [[file stringByDeletingLastPathComponent]stringByAppendingPathComponent:self.fileName.text];
 
     if ([[NSFileManager defaultManager]fileExistsAtPath:newName]) {
-        CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Already Exists" message:@"A file already exists with the new name. Please try a different one." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        TransparentAlert *av = [[TransparentAlert alloc]initWithTitle:@"Already Exists" message:@"A file already exists with the new name. Please try a different one." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [av show];
         [av release];
         [self.fileName becomeFirstResponder];
@@ -126,7 +126,7 @@
             }
         } else {
             NSString *message = [NSString stringWithFormat:@"You do not have the UNIX permissions to rename this file. Try chmod 777 %@ in Terminal on your Mac or Linux machine.", [[kAppDelegate openFile]lastPathComponent]];
-            CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Access Denied" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            TransparentAlert *av = [[TransparentAlert alloc]initWithTitle:@"Access Denied" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [av show];
             [av release];
             [self.fileName setText:[[kAppDelegate openFile]lastPathComponent]];

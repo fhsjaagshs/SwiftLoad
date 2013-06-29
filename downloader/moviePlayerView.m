@@ -143,7 +143,7 @@
                 [self addToTheRoll];
             } else {
                 NSString *message = [NSString stringWithFormat:@"Sorry, the file \"%@\" cannot be added to the camera roll because it is not in MPEG-4 format.",fileName];
-                CustomAlertView *av = [[CustomAlertView alloc] initWithTitle:@"Failure Eporting Video" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                TransparentAlert *av = [[TransparentAlert alloc] initWithTitle:@"Failure Eporting Video" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                 [av show];
                 [av release];
             }

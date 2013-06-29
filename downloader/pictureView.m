@@ -177,7 +177,7 @@
                 [self addToTheRoll];
             } else {
                 NSString *message = [[NSString alloc]initWithFormat:@"Sorry, the file \"%@\" is not an image or is corrupt.",fileName];
-                CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Failure Importing Image" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                TransparentAlert *av = [[TransparentAlert alloc]initWithTitle:@"Failure Importing Image" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                 [av show];
                 [av release];
                 [message release];

@@ -43,14 +43,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (void)showArtworkForFile:(NSString *)file;
 - (void)showMetadataInLockscreenWithArtist:(NSString *)artist title:(NSString *)title album:(NSString *)album;
 
-/*// Downloading
-@property (nonatomic, retain) NSMutableData *downloadedData;
-@property (nonatomic, assign) float expectedDownloadingFileSize;
-@property (nonatomic, retain) NSString *downloadingFileName;
-@property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
-@property (nonatomic, retain) NSURLConnection *connection;
-@property (nonatomic, assign) float downloadedBytes;*/
-
 // File tracking
 @property (nonatomic, retain) NSString *openFile;
 @property (nonatomic, retain) NSString *managerCurrentDir;
@@ -104,7 +96,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (void)showFinishedAlertForFilename:(NSString *)fileName;
 
 // Downloading
-//- (void)downloadURL:(NSURL *)url;
 - (void)downloadFromAppDelegate:(NSString *)stouPrelim;
 
 @end

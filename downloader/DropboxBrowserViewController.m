@@ -292,7 +292,7 @@
                     if (error) {
                         [kAppDelegate showFailedAlertForFilename:path.lastPathComponent];
                     } else {
-                        CustomAlertView *avdd = [[CustomAlertView alloc]initWithTitle:[NSString stringWithFormat:@"Link For:\n%@",[path lastPathComponent]] message:link completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
+                        TransparentAlert *avdd = [[TransparentAlert alloc]initWithTitle:[NSString stringWithFormat:@"Link For:\n%@",[path lastPathComponent]] message:link completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
                             if (buttonIndex == 1) {
                                 [[UIPasteboard generalPasteboard]setString:alertView.message];
                             }

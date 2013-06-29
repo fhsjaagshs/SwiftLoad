@@ -275,7 +275,7 @@
 }
 
 - (void)listFailed:(SCRFTPRequest *)request {
-    CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"FTP Error" message:request.error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    TransparentAlert *av = [[TransparentAlert alloc]initWithTitle:@"FTP Error" message:request.error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [av show];
     [av release];
     

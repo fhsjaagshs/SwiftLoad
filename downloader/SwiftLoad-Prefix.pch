@@ -33,6 +33,7 @@
     #import "MFMailComposeViewController+BlockExtensions.h"
     #import "NSString+mods.h"
 
+#import "TransparentAlert.h"
     #import "ToggleControl.h"
 
     #import "ShadowedNavBar.h"

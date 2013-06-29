@@ -816,7 +816,8 @@
 		F1693C5F16DFAC59006E3739 /* Subclasses */ = {
 			isa = PBXGroup;
 			children = (
-				F1C86EEB1775024100136624 /* DopeController */,
+				F1178B6D1775245400337813 /* TransparentAlert.h */,
+				F1178B6E1775245400337813 /* TransparentAlert.m */,
 				F1E9F7841773FDF300EC345C /* DisclosureButton.h */,
 				F1E9F7851773FDF300EC345C /* DisclosureButton.m */,
 				F144783F1770B25900C5204A /* WhiteProgressView.h */,
@@ -898,15 +899,6 @@
 				F144783D177092B800C5204A /* DownloadingCell.m */,
 			);
 			name = "Download Controller";
-			sourceTree = "<group>";
-		};
-		F1C86EEB1775024100136624 /* DopeController */ = {
-			isa = PBXGroup;
-			children = (
-				F1178B6D1775245400337813 /* TransparentAlert.h */,
-				F1178B6E1775245400337813 /* TransparentAlert.m */,
-			);
-			name = DopeController;
 			sourceTree = "<group>";
 		};
 		F1DA5247176E8181009A43CD /* Libraries */ = {

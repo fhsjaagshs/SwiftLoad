@@ -14,7 +14,7 @@ typedef enum {
     FTPLoginControllerTypeLogin
 } FTPLoginControllerType;
 
-@interface FTPLoginController : CustomAlertView
+@interface FTPLoginController : TransparentAlert
 
 - (void)setType:(FTPLoginControllerType)type;
 - (id)initWithCompletionHandler:(void (^)(NSString *username, NSString *password, NSString *url))block;

@@ -11,9 +11,9 @@
 
 @interface FTPLoginController () <UIAlertViewDelegate, UITextFieldDelegate>
 
-@property (nonatomic, retain) CustomTextField *serverField;
-@property (nonatomic, retain) CustomTextField *usernameField;
-@property (nonatomic, retain) CustomTextField *passwordField;
+@property (nonatomic, retain) UITextField *serverField;
+@property (nonatomic, retain) UITextField *usernameField;
+@property (nonatomic, retain) UITextField *passwordField;
 @property (nonatomic, assign) BOOL urlPredefined;
 
 @end
@@ -23,10 +23,10 @@
 @synthesize serverField, usernameField, passwordField, urlPredefined, textFieldDelegate;
 
 - (void)setupTextViews {
-    self.serverField = [[[CustomTextField alloc]init]autorelease];
+    self.serverField = [[[UITextField alloc]init]autorelease];
     [self.serverField setKeyboardAppearance:UIKeyboardAppearanceAlert];
     [self.serverField setBorderStyle:UITextBorderStyleBezel];
-    [self.serverField setBackgroundColor:[UIColor clearColor]];
+    [self.serverField setBackgroundColor:[UIColor whiteColor]];
     [self.serverField setReturnKeyType:UIReturnKeyNext];
     [self.serverField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     [self.serverField setAutocorrectionType:UITextAutocorrectionTypeNo];
@@ -37,7 +37,7 @@
     [self.serverField setClearButtonMode:UITextFieldViewModeWhileEditing];
     self.serverField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     
-    self.usernameField = [[[CustomTextField alloc]init]autorelease];
+    self.usernameField = [[[UITextField alloc]init]autorelease];
     [self.usernameField setKeyboardAppearance:UIKeyboardAppearanceAlert];
     [self.usernameField setBorderStyle:UITextBorderStyleBezel];
     [self.usernameField setBackgroundColor:[UIColor whiteColor]];
@@ -51,7 +51,7 @@
     self.usernameField.clearButtonMode = UITextFieldViewModeWhileEditing;
     self.usernameField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     
-    self.passwordField = [[[CustomTextField alloc]init]autorelease];
+    self.passwordField = [[[UITextField alloc]init]autorelease];
     [self.passwordField setKeyboardAppearance:UIKeyboardAppearanceAlert];
     [self.passwordField setBorderStyle:UITextBorderStyleBezel];
     [self.passwordField setBackgroundColor:[UIColor whiteColor]];
@@ -195,12 +195,6 @@
             } else {
                 view.frame = CGRectMake(view.frame.origin.x+2.5, view.frame.origin.y, view.frame.size.width-5, 37);
             }
-            
-            UIImage *buttonImage = [getUIButtonImageNonPressed(view.frame.size.height) resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
-            [(UIButton *)view setBackgroundImage:buttonImage forState:UIControlStateNormal];
-            
-            UIImage *buttonImagePressed = [getUIButtonImagePressed(view.frame.size.height) resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
-            [(UIButton *)view setBackgroundImage:buttonImagePressed forState:UIControlStateHighlighted];
         }
     }
 }

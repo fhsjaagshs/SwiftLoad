@@ -10,6 +10,7 @@
 #import "MyFilesViewController.h"
 #import "ButtonBarView.h"
 #import "CustomCellCell.h"
+#import "TransparentAlert.h"
 
 #define BOUNCE_PIXELS 5.0
 
@@ -1108,7 +1109,7 @@
         
         if (!opened) {
             NSString *message = [NSString stringWithFormat:@"No installed applications are capable of opening %@.",[file lastPathComponent]];
-            CustomAlertView *avc = [[CustomAlertView alloc]initWithTitle:@"No External Viewers" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            TransparentAlert *avc = [[TransparentAlert alloc]initWithTitle:@"No External Viewers" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [avc show];
             [avc release];
         }

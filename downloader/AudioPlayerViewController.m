@@ -214,7 +214,7 @@
             [ad hideHUD];
             
             if (error) {
-                CustomAlertView *av = [[CustomAlertView alloc]initWithTitle:@"Conversion Error" message:@"SwiftLoad could not convert the desired audio file." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                TransparentAlert *av = [[TransparentAlert alloc]initWithTitle:@"Conversion Error" message:@"SwiftLoad could not convert the desired audio file." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
                 [av show];
                 [av release];
             } else {

@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TransparentAlert : UIView
+@interface TransparentAlert : UIAlertView
 
 @end
