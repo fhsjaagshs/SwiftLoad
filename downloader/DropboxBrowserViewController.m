@@ -91,20 +91,28 @@
 }
 
 - (NSArray *)getContentsOfDirectory:(NSString *)string {
-    FMResultSet *s = [[[CentralFactory sharedFactory]database]executeQuery:@"SELECT * FROM myTable where lowercasepath=?",[string lowercaseString]];
+    FMResultSet *s = [[[CentralFactory sharedFactory]database]executeQuery:@"SELECT * FROM DropboxData where lowercasepath=?",[string lowercaseString]];
     [[[CentralFactory sharedFactory]database]close];
     while ([s next]) {
+        NSLog(@"%@",s);
         // Do Stuff
     }
     return nil;
 }
 
 - (void)removeItemWithLowercasePath:(NSString *)path {
-    
+    [[[CentralFactory sharedFactory]database]executeQuery:@"DELETE FROM DropboxData WHERE lowercasepath=?",[path lowercaseString]];
+    [[[CentralFactory sharedFactory]database]close];
 }
 
-- (void)addObjectToDatabase:(DBMetadata *)metadata {
+- (void)addObjectToDatabase:(DBMetadata *)item withLowercasePath:(NSString *)lowercasePath {
+    // DropboxData (id INTEGER PRIMARY KEY, lowercasepath TEXT, filename TEXT, date INTEGER, size INTEGER, type INTEGER)
     
+    NSString *filename = item.filename;
+    int type = item.isDirectory?2:1;
+    float date = item.lastModifiedDate.timeIntervalSince1970;
+    float size = item.totalBytes;
+    NSString *query = @"begin tran IF EXISTS (SELECT * FROM DropboxData WHERE lowercasepath=?) UPDATE DropboxData /*setup the data*/ WHERE lowercasepath=? ELSE INSERT INTO DropboxData VALUES (/*setup the data*/) commit";
 }
 
 - (void)pullToRefreshViewShouldRefresh:(PullToRefreshView *)view {

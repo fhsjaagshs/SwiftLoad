@@ -405,8 +405,8 @@
 		F1B2488E14E333E200C44E11 /* webDAVHelp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = webDAVHelp.m; sourceTree = "<group>"; };
 		F1BA8C7C17728500007AAF85 /* BGProcFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BGProcFactory.h; sourceTree = "<group>"; };
 		F1BA8C7D17728500007AAF85 /* BGProcFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BGProcFactory.m; sourceTree = "<group>"; };
-		F1BC30C817715DF300DAFA0A /* Hack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hack.h; sourceTree = "<group>"; };
-		F1BC30C917715DF300DAFA0A /* Hack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Hack.m; sourceTree = "<group>"; };
+		F1BC30C817715DF300DAFA0A /* Hack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Hack.h; path = ../Hack.h; sourceTree = "<group>"; };
+		F1BC30C917715DF300DAFA0A /* Hack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Hack.m; path = ../Hack.m; sourceTree = "<group>"; };
 		F1BE07DF176F793F00C4F038 /* Downloads.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Downloads.h; sourceTree = "<group>"; };
 		F1BE07E0176F793F00C4F038 /* Downloads.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Downloads.m; sourceTree = "<group>"; };
 		F1BE07E2176F7A1100C4F038 /* Download.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Download.h; sourceTree = "<group>"; };
@@ -500,8 +500,6 @@
 				F1693C4516DFABA6006E3739 /* Categories */,
 				F1693C5216DFAC0E006E3739 /* Utility Classes */,
 				F1693C5F16DFAC59006E3739 /* Subclasses */,
-				F1BC30C817715DF300DAFA0A /* Hack.h */,
-				F1BC30C917715DF300DAFA0A /* Hack.m */,
 				F1E9F78B177402B600EC345C /* StyleFactory.h */,
 				F1E9F78C177402B600EC345C /* StyleFactory.m */,
 				F150D6AB177F541700E4C094 /* CentralFactory.h */,
@@ -821,6 +819,8 @@
 		F1693C5F16DFAC59006E3739 /* Subclasses */ = {
 			isa = PBXGroup;
 			children = (
+				F1BC30C817715DF300DAFA0A /* Hack.h */,
+				F1BC30C917715DF300DAFA0A /* Hack.m */,
 				F1178B6D1775245400337813 /* TransparentAlert.h */,
 				F1178B6E1775245400337813 /* TransparentAlert.m */,
 				F1E9F7841773FDF300EC345C /* DisclosureButton.h */,
