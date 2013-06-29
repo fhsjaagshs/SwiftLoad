@@ -135,7 +135,7 @@
 }
 
 - (void)removeRevertButtonFromBar {
-    CustomToolbar *toolbar = (CustomToolbar *)self.fileName.inputAccessoryView;
+    UIToolbar *toolbar = (UIToolbar *)self.fileName.inputAccessoryView;
     
     NSMutableArray *newItems = [NSMutableArray arrayWithArray:toolbar.items];
     
@@ -147,7 +147,7 @@
 }
 
 - (void)addRevertButtonToBar {
-    CustomToolbar *toolbar = (CustomToolbar *)self.fileName.inputAccessoryView;
+    UIToolbar *toolbar = (UIToolbar *)self.fileName.inputAccessoryView;
     
     NSMutableArray *newItems = [NSMutableArray arrayWithArray:toolbar.items];
     

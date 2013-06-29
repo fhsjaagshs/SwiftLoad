@@ -117,12 +117,11 @@
 		self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.backgroundColor = [UIColor clearColor];
         
-        self.statusLabel = [[[UILabel alloc]initWithFrame:CGRectMake(0.0f, frame.size.height - 38.0f, self.frame.size.width, 20.0f)]autorelease];
+        self.statusLabel = [[[UILabel alloc]initWithFrame:CGRectMake(0.0f, frame.size.height-38.0f, self.frame.size.width, 20.0f)]autorelease];
 		self.statusLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.statusLabel.font = [UIFont boldSystemFontOfSize:(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)?18:13];
-		self.statusLabel.textColor = [UIColor whiteColor];
-		self.statusLabel.shadowColor = [UIColor darkGrayColor];
-		self.statusLabel.shadowOffset = CGSizeMake(-1, -1);
+		self.statusLabel.textColor = [UIColor blackColor];
+		self.statusLabel.shadowOffset = CGSizeZero;
 		self.statusLabel.backgroundColor = [UIColor clearColor];
 		self.statusLabel.textAlignment = UITextAlignmentCenter;
 		[self addSubview:self.statusLabel];

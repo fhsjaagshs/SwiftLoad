@@ -9,9 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "CustomButton.h"
 #import "Common.h"
-#import "CustomSegmentedControl.h"
-#import "BackAndForwardButton.h"
-#import "CustomNavBar.h"
 #import "CustomSlider.h"
 
 @interface AudioPlayerViewController : UIViewController

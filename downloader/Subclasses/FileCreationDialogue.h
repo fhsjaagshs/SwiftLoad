@@ -14,11 +14,11 @@ typedef enum {
     FileCreationDialogueFileTypeCancel
 } FileCreationDialogueFileType;
 
-@interface FileCreationDialogue : CustomAlertView
+@interface FileCreationDialogue : TransparentAlert
 
 - (id)initWithCompletionBlock:(void (^)(FileCreationDialogueFileType fileType, NSString *fileName))block;
 
-@property (nonatomic, retain) CustomTextField *tv;
+@property (nonatomic, retain) UITextField *tv;
 @property (nonatomic, retain) CustomButton *createFile;
 @property (nonatomic, retain) CustomButton *createDir;
 

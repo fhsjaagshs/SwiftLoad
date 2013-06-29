@@ -8,7 +8,6 @@
 
 
 #import "MyFilesViewController.h"
-#import "ButtonBarView.h"
 #import "CustomCellCell.h"
 #import "TransparentAlert.h"
 
@@ -1422,13 +1421,6 @@
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-    for (UIView *view in self.view.subviews) {
-        if ([view isKindOfClass:[ButtonBarView class]]) {
-            [view setNeedsDisplay];
-            break;
-        }
-    }
-
     [self removeSideSwipeView:NO];
     [self setupSideSwipeView];
 }

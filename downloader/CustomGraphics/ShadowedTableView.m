@@ -11,24 +11,8 @@
 
 #define SHADOW_HEIGHT 20.0
 #define SHADOW_INVERSE_HEIGHT 10.0
-#define SHADOW_RATIO (SHADOW_INVERSE_HEIGHT / SHADOW_HEIGHT)
 
 @implementation ShadowedTableView
-
-
-/*- (void)removeTopShadow {
-    if (self.topShadow.superlayer) {
-        [self.topShadow removeFromSuperlayer];
-    }
-    //[self setTopShadow:nil];
-}
-
-- (void)removeBottomShadow {
-    if (self.bottomShadow.superlayer) {
-        [self.bottomShadow removeFromSuperlayer];
-    }
-    //[self setBottomShadow:nil];
-}*/
 
 - (CAGradientLayer *)shadowAsInverse:(BOOL)inverse {
 	CAGradientLayer *newShadow = [[[CAGradientLayer alloc]init]autorelease];
@@ -42,60 +26,56 @@
 - (void)layoutSubviews {
 	[super layoutSubviews];
     
-    if (!self.topShadow) {
+    if (!_topShadow) {
         self.topShadow = [self shadowAsInverse:YES];
     }
     
-    if (!self.bottomShadow) {
+    if (!_bottomShadow) {
         self.bottomShadow = [self shadowAsInverse:NO];
     }
     
     NSArray *indexPathsForVisibleRows = [self indexPathsForVisibleRows];
     
     if (indexPathsForVisibleRows.count == 0) {
-        //[self removeBottomShadow];
-        // [self removeTopShadow];
-        [self.bottomShadow setHidden:YES];
-        [self.topShadow setHidden:YES];
+        [_bottomShadow setHidden:YES];
+        [_topShadow setHidden:YES];
 		return;
 	}
 	
 	NSIndexPath *firstRow = [indexPathsForVisibleRows objectAtIndex:0];
 	if (firstRow.section == 0 && firstRow.row == 0) {
 		UIView *cell = [self cellForRowAtIndexPath:firstRow];
-		if (!self.topShadow) {
+		if (!_topShadow) {
 			self.topShadow = [self shadowAsInverse:YES];
-			[cell.layer insertSublayer:self.topShadow atIndex:0];
-		} else if ([cell.layer.sublayers indexOfObjectIdenticalTo:self.topShadow] != 0) {
-			[cell.layer insertSublayer:self.topShadow atIndex:0];
+			[cell.layer insertSublayer:_topShadow atIndex:0];
+		} else if ([cell.layer.sublayers indexOfObjectIdenticalTo:_topShadow] != 0) {
+			[cell.layer insertSublayer:_topShadow atIndex:0];
 		}
-        [self.topShadow setHidden:NO];
-		CGRect shadowFrame = self.topShadow.frame;
+        [_topShadow setHidden:NO];
+		CGRect shadowFrame = _topShadow.frame;
 		shadowFrame.size.width = cell.frame.size.width;
 		shadowFrame.origin.y = -SHADOW_INVERSE_HEIGHT;
-		self.topShadow.frame = shadowFrame;
+		_topShadow.frame = shadowFrame;
 	} else {
-        //[self removeTopShadow];
-        [self.topShadow setHidden:YES];
+        [_topShadow setHidden:YES];
 	}
 
 	NSIndexPath *lastRow = [indexPathsForVisibleRows lastObject];
-	if ([lastRow section] == [self numberOfSections] - 1 && [lastRow row] == [self numberOfRowsInSection:[lastRow section]] - 1) {
+	if (lastRow.section == (self.numberOfSections-1) && lastRow.row == [self numberOfRowsInSection:lastRow.section]-1) {
 		UIView *cell = [self cellForRowAtIndexPath:lastRow];
-		if (!self.bottomShadow) {
+		if (!_bottomShadow) {
 			self.bottomShadow = [self shadowAsInverse:NO];
-			[cell.layer insertSublayer:self.bottomShadow atIndex:0];
-		} else if ([cell.layer.sublayers indexOfObjectIdenticalTo:self.bottomShadow] != 0) {
-            [cell.layer insertSublayer:self.bottomShadow atIndex:0];
+			[cell.layer insertSublayer:_bottomShadow atIndex:0];
+		} else if ([cell.layer.sublayers indexOfObjectIdenticalTo:_bottomShadow] != 0) {
+            [cell.layer insertSublayer:_bottomShadow atIndex:0];
 		}
-        [self.bottomShadow setHidden:NO];
-		CGRect shadowFrame = self.bottomShadow.frame;
+        [_bottomShadow setHidden:NO];
+		CGRect shadowFrame = _bottomShadow.frame;
 		shadowFrame.size.width = cell.frame.size.width;
 		shadowFrame.origin.y = cell.frame.size.height;
-		self.bottomShadow.frame = shadowFrame;
+		_bottomShadow.frame = shadowFrame;
 	} else {
-        //[self removeBottomShadow];
-        [self.bottomShadow setHidden:YES];
+        [_bottomShadow setHidden:YES];
 	}
 }
 

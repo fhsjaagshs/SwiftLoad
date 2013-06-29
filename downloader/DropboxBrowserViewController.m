@@ -7,7 +7,6 @@
 //
 
 #import "DropboxBrowserViewController.h"
-#import "ButtonBarView.h"
 #import "CustomCellCell.h"
 
 @interface DropboxBrowserViewController () <UITableViewDataSource, UITableViewDelegate, PullToRefreshViewDelegate>
@@ -91,6 +90,23 @@
     self.currentPathItems = [NSMutableArray array];
 }
 
+- (NSArray *)getContentsOfDirectory:(NSString *)string {
+    FMResultSet *s = [[[CentralFactory sharedFactory]database]executeQuery:@"SELECT * FROM myTable where lowercasepath=?",[string lowercaseString]];
+    [[[CentralFactory sharedFactory]database]close];
+    while ([s next]) {
+        // Do Stuff
+    }
+    return nil;
+}
+
+- (void)removeItemWithLowercasePath:(NSString *)path {
+    
+}
+
+- (void)addObjectToDatabase:(DBMetadata *)metadata {
+    
+}
+
 - (void)pullToRefreshViewShouldRefresh:(PullToRefreshView *)view {
     [self.pull setState:PullToRefreshViewStateLoading];
     [self loadCachesThenUpdateFileListing];
@@ -104,16 +120,17 @@
             [self loadCachesThenUpdateFileListing];
         }];
     } else {
-        NSString *fileCacheName = [NSString stringWithFormat:@"dbcache-%@.plist",_userID];
+        NSString *fileCacheName = [NSString stringWithFormat:@"dropboxcache-%@.plist",_userID];
         NSString *filePath = [kCachesDir stringByAppendingPathComponent:fileCacheName];
-        NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:filePath];
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithStream:[NSInputStream inputStreamWithFileAtPath:filePath] options:NSJSONReadingMutableContainers error:nil];
         
         NSString *cursor = [dict objectForKey:@"cursor"];
-        NSMutableDictionary *pathContentsTemp = [dict objectForKey:@"pathContents"];
         
         if (cursor.length > 0) {
             
             self.cursor = cursor;
+            
+            NSMutableDictionary *pathContentsTemp = [dict objectForKey:@"pathContents"];
             
             if (pathContentsTemp.allKeys.count > 0) {
                 self.pathContents = [NSMutableDictionary dictionaryWithDictionary:pathContentsTemp];
@@ -144,10 +161,11 @@
             [self cacheFiles];
         }];
     } else {
-        NSString *fileCacheName = [NSString stringWithFormat:@"dbcache-%@.plist",_userID];
+        NSString *fileCacheName = [NSString stringWithFormat:@"dropboxcache-%@.plist",_userID];
         NSString *filePath = [kCachesDir stringByAppendingPathComponent:fileCacheName];
         NSDictionary *dict = @{@"cursor": (_cursor.length == 0)?@"":_cursor, @"pathContents": _pathContents};
-        [dict writeToFile:filePath atomically:YES];
+        NSData *json = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONReadingMutableContainers error:nil];
+        [json writeToFile:filePath atomically:YES];
     }
 }
 
@@ -169,15 +187,18 @@
             self.cursor = cursor;
             
             for (DBDeltaEntry *entry in entries) {
-                if (entry.metadata == nil) {
+                DBMetadata *item = entry.metadata;
+                if (!item) {
                     [self.pathContents removeObjectForKey:entry.lowercasePath];
                 } else {
-                    DBMetadata *item = entry.metadata;
-                    
                     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
                     [dict setObject:item.isDirectory?NSFileTypeDirectory:NSFileTypeRegular forKey:NSFileType];
                     [dict setObject:item.filename forKey:NSFileName];
-                    [dict setObject:[NSNumber numberWithLongLong:item.totalBytes] forKey:NSFileSize];
+                    
+                    if (!item.isDirectory) {
+                        [dict setObject:[NSNumber numberWithLongLong:item.totalBytes] forKey:NSFileSize];
+                    }
+                    
                     [dict setObject:item.lastModifiedDate forKey:NSFileModificationDate];
                     [dict setObject:item.isDirectory?[item.path scr_stringByFixingForURL]:item.path forKey:NSFileDBPath];
                     [self.pathContents setObject:dict forKey:entry.lowercasePath];

@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CustomToolbar.h"
 #import "ZoomingImageView.h"
 
 @interface pictureView : UIViewController <UIGestureRecognizerDelegate>

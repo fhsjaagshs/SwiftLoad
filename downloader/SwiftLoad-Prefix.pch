@@ -17,15 +17,6 @@
     #import <AudioToolbox/AudioToolbox.h>
     #import <CommonCrypto/CommonCrypto.h>
 
-    #import "StyleFactory.h"
-    #import "BGProcFactory.h"
-    #import "WhiteProgressView.h"
-    #import "HUDProgressView.h"
-    #import "NetworkUtils.h"
-    #import "Download.h"
-    #import "Downloads.h"
-    #import "DownloadController.h"
-
     #import "UIViewController+AutoNib.h"
     #import "UIAlertView+BlockExtensions.h"
     #import "UIActionSheet+BlockExtensions.h"
@@ -33,7 +24,20 @@
     #import "MFMailComposeViewController+BlockExtensions.h"
     #import "NSString+mods.h"
 
-#import "TransparentAlert.h"
+    #import "FMDatabase.h"
+    #import "StyleFactory.h"
+    
+    #import "WhiteProgressView.h"
+    #import "HUDProgressView.h"
+    #import "NetworkUtils.h"
+    #import "Download.h"
+    #import "Downloads.h"
+    #import "DownloadController.h"
+
+    #import "CentralFactory.h"
+    #import "BGProcFactory.h"
+
+    #import "TransparentAlert.h"
     #import "ToggleControl.h"
 
     #import "ShadowedNavBar.h"
@@ -64,7 +68,6 @@
 
     #import "DisclosureButton.h"
     #import "ShadowedTableView.h"
-    #import "CustomTextField.h"
 
     #import "ZipFile.h"
     #import "ZipException.h"

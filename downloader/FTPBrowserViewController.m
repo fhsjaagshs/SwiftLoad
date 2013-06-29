@@ -7,7 +7,6 @@
 //
 
 #import "FTPBrowserViewController.h"
-#import "ButtonBarView.h"
 #import "CustomCellCell.h"
 
 @interface FTPBrowserViewController ()

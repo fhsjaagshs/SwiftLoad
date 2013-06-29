@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CustomAlertView.h"
 
 @interface MyFilesViewDetailViewController : UIViewController <UIWebViewDelegate>
 

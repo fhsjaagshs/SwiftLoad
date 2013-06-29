@@ -35,10 +35,10 @@
         [self.createDir setBackgroundColor:[UIColor clearColor]];
         self.createDir.titleLabel.shadowOffset = CGSizeMake(0, -1);
         
-        self.tv = [[[CustomTextField alloc]initWithFrame:CGRectMake(43, 48, 200, 31)]autorelease];
+        self.tv = [[[UITextField alloc]initWithFrame:CGRectMake(43, 48, 200, 31)]autorelease];
         self.tv.keyboardAppearance = UIKeyboardAppearanceAlert;
         self.tv.borderStyle = UITextBorderStyleBezel;
-        self.tv.backgroundColor = [UIColor clearColor];
+        self.tv.backgroundColor = [UIColor whiteColor];
         self.tv.returnKeyType = UIReturnKeyDone;
         self.tv.autocapitalizationType = UITextAutocapitalizationTypeNone;
         self.tv.autocorrectionType = UITextAutocorrectionTypeNo;
