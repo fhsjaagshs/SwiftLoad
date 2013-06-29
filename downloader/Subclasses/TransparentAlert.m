@@ -16,7 +16,7 @@
     UIGraphicsPushContext(context);
     
     UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 5, 37) cornerRadius:0];
-    [[UIColor colorWithWhite:0.0 alpha:0.7]setFill];
+    [[UIColor colorWithWhite:0.0 alpha:0.8]setFill];
     
     CGContextAddPath(context, path.CGPath);
     CGContextFillPath(context);
@@ -33,7 +33,7 @@
     UIGraphicsPushContext(context);
     
     UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 5, 37) cornerRadius:0];
-    [[UIColor colorWithWhite:1.0 alpha:0.7]setFill];
+    [[UIColor colorWithWhite:1.0 alpha:0.8]setFill];
     
     CGContextAddPath(context, path.CGPath);
     CGContextFillPath(context);
@@ -45,9 +45,9 @@
 }
 
 - (void)layoutSubviews {
-    self.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.7];
+    self.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.85];
     
-    self.layer.borderColor = [UIColor colorWithWhite:0.2 alpha:0.7].CGColor;
+    self.layer.borderColor = [UIColor colorWithWhite:0.2 alpha:0.85].CGColor;
     self.layer.borderWidth = 5;
     self.layer.cornerRadius = 5;
     
@@ -70,7 +70,7 @@
             UIImage *buttonImage = [[self drawButtonImage]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
             [(UIButton *)subview setBackgroundImage:buttonImage forState:UIControlStateNormal];
             
-            UIImage *buttonImagePressed = [[self drawButtonImage]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
+            UIImage *buttonImagePressed = [[self drawButtonImagePressed]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
             [(UIButton *)subview setBackgroundImage:buttonImagePressed forState:UIControlStateHighlighted];
         }
         

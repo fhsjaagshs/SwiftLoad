@@ -10,13 +10,11 @@
 
 @implementation SettingsView
 
-@synthesize linkButton;
-
 - (void)loadView {
     [super loadView];
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     
-    self.view = [StyleFactory backgroundImageView]; // [[[HatchedView alloc]initWithFrame:screenBounds]autorelease];
+    self.view = [StyleFactory backgroundImageView];
     
     UINavigationBar *bar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -28,23 +26,33 @@
     [bar release];
     [topItem release];
     
-    CGRect linkButtonFrame = CGRectMake(92, sanitizeMesurement(189), 136, 37);
-    CGRect bmbFrame = CGRectMake(78, sanitizeMesurement(265), 164, 37);
+    CGRect linkButtonFrame = CGRectMake(100, sanitizeMesurement(189), 120, 37);
+    CGRect bmbFrame = CGRectMake(75, sanitizeMesurement(265), 170, 37);
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         linkButtonFrame = CGRectMake(313, 396, 143, 37);
         bmbFrame = CGRectMake(302, 483, 164, 37);
     }
     
-    self.linkButton = [[[CustomButton alloc]initWithFrame:linkButtonFrame]autorelease];
+    UIImage *buttonImage = [[UIImage imageNamed:@"button_icon"]resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4)];
+    
+    self.linkButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _linkButton.frame = linkButtonFrame;
+    _linkButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
+    [_linkButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [_linkButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
     self.linkButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     [self.linkButton addTarget:self action:@selector(linkOrUnlink) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.linkButton];
     [self.view bringSubviewToFront:self.linkButton];
     
-    CustomButton *bookmarkletButton = [[CustomButton alloc]initWithFrame:bmbFrame];
+    UIButton *bookmarkletButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    bookmarkletButton.frame = bmbFrame;
+    bookmarkletButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
+    [bookmarkletButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [bookmarkletButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
     bookmarkletButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-    [bookmarkletButton addTarget:self action:@selector(linkOrUnlink) forControlEvents:UIControlEventTouchUpInside];
+    [bookmarkletButton addTarget:self action:@selector(showBookmarkletInstallationAV) forControlEvents:UIControlEventTouchUpInside];
     [bookmarkletButton setTitle:@"Install Bookmarklet" forState:UIControlStateNormal];
     [self.view addSubview:bookmarkletButton];
     [self.view bringSubviewToFront:bookmarkletButton];
@@ -80,7 +88,7 @@
 - (void)linkOrUnlink {
     if ([[DBSession sharedSession]isLinked]) {
         [[DBSession sharedSession]unlinkUserId:[[[DBSession sharedSession]userIds]objectAtIndex:0]];
-        [linkButton setTitle:@"Link Dropbox" forState:UIControlStateNormal];
+        [_linkButton setTitle:@"Link Dropbox" forState:UIControlStateNormal];
     } else {
         [[DBSession sharedSession]linkFromController:self];
     }
