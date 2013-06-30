@@ -236,8 +236,8 @@ static NSString *CellIdentifier = @"dbcell";
 - (void)updateFileListing {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     [DroppinBadassBlocks loadDelta:_cursor withCompletionHandler:^(NSArray *entries, NSString *cursor, BOOL hasMore, BOOL shouldReset, NSError *error) {
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         if (error) {
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
             self.shouldMassInsert = NO;
         } else {
             if (shouldReset) {
