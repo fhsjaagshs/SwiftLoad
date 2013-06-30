@@ -10,4 +10,6 @@
 
 @interface DropboxBrowserViewController : UIViewController 
 
++ (void)clearDatabase;
+
 @end

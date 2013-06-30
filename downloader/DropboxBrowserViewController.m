@@ -114,6 +114,13 @@ static NSString *CellIdentifier = @"dbcell";
     [_database close];
 }
 
++ (void)clearDatabase {
+    FMDatabase *database = [FMDatabase databaseWithPath:[[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:@"database.db"]];
+    [database open];
+    [database executeUpdate:@"DELETE * FROM dropbox_data"];
+    [database close];
+}
+
 - (void)batchInsert:(NSArray *)metadatas {
     
     [_database open];
@@ -210,7 +217,8 @@ static NSString *CellIdentifier = @"dbcell";
         }];
     } else {
         NSString *filePath = [kCachesDir stringByAppendingPathComponent:@"cursors.json"];
-        NSDictionary *dict = [[NSFileManager defaultManager]fileExistsAtPath:filePath]?[NSJSONSerialization JSONObjectWithStream:[NSInputStream inputStreamWithFileAtPath:filePath] options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
+        NSData *json = [NSData dataWithContentsOfFile:filePath];
+        NSMutableDictionary *dict = [[NSFileManager defaultManager]fileExistsAtPath:filePath]?[NSJSONSerialization JSONObjectWithData:json options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
         self.cursor = [dict objectForKey:_userID];
         [self updateFileListing];
     }
@@ -218,7 +226,8 @@ static NSString *CellIdentifier = @"dbcell";
 
 - (void)saveCursor {
     NSString *filePath = [kCachesDir stringByAppendingPathComponent:@"cursors.json"];
-    NSMutableDictionary *dict = [[NSFileManager defaultManager]fileExistsAtPath:filePath]?[NSJSONSerialization JSONObjectWithStream:[NSInputStream inputStreamWithFileAtPath:filePath] options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
+    NSData *jsonread = [NSData dataWithContentsOfFile:filePath];
+    NSMutableDictionary *dict = [[NSFileManager defaultManager]fileExistsAtPath:filePath]?[NSJSONSerialization JSONObjectWithData:jsonread options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
     [dict setObject:_cursor forKey:_userID];
     NSData *json = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONReadingMutableContainers error:nil];
     [json writeToFile:filePath atomically:YES];
@@ -277,6 +286,7 @@ static NSString *CellIdentifier = @"dbcell";
                 [self updateFileListing];
             } else {
                 NSLog(@"done");
+                [self saveCursor];
                 self.shouldMassInsert = NO;
                 [self refreshStateWithAnimationStyle:UITableViewRowAnimationFade];
                 [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
