@@ -11,6 +11,23 @@
 
 static NSString *CellIdentifier = @"dbcell";
 
+@interface NSString (normalize)
+
+- (NSString *)fhs_normalize;
+
+@end
+
+@implementation NSString (normalize)
+
+- (NSString *)fhs_normalize {
+    if (![[self substringFromIndex:1]isEqualToString:@"/"]) {
+        return [[self lowercaseString]stringByAppendingString:@"/"];
+    }
+    return [self lowercaseString];
+}
+
+@end
+
 @interface DropboxBrowserViewController () <UITableViewDataSource, UITableViewDelegate, PullToRefreshViewDelegate>
 
 @property (nonatomic, retain) ShadowedTableView *theTableView;
@@ -19,7 +36,6 @@ static NSString *CellIdentifier = @"dbcell";
 @property (nonatomic, retain) ShadowedNavBar *navBar;
 @property (nonatomic, retain) PullToRefreshView *pull;
 
-@property (nonatomic, retain) NSMutableDictionary *pathContents;
 @property (nonatomic, retain) NSMutableArray *currentPathItems;
 
 @property (nonatomic, assign) int numberOfDirsToGo;
@@ -86,18 +102,14 @@ static NSString *CellIdentifier = @"dbcell";
     self.pull = [[[PullToRefreshView alloc]initWithScrollView:self.theTableView]autorelease];
     [self.pull setDelegate:self];
     [self.theTableView addSubview:self.pull];
-    
-    self.pathContents = [NSMutableDictionary dictionary];
+
     self.currentPathItems = [NSMutableArray array];
 }
 
-- (void)addComponentToCurrentPath:(NSString *)component {
-    
-}
-
-- (NSArray *)getContentsOfDirectory:(NSString *)string {
+- (NSArray *)loadContentsOfDirectory:(NSString *)string {
     FMResultSet *s = [[[CentralFactory sharedFactory]database]executeQuery:@"SELECT * FROM DropboxData where lowercasepath=? and user_id=? ORDER BY filename",[string lowercaseString],[[CentralFactory sharedFactory]userID]];
     [[[CentralFactory sharedFactory]database]close];
+    [_currentPathItems removeAllObjects];
     while ([s next]) {
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
         NSString *filename = [s stringForColumn:@"filename"];
@@ -147,31 +159,19 @@ static NSString *CellIdentifier = @"dbcell";
         }];
     } else {
         NSString *filePath = [kCachesDir stringByAppendingPathComponent:@"cursors.json"];
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithStream:[NSInputStream inputStreamWithFileAtPath:filePath] options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *dict = [[NSFileManager defaultManager]fileExistsAtPath:filePath]?[NSJSONSerialization JSONObjectWithStream:[NSInputStream inputStreamWithFileAtPath:filePath] options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
         self.cursor = [dict objectForKey:userID];
         [self updateFileListing];
     }
 }
 
-/*- (void)loadCachesThenUpdateFileListing {
-    if (_userID.length == 0) {
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-        [DroppinBadassBlocks loadAccountInfoWithCompletionBlock:^(DBAccountInfo *info, NSError *error) {
-            [[CentralFactory sharedFactory]setUserID:info.userId];
-            [self loadCachesThenUpdateFileListing];
-        }];
-    } else {
-        NSString *filePath = [kCachesDir stringByAppendingPathComponent:@"cursors.json"];
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithStream:[NSInputStream inputStreamWithFileAtPath:filePath] options:NSJSONReadingMutableContainers error:nil];
-        NSString *userID = [[CentralFactory sharedFactory]userID];
-        
-        if (userID.length > 0) {
-            self.cursor = [dict objectForKey:userID];
-        }
-
-        [self updateFileListing];
-    }
-}*/
+- (void)saveCursor {
+    NSString *filePath = [kCachesDir stringByAppendingPathComponent:@"cursors.json"];
+    NSMutableDictionary *dict = [[NSFileManager defaultManager]fileExistsAtPath:filePath]?[NSJSONSerialization JSONObjectWithStream:[NSInputStream inputStreamWithFileAtPath:filePath] options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
+    [dict setObject:_cursor forKey:[[CentralFactory sharedFactory]userID]];
+    NSData *json = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONReadingMutableContainers error:nil];
+    [json writeToFile:filePath atomically:YES];
+}
 
 - (void)viewDidAppear:(BOOL)animated {
     if (![[DBSession sharedSession]isLinked]) {
@@ -181,23 +181,6 @@ static NSString *CellIdentifier = @"dbcell";
         [self loadUserID];
     }
 }
-
-/*- (void)cacheFiles {
-    if (_userID.length == 0) {
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-        [DroppinBadassBlocks loadAccountInfoWithCompletionBlock:^(DBAccountInfo *info, NSError *error) {
-            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-            self.userID = info.userId;
-            [self cacheFiles];
-        }];
-    } else {
-        NSString *fileCacheName = [NSString stringWithFormat:@"dropboxcache-%@.plist",_userID];
-        NSString *filePath = [kCachesDir stringByAppendingPathComponent:fileCacheName];
-        NSDictionary *dict = @{@"cursor": (_cursor.length == 0)?@"":_cursor, @"pathContents": _pathContents};
-        NSData *json = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONReadingMutableContainers error:nil];
-        [json writeToFile:filePath atomically:YES];
-    }
-}*/
 
 - (void)updateFileListing {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
@@ -211,8 +194,6 @@ static NSString *CellIdentifier = @"dbcell";
                 NSLog(@"Resetting");
                 self.cursor = nil;
                 [_currentPathItems removeAllObjects];
-               // [_pathContents removeAllObjects];
-                //[self cacheFiles];
                 [self removeAllEntriesForCurrentUser];
             }
 
@@ -222,20 +203,8 @@ static NSString *CellIdentifier = @"dbcell";
                 DBMetadata *item = entry.metadata;
                 if (!item) {
                     [self removeItemWithLowercasePath:entry.lowercasePath];
-                   // [self.pathContents removeObjectForKey:entry.lowercasePath];
                 } else {
                     [self addObjectToDatabase:item withLowercasePath:entry.lowercasePath];
-                    /*NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-                    [dict setObject:item.isDirectory?NSFileTypeDirectory:NSFileTypeRegular forKey:NSFileType];
-                    [dict setObject:item.filename forKey:NSFileName];
-                    
-                    if (!item.isDirectory) {
-                        [dict setObject:[NSNumber numberWithLongLong:item.totalBytes] forKey:NSFileSize];
-                    }
-                    
-                    [dict setObject:item.lastModifiedDate forKey:NSFileModificationDate];
-                    [dict setObject:item.isDirectory?[item.path scr_stringByFixingForURL]:item.path forKey:NSFileDBPath];
-                    [self.pathContents setObject:dict forKey:entry.lowercasePath];*/
                 }
             }
             
@@ -244,7 +213,6 @@ static NSString *CellIdentifier = @"dbcell";
                 [self updateFileListing];
             } else {
                 NSLog(@"done");
-              //  [self cacheFiles];
                 [self refreshStateWithAnimationStyle:UITableViewRowAnimationFade];
                 [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
             }
@@ -307,13 +275,14 @@ static NSString *CellIdentifier = @"dbcell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    NSDictionary *fileDict = [self.currentPathItems objectAtIndex:indexPath.row];
+    NSDictionary *fileDict = [_currentPathItems objectAtIndex:indexPath.row];
     NSString *filename = [fileDict objectForKey:NSFileName];
     
     NSString *filetype = (NSString *)[fileDict objectForKey:NSFileType];
     
     if ([filetype isEqualToString:(NSString *)NSFileTypeDirectory]) {
-        self.navBar.topItem.title = [fileDict objectForKey:NSFileDBPath];
+        _navBar.topItem.title = [fileDict objectForKey:NSFileDBPath];
+        [self loadContentsOfDirectory:[_navBar.topItem.title fhs_normalize]];
         [self refreshStateWithAnimationStyle:UITableViewRowAnimationLeft];
     } else {
         NSString *message = [NSString stringWithFormat:@"Do you wish to download \"%@\"?",filename];
@@ -360,7 +329,7 @@ static NSString *CellIdentifier = @"dbcell";
         [actionSheet showInView:self.view];
     }
     
-    [self.theTableView deselectRowAtIndexPath:indexPath animated:YES];
+    [_theTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -368,22 +337,23 @@ static NSString *CellIdentifier = @"dbcell";
 }
 
 - (void)setButtonsHidden:(BOOL)shouldHide {
-    [self.backButton setHidden:shouldHide];
-    [self.homeButton setHidden:shouldHide];
+    [_backButton setHidden:shouldHide];
+    [_homeButton setHidden:shouldHide];
 }
 
 - (void)goHome {
-    self.navBar.topItem.title = @"/";
+    _navBar.topItem.title = @"/";
+    [self loadContentsOfDirectory:@"/"];
     [self refreshStateWithAnimationStyle:UITableViewRowAnimationRight];
 }
 
 - (void)goBackDir {
-    self.navBar.topItem.title = [self.navBar.topItem.title stringByDeletingLastPathComponent];
+    _navBar.topItem.title = [self.navBar.topItem.title stringByDeletingLastPathComponent];
+    [self loadContentsOfDirectory:[_navBar.topItem.title fhs_normalize]];
     [self refreshStateWithAnimationStyle:UITableViewRowAnimationRight];
 }
 
 - (void)refreshStateWithAnimationStyle:(UITableViewRowAnimation)animation {
-   // [self updateCurrentDirContentsWithPath:_navBar.topItem.title];
     [self.theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:animation];
 
     if (_navBar.topItem.title.length > 1) {
@@ -394,46 +364,6 @@ static NSString *CellIdentifier = @"dbcell";
     
     [_pull finishedLoading];
 }
-
-/*- (int)getNumberOfPathComponents:(NSString *)path {
-    
-    NSMutableArray *components = [NSMutableArray arrayWithArray:[path componentsSeparatedByString:@"/"]];
-    
-    for (NSString *string in [[components mutableCopy]autorelease]) {
-        if (string.length == 0) {
-            [components removeObject:string];
-        }
-    }
-    
-    return components.count+1;
-}
-
-- (void)updateCurrentDirContentsWithPath:(NSString *)path {
-    [self.currentPathItems removeAllObjects];
-    self.currentPathItems = [NSMutableArray array];
-    
-    NSString *pathy = [path lowercaseString];
-    
-    int pathyPathCount = [self getNumberOfPathComponents:pathy];
-    
-    NSMutableArray *workedArray = [NSMutableArray array];
-    
-    for (NSString *lowercasePath in self.pathContents.allKeys) {
-        if ([lowercasePath hasPrefix:pathy]) {
-            int maxComponents = pathyPathCount+1;
-            
-            if ([self getNumberOfPathComponents:lowercasePath] == maxComponents) {
-                [workedArray addObject:lowercasePath];
-            }
-        }
-    }
-    
-    workedArray = [[[workedArray sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)]mutableCopy]autorelease];
-    
-    for (id obj in workedArray) {
-        [self.currentPathItems addObject:[self.pathContents objectForKey:obj]];
-    }
-}*/
 
 - (void)close {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
@@ -447,7 +377,6 @@ static NSString *CellIdentifier = @"dbcell";
     [self setBackButton:nil];
     [self setNavBar:nil];
     [self setPull:nil];
-    [self setPathContents:nil];
     [self setCurrentPathItems:nil];
     [self setCursor:nil];
     [super dealloc];
