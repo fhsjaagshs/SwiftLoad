@@ -12,7 +12,9 @@
 
 + (CentralFactory *)sharedFactory;
 
-@property (nonatomic, retain, getter = database) FMDatabase *database;
+- (void)loadDatabase;
+
+@property (nonatomic, retain) FMDatabase *database;
 @property (nonatomic, retain) NSString *userID;
 
 @end

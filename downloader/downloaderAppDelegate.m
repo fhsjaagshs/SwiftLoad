@@ -577,6 +577,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [Downloads sharedDownloads];
     [DownloadController sharedController];
     [BGProcFactory sharedFactory];
+    [CentralFactory sharedFactory];
     
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryPlayback error:nil];
     [[UIApplication sharedApplication]beginReceivingRemoteControlEvents];

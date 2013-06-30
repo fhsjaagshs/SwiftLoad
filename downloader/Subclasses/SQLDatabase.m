@@ -67,7 +67,7 @@ static SQLDatabase *sharedInstance;
 }
 
 - (NSString *)filePath {
-    return [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:@"database.sql"];
+    return [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:@"database.db"];
 }
 
 - (BOOL)loadDB {

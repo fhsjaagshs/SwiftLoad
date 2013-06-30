@@ -47,6 +47,8 @@ static NSString *CellIdentifier = @"dbcell";
 - (void)loadView {
     [super loadView];
     
+    [[CentralFactory sharedFactory]loadDatabase];
+    
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
     
@@ -104,9 +106,9 @@ static NSString *CellIdentifier = @"dbcell";
     self.currentPathItems = [NSMutableArray array];
 }
 
-- (NSArray *)loadContentsOfDirectory:(NSString *)string {
+- (void)loadContentsOfDirectory:(NSString *)string {
+    [[[CentralFactory sharedFactory]database]open];
     FMResultSet *s = [[[CentralFactory sharedFactory]database]executeQuery:@"SELECT * FROM DropboxData where lowercasepath=? and user_id=? ORDER BY filename",[string lowercaseString],[[CentralFactory sharedFactory]userID]];
-    [[[CentralFactory sharedFactory]database]close];
     [_currentPathItems removeAllObjects];
     while ([s next]) {
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
@@ -117,15 +119,17 @@ static NSString *CellIdentifier = @"dbcell";
         [dict setObject:([s intForColumn:@"type"]== 1)?NSFileTypeRegular:NSFileTypeDirectory forKey:NSFileType];
         [_currentPathItems addObject:dict];
     }
-    return nil;
+    [[[CentralFactory sharedFactory]database]close];
 }
 
 - (void)removeAllEntriesForCurrentUser {
+    [[[CentralFactory sharedFactory]database]open];
     [[[CentralFactory sharedFactory]database]executeQuery:@"DELETE FROM DropboxData WHERE user_id=?",[[CentralFactory sharedFactory]userID]];
     [[[CentralFactory sharedFactory]database]close];
 }
 
 - (void)removeItemWithLowercasePath:(NSString *)path {
+    [[[CentralFactory sharedFactory]database]open];
     [[[CentralFactory sharedFactory]database]executeQuery:@"DELETE FROM DropboxData WHERE lowercasepath=? and user_id=?",[path lowercaseString],[[CentralFactory sharedFactory]userID]];
     [[[CentralFactory sharedFactory]database]close];
 }
@@ -137,6 +141,7 @@ static NSString *CellIdentifier = @"dbcell";
     int type = item.isDirectory?2:1;
     float date = item.lastModifiedDate.timeIntervalSince1970;
     float size = item.totalBytes;
+    [[[CentralFactory sharedFactory]database]open];
     [[[CentralFactory sharedFactory]database]executeQuery:@"begin tran IF EXISTS (SELECT * FROM DropboxData WHERE filename=? and lowercasepath=? and user_id=?) UPDATE DropboxData SET date=?,size=? WHERE filename=?,lowercasepath=? ELSE INSERT INTO DropboxData VALUES (date=?,size=?,type=?,filename=?,lowercasepath=?,user_id=?) commit",filename,lowercasePath,[[CentralFactory sharedFactory]userID],date,size,filename,lowercasePath,date,size,type,filename,lowercasePath,[[CentralFactory sharedFactory]userID]];
     [[[CentralFactory sharedFactory]database]close];
 }
@@ -352,6 +357,7 @@ static NSString *CellIdentifier = @"dbcell";
 }
 
 - (void)refreshStateWithAnimationStyle:(UITableViewRowAnimation)animation {
+    [self loadContentsOfDirectory:[_navBar.topItem.title fhs_normalize]];
     [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:animation];
 
     if (_navBar.topItem.title.length > 1) {

@@ -19,6 +19,8 @@
 		F10CBC5A1707D6E700C82AFB /* DroppinBadassBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */; };
 		F10CBC5D17080C6600C82AFB /* DropboxBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */; };
 		F1122A76142E4E8B00A04CC6 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */; };
+		F1153024177FCB07000513E1 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F1153023177FCB07000513E1 /* libsqlite3.0.dylib */; };
+		F1153027177FD28E000513E1 /* SQLDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = F1153026177FD28E000513E1 /* SQLDatabase.m */; };
 		F1178B6F1775245400337813 /* TransparentAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = F1178B6E1775245400337813 /* TransparentAlert.m */; };
 		F118C74517713DAA00ED7384 /* ContentOffsetWatchdog.m in Sources */ = {isa = PBXBuildFile; fileRef = F118C74417713DAA00ED7384 /* ContentOffsetWatchdog.m */; };
 		F118C7481771425F00ED7384 /* PullToRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = F118C7471771425F00ED7384 /* PullToRefreshView.m */; };
@@ -210,6 +212,9 @@
 		F10CBC5B17080C6600C82AFB /* DropboxBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxBrowserViewController.h; sourceTree = "<group>"; };
 		F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxBrowserViewController.m; sourceTree = "<group>"; };
 		F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		F1153023177FCB07000513E1 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
+		F1153025177FD28E000513E1 /* SQLDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQLDatabase.h; sourceTree = "<group>"; };
+		F1153026177FD28E000513E1 /* SQLDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQLDatabase.m; sourceTree = "<group>"; };
 		F1178B6D1775245400337813 /* TransparentAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransparentAlert.h; sourceTree = "<group>"; };
 		F1178B6E1775245400337813 /* TransparentAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransparentAlert.m; sourceTree = "<group>"; };
 		F118C74317713DAA00ED7384 /* ContentOffsetWatchdog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentOffsetWatchdog.h; sourceTree = "<group>"; };
@@ -468,6 +473,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1153024177FCB07000513E1 /* libsqlite3.0.dylib in Frameworks */,
 				F150D6B2177F5B9400E4C094 /* libsqlite3.dylib in Frameworks */,
 				F1C0CEFC1661AEC6001B1B42 /* libz.1.2.5.dylib in Frameworks */,
 				F1122A76142E4E8B00A04CC6 /* MediaPlayer.framework in Frameworks */,
@@ -546,6 +552,7 @@
 		F119CEE813F46DA6007D67E4 = {
 			isa = PBXGroup;
 			children = (
+				F1153023177FCB07000513E1 /* libsqlite3.0.dylib */,
 				F119CEFD13F46DA6007D67E4 /* downloader */,
 				F119CEF613F46DA6007D67E4 /* Frameworks */,
 				F119CEF413F46DA6007D67E4 /* Products */,
@@ -861,6 +868,8 @@
 				F1798EB1177417CF00310C37 /* ShadowedToolbar.m */,
 				F1693C3616DFAB6E006E3739 /* ShadowedTableView.h */,
 				F1693C3716DFAB6E006E3739 /* ShadowedTableView.m */,
+				F1153025177FD28E000513E1 /* SQLDatabase.h */,
+				F1153026177FD28E000513E1 /* SQLDatabase.m */,
 			);
 			path = Subclasses;
 			sourceTree = "<group>";
@@ -1188,6 +1197,7 @@
 				F150D6C1177F783E00E4C094 /* FMDatabasePool.m in Sources */,
 				F150D6C2177F783E00E4C094 /* FMDatabaseQueue.m in Sources */,
 				F150D6C4177F783E00E4C094 /* FMResultSet.m in Sources */,
+				F1153027177FD28E000513E1 /* SQLDatabase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
