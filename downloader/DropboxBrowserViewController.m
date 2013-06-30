@@ -90,29 +90,39 @@
     self.currentPathItems = [NSMutableArray array];
 }
 
+- (void)addComponentToCurrentPath:(NSString *)component {
+    
+}
+
 - (NSArray *)getContentsOfDirectory:(NSString *)string {
-    FMResultSet *s = [[[CentralFactory sharedFactory]database]executeQuery:@"SELECT * FROM DropboxData where lowercasepath=?",[string lowercaseString]];
+    FMResultSet *s = [[[CentralFactory sharedFactory]database]executeQuery:@"SELECT * FROM DropboxData where lowercasepath=? and user_id=? ORDER BY filename",[string lowercaseString],[[CentralFactory sharedFactory]userID]];
     [[[CentralFactory sharedFactory]database]close];
     while ([s next]) {
-        NSLog(@"%@",s);
-        // Do Stuff
+        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+        NSString *filename = [s stringForColumn:@"filename"];
+        [dict setObject:filename forKey:NSFileName];
+        [dict setObject:[NSNumber numberWithLongLong:[s doubleForColumn:@"size"]] forKey:NSFileSize];
+        [dict setObject:[NSDate dateWithTimeIntervalSince1970:[s intForColumn:@"date"]] forKey:NSFileCreationDate];
+        [dict setObject:([s intForColumn:@"type"]== 1)?NSFileTypeRegular:NSFileTypeDirectory forKey:NSFileType];
+        [_currentPathItems addObject:dict];
     }
     return nil;
 }
 
 - (void)removeItemWithLowercasePath:(NSString *)path {
-    [[[CentralFactory sharedFactory]database]executeQuery:@"DELETE FROM DropboxData WHERE lowercasepath=?",[path lowercaseString]];
+    [[[CentralFactory sharedFactory]database]executeQuery:@"DELETE FROM DropboxData WHERE lowercasepath=? and use_id=?",[path lowercaseString],[[CentralFactory sharedFactory]userID]];
     [[[CentralFactory sharedFactory]database]close];
 }
 
 - (void)addObjectToDatabase:(DBMetadata *)item withLowercasePath:(NSString *)lowercasePath {
-    // DropboxData (id INTEGER PRIMARY KEY, lowercasepath TEXT, filename TEXT, date INTEGER, size INTEGER, type INTEGER)
+    // DropboxData (id INTEGER PRIMARY KEY, lowercasepath VARCHAR, filename VARCHAR, date INTEGER, size INTEGER, type INTEGER, user_id VARCHAR(255)
     
     NSString *filename = item.filename;
     int type = item.isDirectory?2:1;
     float date = item.lastModifiedDate.timeIntervalSince1970;
     float size = item.totalBytes;
-    NSString *query = @"begin tran IF EXISTS (SELECT * FROM DropboxData WHERE lowercasepath=?) UPDATE DropboxData /*setup the data*/ WHERE lowercasepath=? ELSE INSERT INTO DropboxData VALUES (/*setup the data*/) commit";
+    [[[CentralFactory sharedFactory]database]executeQuery:@"begin tran IF EXISTS (SELECT * FROM DropboxData WHERE filename=? and lowercasepath=? and user_id=?) UPDATE DropboxData SET date=?,size=? WHERE filename=?,lowercasepath=? ELSE INSERT INTO DropboxData VALUES (date=?,size=?,type=?,filename=?,lowercasepath=?,user_id=?) commit",filename,lowercasePath,[[CentralFactory sharedFactory]userID],date,size,filename,lowercasePath,date,size,type,filename,lowercasePath,[[CentralFactory sharedFactory]userID]];
+    [[[CentralFactory sharedFactory]database]close];
 }
 
 - (void)pullToRefreshViewShouldRefresh:(PullToRefreshView *)view {
@@ -128,11 +138,10 @@
             [self loadCachesThenUpdateFileListing];
         }];
     } else {
-        NSString *fileCacheName = [NSString stringWithFormat:@"dropboxcache-%@.plist",_userID];
-        NSString *filePath = [kCachesDir stringByAppendingPathComponent:fileCacheName];
+        NSString *filePath = [kCachesDir stringByAppendingPathComponent:@"cursors.json"];
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithStream:[NSInputStream inputStreamWithFileAtPath:filePath] options:NSJSONReadingMutableContainers error:nil];
         
-        NSString *cursor = [dict objectForKey:@"cursor"];
+        NSString *cursor = [dict objectForKey:[[CentralFactory sharedFactory]userID]];
         
         if (cursor.length > 0) {
             
@@ -197,9 +206,11 @@
             for (DBDeltaEntry *entry in entries) {
                 DBMetadata *item = entry.metadata;
                 if (!item) {
-                    [self.pathContents removeObjectForKey:entry.lowercasePath];
+                    [self removeItemWithLowercasePath:entry.lowercasePath];
+                   // [self.pathContents removeObjectForKey:entry.lowercasePath];
                 } else {
-                    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+                    [self addObjectToDatabase:item withLowercasePath:entry.lowercasePath];
+                    /*NSMutableDictionary *dict = [NSMutableDictionary dictionary];
                     [dict setObject:item.isDirectory?NSFileTypeDirectory:NSFileTypeRegular forKey:NSFileType];
                     [dict setObject:item.filename forKey:NSFileName];
                     
@@ -209,7 +220,7 @@
                     
                     [dict setObject:item.lastModifiedDate forKey:NSFileModificationDate];
                     [dict setObject:item.isDirectory?[item.path scr_stringByFixingForURL]:item.path forKey:NSFileDBPath];
-                    [self.pathContents setObject:dict forKey:entry.lowercasePath];
+                    [self.pathContents setObject:dict forKey:entry.lowercasePath];*/
                 }
             }
             
@@ -218,7 +229,7 @@
                 [self updateFileListing];
             } else {
                 NSLog(@"done");
-                [self cacheFiles];
+              //  [self cacheFiles];
                 [self refreshStateWithAnimationStyle:UITableViewRowAnimationFade];
                 [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
             }
@@ -359,7 +370,7 @@
 }
 
 - (void)refreshStateWithAnimationStyle:(UITableViewRowAnimation)animation {
-    [self updateCurrentDirContentsWithPath:_navBar.topItem.title];
+   // [self updateCurrentDirContentsWithPath:_navBar.topItem.title];
     [self.theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:animation];
 
     if (_navBar.topItem.title.length > 1) {
@@ -384,7 +395,7 @@
     return components.count+1;
 }
 
-- (void)updateCurrentDirContentsWithPath:(NSString *)path {
+/*- (void)updateCurrentDirContentsWithPath:(NSString *)path {
     [self.currentPathItems removeAllObjects];
     self.currentPathItems = [NSMutableArray array];
     
@@ -409,7 +420,7 @@
     for (id obj in workedArray) {
         [self.currentPathItems addObject:[self.pathContents objectForKey:obj]];
     }
-}
+}*/
 
 - (void)close {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
