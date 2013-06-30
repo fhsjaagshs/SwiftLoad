@@ -137,14 +137,16 @@ static NSString *CellIdentifier = @"dbcell";
     NSNumber *type = [NSNumber numberWithInt:item.isDirectory?2:1];
     NSNumber *date = [NSNumber numberWithInt:item.lastModifiedDate.timeIntervalSince1970];
     NSNumber *size = [NSNumber numberWithInt:item.totalBytes];
-    [[[CentralFactory sharedFactory]database]open];
     
-    BOOL shouldUpdate = [[[[CentralFactory sharedFactory]database]executeQuery:@"SELECT * FROM dropbox_data WHERE filename=? and lowercasepath=? and user_id=?",filename,lowercasePath,[[CentralFactory sharedFactory]userID]]next];
+    FMDatabase *database = [[CentralFactory sharedFactory]database];
+    
+    BOOL shouldUpdate = [[database executeQuery:@"SELECT user_id FROM dropbox_data WHERE filename=? and lowercasepath=? and user_id=? LIMIT 1",filename,lowercasePath,[[CentralFactory sharedFactory]userID]]next];
     
     if (shouldUpdate) {
-        [[[CentralFactory sharedFactory]database]executeUpdate:@"UPDATE dropbox_data SET date=?,size=? WHERE filename=?,lowercasepath=?",date,size,filename,lowercasePath];
+        [database executeUpdate:@"UPDATE dropbox_data SET date=?,size=? WHERE filename=?,lowercasepath=?",date,size,filename,lowercasePath];
     } else {
-        [[[CentralFactory sharedFactory]database]executeUpdate:@"INSERT INTO dropbox_data VALUES (date=?,size=?,type=?,filename=?,lowercasepath=?,user_id=?)",date,size,type,filename,lowercasePath,[[CentralFactory sharedFactory]userID]];
+        // Turn this into a batch update
+        [database executeUpdate:@"INSERT INTO dropbox_data (date,size,type,filename,lowercasepath,user_id) VALUES (?,?,?,?,?,?)",date,size,type,filename,lowercasePath,[[CentralFactory sharedFactory]userID]];
     }
 }
 
@@ -204,6 +206,11 @@ static NSString *CellIdentifier = @"dbcell";
 
             self.cursor = cursor;
             
+            FMDatabase *database = [[CentralFactory sharedFactory]database];
+            
+            [database open];
+            [database beginTransaction];
+            
             for (DBDeltaEntry *entry in entries) {
                 DBMetadata *item = entry.metadata;
                 if (item) {
@@ -214,6 +221,10 @@ static NSString *CellIdentifier = @"dbcell";
                     }  
                 }
             }
+            
+            [database commit];
+            [database close];
+            
             
             if (hasMore) {
                 NSLog(@"Continuing");

@@ -15,7 +15,7 @@ static CentralFactory *sharedInstance;
 - (void)loadDatabase {
     self.database = [FMDatabase databaseWithPath:[[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:@"database.db"]];
     [_database open];
-    [_database executeUpdate:@"CREATE TABLE IF NOT EXISTS dropbox_data (id INTEGER PRIMARY KEY AUTOINCREMENT, lowercasepath TEXT DEFAULT NULL, filename TEXT DEFAULT NULL, date INTEGER, size INTEGER, type INTEGER, user_id VARCHAR(255) DEFAULT NULL);"];
+    [_database executeUpdate:@"CREATE TABLE IF NOT EXISTS dropbox_data (id INTEGER PRIMARY KEY AUTOINCREMENT, lowercasepath VARCHAR DEFAULT NULL, filename VARCHAR DEFAULT NULL, date INTEGER, size INTEGER, type INTEGER, user_id VARCHAR(255) DEFAULT NULL);"];
 }
 
 - (id)init {
