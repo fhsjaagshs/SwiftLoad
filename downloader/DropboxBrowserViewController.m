@@ -47,8 +47,6 @@ static NSString *CellIdentifier = @"dbcell";
 - (void)loadView {
     [super loadView];
     
-    [[CentralFactory sharedFactory]loadDatabase];
-    
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
     
@@ -108,7 +106,7 @@ static NSString *CellIdentifier = @"dbcell";
 
 - (void)loadContentsOfDirectory:(NSString *)string {
     [[[CentralFactory sharedFactory]database]open];
-    FMResultSet *s = [[[CentralFactory sharedFactory]database]executeQuery:@"SELECT * FROM DropboxData where lowercasepath=? and user_id=? ORDER BY filename",[string lowercaseString],[[CentralFactory sharedFactory]userID]];
+    FMResultSet *s = [[[CentralFactory sharedFactory]database]executeQuery:@"SELECT * FROM dropbox_data where lowercasepath=? and user_id=? ORDER BY filename",[string lowercaseString],[[CentralFactory sharedFactory]userID]];
     [_currentPathItems removeAllObjects];
     while ([s next]) {
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
@@ -124,26 +122,30 @@ static NSString *CellIdentifier = @"dbcell";
 
 - (void)removeAllEntriesForCurrentUser {
     [[[CentralFactory sharedFactory]database]open];
-    [[[CentralFactory sharedFactory]database]executeQuery:@"DELETE FROM DropboxData WHERE user_id=?",[[CentralFactory sharedFactory]userID]];
+    [[[CentralFactory sharedFactory]database]executeUpdate:@"DELETE FROM dropbox_data WHERE user_id=?",[[CentralFactory sharedFactory]userID]];
     [[[CentralFactory sharedFactory]database]close];
 }
 
 - (void)removeItemWithLowercasePath:(NSString *)path {
     [[[CentralFactory sharedFactory]database]open];
-    [[[CentralFactory sharedFactory]database]executeQuery:@"DELETE FROM DropboxData WHERE lowercasepath=? and user_id=?",[path lowercaseString],[[CentralFactory sharedFactory]userID]];
+    [[[CentralFactory sharedFactory]database]executeUpdate:@"DELETE FROM dropbox_data WHERE lowercasepath=? and user_id=?",[path lowercaseString],[[CentralFactory sharedFactory]userID]];
     [[[CentralFactory sharedFactory]database]close];
 }
 
 - (void)addObjectToDatabase:(DBMetadata *)item withLowercasePath:(NSString *)lowercasePath {
-    // DropboxData (id INTEGER PRIMARY KEY, lowercasepath VARCHAR, filename VARCHAR, date INTEGER, size INTEGER, type INTEGER, user_id VARCHAR(255)
-    
     NSString *filename = item.filename;
-    int type = item.isDirectory?2:1;
-    float date = item.lastModifiedDate.timeIntervalSince1970;
-    float size = item.totalBytes;
+    NSNumber *type = [NSNumber numberWithInt:item.isDirectory?2:1];
+    NSNumber *date = [NSNumber numberWithInt:item.lastModifiedDate.timeIntervalSince1970];
+    NSNumber *size = [NSNumber numberWithInt:item.totalBytes];
     [[[CentralFactory sharedFactory]database]open];
-    [[[CentralFactory sharedFactory]database]executeQuery:@"begin tran IF EXISTS (SELECT * FROM DropboxData WHERE filename=? and lowercasepath=? and user_id=?) UPDATE DropboxData SET date=?,size=? WHERE filename=?,lowercasepath=? ELSE INSERT INTO DropboxData VALUES (date=?,size=?,type=?,filename=?,lowercasepath=?,user_id=?) commit",filename,lowercasePath,[[CentralFactory sharedFactory]userID],date,size,filename,lowercasePath,date,size,type,filename,lowercasePath,[[CentralFactory sharedFactory]userID]];
-    [[[CentralFactory sharedFactory]database]close];
+    
+    BOOL shouldUpdate = [[[[CentralFactory sharedFactory]database]executeQuery:@"SELECT * FROM dropbox_data WHERE filename=? and lowercasepath=? and user_id=?",filename,lowercasePath,[[CentralFactory sharedFactory]userID]]next];
+    
+    if (shouldUpdate) {
+        [[[CentralFactory sharedFactory]database]executeUpdate:@"UPDATE dropbox_data SET date=?,size=? WHERE filename=?,lowercasepath=?",date,size,filename,lowercasePath];
+    } else {
+        [[[CentralFactory sharedFactory]database]executeUpdate:@"INSERT INTO dropbox_data VALUES (date=?,size=?,type=?,filename=?,lowercasepath=?,user_id=?)",date,size,type,filename,lowercasePath,[[CentralFactory sharedFactory]userID]];
+    }
 }
 
 - (void)pullToRefreshViewShouldRefresh:(PullToRefreshView *)view {
@@ -204,10 +206,12 @@ static NSString *CellIdentifier = @"dbcell";
             
             for (DBDeltaEntry *entry in entries) {
                 DBMetadata *item = entry.metadata;
-                if (!item) {
-                    [self removeItemWithLowercasePath:entry.lowercasePath];
-                } else {
-                    [self addObjectToDatabase:item withLowercasePath:entry.lowercasePath];
+                if (item) {
+                    if (item.isDeleted) {
+                        [self removeItemWithLowercasePath:entry.lowercasePath];
+                    } else {
+                        [self addObjectToDatabase:item withLowercasePath:entry.lowercasePath];
+                    }  
                 }
             }
             
