@@ -34,7 +34,6 @@
     #import "Downloads.h"
     #import "DownloadController.h"
 
-    #import "CentralFactory.h"
     #import "BGProcFactory.h"
 
     #import "TransparentAlert.h"

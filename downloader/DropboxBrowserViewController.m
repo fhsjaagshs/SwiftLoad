@@ -121,10 +121,12 @@ static NSString *CellIdentifier = @"dbcell";
     
     int length = metadatas.count;
     
-    for (int location = 0; location < length; location+=100) {
+    // IMPORTANT INFO: the row constructor (multi-value insert command) has a hard limit of 1000 rows.
+    
+    for (int location = 0; location < length; location+=900) {
         unsigned int size = length-location;
-        if (size > 100)  {
-            size = 100;
+        if (size > 900)  {
+            size = 900;
         }
         NSArray *array = [metadatas subarrayWithRange:NSMakeRange(location, size)];
         
@@ -155,9 +157,8 @@ static NSString *CellIdentifier = @"dbcell";
 
     while ([s next]) {
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-        NSString *filename = [s stringForColumn:@"filename"];
-        [dict setObject:filename forKey:NSFileName];
-        [dict setObject:[NSNumber numberWithLongLong:[s doubleForColumn:@"size"]] forKey:NSFileSize];
+        [dict setObject:[s stringForColumn:@"filename"] forKey:NSFileName];
+        [dict setObject:[NSNumber numberWithLongLong:[s intForColumn:@"size"]] forKey:NSFileSize];
         [dict setObject:[NSDate dateWithTimeIntervalSince1970:[s intForColumn:@"date"]] forKey:NSFileCreationDate];
         [dict setObject:([s intForColumn:@"type"]== 1)?NSFileTypeRegular:NSFileTypeDirectory forKey:NSFileType];
         [_currentPathItems addObject:dict];
@@ -267,7 +268,7 @@ static NSString *CellIdentifier = @"dbcell";
             }
             
             if (_shouldMassInsert) {
-                NSLog(@"asdf");
+                NSLog(@"Inserting mass query items");
                 [self batchInsert:array];
             }
 
@@ -345,7 +346,7 @@ static NSString *CellIdentifier = @"dbcell";
     NSString *filetype = (NSString *)[fileDict objectForKey:NSFileType];
     
     if ([filetype isEqualToString:(NSString *)NSFileTypeDirectory]) {
-        _navBar.topItem.title = [fileDict objectForKey:NSFileDBPath];
+        _navBar.topItem.title = [_navBar.topItem.title stringByAppendingPathComponent:[fileDict objectForKey:NSFileName]];
         [self loadContentsOfDirectory:[_navBar.topItem.title fhs_normalize]];
         [self refreshStateWithAnimationStyle:UITableViewRowAnimationLeft];
     } else {
