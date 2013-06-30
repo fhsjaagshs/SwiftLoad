@@ -72,12 +72,44 @@ static SQLDatabase *sharedInstance;
 
 - (BOOL)loadDB {
     if (!db) {
-        if (sqlite3_open([[self filePath] UTF8String], &db) != SQLITE_OK ) {
+        if (sqlite3_open([[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:@"database.db"]UTF8String], &db) != SQLITE_OK ) {
             sqlite3_close(db);
             return NO;
         }
     }
     return YES;
+}
+
+- (void)insertEntriesIntoDB:(NSArray *)array {
+    sqlite3 *db;
+    sqlite3_open([[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:@"database.db"]UTF8String], &db);
+    
+    sqlite3_stmt *stmt;
+    const char *pzTest;
+    char *szSQL = "INSERT INTO dropbox_data (FirstName, LastName, Age) values (?,?,?)";
+    
+    sqlite3_exec(db, "BEGIN TRANSACTION", NULL, NULL, nil);
+    
+    int rc = sqlite3_prepare(db, szSQL, strlen(szSQL), &stmt, &pzTest);
+    
+    if (rc == SQLITE_OK) {
+        // bind the value
+        //sqlite3_bind_text(stmt, 1, fn, strlen(fn), 0);
+        //sqlite3_bind_text(stmt, 2, ln, strlen(ln), 0);
+        //sqlite3_bind_int(stmt, 3, age);
+        
+        // commit
+        sqlite3_step(stmt);
+        sqlite3_finalize(stmt);
+        
+        
+        sqlite3_clear_bindings(stmt);
+        sqlite3_reset(stmt);
+    }
+    
+    sqlite3_exec(db, "END TRANSACTION", NULL, NULL, nil);
+    
+    sqlite3_close(db);
 }
 
 - (NSArray *)performQuery:(NSString *)query {

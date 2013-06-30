@@ -11,20 +11,31 @@
 
 static NSString *CellIdentifier = @"dbcell";
 
-@interface NSString (normalize)
+@interface NSString (dropbox_browser)
 
 - (NSString *)fhs_normalize;
 
 @end
 
-@implementation NSString (normalize)
+@implementation NSString (dropbox_browser)
+
+/*- (BOOL)fhs_isNumeric {
+    const char *raw = (const char *)[self UTF8String];
+    
+	for (int i = 0; i < strlen(raw); i++) {
+		if (raw[i] < '0' || raw[i] > '9') {
+            return NO;
+        }
+	}
+	return YES;
+}*/
 
 - (NSString *)fhs_normalize {
     if (![[self substringFromIndex:1]isEqualToString:@"/"]) {
         return [[self lowercaseString]stringByAppendingString:@"/"];
     }
     return [self lowercaseString];
-}
+}       
 
 @end
 
@@ -39,6 +50,8 @@ static NSString *CellIdentifier = @"dbcell";
 @property (nonatomic, retain) NSMutableArray *currentPathItems;
 
 @property (nonatomic, retain) NSString *cursor;
+
+@property (nonatomic, assign) BOOL shouldMassInsert;
 
 @end
 
@@ -102,12 +115,78 @@ static NSString *CellIdentifier = @"dbcell";
     [_theTableView addSubview:_pull];
 
     self.currentPathItems = [NSMutableArray array];
+    
+    [[[CentralFactory sharedFactory]database]open];
+    [[[CentralFactory sharedFactory]database]executeUpdate:@"CREATE TABLE IF NOT EXISTS dropbox_data (id INTEGER PRIMARY KEY AUTOINCREMENT, lowercasepath VARCHAR DEFAULT NULL, filename VARCHAR DEFAULT NULL, date INTEGER, size INTEGER, type INTEGER);"];
+    [[[CentralFactory sharedFactory]database]close];
+}
+
+- (void)batchInsert:(NSArray *)metadatas {
+    //  INSERT INTO Table ( Column1, Column2 ) VALUES ( Value1, Value2 ), ( Value1, Value2 )
+    
+    NSMutableString *query = [NSMutableString stringWithFormat:@"INSERT INTO dropbox_data (date,size,type,filename,lowercasepath) VALUES "];
+    
+    for (DBMetadata *item in metadatas) {
+        NSString *filename = item.filename;
+        NSString *lowercasePath = [[item.path stringByDeletingLastPathComponent]fhs_normalize];
+        int type = item.isDirectory?2:1;
+        int date = item.lastModifiedDate.timeIntervalSince1970;
+        int size = item.totalBytes;
+        [query appendFormat:@"(%d,%d,%d,%@,%@),",date,size,type,filename,lowercasePath];
+    }
+    
+    [query deleteCharactersInRange:NSMakeRange(query.length-1, 1)];
+    
+    FMDatabase *database = [[CentralFactory sharedFactory]database];
+  //  [database open];
+    [database executeUpdate:query];
+  //  [database close];
+}
+
+- (void)batchInsertRAW:(NSArray *)metadatas {
+    sqlite3 *db;
+    sqlite3_open([[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:@"database.db"]UTF8String], &db);
+    
+    sqlite3_stmt *stmt;
+    const char *pzTest;
+    char *szSQL = "INSERT INTO dropbox_data (date,size,type,filename,lowercasepath) VALUES (?,?,?,?,?)";
+    
+    sqlite3_exec(db, "BEGIN TRANSACTION", NULL, NULL, nil);
+    
+    for (DBMetadata *item in metadatas) {
+        sqlite3_prepare_v2(db, szSQL, strlen(szSQL), &stmt, &pzTest);
+        
+        const char *filename = item.filename.UTF8String;
+        const char *lowercasepath = [[[item.path stringByDeletingLastPathComponent]fhs_normalize]UTF8String];
+        
+        sqlite3_bind_int(stmt, 1, item.lastModifiedDate.timeIntervalSince1970);
+        sqlite3_bind_int(stmt, 2, item.totalBytes);
+        sqlite3_bind_int(stmt, 3, item.isDirectory?2:1);
+        sqlite3_bind_text(stmt, 4, filename, strlen(filename), 0);
+        sqlite3_bind_text(stmt, 5, lowercasepath, strlen(lowercasepath), 0);
+
+        sqlite3_step(stmt);
+        
+        sqlite3_clear_bindings(stmt);
+        sqlite3_reset(stmt);
+    }
+    
+    sqlite3_exec(db, "END TRANSACTION", NULL, NULL, nil);
+    
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+}
+
+- (void)logError:(NSString *)at {
+    NSLog(@"ERROR @ %@: %@",at,[[[CentralFactory sharedFactory]database]lastErrorMessage]);
 }
 
 - (void)loadContentsOfDirectory:(NSString *)string {
-    [[[CentralFactory sharedFactory]database]open];
-    FMResultSet *s = [[[CentralFactory sharedFactory]database]executeQuery:@"SELECT * FROM dropbox_data where lowercasepath=? and user_id=? ORDER BY filename",[string lowercaseString],[[CentralFactory sharedFactory]userID]];
     [_currentPathItems removeAllObjects];
+    [[[CentralFactory sharedFactory]database]open];
+    FMResultSet *s = [[[CentralFactory sharedFactory]database]executeQuery:@"SELECT * FROM dropbox_data where lowercasepath=? ORDER BY filename",[string lowercaseString]];
+    
+ //   [self logError];
     while ([s next]) {
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
         NSString *filename = [s stringForColumn:@"filename"];
@@ -117,18 +196,19 @@ static NSString *CellIdentifier = @"dbcell";
         [dict setObject:([s intForColumn:@"type"]== 1)?NSFileTypeRegular:NSFileTypeDirectory forKey:NSFileType];
         [_currentPathItems addObject:dict];
     }
+    [s close];
     [[[CentralFactory sharedFactory]database]close];
 }
 
 - (void)removeAllEntriesForCurrentUser {
     [[[CentralFactory sharedFactory]database]open];
-    [[[CentralFactory sharedFactory]database]executeUpdate:@"DELETE FROM dropbox_data WHERE user_id=?",[[CentralFactory sharedFactory]userID]];
+    [[[CentralFactory sharedFactory]database]executeUpdate:@"DELETE * FROM dropbox_data"];
     [[[CentralFactory sharedFactory]database]close];
 }
 
 - (void)removeItemWithLowercasePath:(NSString *)path {
     [[[CentralFactory sharedFactory]database]open];
-    [[[CentralFactory sharedFactory]database]executeUpdate:@"DELETE FROM dropbox_data WHERE lowercasepath=? and user_id=?",[path lowercaseString],[[CentralFactory sharedFactory]userID]];
+    [[[CentralFactory sharedFactory]database]executeUpdate:@"DELETE FROM dropbox_data WHERE lowercasepath=?",[path lowercaseString]];
     [[[CentralFactory sharedFactory]database]close];
 }
 
@@ -140,13 +220,15 @@ static NSString *CellIdentifier = @"dbcell";
     
     FMDatabase *database = [[CentralFactory sharedFactory]database];
     
-    BOOL shouldUpdate = [[database executeQuery:@"SELECT user_id FROM dropbox_data WHERE filename=? and lowercasepath=? and user_id=? LIMIT 1",filename,lowercasePath,[[CentralFactory sharedFactory]userID]]next];
-    
+    FMResultSet *s = [database executeQuery:@"SELECT type FROM dropbox_data WHERE filename=? and lowercasepath=? LIMIT 1",filename,lowercasePath];
+    BOOL shouldUpdate = [s next];
+    [s close];
+
     if (shouldUpdate) {
         [database executeUpdate:@"UPDATE dropbox_data SET date=?,size=? WHERE filename=?,lowercasepath=?",date,size,filename,lowercasePath];
     } else {
         // Turn this into a batch update
-        [database executeUpdate:@"INSERT INTO dropbox_data (date,size,type,filename,lowercasepath,user_id) VALUES (?,?,?,?,?,?)",date,size,type,filename,lowercasePath,[[CentralFactory sharedFactory]userID]];
+        [database executeUpdate:@"INSERT INTO dropbox_data (date,size,type,filename,lowercasepath) VALUES (?,?,?,?,?)",date,size,type,filename,lowercasePath];
     }
 }
 
@@ -195,21 +277,19 @@ static NSString *CellIdentifier = @"dbcell";
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         if (error) {
             NSLog(@"Error: %@",error);
+            self.shouldMassInsert = NO;
         } else {
-            
             if (shouldReset) {
                 NSLog(@"Resetting");
                 self.cursor = nil;
                 [_currentPathItems removeAllObjects];
+                self.shouldMassInsert = YES;
                 [self removeAllEntriesForCurrentUser];
-            }
+            } 
 
             self.cursor = cursor;
             
-            FMDatabase *database = [[CentralFactory sharedFactory]database];
-            
-            [database open];
-            [database beginTransaction];
+            NSMutableArray *array = [NSMutableArray array];
             
             for (DBDeltaEntry *entry in entries) {
                 DBMetadata *item = entry.metadata;
@@ -217,20 +297,26 @@ static NSString *CellIdentifier = @"dbcell";
                     if (item.isDeleted) {
                         [self removeItemWithLowercasePath:entry.lowercasePath];
                     } else {
-                        [self addObjectToDatabase:item withLowercasePath:entry.lowercasePath];
+                        if (_shouldMassInsert) {
+                            [array addObject:item];
+                        } else {
+                            [self addObjectToDatabase:item withLowercasePath:entry.lowercasePath];
+                        }
                     }  
                 }
             }
             
-            [database commit];
-            [database close];
-            
-            
+            if (_shouldMassInsert) {
+                NSLog(@"asdf");
+               // [self batchInsertRAW:array];
+            }
+
             if (hasMore) {
                 NSLog(@"Continuing");
                 [self updateFileListing];
             } else {
                 NSLog(@"done");
+                self.shouldMassInsert = NO;
                 [self refreshStateWithAnimationStyle:UITableViewRowAnimationFade];
                 [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
             }

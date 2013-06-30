@@ -502,7 +502,6 @@
 			children = (
 				F1BE07E5176F7A1B00C4F038 /* Download Controller */,
 				F1DA5247176E8181009A43CD /* Libraries */,
-				F1693C1D16DFAB6E006E3739 /* Graphics */,
 				F1693C4516DFABA6006E3739 /* Categories */,
 				F1693C5216DFAC0E006E3739 /* Utility Classes */,
 				F1693C5F16DFAC59006E3739 /* Subclasses */,
@@ -627,6 +626,46 @@
 				F19BB51816E006680081C95B /* Supporting Files */,
 			);
 			path = downloader;
+			sourceTree = "<group>";
+		};
+		F1283AFE1780A79F006D8A79 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				F1693C1D16DFAB6E006E3739 /* Graphics */,
+				F1178B6D1775245400337813 /* TransparentAlert.h */,
+				F1178B6E1775245400337813 /* TransparentAlert.m */,
+				F1E9F7841773FDF300EC345C /* DisclosureButton.h */,
+				F1E9F7851773FDF300EC345C /* DisclosureButton.m */,
+				F144783F1770B25900C5204A /* WhiteProgressView.h */,
+				F14478401770B25900C5204A /* WhiteProgressView.m */,
+				F1564AEA17765B4300E53B42 /* ToggleControl.h */,
+				F1564AEB17765B4300E53B42 /* ToggleControl.m */,
+				F13B58A5176D2C7E007EF22B /* HUDProgressView.h */,
+				F13B58A6176D2C7E007EF22B /* HUDProgressView.m */,
+				F1693C6016DFAC59006E3739 /* MBProgressHUD.h */,
+				F1693C6116DFAC59006E3739 /* MBProgressHUD.m */,
+				F118C74317713DAA00ED7384 /* ContentOffsetWatchdog.h */,
+				F118C74417713DAA00ED7384 /* ContentOffsetWatchdog.m */,
+				F118C7461771425F00ED7384 /* PullToRefreshView.h */,
+				F118C7471771425F00ED7384 /* PullToRefreshView.m */,
+				F1C7A6B516E8178F0082D4D3 /* ZoomingImageView.h */,
+				F1C7A6B616E8178F0082D4D3 /* ZoomingImageView.m */,
+				F1FCF12817710BAA004A42B8 /* URLInputController.h */,
+				F1FCF12917710BAA004A42B8 /* URLInputController.m */,
+				F17CEDDF16FE724C00E7E47B /* FileCreationDialogue.h */,
+				F17CEDE016FE724C00E7E47B /* FileCreationDialogue.m */,
+				F1CB7DAC16FFE99A002693B5 /* FTPLoginController.h */,
+				F1CB7DAD16FFE99A002693B5 /* FTPLoginController.m */,
+				F1FCF12B17711DE3004A42B8 /* CoolRefreshTableView.h */,
+				F1FCF12C17711DE3004A42B8 /* CoolRefreshTableView.m */,
+				F1798EAD1774177400310C37 /* ShadowedNavBar.h */,
+				F1798EAE1774177400310C37 /* ShadowedNavBar.m */,
+				F1798EB0177417CF00310C37 /* ShadowedToolbar.h */,
+				F1798EB1177417CF00310C37 /* ShadowedToolbar.m */,
+				F1693C3616DFAB6E006E3739 /* ShadowedTableView.h */,
+				F1693C3716DFAB6E006E3739 /* ShadowedTableView.m */,
+			);
+			name = UI;
 			sourceTree = "<group>";
 		};
 		F14333E516F610DE00B279F9 /* PullToReveal */ = {
@@ -786,7 +825,7 @@
 				F1693C2F16DFAB6E006E3739 /* CustomSlider.m */,
 			);
 			name = Graphics;
-			path = CustomGraphics;
+			path = ../CustomGraphics;
 			sourceTree = "<group>";
 		};
 		F1693C4516DFABA6006E3739 /* Categories */ = {
@@ -826,48 +865,17 @@
 		F1693C5F16DFAC59006E3739 /* Subclasses */ = {
 			isa = PBXGroup;
 			children = (
+				F1283AFE1780A79F006D8A79 /* UI */,
 				F1BC30C817715DF300DAFA0A /* Hack.h */,
 				F1BC30C917715DF300DAFA0A /* Hack.m */,
-				F1178B6D1775245400337813 /* TransparentAlert.h */,
-				F1178B6E1775245400337813 /* TransparentAlert.m */,
-				F1E9F7841773FDF300EC345C /* DisclosureButton.h */,
-				F1E9F7851773FDF300EC345C /* DisclosureButton.m */,
-				F144783F1770B25900C5204A /* WhiteProgressView.h */,
-				F14478401770B25900C5204A /* WhiteProgressView.m */,
-				F1564AEA17765B4300E53B42 /* ToggleControl.h */,
-				F1564AEB17765B4300E53B42 /* ToggleControl.m */,
-				F13B58A5176D2C7E007EF22B /* HUDProgressView.h */,
-				F13B58A6176D2C7E007EF22B /* HUDProgressView.m */,
 				F10CBC581707D6E700C82AFB /* DroppinBadassBlocks.h */,
 				F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */,
 				F1A45E6E1704A15E00DD5FB9 /* KeychainItemWrapper.h */,
 				F1A45E6F1704A15E00DD5FB9 /* KeychainItemWrapper.m */,
-				F1693C6016DFAC59006E3739 /* MBProgressHUD.h */,
-				F1693C6116DFAC59006E3739 /* MBProgressHUD.m */,
-				F118C74317713DAA00ED7384 /* ContentOffsetWatchdog.h */,
-				F118C74417713DAA00ED7384 /* ContentOffsetWatchdog.m */,
-				F118C7461771425F00ED7384 /* PullToRefreshView.h */,
-				F118C7471771425F00ED7384 /* PullToRefreshView.m */,
 				F1693C6416DFAC59006E3739 /* SCRFTPRequest.h */,
 				F1693C6516DFAC59006E3739 /* SCRFTPRequest.m */,
-				F1C7A6B516E8178F0082D4D3 /* ZoomingImageView.h */,
-				F1C7A6B616E8178F0082D4D3 /* ZoomingImageView.m */,
-				F1FCF12817710BAA004A42B8 /* URLInputController.h */,
-				F1FCF12917710BAA004A42B8 /* URLInputController.m */,
-				F17CEDDF16FE724C00E7E47B /* FileCreationDialogue.h */,
-				F17CEDE016FE724C00E7E47B /* FileCreationDialogue.m */,
-				F1CB7DAC16FFE99A002693B5 /* FTPLoginController.h */,
-				F1CB7DAD16FFE99A002693B5 /* FTPLoginController.m */,
-				F1FCF12B17711DE3004A42B8 /* CoolRefreshTableView.h */,
-				F1FCF12C17711DE3004A42B8 /* CoolRefreshTableView.m */,
 				F1BA8C7C17728500007AAF85 /* BGProcFactory.h */,
 				F1BA8C7D17728500007AAF85 /* BGProcFactory.m */,
-				F1798EAD1774177400310C37 /* ShadowedNavBar.h */,
-				F1798EAE1774177400310C37 /* ShadowedNavBar.m */,
-				F1798EB0177417CF00310C37 /* ShadowedToolbar.h */,
-				F1798EB1177417CF00310C37 /* ShadowedToolbar.m */,
-				F1693C3616DFAB6E006E3739 /* ShadowedTableView.h */,
-				F1693C3716DFAB6E006E3739 /* ShadowedTableView.m */,
 				F1153025177FD28E000513E1 /* SQLDatabase.h */,
 				F1153026177FD28E000513E1 /* SQLDatabase.m */,
 			);
