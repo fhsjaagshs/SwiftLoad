@@ -38,8 +38,6 @@ static NSString *CellIdentifier = @"dbcell";
 
 @property (nonatomic, retain) NSMutableArray *currentPathItems;
 
-@property (nonatomic, assign) int numberOfDirsToGo;
-
 @property (nonatomic, retain) NSString *cursor;
 
 @end
@@ -55,12 +53,12 @@ static NSString *CellIdentifier = @"dbcell";
     self.view = [StyleFactory backgroundImageView];
     
     self.navBar = [[[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
-    self.navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[[UINavigationItem alloc]initWithTitle:@"/"]autorelease];
     topItem.rightBarButtonItem = nil;
     topItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)]autorelease];
-    [self.navBar pushNavigationItem:topItem animated:YES];
-    [self.view addSubview:self.navBar];
+    [_navBar pushNavigationItem:topItem animated:YES];
+    [self.view addSubview:_navBar];
     
     UIImageView *bbv = [StyleFactory buttonBarImageView];
     bbv.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -70,38 +68,38 @@ static NSString *CellIdentifier = @"dbcell";
     UIImage *buttonImage = [[UIImage imageNamed:@"button_icon"]resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4)];
     
     self.homeButton = [[[UIButton alloc]initWithFrame:iPad?CGRectMake(358, 4, 62, 36):CGRectMake(135, 6, 50, 31)]autorelease];
-    [self.homeButton setTitle:@"Home" forState:UIControlStateNormal];
-    [self.homeButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
-    [self.homeButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [self.homeButton addTarget:self action:@selector(goHome) forControlEvents:UIControlEventTouchUpInside];
-    self.homeButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
-    self.homeButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
-    [bbv addSubview:self.homeButton];
-    [self.homeButton setHidden:YES];
+    [_homeButton setTitle:@"Home" forState:UIControlStateNormal];
+    [_homeButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
+    [_homeButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [_homeButton addTarget:self action:@selector(goHome) forControlEvents:UIControlEventTouchUpInside];
+    _homeButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
+    _homeButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
+    [bbv addSubview:_homeButton];
+    [_homeButton setHidden:YES];
     
     self.backButton = [[[UIButton alloc]initWithFrame:iPad?CGRectMake(117, 4, 62, 36):CGRectMake(53, 6, 62, 31)]autorelease];
-    [self.backButton setTitle:@"Back" forState:UIControlStateNormal];
-    [self.backButton addTarget:self action:@selector(goBackDir) forControlEvents:UIControlEventTouchUpInside];
-    [self.backButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
-    [self.backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    self.backButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
-    self.backButton.titleLabel.shadowColor = [UIColor blackColor];
-    self.backButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
-    [bbv addSubview:self.backButton];
-    [self.backButton setHidden:YES];
+    [_backButton setTitle:@"Back" forState:UIControlStateNormal];
+    [_backButton addTarget:self action:@selector(goBackDir) forControlEvents:UIControlEventTouchUpInside];
+    [_backButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
+    [_backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    _backButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
+    _backButton.titleLabel.shadowColor = [UIColor blackColor];
+    _backButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
+    [bbv addSubview:_backButton];
+    [_backButton setHidden:YES];
     
     self.theTableView = [[[ShadowedTableView alloc]initWithFrame:CGRectMake(0, 88, screenBounds.size.width, screenBounds.size.height-88) style:UITableViewStylePlain]autorelease];
-    self.theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    self.theTableView.backgroundColor = [UIColor clearColor];
-    self.theTableView.rowHeight = iPad?60:44;
-    self.theTableView.dataSource = self;
-    self.theTableView.delegate = self;
-    [self.view addSubview:self.theTableView];
+    _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    _theTableView.backgroundColor = [UIColor clearColor];
+    _theTableView.rowHeight = iPad?60:44;
+    _theTableView.dataSource = self;
+    _theTableView.delegate = self;
+    [self.view addSubview:_theTableView];
     
-    self.pull = [[[PullToRefreshView alloc]initWithScrollView:self.theTableView]autorelease];
-    [self.pull setDelegate:self];
-    [self.theTableView addSubview:self.pull];
+    self.pull = [[[PullToRefreshView alloc]initWithScrollView:_theTableView]autorelease];
+    [_pull setDelegate:self];
+    [_theTableView addSubview:_pull];
 
     self.currentPathItems = [NSMutableArray array];
 }
@@ -144,7 +142,7 @@ static NSString *CellIdentifier = @"dbcell";
 }
 
 - (void)pullToRefreshViewShouldRefresh:(PullToRefreshView *)view {
-    [self.pull setState:PullToRefreshViewStateLoading];
+    [_pull setState:PullToRefreshViewStateLoading];
     [self loadUserID];
 }
 
@@ -177,7 +175,7 @@ static NSString *CellIdentifier = @"dbcell";
     if (![[DBSession sharedSession]isLinked]) {
         [[DBSession sharedSession]linkFromController:self];
     } else {
-        [self.pull setState:PullToRefreshViewStateLoading];
+        [_pull setState:PullToRefreshViewStateLoading];
         [self loadUserID];
     }
 }
@@ -229,7 +227,7 @@ static NSString *CellIdentifier = @"dbcell";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.currentPathItems count];
+    return _currentPathItems.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -348,13 +346,13 @@ static NSString *CellIdentifier = @"dbcell";
 }
 
 - (void)goBackDir {
-    _navBar.topItem.title = [self.navBar.topItem.title stringByDeletingLastPathComponent];
+    _navBar.topItem.title = [_navBar.topItem.title stringByDeletingLastPathComponent];
     [self loadContentsOfDirectory:[_navBar.topItem.title fhs_normalize]];
     [self refreshStateWithAnimationStyle:UITableViewRowAnimationRight];
 }
 
 - (void)refreshStateWithAnimationStyle:(UITableViewRowAnimation)animation {
-    [self.theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:animation];
+    [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:animation];
 
     if (_navBar.topItem.title.length > 1) {
         [self setButtonsHidden:NO];
