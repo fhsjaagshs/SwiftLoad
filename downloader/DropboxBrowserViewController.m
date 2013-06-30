@@ -9,6 +9,8 @@
 #import "DropboxBrowserViewController.h"
 #import "CustomCellCell.h"
 
+static NSString *CellIdentifier = @"dbcell";
+
 @interface DropboxBrowserViewController () <UITableViewDataSource, UITableViewDelegate, PullToRefreshViewDelegate>
 
 @property (nonatomic, retain) ShadowedTableView *theTableView;
@@ -22,7 +24,6 @@
 
 @property (nonatomic, assign) int numberOfDirsToGo;
 
-@property (nonatomic, retain) NSString *userID;
 @property (nonatomic, retain) NSString *cursor;
 
 @end
@@ -109,8 +110,13 @@
     return nil;
 }
 
+- (void)removeAllEntriesForCurrentUser {
+    [[[CentralFactory sharedFactory]database]executeQuery:@"DELETE FROM DropboxData WHERE user_id=?",[[CentralFactory sharedFactory]userID]];
+    [[[CentralFactory sharedFactory]database]close];
+}
+
 - (void)removeItemWithLowercasePath:(NSString *)path {
-    [[[CentralFactory sharedFactory]database]executeQuery:@"DELETE FROM DropboxData WHERE lowercasepath=? and use_id=?",[path lowercaseString],[[CentralFactory sharedFactory]userID]];
+    [[[CentralFactory sharedFactory]database]executeQuery:@"DELETE FROM DropboxData WHERE lowercasepath=? and user_id=?",[path lowercaseString],[[CentralFactory sharedFactory]userID]];
     [[[CentralFactory sharedFactory]database]close];
 }
 
@@ -127,49 +133,56 @@
 
 - (void)pullToRefreshViewShouldRefresh:(PullToRefreshView *)view {
     [self.pull setState:PullToRefreshViewStateLoading];
-    [self loadCachesThenUpdateFileListing];
+    [self loadUserID];
 }
 
-- (void)loadCachesThenUpdateFileListing {
+- (void)loadUserID {
+    NSLog(@"loadUserID");
+    NSString *userID = [[CentralFactory sharedFactory]userID];
+    if (userID.length == 0) {
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+        [DroppinBadassBlocks loadAccountInfoWithCompletionBlock:^(DBAccountInfo *info, NSError *error) {
+            [[CentralFactory sharedFactory]setUserID:info.userId];
+            [self loadUserID];
+        }];
+    } else {
+        NSString *filePath = [kCachesDir stringByAppendingPathComponent:@"cursors.json"];
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithStream:[NSInputStream inputStreamWithFileAtPath:filePath] options:NSJSONReadingMutableContainers error:nil];
+        self.cursor = [dict objectForKey:userID];
+        [self updateFileListing];
+    }
+}
+
+/*- (void)loadCachesThenUpdateFileListing {
     if (_userID.length == 0) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
         [DroppinBadassBlocks loadAccountInfoWithCompletionBlock:^(DBAccountInfo *info, NSError *error) {
-            self.userID = info.userId;
+            [[CentralFactory sharedFactory]setUserID:info.userId];
             [self loadCachesThenUpdateFileListing];
         }];
     } else {
         NSString *filePath = [kCachesDir stringByAppendingPathComponent:@"cursors.json"];
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithStream:[NSInputStream inputStreamWithFileAtPath:filePath] options:NSJSONReadingMutableContainers error:nil];
+        NSString *userID = [[CentralFactory sharedFactory]userID];
         
-        NSString *cursor = [dict objectForKey:[[CentralFactory sharedFactory]userID]];
-        
-        if (cursor.length > 0) {
-            
-            self.cursor = cursor;
-            
-            NSMutableDictionary *pathContentsTemp = [dict objectForKey:@"pathContents"];
-            
-            if (pathContentsTemp.allKeys.count > 0) {
-                self.pathContents = [NSMutableDictionary dictionaryWithDictionary:pathContentsTemp];
-            }
-        } else {
-            self.cursor = nil;
+        if (userID.length > 0) {
+            self.cursor = [dict objectForKey:userID];
         }
-        
+
         [self updateFileListing];
     }
-}
+}*/
 
 - (void)viewDidAppear:(BOOL)animated {
     if (![[DBSession sharedSession]isLinked]) {
         [[DBSession sharedSession]linkFromController:self];
     } else {
         [self.pull setState:PullToRefreshViewStateLoading];
-        [self loadCachesThenUpdateFileListing];
+        [self loadUserID];
     }
 }
 
-- (void)cacheFiles {
+/*- (void)cacheFiles {
     if (_userID.length == 0) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
         [DroppinBadassBlocks loadAccountInfoWithCompletionBlock:^(DBAccountInfo *info, NSError *error) {
@@ -184,7 +197,7 @@
         NSData *json = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONReadingMutableContainers error:nil];
         [json writeToFile:filePath atomically:YES];
     }
-}
+}*/
 
 - (void)updateFileListing {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
@@ -197,8 +210,10 @@
             if (shouldReset) {
                 NSLog(@"Resetting");
                 self.cursor = nil;
-                [_pathContents removeAllObjects];
-                [self cacheFiles];
+                [_currentPathItems removeAllObjects];
+               // [_pathContents removeAllObjects];
+                //[self cacheFiles];
+                [self removeAllEntriesForCurrentUser];
             }
 
             self.cursor = cursor;
@@ -251,8 +266,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *CellIdentifier = @"Cell";
-    
     CustomCellCell *cell = (CustomCellCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
@@ -266,7 +279,7 @@
         }
     }
     
-    NSDictionary *fileDict = [self.currentPathItems objectAtIndex:indexPath.row];
+    NSDictionary *fileDict = [_currentPathItems objectAtIndex:indexPath.row];
     NSString *filename = [fileDict objectForKey:NSFileName];
     
     cell.textLabel.text = filename;
@@ -382,7 +395,7 @@
     [_pull finishedLoading];
 }
 
-- (int)getNumberOfPathComponents:(NSString *)path {
+/*- (int)getNumberOfPathComponents:(NSString *)path {
     
     NSMutableArray *components = [NSMutableArray arrayWithArray:[path componentsSeparatedByString:@"/"]];
     
@@ -395,7 +408,7 @@
     return components.count+1;
 }
 
-/*- (void)updateCurrentDirContentsWithPath:(NSString *)path {
+- (void)updateCurrentDirContentsWithPath:(NSString *)path {
     [self.currentPathItems removeAllObjects];
     self.currentPathItems = [NSMutableArray array];
     
@@ -436,7 +449,6 @@
     [self setPull:nil];
     [self setPathContents:nil];
     [self setCurrentPathItems:nil];
-    [self setUserID:nil];
     [self setCursor:nil];
     [super dealloc];
 }

@@ -13,15 +13,7 @@ static CentralFactory *sharedInstance;
 @implementation CentralFactory
 
 - (FMDatabase *)database {
-    [_database open];
-    return _database;
-}
-
-- (void)setDropboxUserID:(NSString *)userID {
-    if (![userID isEqualToString:_userID]) {
-        [_userID release];
-        _userID = [userID retain];
-    }
+    return [_database open]?_database:nil;
 }
 
 - (void)loadDatabase {
@@ -78,6 +70,8 @@ static CentralFactory *sharedInstance;
 }
 
 - (void)dealloc {
+    [self setDatabase:nil];
+    [self setUserID:nil];
     [super dealloc];
 }
 
