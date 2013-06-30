@@ -19,17 +19,6 @@ static NSString *CellIdentifier = @"dbcell";
 
 @implementation NSString (dropbox_browser)
 
-/*- (BOOL)fhs_isNumeric {
-    const char *raw = (const char *)[self UTF8String];
-    
-	for (int i = 0; i < strlen(raw); i++) {
-		if (raw[i] < '0' || raw[i] > '9') {
-            return NO;
-        }
-	}
-	return YES;
-}*/
-
 - (NSString *)fhs_normalize {
     if (![[self substringFromIndex:1]isEqualToString:@"/"]) {
         return [[self lowercaseString]stringByAppendingString:@"/"];
@@ -52,6 +41,9 @@ static NSString *CellIdentifier = @"dbcell";
 @property (nonatomic, retain) NSString *cursor;
 
 @property (nonatomic, assign) BOOL shouldMassInsert;
+
+@property (nonatomic, retain) FMDatabase *database;
+@property (nonatomic, retain) NSString *userID;
 
 @end
 
@@ -116,77 +108,51 @@ static NSString *CellIdentifier = @"dbcell";
 
     self.currentPathItems = [NSMutableArray array];
     
-    [[[CentralFactory sharedFactory]database]open];
-    [[[CentralFactory sharedFactory]database]executeUpdate:@"CREATE TABLE IF NOT EXISTS dropbox_data (id INTEGER PRIMARY KEY AUTOINCREMENT, lowercasepath VARCHAR DEFAULT NULL, filename VARCHAR DEFAULT NULL, date INTEGER, size INTEGER, type INTEGER);"];
-    [[[CentralFactory sharedFactory]database]close];
+    self.database = [FMDatabase databaseWithPath:[[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:@"database.db"]];
+    [_database open];
+    [_database executeQuery:@"CREATE TABLE IF NOT EXISTS dropbox_data (id INTEGER PRIMARY KEY AUTOINCREMENT, lowercasepath VARCHAR(255) DEFAULT NULL, filename VARCHAR(255) DEFAULT NULL, date INTEGER, size INTEGER, type INTEGER)"];
+    [_database close];
 }
 
 - (void)batchInsert:(NSArray *)metadatas {
-    //  INSERT INTO Table ( Column1, Column2 ) VALUES ( Value1, Value2 ), ( Value1, Value2 )
     
-    NSMutableString *query = [NSMutableString stringWithFormat:@"INSERT INTO dropbox_data (date,size,type,filename,lowercasepath) VALUES "];
+    [_database open];
+    [_database beginTransaction];
     
-    for (DBMetadata *item in metadatas) {
-        NSString *filename = item.filename;
-        NSString *lowercasePath = [[item.path stringByDeletingLastPathComponent]fhs_normalize];
-        int type = item.isDirectory?2:1;
-        int date = item.lastModifiedDate.timeIntervalSince1970;
-        int size = item.totalBytes;
-        [query appendFormat:@"(%d,%d,%d,%@,%@),",date,size,type,filename,lowercasePath];
+    int length = metadatas.count;
+    
+    for (int location = 0; location < length; location+=100) {
+        unsigned int size = length-location;
+        if (size > 100)  {
+            size = 100;
+        }
+        NSArray *array = [metadatas subarrayWithRange:NSMakeRange(location, size)];
+        
+        NSMutableString *query = [NSMutableString stringWithFormat:@"INSERT INTO dropbox_data (date,size,type,filename,lowercasepath) VALUES "];
+        
+        for (DBMetadata *item in array) {
+            NSString *filename = item.filename;
+            NSString *lowercasePath = [[item.path stringByDeletingLastPathComponent]fhs_normalize];
+            int type = item.isDirectory?2:1;
+            int date = item.lastModifiedDate.timeIntervalSince1970;
+            int size = item.totalBytes;
+            [query appendFormat:@"(%d,%d,%d,\"%@\",\"%@\"),",date,size,type,filename,lowercasePath];
+        }
+        
+        [query deleteCharactersInRange:NSMakeRange(query.length-1, 1)];
+        
+        [_database executeUpdate:query];
     }
-    
-    [query deleteCharactersInRange:NSMakeRange(query.length-1, 1)];
-    
-    FMDatabase *database = [[CentralFactory sharedFactory]database];
-  //  [database open];
-    [database executeUpdate:query];
-  //  [database close];
-}
 
-- (void)batchInsertRAW:(NSArray *)metadatas {
-    sqlite3 *db;
-    sqlite3_open([[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:@"database.db"]UTF8String], &db);
-    
-    sqlite3_stmt *stmt;
-    const char *pzTest;
-    char *szSQL = "INSERT INTO dropbox_data (date,size,type,filename,lowercasepath) VALUES (?,?,?,?,?)";
-    
-    sqlite3_exec(db, "BEGIN TRANSACTION", NULL, NULL, nil);
-    
-    for (DBMetadata *item in metadatas) {
-        sqlite3_prepare_v2(db, szSQL, strlen(szSQL), &stmt, &pzTest);
-        
-        const char *filename = item.filename.UTF8String;
-        const char *lowercasepath = [[[item.path stringByDeletingLastPathComponent]fhs_normalize]UTF8String];
-        
-        sqlite3_bind_int(stmt, 1, item.lastModifiedDate.timeIntervalSince1970);
-        sqlite3_bind_int(stmt, 2, item.totalBytes);
-        sqlite3_bind_int(stmt, 3, item.isDirectory?2:1);
-        sqlite3_bind_text(stmt, 4, filename, strlen(filename), 0);
-        sqlite3_bind_text(stmt, 5, lowercasepath, strlen(lowercasepath), 0);
-
-        sqlite3_step(stmt);
-        
-        sqlite3_clear_bindings(stmt);
-        sqlite3_reset(stmt);
-    }
-    
-    sqlite3_exec(db, "END TRANSACTION", NULL, NULL, nil);
-    
-    sqlite3_finalize(stmt);
-    sqlite3_close(db);
-}
-
-- (void)logError:(NSString *)at {
-    NSLog(@"ERROR @ %@: %@",at,[[[CentralFactory sharedFactory]database]lastErrorMessage]);
+    [_database commit];
+    [_database close];
 }
 
 - (void)loadContentsOfDirectory:(NSString *)string {
     [_currentPathItems removeAllObjects];
-    [[[CentralFactory sharedFactory]database]open];
-    FMResultSet *s = [[[CentralFactory sharedFactory]database]executeQuery:@"SELECT * FROM dropbox_data where lowercasepath=? ORDER BY filename",[string lowercaseString]];
-    
- //   [self logError];
+    [_database open];
+    FMResultSet *s = [_database executeQuery:@"SELECT * FROM dropbox_data where lowercasepath=? ORDER BY filename",[string lowercaseString]];
+
     while ([s next]) {
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
         NSString *filename = [s stringForColumn:@"filename"];
@@ -197,19 +163,19 @@ static NSString *CellIdentifier = @"dbcell";
         [_currentPathItems addObject:dict];
     }
     [s close];
-    [[[CentralFactory sharedFactory]database]close];
+    [_database close];
 }
 
 - (void)removeAllEntriesForCurrentUser {
-    [[[CentralFactory sharedFactory]database]open];
-    [[[CentralFactory sharedFactory]database]executeUpdate:@"DELETE * FROM dropbox_data"];
-    [[[CentralFactory sharedFactory]database]close];
+    [_database open];
+    [_database executeUpdate:@"DELETE * FROM dropbox_data"];
+    [_database close];
 }
 
 - (void)removeItemWithLowercasePath:(NSString *)path {
-    [[[CentralFactory sharedFactory]database]open];
-    [[[CentralFactory sharedFactory]database]executeUpdate:@"DELETE FROM dropbox_data WHERE lowercasepath=?",[path lowercaseString]];
-    [[[CentralFactory sharedFactory]database]close];
+    [_database open];
+    [_database executeUpdate:@"DELETE FROM dropbox_data WHERE lowercasepath=?",[path lowercaseString]];
+    [_database close];
 }
 
 - (void)addObjectToDatabase:(DBMetadata *)item withLowercasePath:(NSString *)lowercasePath {
@@ -218,17 +184,14 @@ static NSString *CellIdentifier = @"dbcell";
     NSNumber *date = [NSNumber numberWithInt:item.lastModifiedDate.timeIntervalSince1970];
     NSNumber *size = [NSNumber numberWithInt:item.totalBytes];
     
-    FMDatabase *database = [[CentralFactory sharedFactory]database];
-    
-    FMResultSet *s = [database executeQuery:@"SELECT type FROM dropbox_data WHERE filename=? and lowercasepath=? LIMIT 1",filename,lowercasePath];
+    FMResultSet *s = [_database executeQuery:@"SELECT type FROM dropbox_data WHERE filename=? and lowercasepath=? LIMIT 1",filename,lowercasePath];
     BOOL shouldUpdate = [s next];
     [s close];
 
     if (shouldUpdate) {
-        [database executeUpdate:@"UPDATE dropbox_data SET date=?,size=? WHERE filename=?,lowercasepath=?",date,size,filename,lowercasePath];
+        [_database executeUpdate:@"UPDATE dropbox_data SET date=?,size=? WHERE filename=?,lowercasepath=?",date,size,filename,lowercasePath];
     } else {
-        // Turn this into a batch update
-        [database executeUpdate:@"INSERT INTO dropbox_data (date,size,type,filename,lowercasepath) VALUES (?,?,?,?,?)",date,size,type,filename,lowercasePath];
+        [_database executeUpdate:@"INSERT INTO dropbox_data (date,size,type,filename,lowercasepath) VALUES (?,?,?,?,?)",date,size,type,filename,lowercasePath];
     }
 }
 
@@ -238,18 +201,16 @@ static NSString *CellIdentifier = @"dbcell";
 }
 
 - (void)loadUserID {
-    NSLog(@"loadUserID");
-    NSString *userID = [[CentralFactory sharedFactory]userID];
-    if (userID.length == 0) {
+    if (_userID.length == 0) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
         [DroppinBadassBlocks loadAccountInfoWithCompletionBlock:^(DBAccountInfo *info, NSError *error) {
-            [[CentralFactory sharedFactory]setUserID:info.userId];
+            self.userID = info.userId;
             [self loadUserID];
         }];
     } else {
         NSString *filePath = [kCachesDir stringByAppendingPathComponent:@"cursors.json"];
         NSDictionary *dict = [[NSFileManager defaultManager]fileExistsAtPath:filePath]?[NSJSONSerialization JSONObjectWithStream:[NSInputStream inputStreamWithFileAtPath:filePath] options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
-        self.cursor = [dict objectForKey:userID];
+        self.cursor = [dict objectForKey:_userID];
         [self updateFileListing];
     }
 }
@@ -257,7 +218,7 @@ static NSString *CellIdentifier = @"dbcell";
 - (void)saveCursor {
     NSString *filePath = [kCachesDir stringByAppendingPathComponent:@"cursors.json"];
     NSMutableDictionary *dict = [[NSFileManager defaultManager]fileExistsAtPath:filePath]?[NSJSONSerialization JSONObjectWithStream:[NSInputStream inputStreamWithFileAtPath:filePath] options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
-    [dict setObject:_cursor forKey:[[CentralFactory sharedFactory]userID]];
+    [dict setObject:_cursor forKey:_userID];
     NSData *json = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONReadingMutableContainers error:nil];
     [json writeToFile:filePath atomically:YES];
 }
@@ -276,7 +237,6 @@ static NSString *CellIdentifier = @"dbcell";
     [DroppinBadassBlocks loadDelta:_cursor withCompletionHandler:^(NSArray *entries, NSString *cursor, BOOL hasMore, BOOL shouldReset, NSError *error) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         if (error) {
-            NSLog(@"Error: %@",error);
             self.shouldMassInsert = NO;
         } else {
             if (shouldReset) {
@@ -308,7 +268,7 @@ static NSString *CellIdentifier = @"dbcell";
             
             if (_shouldMassInsert) {
                 NSLog(@"asdf");
-               // [self batchInsertRAW:array];
+                [self batchInsert:array];
             }
 
             if (hasMore) {
@@ -468,6 +428,8 @@ static NSString *CellIdentifier = @"dbcell";
     }
     
     [_pull finishedLoading];
+    
+    NSLog(@"Current Path Items: %@",_currentPathItems);
 }
 
 - (void)close {
@@ -484,6 +446,7 @@ static NSString *CellIdentifier = @"dbcell";
     [self setPull:nil];
     [self setCurrentPathItems:nil];
     [self setCursor:nil];
+    [self setDatabase:nil];
     [super dealloc];
 }
 

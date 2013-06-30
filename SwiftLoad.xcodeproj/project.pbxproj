@@ -20,7 +20,6 @@
 		F10CBC5D17080C6600C82AFB /* DropboxBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */; };
 		F1122A76142E4E8B00A04CC6 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */; };
 		F1153024177FCB07000513E1 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F1153023177FCB07000513E1 /* libsqlite3.0.dylib */; };
-		F1153027177FD28E000513E1 /* SQLDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = F1153026177FD28E000513E1 /* SQLDatabase.m */; };
 		F115302B177FDB4F000513E1 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = F115302A177FDB4E000513E1 /* FMDatabasePool.m */; };
 		F1178B6F1775245400337813 /* TransparentAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = F1178B6E1775245400337813 /* TransparentAlert.m */; };
 		F118C74517713DAA00ED7384 /* ContentOffsetWatchdog.m in Sources */ = {isa = PBXBuildFile; fileRef = F118C74417713DAA00ED7384 /* ContentOffsetWatchdog.m */; };
@@ -44,7 +43,6 @@
 		F14478411770B25900C5204A /* WhiteProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = F14478401770B25900C5204A /* WhiteProgressView.m */; };
 		F149A6781491686D0038F1FC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F149A6771491686D0038F1FC /* AudioToolbox.framework */; };
 		F149A685149176E60038F1FC /* moviePlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F149A683149176E60038F1FC /* moviePlayerView.m */; };
-		F150D6AD177F541700E4C094 /* CentralFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = F150D6AC177F541700E4C094 /* CentralFactory.m */; };
 		F150D6B2177F5B9400E4C094 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F150D6B1177F5B9400E4C094 /* libsqlite3.dylib */; };
 		F150D6BF177F783E00E4C094 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = F150D6B5177F783E00E4C094 /* FMDatabase.m */; };
 		F150D6C0177F783E00E4C094 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F150D6B7177F783E00E4C094 /* FMDatabaseAdditions.m */; };
@@ -213,8 +211,6 @@
 		F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxBrowserViewController.m; sourceTree = "<group>"; };
 		F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		F1153023177FCB07000513E1 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
-		F1153025177FD28E000513E1 /* SQLDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQLDatabase.h; sourceTree = "<group>"; };
-		F1153026177FD28E000513E1 /* SQLDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQLDatabase.m; sourceTree = "<group>"; };
 		F1153029177FDB4E000513E1 /* FMDatabasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabasePool.h; sourceTree = "<group>"; };
 		F115302A177FDB4E000513E1 /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePool.m; sourceTree = "<group>"; };
 		F1178B6D1775245400337813 /* TransparentAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransparentAlert.h; sourceTree = "<group>"; };
@@ -254,8 +250,6 @@
 		F149A6771491686D0038F1FC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		F149A682149176E60038F1FC /* moviePlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = moviePlayerView.h; sourceTree = "<group>"; };
 		F149A683149176E60038F1FC /* moviePlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = moviePlayerView.m; sourceTree = "<group>"; };
-		F150D6AB177F541700E4C094 /* CentralFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CentralFactory.h; sourceTree = "<group>"; };
-		F150D6AC177F541700E4C094 /* CentralFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CentralFactory.m; sourceTree = "<group>"; };
 		F150D6B1177F5B9400E4C094 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		F150D6B4177F783E00E4C094 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
 		F150D6B5177F783E00E4C094 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
@@ -507,8 +501,6 @@
 				F1693C5F16DFAC59006E3739 /* Subclasses */,
 				F1E9F78B177402B600EC345C /* StyleFactory.h */,
 				F1E9F78C177402B600EC345C /* StyleFactory.m */,
-				F150D6AB177F541700E4C094 /* CentralFactory.h */,
-				F150D6AC177F541700E4C094 /* CentralFactory.m */,
 			);
 			name = "Custom Classes";
 			sourceTree = "<group>";
@@ -876,8 +868,6 @@
 				F1693C6516DFAC59006E3739 /* SCRFTPRequest.m */,
 				F1BA8C7C17728500007AAF85 /* BGProcFactory.h */,
 				F1BA8C7D17728500007AAF85 /* BGProcFactory.m */,
-				F1153025177FD28E000513E1 /* SQLDatabase.h */,
-				F1153026177FD28E000513E1 /* SQLDatabase.m */,
 			);
 			path = Subclasses;
 			sourceTree = "<group>";
@@ -1199,12 +1189,10 @@
 				F1798EB2177417CF00310C37 /* ShadowedToolbar.m in Sources */,
 				F1178B6F1775245400337813 /* TransparentAlert.m in Sources */,
 				F1564AEC17765B4300E53B42 /* ToggleControl.m in Sources */,
-				F150D6AD177F541700E4C094 /* CentralFactory.m in Sources */,
 				F150D6BF177F783E00E4C094 /* FMDatabase.m in Sources */,
 				F150D6C0177F783E00E4C094 /* FMDatabaseAdditions.m in Sources */,
 				F150D6C2177F783E00E4C094 /* FMDatabaseQueue.m in Sources */,
 				F150D6C4177F783E00E4C094 /* FMResultSet.m in Sources */,
-				F1153027177FD28E000513E1 /* SQLDatabase.m in Sources */,
 				F115302B177FDB4F000513E1 /* FMDatabasePool.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -15,9 +15,8 @@ static CentralFactory *sharedInstance;
 - (id)init {
     self = [super init];
     if (self) {
-        self.database = [FMDatabase databaseWithPath:[[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:@"database.db"]];
-        [_database close];
-    }
+        
+    };
     return self;
 }
 
