@@ -20,6 +20,7 @@ static NSString *CellIdentifier = @"dbcell";
 @implementation NSString (dropbox_browser)
 
 - (NSString *)fhs_normalize {
+    
     if (![[self substringFromIndex:1]isEqualToString:@"/"]) {
         return [[self lowercaseString]stringByAppendingString:@"/"];
     }
@@ -110,15 +111,18 @@ static NSString *CellIdentifier = @"dbcell";
     
     self.database = [FMDatabase databaseWithPath:[[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:@"database.db"]];
     [_database open];
-    [_database executeQuery:@"CREATE TABLE IF NOT EXISTS dropbox_data (id INTEGER PRIMARY KEY AUTOINCREMENT, lowercasepath VARCHAR(255) DEFAULT NULL, filename VARCHAR(255) DEFAULT NULL, date INTEGER, size INTEGER, type INTEGER)"];
+    [_database executeUpdate:@"CREATE TABLE IF NOT EXISTS dropbox_data (id INTEGER PRIMARY KEY AUTOINCREMENT, lowercasepath VARCHAR(255) DEFAULT NULL, filename VARCHAR(255) DEFAULT NULL, date INTEGER, size INTEGER, type INTEGER)"];
+    NSLog(@"Error @ database creation: %@",[_database lastErrorMessage]);
     [_database close];
 }
 
 + (void)clearDatabase {
     FMDatabase *database = [FMDatabase databaseWithPath:[[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:@"database.db"]];
     [database open];
-    [database executeUpdate:@"DELETE * FROM dropbox_data"];
+    [database executeUpdate:@"DROP TABLE dropbox_data"];
+    [database executeUpdate:@"CREATE TABLE IF NOT EXISTS dropbox_data (id INTEGER PRIMARY KEY AUTOINCREMENT, lowercasepath VARCHAR(255) DEFAULT NULL, filename VARCHAR(255) DEFAULT NULL, date INTEGER, size INTEGER, type INTEGER)"];
     [database close];
+    [[NSFileManager defaultManager]removeItemAtPath:[kCachesDir stringByAppendingPathComponent:@"cursors.json"] error:nil];
 }
 
 - (void)batchInsert:(NSArray *)metadatas {
@@ -130,16 +134,21 @@ static NSString *CellIdentifier = @"dbcell";
     
     // IMPORTANT INFO: the row constructor (multi-value insert command) has a hard limit of 1000 rows.
     
+    int total = 0;
+    
     for (int location = 0; location < length; location+=900) {
         unsigned int size = length-location;
         if (size > 900)  {
             size = 900;
         }
+        total += size;
+        
         NSArray *array = [metadatas subarrayWithRange:NSMakeRange(location, size)];
         
         NSMutableString *query = [NSMutableString stringWithFormat:@"INSERT INTO dropbox_data (date,size,type,filename,lowercasepath) VALUES "];
         
         for (DBMetadata *item in array) {
+            
             NSString *filename = item.filename;
             NSString *lowercasePath = [[item.path stringByDeletingLastPathComponent]fhs_normalize];
             int type = item.isDirectory?2:1;
@@ -152,16 +161,23 @@ static NSString *CellIdentifier = @"dbcell";
         
         [_database executeUpdate:query];
     }
+    
+    NSLog(@"Total: %d, Inserted: %d",length,total);
 
     [_database commit];
     [_database close];
 }
 
+- (void)logError:(NSString *)string {
+    NSLog(@"ERROR @ %@: %@",string,[_database lastErrorMessage]);
+}
+
 - (void)loadContentsOfDirectory:(NSString *)string {
+    NSLog(@"Lookin up: %@",string);
     [_currentPathItems removeAllObjects];
     [_database open];
     FMResultSet *s = [_database executeQuery:@"SELECT * FROM dropbox_data where lowercasepath=? ORDER BY filename",[string lowercaseString]];
-
+    [self logError:@"loadContentsOfDirectory"];
     while ([s next]) {
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
         [dict setObject:[s stringForColumn:@"filename"] forKey:NSFileName];
@@ -176,7 +192,8 @@ static NSString *CellIdentifier = @"dbcell";
 
 - (void)removeAllEntriesForCurrentUser {
     [_database open];
-    [_database executeUpdate:@"DELETE * FROM dropbox_data"];
+    [_database executeUpdate:@"DROP TABLE dropbox_data"];
+    [_database executeUpdate:@"CREATE TABLE dropbox_data (id INTEGER PRIMARY KEY AUTOINCREMENT, lowercasepath VARCHAR(255) DEFAULT NULL, filename VARCHAR(255) DEFAULT NULL, date INTEGER, size INTEGER, type INTEGER)"];
     [_database close];
 }
 
@@ -212,14 +229,18 @@ static NSString *CellIdentifier = @"dbcell";
     if (_userID.length == 0) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
         [DroppinBadassBlocks loadAccountInfoWithCompletionBlock:^(DBAccountInfo *info, NSError *error) {
-            self.userID = info.userId;
-            [self loadUserID];
+            if (error) {
+                [TransparentAlert showAlertWithTitle:[NSString stringWithFormat:@"Dropbox Error %d",error.code] andMessage:[error localizedDescription]];
+            } else {
+                self.userID = info.userId;
+                [self loadUserID];
+            }
         }];
     } else {
         NSString *filePath = [kCachesDir stringByAppendingPathComponent:@"cursors.json"];
         NSData *json = [NSData dataWithContentsOfFile:filePath];
         NSMutableDictionary *dict = [[NSFileManager defaultManager]fileExistsAtPath:filePath]?[NSJSONSerialization JSONObjectWithData:json options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
-        self.cursor = [dict objectForKey:_userID];
+        //self.cursor = [dict objectForKey:_userID];
         [self updateFileListing];
     }
 }
@@ -263,6 +284,7 @@ static NSString *CellIdentifier = @"dbcell";
             
             for (DBDeltaEntry *entry in entries) {
                 DBMetadata *item = entry.metadata;
+                NSLog(@"%@",[[item.path stringByDeletingLastPathComponent]fhs_normalize]);
                 if (item) {
                     if (item.isDeleted) {
                         [self removeItemWithLowercasePath:entry.lowercasePath];
@@ -277,7 +299,6 @@ static NSString *CellIdentifier = @"dbcell";
             }
             
             if (_shouldMassInsert) {
-                NSLog(@"Inserting mass query items");
                 [self batchInsert:array];
             }
 
@@ -458,6 +479,7 @@ static NSString *CellIdentifier = @"dbcell";
     [self setCurrentPathItems:nil];
     [self setCursor:nil];
     [self setDatabase:nil];
+    [self setUserID:nil];
     [super dealloc];
 }
 

@@ -10,6 +10,10 @@
 
 @implementation TransparentAlert
 
++ (void)showAlertWithTitle:(NSString *)title andMessage:(NSString *)message {
+    [[[[TransparentAlert alloc]initWithTitle:title message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil]autorelease]show];
+}
+
 - (UIImage *)drawButtonImage {
     UIGraphicsBeginImageContext(CGSizeMake(5, 37));
     CGContextRef context = UIGraphicsGetCurrentContext();

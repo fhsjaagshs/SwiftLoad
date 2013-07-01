@@ -133,7 +133,7 @@
         self.arrowImage.contents = (id)[self getArrowImage].CGImage;
 		[self.layer addSublayer:self.arrowImage];
 
-        self.activityView = [[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite]autorelease];
+        self.activityView = [[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray]autorelease];
 		self.activityView.frame = CGRectMake(30.0f, frame.size.height - 38.0f, 20.0f, 20.0f);
 		[self addSubview:self.activityView];
 
