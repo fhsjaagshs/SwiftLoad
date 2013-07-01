@@ -25,32 +25,38 @@
     #import "NSString+mods.h"
 
     #import "FMDatabase.h"
+    #import "KeychainItemWrapper.h"
+
     #import "StyleFactory.h"
-    
+    #import "BGProcFactory.h"
+
+    #import "ZoomingImageView.h"
+    #import "ContentOffsetWatchdog.h"
     #import "WhiteProgressView.h"
     #import "HUDProgressView.h"
+    #import "TransparentAlert.h"
+    #import "ToggleControl.h"
+    #import "DisclosureButton.h"
+    #import "ShadowedNavBar.h"
+    #import "ShadowedToolBar.h"
+    #import "ShadowedTableView.h"
+
+    #import "MBProgressHUD.h"
+    #import "PullToRefreshView.h"
+
+    #import "DroppinBadassBlocks.h"
+    #import "metadataRetriever.h"
+    #import "MIMEUtils.h"
     #import "NetworkUtils.h"
     #import "Download.h"
     #import "Downloads.h"
     #import "DownloadController.h"
 
-    #import "BGProcFactory.h"
-
-    #import "TransparentAlert.h"
-    #import "ToggleControl.h"
-
-    #import "ShadowedNavBar.h"
-    #import "ShadowedToolBar.h"
-
     #import "HTTPServer.h"
     #import "DAVConnection.h"
-    #import "MBProgressHUD.h"
     #import "BKSessionController.h"
-    #import "PullToRefreshView.h"
-    #import "ContentOffsetWatchdog.h"
     #import "SCRFTPRequest.h"
-    #import "metadataRetriever.h"
-    #import "MIMEUtils.h"
+    
 
     #import "webDAVHelp.h"
     #import "MyFilesViewDetailViewController.h"
@@ -65,9 +71,6 @@
     #import "FTPBrowserViewController.h"
     #import "DropboxBrowserViewController.h"
 
-    #import "DisclosureButton.h"
-    #import "ShadowedTableView.h"
-
     #import "ZipFile.h"
     #import "ZipException.h"
     #import "FileInZipInfo.h"
@@ -77,11 +80,10 @@
     #import "AudioConverter.h"
     #import "downloaderAppDelegate.h"
     
-    #import "ZoomingImageView.h"
     #import "URLInputController.h"
     #import "FileCreationDialogue.h"
     #import "FTPLoginController.h"
-    #import "KeychainItemWrapper.h"
-    #import "DroppinBadassBlocks.h"
+    
+    
 
 #endif

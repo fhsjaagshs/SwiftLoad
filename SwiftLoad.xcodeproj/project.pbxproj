@@ -425,8 +425,8 @@
 		F1E9F7851773FDF300EC345C /* DisclosureButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisclosureButton.m; sourceTree = "<group>"; };
 		F1E9F7871773FECB00EC345C /* arrow_disclosure_highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_disclosure_highlighted.png; sourceTree = "<group>"; };
 		F1E9F7881773FECB00EC345C /* arrow_disclosure_highlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow_disclosure_highlighted@2x.png"; sourceTree = "<group>"; };
-		F1E9F78B177402B600EC345C /* StyleFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyleFactory.h; sourceTree = "<group>"; };
-		F1E9F78C177402B600EC345C /* StyleFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyleFactory.m; sourceTree = "<group>"; };
+		F1E9F78B177402B600EC345C /* StyleFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StyleFactory.h; path = ../StyleFactory.h; sourceTree = "<group>"; };
+		F1E9F78C177402B600EC345C /* StyleFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StyleFactory.m; path = ../StyleFactory.m; sourceTree = "<group>"; };
 		F1E9F78E1774052D00EC345C /* buttonbarBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = buttonbarBG.png; sourceTree = "<group>"; };
 		F1E9F78F1774052D00EC345C /* buttonbarBG@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "buttonbarBG@2x.png"; sourceTree = "<group>"; };
 		F1E9F7BA1774114A00EC345C /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../Packaging/Default.png; sourceTree = "<group>"; };
@@ -497,8 +497,6 @@
 				F1693C4516DFABA6006E3739 /* Categories */,
 				F1693C5216DFAC0E006E3739 /* Utility Classes */,
 				F1693C5F16DFAC59006E3739 /* Subclasses */,
-				F1E9F78B177402B600EC345C /* StyleFactory.h */,
-				F1E9F78C177402B600EC345C /* StyleFactory.m */,
 			);
 			name = "Custom Classes";
 			sourceTree = "<group>";
@@ -852,6 +850,8 @@
 				F1693C6516DFAC59006E3739 /* SCRFTPRequest.m */,
 				F1BA8C7C17728500007AAF85 /* BGProcFactory.h */,
 				F1BA8C7D17728500007AAF85 /* BGProcFactory.m */,
+				F1E9F78B177402B600EC345C /* StyleFactory.h */,
+				F1E9F78C177402B600EC345C /* StyleFactory.m */,
 			);
 			path = Subclasses;
 			sourceTree = "<group>";
