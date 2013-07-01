@@ -99,16 +99,16 @@
                 fileName = [[fileName substringToIndex:11]stringByAppendingString:@"..."];
             }
             
-            UIImageView *checkmark = [[UIImageView alloc]initWithImage:getCheckmarkImage()];
+           // UIImageView *checkmark = [[UIImageView alloc]initWithImage:getCheckmarkImage()];
             
             [kAppDelegate hideHUD];
             
             [kAppDelegate showHUDWithTitle:@"Imported"];
             [kAppDelegate setSecondaryTitleOfVisibleHUD:fileName];
             [kAppDelegate setVisibleHudMode:MBProgressHUDModeCustomView];
-            [kAppDelegate setVisibleHudCustomView:checkmark];
+            //[kAppDelegate setVisibleHudCustomView:checkmark];
             [kAppDelegate hideVisibleHudAfterDelay:1.0f];
-            [checkmark release];
+           // [checkmark release];
             [poolTwo release];
         });
         

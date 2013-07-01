@@ -19,7 +19,7 @@ typedef enum {
 - (id)initWithCompletionBlock:(void (^)(FileCreationDialogueFileType fileType, NSString *fileName))block;
 
 @property (nonatomic, retain) UITextField *tv;
-@property (nonatomic, retain) CustomButton *createFile;
-@property (nonatomic, retain) CustomButton *createDir;
+@property (nonatomic, retain) UIButton *createFile;
+@property (nonatomic, retain) UIButton *createDir;
 
 @end

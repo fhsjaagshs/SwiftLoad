@@ -7,8 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CustomButton.h"
-#import "Common.h"
 #import "CustomSlider.h"
 
 @interface AudioPlayerViewController : UIViewController
@@ -16,7 +14,6 @@
 @property (nonatomic, retain) UILabel *secondsDisplay;
 @property (nonatomic, retain) UILabel *errorLabel;
 @property (nonatomic, retain) UILabel *secondsRemaining;
-// @property (nonatomic, retain) CustomSegmentedControl *control;
 
 @property (nonatomic, retain) UIButton *pausePlay;
 @property (nonatomic, retain) UIButton *stopButton;

@@ -1,6 +1,5 @@
 
 #import "PullToRefreshView.h"
-#import "Common.h"
 
 #define TEXT_COLOR	 [UIColor colorWithRed:(87.0/255.0) green:(108.0/255.0) blue:(137.0/255.0) alpha:1.0]
 #define FLIP_ANIMATION_DURATION 0.18f
@@ -21,71 +20,6 @@
 @end
 
 @implementation PullToRefreshView
-@synthesize delegate, scrollView, state, statusLabel, arrowImage, activityView;
-
-- (UIImage *)getArrowImage {
-    CGFloat width = 56.4f;
-    CGFloat height = 90.0f;
-    CGFloat padding = 7.0f;
-    
-    UIGraphicsBeginImageContext(CGSizeMake(56.4f, 104.0f));		
-    CGContextRef context = UIGraphicsGetCurrentContext();		
-    UIGraphicsPushContext(context);								
-    
-    CGColorRef lightColor = LIGHT_BLUE;
-    CGColorRef darkColor = DARK_BLUE; 
-    
-    CGContextSaveGState(context);
-    CGMutablePathRef overallPath = CGPathCreateMutable();
-    
-    CGPathMoveToPoint(overallPath, nil, width/2, padding);
-    CGPathAddLineToPoint(overallPath, nil, width/2, padding);
-    CGPathAddLineToPoint(overallPath, nil, width, (height/2)+padding);
-    CGPathAddLineToPoint(overallPath, nil, (width/3)*2.2, (height/2)+padding);
-    CGPathAddLineToPoint(overallPath, nil, (width/3)*2.2, height+padding);
-    CGPathAddLineToPoint(overallPath, nil, (width/3)*0.8, height+padding);
-    CGPathAddLineToPoint(overallPath, nil, (width/3)*0.8, (height/2)+padding);
-    CGPathAddLineToPoint(overallPath, nil, 0, (height/2)+padding);
-    CGPathAddLineToPoint(overallPath, nil, width/2, padding);
-    
-    CGContextAddPath(context, overallPath);
-    CGContextClip(context);
-    drawGlossAndGradient(context, CGRectMake(0, 0, 56.4f, 104.0f), lightColor, darkColor);  
-    
-    CGContextRestoreGState(context);
-    CGContextSaveGState(context);
-    
-    CGContextAddPath(context, overallPath);
-    CGContextSetLineWidth(context, 2.0f);
-    CGContextSetLineCap(context, kCGLineCapRound);
-    CGContextSetStrokeColorWithColor(context, [UIColor blackColor].CGColor);
-    CGContextDrawPath(context, kCGPathStroke);
-    
-    CGContextRestoreGState(context);  
-    CGPathRelease(overallPath);
-
-    UIGraphicsPopContext();								
-    
-    UIImage *outputImage = UIGraphicsGetImageFromCurrentImageContext();
-    
-    UIGraphicsEndImageContext();
-    return outputImage;
-}
-
-- (UIColor *)getGradientTextColor {
-    
-    UIGraphicsBeginImageContext(CGSizeMake(5.0f, 20.0f));		
-    CGContextRef context = UIGraphicsGetCurrentContext();		
-    UIGraphicsPushContext(context);
-    
-    drawGlossAndGradient(context, CGRectMake(0, 0, 5.0f, 20.0f), LIGHT_BLUE, DARK_BLUE);  
-    
-    UIGraphicsPopContext();								
-    UIImage *outputImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return [UIColor colorWithPatternImage:outputImage];
-}
 
 - (void)showActivity:(BOOL)shouldShow animated:(BOOL)animated {
     if (shouldShow) {
@@ -130,7 +64,7 @@
         self.arrowImage.frame = CGRectMake(25.0f, frame.size.height - 60.0f, 30.7f, 52.0f); // 30.7f was 24.0f
 		self.arrowImage.contentsGravity = kCAGravityCenter;
         self.arrowImage.contentsScale = 2; // scale down the image regardless of retina. The image is by default the retina size.
-        self.arrowImage.contents = (id)[self getArrowImage].CGImage;
+        self.arrowImage.contents = (id)[UIImage imageNamed:@"arrow"].CGImage;
 		[self.layer addSublayer:self.arrowImage];
 
         self.activityView = [[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray]autorelease];
@@ -144,7 +78,7 @@
 }
 
 - (void)setState:(PullToRefreshViewState)state_ {
-    state = state_;
+    _state = state_;
 
 	switch (self.state) {
 		case PullToRefreshViewStateReady:

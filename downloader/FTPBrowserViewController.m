@@ -7,7 +7,7 @@
 //
 
 #import "FTPBrowserViewController.h"
-#import "CustomCellCell.h"
+#import "SwiftLoadCell.h"
 
 @interface FTPBrowserViewController ()
 
@@ -313,10 +313,10 @@
     
     static NSString *CellIdentifier = @"Cell";
     
-    CustomCellCell *cell = (CustomCellCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    SwiftLoadCell *cell = (SwiftLoadCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
-        cell = [[[CustomCellCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier]autorelease];
+        cell = [[[SwiftLoadCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier]autorelease];
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             cell.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:27];
@@ -407,26 +407,31 @@
 }
 
 - (void)cacheCurrentDir {
-    NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"cachedFTPDirs.plist"];
-    NSMutableDictionary *savedDict = [NSMutableDictionary dictionaryWithContentsOfFile:cachePath];
+    NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"ftp_directory_cache.json"];
+    NSData *json = [NSData dataWithContentsOfFile:cachePath];
+    NSMutableDictionary *savedDict = [[NSFileManager defaultManager]fileExistsAtPath:cachePath]?[NSJSONSerialization JSONObjectWithData:json options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
     
     if (savedDict.count == 0) {
         savedDict = [NSMutableDictionary dictionary];
     }
     
     [savedDict setObject:self.filedicts forKey:[self fixURL:self.currentFTPURL]];
-    [savedDict writeToFile:cachePath atomically:YES];
+    
+    NSData *jsontowrite = [NSJSONSerialization dataWithJSONObject:savedDict options:NSJSONReadingMutableContainers error:nil];
+    [jsontowrite writeToFile:cachePath atomically:YES];
 }
 
 - (void)loadDirFromCacheForURL:(NSString *)url {
-    NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"cachedFTPDirs.plist"];
-    NSMutableDictionary *savedDict = [NSMutableDictionary dictionaryWithContentsOfFile:cachePath];
+    NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"ftp_directory_cache.json"];
+    NSData *json = [NSData dataWithContentsOfFile:cachePath];
+    NSMutableDictionary *savedDict = [[NSFileManager defaultManager]fileExistsAtPath:cachePath]?[NSJSONSerialization JSONObjectWithData:json options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
     self.filedicts = [NSMutableArray arrayWithArray:[savedDict objectForKey:url]];
 }
 
 - (void)loadCurrentDirectory {
-    NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"cachedFTPDirs.plist"];
-    NSMutableDictionary *savedDict = [NSMutableDictionary dictionaryWithContentsOfFile:cachePath];
+    NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"ftp_directory_cache.json"];
+    NSData *json = [NSData dataWithContentsOfFile:cachePath];
+    NSMutableDictionary *savedDict = [[NSFileManager defaultManager]fileExistsAtPath:cachePath]?[NSJSONSerialization JSONObjectWithData:json options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
     
     if ([savedDict objectForKey:[self fixURL:self.currentFTPURL]]) {
         self.filedicts = [NSMutableArray arrayWithArray:[savedDict objectForKey:[self fixURL:self.currentFTPURL]]];

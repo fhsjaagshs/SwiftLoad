@@ -218,11 +218,11 @@
                 [av show];
                 [av release];
             } else {
-                UIImageView *checkmark = [[[UIImageView alloc]initWithImage:getCheckmarkImage()]autorelease];
+             //   UIImageView *checkmark = [[[UIImageView alloc]initWithImage:getCheckmarkImage()]autorelease];
                 [ad showHUDWithTitle:@"Complete"];
                 [ad setSecondaryTitleOfVisibleHUD:fileName];
                 [ad setVisibleHudMode:MBProgressHUDModeCustomView];
-                [ad setVisibleHudCustomView:checkmark];
+//              /  [ad setVisibleHudCustomView:checkmark];
                 [ad hideVisibleHudAfterDelay:1.5];
             }
             [poolTwo release];

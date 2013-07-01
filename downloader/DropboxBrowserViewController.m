@@ -7,7 +7,7 @@
 //
 
 #import "DropboxBrowserViewController.h"
-#import "CustomCellCell.h"
+#import "SwiftLoadCell.h"
 
 static NSString *CellIdentifier = @"dbcell";
 
@@ -312,10 +312,10 @@ static NSString *CellIdentifier = @"dbcell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    CustomCellCell *cell = (CustomCellCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    SwiftLoadCell *cell = (SwiftLoadCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
-        cell = [[[CustomCellCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier]autorelease];
+        cell = [[[SwiftLoadCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier]autorelease];
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             cell.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:27];
@@ -460,6 +460,7 @@ static NSString *CellIdentifier = @"dbcell";
     [self setCursor:nil];
     [self setDatabase:nil];
     [self setUserID:nil];
+    NSLog(@"DropboxBrowserViewController dealloc'd");
     [super dealloc];
 }
 

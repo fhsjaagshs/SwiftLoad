@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CustomCellCell : UITableViewCell
+@interface SwiftLoadCell : UITableViewCell
 
 @end

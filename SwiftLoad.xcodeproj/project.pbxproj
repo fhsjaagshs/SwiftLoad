@@ -41,6 +41,8 @@
 		F144783E177092B800C5204A /* DownloadingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F144783D177092B800C5204A /* DownloadingCell.m */; };
 		F14478411770B25900C5204A /* WhiteProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = F14478401770B25900C5204A /* WhiteProgressView.m */; };
 		F145023B1781181700096202 /* DropboxDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = F145023A1781181700096202 /* DropboxDownload.m */; };
+		F145023E1781243000096202 /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = F145023C1781243000096202 /* arrow.png */; };
+		F145023F1781243000096202 /* arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F145023D1781243000096202 /* arrow@2x.png */; };
 		F149A6781491686D0038F1FC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F149A6771491686D0038F1FC /* AudioToolbox.framework */; };
 		F149A685149176E60038F1FC /* moviePlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F149A683149176E60038F1FC /* moviePlayerView.m */; };
 		F150D6B2177F5B9400E4C094 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F150D6B1177F5B9400E4C094 /* libsqlite3.dylib */; };
@@ -108,9 +110,7 @@
 		F1693C1216DFAA08006E3739 /* WebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BFB16DFAA08006E3739 /* WebSocket.m */; };
 		F1693C1A16DFAA92006E3739 /* BKChunkDataContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C1516DFAA92006E3739 /* BKChunkDataContainer.m */; };
 		F1693C1C16DFAA92006E3739 /* BKSessionController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C1916DFAA92006E3739 /* BKSessionController.m */; };
-		F1693C3A16DFAB6E006E3739 /* Common.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C2316DFAB6E006E3739 /* Common.m */; };
-		F1693C3C16DFAB6E006E3739 /* CustomButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C2716DFAB6E006E3739 /* CustomButton.m */; };
-		F1693C3D16DFAB6E006E3739 /* CustomCellCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C2916DFAB6E006E3739 /* CustomCellCell.m */; };
+		F1693C3D16DFAB6E006E3739 /* SwiftLoadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C2916DFAB6E006E3739 /* SwiftLoadCell.m */; };
 		F1693C4016DFAB6E006E3739 /* CustomSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C2F16DFAB6E006E3739 /* CustomSlider.m */; };
 		F1693C4416DFAB6E006E3739 /* ShadowedTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C3716DFAB6E006E3739 /* ShadowedTableView.m */; };
 		F1693C4E16DFABA6006E3739 /* UIActionSheet+BlockExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C4716DFABA6006E3739 /* UIActionSheet+BlockExtensions.m */; };
@@ -248,6 +248,8 @@
 		F14478401770B25900C5204A /* WhiteProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WhiteProgressView.m; path = ../WhiteProgressView.m; sourceTree = "<group>"; };
 		F14502391781181700096202 /* DropboxDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxDownload.h; sourceTree = "<group>"; };
 		F145023A1781181700096202 /* DropboxDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxDownload.m; sourceTree = "<group>"; };
+		F145023C1781243000096202 /* arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow.png; sourceTree = "<group>"; };
+		F145023D1781243000096202 /* arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow@2x.png"; sourceTree = "<group>"; };
 		F149A6771491686D0038F1FC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		F149A682149176E60038F1FC /* moviePlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = moviePlayerView.h; sourceTree = "<group>"; };
 		F149A683149176E60038F1FC /* moviePlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = moviePlayerView.m; sourceTree = "<group>"; };
@@ -350,14 +352,10 @@
 		F1693C1516DFAA92006E3739 /* BKChunkDataContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKChunkDataContainer.m; sourceTree = "<group>"; };
 		F1693C1816DFAA92006E3739 /* BKSessionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKSessionController.h; sourceTree = "<group>"; };
 		F1693C1916DFAA92006E3739 /* BKSessionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKSessionController.m; sourceTree = "<group>"; };
-		F1693C2216DFAB6E006E3739 /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
-		F1693C2316DFAB6E006E3739 /* Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Common.m; sourceTree = "<group>"; };
-		F1693C2616DFAB6E006E3739 /* CustomButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomButton.h; sourceTree = "<group>"; };
-		F1693C2716DFAB6E006E3739 /* CustomButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomButton.m; sourceTree = "<group>"; };
-		F1693C2816DFAB6E006E3739 /* CustomCellCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomCellCell.h; sourceTree = "<group>"; };
-		F1693C2916DFAB6E006E3739 /* CustomCellCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomCellCell.m; sourceTree = "<group>"; };
-		F1693C2E16DFAB6E006E3739 /* CustomSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomSlider.h; sourceTree = "<group>"; };
-		F1693C2F16DFAB6E006E3739 /* CustomSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomSlider.m; sourceTree = "<group>"; };
+		F1693C2816DFAB6E006E3739 /* SwiftLoadCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwiftLoadCell.h; path = ../CustomGraphics/SwiftLoadCell.h; sourceTree = "<group>"; };
+		F1693C2916DFAB6E006E3739 /* SwiftLoadCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwiftLoadCell.m; path = ../CustomGraphics/SwiftLoadCell.m; sourceTree = "<group>"; };
+		F1693C2E16DFAB6E006E3739 /* CustomSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CustomSlider.h; path = ../CustomGraphics/CustomSlider.h; sourceTree = "<group>"; };
+		F1693C2F16DFAB6E006E3739 /* CustomSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CustomSlider.m; path = ../CustomGraphics/CustomSlider.m; sourceTree = "<group>"; };
 		F1693C3616DFAB6E006E3739 /* ShadowedTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShadowedTableView.h; path = ../CustomGraphics/ShadowedTableView.h; sourceTree = "<group>"; };
 		F1693C3716DFAB6E006E3739 /* ShadowedTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ShadowedTableView.m; path = ../CustomGraphics/ShadowedTableView.m; sourceTree = "<group>"; };
 		F1693C4616DFABA6006E3739 /* UIActionSheet+BlockExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActionSheet+BlockExtensions.h"; sourceTree = "<group>"; };
@@ -622,7 +620,10 @@
 		F1283AFE1780A79F006D8A79 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				F1693C1D16DFAB6E006E3739 /* Graphics */,
+				F1693C2E16DFAB6E006E3739 /* CustomSlider.h */,
+				F1693C2F16DFAB6E006E3739 /* CustomSlider.m */,
+				F1693C2816DFAB6E006E3739 /* SwiftLoadCell.h */,
+				F1693C2916DFAB6E006E3739 /* SwiftLoadCell.m */,
 				F1178B6D1775245400337813 /* TransparentAlert.h */,
 				F1178B6E1775245400337813 /* TransparentAlert.m */,
 				F1E9F7841773FDF300EC345C /* DisclosureButton.h */,
@@ -803,22 +804,6 @@
 			path = BKSessionController;
 			sourceTree = "<group>";
 		};
-		F1693C1D16DFAB6E006E3739 /* Graphics */ = {
-			isa = PBXGroup;
-			children = (
-				F1693C2216DFAB6E006E3739 /* Common.h */,
-				F1693C2316DFAB6E006E3739 /* Common.m */,
-				F1693C2616DFAB6E006E3739 /* CustomButton.h */,
-				F1693C2716DFAB6E006E3739 /* CustomButton.m */,
-				F1693C2816DFAB6E006E3739 /* CustomCellCell.h */,
-				F1693C2916DFAB6E006E3739 /* CustomCellCell.m */,
-				F1693C2E16DFAB6E006E3739 /* CustomSlider.h */,
-				F1693C2F16DFAB6E006E3739 /* CustomSlider.m */,
-			);
-			name = Graphics;
-			path = ../CustomGraphics;
-			sourceTree = "<group>";
-		};
 		F1693C4516DFABA6006E3739 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
@@ -973,6 +958,8 @@
 				F1564AFE1776A06700E53B42 /* pause_pressed@2x.png */,
 				F1564AF91776A05300E53B42 /* play_pressed.png */,
 				F1564AFA1776A05300E53B42 /* play_pressed@2x.png */,
+				F145023C1781243000096202 /* arrow.png */,
+				F145023D1781243000096202 /* arrow@2x.png */,
 			);
 			name = Assets;
 			sourceTree = "<group>";
@@ -1092,6 +1079,8 @@
 				F1564B081776A09000E53B42 /* back_button_pressed@2x.png in Resources */,
 				F1564B0B1776A27900E53B42 /* loop_pressed.png in Resources */,
 				F1564B0C1776A27900E53B42 /* loop_pressed@2x.png in Resources */,
+				F145023E1781243000096202 /* arrow.png in Resources */,
+				F145023F1781243000096202 /* arrow@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1147,9 +1136,7 @@
 				F1693C1216DFAA08006E3739 /* WebSocket.m in Sources */,
 				F1693C1A16DFAA92006E3739 /* BKChunkDataContainer.m in Sources */,
 				F1693C1C16DFAA92006E3739 /* BKSessionController.m in Sources */,
-				F1693C3A16DFAB6E006E3739 /* Common.m in Sources */,
-				F1693C3C16DFAB6E006E3739 /* CustomButton.m in Sources */,
-				F1693C3D16DFAB6E006E3739 /* CustomCellCell.m in Sources */,
+				F1693C3D16DFAB6E006E3739 /* SwiftLoadCell.m in Sources */,
 				F1693C4016DFAB6E006E3739 /* CustomSlider.m in Sources */,
 				F1693C4416DFAB6E006E3739 /* ShadowedTableView.m in Sources */,
 				F1693C4E16DFABA6006E3739 /* UIActionSheet+BlockExtensions.m in Sources */,

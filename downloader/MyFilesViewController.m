@@ -8,7 +8,7 @@
 
 
 #import "MyFilesViewController.h"
-#import "CustomCellCell.h"
+#import "SwiftLoadCell.h"
 #import "TransparentAlert.h"
 
 #define BOUNCE_PIXELS 5.0
@@ -737,18 +737,14 @@
     
     static NSString *CellIdentifier = @"Cell";
     
-    CustomCellCell *cell = (CustomCellCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    SwiftLoadCell *cell = (SwiftLoadCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
-        cell = [[[CustomCellCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier]autorelease];
+        cell = [[[SwiftLoadCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier]autorelease];
         
         DisclosureButton *button = [DisclosureButton button];
         [button addTarget:self action:@selector(accessoryButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         cell.accessoryView = button;
-        /*DTCustomColoredAccessory *accessory = [DTCustomColoredAccessory accessoryWithColor:[UIColor whiteColor]];
-        accessory.highlightedColor = [UIColor darkGrayColor];
-        [accessory addTarget:self action:@selector(accessoryButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        cell.accessoryView = accessory;*/
             
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             cell.accessoryView.center = CGPointMake(735, (cell.bounds.size.height)/2);

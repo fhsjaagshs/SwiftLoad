@@ -34,7 +34,6 @@ void drawLinearGradient(CGContextRef context, CGRect rect, CGColorRef startColor
 }
 
 void draw1PxStroke(CGContextRef context, CGPoint startPoint, CGPoint endPoint, CGColorRef color) {
-    
     CGContextSaveGState(context);
     CGContextSetLineCap(context, kCGLineCapSquare);
     CGContextSetStrokeColorWithColor(context, color);

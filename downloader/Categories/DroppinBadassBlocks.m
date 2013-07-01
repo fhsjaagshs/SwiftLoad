@@ -32,6 +32,7 @@ static NSString * const DeltaBlockStringKey = @"dbsk";
 static NSString * const UploadBlockStringKey = @"ubsk";
 static NSString * const UploadProgressBlockStringKey = @"ubsk-1";
 static NSString * const loadAccountInfoBlockStringKey = @"laicsk";
+static NSString * const instanceString = @"instance";
 
 static char const * const MetadataBlockKey = "mbk";
 static char const * const DownloadProgressBlockKey = "dbsk-1";
@@ -41,6 +42,7 @@ static char const * const DeltaBlockKey = "dbk";
 static char const * const UploadBlockKey = "ubk";
 static char const * const UploadProgressBlockKey = "ubk-1";
 static char const * const loadAccountInfoBlockKey = "laick";
+static char const * const instance = "instance";
 
 
 @interface DroppinBadassBlocks () <DBRestClientDelegate>
@@ -66,7 +68,12 @@ static char const * const loadAccountInfoBlockKey = "laick";
 @implementation DroppinBadassBlocks
 
 + (id)getInstance {
-    DroppinBadassBlocks *restClient = [[DroppinBadassBlocks alloc]initWithSession:[DBSession sharedSession]];
+    DroppinBadassBlocks *restClient = objc_getAssociatedObject(instanceString, instance);
+    
+    if (!restClient) {
+        restClient = [[DroppinBadassBlocks alloc]initWithSession:[DBSession sharedSession]];
+        objc_setAssociatedObject(instanceString, instance, restClient, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
     restClient.delegate = restClient;
     return restClient;
 }
