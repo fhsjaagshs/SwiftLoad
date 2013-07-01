@@ -40,6 +40,7 @@
 		F14478381770826A00C5204A /* DownloadController.m in Sources */ = {isa = PBXBuildFile; fileRef = F14478371770826A00C5204A /* DownloadController.m */; };
 		F144783E177092B800C5204A /* DownloadingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F144783D177092B800C5204A /* DownloadingCell.m */; };
 		F14478411770B25900C5204A /* WhiteProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = F14478401770B25900C5204A /* WhiteProgressView.m */; };
+		F145023B1781181700096202 /* DropboxDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = F145023A1781181700096202 /* DropboxDownload.m */; };
 		F149A6781491686D0038F1FC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F149A6771491686D0038F1FC /* AudioToolbox.framework */; };
 		F149A685149176E60038F1FC /* moviePlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F149A683149176E60038F1FC /* moviePlayerView.m */; };
 		F150D6B2177F5B9400E4C094 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F150D6B1177F5B9400E4C094 /* libsqlite3.dylib */; };
@@ -245,6 +246,8 @@
 		F144783D177092B800C5204A /* DownloadingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadingCell.m; sourceTree = "<group>"; };
 		F144783F1770B25900C5204A /* WhiteProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WhiteProgressView.h; path = ../WhiteProgressView.h; sourceTree = "<group>"; };
 		F14478401770B25900C5204A /* WhiteProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WhiteProgressView.m; path = ../WhiteProgressView.m; sourceTree = "<group>"; };
+		F14502391781181700096202 /* DropboxDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxDownload.h; sourceTree = "<group>"; };
+		F145023A1781181700096202 /* DropboxDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxDownload.m; sourceTree = "<group>"; };
 		F149A6771491686D0038F1FC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		F149A682149176E60038F1FC /* moviePlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = moviePlayerView.h; sourceTree = "<group>"; };
 		F149A683149176E60038F1FC /* moviePlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = moviePlayerView.m; sourceTree = "<group>"; };
@@ -901,6 +904,8 @@
 			children = (
 				F1BE07DF176F793F00C4F038 /* Downloads.h */,
 				F1BE07E0176F793F00C4F038 /* Downloads.m */,
+				F14502391781181700096202 /* DropboxDownload.h */,
+				F145023A1781181700096202 /* DropboxDownload.m */,
 				F1BE07E2176F7A1100C4F038 /* Download.h */,
 				F1BE07E3176F7A1100C4F038 /* Download.m */,
 				F14478361770826A00C5204A /* DownloadController.h */,
@@ -1190,6 +1195,7 @@
 				F150D6C2177F783E00E4C094 /* FMDatabaseQueue.m in Sources */,
 				F150D6C4177F783E00E4C094 /* FMResultSet.m in Sources */,
 				F115302B177FDB4F000513E1 /* FMDatabasePool.m in Sources */,
+				F145023B1781181700096202 /* DropboxDownload.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -186,7 +186,7 @@
                 if (self.scrollView.contentOffset.y >= 0) {
                     self.scrollView.contentInset = UIEdgeInsetsZero;
                 } else {
-                    self.scrollView.contentInset = UIEdgeInsetsMake(MIN(-self.scrollView.contentOffset.y, 30.0f), 0, 0, 0);
+                    self.scrollView.contentInset = UIEdgeInsetsMake(MIN(-self.scrollView.contentOffset.y, 60.0f), 0, 0, 0);
                 }
             }
         } else {

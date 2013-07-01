@@ -20,7 +20,6 @@ static NSString *CellIdentifier = @"dbcell";
 @implementation NSString (dropbox_browser)
 
 - (NSString *)fhs_normalize {
-    
     if (![[self substringFromIndex:1]isEqualToString:@"/"]) {
         return [[self lowercaseString]stringByAppendingString:@"/"];
     }
@@ -112,7 +111,6 @@ static NSString *CellIdentifier = @"dbcell";
     self.database = [FMDatabase databaseWithPath:[[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:@"database.db"]];
     [_database open];
     [_database executeUpdate:@"CREATE TABLE IF NOT EXISTS dropbox_data (id INTEGER PRIMARY KEY AUTOINCREMENT, lowercasepath VARCHAR(255) DEFAULT NULL, filename VARCHAR(255) DEFAULT NULL, date INTEGER, size INTEGER, type INTEGER)"];
-    NSLog(@"Error @ database creation: %@",[_database lastErrorMessage]);
     [_database close];
 }
 
@@ -126,29 +124,23 @@ static NSString *CellIdentifier = @"dbcell";
 }
 
 - (void)batchInsert:(NSArray *)metadatas {
-    
     [_database open];
     [_database beginTransaction];
     
     int length = metadatas.count;
     
-    // IMPORTANT INFO: the row constructor (multi-value insert command) has a hard limit of 1000 rows.
+    // IMPORTANT INFO: the row constructor (multi-value insert command) has a hard limit of 1000 rows. But for some reason, Anything above 100 doesnt work...
     
-    int total = 0;
-    
-    for (int location = 0; location < length; location+=900) {
+    for (int location = 0; location < length; location+=50) {
         unsigned int size = length-location;
-        if (size > 900)  {
-            size = 900;
+        if (size > 50)  {
+            size = 50;
         }
-        total += size;
         
         NSArray *array = [metadatas subarrayWithRange:NSMakeRange(location, size)];
-        
         NSMutableString *query = [NSMutableString stringWithFormat:@"INSERT INTO dropbox_data (date,size,type,filename,lowercasepath) VALUES "];
-        
+
         for (DBMetadata *item in array) {
-            
             NSString *filename = item.filename;
             NSString *lowercasePath = [[item.path stringByDeletingLastPathComponent]fhs_normalize];
             int type = item.isDirectory?2:1;
@@ -158,32 +150,23 @@ static NSString *CellIdentifier = @"dbcell";
         }
         
         [query deleteCharactersInRange:NSMakeRange(query.length-1, 1)];
-        
         [_database executeUpdate:query];
     }
-    
-    NSLog(@"Total: %d, Inserted: %d",length,total);
 
     [_database commit];
     [_database close];
 }
 
-- (void)logError:(NSString *)string {
-    NSLog(@"ERROR @ %@: %@",string,[_database lastErrorMessage]);
-}
-
 - (void)loadContentsOfDirectory:(NSString *)string {
-    NSLog(@"Lookin up: %@",string);
     [_currentPathItems removeAllObjects];
     [_database open];
     FMResultSet *s = [_database executeQuery:@"SELECT * FROM dropbox_data where lowercasepath=? ORDER BY filename",[string lowercaseString]];
-    [self logError:@"loadContentsOfDirectory"];
     while ([s next]) {
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
         [dict setObject:[s stringForColumn:@"filename"] forKey:NSFileName];
         [dict setObject:[NSNumber numberWithLongLong:[s intForColumn:@"size"]] forKey:NSFileSize];
         [dict setObject:[NSDate dateWithTimeIntervalSince1970:[s intForColumn:@"date"]] forKey:NSFileCreationDate];
-        [dict setObject:([s intForColumn:@"type"]== 1)?NSFileTypeRegular:NSFileTypeDirectory forKey:NSFileType];
+        [dict setObject:([s intForColumn:@"type"] == 1)?NSFileTypeRegular:NSFileTypeDirectory forKey:NSFileType];
         [_currentPathItems addObject:dict];
     }
     [s close];
@@ -240,7 +223,7 @@ static NSString *CellIdentifier = @"dbcell";
         NSString *filePath = [kCachesDir stringByAppendingPathComponent:@"cursors.json"];
         NSData *json = [NSData dataWithContentsOfFile:filePath];
         NSMutableDictionary *dict = [[NSFileManager defaultManager]fileExistsAtPath:filePath]?[NSJSONSerialization JSONObjectWithData:json options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
-        //self.cursor = [dict objectForKey:_userID];
+        self.cursor = [dict objectForKey:_userID];
         [self updateFileListing];
     }
 }
@@ -284,7 +267,6 @@ static NSString *CellIdentifier = @"dbcell";
             
             for (DBDeltaEntry *entry in entries) {
                 DBMetadata *item = entry.metadata;
-                NSLog(@"%@",[[item.path stringByDeletingLastPathComponent]fhs_normalize]);
                 if (item) {
                     if (item.isDeleted) {
                         [self removeItemWithLowercasePath:entry.lowercasePath];
@@ -389,7 +371,7 @@ static NSString *CellIdentifier = @"dbcell";
                 [kAppDelegate setVisibleHudMode:MBProgressHUDModeDeterminate];
                 [kAppDelegate setSecondaryTitleOfVisibleHUD:filename];
                 
-                [DroppinBadassBlocks loadFile:[fileDict objectForKey:NSFileDBPath] intoPath:getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:filename]) withCompletionBlock:^(DBMetadata *metadata, NSError *error) {
+                [DroppinBadassBlocks loadFile:[_navBar.topItem.title stringByAppendingPathComponent:[fileDict objectForKey:NSFileName]] intoPath:getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:filename]) withCompletionBlock:^(DBMetadata *metadata, NSError *error) {
                     if (error) {
                         [kAppDelegate showFailedAlertForFilename:metadata.filename];
                     } else {
@@ -460,8 +442,6 @@ static NSString *CellIdentifier = @"dbcell";
     }
     
     [_pull finishedLoading];
-    
-    NSLog(@"Current Path Items: %@",_currentPathItems);
 }
 
 - (void)close {
