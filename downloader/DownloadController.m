@@ -86,7 +86,7 @@ static NSString * const cellId = @"acellid";
         [backButton addTarget:self action:@selector(strikedownTableView) forControlEvents:UIControlEventTouchUpInside];
         [_mainView addSubview:backButton];
         
-        UILabel *dl = [[[UILabel alloc]initWithFrame:CGRectMake(60, 5, _mainView.bounds.size.width-100, 30)]autorelease];
+        UILabel *dl = [[[UILabel alloc]initWithFrame:CGRectMake(100, 5, _mainView.bounds.size.width-180, 30)]autorelease];
         dl.text = @"Downloads";
         dl.font = [UIFont boldSystemFontOfSize:20];
         dl.backgroundColor = [UIColor clearColor];
