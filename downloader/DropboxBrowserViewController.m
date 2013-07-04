@@ -365,43 +365,28 @@ static NSString *CellIdentifier = @"dbcell";
     } else {
         NSString *message = [NSString stringWithFormat:@"Do you wish to download \"%@\"?",filename];
         UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+            
+            NSString *filePath = [_navBar.topItem.title stringByAppendingPathComponent:[fileDict objectForKey:NSFileName]];
+            
             if (buttonIndex == 0) {
-                
-                DropboxDownload *dl = [DropboxDownload downloadWithPath:[_navBar.topItem.title stringByAppendingPathComponent:[fileDict objectForKey:NSFileName]]];
+                DropboxDownload *dl = [DropboxDownload downloadWithPath:filePath];
                 [[Downloads sharedDownloads]addDownload:dl];
-                /*
-                [kAppDelegate showHUDWithTitle:@"Downloading"];
-                [kAppDelegate setVisibleHudMode:MBProgressHUDModeDeterminate];
-                [kAppDelegate setSecondaryTitleOfVisibleHUD:filename];
-                
-                [DroppinBadassBlocks loadFile:[_navBar.topItem.title stringByAppendingPathComponent:[fileDict objectForKey:NSFileName]] intoPath:getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:filename]) withCompletionBlock:^(DBMetadata *metadata, NSError *error) {
-                    if (error) {
-                        [kAppDelegate showFailedAlertForFilename:metadata.filename];
-                    } else {
-                        [kAppDelegate showFinishedAlertForFilename:metadata.filename];
-                    }
-                } andProgressBlock:^(float progress) {
-                    [kAppDelegate setProgressOfVisibleHUD:progress];
-                }];*/
-                
             } else if (buttonIndex == 1) {
                 
                 [kAppDelegate showHUDWithTitle:@"Loading Link..."];
                 [kAppDelegate setVisibleHudMode:MBProgressHUDModeIndeterminate];
                 [kAppDelegate setSecondaryTitleOfVisibleHUD:filename];
                 
-                [DroppinBadassBlocks loadSharableLinkForFile:[fileDict objectForKey:NSFileDBPath] andCompletionBlock:^(NSString *link, NSString *path, NSError *error) {
+                [DroppinBadassBlocks loadSharableLinkForFile:filePath andCompletionBlock:^(NSString *link, NSString *path, NSError *error) {
                     [kAppDelegate hideHUD];
                     if (error) {
                         [kAppDelegate showFailedAlertForFilename:path.lastPathComponent];
                     } else {
-                        TransparentAlert *avdd = [[TransparentAlert alloc]initWithTitle:[NSString stringWithFormat:@"Link For:\n%@",[path lastPathComponent]] message:link completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
+                        [[[[TransparentAlert alloc]initWithTitle:[NSString stringWithFormat:@"Link For:\n%@",[path lastPathComponent]] message:link completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
                             if (buttonIndex == 1) {
                                 [[UIPasteboard generalPasteboard]setString:alertView.message];
                             }
-                        } cancelButtonTitle:@"OK" otherButtonTitles:@"Copy", nil];
-                        [avdd show];
-                        [avdd release];
+                        } cancelButtonTitle:@"OK" otherButtonTitles:@"Copy", nil]autorelease]show];
                     }
                 }];
             }
