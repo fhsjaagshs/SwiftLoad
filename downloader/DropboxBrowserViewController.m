@@ -367,6 +367,9 @@ static NSString *CellIdentifier = @"dbcell";
         UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             if (buttonIndex == 0) {
                 
+                DropboxDownload *dl = [DropboxDownload downloadWithPath:[_navBar.topItem.title stringByAppendingPathComponent:[fileDict objectForKey:NSFileName]]];
+                [[Downloads sharedDownloads]addDownload:dl];
+                /*
                 [kAppDelegate showHUDWithTitle:@"Downloading"];
                 [kAppDelegate setVisibleHudMode:MBProgressHUDModeDeterminate];
                 [kAppDelegate setSecondaryTitleOfVisibleHUD:filename];
@@ -379,7 +382,7 @@ static NSString *CellIdentifier = @"dbcell";
                     }
                 } andProgressBlock:^(float progress) {
                     [kAppDelegate setProgressOfVisibleHUD:progress];
-                }];
+                }];*/
                 
             } else if (buttonIndex == 1) {
                 

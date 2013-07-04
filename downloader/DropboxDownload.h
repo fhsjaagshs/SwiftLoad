@@ -10,4 +10,7 @@
 
 @interface DropboxDownload : Download
 
++ (DropboxDownload *)downloadWithPath:(NSString *)path;
+- (id)initWithPath:(NSString *)path;
+
 @end

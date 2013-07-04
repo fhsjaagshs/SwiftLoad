@@ -26,12 +26,14 @@ static BGProcFactory *sharedInstance = nil;
         identifier = UIBackgroundTaskInvalid;
     }];
     
-    [_core setObject:identifier forKey:key];
+    NSLog(@"%u",identifier);
+    
+    [_core setObject:[NSString stringWithFormat:@"%u",identifier] forKey:key];
 }
 
 - (void)endProcForKey:(NSString *)key {
-    UIBackgroundTaskIdentifier identifier = [_core objectForKey:key];
-    if (identifier) {
+    UIBackgroundTaskIdentifier identifier = [[_core objectForKey:key]unsignedIntValue];
+    if (identifier > 0) {
         [[UIApplication sharedApplication]endBackgroundTask:identifier];
         identifier = UIBackgroundTaskInvalid;
     }

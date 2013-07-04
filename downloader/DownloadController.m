@@ -154,7 +154,7 @@ static NSString * const cellId = @"acellid";
     
     Download *download = [[Downloads sharedDownloads]downloadAtIndex:indexPath.row];
     download.delegate = cell;
-    cell.titleLabel.text = [[download.url lastPathComponent]stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    cell.titleLabel.text = [download.fileName stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     return cell;
 }
 

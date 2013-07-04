@@ -49,6 +49,7 @@
     #import "MIMEUtils.h"
     #import "NetworkUtils.h"
     #import "Download.h"
+    #import "DropboxDownload.h"
     #import "Downloads.h"
     #import "DownloadController.h"
 
