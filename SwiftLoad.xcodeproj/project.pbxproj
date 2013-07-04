@@ -177,6 +177,7 @@
 		F1EB834516D808AA009D7D2D /* paperclip.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833A16D808AA009D7D2D /* paperclip.png */; };
 		F1ED4B12170352D10056D55F /* NSString+mods.m in Sources */ = {isa = PBXBuildFile; fileRef = F1ED4B11170352D10056D55F /* NSString+mods.m */; };
 		F1EDE3F613F8708600C17B2A /* MyFilesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1EDE3F513F8708600C17B2A /* MyFilesViewController.m */; };
+		F1F0EBC31785D9EA00878F7D /* HTTPDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = F1F0EBC21785D9EA00878F7D /* HTTPDownload.m */; };
 		F1F114C5142AA29F00199C3C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F114C4142AA29F00199C3C /* SystemConfiguration.framework */; };
 		F1F114C7142AA3F400199C3C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F114C6142AA3F400199C3C /* CFNetwork.framework */; };
 		F1F114E3142AA73F00199C3C /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F114E2142AA73F00199C3C /* MobileCoreServices.framework */; };
@@ -451,6 +452,8 @@
 		F1ED4B10170352D10056D55F /* NSString+mods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+mods.h"; sourceTree = "<group>"; };
 		F1ED4B11170352D10056D55F /* NSString+mods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+mods.m"; sourceTree = "<group>"; };
 		F1EDE3F513F8708600C17B2A /* MyFilesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFilesViewController.m; sourceTree = "<group>"; };
+		F1F0EBC11785D9E900878F7D /* HTTPDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPDownload.h; sourceTree = "<group>"; };
+		F1F0EBC21785D9EA00878F7D /* HTTPDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPDownload.m; sourceTree = "<group>"; };
 		F1F114C4142AA29F00199C3C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		F1F114C6142AA3F400199C3C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		F1F114E2142AA73F00199C3C /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -891,6 +894,8 @@
 				F1BE07E0176F793F00C4F038 /* Downloads.m */,
 				F14502391781181700096202 /* DropboxDownload.h */,
 				F145023A1781181700096202 /* DropboxDownload.m */,
+				F1F0EBC11785D9E900878F7D /* HTTPDownload.h */,
+				F1F0EBC21785D9EA00878F7D /* HTTPDownload.m */,
 				F1BE07E2176F7A1100C4F038 /* Download.h */,
 				F1BE07E3176F7A1100C4F038 /* Download.m */,
 				F14478361770826A00C5204A /* DownloadController.h */,
@@ -1183,6 +1188,7 @@
 				F150D6C4177F783E00E4C094 /* FMResultSet.m in Sources */,
 				F115302B177FDB4F000513E1 /* FMDatabasePool.m in Sources */,
 				F145023B1781181700096202 /* DropboxDownload.m in Sources */,
+				F1F0EBC31785D9EA00878F7D /* HTTPDownload.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

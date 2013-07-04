@@ -7,7 +7,6 @@
 //
 
 #import "DropboxBrowserViewController.h"
-#import "SwiftLoadCell.h"
 
 static NSString *CellIdentifier = @"dbcell";
 
@@ -117,8 +116,10 @@ static NSString *CellIdentifier = @"dbcell";
 + (void)clearDatabase {
     FMDatabase *database = [FMDatabase databaseWithPath:[[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:@"database.db"]];
     [database open];
+    [database beginTransaction];
     [database executeUpdate:@"DROP TABLE dropbox_data"];
     [database executeUpdate:@"CREATE TABLE IF NOT EXISTS dropbox_data (id INTEGER PRIMARY KEY AUTOINCREMENT, lowercasepath VARCHAR(255) DEFAULT NULL, filename VARCHAR(255) DEFAULT NULL, date INTEGER, size INTEGER, type INTEGER)"];
+    [database commit];
     [database close];
     [[NSFileManager defaultManager]removeItemAtPath:[kCachesDir stringByAppendingPathComponent:@"cursors.json"] error:nil];
 }
@@ -129,7 +130,7 @@ static NSString *CellIdentifier = @"dbcell";
     
     int length = metadatas.count;
     
-    // IMPORTANT INFO: the row constructor (multi-value insert command) has a hard limit of 1000 rows. But for some reason, Anything above 100 doesnt work...
+    // IMPORTANT INFO: the row constructor (multi-value insert command) has a hard limit of 1000 rows. But for some reason, Anything above 100 doesnt work... So I just do 25 to 50...
     
     for (int location = 0; location < length; location+=50) {
         unsigned int size = length-location;
@@ -175,8 +176,10 @@ static NSString *CellIdentifier = @"dbcell";
 
 - (void)removeAllEntriesForCurrentUser {
     [_database open];
+    [_database beginTransaction];
     [_database executeUpdate:@"DROP TABLE dropbox_data"];
     [_database executeUpdate:@"CREATE TABLE dropbox_data (id INTEGER PRIMARY KEY AUTOINCREMENT, lowercasepath VARCHAR(255) DEFAULT NULL, filename VARCHAR(255) DEFAULT NULL, date INTEGER, size INTEGER, type INTEGER)"];
+    [_database commit];
     [_database close];
 }
 

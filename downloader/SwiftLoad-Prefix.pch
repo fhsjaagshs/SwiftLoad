@@ -40,6 +40,7 @@
     #import "ShadowedNavBar.h"
     #import "ShadowedToolBar.h"
     #import "ShadowedTableView.h"
+    #import "SwiftLoadCell.h"
 
     #import "MBProgressHUD.h"
     #import "PullToRefreshView.h"
@@ -50,6 +51,7 @@
     #import "NetworkUtils.h"
     #import "Download.h"
     #import "DropboxDownload.h"
+    #import "HTTPDownload.h"
     #import "Downloads.h"
     #import "DownloadController.h"
 

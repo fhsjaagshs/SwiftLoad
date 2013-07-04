@@ -462,7 +462,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     
     NSLog(@"URL in AppDelegate: %@",url);
     
-    Download *download = [Download downloadWithURL:url];
+    HTTPDownload *download = [HTTPDownload downloadWithURL:url];
     [[Downloads sharedDownloads]addDownload:download];
 }
 

@@ -14,9 +14,7 @@ extern NSString * const kDownloadChanged;
 
 @interface Download : NSObject
 
-@property (nonatomic, assign) float fileSize;
 @property (nonatomic, retain) NSString *fileName;
-@property (nonatomic, retain) NSURL *url;
 @property (nonatomic, assign) BOOL complete;
 @property (nonatomic, assign) BOOL succeeded;
 
@@ -25,7 +23,9 @@ extern NSString * const kDownloadChanged;
 - (void)stop;
 - (void)start;
 
-- (id)initWithURL:(NSURL *)aUrl;
-+ (Download *)downloadWithURL:(NSURL *)aURL;
+- (void)showSuccess;
+- (void)showFailure;
+
+- (void)handleBackgroundTaskExpiration;
 
 @end

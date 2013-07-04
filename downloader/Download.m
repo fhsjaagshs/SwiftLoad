@@ -10,128 +10,22 @@
 #import "DownloadingCell.h"
 
 NSString * const kDownloadChanged = @"downloadDone";
-
-@interface Download ()
-
-@property (nonatomic, strong) NSURLConnection *connection;
-@property (nonatomic, retain) NSMutableData *downloadedData;
-@property (nonatomic, assign) float downloadedBytes;
-@property (nonatomic, assign) UIBackgroundTaskIdentifier bgtask;
-
-@end
+NSString * const kBackgroundTaskDownload = @"download";
 
 @implementation Download
 
-+ (Download *)downloadWithURL:(NSURL *)aURL {
-    return [[[[self class]alloc]initWithURL:aURL]autorelease];
+- (void)handleBackgroundTaskExpiration {
+    [self stop];
 }
 
-- (id)initWithURL:(NSURL *)aUrl {
-    self = [super init];
-    if (self) {
-        self.url = aUrl;
-    }
-    return self;
+- (void)cancelBackgroundTask {
+    [[BGProcFactory sharedFactory]endProcForKey:kBackgroundTaskDownload];
 }
 
-- (void)stop {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    self.complete = YES;
-    self.succeeded = NO;
-    [_connection cancel];
-    [_downloadedData setLength:0];
-    self.downloadedBytes = 0;
-    self.fileName = nil;
-    self.fileSize = 0;
-}
-
-- (void)start {
-    [[NSNotificationCenter defaultCenter]postNotificationName:kDownloadChanged object:self];
-    self.complete = NO;
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    
-    NSMutableURLRequest *headReq = [NSMutableURLRequest requestWithURL:_url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:30.0];
-    [headReq setHTTPMethod:@"HEAD"];
-    
-    [NSURLConnection sendAsynchronousRequest:headReq queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
-        if (!error) {
-            NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
-            if (headers) {
-                if ([headers objectForKey:@"Content-Range"]) {
-                    NSString *contentRange = [headers objectForKey:@"Content-Range"];
-                    NSRange range = [contentRange rangeOfString:@"/"];
-                    NSString *totalBytesCount = [contentRange substringFromIndex:range.location+1];
-                    self.fileSize = [totalBytesCount floatValue];
-                } else if ([headers objectForKey:@"Content-Length"]) {
-                    self.fileSize = [[headers objectForKey:@"Content-Length"]floatValue];
-                } else {
-                    self.fileSize = -1;
-                }
-            }
-            
-            
-            self.bgtask = [[UIApplication sharedApplication]beginBackgroundTaskWithExpirationHandler:^{
-                [_connection cancel];
-                [_downloadedData setLength:0];
-                
-                [[UIApplication sharedApplication]endBackgroundTask:_bgtask];
-                self.bgtask = UIBackgroundTaskInvalid;
-            }];
-            
-            NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:_url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:30.0];
-            [theRequest setHTTPMethod:@"GET"];
-            
-            if ([NSURLConnection canHandleRequest:theRequest]) {
-                self.connection = [[[NSURLConnection alloc]initWithRequest:theRequest delegate:self]autorelease];
-            } else {
-                [self showFailure];
-                [[UIApplication sharedApplication]endBackgroundTask:_bgtask];
-                self.bgtask = UIBackgroundTaskInvalid;
-            }
-            
-        } else {
-            self.complete = YES;
-            self.succeeded = NO;
-        }
+- (void)startBackgroundTask {
+    [[BGProcFactory sharedFactory]startProcForKey:kBackgroundTaskDownload andExpirationHandler:^{
+        [self handleBackgroundTaskExpiration];
     }];
-}
-
-- (void)showFailure {
-    [_delegate drawRed];
-}
-
-- (void)showSuccessForFilename:(NSString *)fileName {
-    if (fileName.length > 14) {
-        fileName = [[fileName substringToIndex:11]stringByAppendingString:@"..."];
-    }
-    
-    UILocalNotification *notification = [[UILocalNotification alloc]init];
-    notification.fireDate = [NSDate date];
-    notification.alertBody = [NSString stringWithFormat:@"Finished downloading: %@",fileName];
-    notification.soundName = UILocalNotificationDefaultSoundName;
-    [[UIApplication sharedApplication]presentLocalNotificationNow:notification];
-    [notification release];
-    
-    [_delegate drawGreen];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSHTTPURLResponse *)response {
-    self.fileName = [response.URL.absoluteString lastPathComponent];
-}
-
-- (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)recievedData {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    
-    if (_downloadedData.length == 0) {
-        self.downloadedData = [NSMutableData data];
-    }
-    
-    self.downloadedBytes += recievedData.length;
-    [_downloadedData appendData:recievedData];
-    
-    float progress = (_fileSize == -1)?1:_downloadedData.length/_fileSize;
-    
-    [_delegate setProgress:progress];
 }
 
 - (void)clearOutMyself {
@@ -140,40 +34,56 @@ NSString * const kDownloadChanged = @"downloadDone";
     [[NSNotificationCenter defaultCenter]postNotificationName:kDownloadChanged object:self];
 }
 
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+- (void)stop {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    [self showFailure];
-    [self performSelector:@selector(clearOutMyself) withObject:nil afterDelay:0.6f];
-    [[UIApplication sharedApplication]endBackgroundTask:_bgtask];
-    self.bgtask = UIBackgroundTaskInvalid;
+    self.complete = YES;
+    self.succeeded = NO;
+    self.fileName = nil;
+    [self cancelBackgroundTask];
 }
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)theConnection {
+- (void)start {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    [[NSNotificationCenter defaultCenter]postNotificationName:kDownloadChanged object:self];
+    self.complete = NO;
+    self.succeeded = NO;
+    [self startBackgroundTask];
+}
+
+- (void)showFailure {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    NSString *filename = [_fileName stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    self.complete = YES;
+    self.succeeded = NO;
+    [_delegate drawRed];
+    [self performSelector:@selector(clearOutMyself) withObject:nil afterDelay:0.6f];
+    [self cancelBackgroundTask];
+}
+
+- (void)showSuccess {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    
+    if (_fileName.length > 14) {
+        self.fileName = [[_fileName substringToIndex:11]stringByAppendingString:@"..."];
+    }
+    
+    UILocalNotification *notification = [[UILocalNotification alloc]init];
+    notification.fireDate = [NSDate date];
+    notification.alertBody = [NSString stringWithFormat:@"Finished downloading: %@",_fileName];
+    notification.soundName = UILocalNotificationDefaultSoundName;
+    [[UIApplication sharedApplication]presentLocalNotificationNow:notification];
+    [notification release];
     
     self.complete = YES;
+    self.succeeded = YES;
     
-    if (_downloadedData.length > 0) {
-        NSString *filePath = getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:filename]);
-        [[NSFileManager defaultManager]createFileAtPath:filePath contents:_downloadedData attributes:nil];
-        [self showSuccessForFilename:filename];
-        self.succeeded = YES;
-    } else {
-        self.succeeded = NO;
-        [self showFailure];
-    }
+    [_delegate drawGreen];
     [self performSelector:@selector(clearOutMyself) withObject:nil afterDelay:0.6f];
-    [[UIApplication sharedApplication]endBackgroundTask:_bgtask];
-    self.bgtask = UIBackgroundTaskInvalid;
+    [self cancelBackgroundTask];
 }
 
 - (void)dealloc {
     [self setDelegate:nil];
     [self setFileName:nil];
-    [self setUrl:nil];
-    [self setConnection:nil];
-    [self setDownloadedData:nil];
     [super dealloc];
 }
 
