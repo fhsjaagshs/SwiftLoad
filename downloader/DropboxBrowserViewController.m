@@ -383,7 +383,7 @@ static NSString *CellIdentifier = @"dbcell";
                 [DroppinBadassBlocks loadSharableLinkForFile:filePath andCompletionBlock:^(NSString *link, NSString *path, NSError *error) {
                     [kAppDelegate hideHUD];
                     if (error) {
-                        [kAppDelegate showFailedAlertForFilename:path.lastPathComponent];
+                        //[kAppDelegate showFailedAlertForFilename:path.lastPathComponent];
                     } else {
                         [[[[TransparentAlert alloc]initWithTitle:[NSString stringWithFormat:@"Link For:\n%@",[path lastPathComponent]] message:link completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
                             if (buttonIndex == 1) {

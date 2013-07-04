@@ -8,6 +8,21 @@
 
 #import "downloaderAppDelegate.h"
 
+void fireNotification(NSString *filename) {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    
+    if (filename.length > 14) {
+        filename = [[filename substringToIndex:11]stringByAppendingString:@"..."];
+    }
+    
+    UILocalNotification *notification = [[UILocalNotification alloc]init];
+    notification.fireDate = [NSDate date];
+    notification.alertBody = [NSString stringWithFormat:@"Finished downloading: %@",filename];
+    notification.soundName = UILocalNotificationDefaultSoundName;
+    [[UIApplication sharedApplication]presentLocalNotificationNow:notification];
+    [notification release];
+}
+
 NSString * getResource(NSString *raw) {
     return [[NSBundle mainBundle]pathForResource:[raw stringByDeletingPathExtension] ofType:[raw pathExtension]];
 }
@@ -50,8 +65,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 @implementation downloaderAppDelegate
-
-//@synthesize sessionController, progressView, isReciever, nowPlayingFile, sessionControllerSending, openFile, managerCurrentDir, downloadedData, expectedDownloadingFileSize, downloadedBytes, audioPlayer;
 
 //
 // Audio Player
@@ -371,7 +384,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 // AppDelegate Downloading
 //
 
-- (void)showFinishedAlertForFilename:(NSString *)fileName {
+/*- (void)showFinishedAlertForFilename:(NSString *)fileName {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     
     if (fileName.length > 14) {
@@ -384,7 +397,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     notification.soundName = UILocalNotificationDefaultSoundName;
     [[UIApplication sharedApplication]presentLocalNotificationNow:notification];
     [notification release];
-    
+ 
     [[HUDProgressView progressViewWithTag:0]redrawGreen];
     [[HUDProgressView progressViewWithTag:0]hideAfterDelay:1.5f];
 }
@@ -408,7 +421,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         [av show];
         [av release];
     }
-}
+}*/
 
 /*- (void)showFailedAlertForFilename:(NSString *)fileName {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
@@ -648,7 +661,8 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
             [[NSFileManager defaultManager]removeItemAtPath:inboxDir error:nil];
         }
         
-        [self showFinishedAlertForFilename:[url.absoluteString lastPathComponent]];
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        fireNotification(url.absoluteString.lastPathComponent);
     } else {
         NSString *URLString = nil;
         if ([url.absoluteString hasPrefix:@"swiftload://"]) {
@@ -939,7 +953,8 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     if (filename.length > 14) {
         filename = [[filename substringToIndex:11]stringByAppendingString:@"..."];
     }
-    [self showFinishedAlertForFilename:filename];
+    fireNotification(filename);
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [request release];
 }
 
@@ -989,7 +1004,8 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 - (void)uploadFinished:(SCRFTPRequest *)request {
     [self hideHUD];
-    [self showFinishedAlertForFilename:[request.ftpURL.absoluteString lastPathComponent]];
+    
+    //[self showFinishedAlertForFilename:[request.ftpURL.absoluteString lastPathComponent]];
     [request release];
 }
 

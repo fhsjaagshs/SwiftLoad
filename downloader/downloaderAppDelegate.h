@@ -20,6 +20,7 @@
 #define KILL_TIMER(q) if (q) {[q invalidate]; q=nil;}
 #define myCyan [UIColor colorWithRed:46.0f/255.0f green:1.0f blue:1.0f alpha:1.0f]
 
+void fireNotification(NSString *filename);
 NSString * getResource(NSString *raw);
 float sanitizeMesurement(float measurement);
 NSString * getNonConflictingFilePathForPath(NSString *path);
@@ -93,7 +94,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 // Downloading-specific HUDs
 //- (void)showFailedAlertForFilename:(NSString *)fileName;
-- (void)showFinishedAlertForFilename:(NSString *)fileName;
+//- (void)showFinishedAlertForFilename:(NSString *)fileName;
 
 // Downloading
 - (void)downloadFromAppDelegate:(NSString *)stouPrelim;
