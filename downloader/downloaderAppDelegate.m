@@ -308,9 +308,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         [vc presentModalViewController:controller animated:YES];
         [controller release];
     } else {
-        TransparentAlert *av = [[TransparentAlert alloc]initWithTitle:@"Mail Unavailable" message:@"In order to use this functionality, you must set up an email account in Settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [av show];
-        [av release];
+        [TransparentAlert showAlertWithTitle:@"Mail Unavailable" andMessage:@"In order to email files, you must set up an mail account in Settings."];
     }
 }
 
@@ -327,9 +325,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         [vc presentModalViewController:controller animated:YES];
         [controller release];
     } else {
-        TransparentAlert *av = [[TransparentAlert alloc]initWithTitle:@"Mail Unavailable" message:@"In order to use this functionality, you must set up an email account in Settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [av show];
-        [av release];
+        [TransparentAlert showAlertWithTitle:@"SMS unavailable" andMessage:@"Please double check if you can send SMS messsages or iMessages."];
     }
 }
 
@@ -355,10 +351,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
             
             void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) = ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
                 if (error) {
-                    NSString *message = [NSString stringWithFormat:@"Error %u: %@", error.code, error.domain];
-                    TransparentAlert *av = [[TransparentAlert alloc]initWithTitle:@"Error Printing" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                    [av show];
-                    [av release];
+                    [TransparentAlert showAlertWithTitle:[NSString stringWithFormat:@"Error %u",error.code] andMessage:error.domain];
                 }
             };
             
@@ -417,7 +410,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     }
 }
 
-- (void)showFailedAlertForFilename:(NSString *)fileName {
+/*- (void)showFailedAlertForFilename:(NSString *)fileName {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     
     if (fileName.length > 14) {
@@ -437,32 +430,29 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         [av show];
         [av release];
     }
-}
+}*/
 
 - (void)downloadFromAppDelegate:(NSString *)stouPrelim {
     
     NSURL *url = [NSURL URLWithString:stouPrelim];
     
-    if (url == nil) {
-        TransparentAlert *av = [[[TransparentAlert alloc]initWithTitle:@"Invalid URL" message:@"The URL you have provided is somehow bogus." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil]autorelease];
-        [av show];
+    if (!url) {
+        [TransparentAlert showAlertWithTitle:@"Invalid URL" andMessage:@"The URL you have provided is somehow bogus."];
         return;
     }
     
     if (![stouPrelim hasPrefix:@"http"]) {
         
         if ([stouPrelim hasPrefix:@"sftp"] || [stouPrelim hasPrefix:@"rsync"] || [stouPrelim hasPrefix:@"afp"]) {
-            TransparentAlert *av = [[[TransparentAlert alloc]initWithTitle:@"Invalid URL" message:@"The URL you have provided is not HTTP or FTP." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil]autorelease];
-            [av show];
+            [TransparentAlert showAlertWithTitle:@"Invalid URL" andMessage:@"The URL you have provided is not HTTP or FTP."];
             return;
         }
         
         stouPrelim = [NSString stringWithFormat:@"http://%@",stouPrelim];
     }
     
-    NSLog(@"URL in AppDelegate: %@",url);
-    
     HTTPDownload *download = [HTTPDownload downloadWithURL:url];
+    download.fileName = [url.absoluteString.lastPathComponent stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [[Downloads sharedDownloads]addDownload:download];
 }
 
@@ -485,10 +475,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         if (error) {
             [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
             [self hideHUD];
-            NSString *message = [NSString stringWithFormat:@"The file you tried to upload failed because: %@",error];
-            TransparentAlert *avdd = [[TransparentAlert alloc]initWithTitle:@"Failure Uploading" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [avdd show];
-            [avdd release];
+            [TransparentAlert showAlertWithTitle:@"Failure Uploading" andMessage:[NSString stringWithFormat:@"The file you tried to upload failed because: %@",error]];
         } else {
             NSString *rev = nil;
             
@@ -512,29 +499,20 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
                     if (error) {
                         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                         [self hideHUD];
-                        NSString *message = [[NSString alloc]initWithFormat:@"The file you tried to upload failed because: %@",error];
-                        TransparentAlert *avdd = [[TransparentAlert alloc]initWithTitle:@"Failure Uploading" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                        [avdd show];
-                        [avdd release];
-                        [message release];
+                        [TransparentAlert showAlertWithTitle:@"Failure Uploading" andMessage:[NSString stringWithFormat:@"The file you tried to upload failed because: %@",error]];
                     } else {
                         [DroppinBadassBlocks loadSharableLinkForFile:metadata.path andCompletionBlock:^(NSString *link, NSString *path, NSError *error) {
                             [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                             [self hideHUD];
                             
                             if (error) {
-                                TransparentAlert *avdd = [[TransparentAlert alloc]initWithTitle:@"Success Uploading" message:@"Upload succeeded, but there was a problem generating a sharable link." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                                [avdd show];
-                                [avdd release];
+                                [TransparentAlert showAlertWithTitle:[NSString stringWithFormat:@"Error %d",error.code] andMessage:@"Upload succeeded, but there was a problem generating a sharable link."];
                             } else {
-                                TransparentAlert *avdd = [[TransparentAlert alloc]initWithTitle:[NSString stringWithFormat:@"Link For:\n%@",[path lastPathComponent]] message:link completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
+                                [[[[TransparentAlert alloc]initWithTitle:[NSString stringWithFormat:@"Link For:\n%@",[path lastPathComponent]] message:link completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
                                     if (buttonIndex == 1) {
                                         [[UIPasteboard generalPasteboard]setString:alertView.message];
                                     }
-                                } cancelButtonTitle:@"OK" otherButtonTitles:@"Copy", nil];
-                                
-                                [avdd show];
-                                [avdd release];
+                                } cancelButtonTitle:@"OK" otherButtonTitles:@"Copy", nil]autorelease]show];
                             }
                         }];
                     }
@@ -548,9 +526,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 - (void)sessionDidReceiveAuthorizationFailure:(DBSession *)session userId:(NSString *)userId {
-    TransparentAlert *avD = [[TransparentAlert alloc]initWithTitle:@"Failed Dropbox Authentication" message:@"Please try reauthenticating in the settings page on the main menu." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	[avD show];
-    [avD release];
+    [TransparentAlert showAlertWithTitle:@"Dropbox Authentication Failed" andMessage:@"Please try reauthenticating in Settings"];
 }
 
 - (void)remoteControlReceivedWithEvent:(UIEvent *)event {
@@ -790,8 +766,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         [self.sessionControllerSending disconnect];
         [self setSessionControllerSending:nil];
         [self makeSessionAvailable];
-        TransparentAlert *av = [[TransparentAlert alloc]initWithTitle:@"Internal Error" message:@"The file could not be sent due to an internal error. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [av show];
+        [TransparentAlert showAlertWithTitle:@"Internal Error" andMessage:@"The file could not be sent due to an internal error. Please try again later."];
         return;
     }
     
@@ -805,7 +780,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 - (void)peerPickerController:(GKPeerPickerController *)picker didConnectPeer:(NSString *)peerID toSession:(GKSession *)session {
     
-    TransparentAlert *avs = [[TransparentAlert alloc]initWithTitle:@"Connected" message:@"Would you like to send the file?" completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
+    [[[[TransparentAlert alloc]initWithTitle:@"Connected" message:@"Would you like to send the file?" completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
         
         if (buttonIndex == 1) {
             [self sendBluetoothData];
@@ -813,10 +788,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
             [session disconnectFromAllPeers];
         }
         
-    } cancelButtonTitle:@"Cancel" otherButtonTitles:@"Send", nil];
-
-    [avs show];
-    [avs release];
+    } cancelButtonTitle:@"Cancel" otherButtonTitles:@"Send", nil]autorelease]show];
     
     BKSessionController *sTemp = [[BKSessionController alloc]initWithSession:session];
     self.sessionControllerSending = sTemp;
@@ -842,9 +814,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 - (void)sessionControllerSenderDidFinishSendingData:(NSNotification *)aNotification {
     [self hideHUD];
-    TransparentAlert *avs = [[TransparentAlert alloc]initWithTitle:@"Sent" message:@"Your file has been successfully sent." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [avs show];
-    [avs release];
+    [TransparentAlert showAlertWithTitle:@"Sent" andMessage:@"Your file has been successfully sent."];
     [self.sessionControllerSending disconnect];
     [self setSessionControllerSending:nil];
     [self makeSessionAvailable];
@@ -853,9 +823,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 - (void)sessionControllerPeerDidDisconnect:(NSNotification *)aNotification {
     [self hideHUD];
-    TransparentAlert *avs = [[TransparentAlert alloc]initWithTitle:@"Disconnected" message:@"The device with which you were connected has been disconnected." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [avs show];
-    [avs release];
+    [TransparentAlert showAlertWithTitle:@"Bluetooth Disconnected" andMessage:@"The device you were connected to has been disconnected."];
     [self.sessionControllerSending.session disconnectFromAllPeers];
     [self setSessionControllerSending:nil];
     [self makeSessionAvailable];
@@ -896,7 +864,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         [self.sessionController.session denyConnectionFromPeer:peerID];
     }
     
-    TransparentAlert *avs = [[TransparentAlert alloc]initWithTitle:@"Connect?" message:@"Another person is trying to send you a file over bluetooth." completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
+    [[[[TransparentAlert alloc]initWithTitle:@"Connect?" message:@"Another person is trying to send you a file over bluetooth." completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
         
         if (buttonIndex == 1) {
             [self.sessionController.session acceptConnectionFromPeer:peerID error:nil];
@@ -904,10 +872,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
             [self.sessionController.session denyConnectionFromPeer:peerID];
         }
         
-    } cancelButtonTitle:@"Cancel" otherButtonTitles:@"Connect", nil];
-    
-    [avs show];
-    [avs release];
+    } cancelButtonTitle:@"Cancel" otherButtonTitles:@"Connect", nil]autorelease]show];
 }
 
 - (void)sessionControllerReceiverWillStartReceivingData:(NSNotification *)aNotification {
@@ -929,9 +894,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     NSArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:self.sessionController.receivedData];
     
     if (array.count == 0) {
-        TransparentAlert *av = [[TransparentAlert alloc]initWithTitle:@"Failure" message:@"There has been an error trying to receive your file." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [av show];
-        [av release];
+        [TransparentAlert showAlertWithTitle:@"File Transfer Failed" andMessage:@"There was an error receiving your file."];
         return;
     }
     
@@ -947,9 +910,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     
     [[BGProcFactory sharedFactory]endProcForKey:@"bt_rec"];
     
-    TransparentAlert *av = [[TransparentAlert alloc]initWithTitle:@"Success" message:@"Your file has been successfully received." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [av show];
-    [av release];
+    [TransparentAlert showAlertWithTitle:@"Success" andMessage:@"Your file was successfully received."];
 }
 
 //
@@ -1004,9 +965,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         [controller setType:FTPLoginControllerTypeDownload];
         [controller show];
     } else {
-        TransparentAlert *avs = [[TransparentAlert alloc]initWithTitle:@"Download Failed" message:[request.error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [avs show];
-        [avs release];
+        [TransparentAlert showAlertWithTitle:@"Download Failed" andMessage:[request.error localizedDescription]];
     }
     [request release];
 }
@@ -1037,9 +996,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (void)uploadFailed:(SCRFTPRequest *)request {
     [self hideHUD];
     NSString *message = [NSString stringWithFormat:@"Your file was not uploaded because %@", [request.error localizedDescription]];
-    TransparentAlert *avs = [[TransparentAlert alloc]initWithTitle:@"Upload Failed" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [avs show];
-    [avs release];
+    [TransparentAlert showAlertWithTitle:@"Upload Failed" andMessage:message];
     [request release];
 }
 

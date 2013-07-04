@@ -92,7 +92,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (void)setTagOfVisibleHUD:(int)tag;
 
 // Downloading-specific HUDs
-- (void)showFailedAlertForFilename:(NSString *)fileName;
+//- (void)showFailedAlertForFilename:(NSString *)fileName;
 - (void)showFinishedAlertForFilename:(NSString *)fileName;
 
 // Downloading
