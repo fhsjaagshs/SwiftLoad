@@ -8,11 +8,7 @@
 //  Adapted from work done by Matt Gallagher.
 
 #import <UIKit/UIKit.h>
-#import <QuartzCore/QuartzCore.h>
 
 @interface ShadowedTableView : UITableView
-
-@property (nonatomic, retain) CAGradientLayer *topShadow;
-@property (nonatomic, retain) CAGradientLayer *bottomShadow;
 
 @end

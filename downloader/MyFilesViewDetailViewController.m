@@ -10,8 +10,6 @@
 
 @implementation MyFilesViewDetailViewController
 
-@synthesize webView, popupQuery;
-
 - (void)loadView {
     [super loadView];
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];

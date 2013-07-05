@@ -10,8 +10,6 @@
 
 @implementation moviePlayerView
 
-@synthesize moviePlayer, popupQuery;
-
 - (void)loadView {
     [super loadView];
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];

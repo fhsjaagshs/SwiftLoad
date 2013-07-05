@@ -10,8 +10,6 @@
 
 @implementation fileInfo
 
-@synthesize moddateLabel, fileName, md5Field, revertButton, staticMD5Label;
-
 - (void)loadView {
     [super loadView];
     

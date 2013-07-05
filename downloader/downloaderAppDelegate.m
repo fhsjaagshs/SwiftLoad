@@ -936,66 +936,10 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 - (void)downloadFileUsingFtp:(NSString *)url withUsername:(NSString *)username andPassword:(NSString *)password {
-    SCRFTPRequest *ftpRequest = [[SCRFTPRequest requestWithURL:[NSURL URLWithString:url] toDownloadFile:getNonConflictingFilePathForPath([[kDocsDir stringByAppendingPathComponent:[url lastPathComponent]]stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding])]retain];
-    ftpRequest.username = username;
-    ftpRequest.password = password;
-    ftpRequest.delegate = self;
-    ftpRequest.didFinishSelector = @selector(downloadFinished:);
-    ftpRequest.didFailSelector = @selector(downloadFailed:);
-    ftpRequest.willStartSelector = @selector(downloadWillStart:);
-    [ftpRequest startRequest];
-}
-
-- (void)downloadFinished:(SCRFTPRequest *)request {
-    [self hideHUD];
-    NSString *filename = [[request.ftpURL.absoluteString lastPathComponent]stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    
-    if (filename.length > 14) {
-        filename = [[filename substringToIndex:11]stringByAppendingString:@"..."];
-    }
-    fireNotification(filename);
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    [request release];
-}
-
-- (void)downloadFailed:(SCRFTPRequest *)request {
-    [self hideHUD];
-    
-    if ([request.error.localizedDescription isEqualToString:@"FTP error 530"]) {
-        FTPLoginController *controller = [[[FTPLoginController alloc]initWithCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
-            if ([username isEqualToString:@"cancel"]) {
-                [[NSFileManager defaultManager]removeItemAtPath:[kDocsDir stringByAppendingPathComponent:[url lastPathComponent]] error:nil];
-            } else {
-                SCRFTPRequest *ftpRequest = [[SCRFTPRequest requestWithURL:[NSURL URLWithString:url] toDownloadFile:[[kDocsDir stringByAppendingPathComponent:[url lastPathComponent]]stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]retain];
-                ftpRequest.username = username;
-                ftpRequest.password = password;
-                ftpRequest.delegate = self;
-                ftpRequest.didFinishSelector = @selector(downloadFinished:);
-                ftpRequest.didFailSelector = @selector(downloadFailed:);
-                ftpRequest.willStartSelector = @selector(downloadWillStart:);
-                [ftpRequest startRequest];
-            }
-        }]autorelease];
-        [controller setUrl:request.ftpURL.absoluteString isPredefined:YES];
-        [controller setType:FTPLoginControllerTypeDownload];
-        [controller show];
-    } else {
-        [TransparentAlert showAlertWithTitle:@"Download Failed" andMessage:[request.error localizedDescription]];
-    }
-    [request release];
-}
-
-- (void)downloadWillStart:(SCRFTPRequest *)request {
-    [self showHUDWithTitle:@"Downloading..."];
-    
-    NSString *filename = [[request.ftpURL.absoluteString lastPathComponent]stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    
-    if (filename.length > 14) {
-        filename = [[filename substringToIndex:11]stringByAppendingString:@"..."];
-    }
-    
-    [self setSecondaryTitleOfVisibleHUD:filename];
-    [self setVisibleHudMode:MBProgressHUDModeIndeterminate];
+    FTPDownload *download = [FTPDownload downloadWithURL:[NSURL URLWithString:url]];
+    download.username = username;
+    download.password = password;
+    [[Downloads sharedDownloads]addDownload:download];
 }
 
 //

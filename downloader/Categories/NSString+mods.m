@@ -10,6 +10,10 @@
 
 @implementation NSString (mods)
 
+- (NSString *)percentSanitize {
+    return [self stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+}
+
 - (NSString *)stringByTrimmingWhitespace {
     return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
@@ -28,34 +32,23 @@
 }
 
 - (NSString *)stringByCapitalizingFirstLetter {
-    return [self stringByReplacingCharactersInRange:NSMakeRange(0,1) withString:[[self substringToIndex:1] uppercaseString]];
+    return [self stringByReplacingCharactersInRange:NSMakeRange(0,1) withString:[[self substringToIndex:1]uppercaseString]];
 }
 
 - (int)occurencesOfString:(NSString *)string {
-    return ([[self stringByReplacingOccurrencesOfString:string withString:@"``"]componentsSeparatedByString:@"``"].count-1);
+    return ([self componentsSeparatedByString:string].count-1);
 }
 
 - (BOOL)containsString:(NSString *)otherString {
-    if ([self rangeOfString:otherString].location == NSNotFound) {
-        return NO;
-    } else {
-        return YES;
-    }
+    return !([self rangeOfString:otherString].location == NSNotFound);
 }
 
 - (NSString *)stringByTrimmingExtraInternalSpacing {
-    
-    NSString *string = self;
-
-    while ([string rangeOfString:@"  "].location != NSNotFound) {
-        string = [string stringByReplacingOccurrencesOfString:@"  " withString:@" "];
-    }
-    return string;
+    return [self stringByReplacingOccurrencesOfString:@"  " withString:@" "];
 }
 
 - (NSString *)stringBySanitizingForFilename {
-    NSCharacterSet *illegalFileNameCharacters = [NSCharacterSet characterSetWithCharactersInString:@"/\\?%*|\"<>"];
-    return [[self componentsSeparatedByCharactersInSet:illegalFileNameCharacters]componentsJoinedByString:@""];
+    return [[self componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"/\\?%*|\"<>"]]componentsJoinedByString:@""];
 }
 
 - (NSString *)stringByAppendingPathComponent_URLSafe:(NSString *)str {

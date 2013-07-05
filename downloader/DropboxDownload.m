@@ -11,7 +11,7 @@
 
 @interface DropboxDownload ()
 
-@property (nonatomic, strong) NSString *path;
+@property (nonatomic, retain) NSString *path;
 
 @end
 

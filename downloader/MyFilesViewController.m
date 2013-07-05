@@ -14,9 +14,7 @@
 #define BOUNCE_PIXELS 5.0
 
 @interface MyFilesViewController ()
-
 @property (nonatomic, assign) BOOL watchdogCanGo;
-
 @end
 
 @implementation MyFilesViewController

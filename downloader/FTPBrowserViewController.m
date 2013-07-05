@@ -25,8 +25,6 @@
 
 @implementation FTPBrowserViewController
 
-@synthesize theTableView, backButton, homeButton, navBar, pull, currentFTPURL, originalFTPURL, filedicts;
-
 - (void)loadView {
     [super loadView];
     
@@ -209,11 +207,11 @@
         password = @" ";
     }
     
+    NSString *concatString = [NSString stringWithFormat:@"%@:%@:%@",username, password, ftpurl.host];
+    
     if (index == -1) {
-        NSString *concatString = [NSString stringWithFormat:@"%@:%@:%@",username, password, ftpurl.host];
         [triples addObject:concatString];
     } else {
-        NSString *concatString = [NSString stringWithFormat:@"%@:%@:%@",username, password, ftpurl.host];
         [triples replaceObjectAtIndex:index withObject:concatString];
     }
     
@@ -274,10 +272,7 @@
 }
 
 - (void)listFailed:(SCRFTPRequest *)request {
-    TransparentAlert *av = [[TransparentAlert alloc]initWithTitle:@"FTP Error" message:request.error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [av show];
-    [av release];
-    
+    [TransparentAlert showAlertWithTitle:@"FTP Error" andMessage:request.error.localizedDescription];
     [self.theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     [self.pull finishedLoading];
     [request release];
@@ -371,7 +366,7 @@
         UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             if (buttonIndex == 0) {
                 NSDictionary *creds = [self getCredsForURL:[NSURL URLWithString:[self fixURL:self.currentFTPURL]]];
-                [kAppDelegate downloadFileUsingFtp:[self.currentFTPURL stringByAppendingPathComponent_URLSafe:filename] withUsername:[creds objectForKey:@"username"] andPassword:[creds objectForKey:@"password"]];
+                [kAppDelegate downloadFileUsingFtp:[_currentFTPURL stringByAppendingPathComponent_URLSafe:filename] withUsername:[creds objectForKey:@"username"] andPassword:[creds objectForKey:@"password"]];
             }
         } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download", nil]autorelease];
         actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;

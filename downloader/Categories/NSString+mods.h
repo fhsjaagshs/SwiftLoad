@@ -10,6 +10,7 @@
 
 @interface NSString (mods)
 
+- (NSString *)percentSanitize;
 - (NSString *)stringByRemovingHTMLEntities;
 - (NSString *)stringByCapitalizingFirstLetter;
 - (int)occurencesOfString:(NSString *)string;

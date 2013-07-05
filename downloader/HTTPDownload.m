@@ -10,7 +10,7 @@
 
 @interface HTTPDownload ()
 
-@property (nonatomic, strong) NSURLConnection *connection;
+@property (nonatomic, retain) NSURLConnection *connection;
 @property (nonatomic, retain) NSMutableData *downloadedData;
 @property (nonatomic, assign) float downloadedBytes;
 @property (nonatomic, assign) float fileSize;

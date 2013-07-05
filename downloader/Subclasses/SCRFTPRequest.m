@@ -415,7 +415,7 @@ static NSOperationQueue *sharedRequestQueue = nil;
                 
                 id date = (NSDate *)CFDictionaryGetValue(entry, kCFFTPResourceModDate);
                 if (date) {
-                    [dictionary setObject:(NSDate *)date forKey:NSFileModificationDate];
+                    [dictionary setObject:[NSNumber numberWithFloat:[(NSDate *)date timeIntervalSince1970]] forKey:NSFileModificationDate];
                 }
                 [self.directoryContents addObject:dictionary];
             }

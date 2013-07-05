@@ -52,6 +52,7 @@
     #import "Download.h"
     #import "DropboxDownload.h"
     #import "HTTPDownload.h"
+    #import "FTPDownload.h"
     #import "Downloads.h"
     #import "DownloadController.h"
 
@@ -59,7 +60,6 @@
     #import "DAVConnection.h"
     #import "BKSessionController.h"
     #import "SCRFTPRequest.h"
-    
 
     #import "webDAVHelp.h"
     #import "MyFilesViewDetailViewController.h"

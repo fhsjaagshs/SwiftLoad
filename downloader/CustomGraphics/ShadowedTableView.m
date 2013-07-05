@@ -8,16 +8,19 @@
 //  Adapted from work done by Matt Gallagher.
 
 #import "ShadowedTableView.h"
+#import <QuartzCore/QuartzCore.h>
 
-#define SHADOW_HEIGHT 20.0
-#define SHADOW_INVERSE_HEIGHT 10.0
+@interface ShadowedTableView ()
+@property (nonatomic, retain) CAGradientLayer *topShadow;
+@property (nonatomic, retain) CAGradientLayer *bottomShadow;
+@end
 
 @implementation ShadowedTableView
 
 - (CAGradientLayer *)shadowAsInverse:(BOOL)inverse {
 	CAGradientLayer *newShadow = [[[CAGradientLayer alloc]init]autorelease];
-	newShadow.frame = CGRectMake(0, 0, self.frame.size.width,inverse?SHADOW_INVERSE_HEIGHT:SHADOW_HEIGHT);
-	CGColorRef darkColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:inverse?(SHADOW_INVERSE_HEIGHT/SHADOW_HEIGHT)*0.5:0.5].CGColor;
+	newShadow.frame = CGRectMake(0, 0, self.frame.size.width,inverse?10:20);
+	CGColorRef darkColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:inverse?0.25:0.5].CGColor;
 	CGColorRef lightColor = [self.backgroundColor colorWithAlphaComponent:0.0].CGColor;
 	newShadow.colors = [NSArray arrayWithObjects:(id)(inverse?lightColor:darkColor), (id)(inverse?darkColor:lightColor), nil];
 	return newShadow;
@@ -47,14 +50,14 @@
 		UIView *cell = [self cellForRowAtIndexPath:firstRow];
 		if (!_topShadow) {
 			self.topShadow = [self shadowAsInverse:YES];
-			[cell.layer insertSublayer:_topShadow atIndex:0];
+			[cell.layer insertSublayer:_topShadow atIndex:cell.subviews.count-1];
 		} else if ([cell.layer.sublayers indexOfObjectIdenticalTo:_topShadow] != 0) {
-			[cell.layer insertSublayer:_topShadow atIndex:0];
+			[cell.layer insertSublayer:_topShadow atIndex:cell.subviews.count-1];
 		}
         [_topShadow setHidden:NO];
 		CGRect shadowFrame = _topShadow.frame;
 		shadowFrame.size.width = cell.frame.size.width;
-		shadowFrame.origin.y = -SHADOW_INVERSE_HEIGHT;
+		shadowFrame.origin.y = -10;
 		_topShadow.frame = shadowFrame;
 	} else {
         [_topShadow setHidden:YES];

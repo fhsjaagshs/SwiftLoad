@@ -15,7 +15,7 @@ NSString * const kBackgroundTaskDownload = @"download";
 @implementation Download
 
 - (void)handleBackgroundTaskExpiration {
-    [self stop];
+    
 }
 
 - (void)cancelBackgroundTask {
@@ -24,6 +24,7 @@ NSString * const kBackgroundTaskDownload = @"download";
 
 - (void)startBackgroundTask {
     [[BGProcFactory sharedFactory]startProcForKey:kBackgroundTaskDownload andExpirationHandler:^{
+        [self stop];
         [self handleBackgroundTaskExpiration];
     }];
 }
@@ -62,16 +63,7 @@ NSString * const kBackgroundTaskDownload = @"download";
 - (void)showSuccess {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     
-    if (_fileName.length > 14) {
-        self.fileName = [[_fileName substringToIndex:11]stringByAppendingString:@"..."];
-    }
-    
-    UILocalNotification *notification = [[UILocalNotification alloc]init];
-    notification.fireDate = [NSDate date];
-    notification.alertBody = [NSString stringWithFormat:@"Finished downloading: %@",_fileName];
-    notification.soundName = UILocalNotificationDefaultSoundName;
-    [[UIApplication sharedApplication]presentLocalNotificationNow:notification];
-    [notification release];
+    fireNotification(_fileName);
     
     self.complete = YES;
     self.succeeded = YES;
