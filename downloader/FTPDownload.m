@@ -54,7 +54,12 @@
     _request.didFinishSelector = @selector(downloadFinished:);
     _request.didFailSelector = @selector(downloadFailed:);
     _request.willStartSelector = @selector(downloadWillStart:);
+    _request.bytesWrittenSelector = @selector(bytesWritten:);
     [_request startRequest];
+}
+
+- (void)bytesWritten:(SCRFTPRequest *)request {
+    [self.delegate setProgress:_request.bytesWritten/_request.fileSize];
 }
 
 - (void)downloadFinished:(SCRFTPRequest *)request {
