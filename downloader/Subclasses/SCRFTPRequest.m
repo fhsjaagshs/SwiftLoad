@@ -454,6 +454,11 @@ static NSOperationQueue *sharedRequestQueue = nil;
                     } else {
                         bytesWrittenSoFar += bytesWritten;
                         [self setStatus:SCRFTPRequestStatusWritingToStream];
+                        
+                        if (_bytesWrittenSelector && [_delegate respondsToSelector:_bytesWrittenSelector]) {
+                            [_delegate performSelectorOnMainThread:_bytesWrittenSelector withObject:self waitUntilDone:[NSThread isMainThread]];
+                        }
+                        
                     }
                 } while (bytesWrittenSoFar != bytesRead);
             }
@@ -582,17 +587,15 @@ static NSOperationQueue *sharedRequestQueue = nil;
             if (_bufferOffset != _bufferLimit) {
 				
                 _bytesWritten = [_writeStream write:&_buffer[_bufferOffset] maxLength:_bufferLimit-_bufferOffset];
-                assert(_bytesWritten != 0);
                 
 				if (_bytesWritten == -1) {
 					[self failWithError:[self constructErrorWithCode:SCRFTPConnectionFailureErrorType message:@"Cannot continue writing file to the specified URL at the FTP server."]];
 					return;
                 } else {
-					
 					[self setStatus:SCRFTPRequestStatusWritingToStream];
 					
-					if (self.bytesWrittenSelector && [self.delegate respondsToSelector:self.bytesWrittenSelector]) {
-						[self.delegate performSelectorOnMainThread:self.bytesWrittenSelector withObject:self waitUntilDone:[NSThread isMainThread]];
+					if (_bytesWrittenSelector && [_delegate respondsToSelector:_bytesWrittenSelector]) {
+						[_delegate performSelectorOnMainThread:_bytesWrittenSelector withObject:self waitUntilDone:[NSThread isMainThread]];
 					}
 					
                     _bufferOffset += _bytesWritten;

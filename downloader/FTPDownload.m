@@ -30,6 +30,7 @@
 
 - (void)stop {
     [super stop];
+    [_request cancelRequest];
 }
 
 - (void)start {
@@ -59,6 +60,7 @@
 }
 
 - (void)bytesWritten:(SCRFTPRequest *)request {
+    NSLog(@"%llu",_request.bytesWritten/_request.fileSize);
     [self.delegate setProgress:_request.bytesWritten/_request.fileSize];
 }
 
