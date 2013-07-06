@@ -25,6 +25,7 @@
     #import "NSString+mods.h"
     #import "UIButton+SwiftLoad.h"
 
+    #import "DLSFTP-all.h"
     #import "SFTPCreds.h"
     #import "FMDatabase.h"
     #import "Keychain.h"

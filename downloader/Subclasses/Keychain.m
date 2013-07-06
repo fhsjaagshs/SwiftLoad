@@ -34,7 +34,8 @@
     CFDictionaryRef result = nil;
     
     if (!SecItemCopyMatching((__bridge CFDictionaryRef)query, (CFTypeRef *)&result) == noErr) {
-        [self reset];
+        NSLog(@"OOPS");
+        [self resetInternal];
         [_keychainItemData setObject:_keychainidentifier forKey:(__bridge id)kSecAttrGeneric];
     } else {
         self.keychainItemData = [self secItemFormatToDictionary:(__bridge id)result];
@@ -50,7 +51,7 @@
         return;
     }
     
-    if (![[_keychainItemData objectForKey:key] isEqual:inObject]) {
+    if (![[_keychainItemData objectForKey:key]isEqual:inObject]) {
         [_keychainItemData setObject:inObject forKey:key];
         [self writeToKeychain];
     }
@@ -60,6 +61,16 @@
     return [_keychainItemData objectForKey:key];
 }
 
+// reset state of Keychain
+- (void)resetInternal {
+    self.keychainItemData = [NSMutableDictionary dictionary];
+    [_keychainItemData setObject:@"" forKey:(__bridge id)kSecAttrAccount];
+    [_keychainItemData setObject:@"" forKey:(__bridge id)kSecAttrLabel];
+    [_keychainItemData setObject:@"" forKey:(__bridge id)kSecAttrDescription];
+    [_keychainItemData setObject:@"" forKey:(__bridge id)kSecValueData];
+}
+
+// clear the keychain
 - (void)reset {
 	OSStatus junk = noErr;
     if (!_keychainItemData) {

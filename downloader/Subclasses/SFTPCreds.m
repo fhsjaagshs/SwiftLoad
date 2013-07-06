@@ -71,12 +71,19 @@ static NSString * const kCredentialsKeychainIdentifier = @"com.swiftload.sftp.cr
     
     NSString *final = [triples componentsJoinedByString:@","];
     
+    NSLog(@"Final (when writing) = %@",final);
+    
     [[Keychain sharedKeychain]setObject:final forKey:(id)kSecValueData];
+    NSLog(@"Data %@",[[Keychain sharedKeychain]objectForKey:(id)kSecValueData]);
 }
 
 + (NSDictionary *)getCredsForURL:(NSURL *)ftpurl {
+    NSLog(@"Data %@",[[Keychain sharedKeychain]objectForKey:(id)kSecValueData]);
     [[Keychain sharedKeychain]setIdentifier:kCredentialsKeychainIdentifier];
+    NSLog(@"Data %@",[[Keychain sharedKeychain]objectForKey:(id)kSecValueData]);
     NSString *keychainData = (NSString *)[[Keychain sharedKeychain]objectForKey:(id)kSecValueData];
+    
+    NSLog(@"keychainData = %@",keychainData);
     
     if (keychainData.length == 0) {
         return nil;

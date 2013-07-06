@@ -7,7 +7,6 @@
 //
 
 #import "SFTPBrowserViewController.h"
-#import "DLSFTP-all.h"
 
 @interface SFTPBrowserViewController () <PullToRefreshViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
@@ -316,6 +315,7 @@
         UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             if (buttonIndex == 0) {
                 NSDictionary *creds = [SFTPCreds getCredsForURL:[NSURL URLWithString:_currentURL]];
+                NSLog(@"%@",creds);
                 [kAppDelegate downloadFileUsingSFTP:[self constructURLForFile:filename] withUsername:[creds objectForKey:@"username"] andPassword:[creds objectForKey:@"password"]];
             }
         } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download", nil]autorelease];
