@@ -428,6 +428,7 @@ static NSOperationQueue *sharedRequestQueue = nil;
     switch (eventCode) {
         case NSStreamEventOpenCompleted: {
             [self setStatus:SCRFTPRequestStatusOpenNetworkConnection];
+            _fileSize = [[_readStream propertyForKey:(id)kCFStreamPropertyFTPResourceSize]integerValue];
         } break;
         case NSStreamEventHasBytesAvailable: {
             uint8_t buffer[kSCRFTPRequestBufferSize];
@@ -435,6 +436,8 @@ static NSOperationQueue *sharedRequestQueue = nil;
             [self setStatus:SCRFTPRequestStatusReadingFromStream];
             
             NSInteger bytesRead = [_readStream read:buffer maxLength:sizeof(buffer)];
+            
+            _bytesRead += bytesRead;
             
             if (bytesRead == -1) {
                 [self failWithError:[self constructErrorWithCode:SCRFTPConnectionFailureErrorType message:[NSString stringWithFormat:@"Cannot continue downloading the file at %@",_ftpURL.absoluteString]]];
@@ -446,7 +449,7 @@ static NSOperationQueue *sharedRequestQueue = nil;
                 NSInteger bytesWrittenSoFar = 0;
                 
                 do {
-                    bytesWritten = [_writeStream write:&buffer[bytesWrittenSoFar] maxLength:(NSUInteger)(bytesRead-bytesWrittenSoFar)];
+                    bytesWritten = [_writeStream write:&buffer[bytesWrittenSoFar] maxLength:(NSUInteger)(_bytesRead-bytesWrittenSoFar)];
                     if (bytesWritten == -1) {
                         [self failWithError:[self constructErrorWithCode:SCRFTPConnectionFailureErrorType message:[NSString stringWithFormat:@"Cannot continue writing data to the local file at %@",_filePath]]];
                         return;
@@ -455,8 +458,8 @@ static NSOperationQueue *sharedRequestQueue = nil;
                         bytesWrittenSoFar += bytesWritten;
                         [self setStatus:SCRFTPRequestStatusWritingToStream];
                         
-                        if (_bytesWrittenSelector && [_delegate respondsToSelector:_bytesWrittenSelector]) {
-                            [_delegate performSelectorOnMainThread:_bytesWrittenSelector withObject:self waitUntilDone:[NSThread isMainThread]];
+                        if (_bytesReadSelector && [_delegate respondsToSelector:_bytesReadSelector]) {
+                            [_delegate performSelectorOnMainThread:_bytesReadSelector withObject:self waitUntilDone:[NSThread isMainThread]];
                         }
                         
                     }

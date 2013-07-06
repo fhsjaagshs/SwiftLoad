@@ -73,6 +73,7 @@
     #import "SettingsView.h"
     #import "FTPBrowserViewController.h"
     #import "DropboxBrowserViewController.h"
+    #import "SFTPBrowserViewController.h"
 
     #import "ZipFile.h"
     #import "ZipException.h"

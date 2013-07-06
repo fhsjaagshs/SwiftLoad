@@ -48,19 +48,25 @@
     self.username = username;
     self.password = password;
     
-    self.request = [SCRFTPRequest requestWithURL:url toDownloadFile:getNonConflictingFilePathForPath([[kDocsDir stringByAppendingPathComponent:url.absoluteString.lastPathComponent]percentSanitize])];
+    NSString *path = getNonConflictingFilePathForPath([[kDocsDir stringByAppendingPathComponent:url.absoluteString.lastPathComponent]percentSanitize]);
+    
+    if (![[NSFileManager defaultManager]fileExistsAtPath:path]) {
+        [[NSFileManager defaultManager]createFileAtPath:path contents:nil attributes:nil];
+    }
+    
+    self.request = [SCRFTPRequest requestWithURL:url toDownloadFile:path];
     _request.username = _username;
     _request.password = _password;
     _request.delegate = self;
     _request.didFinishSelector = @selector(downloadFinished:);
     _request.didFailSelector = @selector(downloadFailed:);
     _request.willStartSelector = @selector(downloadWillStart:);
-    _request.bytesWrittenSelector = @selector(bytesWritten:);
-    [_request startRequest];
+    _request.bytesReadSelector = @selector(bytesRead:);
+    [_request startAsynchronous];
 }
 
-- (void)bytesWritten:(SCRFTPRequest *)request {
-    NSLog(@"%llu",_request.bytesWritten/_request.fileSize);
+- (void)bytesRead:(SCRFTPRequest *)request {
+    NSLog(@"%llu",_request.bytesRead/_request.fileSize);
     [self.delegate setProgress:_request.bytesWritten/_request.fileSize];
 }
 
@@ -86,6 +92,7 @@
         [controller setType:FTPLoginControllerTypeDownload];
         [controller show];
     } else {
+        NSLog(@"Request.error = %@",_request.error);
         [self showFailure];
     }
 }

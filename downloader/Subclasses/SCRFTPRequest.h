@@ -85,24 +85,17 @@ extern NSString * const NSFileName;
 @interface SCRFTPRequest : NSOperation
 
 @property (nonatomic, assign) id delegate;
-/** Called on the delegate when the request completes successfully. */
 @property (nonatomic, assign) SEL didFinishSelector;
-/** Called on the delegate when the request fails. */
 @property (nonatomic, assign) SEL didFailSelector;
-/** Called on the delegate when the transfer is about to start. */
 @property (nonatomic, assign) SEL willStartSelector;
-/** Called on the delegate when the status of the request instance changed. */
 @property (nonatomic, assign) SEL didChangeStatusSelector;
-/** Called on the delegate when some amount of bytes were transferred. */
 @property (nonatomic, assign) SEL bytesWrittenSelector;
+@property (nonatomic, assign) SEL bytesReadSelector;
 
-/** If 0 the size cannot be determined. fileSize is determined when delegate receives a notification via willStartSelector. */
 @property (nonatomic, readonly) UInt64 fileSize;
-/** The amount of bytes currently uploaded or downloaded. Delegate can listen to the changes of this property via bytesWrittenSelector. */
 @property (nonatomic, readonly) SInt64 bytesWritten;
-/** Current instance status. Delegate can listen to the changes of this property via didChangeStatusSelector. */
+@property (nonatomic, readonly) SInt64 bytesRead;
 @property (nonatomic, readonly) SCRFTPRequestStatus status;
-/** Populated when error occurs. */
 @property (nonatomic, retain) NSError *error;
 
 /** Specifies the operation for the request to invoke. */

@@ -85,6 +85,10 @@
 		F165C3EC16E445E5004B81F1 /* clipboard.png in Resources */ = {isa = PBXBuildFile; fileRef = F165C3EB16E445E5004B81F1 /* clipboard.png */; };
 		F166BBC414E2171A003E5A07 /* webDAVViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F166BBC214E2171A003E5A07 /* webDAVViewController.m */; };
 		F166BC1914E21973003E5A07 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F166BC1814E21973003E5A07 /* libxml2.dylib */; };
+		F1679AC61787B368001369B1 /* SFTPBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1679AC51787B368001369B1 /* SFTPBrowserViewController.m */; };
+		F1679ACA1787B3C1001369B1 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1679AC71787B3C1001369B1 /* libcrypto.a */; };
+		F1679ACB1787B3C1001369B1 /* libssh2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1679AC81787B3C1001369B1 /* libssh2.a */; };
+		F1679ACC1787B3C1001369B1 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1679AC91787B3C1001369B1 /* libssl.a */; };
 		F1693BFC16DFAA08006E3739 /* DDData.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BC916DFAA08006E3739 /* DDData.m */; };
 		F1693BFD16DFAA08006E3739 /* DDNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BCB16DFAA08006E3739 /* DDNumber.m */; };
 		F1693BFE16DFAA08006E3739 /* DDRange.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BCD16DFAA08006E3739 /* DDRange.m */; };
@@ -131,6 +135,9 @@
 		F17DC662140C489B0015F613 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F17DC661140C489B0015F613 /* AVFoundation.framework */; };
 		F17F11231420017100CE45D7 /* fileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F17F11211420017100CE45D7 /* fileInfo.m */; };
 		F1847BBB16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F1847BBA16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m */; };
+		F190FBC31787C52D00ED4E24 /* CK2SFTPFileHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = F190FBBE1787C52D00ED4E24 /* CK2SFTPFileHandle.m */; };
+		F190FBC41787C52D00ED4E24 /* CK2SFTPSession.m in Sources */ = {isa = PBXBuildFile; fileRef = F190FBC01787C52D00ED4E24 /* CK2SFTPSession.m */; };
+		F190FBC51787C52D00ED4E24 /* CK2SSHCredential.m in Sources */ = {isa = PBXBuildFile; fileRef = F190FBC21787C52D00ED4E24 /* CK2SSHCredential.m */; };
 		F19BB51C16E006CA0081C95B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F19BB51916E006CA0081C95B /* main.m */; };
 		F1A45E701704A15E00DD5FB9 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = F1A45E6F1704A15E00DD5FB9 /* KeychainItemWrapper.m */; };
 		F1A72948149876040049DBB6 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A72947149876040049DBB6 /* GameKit.framework */; };
@@ -302,6 +309,11 @@
 		F166BBC114E2171A003E5A07 /* webDAVViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = webDAVViewController.h; sourceTree = "<group>"; };
 		F166BBC214E2171A003E5A07 /* webDAVViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = webDAVViewController.m; sourceTree = "<group>"; };
 		F166BC1814E21973003E5A07 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		F1679AC41787B368001369B1 /* SFTPBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFTPBrowserViewController.h; sourceTree = "<group>"; };
+		F1679AC51787B368001369B1 /* SFTPBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFTPBrowserViewController.m; sourceTree = "<group>"; };
+		F1679AC71787B3C1001369B1 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "Libs/libssh2-for-iOS/lib/libcrypto.a"; sourceTree = "<group>"; };
+		F1679AC81787B3C1001369B1 /* libssh2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssh2.a; path = "Libs/libssh2-for-iOS/lib/libssh2.a"; sourceTree = "<group>"; };
+		F1679AC91787B3C1001369B1 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = "Libs/libssh2-for-iOS/lib/libssl.a"; sourceTree = "<group>"; };
 		F1693BC816DFAA08006E3739 /* DDData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDData.h; sourceTree = "<group>"; };
 		F1693BC916DFAA08006E3739 /* DDData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDData.m; sourceTree = "<group>"; };
 		F1693BCA16DFAA08006E3739 /* DDNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDNumber.h; sourceTree = "<group>"; };
@@ -394,6 +406,12 @@
 		F17F11211420017100CE45D7 /* fileInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = fileInfo.m; sourceTree = "<group>"; };
 		F1847BB916E538C600006C25 /* MFMailComposeViewController+BlockExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MFMailComposeViewController+BlockExtensions.h"; sourceTree = "<group>"; };
 		F1847BBA16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MFMailComposeViewController+BlockExtensions.m"; sourceTree = "<group>"; };
+		F190FBBD1787C52D00ED4E24 /* CK2SFTPFileHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CK2SFTPFileHandle.h; sourceTree = "<group>"; };
+		F190FBBE1787C52D00ED4E24 /* CK2SFTPFileHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CK2SFTPFileHandle.m; sourceTree = "<group>"; };
+		F190FBBF1787C52D00ED4E24 /* CK2SFTPSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CK2SFTPSession.h; sourceTree = "<group>"; };
+		F190FBC01787C52D00ED4E24 /* CK2SFTPSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CK2SFTPSession.m; sourceTree = "<group>"; };
+		F190FBC11787C52D00ED4E24 /* CK2SSHCredential.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CK2SSHCredential.h; sourceTree = "<group>"; };
+		F190FBC21787C52D00ED4E24 /* CK2SSHCredential.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CK2SSHCredential.m; sourceTree = "<group>"; };
 		F19BB51916E006CA0081C95B /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F19BB51A16E006CA0081C95B /* SwiftLoad-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SwiftLoad-Info.plist"; sourceTree = "<group>"; };
 		F19BB51B16E006CA0081C95B /* SwiftLoad-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SwiftLoad-Prefix.pch"; sourceTree = "<group>"; };
@@ -472,6 +490,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1679ACA1787B3C1001369B1 /* libcrypto.a in Frameworks */,
+				F1679ACB1787B3C1001369B1 /* libssh2.a in Frameworks */,
+				F1679ACC1787B3C1001369B1 /* libssl.a in Frameworks */,
 				F150D6B2177F5B9400E4C094 /* libsqlite3.dylib in Frameworks */,
 				F1C0CEFC1661AEC6001B1B42 /* libz.1.2.5.dylib in Frameworks */,
 				F1122A76142E4E8B00A04CC6 /* MediaPlayer.framework in Frameworks */,
@@ -562,6 +583,9 @@
 		F119CEF613F46DA6007D67E4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F1679AC71787B3C1001369B1 /* libcrypto.a */,
+				F1679AC81787B3C1001369B1 /* libssh2.a */,
+				F1679AC91787B3C1001369B1 /* libssl.a */,
 				F1693C7216DFB9B5006E3739 /* DropboxSDK.framework */,
 				F150D6B1177F5B9400E4C094 /* libsqlite3.dylib */,
 				F166BC1814E21973003E5A07 /* libxml2.dylib */,
@@ -613,6 +637,8 @@
 				F1B2488E14E333E200C44E11 /* webDAVHelp.m */,
 				F1270DD71703C7710012A293 /* FTPBrowserViewController.h */,
 				F1270DD81703C7710012A293 /* FTPBrowserViewController.m */,
+				F1679AC41787B368001369B1 /* SFTPBrowserViewController.h */,
+				F1679AC51787B368001369B1 /* SFTPBrowserViewController.m */,
 				F10CBC5B17080C6600C82AFB /* DropboxBrowserViewController.h */,
 				F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */,
 				9B9DA4CE15561D0100C260AD /* Custom Classes */,
@@ -880,6 +906,19 @@
 			name = Packagaing;
 			sourceTree = "<group>";
 		};
+		F190FBBC1787C52D00ED4E24 /* CK2SFTP */ = {
+			isa = PBXGroup;
+			children = (
+				F190FBBD1787C52D00ED4E24 /* CK2SFTPFileHandle.h */,
+				F190FBBE1787C52D00ED4E24 /* CK2SFTPFileHandle.m */,
+				F190FBBF1787C52D00ED4E24 /* CK2SFTPSession.h */,
+				F190FBC01787C52D00ED4E24 /* CK2SFTPSession.m */,
+				F190FBC11787C52D00ED4E24 /* CK2SSHCredential.h */,
+				F190FBC21787C52D00ED4E24 /* CK2SSHCredential.m */,
+			);
+			path = CK2SFTP;
+			sourceTree = "<group>";
+		};
 		F19BB51816E006680081C95B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -914,6 +953,7 @@
 		F1DA5247176E8181009A43CD /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				F190FBBC1787C52D00ED4E24 /* CK2SFTP */,
 				F150D6B3177F783E00E4C094 /* FMDatabase */,
 				F1693C1316DFAA92006E3739 /* BKSessionController */,
 				9BFF29FE15387C6E007ED9B1 /* Objective-Zip */,
@@ -1195,6 +1235,10 @@
 				F145023B1781181700096202 /* DropboxDownload.m in Sources */,
 				F1F0EBC31785D9EA00878F7D /* HTTPDownload.m in Sources */,
 				F1F0EBC61785F75900878F7D /* FTPDownload.m in Sources */,
+				F1679AC61787B368001369B1 /* SFTPBrowserViewController.m in Sources */,
+				F190FBC31787C52D00ED4E24 /* CK2SFTPFileHandle.m in Sources */,
+				F190FBC41787C52D00ED4E24 /* CK2SFTPSession.m in Sources */,
+				F190FBC51787C52D00ED4E24 /* CK2SSHCredential.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1275,13 +1319,18 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "downloader/SwiftLoad-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				HEADER_SEARCH_PATHS = /usr/include/libxml2/;
+				HEADER_SEARCH_PATHS = (
+					"${SRCROOT}/libs/**",
+					/usr/include/libxml2/,
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/downloader/SwiftLoad-Info.plist";
 				INFOPLIST_PREFIX_HEADER = "/Users/nathaniel/Documents/Code/SwiftLoad/downloader/SwiftLoad-Prefix.pch";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/libs/\"",
+					"\"$(SRCROOT)/Libs/libssh2-for-iOS/lib\"",
 				);
 				PRODUCT_NAME = SwiftLoad;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "AED9C462-0F79-46ED-9182-106437775B8F";
@@ -1306,13 +1355,18 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "downloader/SwiftLoad-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				HEADER_SEARCH_PATHS = /usr/include/libxml2/;
+				HEADER_SEARCH_PATHS = (
+					"${SRCROOT}/libs/**",
+					/usr/include/libxml2/,
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/downloader/SwiftLoad-Info.plist";
 				INFOPLIST_PREFIX_HEADER = "/Users/nathaniel/Documents/Code/SwiftLoad/downloader/SwiftLoad-Prefix.pch";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/libs/\"",
+					"\"$(SRCROOT)/Libs/libssh2-for-iOS/lib\"",
 				);
 				PRODUCT_NAME = SwiftLoad;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0786489C-1F43-4466-BC04-669FD8CE2E6C";

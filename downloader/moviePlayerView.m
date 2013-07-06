@@ -76,44 +76,6 @@
     [kAppDelegate setOpenFile:nil];
 }
 
-- (void)addToTheRoll {
-    
-    [kAppDelegate showHUDWithTitle:@"Working..."];
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-        
-        NSString *file = [kAppDelegate openFile];
-        UISaveVideoAtPathToSavedPhotosAlbum(file, nil, nil, nil);
-        
-        [NSThread sleepForTimeInterval:0.5f];
-        
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            NSAutoreleasePool *poolTwo = [[NSAutoreleasePool alloc]init];
-            
-            NSString *fileName = [file lastPathComponent];
-            
-            if (fileName.length > 14) {
-                fileName = [[fileName substringToIndex:11]stringByAppendingString:@"..."];
-            }
-            
-           // UIImageView *checkmark = [[UIImageView alloc]initWithImage:getCheckmarkImage()];
-            
-            [kAppDelegate hideHUD];
-            
-            [kAppDelegate showHUDWithTitle:@"Imported"];
-            [kAppDelegate setSecondaryTitleOfVisibleHUD:fileName];
-            [kAppDelegate setVisibleHudMode:MBProgressHUDModeCustomView];
-            //[kAppDelegate setVisibleHudCustomView:checkmark];
-            [kAppDelegate hideVisibleHudAfterDelay:1.0f];
-           // [checkmark release];
-            [poolTwo release];
-        });
-        
-        [pool release];
-    });
-}
-
 - (void)showActionSheet:(id)sender {
     
     if (self.popupQuery && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
@@ -122,31 +84,17 @@
         return;
     }
     
-    NSString *file = [kAppDelegate openFile];
-    
-    self.popupQuery = [[[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",[file lastPathComponent]] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-        NSString *file = [kAppDelegate openFile];
-        NSString *fileName = [file lastPathComponent];
-        
+    self.popupQuery = [[[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",[[kAppDelegate openFile]lastPathComponent]] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         if (buttonIndex == 0) {
-            [kAppDelegate sendFileInEmail:file fromViewController:self];
+            [kAppDelegate sendFileInEmail:[kAppDelegate openFile] fromViewController:self];
         } else if (buttonIndex == 1) {
             [kAppDelegate showBTController];
         } else if (buttonIndex == 2) {
             [kAppDelegate showFTPUploadController];
         } else if (buttonIndex == 3) {
             [self uploadToDropbox];
-        } else if (buttonIndex == 4) {
-            if ([[[file pathExtension]lowercaseString]isEqualToString:@"mp4"]) {
-                [self addToTheRoll];
-            } else {
-                NSString *message = [NSString stringWithFormat:@"Sorry, the file \"%@\" cannot be added to the camera roll because it is not in MPEG-4 format.",fileName];
-                TransparentAlert *av = [[TransparentAlert alloc] initWithTitle:@"Failure Eporting Video" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                [av show];
-                [av release];
-            }
         }
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Upload to Server", @"Upload to Dropbox", @"Save to Camera Roll", nil]autorelease];
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Upload to Server", @"Upload to Dropbox", nil]autorelease];
     
     self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
 
