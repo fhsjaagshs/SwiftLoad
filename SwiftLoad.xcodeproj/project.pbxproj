@@ -27,6 +27,8 @@
 		F106A4E4178865AD002D3BC8 /* DLSFTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4D7178865AD002D3BC8 /* DLSFTPRequest.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		F106A4E5178865AD002D3BC8 /* DLSFTPUploadRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4D9178865AD002D3BC8 /* DLSFTPUploadRequest.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		F106A4E6178865AD002D3BC8 /* NSDictionary+SFTPFileAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4DB178865AD002D3BC8 /* NSDictionary+SFTPFileAttributes.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		F106A7CF178876B1002D3BC8 /* SFTPCreds.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A7CE178876B1002D3BC8 /* SFTPCreds.m */; };
+		F106A7D2178876CA002D3BC8 /* Keychain.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A7D1178876CA002D3BC8 /* Keychain.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		F10CBC5A1707D6E700C82AFB /* DroppinBadassBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */; };
 		F10CBC5D17080C6600C82AFB /* DropboxBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */; };
 		F1122A76142E4E8B00A04CC6 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */; };
@@ -246,6 +248,10 @@
 		F106A4DA178865AD002D3BC8 /* NSDictionary+SFTPFileAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+SFTPFileAttributes.h"; sourceTree = "<group>"; };
 		F106A4DB178865AD002D3BC8 /* NSDictionary+SFTPFileAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+SFTPFileAttributes.m"; sourceTree = "<group>"; };
 		F106A4E8178866F2002D3BC8 /* DLSFTP-all.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DLSFTP-all.h"; sourceTree = "<group>"; };
+		F106A7CD178876B1002D3BC8 /* SFTPCreds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFTPCreds.h; sourceTree = "<group>"; };
+		F106A7CE178876B1002D3BC8 /* SFTPCreds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFTPCreds.m; sourceTree = "<group>"; };
+		F106A7D0178876CA002D3BC8 /* Keychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Keychain.h; sourceTree = "<group>"; };
+		F106A7D1178876CA002D3BC8 /* Keychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Keychain.m; sourceTree = "<group>"; };
 		F10CBC581707D6E700C82AFB /* DroppinBadassBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DroppinBadassBlocks.h; path = ../Categories/DroppinBadassBlocks.h; sourceTree = "<group>"; };
 		F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DroppinBadassBlocks.m; path = ../Categories/DroppinBadassBlocks.m; sourceTree = "<group>"; };
 		F10CBC5B17080C6600C82AFB /* DropboxBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxBrowserViewController.h; sourceTree = "<group>"; };
@@ -941,6 +947,10 @@
 				F1BA8C7D17728500007AAF85 /* BGProcFactory.m */,
 				F1E9F78B177402B600EC345C /* StyleFactory.h */,
 				F1E9F78C177402B600EC345C /* StyleFactory.m */,
+				F106A7CD178876B1002D3BC8 /* SFTPCreds.h */,
+				F106A7CE178876B1002D3BC8 /* SFTPCreds.m */,
+				F106A7D0178876CA002D3BC8 /* Keychain.h */,
+				F106A7D1178876CA002D3BC8 /* Keychain.m */,
 			);
 			path = Subclasses;
 			sourceTree = "<group>";
@@ -1291,6 +1301,8 @@
 				F106A4E4178865AD002D3BC8 /* DLSFTPRequest.m in Sources */,
 				F106A4E5178865AD002D3BC8 /* DLSFTPUploadRequest.m in Sources */,
 				F106A4E6178865AD002D3BC8 /* NSDictionary+SFTPFileAttributes.m in Sources */,
+				F106A7D2178876CA002D3BC8 /* Keychain.m in Sources */,
+				F106A7CF178876B1002D3BC8 /* SFTPCreds.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

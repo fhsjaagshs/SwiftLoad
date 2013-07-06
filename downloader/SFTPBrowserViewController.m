@@ -181,7 +181,7 @@
     }
     
     if (url.length > 0) {
-        NSDictionary *creds = [self getCredsForURL:[NSURL URLWithString:url]];
+        NSDictionary *creds = [SFTPCreds getCredsForURL:[NSURL URLWithString:url]];
         
         if (creds) {
             NSString *username = [creds objectForKey:@"username"];
@@ -205,7 +205,7 @@
     [self dismissModalViewControllerAnimated:YES];
 }
 
-- (void)removeCredsForURL:(NSURL *)ftpurl {
+/*- (void)removeCredsForURL:(NSURL *)ftpurl {
     KeychainItemWrapper *keychain = [[KeychainItemWrapper alloc]initWithIdentifier:@"SwiftLoadSFTPCreds" accessGroup:nil];
     NSString *keychainData = (NSString *)[keychain objectForKey:(id)kSecValueData];
     
@@ -288,7 +288,6 @@
     NSArray *triples = [keychainData componentsSeparatedByString:@","];
     
     for (NSString *string in triples) {
-        
         NSArray *components = [string componentsSeparatedByString:@":"];
         
         if (components.count == 0) {
@@ -311,7 +310,7 @@
         return dict;
     }
     return nil;
-}
+}*/
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
     return UITableViewCellEditingStyleNone;

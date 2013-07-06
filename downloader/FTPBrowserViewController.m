@@ -104,7 +104,7 @@
             NSLog(@"URL: %@",url);
             self.originalFTPURL = [self fixURL:url];
             [[NSUserDefaults standardUserDefaults]setObject:self.originalFTPURL forKey:@"FTPURLBrowser"];
-            [self saveUsername:username andPassword:password forURL:[NSURL URLWithString:self.currentFTPURL]];
+            [SFTPCreds saveUsername:username andPassword:password forURL:[NSURL URLWithString:self.currentFTPURL]];
             [self sendReqestForCurrentURL];
         }
     }]autorelease];
@@ -131,7 +131,7 @@
     }
     
     if (url.length > 0) {
-        NSDictionary *creds = [self getCredsForURL:[NSURL URLWithString:url]];
+        NSDictionary *creds = [SFTPCreds getCredsForURL:[NSURL URLWithString:url]];
         
         if (creds) {
             NSString *username = [creds objectForKey:@"username"];
@@ -155,7 +155,8 @@
     [self dismissModalViewControllerAnimated:YES];
 }
 
-- (void)removeCredsForURL:(NSURL *)ftpurl {
+/*- (void)removeCredsForURL:(NSURL *)ftpurl {
+    [[Keychain sharedKeychain]setIdentifier:@"SwiftLoadFTPCreds"];
     KeychainItemWrapper *keychain = [[KeychainItemWrapper alloc]initWithIdentifier:@"SwiftLoadFTPCreds" accessGroup:nil];
     NSString *keychainData = (NSString *)[keychain objectForKey:(id)kSecValueData];
     
@@ -261,7 +262,7 @@
         return dict;
     }
     return nil;
-}
+}*/
 
 - (void)listFinished:(SCRFTPRequest *)request {
     self.filedicts = [NSMutableArray arrayWithArray:request.directoryContents];
@@ -279,7 +280,7 @@
 }
 
 - (void)sendReqestForCurrentURL {
-    NSDictionary *creds = [self getCredsForURL:[NSURL URLWithString:self.currentFTPURL]];
+    NSDictionary *creds = [SFTPCreds getCredsForURL:[NSURL URLWithString:self.currentFTPURL]];
     NSString *username = [creds objectForKey:@"username"];
     NSString *password = [creds objectForKey:@"password"];
     SCRFTPRequest *ftpRequest = [[SCRFTPRequest requestWithURLToListDirectory:[NSURL URLWithString:self.currentFTPURL]]retain];
@@ -365,7 +366,7 @@
         NSString *message = [NSString stringWithFormat:@"Do you wish to download \"%@\"?",filename];
         UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             if (buttonIndex == 0) {
-                NSDictionary *creds = [self getCredsForURL:[NSURL URLWithString:[self fixURL:self.currentFTPURL]]];
+                NSDictionary *creds = [SFTPCreds getCredsForURL:[NSURL URLWithString:[self fixURL:self.currentFTPURL]]];
                 [kAppDelegate downloadFileUsingFtp:[_currentFTPURL stringByAppendingPathComponent_URLSafe:filename] withUsername:[creds objectForKey:@"username"] andPassword:[creds objectForKey:@"password"]];
             }
         } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download", nil]autorelease];
@@ -375,7 +376,7 @@
         NSString *message = [NSString stringWithFormat:@"What do you wish to do with \"%@\"?",filename];
         UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             if (buttonIndex == 0) {
-                NSDictionary *creds = [self getCredsForURL:[NSURL URLWithString:[self fixURL:self.currentFTPURL]]];
+                NSDictionary *creds = [SFTPCreds getCredsForURL:[NSURL URLWithString:[self fixURL:self.currentFTPURL]]];
                 [kAppDelegate downloadFileUsingFtp:[self.currentFTPURL stringByAppendingPathComponent_URLSafe:filename] withUsername:[creds objectForKey:@"username"] andPassword:[creds objectForKey:@"password"]];
             } else if (buttonIndex == 1) {
                 self.currentFTPURL = [self fixURL:[self.currentFTPURL stringByAppendingPathComponent_URLSafe:filename]];

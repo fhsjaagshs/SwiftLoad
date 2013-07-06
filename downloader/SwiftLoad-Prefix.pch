@@ -24,8 +24,9 @@
     #import "MFMailComposeViewController+BlockExtensions.h"
     #import "NSString+mods.h"
 
+    #import "SFTPCreds.h"
     #import "FMDatabase.h"
-    #import "KeychainItemWrapper.h"
+    #import "Keychain.h"
 
     #import "StyleFactory.h"
     #import "BGProcFactory.h"
