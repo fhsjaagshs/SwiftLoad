@@ -83,6 +83,8 @@
     [self.theTableView addSubview:self.pull];
     
     [self showInitialLoginController];
+    
+    self.filedicts = [NSMutableArray array];
 }
 
 - (NSString *)fixURL:(NSString *)url {
@@ -108,42 +110,60 @@
     [jsontowrite writeToFile:cachePath atomically:YES];
 }
 
-- (void)loadDirFromCacheForURL:(NSString *)url {
-    NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"sftp_directory_cache.json"];
-    NSData *json = [NSData dataWithContentsOfFile:cachePath];
-    NSMutableDictionary *savedDict = [[NSFileManager defaultManager]fileExistsAtPath:cachePath]?[NSJSONSerialization JSONObjectWithData:json options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
-    self.filedicts = [NSMutableArray arrayWithArray:[savedDict objectForKey:url]];
-}
-
 - (void)loadCurrentDirectoryFromCache {
+    self.filedicts = [NSMutableArray array];
     NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"sftp_directory_cache.json"];
     NSData *json = [NSData dataWithContentsOfFile:cachePath];
     NSMutableDictionary *savedDict = [[NSFileManager defaultManager]fileExistsAtPath:cachePath]?[NSJSONSerialization JSONObjectWithData:json options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
     
     if ([savedDict objectForKey:[self fixURL:_currentURL]]) {
-        self.filedicts = [NSMutableArray arrayWithArray:[savedDict objectForKey:[self fixURL:_currentURL]]];
-        [self.theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-        [self.pull finishedLoading];
+        [_filedicts addObjectsFromArray:[savedDict objectForKey:[self fixURL:_currentURL]]];
+        [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+        [_pull finishedLoading];
     } else {
-        [self loadCurrentDirectory];
+        [self loadCurrentDirectoryFromSFTP];
     }
 }
 
-- (void)loadCurrentDirectory {
-    // load SFTP files
+- (void)loadCurrentDirectoryFromSFTP {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    DLSFTPRequest *req = [[DLSFTPListFilesRequest alloc]initWithDirectoryPath:@"/home/natesymer/" successBlock:^(NSArray *array) {
+        for (DLSFTPFile *sftpFile in array) {
+            NSDictionary *dict = @{@"NSFileName": sftpFile.filename, NSFileType:[sftpFile.attributes objectForKey:NSFileType], NSFileSize: [sftpFile.attributes objectForKey:NSFileSize], @"NSFilePath": sftpFile.path};
+            [_filedicts addObject:dict];
+          //  [self cacheCurrentDir];
+        }
+        [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+        [_pull finishedLoading];
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    } failureBlock:^(NSError *error) {
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+        [_pull finishedLoading];
+        [TransparentAlert showAlertWithTitle:@"SFTP Error" andMessage:@"There was an error loading the current directory via SFTP."]; // Improve this later
+    }];
+    [_connection submitRequest:req];
 }
 
 - (void)showInitialLoginController {
     
-   /* NSString *browserURL = [[NSUserDefaults standardUserDefaults]objectForKey:@"FTPURLBrowser"];
+    NSString *browserURL = [[NSUserDefaults standardUserDefaults]objectForKey:@"FTPURLBrowser"];
     
     FTPLoginController *controller = [[[FTPLoginController alloc]initWithCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
         if ([username isEqualToString:@"cancel"]) {
             [self dismissModalViewControllerAnimated:YES];
         } else {
             self.currentURL = url;
-            [self saveUsername:username andPassword:password forURL:[NSURL URLWithString:_currentURL]];
-            // login
+            NSURL *URL = [NSURL URLWithString:_currentURL];
+            [SFTPCreds saveUsername:username andPassword:password forURL:URL];
+            self.username = username;
+            self.password = password;
+            self.connection = [[DLSFTPConnection alloc]initWithHostname:URL.host username:_username password:_password];
+            [_connection connectWithSuccessBlock:^{
+                [self loadCurrentDirectoryFromSFTP];
+            } failureBlock:^(NSError *error) {
+                [TransparentAlert showAlertWithTitle:@"SFTP Login Error" andMessage:@"There was an issue logging in via SFTP."]; // improve this later
+            }];
         }
     }]autorelease];
     [controller setType:FTPLoginControllerTypeLogin];
@@ -154,19 +174,7 @@
         [controller setUrl:browserURL isPredefined:NO];
     }
     
-    [controller show];*/
-    self.connection = [[DLSFTPConnection alloc]initWithHostname:@"natesymer.com" username:@"natesymer" password:@"ipodipod"];
-    [_connection connectWithSuccessBlock:^{
-        DLSFTPRequest *req = [[DLSFTPListFilesRequest alloc]initWithDirectoryPath:@"/home/natesymer/" successBlock:^(NSArray *array) {
-            for (DLSFTPFile *sftpFile in array) {
-                NSDictionary *dict = @{@"NSFileName": sftpFile.filename, @"NSFileAttributes": sftpFile.attributes, @"NSFilePath": sftpFile.path};
-                [_filedicts addObject:dict];
-            }
-        } failureBlock:nil];
-        [_connection submitRequest:req];
-    } failureBlock:^(NSError *error) {
-        
-    }];
+    [controller show];
 }
 
 - (void)didMoveOn:(FTPLoginController *)controller {
@@ -205,113 +213,6 @@
     [self dismissModalViewControllerAnimated:YES];
 }
 
-/*- (void)removeCredsForURL:(NSURL *)ftpurl {
-    KeychainItemWrapper *keychain = [[KeychainItemWrapper alloc]initWithIdentifier:@"SwiftLoadSFTPCreds" accessGroup:nil];
-    NSString *keychainData = (NSString *)[keychain objectForKey:(id)kSecValueData];
-    
-    int index = -1;
-    
-    NSMutableArray *triples = [NSMutableArray arrayWithArray:[keychainData componentsSeparatedByString:@","]];
-    
-    for (NSString *string in triples) {
-        NSArray *components = [keychainData componentsSeparatedByString:@":"];
-        NSString *host = [components objectAtIndex:2];
-        if ([host isEqualToString:ftpurl.host]) {
-            index = [triples indexOfObject:string];
-            break;
-        }
-    }
-    
-    [triples removeObjectAtIndex:index];
-    NSString *final = [triples componentsJoinedByString:@","];
-    [keychain setObject:final forKey:(id)kSecValueData];
-    
-    [keychain release];
-}
-
-- (void)saveUsername:(NSString *)username andPassword:(NSString *)password forURL:(NSURL *)ftpurl {
-    
-    KeychainItemWrapper *keychain = [[KeychainItemWrapper alloc]initWithIdentifier:@"SwiftLoadSFTPCreds" accessGroup:nil];
-    NSString *keychainData = (NSString *)[keychain objectForKey:(id)kSecValueData];
-    int index = -1;
-    
-    NSMutableArray *triples = [NSMutableArray arrayWithArray:[keychainData componentsSeparatedByString:@","]];
-    
-    for (NSString *string in [[triples mutableCopy]autorelease]) {
-        
-        if (string.length == 0) {
-            [triples removeObject:string];
-            continue;
-        }
-        
-        NSArray *components = [string componentsSeparatedByString:@":"];
-        
-        NSString *host = [components objectAtIndex:2];
-        if ([host isEqualToString:ftpurl.host]) {
-            index = [triples indexOfObject:string];
-            break;
-        }
-    }
-    
-    if (password.length == 0) {
-        password = @" ";
-    }
-    
-    NSString *concatString = [NSString stringWithFormat:@"%@:%@:%@",username, password, ftpurl.host];
-    
-    if (index == -1) {
-        [triples addObject:concatString];
-    } else {
-        [triples replaceObjectAtIndex:index withObject:concatString];
-    }
-    
-    NSString *final = [triples componentsJoinedByString:@","];
-    
-    [keychain setObject:final forKey:(id)kSecValueData];
-    [keychain release];
-}
-
-- (NSDictionary *)getCredsForURL:(NSURL *)ftpurl {
-    KeychainItemWrapper *keychain = [[KeychainItemWrapper alloc]initWithIdentifier:@"SwiftLoadFTPCreds" accessGroup:nil];
-    NSString *keychainData = (NSString *)[keychain objectForKey:(id)kSecValueData];
-    [keychain release];
-    
-    if (keychainData.length == 0) {
-        return nil;
-    }
-    
-    // username:password:host, username:password:host, username:password:host
-    
-    NSString *username = nil;
-    NSString *password = nil;
-    
-    NSArray *triples = [keychainData componentsSeparatedByString:@","];
-    
-    for (NSString *string in triples) {
-        NSArray *components = [string componentsSeparatedByString:@":"];
-        
-        if (components.count == 0) {
-            continue;
-        }
-        
-        NSString *host = [components objectAtIndex:2];
-        
-        if ([host isEqualToString:ftpurl.host]) {
-            username = [components objectAtIndex:0];
-            password = [components objectAtIndex:1];
-            break;
-        }
-    }
-    
-    if (username.length > 0 && password.length > 0) {
-        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-        [dict setObject:username forKey:@"username"];
-        [dict setObject:password forKey:@"password"];
-        return dict;
-    }
-    return nil;
-}*/
-
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
     return UITableViewCellEditingStyleNone;
 }
@@ -321,7 +222,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.filedicts.count;
+    return _filedicts.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -341,12 +242,12 @@
         }
     }
     
-    NSDictionary *fileDict = [self.filedicts objectAtIndex:indexPath.row];
+    NSDictionary *fileDict = [_filedicts objectAtIndex:indexPath.row];
     NSString *filename = [fileDict objectForKey:@"NSFileName"];
     
     cell.textLabel.text = filename;
     
-    /*if ([(NSString *)[fileDict objectForKey:NSFileType] isEqualToString:(NSString *)NSFileTypeRegular]) {
+    if ([(NSString *)[fileDict objectForKey:NSFileType] isEqualToString:(NSString *)NSFileTypeRegular]) {
         float fileSize = [[fileDict objectForKey:NSFileSize]intValue];
         
         cell.detailTextLabel.text = @"File, ";
@@ -362,7 +263,7 @@
         }
     } else {
         cell.detailTextLabel.text = @"Directory";
-    }*/
+    }
     
     return cell;
 }
@@ -418,7 +319,7 @@
 }
 
 - (void)pullToRefreshViewShouldRefresh:(PullToRefreshView *)view {
-   // [self sendReqestForCurrentURL];
+    [self loadCurrentDirectoryFromSFTP];
 }
 
 - (void)dealloc {
