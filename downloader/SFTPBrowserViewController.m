@@ -19,6 +19,8 @@
 @property (nonatomic, retain) NSString *currentURL;
 @property (nonatomic, retain) NSMutableArray *filedicts;
 
+@property (nonatomic, retain) CK2SFTPSession *session;
+
 @end
 
 @implementation SFTPBrowserViewController
@@ -139,9 +141,8 @@
             [self dismissModalViewControllerAnimated:YES];
         } else {
             self.currentURL = url;
-            NSURL *aURL = [NSURL URLWithString:_currentURL];
             [self saveUsername:username andPassword:password forURL:[NSURL URLWithString:_currentURL]];
-            CK2SFTPSession* session = [[CK2SFTPSession alloc] initWithURL:[NSURL URLWithString:url] delegate:self startImmediately:YES];
+            self.session = [[CK2SFTPSession alloc] initWithURL:[NSURL URLWithString:url] delegate:self startImmediately:YES];
             // login
         }
     }]autorelease];
@@ -160,10 +161,20 @@
     NSLog(@"challenge");
 }
 
-- (void)SFTPSession:(CK2SFTPSession *)session appendStringToTranscript:(NSString *)string
-           received:(BOOL)received
-{
+- (void)SFTPSession:(CK2SFTPSession *)session appendStringToTranscript:(NSString *)string received:(BOOL)received {
     NSLog(@"%@", string);
+}
+
+- (void)SFTPSessionDidInitialize:(CK2SFTPSession *)session {
+    
+}
+
+- (void)SFTPSession:(CK2SFTPSession *)session didFailWithError:(NSError *)error {
+    
+}
+
+- (void)SFTPSession:(CK2SFTPSession *)session didCancelAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
+    
 }
 
 - (void)didMoveOn:(FTPLoginController *)controller {

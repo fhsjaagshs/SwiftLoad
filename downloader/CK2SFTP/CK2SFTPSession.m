@@ -158,8 +158,21 @@ void disconnect_callback(LIBSSH2_SESSION *session, int reason, const char *messa
     if (port) transcript = [transcript stringByAppendingFormat:@":%@", port];
     [_delegate SFTPSession:self appendStringToTranscript:transcript received:NO];
     
-    NSHost *host = [NSHost hostWithName:hostName];
-    NSString *address = [host address];
+    Boolean result;
+    CFHostRef hostRef = CFHostCreateWithName(kCFAllocatorDefault, (CFStringRef)hostName);
+    CFArrayRef addresses;
+    if (hostRef) {
+        result = CFHostStartInfoResolution(hostRef, kCFHostAddresses, NULL);
+        if (result == TRUE) {
+            addresses = CFHostGetAddressing(hostRef, &result);
+        }
+    }
+    CFRelease(hostRef);
+    
+    NSString *address = (NSString *)CFArrayGetValueAtIndex(addresses, 0);
+    
+    //NSHost *host = [NSHost hostWithName:hostName];
+   // NSString *address = [host address];
     if (!address)
     {
         NSError *error = [NSError errorWithDomain:NSURLErrorDomain
