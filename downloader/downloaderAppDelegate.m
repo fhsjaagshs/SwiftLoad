@@ -928,6 +928,15 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 //
+// SFTP Download
+//
+
+- (void)downloadFileUsingSFTP:(NSURL *)url withUsername:(NSString *)username andPassword:(NSString *)password {
+    SFTPDownload *download = [SFTPDownload downloadWithURL:url username:username andPassword:password];
+    [[Downloads sharedDownloads]addDownload:download];
+}
+
+//
 // FTP Download
 //
 

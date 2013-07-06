@@ -13,7 +13,6 @@
 
 @property (nonatomic, retain) ShadowedTableView *theTableView;
 @property (nonatomic, retain) UIButton *backButton;
-@property (nonatomic, retain) UIButton *homeButton;
 @property (nonatomic, retain) ShadowedNavBar *navBar;
 @property (nonatomic, retain) PullToRefreshView *pull;
 @property (nonatomic, retain) NSString *currentURL;
@@ -22,6 +21,8 @@
 @property (nonatomic, retain) DLSFTPConnection *connection;
 @property (nonatomic, retain) NSString *username;
 @property (nonatomic, retain) NSString *password;
+
+@property (nonatomic, retain) NSString *currentPath;
 @end
 
 @implementation SFTPBrowserViewController
@@ -47,24 +48,12 @@
     bbv.frame = CGRectMake(0, 44, screenBounds.size.width, 44);
     [self.view addSubview:bbv];
     
-    UIImage *buttonImage = [[UIImage imageNamed:@"button_icon"]resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4)];
-    
-    self.homeButton = [UIButton customizedButton];
-    _homeButton.frame = iPad?CGRectMake(358, 4, 62, 36):CGRectMake(125, 6, 60, 31);
-    [self.homeButton setTitle:@"Home" forState:UIControlStateNormal];
-    [self.homeButton addTarget:self action:@selector(goHome) forControlEvents:UIControlEventTouchUpInside];
-    [bbv addSubview:_homeButton];
-   // [_homeButton setHidden:YES];
-    
-    self.backButton = [[[UIButton alloc]initWithFrame:iPad?CGRectMake(117, 4, 62, 36):CGRectMake(53, 4, 62, 31)]autorelease];
-    [self.backButton setTitle:@"Back" forState:UIControlStateNormal];
-    [self.backButton addTarget:self action:@selector(goBackDir) forControlEvents:UIControlEventTouchUpInside];
-    [self.backButton setImage:buttonImage forState:UIControlStateNormal];
-    [self.backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    self.backButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
-    self.backButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
-    [bbv addSubview:self.backButton];
-    [self.backButton setHidden:YES];
+    self.backButton = [UIButton customizedButton];
+    _backButton.frame = CGRectMake(10, 6, 62, 31);
+    [_backButton setTitle:@"Back" forState:UIControlStateNormal];
+    [_backButton addTarget:self action:@selector(goBackDir) forControlEvents:UIControlEventTouchUpInside];
+    [bbv addSubview:_backButton];
+    [_backButton setHidden:YES];
     
     self.theTableView = [[[ShadowedTableView alloc]initWithFrame:CGRectMake(0, 88, screenBounds.size.width, screenBounds.size.height-88) style:UITableViewStylePlain]autorelease];
     self.theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -79,16 +68,26 @@
     [self.pull setDelegate:self];
     [self.theTableView addSubview:self.pull];
     
-    [self showInitialLoginController];
-    
     self.filedicts = [NSMutableArray array];
+    
+    [self showInitialLoginController];
 }
 
-- (void)logThread:(NSString *)message {
-    NSLog(@"%@: Is%@ main thread",message,[NSThread isMainThread]?@"":@"n't");
+- (void)goBackDir {
+    [self deleteLastPathComponent];
+    [self loadCurrentDirectoryFromCache];
+    
+    if (_currentPath.length <= 1) {
+        [_backButton setHidden:YES];
+    }
 }
 
 - (NSString *)fixURL:(NSString *)url {
+    
+    if ([url isEqualToString:@"/"]) {
+        return @"/";
+    }
+    
     NSString *lastChar = [url substringFromIndex:url.length-1];
     if (![lastChar isEqualToString:@"/"]) {
         return [url stringByAppendingString:@"/"];
@@ -97,7 +96,7 @@
 }
 
 - (void)cacheCurrentDir {
-    NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"ftp_directory_cache.json"];
+    NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"sftp_directory_cache.json"];
     NSData *json = [NSData dataWithContentsOfFile:cachePath];
     NSMutableDictionary *savedDict = [[NSFileManager defaultManager]fileExistsAtPath:cachePath]?[NSJSONSerialization JSONObjectWithData:json options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
 
@@ -118,13 +117,15 @@
         [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
         [_pull finishedLoading];
     } else {
+        [_filedicts removeAllObjects];
+        [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
         [self loadCurrentDirectoryFromSFTP];
     }
 }
 
 - (void)loadCurrentDirectoryFromSFTP {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    DLSFTPRequest *req = [[DLSFTPListFilesRequest alloc]initWithDirectoryPath:@"/home/nate/" successBlock:^(NSArray *array) {
+    DLSFTPRequest *req = [[DLSFTPListFilesRequest alloc]initWithDirectoryPath:_currentPath successBlock:^(NSArray *array) {
         dispatch_sync(dispatch_get_main_queue(), ^{
             NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
             
@@ -151,6 +152,16 @@
     [_connection submitRequest:req];
 }
 
+- (void)addComponentToPath:(NSString *)pathComponent {
+    self.currentPath = [self fixURL:[_currentPath stringByAppendingPathComponent:pathComponent]];
+    self.navBar.topItem.title = _currentPath;
+}
+
+- (void)deleteLastPathComponent {
+    self.currentPath = [self fixURL:[_currentPath stringByDeletingLastPathComponent]];
+    self.navBar.topItem.title = _currentPath;
+}
+
 - (void)showInitialLoginController {
     
     NSString *browserURL = [[NSUserDefaults standardUserDefaults]objectForKey:@"FTPURLBrowser"];
@@ -162,6 +173,8 @@
             self.currentURL = url;
             NSURL *URL = [NSURL URLWithString:_currentURL];
             [SFTPCreds saveUsername:username andPassword:password forURL:URL];
+            self.currentPath = URL.path;
+            self.navBar.topItem.title = _currentPath;
             self.username = username;
             self.password = password;
             self.connection = [[DLSFTPConnection alloc]initWithHostname:URL.host username:_username password:_password];
@@ -282,50 +295,34 @@
     return cell;
 }
 
+- (NSURL *)constructURLForFile:(NSString *)filename {
+    return [NSURL URLWithString:[NSString stringWithFormat:@"sftp://%@%@%@",[[NSURL URLWithString:_currentURL]host],[self fixURL:_currentPath],filename]];
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-   /*
     NSDictionary *fileDict = [self.filedicts objectAtIndex:indexPath.row];
     NSString *filename = [fileDict objectForKey:NSFileName];
     
     NSString *filetype = (NSString *)[fileDict objectForKey:NSFileType];
     
     if ([filetype isEqualToString:(NSString *)NSFileTypeDirectory]) {
-        self.currentFTPURL = [self fixURL:[self.currentFTPURL stringByAppendingPathComponent_URLSafe:filename]];
-        self.navBar.topItem.title = [self.navBar.topItem.title stringByAppendingPathComponent:filename];
-        [self loadCurrentDirectory];
-        if (self.currentFTPURL.length > self.originalFTPURL.length) {
-            [self setButtonsHidden:NO];
+        [self addComponentToPath:filename];
+        [self loadCurrentDirectoryFromCache];
+        if (_currentPath.length > 1) {
+            [_backButton setHidden:NO];
         }
     } else if ([filetype isEqualToString:(NSString *)NSFileTypeRegular]) {
         NSString *message = [NSString stringWithFormat:@"Do you wish to download \"%@\"?",filename];
         UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             if (buttonIndex == 0) {
-                NSDictionary *creds = [self getCredsForURL:[NSURL URLWithString:[self fixURL:self.currentFTPURL]]];
-                [kAppDelegate downloadFileUsingFtp:[_currentFTPURL stringByAppendingPathComponent_URLSafe:filename] withUsername:[creds objectForKey:@"username"] andPassword:[creds objectForKey:@"password"]];
+                NSDictionary *creds = [SFTPCreds getCredsForURL:[NSURL URLWithString:_currentURL]];
+                [kAppDelegate downloadFileUsingSFTP:[self constructURLForFile:filename] withUsername:[creds objectForKey:@"username"] andPassword:[creds objectForKey:@"password"]];
             }
         } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download", nil]autorelease];
         actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
         [actionSheet showInView:self.view];
-    } else {
-        NSString *message = [NSString stringWithFormat:@"What do you wish to do with \"%@\"?",filename];
-        UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-            if (buttonIndex == 0) {
-                NSDictionary *creds = [self getCredsForURL:[NSURL URLWithString:[self fixURL:self.currentFTPURL]]];
-                [kAppDelegate downloadFileUsingFtp:[self.currentFTPURL stringByAppendingPathComponent_URLSafe:filename] withUsername:[creds objectForKey:@"username"] andPassword:[creds objectForKey:@"password"]];
-            } else if (buttonIndex == 1) {
-                self.currentFTPURL = [self fixURL:[self.currentFTPURL stringByAppendingPathComponent_URLSafe:filename]];
-                self.navBar.topItem.title = [self.navBar.topItem.title stringByAppendingPathComponent:filename];
-                [self loadCurrentDirectory];
-                if (self.currentFTPURL.length > self.originalFTPURL.length) {
-                    [self setButtonsHidden:NO];
-                }
-            }
-        } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download", @"Treat as Directory", nil]autorelease];
-        actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
-        [actionSheet showInView:self.view];
     }
-    */
-    [self.theTableView deselectRowAtIndexPath:indexPath animated:YES];
+    [_theTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -339,7 +336,6 @@
 - (void)dealloc {
     [self setTheTableView:nil];
     [self setBackButton:nil];
-    [self setHomeButton:nil];
     [self setNavBar:nil];
     [self setPull:nil];
     [self setCurrentURL:nil];

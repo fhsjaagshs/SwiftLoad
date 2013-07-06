@@ -55,6 +55,7 @@
     #import "DropboxDownload.h"
     #import "HTTPDownload.h"
     #import "FTPDownload.h"
+    #import "SFTPDownload.h"
     #import "Downloads.h"
     #import "DownloadController.h"
 
