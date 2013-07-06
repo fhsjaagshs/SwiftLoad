@@ -16,6 +16,17 @@
 		9BFF2A0B15387C6E007ED9B1 /* ZipFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0415387C6E007ED9B1 /* ZipFile.m */; };
 		9BFF2A0C15387C6E007ED9B1 /* ZipReadStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0615387C6E007ED9B1 /* ZipReadStream.m */; };
 		9BFF2A0D15387C6E007ED9B1 /* ZipWriteStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0815387C6E007ED9B1 /* ZipWriteStream.m */; };
+		F106A4DC178865AD002D3BC8 /* DLSFTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4C7178865AD002D3BC8 /* DLSFTPConnection.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		F106A4DD178865AD002D3BC8 /* DLSFTPDownloadRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4C9178865AD002D3BC8 /* DLSFTPDownloadRequest.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		F106A4DE178865AD002D3BC8 /* DLSFTPFile.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4CB178865AD002D3BC8 /* DLSFTPFile.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		F106A4DF178865AD002D3BC8 /* DLSFTPListFilesRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4CD178865AD002D3BC8 /* DLSFTPListFilesRequest.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		F106A4E0178865AD002D3BC8 /* DLSFTPMakeDirectoryRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4CF178865AD002D3BC8 /* DLSFTPMakeDirectoryRequest.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		F106A4E1178865AD002D3BC8 /* DLSFTPMoveRenameRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4D1178865AD002D3BC8 /* DLSFTPMoveRenameRequest.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		F106A4E2178865AD002D3BC8 /* DLSFTPRemoveDirectoryRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4D3178865AD002D3BC8 /* DLSFTPRemoveDirectoryRequest.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		F106A4E3178865AD002D3BC8 /* DLSFTPRemoveFileRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4D5178865AD002D3BC8 /* DLSFTPRemoveFileRequest.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		F106A4E4178865AD002D3BC8 /* DLSFTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4D7178865AD002D3BC8 /* DLSFTPRequest.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		F106A4E5178865AD002D3BC8 /* DLSFTPUploadRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4D9178865AD002D3BC8 /* DLSFTPUploadRequest.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		F106A4E6178865AD002D3BC8 /* NSDictionary+SFTPFileAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4DB178865AD002D3BC8 /* NSDictionary+SFTPFileAttributes.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		F10CBC5A1707D6E700C82AFB /* DroppinBadassBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */; };
 		F10CBC5D17080C6600C82AFB /* DropboxBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */; };
 		F1122A76142E4E8B00A04CC6 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */; };
@@ -135,9 +146,6 @@
 		F17DC662140C489B0015F613 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F17DC661140C489B0015F613 /* AVFoundation.framework */; };
 		F17F11231420017100CE45D7 /* fileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F17F11211420017100CE45D7 /* fileInfo.m */; };
 		F1847BBB16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F1847BBA16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m */; };
-		F190FBC31787C52D00ED4E24 /* CK2SFTPFileHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = F190FBBE1787C52D00ED4E24 /* CK2SFTPFileHandle.m */; };
-		F190FBC41787C52D00ED4E24 /* CK2SFTPSession.m in Sources */ = {isa = PBXBuildFile; fileRef = F190FBC01787C52D00ED4E24 /* CK2SFTPSession.m */; };
-		F190FBC51787C52D00ED4E24 /* CK2SSHCredential.m in Sources */ = {isa = PBXBuildFile; fileRef = F190FBC21787C52D00ED4E24 /* CK2SSHCredential.m */; };
 		F19BB51C16E006CA0081C95B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F19BB51916E006CA0081C95B /* main.m */; };
 		F1A45E701704A15E00DD5FB9 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = F1A45E6F1704A15E00DD5FB9 /* KeychainItemWrapper.m */; };
 		F1A72948149876040049DBB6 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A72947149876040049DBB6 /* GameKit.framework */; };
@@ -214,6 +222,30 @@
 		9BFF2A0615387C6E007ED9B1 /* ZipReadStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZipReadStream.m; sourceTree = "<group>"; };
 		9BFF2A0715387C6E007ED9B1 /* ZipWriteStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipWriteStream.h; sourceTree = "<group>"; };
 		9BFF2A0815387C6E007ED9B1 /* ZipWriteStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZipWriteStream.m; sourceTree = "<group>"; };
+		F106A4C5178865AD002D3BC8 /* DLSFTP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLSFTP.h; sourceTree = "<group>"; };
+		F106A4C6178865AD002D3BC8 /* DLSFTPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLSFTPConnection.h; sourceTree = "<group>"; };
+		F106A4C7178865AD002D3BC8 /* DLSFTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLSFTPConnection.m; sourceTree = "<group>"; };
+		F106A4C8178865AD002D3BC8 /* DLSFTPDownloadRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLSFTPDownloadRequest.h; sourceTree = "<group>"; };
+		F106A4C9178865AD002D3BC8 /* DLSFTPDownloadRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLSFTPDownloadRequest.m; sourceTree = "<group>"; };
+		F106A4CA178865AD002D3BC8 /* DLSFTPFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLSFTPFile.h; sourceTree = "<group>"; };
+		F106A4CB178865AD002D3BC8 /* DLSFTPFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLSFTPFile.m; sourceTree = "<group>"; };
+		F106A4CC178865AD002D3BC8 /* DLSFTPListFilesRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLSFTPListFilesRequest.h; sourceTree = "<group>"; };
+		F106A4CD178865AD002D3BC8 /* DLSFTPListFilesRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLSFTPListFilesRequest.m; sourceTree = "<group>"; };
+		F106A4CE178865AD002D3BC8 /* DLSFTPMakeDirectoryRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLSFTPMakeDirectoryRequest.h; sourceTree = "<group>"; };
+		F106A4CF178865AD002D3BC8 /* DLSFTPMakeDirectoryRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLSFTPMakeDirectoryRequest.m; sourceTree = "<group>"; };
+		F106A4D0178865AD002D3BC8 /* DLSFTPMoveRenameRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLSFTPMoveRenameRequest.h; sourceTree = "<group>"; };
+		F106A4D1178865AD002D3BC8 /* DLSFTPMoveRenameRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLSFTPMoveRenameRequest.m; sourceTree = "<group>"; };
+		F106A4D2178865AD002D3BC8 /* DLSFTPRemoveDirectoryRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLSFTPRemoveDirectoryRequest.h; sourceTree = "<group>"; };
+		F106A4D3178865AD002D3BC8 /* DLSFTPRemoveDirectoryRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLSFTPRemoveDirectoryRequest.m; sourceTree = "<group>"; };
+		F106A4D4178865AD002D3BC8 /* DLSFTPRemoveFileRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLSFTPRemoveFileRequest.h; sourceTree = "<group>"; };
+		F106A4D5178865AD002D3BC8 /* DLSFTPRemoveFileRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLSFTPRemoveFileRequest.m; sourceTree = "<group>"; };
+		F106A4D6178865AD002D3BC8 /* DLSFTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLSFTPRequest.h; sourceTree = "<group>"; };
+		F106A4D7178865AD002D3BC8 /* DLSFTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLSFTPRequest.m; sourceTree = "<group>"; };
+		F106A4D8178865AD002D3BC8 /* DLSFTPUploadRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLSFTPUploadRequest.h; sourceTree = "<group>"; };
+		F106A4D9178865AD002D3BC8 /* DLSFTPUploadRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLSFTPUploadRequest.m; sourceTree = "<group>"; };
+		F106A4DA178865AD002D3BC8 /* NSDictionary+SFTPFileAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+SFTPFileAttributes.h"; sourceTree = "<group>"; };
+		F106A4DB178865AD002D3BC8 /* NSDictionary+SFTPFileAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+SFTPFileAttributes.m"; sourceTree = "<group>"; };
+		F106A4E8178866F2002D3BC8 /* DLSFTP-all.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DLSFTP-all.h"; sourceTree = "<group>"; };
 		F10CBC581707D6E700C82AFB /* DroppinBadassBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DroppinBadassBlocks.h; path = ../Categories/DroppinBadassBlocks.h; sourceTree = "<group>"; };
 		F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DroppinBadassBlocks.m; path = ../Categories/DroppinBadassBlocks.m; sourceTree = "<group>"; };
 		F10CBC5B17080C6600C82AFB /* DropboxBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxBrowserViewController.h; sourceTree = "<group>"; };
@@ -406,12 +438,6 @@
 		F17F11211420017100CE45D7 /* fileInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = fileInfo.m; sourceTree = "<group>"; };
 		F1847BB916E538C600006C25 /* MFMailComposeViewController+BlockExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MFMailComposeViewController+BlockExtensions.h"; sourceTree = "<group>"; };
 		F1847BBA16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MFMailComposeViewController+BlockExtensions.m"; sourceTree = "<group>"; };
-		F190FBBD1787C52D00ED4E24 /* CK2SFTPFileHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CK2SFTPFileHandle.h; sourceTree = "<group>"; };
-		F190FBBE1787C52D00ED4E24 /* CK2SFTPFileHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CK2SFTPFileHandle.m; sourceTree = "<group>"; };
-		F190FBBF1787C52D00ED4E24 /* CK2SFTPSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CK2SFTPSession.h; sourceTree = "<group>"; };
-		F190FBC01787C52D00ED4E24 /* CK2SFTPSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CK2SFTPSession.m; sourceTree = "<group>"; };
-		F190FBC11787C52D00ED4E24 /* CK2SSHCredential.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CK2SSHCredential.h; sourceTree = "<group>"; };
-		F190FBC21787C52D00ED4E24 /* CK2SSHCredential.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CK2SSHCredential.m; sourceTree = "<group>"; };
 		F19BB51916E006CA0081C95B /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F19BB51A16E006CA0081C95B /* SwiftLoad-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SwiftLoad-Info.plist"; sourceTree = "<group>"; };
 		F19BB51B16E006CA0081C95B /* SwiftLoad-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SwiftLoad-Prefix.pch"; sourceTree = "<group>"; };
@@ -561,6 +587,37 @@
 				9BFF2A0815387C6E007ED9B1 /* ZipWriteStream.m */,
 			);
 			path = "Objective-Zip";
+			sourceTree = "<group>";
+		};
+		F106A4C4178865AD002D3BC8 /* DLSFTP */ = {
+			isa = PBXGroup;
+			children = (
+				F106A4C5178865AD002D3BC8 /* DLSFTP.h */,
+				F106A4C6178865AD002D3BC8 /* DLSFTPConnection.h */,
+				F106A4C7178865AD002D3BC8 /* DLSFTPConnection.m */,
+				F106A4C8178865AD002D3BC8 /* DLSFTPDownloadRequest.h */,
+				F106A4C9178865AD002D3BC8 /* DLSFTPDownloadRequest.m */,
+				F106A4CA178865AD002D3BC8 /* DLSFTPFile.h */,
+				F106A4CB178865AD002D3BC8 /* DLSFTPFile.m */,
+				F106A4CC178865AD002D3BC8 /* DLSFTPListFilesRequest.h */,
+				F106A4CD178865AD002D3BC8 /* DLSFTPListFilesRequest.m */,
+				F106A4CE178865AD002D3BC8 /* DLSFTPMakeDirectoryRequest.h */,
+				F106A4CF178865AD002D3BC8 /* DLSFTPMakeDirectoryRequest.m */,
+				F106A4D0178865AD002D3BC8 /* DLSFTPMoveRenameRequest.h */,
+				F106A4D1178865AD002D3BC8 /* DLSFTPMoveRenameRequest.m */,
+				F106A4D2178865AD002D3BC8 /* DLSFTPRemoveDirectoryRequest.h */,
+				F106A4D3178865AD002D3BC8 /* DLSFTPRemoveDirectoryRequest.m */,
+				F106A4D4178865AD002D3BC8 /* DLSFTPRemoveFileRequest.h */,
+				F106A4D5178865AD002D3BC8 /* DLSFTPRemoveFileRequest.m */,
+				F106A4D6178865AD002D3BC8 /* DLSFTPRequest.h */,
+				F106A4D7178865AD002D3BC8 /* DLSFTPRequest.m */,
+				F106A4D8178865AD002D3BC8 /* DLSFTPUploadRequest.h */,
+				F106A4D9178865AD002D3BC8 /* DLSFTPUploadRequest.m */,
+				F106A4DA178865AD002D3BC8 /* NSDictionary+SFTPFileAttributes.h */,
+				F106A4DB178865AD002D3BC8 /* NSDictionary+SFTPFileAttributes.m */,
+				F106A4E8178866F2002D3BC8 /* DLSFTP-all.h */,
+			);
+			path = DLSFTP;
 			sourceTree = "<group>";
 		};
 		F119CEE813F46DA6007D67E4 = {
@@ -906,19 +963,6 @@
 			name = Packagaing;
 			sourceTree = "<group>";
 		};
-		F190FBBC1787C52D00ED4E24 /* CK2SFTP */ = {
-			isa = PBXGroup;
-			children = (
-				F190FBBD1787C52D00ED4E24 /* CK2SFTPFileHandle.h */,
-				F190FBBE1787C52D00ED4E24 /* CK2SFTPFileHandle.m */,
-				F190FBBF1787C52D00ED4E24 /* CK2SFTPSession.h */,
-				F190FBC01787C52D00ED4E24 /* CK2SFTPSession.m */,
-				F190FBC11787C52D00ED4E24 /* CK2SSHCredential.h */,
-				F190FBC21787C52D00ED4E24 /* CK2SSHCredential.m */,
-			);
-			path = CK2SFTP;
-			sourceTree = "<group>";
-		};
 		F19BB51816E006680081C95B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -953,7 +997,7 @@
 		F1DA5247176E8181009A43CD /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				F190FBBC1787C52D00ED4E24 /* CK2SFTP */,
+				F106A4C4178865AD002D3BC8 /* DLSFTP */,
 				F150D6B3177F783E00E4C094 /* FMDatabase */,
 				F1693C1316DFAA92006E3739 /* BKSessionController */,
 				9BFF29FE15387C6E007ED9B1 /* Objective-Zip */,
@@ -1236,9 +1280,17 @@
 				F1F0EBC31785D9EA00878F7D /* HTTPDownload.m in Sources */,
 				F1F0EBC61785F75900878F7D /* FTPDownload.m in Sources */,
 				F1679AC61787B368001369B1 /* SFTPBrowserViewController.m in Sources */,
-				F190FBC31787C52D00ED4E24 /* CK2SFTPFileHandle.m in Sources */,
-				F190FBC41787C52D00ED4E24 /* CK2SFTPSession.m in Sources */,
-				F190FBC51787C52D00ED4E24 /* CK2SSHCredential.m in Sources */,
+				F106A4DC178865AD002D3BC8 /* DLSFTPConnection.m in Sources */,
+				F106A4DD178865AD002D3BC8 /* DLSFTPDownloadRequest.m in Sources */,
+				F106A4DE178865AD002D3BC8 /* DLSFTPFile.m in Sources */,
+				F106A4DF178865AD002D3BC8 /* DLSFTPListFilesRequest.m in Sources */,
+				F106A4E0178865AD002D3BC8 /* DLSFTPMakeDirectoryRequest.m in Sources */,
+				F106A4E1178865AD002D3BC8 /* DLSFTPMoveRenameRequest.m in Sources */,
+				F106A4E2178865AD002D3BC8 /* DLSFTPRemoveDirectoryRequest.m in Sources */,
+				F106A4E3178865AD002D3BC8 /* DLSFTPRemoveFileRequest.m in Sources */,
+				F106A4E4178865AD002D3BC8 /* DLSFTPRequest.m in Sources */,
+				F106A4E5178865AD002D3BC8 /* DLSFTPUploadRequest.m in Sources */,
+				F106A4E6178865AD002D3BC8 /* NSDictionary+SFTPFileAttributes.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1331,6 +1383,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/libs/\"",
 					"\"$(SRCROOT)/Libs/libssh2-for-iOS/lib\"",
+					"\"$(SRCROOT)/downloader/NMSSH/libssh2\"",
 				);
 				PRODUCT_NAME = SwiftLoad;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "AED9C462-0F79-46ED-9182-106437775B8F";
@@ -1367,6 +1420,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/libs/\"",
 					"\"$(SRCROOT)/Libs/libssh2-for-iOS/lib\"",
+					"\"$(SRCROOT)/downloader/NMSSH/libssh2\"",
 				);
 				PRODUCT_NAME = SwiftLoad;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0786489C-1F43-4466-BC04-669FD8CE2E6C";

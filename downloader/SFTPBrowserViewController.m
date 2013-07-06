@@ -7,9 +7,9 @@
 //
 
 #import "SFTPBrowserViewController.h"
-#import "CK2SFTPSession.h"
+#import "DLSFTP-all.h"
 
-@interface SFTPBrowserViewController () <PullToRefreshViewDelegate, UITableViewDataSource, UITableViewDelegate, CK2SFTPSessionDelegate>
+@interface SFTPBrowserViewController () <PullToRefreshViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, retain) ShadowedTableView *theTableView;
 @property (nonatomic, retain) UIButton *backButton;
@@ -19,8 +19,9 @@
 @property (nonatomic, retain) NSString *currentURL;
 @property (nonatomic, retain) NSMutableArray *filedicts;
 
-@property (nonatomic, retain) CK2SFTPSession *session;
-
+@property (nonatomic, retain) DLSFTPConnection *connection;
+@property (nonatomic, retain) NSString *username;
+@property (nonatomic, retain) NSString *password;
 @end
 
 @implementation SFTPBrowserViewController
@@ -108,14 +109,14 @@
 }
 
 - (void)loadDirFromCacheForURL:(NSString *)url {
-    NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"ftp_directory_cache.json"];
+    NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"sftp_directory_cache.json"];
     NSData *json = [NSData dataWithContentsOfFile:cachePath];
     NSMutableDictionary *savedDict = [[NSFileManager defaultManager]fileExistsAtPath:cachePath]?[NSJSONSerialization JSONObjectWithData:json options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
     self.filedicts = [NSMutableArray arrayWithArray:[savedDict objectForKey:url]];
 }
 
 - (void)loadCurrentDirectoryFromCache {
-    NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"ftp_directory_cache.json"];
+    NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"sftp_directory_cache.json"];
     NSData *json = [NSData dataWithContentsOfFile:cachePath];
     NSMutableDictionary *savedDict = [[NSFileManager defaultManager]fileExistsAtPath:cachePath]?[NSJSONSerialization JSONObjectWithData:json options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
     
@@ -134,7 +135,7 @@
 
 - (void)showInitialLoginController {
     
-    NSString *browserURL = [[NSUserDefaults standardUserDefaults]objectForKey:@"FTPURLBrowser"];
+   /* NSString *browserURL = [[NSUserDefaults standardUserDefaults]objectForKey:@"FTPURLBrowser"];
     
     FTPLoginController *controller = [[[FTPLoginController alloc]initWithCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
         if ([username isEqualToString:@"cancel"]) {
@@ -142,7 +143,6 @@
         } else {
             self.currentURL = url;
             [self saveUsername:username andPassword:password forURL:[NSURL URLWithString:_currentURL]];
-            self.session = [[CK2SFTPSession alloc] initWithURL:[NSURL URLWithString:url] delegate:self startImmediately:YES];
             // login
         }
     }]autorelease];
@@ -154,27 +154,19 @@
         [controller setUrl:browserURL isPredefined:NO];
     }
     
-    [controller show];
-}
-
-- (void)SFTPSession:(CK2SFTPSession *)session didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-    NSLog(@"challenge");
-}
-
-- (void)SFTPSession:(CK2SFTPSession *)session appendStringToTranscript:(NSString *)string received:(BOOL)received {
-    NSLog(@"%@", string);
-}
-
-- (void)SFTPSessionDidInitialize:(CK2SFTPSession *)session {
-    
-}
-
-- (void)SFTPSession:(CK2SFTPSession *)session didFailWithError:(NSError *)error {
-    
-}
-
-- (void)SFTPSession:(CK2SFTPSession *)session didCancelAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-    
+    [controller show];*/
+    self.connection = [[DLSFTPConnection alloc]initWithHostname:@"natesymer.com" username:@"natesymer" password:@"ipodipod"];
+    [_connection connectWithSuccessBlock:^{
+        DLSFTPRequest *req = [[DLSFTPListFilesRequest alloc]initWithDirectoryPath:@"/home/natesymer/" successBlock:^(NSArray *array) {
+            for (DLSFTPFile *sftpFile in array) {
+                NSDictionary *dict = @{@"NSFileName": sftpFile.filename, @"NSFileAttributes": sftpFile.attributes, @"NSFilePath": sftpFile.path};
+                [_filedicts addObject:dict];
+            }
+        } failureBlock:nil];
+        [_connection submitRequest:req];
+    } failureBlock:^(NSError *error) {
+        
+    }];
 }
 
 - (void)didMoveOn:(FTPLoginController *)controller {
@@ -214,7 +206,7 @@
 }
 
 - (void)removeCredsForURL:(NSURL *)ftpurl {
-    KeychainItemWrapper *keychain = [[KeychainItemWrapper alloc]initWithIdentifier:@"SwiftLoadFTPCreds" accessGroup:nil];
+    KeychainItemWrapper *keychain = [[KeychainItemWrapper alloc]initWithIdentifier:@"SwiftLoadSFTPCreds" accessGroup:nil];
     NSString *keychainData = (NSString *)[keychain objectForKey:(id)kSecValueData];
     
     int index = -1;
@@ -239,7 +231,7 @@
 
 - (void)saveUsername:(NSString *)username andPassword:(NSString *)password forURL:(NSURL *)ftpurl {
     
-    KeychainItemWrapper *keychain = [[KeychainItemWrapper alloc]initWithIdentifier:@"SwiftLoadFTPCreds" accessGroup:nil];
+    KeychainItemWrapper *keychain = [[KeychainItemWrapper alloc]initWithIdentifier:@"SwiftLoadSFTPCreds" accessGroup:nil];
     NSString *keychainData = (NSString *)[keychain objectForKey:(id)kSecValueData];
     int index = -1;
     
@@ -428,6 +420,20 @@
 
 - (void)pullToRefreshViewShouldRefresh:(PullToRefreshView *)view {
    // [self sendReqestForCurrentURL];
+}
+
+- (void)dealloc {
+    [self setTheTableView:nil];
+    [self setBackButton:nil];
+    [self setHomeButton:nil];
+    [self setNavBar:nil];
+    [self setPull:nil];
+    [self setCurrentURL:nil];
+    [self setFiledicts:nil];
+    [self setConnection:nil];
+    [self setUsername:nil];
+    [self setPassword:nil];
+    [super dealloc];
 }
 
 @end
