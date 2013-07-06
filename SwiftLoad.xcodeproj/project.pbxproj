@@ -58,6 +58,9 @@
 		F145023F1781243000096202 /* arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F145023D1781243000096202 /* arrow@2x.png */; };
 		F149A6781491686D0038F1FC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F149A6771491686D0038F1FC /* AudioToolbox.framework */; };
 		F149A685149176E60038F1FC /* moviePlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F149A683149176E60038F1FC /* moviePlayerView.m */; };
+		F14B81931788C37600ADEF99 /* button_icon_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = F14B81911788C37500ADEF99 /* button_icon_pressed.png */; };
+		F14B81941788C37600ADEF99 /* button_icon_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F14B81921788C37600ADEF99 /* button_icon_pressed@2x.png */; };
+		F14B81971788C39E00ADEF99 /* UIButton+SwiftLoad.m in Sources */ = {isa = PBXBuildFile; fileRef = F14B81961788C39E00ADEF99 /* UIButton+SwiftLoad.m */; };
 		F150D6B2177F5B9400E4C094 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F150D6B1177F5B9400E4C094 /* libsqlite3.dylib */; };
 		F150D6BF177F783E00E4C094 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = F150D6B5177F783E00E4C094 /* FMDatabase.m */; };
 		F150D6C0177F783E00E4C094 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F150D6B7177F783E00E4C094 /* FMDatabaseAdditions.m */; };
@@ -300,6 +303,10 @@
 		F149A6771491686D0038F1FC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		F149A682149176E60038F1FC /* moviePlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = moviePlayerView.h; sourceTree = "<group>"; };
 		F149A683149176E60038F1FC /* moviePlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = moviePlayerView.m; sourceTree = "<group>"; };
+		F14B81911788C37500ADEF99 /* button_icon_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_icon_pressed.png; sourceTree = "<group>"; };
+		F14B81921788C37600ADEF99 /* button_icon_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_icon_pressed@2x.png"; sourceTree = "<group>"; };
+		F14B81951788C39E00ADEF99 /* UIButton+SwiftLoad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+SwiftLoad.h"; sourceTree = "<group>"; };
+		F14B81961788C39E00ADEF99 /* UIButton+SwiftLoad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+SwiftLoad.m"; sourceTree = "<group>"; };
 		F150D6B1177F5B9400E4C094 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		F150D6B4177F783E00E4C094 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
 		F150D6B5177F783E00E4C094 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
@@ -912,6 +919,8 @@
 				F1693C4D16DFABA6006E3739 /* UIViewController+AutoNib.m */,
 				F1847BB916E538C600006C25 /* MFMailComposeViewController+BlockExtensions.h */,
 				F1847BBA16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m */,
+				F14B81951788C39E00ADEF99 /* UIButton+SwiftLoad.h */,
+				F14B81961788C39E00ADEF99 /* UIButton+SwiftLoad.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -1031,6 +1040,8 @@
 				F1E9F77C1773F6BA00EC345C /* toolbar_icon@2x.png */,
 				F16187A317760311005D4568 /* button_icon.png */,
 				F16187A417760311005D4568 /* button_icon@2x.png */,
+				F14B81911788C37500ADEF99 /* button_icon_pressed.png */,
+				F14B81921788C37600ADEF99 /* button_icon_pressed@2x.png */,
 				F1E9F78E1774052D00EC345C /* buttonbarBG.png */,
 				F1E9F78F1774052D00EC345C /* buttonbarBG@2x.png */,
 				F1EB833316D808AA009D7D2D /* config.png */,
@@ -1185,6 +1196,8 @@
 				F1564B0C1776A27900E53B42 /* loop_pressed@2x.png in Resources */,
 				F145023E1781243000096202 /* arrow.png in Resources */,
 				F145023F1781243000096202 /* arrow@2x.png in Resources */,
+				F14B81931788C37600ADEF99 /* button_icon_pressed.png in Resources */,
+				F14B81941788C37600ADEF99 /* button_icon_pressed@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1303,6 +1316,7 @@
 				F106A4E6178865AD002D3BC8 /* NSDictionary+SFTPFileAttributes.m in Sources */,
 				F106A7D2178876CA002D3BC8 /* Keychain.m in Sources */,
 				F106A7CF178876B1002D3BC8 /* SFTPCreds.m in Sources */,
+				F14B81971788C39E00ADEF99 /* UIButton+SwiftLoad.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

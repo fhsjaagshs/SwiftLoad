@@ -49,17 +49,14 @@
     
     UIImage *buttonImage = [[UIImage imageNamed:@"button_icon"]resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4)];
     
-    self.homeButton = [[[UIButton alloc]initWithFrame:iPad?CGRectMake(358, 4, 62, 36):CGRectMake(123, 4, 62, 36)]autorelease];
-    [self.homeButton setImage:buttonImage forState:UIControlStateNormal];
-    [self.homeButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    self.homeButton = [UIButton customizedButton];
+    _homeButton.frame = iPad?CGRectMake(358, 4, 62, 36):CGRectMake(125, 6, 60, 31);
     [self.homeButton setTitle:@"Home" forState:UIControlStateNormal];
     [self.homeButton addTarget:self action:@selector(goHome) forControlEvents:UIControlEventTouchUpInside];
-    self.homeButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
-    self.homeButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
-    [bbv addSubview:self.homeButton];
-    [self.homeButton setHidden:YES];
+    [bbv addSubview:_homeButton];
+   // [_homeButton setHidden:YES];
     
-    self.backButton = [[[UIButton alloc]initWithFrame:iPad?CGRectMake(117, 4, 62, 36):CGRectMake(53, 4, 62, 37)]autorelease];
+    self.backButton = [[[UIButton alloc]initWithFrame:iPad?CGRectMake(117, 4, 62, 36):CGRectMake(53, 4, 62, 31)]autorelease];
     [self.backButton setTitle:@"Back" forState:UIControlStateNormal];
     [self.backButton addTarget:self action:@selector(goBackDir) forControlEvents:UIControlEventTouchUpInside];
     [self.backButton setImage:buttonImage forState:UIControlStateNormal];
@@ -87,6 +84,10 @@
     self.filedicts = [NSMutableArray array];
 }
 
+- (void)logThread:(NSString *)message {
+    NSLog(@"%@: Is%@ main thread",message,[NSThread isMainThread]?@"":@"n't");
+}
+
 - (NSString *)fixURL:(NSString *)url {
     NSString *lastChar = [url substringFromIndex:url.length-1];
     if (![lastChar isEqualToString:@"/"]) {
@@ -99,12 +100,8 @@
     NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"ftp_directory_cache.json"];
     NSData *json = [NSData dataWithContentsOfFile:cachePath];
     NSMutableDictionary *savedDict = [[NSFileManager defaultManager]fileExistsAtPath:cachePath]?[NSJSONSerialization JSONObjectWithData:json options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
-    
-    if (savedDict.count == 0) {
-        savedDict = [NSMutableDictionary dictionary];
-    }
-    
-    [savedDict setObject:self.filedicts forKey:[self fixURL:_currentURL]];
+
+    [savedDict setObject:_filedicts forKey:[self fixURL:_currentURL]];
     
     NSData *jsontowrite = [NSJSONSerialization dataWithJSONObject:savedDict options:NSJSONReadingMutableContainers error:nil];
     [jsontowrite writeToFile:cachePath atomically:YES];
@@ -127,20 +124,29 @@
 
 - (void)loadCurrentDirectoryFromSFTP {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    DLSFTPRequest *req = [[DLSFTPListFilesRequest alloc]initWithDirectoryPath:@"/home/natesymer/" successBlock:^(NSArray *array) {
-        for (DLSFTPFile *sftpFile in array) {
-            NSDictionary *dict = @{@"NSFileName": sftpFile.filename, NSFileType:[sftpFile.attributes objectForKey:NSFileType], NSFileSize: [sftpFile.attributes objectForKey:NSFileSize], @"NSFilePath": sftpFile.path};
-            [_filedicts addObject:dict];
-          //  [self cacheCurrentDir];
-        }
-        [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-        [_pull finishedLoading];
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    DLSFTPRequest *req = [[DLSFTPListFilesRequest alloc]initWithDirectoryPath:@"/home/nate/" successBlock:^(NSArray *array) {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+            
+            for (DLSFTPFile *sftpFile in array) {
+                NSDictionary *dict = @{@"NSFileName": sftpFile.filename, NSFileType:[sftpFile.attributes objectForKey:NSFileType], NSFileSize: [sftpFile.attributes objectForKey:NSFileSize], @"NSFilePath": sftpFile.path};
+                [_filedicts addObject:dict];
+            }
+        
+            [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+            [_pull finishedLoading];
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            [pool release];
+        });
     } failureBlock:^(NSError *error) {
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-        [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-        [_pull finishedLoading];
-        [TransparentAlert showAlertWithTitle:@"SFTP Error" andMessage:@"There was an error loading the current directory via SFTP."]; // Improve this later
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+            [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+            [_pull finishedLoading];
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            [pool release];
+            [TransparentAlert showAlertWithTitle:@"SFTP Error" andMessage:@"There was an error loading the current directory via SFTP."]; // Improve this later
+        });
     }];
     [_connection submitRequest:req];
 }
@@ -160,9 +166,17 @@
             self.password = password;
             self.connection = [[DLSFTPConnection alloc]initWithHostname:URL.host username:_username password:_password];
             [_connection connectWithSuccessBlock:^{
-                [self loadCurrentDirectoryFromSFTP];
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+                    [self loadCurrentDirectoryFromSFTP];
+                    [pool release];
+                });
             } failureBlock:^(NSError *error) {
-                [TransparentAlert showAlertWithTitle:@"SFTP Login Error" andMessage:@"There was an issue logging in via SFTP."]; // improve this later
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+                    [TransparentAlert showAlertWithTitle:@"SFTP Login Error" andMessage:@"There was an issue logging in via SFTP."]; // improve this later
+                    [pool release];
+                });
             }];
         }
     }]autorelease];
