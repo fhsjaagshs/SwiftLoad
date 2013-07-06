@@ -1395,7 +1395,6 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/libs/\"",
 					"\"$(SRCROOT)/Libs/libssh2-for-iOS/lib\"",
-					"\"$(SRCROOT)/downloader/NMSSH/libssh2\"",
 				);
 				PRODUCT_NAME = SwiftLoad;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "AED9C462-0F79-46ED-9182-106437775B8F";
@@ -1432,7 +1431,6 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/libs/\"",
 					"\"$(SRCROOT)/Libs/libssh2-for-iOS/lib\"",
-					"\"$(SRCROOT)/downloader/NMSSH/libssh2\"",
 				);
 				PRODUCT_NAME = SwiftLoad;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0786489C-1F43-4466-BC04-669FD8CE2E6C";
