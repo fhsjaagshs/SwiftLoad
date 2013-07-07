@@ -11,8 +11,6 @@
 @interface SFTPDownload ()
 
 @property (nonatomic, retain) NSURL *URL;
-@property (nonatomic, retain) NSString *username;
-@property (nonatomic, retain) NSString *password;
 @property (nonatomic, retain) DLSFTPConnection *connection;
 
 @end
@@ -27,9 +25,8 @@
     self = [super init];
     if (self) {
         self.URL = url;
-        self.username = username;
-        self.password = password;
         self.fileName = _URL.path.lastPathComponent;
+        self.connection = [[DLSFTPConnection alloc]initWithHostname:_URL.host username:username password:password];
     }
     return self;
 }
@@ -41,16 +38,29 @@
 
 - (void)start {
     [super start];
-    self.connection = [[DLSFTPConnection alloc]initWithHostname:_URL.host username:_username password:_password];
     [_connection connectWithSuccessBlock:^{
         dispatch_sync(dispatch_get_main_queue(), ^{
             NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-            DLSFTPDownloadRequest *req = [[DLSFTPDownloadRequest alloc]initWithRemotePath:_URL.path localPath:[kDocsDir stringByAppendingPathComponent:self.fileName] resume:NO successBlock:^(DLSFTPFile *file, NSDate *startTime, NSDate *finishTime) {
-                [self showSuccess];
+            
+            DLSFTPDownloadRequest *req = [[DLSFTPDownloadRequest alloc]initWithRemotePath:_URL.path localPath:getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:self.fileName]) resume:NO successBlock:^(DLSFTPFile *file, NSDate *startTime, NSDate *finishTime) {
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    NSAutoreleasePool *poolTwo = [[NSAutoreleasePool alloc]init];
+                    [self showSuccess];
+                    NSLog(@"success");
+                    [poolTwo release];
+                });
             } failureBlock:^(NSError *error) {
-                [self showFailure];
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    NSAutoreleasePool *poolTwo = [[NSAutoreleasePool alloc]init];
+                    [self showFailure];
+                    [poolTwo release];
+                });
             } progressBlock:^(unsigned long long bytesReceived, unsigned long long bytesTotal) {
-                [self.delegate setProgress:(bytesReceived/bytesTotal)];
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    NSAutoreleasePool *poolTwo = [[NSAutoreleasePool alloc]init];
+                    [self.delegate setProgress:((float)bytesReceived/(float)bytesTotal)];
+                    [poolTwo release];
+                });
             }];
             
             [_connection submitRequest:req];
@@ -61,8 +71,7 @@
         dispatch_sync(dispatch_get_main_queue(), ^{
             NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
             [self showFailure];
-            NSLog(@"Error: %@",error);
-            [TransparentAlert showAlertWithTitle:@"SFTP Login Error" andMessage:@"There was an issue logging in via SFTP."]; // improve this later
+            [TransparentAlert showAlertWithTitle:@"SFTP Login Error" andMessage:error.localizedDescription.stringByCapitalizingFirstLetter];
             [pool release];
         });
     }];
@@ -70,8 +79,6 @@
 
 - (void)dealloc {
     [self setURL:nil];
-    [self setUsername:nil];
-    [self setPassword:nil];
     [self setConnection:nil];
     [super dealloc];
 }

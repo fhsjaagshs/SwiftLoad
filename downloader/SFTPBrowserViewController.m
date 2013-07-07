@@ -165,7 +165,7 @@
     
     NSString *browserURL = [[NSUserDefaults standardUserDefaults]objectForKey:@"FTPURLBrowser"];
     
-    FTPLoginController *controller = [[[FTPLoginController alloc]initWithCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
+    FTPLoginController *controller = [[[FTPLoginController alloc]initWithType:FTPLoginControllerTypeLogin andCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
         if ([username isEqualToString:@"cancel"]) {
             [self dismissModalViewControllerAnimated:YES];
         } else {
@@ -177,6 +177,7 @@
             self.username = username;
             self.password = password;
             self.connection = [[DLSFTPConnection alloc]initWithHostname:URL.host username:_username password:_password];
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
             [_connection connectWithSuccessBlock:^{
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
@@ -192,7 +193,6 @@
             }];
         }
     }]autorelease];
-    [controller setType:FTPLoginControllerTypeLogin];
     controller.textFieldDelegate = self;
     controller.didMoveOnSelector = @selector(didMoveOn);
     
@@ -295,7 +295,7 @@
 }
 
 - (NSURL *)constructURLForFile:(NSString *)filename {
-    return [NSURL URLWithString:[NSString stringWithFormat:@"sftp://%@%@%@",[[NSURL URLWithString:_currentURL]host],[self fixURL:_currentPath],filename]];
+    return [NSURL URLWithString:[[NSString stringWithFormat:@"sftp://%@%@%@",[[NSURL URLWithString:_currentURL]host],[self fixURL:_currentPath],filename]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

@@ -980,7 +980,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 - (void)showFTPUploadController {
-    FTPLoginController *controller = [[[FTPLoginController alloc]initWithCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
+    FTPLoginController *controller = [[[FTPLoginController alloc]initWithType:FTPLoginControllerTypeUpload andCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
         SCRFTPRequest *ftpRequest = [[SCRFTPRequest requestWithURL:[NSURL URLWithString:url] toUploadFile:self.openFile]retain];
         ftpRequest.username = username;
         ftpRequest.password = password;
@@ -991,7 +991,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         ftpRequest.bytesWrittenSelector = @selector(uploadBytesWritten:);
         [ftpRequest startRequest];
     }]autorelease];
-    [controller setType:FTPLoginControllerTypeUpload];
     [controller show];
 }
 

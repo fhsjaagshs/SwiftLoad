@@ -16,8 +16,7 @@ typedef enum {
 
 @interface FTPLoginController : TransparentAlert
 
-- (void)setType:(FTPLoginControllerType)type;
-- (id)initWithCompletionHandler:(void (^)(NSString *username, NSString *password, NSString *url))block;
+- (id)initWithType:(FTPLoginControllerType)type andCompletionHandler:(void (^)(NSString *username, NSString *password, NSString *url))block;
 - (void)setUrl:(NSString *)url isPredefined:(BOOL)isPredef;
 
 @property (nonatomic, assign) SEL didMoveOnSelector;

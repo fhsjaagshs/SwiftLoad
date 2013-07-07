@@ -85,7 +85,8 @@
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)recievedData {
     self.downloadedBytes += recievedData.length;
     [_downloadedData appendData:recievedData];
-    [self.delegate setProgress:((_fileSize == -1)?1:_downloadedData.length/_fileSize)];
+    NSLog(@"In progress area");
+    [self.delegate setProgress:((_fileSize == -1)?1:((float)_downloadedData.length/(float)_fileSize))];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {

@@ -27,8 +27,6 @@
     [keychainQuery setObject:(id)kCFBooleanTrue forKey:(id)kSecReturnData];
     [keychainQuery setObject:(id)kSecMatchLimitOne forKey:(id)kSecMatchLimit];
     
-    NSLog(@"Query: %@",keychainQuery);
-    
     CFDataRef keyData = NULL;
     if (SecItemCopyMatching((CFDictionaryRef)keychainQuery, (CFTypeRef *)&keyData) == noErr) {
         @try {

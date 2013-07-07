@@ -96,7 +96,7 @@
     
     NSString *browserURL = [[NSUserDefaults standardUserDefaults]objectForKey:@"FTPURLBrowser"];
     
-    FTPLoginController *controller = [[[FTPLoginController alloc]initWithCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
+    FTPLoginController *controller = [[[FTPLoginController alloc]initWithType:FTPLoginControllerTypeLogin andCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
         if ([username isEqualToString:@"cancel"]) {
             [self dismissModalViewControllerAnimated:YES];
         } else {
@@ -107,7 +107,6 @@
             [self sendReqestForCurrentURL];
         }
     }]autorelease];
-    [controller setType:FTPLoginControllerTypeLogin];
     controller.textFieldDelegate = self;
     controller.didMoveOnSelector = @selector(didMoveOn);
     

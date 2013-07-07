@@ -30,7 +30,9 @@ NSString * const kBackgroundTaskDownload = @"download";
 }
 
 - (void)clearOutMyself {
-    [_delegate reset];
+    if (_delegate) {
+        [_delegate reset];
+    }
     [[Downloads sharedDownloads]removeDownload:self];
     [[NSNotificationCenter defaultCenter]postNotificationName:kDownloadChanged object:self];
 }
@@ -55,7 +57,11 @@ NSString * const kBackgroundTaskDownload = @"download";
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     self.complete = YES;
     self.succeeded = NO;
-    [_delegate drawRed];
+    
+    if (_delegate) {
+        [_delegate drawRed];
+    }
+    
     [self performSelector:@selector(clearOutMyself) withObject:nil afterDelay:0.6f];
     [self cancelBackgroundTask];
 }
@@ -68,7 +74,10 @@ NSString * const kBackgroundTaskDownload = @"download";
     self.complete = YES;
     self.succeeded = YES;
     
-    [_delegate drawGreen];
+    if (_delegate) {
+        [_delegate drawGreen];
+    }
+    
     [self performSelector:@selector(clearOutMyself) withObject:nil afterDelay:0.6f];
     [self cancelBackgroundTask];
 }

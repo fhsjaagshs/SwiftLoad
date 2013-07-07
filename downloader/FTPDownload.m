@@ -67,7 +67,7 @@
 
 - (void)bytesRead:(SCRFTPRequest *)request {
     NSLog(@"%llu",_request.bytesRead/_request.fileSize);
-    [self.delegate setProgress:_request.bytesWritten/_request.fileSize];
+    [self.delegate setProgress:((float)_request.bytesWritten/(float)_request.fileSize)];
 }
 
 - (void)downloadFinished:(SCRFTPRequest *)request {
@@ -77,7 +77,8 @@
 
 - (void)downloadFailed:(SCRFTPRequest *)request {
     if ([_request.error.localizedDescription isEqualToString:@"FTP error 530"]) {
-        FTPLoginController *controller = [[[FTPLoginController alloc]initWithCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
+        [TransparentAlert showAlertWithTitle:@"Insecure Authorization Required" andMessage:@"The server requires authentication in order to download your file. Since FTP sends passwords in plain text, try using SFTP to download your file."];
+        /*FTPLoginController *controller = [[[FTPLoginController alloc]initWithCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
             if ([username isEqualToString:@"cancel"]) {
                 [[NSFileManager defaultManager]removeItemAtPath:[kDocsDir stringByAppendingPathComponent:[url lastPathComponent]] error:nil];
             } else {
@@ -90,7 +91,7 @@
         }]autorelease];
         [controller setUrl:_url.absoluteString isPredefined:YES];
         [controller setType:FTPLoginControllerTypeDownload];
-        [controller show];
+        [controller show];*/
     } else {
         NSLog(@"Request.error = %@",_request.error);
         [self showFailure];

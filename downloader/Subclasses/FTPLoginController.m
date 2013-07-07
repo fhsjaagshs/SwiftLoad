@@ -66,11 +66,8 @@
     self.passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
     self.passwordField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     
-    NSString *FTPPath = [[NSUserDefaults standardUserDefaults]objectForKey:@"FTPPath"];
-    NSString *FTPUsername = [[NSUserDefaults standardUserDefaults]objectForKey:@"FTPUsername"];
-    
-    self.serverField.text = FTPPath;
-    self.usernameField.text = FTPUsername;
+    self.serverField.text = [[NSUserDefaults standardUserDefaults]objectForKey:@"FTPPath"];
+    self.usernameField.text = [[NSUserDefaults standardUserDefaults]objectForKey:@"FTPUsername"];
     
     [self.serverField addTarget:self action:@selector(moveOnServerField) forControlEvents:UIControlEventEditingDidEndOnExit];
     [self.usernameField addTarget:self action:@selector(moveOnUsernameField) forControlEvents:UIControlEventEditingDidEndOnExit];
@@ -81,8 +78,21 @@
     [self addSubview:self.passwordField];
 }
 
-- (id)initWithCompletionHandler:(void (^)(NSString *username, NSString *password, NSString *url))block {
-    self = [super initWithTitle:@"FTP Login Required" message:@"\n\n\n\n\n" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+- (id)initWithType:(FTPLoginControllerType)type andCompletionHandler:(void (^)(NSString *username, NSString *password, NSString *url))block {
+    switch (type) {
+        case FTPLoginControllerTypeDownload:
+            self = [super initWithTitle:@"FTP Login Required" message:@"\n\n\n\n\n" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Download", nil];
+            break;
+        case FTPLoginControllerTypeUpload:
+            self = [super initWithTitle:@"FTP Login Required" message:@"\n\n\n\n\n" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Upload", nil];
+            break;
+        case FTPLoginControllerTypeLogin:
+            self = [super initWithTitle:@"FTP Login Required" message:@"\n\n\n\n\n" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Login", nil];
+            break;
+        default:
+            break;
+    }
+    
     if (self) {
         objc_setAssociatedObject(self, "blockCallback", [block copy], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         [self setupTextViews];
@@ -91,12 +101,11 @@
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 1) {
-        NSString *server = self.serverField.text;
-        [[NSUserDefaults standardUserDefaults]setObject:server forKey:@"FTPPath"];
+    if (buttonIndex == alertView.firstOtherButtonIndex) {
+        [[NSUserDefaults standardUserDefaults]setObject:self.serverField.text forKey:@"FTPPath"];
         [[NSUserDefaults standardUserDefaults]setObject:self.usernameField.text forKey:@"FTPUsername"];
         void (^block)(NSString *username, NSString *password, NSString *url) = objc_getAssociatedObject(self, "blockCallback");
-        block(self.usernameField.text, self.passwordField.text, server);
+        block(self.usernameField.text, self.passwordField.text, self.serverField.text);
         Block_release(block);
     } else {
         void (^block)(NSString *username, NSString *password, NSString *url) = objc_getAssociatedObject(self, "blockCallback");
