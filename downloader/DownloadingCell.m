@@ -29,7 +29,6 @@
 }
 
 - (void)setProgress:(float)progress {
-    NSLog(@"Progress: %f",progress);
     _progress = progress;
     _progressView.progress = progress;
 }

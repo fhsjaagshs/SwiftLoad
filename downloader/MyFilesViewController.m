@@ -659,7 +659,6 @@
         if (buttonIndex == 0) {
             URLInputController *chav = [[[URLInputController alloc]initWithCompletionBlock:^(NSString *url) {
                 if (url.length > 0) {
-                    NSLog(@"URL: %@",url);
                     if ([url hasPrefix:@"http"]) {
                         [kAppDelegate downloadFromAppDelegate:url];
                     } else if ([url hasPrefix:@"ftp"]) {
