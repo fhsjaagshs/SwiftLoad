@@ -43,49 +43,24 @@
 - (void)start {
     [super start];
     
-    NSMutableURLRequest *headReq = [NSMutableURLRequest requestWithURL:_url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:30.0];
-    [headReq setHTTPMethod:@"HEAD"];
+    NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:_url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:30.0];
+    [theRequest setHTTPMethod:@"GET"];
     
-    [NSURLConnection sendAsynchronousRequest:headReq queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
-        if (!error) {
-            NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
-            if (headers) {
-                if ([headers objectForKey:@"Content-Range"]) {
-                    NSString *contentRange = [headers objectForKey:@"Content-Range"];
-                    NSRange range = [contentRange rangeOfString:@"/"];
-                    NSString *totalBytesCount = [contentRange substringFromIndex:range.location+1];
-                    self.fileSize = [totalBytesCount floatValue];
-                } else if ([headers objectForKey:@"Content-Length"]) {
-                    self.fileSize = [[headers objectForKey:@"Content-Length"]floatValue];
-                } else {
-                    self.fileSize = -1;
-                }
-            }
-            
-            NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:_url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:30.0];
-            [theRequest setHTTPMethod:@"GET"];
-            
-            if ([NSURLConnection canHandleRequest:theRequest]) {
-                self.connection = [[[NSURLConnection alloc]initWithRequest:theRequest delegate:self]autorelease];
-            } else {
-                [self showFailure];
-            }
-            
-        } else {
-            self.complete = YES;
-            self.succeeded = NO;
-        }
-    }];
+    if ([NSURLConnection canHandleRequest:theRequest]) {
+        self.connection = [[[NSURLConnection alloc]initWithRequest:theRequest delegate:self]autorelease];
+    } else {
+        [self showFailure];
+    }
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSHTTPURLResponse *)response {
     self.fileName = [response.URL.absoluteString lastPathComponent];
+    self.fileSize = [response expectedContentLength];
 }
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)recievedData {
     self.downloadedBytes += recievedData.length;
     [_downloadedData appendData:recievedData];
-    NSLog(@"In progress area");
     [self.delegate setProgress:((_fileSize == -1)?1:((float)_downloadedData.length/(float)_fileSize))];
 }
 
