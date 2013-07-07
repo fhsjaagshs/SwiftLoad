@@ -62,6 +62,7 @@
 		F14B81941788C37600ADEF99 /* button_icon_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F14B81921788C37600ADEF99 /* button_icon_pressed@2x.png */; };
 		F14B81971788C39E00ADEF99 /* UIButton+SwiftLoad.m in Sources */ = {isa = PBXBuildFile; fileRef = F14B81961788C39E00ADEF99 /* UIButton+SwiftLoad.m */; };
 		F14B819A1788D26500ADEF99 /* SFTPDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = F14B81991788D26500ADEF99 /* SFTPDownload.m */; };
+		F14B819D1788E2D300ADEF99 /* SimpleKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = F14B819C1788E2D300ADEF99 /* SimpleKeychain.m */; };
 		F150D6B2177F5B9400E4C094 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F150D6B1177F5B9400E4C094 /* libsqlite3.dylib */; };
 		F150D6BF177F783E00E4C094 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = F150D6B5177F783E00E4C094 /* FMDatabase.m */; };
 		F150D6C0177F783E00E4C094 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F150D6B7177F783E00E4C094 /* FMDatabaseAdditions.m */; };
@@ -310,6 +311,8 @@
 		F14B81961788C39E00ADEF99 /* UIButton+SwiftLoad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+SwiftLoad.m"; sourceTree = "<group>"; };
 		F14B81981788D26500ADEF99 /* SFTPDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFTPDownload.h; sourceTree = "<group>"; };
 		F14B81991788D26500ADEF99 /* SFTPDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFTPDownload.m; sourceTree = "<group>"; };
+		F14B819B1788E2D300ADEF99 /* SimpleKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleKeychain.h; sourceTree = "<group>"; };
+		F14B819C1788E2D300ADEF99 /* SimpleKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleKeychain.m; sourceTree = "<group>"; };
 		F150D6B1177F5B9400E4C094 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		F150D6B4177F783E00E4C094 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
 		F150D6B5177F783E00E4C094 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
@@ -963,6 +966,8 @@
 				F106A7CE178876B1002D3BC8 /* SFTPCreds.m */,
 				F106A7D0178876CA002D3BC8 /* Keychain.h */,
 				F106A7D1178876CA002D3BC8 /* Keychain.m */,
+				F14B819B1788E2D300ADEF99 /* SimpleKeychain.h */,
+				F14B819C1788E2D300ADEF99 /* SimpleKeychain.m */,
 			);
 			path = Subclasses;
 			sourceTree = "<group>";
@@ -1323,6 +1328,7 @@
 				F106A7CF178876B1002D3BC8 /* SFTPCreds.m in Sources */,
 				F14B81971788C39E00ADEF99 /* UIButton+SwiftLoad.m in Sources */,
 				F14B819A1788D26500ADEF99 /* SFTPDownload.m in Sources */,
+				F14B819D1788E2D300ADEF99 /* SimpleKeychain.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

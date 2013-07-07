@@ -28,14 +28,15 @@
 }
 
 - (void)setIdentifier:(NSString *)anIdentifier {
+    [self resetInternal];
     self.keychainidentifier = anIdentifier;
-    NSDictionary *query = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:(__bridge id)kSecClassGenericPassword, _keychainidentifier, (__bridge id)kSecMatchLimitOne, (id)kCFBooleanTrue, nil] forKeys:[NSArray arrayWithObjects:(__bridge id)kSecClass, (__bridge id)kSecAttrGeneric, (__bridge id)kSecMatchLimit, (__bridge id)kSecReturnAttributes, nil]];
+    NSDictionary *query = @{ (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword, (__bridge id)kSecAttrGeneric: _keychainidentifier, (__bridge id)kSecMatchLimit: (__bridge id)kSecMatchLimitOne, (__bridge id)kSecReturnAttributes: (id)kCFBooleanTrue };
     
     CFDictionaryRef result = nil;
     
     if (!SecItemCopyMatching((__bridge CFDictionaryRef)query, (CFTypeRef *)&result) == noErr) {
         NSLog(@"OOPS");
-        [self resetInternal];
+        [self reset];
         [_keychainItemData setObject:_keychainidentifier forKey:(__bridge id)kSecAttrGeneric];
     } else {
         self.keychainItemData = [self secItemFormatToDictionary:(__bridge id)result];
@@ -112,17 +113,20 @@
 }
 
 - (void)writeToKeychain {
-    NSDictionary *query = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:(__bridge id)kSecClassGenericPassword, _keychainidentifier, (__bridge id)kSecMatchLimitOne, (id)kCFBooleanTrue, nil] forKeys:[NSArray arrayWithObjects:(__bridge id)kSecClass, (__bridge id)kSecAttrGeneric, (__bridge id)kSecMatchLimit, (__bridge id)kSecReturnAttributes, nil]];
+    NSDictionary *query = @{ (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword, (__bridge id)kSecAttrGeneric: _keychainidentifier, (__bridge id)kSecMatchLimit: (__bridge id)kSecMatchLimitOne, (__bridge id)kSecReturnAttributes: (id)kCFBooleanTrue };
     
     CFDictionaryRef result = nil;
     
-    if (SecItemCopyMatching((__bridge CFDictionaryRef)query, (CFTypeRef *)&result) == noErr) {
+    OSStatus err = SecItemCopyMatching((__bridge CFDictionaryRef)query, (CFTypeRef *)&result);
+    
+    if (err == noErr) {
         NSMutableDictionary *updateItem = [NSMutableDictionary dictionaryWithDictionary:(__bridge id)result];
         [updateItem setObject:(__bridge id)kSecClassGenericPassword forKey:(__bridge id)kSecClass];
         NSMutableDictionary *tempCheck = [self dictionaryToSecItemFormat:_keychainItemData];
         [tempCheck removeObjectForKey:(__bridge id)kSecClass];
         SecItemUpdate((__bridge CFDictionaryRef)updateItem, (__bridge CFDictionaryRef)tempCheck);
     } else {
+        NSLog(@"Awww eff it");
         SecItemAdd((__bridge CFDictionaryRef)[self dictionaryToSecItemFormat:_keychainItemData], nil);
     }
 }

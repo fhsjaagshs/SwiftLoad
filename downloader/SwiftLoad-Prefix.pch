@@ -28,7 +28,7 @@
     #import "DLSFTP-all.h"
     #import "SFTPCreds.h"
     #import "FMDatabase.h"
-    #import "Keychain.h"
+    #import "SimpleKeychain.h"
 
     #import "StyleFactory.h"
     #import "BGProcFactory.h"
