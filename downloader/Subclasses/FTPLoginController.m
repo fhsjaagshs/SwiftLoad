@@ -22,6 +22,14 @@
 
 @synthesize serverField, usernameField, passwordField, urlPredefined, textFieldDelegate;
 
+- (void)setSFTP:(BOOL)isSFTP {
+    _isSFTP = isSFTP;
+    self.title = _isSFTP?@"SFTP Login Required":@"FTP Login Required";
+    self.serverField.text = [[NSUserDefaults standardUserDefaults]objectForKey:_isSFTP?@"sftp.server_name":@"ftp.server_name"];
+    self.usernameField.text = [[NSUserDefaults standardUserDefaults]objectForKey:_isSFTP?@"sftp.user_name":@"ftp.user_name"];
+    [self.serverField setPlaceholder:_isSFTP?@"sftp://example.com/home/me/":@"ftp://example.com/from/webroot/"];
+}
+
 - (void)setupTextViews {
     self.serverField = [[[UITextField alloc]init]autorelease];
     [self.serverField setKeyboardAppearance:UIKeyboardAppearanceAlert];
@@ -30,7 +38,7 @@
     [self.serverField setReturnKeyType:UIReturnKeyNext];
     [self.serverField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     [self.serverField setAutocorrectionType:UITextAutocorrectionTypeNo];
-    [self.serverField setPlaceholder:@"ftp://"];
+    [self.serverField setPlaceholder:_isSFTP?@"sftp://example.com/home/me/":@"ftp://example.com/from/webroot/"];
     [self.serverField setFont:[UIFont boldSystemFontOfSize:18]];
     [self.serverField setAdjustsFontSizeToFitWidth:YES];
     [self.serverField setDelegate:self];
@@ -66,8 +74,8 @@
     self.passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
     self.passwordField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     
-    self.serverField.text = [[NSUserDefaults standardUserDefaults]objectForKey:@"FTPPath"];
-    self.usernameField.text = [[NSUserDefaults standardUserDefaults]objectForKey:@"FTPUsername"];
+    self.serverField.text = [[NSUserDefaults standardUserDefaults]objectForKey:_isSFTP?@"sftp.server_name":@"ftp.server_name"];
+    self.usernameField.text = [[NSUserDefaults standardUserDefaults]objectForKey:_isSFTP?@"sftp.user_name":@"ftp.user_name"];
     
     [self.serverField addTarget:self action:@selector(moveOnServerField) forControlEvents:UIControlEventEditingDidEndOnExit];
     [self.usernameField addTarget:self action:@selector(moveOnUsernameField) forControlEvents:UIControlEventEditingDidEndOnExit];
@@ -102,8 +110,8 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == alertView.firstOtherButtonIndex) {
-        [[NSUserDefaults standardUserDefaults]setObject:self.serverField.text forKey:@"FTPPath"];
-        [[NSUserDefaults standardUserDefaults]setObject:self.usernameField.text forKey:@"FTPUsername"];
+        [[NSUserDefaults standardUserDefaults]setObject:self.serverField.text forKey:_isSFTP?@"sftp.server_name":@"ftp.server_name"];
+        [[NSUserDefaults standardUserDefaults]setObject:self.usernameField.text forKey:_isSFTP?@"sftp.user_name":@"ftp.user_name"];
         void (^block)(NSString *username, NSString *password, NSString *url) = objc_getAssociatedObject(self, "blockCallback");
         block(self.usernameField.text, self.passwordField.text, self.serverField.text);
         Block_release(block);

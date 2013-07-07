@@ -21,5 +21,6 @@ typedef enum {
 
 @property (nonatomic, assign) SEL didMoveOnSelector;
 @property (nonatomic, assign) id textFieldDelegate;
+@property (nonatomic, assign, setter = setSFTP:) BOOL isSFTP;
 
 @end

@@ -163,8 +163,6 @@
 
 - (void)showInitialLoginController {
     
-    NSString *browserURL = [[NSUserDefaults standardUserDefaults]objectForKey:@"FTPURLBrowser"];
-    
     FTPLoginController *controller = [[[FTPLoginController alloc]initWithType:FTPLoginControllerTypeLogin andCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
         if ([username isEqualToString:@"cancel"]) {
             [self dismissModalViewControllerAnimated:YES];
@@ -193,12 +191,9 @@
             }];
         }
     }]autorelease];
+    controller.isSFTP = YES;
     controller.textFieldDelegate = self;
     controller.didMoveOnSelector = @selector(didMoveOn);
-    
-    if (browserURL.length > 0) {
-        [controller setUrl:browserURL isPredefined:NO];
-    }
     
     [controller show];
 }
@@ -236,6 +231,8 @@
 }
 
 - (void)close {
+    [_connection cancelAllRequests];
+    [_connection disconnect];
     [self dismissModalViewControllerAnimated:YES];
 }
 
