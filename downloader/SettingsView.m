@@ -27,26 +27,13 @@
     
     BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
     
-    CGRect linkButtonFrame = iPad?CGRectMake(313, 396, 143, 37):CGRectMake(100, sanitizeMesurement(189), 120, 37);
-    CGRect bmbFrame = iPad?CGRectMake(302, 483, 164, 37):CGRectMake(75, sanitizeMesurement(265), 170, 37);
-    
-    UIImage *buttonImage = [[UIImage imageNamed:@"button_icon"]resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4)];
-    
-    self.linkButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _linkButton.frame = linkButtonFrame;
-    _linkButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
-    [_linkButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [_linkButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
-    _linkButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+    self.linkButton = [UIButton customizedButton];
+    _linkButton.frame = CGRectMake(iPad?313:88, iPad?396:sanitizeMesurement(189), 143, 37);
     [_linkButton addTarget:self action:@selector(linkOrUnlink) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_linkButton];
     
-    UIButton *bookmarkletButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    bookmarkletButton.frame = bmbFrame;
-    bookmarkletButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
-    [bookmarkletButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [bookmarkletButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
-    bookmarkletButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+    UIButton *bookmarkletButton = [UIButton customizedButton];
+    bookmarkletButton.frame = CGRectMake(iPad?302:75, iPad?483:sanitizeMesurement(265), 170, 37);
     [bookmarkletButton addTarget:self action:@selector(showBookmarkletInstallationAV) forControlEvents:UIControlEventTouchUpInside];
     [bookmarkletButton setTitle:@"Install Bookmarklet" forState:UIControlStateNormal];
     [self.view addSubview:bookmarkletButton];

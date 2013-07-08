@@ -69,26 +69,17 @@ static NSString *CellIdentifier = @"dbcell";
     bbv.frame = CGRectMake(0, 44, screenBounds.size.width, 44);
     [self.view addSubview:bbv];
     
-    UIImage *buttonImage = [[UIImage imageNamed:@"button_icon"]resizableImageWithCapInsets:UIEdgeInsetsMake(4, 4, 4, 4)];
-    
-    self.homeButton = [[[UIButton alloc]initWithFrame:iPad?CGRectMake(358, 4, 62, 36):CGRectMake(135, 6, 50, 31)]autorelease];
+    self.homeButton = [UIButton customizedButton];
+    _homeButton.frame = CGRectMake(iPad?354:131, 6, 68, 31);
     [_homeButton setTitle:@"Home" forState:UIControlStateNormal];
-    [_homeButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
-    [_homeButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [_homeButton addTarget:self action:@selector(goHome) forControlEvents:UIControlEventTouchUpInside];
-    _homeButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
-    _homeButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
     [bbv addSubview:_homeButton];
     [_homeButton setHidden:YES];
     
-    self.backButton = [[[UIButton alloc]initWithFrame:iPad?CGRectMake(117, 4, 62, 36):CGRectMake(53, 6, 62, 31)]autorelease];
+    self.backButton = [UIButton customizedButton];
+    _backButton.frame = CGRectMake(iPad?113:49, 6, 62, 31);
     [_backButton setTitle:@"Back" forState:UIControlStateNormal];
     [_backButton addTarget:self action:@selector(goBackDir) forControlEvents:UIControlEventTouchUpInside];
-    [_backButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
-    [_backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    _backButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
-    _backButton.titleLabel.shadowColor = [UIColor blackColor];
-    _backButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
     [bbv addSubview:_backButton];
     [_backButton setHidden:YES];
     
