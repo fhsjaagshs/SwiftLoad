@@ -59,15 +59,12 @@
     [self.view addSubview:self.infoField];
     
     self.loopControl = [[[ToggleControl alloc]initWithFrame:CGRectMake(self.view.bounds.size.width-50, self.view.bounds.size.height-50-44, 40, 40)]autorelease];
-    [_loopControl addTarget:self action:@selector(refreshLoops) forControlEvents:UIControlEventTouchUpInside];
+    [_loopControl addTarget:self action:@selector(saveLoopState) forControlEvents:UIControlEventTouchUpInside];
     self.loopControl.backgroundColor = [UIColor clearColor];
     [_loopControl setImage:[UIImage imageNamed:@"loop_on"] forState:ToggleControlModeOn];
     [_loopControl setImage:[UIImage imageNamed:@"loop_off"] forState:ToggleControlModeOff];
     [_loopControl setImage:[UIImage imageNamed:@"loop_pressed"] forState:ToggleControlModeIntermediate];
     [self.view addSubview:_loopControl];
-
-    NSString *loopContents = [NSString stringWithContentsOfFile:[kLibDir stringByAppendingPathComponent:@"loop.txt"] encoding:NSUTF8StringEncoding error:nil];
-    [self setLoopOn:[loopContents isEqualToString:@"loop"]];
     
     self.secondsRemaining = [[[UILabel alloc]initWithFrame:iPad?CGRectMake(315, 220, 139, 35):CGRectMake(51, sanitizeMesurement(187), 112, 21)]autorelease];
     self.secondsRemaining.text = @"Time Elapsed:";
@@ -169,9 +166,12 @@
     if (!playingError) {
         [self startUpdatingTime];
     }
+    
+    NSString *loopContents = [NSString stringWithContentsOfFile:[kLibDir stringByAppendingPathComponent:@"loop.txt"] encoding:NSUTF8StringEncoding error:nil];
+    [self setLoopOn:[loopContents isEqualToString:@"loop"]];
 }
 
-- (void)refreshLoops {
+- (void)saveLoopState {
     self.isLooped = (_loopControl.currentMode == ToggleControlModeOn);
     [[kAppDelegate audioPlayer]setNumberOfLoops:self.isLooped?-1:0];
     [self.isLooped?@"loop":@"dloop" writeToFile:[kLibDir stringByAppendingPathComponent:@"loop.txt"] atomically:YES encoding:NSUTF8StringEncoding error:nil];
@@ -214,9 +214,7 @@
             [ad hideHUD];
             
             if (error) {
-                TransparentAlert *av = [[TransparentAlert alloc]initWithTitle:@"Conversion Error" message:@"SwiftLoad could not convert the desired audio file." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                [av show];
-                [av release];
+                [TransparentAlert showAlertWithTitle:@"Conversion Error" andMessage:@"SwiftLoad could not convert the desired audio file."];
             } else {
              //   UIImageView *checkmark = [[[UIImageView alloc]initWithImage:getCheckmarkImage()]autorelease];
                 [ad showHUDWithTitle:@"Complete"];
@@ -489,7 +487,6 @@
     [self setSecondsRemaining:nil];
     [self setStopButton:nil];
     [self setErrorLabel:nil];
-    // [self setControl:nil];
     [self setLoopControl:nil];
     [self setPausePlay:nil];
     [self setTime:nil];
