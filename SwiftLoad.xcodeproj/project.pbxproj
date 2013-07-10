@@ -47,6 +47,7 @@
 		F13979A616E78F4E00F8B61B /* ArrowLeft@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A216E78F4E00F8B61B /* ArrowLeft@2x.png */; };
 		F13979A716E78F4E00F8B61B /* ArrowRight.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A316E78F4E00F8B61B /* ArrowRight.png */; };
 		F13979A816E78F4E00F8B61B /* ArrowRight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A416E78F4E00F8B61B /* ArrowRight@2x.png */; };
+		F13B08B9178CEE05005201F7 /* WebDAVCredsPrompt.m in Sources */ = {isa = PBXBuildFile; fileRef = F13B08B8178CEE05005201F7 /* WebDAVCredsPrompt.m */; };
 		F13B58A7176D2C7E007EF22B /* HUDProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = F13B58A6176D2C7E007EF22B /* HUDProgressView.m */; };
 		F1444581145A04A30026CDB7 /* pictureView.m in Sources */ = {isa = PBXBuildFile; fileRef = F144457F145A04A30026CDB7 /* pictureView.m */; };
 		F14478381770826A00C5204A /* DownloadController.m in Sources */ = {isa = PBXBuildFile; fileRef = F14478371770826A00C5204A /* DownloadController.m */; };
@@ -285,6 +286,8 @@
 		F13979A216E78F4E00F8B61B /* ArrowLeft@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ArrowLeft@2x.png"; path = "Images/ArrowLeft@2x.png"; sourceTree = "<group>"; };
 		F13979A316E78F4E00F8B61B /* ArrowRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ArrowRight.png; path = Images/ArrowRight.png; sourceTree = "<group>"; };
 		F13979A416E78F4E00F8B61B /* ArrowRight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ArrowRight@2x.png"; path = "Images/ArrowRight@2x.png"; sourceTree = "<group>"; };
+		F13B08B7178CEE05005201F7 /* WebDAVCredsPrompt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebDAVCredsPrompt.h; sourceTree = "<group>"; };
+		F13B08B8178CEE05005201F7 /* WebDAVCredsPrompt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebDAVCredsPrompt.m; sourceTree = "<group>"; };
 		F13B58A5176D2C7E007EF22B /* HUDProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HUDProgressView.h; path = ../HUDProgressView.h; sourceTree = "<group>"; };
 		F13B58A6176D2C7E007EF22B /* HUDProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HUDProgressView.m; path = ../HUDProgressView.m; sourceTree = "<group>"; };
 		F144457E145A04A30026CDB7 /* pictureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pictureView.h; sourceTree = "<group>"; };
@@ -749,6 +752,8 @@
 				F17CEDE016FE724C00E7E47B /* FileCreationDialogue.m */,
 				F1CB7DAC16FFE99A002693B5 /* FTPLoginController.h */,
 				F1CB7DAD16FFE99A002693B5 /* FTPLoginController.m */,
+				F13B08B7178CEE05005201F7 /* WebDAVCredsPrompt.h */,
+				F13B08B8178CEE05005201F7 /* WebDAVCredsPrompt.m */,
 				F1FCF12B17711DE3004A42B8 /* CoolRefreshTableView.h */,
 				F1FCF12C17711DE3004A42B8 /* CoolRefreshTableView.m */,
 				F1798EAD1774177400310C37 /* ShadowedNavBar.h */,
@@ -1323,6 +1328,7 @@
 				F14B81971788C39E00ADEF99 /* UIButton+SwiftLoad.m in Sources */,
 				F14B819A1788D26500ADEF99 /* SFTPDownload.m in Sources */,
 				F14B819D1788E2D300ADEF99 /* SimpleKeychain.m in Sources */,
+				F13B08B9178CEE05005201F7 /* WebDAVCredsPrompt.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

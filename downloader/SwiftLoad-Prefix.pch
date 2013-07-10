@@ -45,6 +45,11 @@
     #import "ShadowedTableView.h"
     #import "SwiftLoadCell.h"
 
+    #import "URLInputController.h"
+    #import "FileCreationDialogue.h"
+    #import "FTPLoginController.h"
+    #import "WebDAVCredsPrompt.h"
+
     #import "MBProgressHUD.h"
     #import "PullToRefreshView.h"
 
@@ -86,11 +91,5 @@
 
     #import "AudioConverter.h"
     #import "downloaderAppDelegate.h"
-    
-    #import "URLInputController.h"
-    #import "FileCreationDialogue.h"
-    #import "FTPLoginController.h"
-    
-    
 
 #endif

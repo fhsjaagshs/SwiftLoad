@@ -11,8 +11,6 @@
 
 @implementation FileCreationDialogue
 
-@synthesize tv, createFile, createDir;
-
 - (id)initWithCompletionBlock:(void (^)(FileCreationDialogueFileType fileType, NSString *fileName))block {
     self = [super initWithTitle:@"Create File or Directory" message:@"\n\n\n\n" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
     if (self) {

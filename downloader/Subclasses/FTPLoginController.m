@@ -20,8 +20,6 @@
 
 @implementation FTPLoginController
 
-@synthesize serverField, usernameField, passwordField, urlPredefined, textFieldDelegate;
-
 - (void)setSFTP:(BOOL)isSFTP {
     _isSFTP = isSFTP;
     self.title = _isSFTP?@"SFTP Login Required":@"FTP Login Required";
@@ -235,6 +233,9 @@
 }
 
 - (void)dealloc {
+    [self setServerField:nil];
+    [self setUsernameField:nil];
+    [self setPasswordField:nil];
     [self setTextFieldDelegate:nil];
     [super dealloc];
 }

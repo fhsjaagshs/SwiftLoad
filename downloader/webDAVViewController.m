@@ -24,9 +24,14 @@
 
 - (NSString *)passwordForUser:(NSString *)username {
     
-    // get password
+    NSDictionary *creds = [SimpleKeychain load:@"webdav_creds"];
     
-	return @"secret";
+    if ([[creds objectForKey:@"username"]isEqualToString:username]) {
+        return [creds objectForKey:@"password"];
+    }
+    // get password
+
+	return nil;
 }
 
 @end
@@ -78,6 +83,13 @@
     _urlLabel.textAlignment = UITextAlignmentCenter;
     [self.view addSubview:_urlLabel];
     
+    self.setCredsButton = [UIButton customizedButton];
+    _setCredsButton.frame = CGRectMake((self.view.bounds.size.width/2), _onLabel.bounds.size.height+_onLabel.bounds.origin.y+20, 5, 37);
+    [_setCredsButton setTitle:@"Set User" forState:UIControlStateNormal];
+    [_setCredsButton addTarget:self action:@selector(showCredsController) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_setCredsButton];
+    [_setCredsButton resizeForTitle];
+    
     UITextView *btf = [[[UITextView alloc]initWithFrame:iPad?CGRectMake(158, 512, 453, 61):CGRectMake(40, sanitizeMesurement(326), 240, 50)]autorelease];
     btf.backgroundColor = [UIColor clearColor];
     btf.editable = NO;
@@ -88,6 +100,14 @@
     [self.view addSubview:btf];
     
     [self createServer];
+}
+
+- (void)showCredsController {
+    [[[[WebDAVCredsPrompt alloc]initWithCredsDelegate:self]autorelease]show];
+}
+
+- (void)credsWereSaved {
+    // change _setCredsButton color to green
 }
 
 - (void)killServer {

@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface webDAVViewController : UIViewController
+@interface webDAVViewController : UIViewController <WebDAVCredsPromptCredsDelegate>
 
 @property (nonatomic, retain) HTTPServer *httpServer;
 @property (nonatomic, retain) UILabel *urlLabel;
 @property (nonatomic, retain) UILabel *onLabel;
+@property (nonatomic, retain) UIButton *setCredsButton;
 
 @end

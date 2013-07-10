@@ -26,7 +26,7 @@
     [topItem release];
     
     UITextView *textView = [[[UITextView alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-(iPad?200:200), screenBounds.size.width, iPad?200:150)]autorelease];
-    textView.text = @"Server: IP address of iPhone\nPort: 8080\nConnection type: Non-SSL WebDAV\nUsername and password: Anything";
+    textView.text = @"Server: IP address of iPhone\nPort: 8080\nConnection type: Non-SSL WebDAV\nUsername & Password: What you set in the previous window";
     textView.backgroundColor = [UIColor clearColor];
     textView.textColor = [UIColor blackColor];
     textView.font = [UIFont boldSystemFontOfSize:18];
