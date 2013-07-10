@@ -8,6 +8,29 @@
 
 #import "webDAVViewController.h"
 
+@interface PasswdWebDAVConnection : DAVConnection
+
+@end
+
+@implementation PasswdWebDAVConnection
+
+- (BOOL)isPasswordProtected:(NSString *)path {    
+	return YES;
+}
+
+- (BOOL)useDigestAccessAuthentication {
+	return YES;
+}
+
+- (NSString *)passwordForUser:(NSString *)username {
+    
+    // get password
+    
+	return @"secret";
+}
+
+@end
+
 @implementation webDAVViewController
 
 - (void)loadView {
@@ -90,7 +113,7 @@
 
     self.httpServer = [[[HTTPServer alloc]init]autorelease];
     [_httpServer setType:@"_http._tcp."];
-    [_httpServer setConnectionClass:[DAVConnection class]];
+    [_httpServer setConnectionClass:[PasswdWebDAVConnection class]];
     [_httpServer setPort:8080];
     [_httpServer setName:[[UIDevice currentDevice]name]];
 	[_httpServer setDocumentRoot:kDocsDir];
