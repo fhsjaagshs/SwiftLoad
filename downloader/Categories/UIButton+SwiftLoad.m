@@ -22,7 +22,8 @@
 }
 
 - (void)resizeForTitle {
-    
+    float width = [self.titleLabel.text sizeWithFont:self.titleLabel.font constrainedToSize:CGSizeMake(300, self.bounds.size.height)].width+10;
+    self.frame = CGRectMake(((self.frame.size.width-width)/2)+self.frame.origin.x, self.frame.origin.y, width, self.frame.size.height);
 }
 
 @end

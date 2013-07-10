@@ -69,6 +69,7 @@
     if ([[DBSession sharedSession]isLinked]) {
         [[DBSession sharedSession]unlinkUserId:[[[DBSession sharedSession]userIds]objectAtIndex:0]];
         [_linkButton setTitle:@"Link Dropbox" forState:UIControlStateNormal];
+        [_linkButton resizeForTitle];
         [DropboxBrowserViewController clearDatabase];
     } else {
         [[DBSession sharedSession]linkFromController:self];
@@ -82,10 +83,12 @@
 
 - (void)dropboxAuthenticationFailed {
     [self.linkButton setTitle:@"Link Dropbox" forState:UIControlStateNormal];
+    [_linkButton resizeForTitle];
 }
 
 - (void)dropboxAuthenticationSucceeded {
     [self.linkButton setTitle:@"Unlink Dropbox" forState:UIControlStateNormal];
+    [_linkButton resizeForTitle];
 }
 
 - (void)dealloc {

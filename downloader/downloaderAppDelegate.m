@@ -41,7 +41,12 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
             break;
         }
         
-        path = [[[oldPath stringByDeletingPathExtension]stringByAppendingString:[NSString stringWithFormat:@" - %d",appendNumber]]stringByAppendingPathExtension:ext];
+        path = [[oldPath stringByDeletingPathExtension]stringByAppendingString:[NSString stringWithFormat:@" - %d",appendNumber]];
+        
+        if (ext.length > 0) {
+            path = [path stringByAppendingPathExtension:ext];
+        }
+        
         appendNumber = appendNumber+1;
     } while (YES);
     
