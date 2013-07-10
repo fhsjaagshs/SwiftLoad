@@ -75,7 +75,6 @@
     #import "webDAVViewController.h"
     #import "MyFilesViewController.h"
     #import "SettingsView.h"
-    #import "FTPBrowserViewController.h"
     #import "DropboxBrowserViewController.h"
     #import "SFTPBrowserViewController.h"
 

@@ -676,18 +676,14 @@
             d.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
             [self presentModalViewController:d animated:YES];
         } else if (buttonIndex == 3) {
-            FTPBrowserViewController *d = [FTPBrowserViewController viewController];
-            d.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-            [self presentModalViewController:d animated:YES];
-        } else if (buttonIndex == 4) {
             SFTPBrowserViewController *s = [SFTPBrowserViewController viewController];
             [self presentModalViewController:s animated:YES];
-        } else if (buttonIndex == 5) {
+        } else if (buttonIndex == 4) {
             SettingsView *d = [SettingsView viewController];
             d.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
             [self presentModalViewController:d animated:YES];
         }
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download URL", @"WebDAV Server", @"Browse Dropbox", @"Browse FTP", @"Browse SFTP", @"Settings", nil]autorelease];
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download URL", @"WebDAV Server", @"Browse Dropbox", @"Browse SFTP", @"Settings", nil]autorelease];
     
     as.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     
