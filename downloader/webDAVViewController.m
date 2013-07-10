@@ -23,14 +23,11 @@
 }
 
 - (NSString *)passwordForUser:(NSString *)username {
-    
     NSDictionary *creds = [SimpleKeychain load:@"webdav_creds"];
     
     if ([[creds objectForKey:@"username"]isEqualToString:username]) {
         return [creds objectForKey:@"password"];
     }
-    // get password
-
 	return nil;
 }
 
@@ -84,7 +81,7 @@
     [self.view addSubview:_urlLabel];
     
     self.setCredsButton = [UIButton customizedButton];
-    _setCredsButton.frame = CGRectMake((self.view.bounds.size.width/2), _onLabel.bounds.size.height+_onLabel.bounds.origin.y+20, 5, 37);
+    _setCredsButton.frame = CGRectMake((self.view.bounds.size.width/2), self.view.bounds.size.height-37-10, 5, 37);
     [_setCredsButton setTitle:@"Set User" forState:UIControlStateNormal];
     [_setCredsButton addTarget:self action:@selector(showCredsController) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_setCredsButton];
