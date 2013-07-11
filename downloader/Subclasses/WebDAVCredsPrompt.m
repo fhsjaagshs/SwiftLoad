@@ -21,18 +21,18 @@
 - (void)setupTextViews {
     self.usernameField = [[[UITextField alloc]init]autorelease];
     _usernameField.frame = CGRectMake(13, 45, 257, 30);
-    [self.usernameField setKeyboardAppearance:UIKeyboardAppearanceAlert];
-    [self.usernameField setBorderStyle:UITextBorderStyleBezel];
-    [self.usernameField setBackgroundColor:[UIColor whiteColor]];
-    [self.usernameField setReturnKeyType:UIReturnKeyNext];
-    [self.usernameField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
-    [self.usernameField setAutocorrectionType:UITextAutocorrectionTypeNo];
-    [self.usernameField setPlaceholder:@"Username"];
-    [self.usernameField setFont:[UIFont boldSystemFontOfSize:18]];
-    [self.usernameField setAdjustsFontSizeToFitWidth:YES];
-    self.usernameField.delegate = self;
-    self.usernameField.clearButtonMode = UITextFieldViewModeWhileEditing;
-    self.usernameField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    _usernameField.keyboardAppearance = UIKeyboardAppearanceAlert;
+    _usernameField.borderStyle = UITextBorderStyleBezel;
+    _usernameField.backgroundColor = [UIColor whiteColor];
+    _usernameField.returnKeyType = UIReturnKeyNext;
+    _usernameField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    _usernameField.autocorrectionType = UITextAutocorrectionTypeNo;
+    _usernameField.placeholder = @"Username";
+    _usernameField.font = [UIFont boldSystemFontOfSize:18];
+    _usernameField.adjustsFontSizeToFitWidth = YES;
+    _usernameField.delegate = self;
+    _usernameField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    _usernameField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     
     self.passwordField = [[[UITextField alloc]init]autorelease];
     _passwordField.frame = CGRectMake(13, 85, 257, 30);

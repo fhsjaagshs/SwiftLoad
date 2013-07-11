@@ -18,7 +18,7 @@
 @property (nonatomic, retain) NSMutableArray *perspectiveCopiedList;
 @property (nonatomic, assign) BOOL isCut;
 
-@property (nonatomic, retain) UIDocumentInteractionController *docController;
+//@property (nonatomic, retain) UIDocumentInteractionController *docController;
 
 @property (nonatomic, retain) NSMutableArray *filelist;
 @property (nonatomic, retain) NSMutableArray *dirs;

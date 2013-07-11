@@ -95,29 +95,30 @@
 
 - (void)pasteInLocation:(NSString *)location {
     
-    [kAppDelegate showHUDWithTitle:_isCut?@"Moving Files...":@"Copying Files..."];
+    downloaderAppDelegate *ad = kAppDelegate;
+    
+    [ad showHUDWithTitle:_isCut?@"Moving Files...":@"Copying Files..."];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
         
+        NSFileManager *fm = [[NSFileManager alloc]init];
+        
         for (NSString *oldPath in _copiedList) {
-            [kAppDelegate setSecondaryTitleOfVisibleHUD:[oldPath lastPathComponent]];
+            [ad setSecondaryTitleOfVisibleHUD:[oldPath lastPathComponent]];
             NSString *newPath = getNonConflictingFilePathForPath([location stringByAppendingPathComponent:[oldPath lastPathComponent]]);
             
-            NSError *error = nil;
-            
-            NSFileManager *fm = [[NSFileManager alloc]init];
-            
             if (_isCut) {
-                [fm moveItemAtPath:oldPath toPath:newPath error:&error];
+                [fm moveItemAtPath:oldPath toPath:newPath error:nil];
                 if ([oldPath isEqualToString:[kAppDelegate nowPlayingFile]]) {
                     [kAppDelegate setNowPlayingFile:newPath];
                 }
             } else {
-                [fm copyItemAtPath:oldPath toPath:newPath error:&error];
+                [fm copyItemAtPath:oldPath toPath:newPath error:nil];
             }
-            [fm release];
         }
+                   
+        [fm release];
         
         [self flushCopiedList];
         
@@ -148,7 +149,7 @@
     [self saveIsCutBOOL];
     [self verifyProspectiveCopyList];
     [self flushCopiedList];
-    [_copiedList addObjectsFromArray:self.perspectiveCopiedList];
+    [_copiedList addObjectsFromArray:_perspectiveCopiedList];
     [self flushPerspectiveCopyList];
     [self saveCopiedList];
     [self updateCopyButtonState];
@@ -216,7 +217,7 @@
 }
 
 - (void)saveCopiedList {
-    [[NSUserDefaults standardUserDefaults]setObject:self.copiedList forKey:@"saved_copied_list"];
+    [[NSUserDefaults standardUserDefaults]setObject:_copiedList forKey:@"saved_copied_list"];
 }
 
 - (void)verifyCopiedList {
@@ -243,12 +244,12 @@
     NSString *old = [changedDict objectForKey:@"old"];
     NSString *new = [changedDict objectForKey:@"new"];
     
-    if ([self.copiedList containsObject:old]) {
-        [self.copiedList replaceObjectAtIndex:[self.copiedList indexOfObject:old] withObject:new];
+    if ([_copiedList containsObject:old]) {
+        [_copiedList replaceObjectAtIndex:[_copiedList indexOfObject:old] withObject:new];
     }
     
-    if ([self.perspectiveCopiedList containsObject:old]) {
-        [self.perspectiveCopiedList replaceObjectAtIndex:[self.perspectiveCopiedList indexOfObject:old] withObject:new];
+    if ([_perspectiveCopiedList containsObject:old]) {
+        [_perspectiveCopiedList replaceObjectAtIndex:[_perspectiveCopiedList indexOfObject:old] withObject:new];
     }
     
     [self saveCopiedList];
@@ -312,7 +313,7 @@
 
 - (void)updateCopyButtonState {
     
-    if (!self.theTableView.editing) {
+    if (!_theTableView.editing) {
         [self setCPButtonHidden:YES];
         return;
     }
@@ -320,17 +321,17 @@
     [self verifyProspectiveCopyList];
     [self verifyCopiedList];
     
-    BOOL persCLGT = (self.perspectiveCopiedList.count > 0);
-    BOOL CLGT = (self.copiedList.count > 0);
+    BOOL persCLGT = (_perspectiveCopiedList.count > 0);
+    BOOL CLGT = (_copiedList.count > 0);
     BOOL shouldUnhide = ((persCLGT || CLGT) || (persCLGT && CLGT));
     
     [self setCPButtonHidden:!shouldUnhide];
 }
 
 - (void)reindexFilelist {
-    if (self.filelist.count == 0) {
-        [self setFilelist:[NSMutableArray array]];
-        [self.filelist addObjectsFromArray:[[[NSFileManager defaultManager]contentsOfDirectoryAtPath:[kAppDelegate managerCurrentDir] error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)]];
+    if (_filelist.count == 0) {
+        self.filelist = [NSMutableArray array];
+        [_filelist addObjectsFromArray:[[[NSFileManager defaultManager]contentsOfDirectoryAtPath:[kAppDelegate managerCurrentDir] error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)]];
     }
 }
 
@@ -1087,22 +1088,18 @@
         textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
         [self presentModalViewController:textEditor animated:YES];
     } else if (buttonIndex == 5) {
-        
-        [self setDocController:[UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:file]]];
+        UIDocumentInteractionController *controller = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:file]];
         
         BOOL opened = NO;
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            opened = [self.docController presentOpenInMenuFromRect:self.sideSwipeCell.frame inView:self.theTableView animated:YES];
+            opened = [controller presentOpenInMenuFromRect:self.sideSwipeCell.frame inView:self.theTableView animated:YES];
         } else {
-            opened = [self.docController presentOpenInMenuFromRect:self.view.frame inView:self.view animated:YES];
+            opened = [controller presentOpenInMenuFromRect:self.view.frame inView:self.view animated:YES];
         }
         
         if (!opened) {
-            NSString *message = [NSString stringWithFormat:@"No installed applications are capable of opening %@.",[file lastPathComponent]];
-            TransparentAlert *avc = [[TransparentAlert alloc]initWithTitle:@"No External Viewers" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [avc show];
-            [avc release];
+            [TransparentAlert showAlertWithTitle:@"No External Viewers" andMessage:[NSString stringWithFormat:@"No installed applications are capable of opening %@.",[file lastPathComponent]]];
         }
     }
     [self removeSideSwipeView:YES];
@@ -1425,7 +1422,7 @@
     [[NSNotificationCenter defaultCenter]removeObserver:self];
     [self setPerspectiveCopiedList:nil];
     [self setCopiedList:nil];
-    [self setDocController:nil];
+   // [self setDocController:nil];
     [self setFilelist:nil];
     [self setDirs:nil];
     [self setEditButton:nil];
