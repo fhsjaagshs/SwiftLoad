@@ -77,7 +77,7 @@
 
 - (void)downloadFailed:(SCRFTPRequest *)request {
     if ([_request.error.localizedDescription isEqualToString:@"FTP error 530"]) {
-        [TransparentAlert showAlertWithTitle:@"Insecure Authorization Required" andMessage:@"The server requires authentication in order to download your file. Since FTP sends passwords in plain text, try using SFTP to download your file."];
+        [TransparentAlert showAlertWithTitle:@"Insecure Authorization Required" andMessage:@"The server requires authentication, but FTP sends passwords in plain text. Try using SFTP instead."];
         /*FTPLoginController *controller = [[[FTPLoginController alloc]initWithCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
             if ([username isEqualToString:@"cancel"]) {
                 [[NSFileManager defaultManager]removeItemAtPath:[kDocsDir stringByAppendingPathComponent:[url lastPathComponent]] error:nil];

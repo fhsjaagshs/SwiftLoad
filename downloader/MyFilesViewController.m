@@ -759,6 +759,8 @@
             cell.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:20];
         }
         
+       // cell.textLabel.textColor = [UIColor brownColor];
+        
         if (cell.gestureRecognizers.count == 0) {
             UISwipeGestureRecognizer *rightSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeRight:)];
             rightSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
