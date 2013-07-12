@@ -38,8 +38,19 @@
     [bookmarkletButton setTitle:@"Install Bookmarklet" forState:UIControlStateNormal];
     [self.view addSubview:bookmarkletButton];
     
+    UIButton *setCredsButton = [UIButton customizedButton];
+    setCredsButton.frame = CGRectMake((self.view.bounds.size.width/2), self.view.bounds.size.height-37-10, 5, 37);
+    [setCredsButton setTitle:@"Set User" forState:UIControlStateNormal];
+    [setCredsButton addTarget:self action:@selector(showCredsController) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:setCredsButton];
+    [setCredsButton resizeForTitle];
+    
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(dropboxAuthenticationSucceeded) name:@"db_auth_success" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(dropboxAuthenticationFailed) name:@"db_auth_failure" object:nil];
+}
+
+- (void)showCredsController {
+    [[[[WebDAVCredsPrompt alloc]initWithCredsDelegate:nil]autorelease]show];
 }
 
 - (void)close {

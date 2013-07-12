@@ -604,6 +604,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     NSDictionary *navbarTitleTextAttributes = @{ UITextAttributeTextColor: [UIColor whiteColor] };
     
     [[UINavigationBar appearance]setTitleTextAttributes:navbarTitleTextAttributes];
+    //loadFonts();
     
     return YES;
 }

@@ -256,13 +256,6 @@
     
     if (cell == nil) {
         cell = [[[SwiftLoadCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier]autorelease];
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            cell.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:27];
-            cell.detailTextLabel.font = [UIFont systemFontOfSize:20.0];
-        } else {
-            cell.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:20];
-        }
     }
     
     NSDictionary *fileDict = [_filedicts objectAtIndex:indexPath.row];

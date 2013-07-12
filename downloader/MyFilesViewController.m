@@ -752,14 +752,9 @@
             
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             cell.accessoryView.center = CGPointMake(735, (cell.bounds.size.height)/2);
-            cell.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:27];
-            cell.detailTextLabel.font = [UIFont systemFontOfSize:20.0];
         } else {
             cell.accessoryView.center = CGPointMake(297.5, (cell.bounds.size.height)/2);
-            cell.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:20];
         }
-        
-       // cell.textLabel.textColor = [UIColor brownColor];
         
         if (cell.gestureRecognizers.count == 0) {
             UISwipeGestureRecognizer *rightSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeRight:)];
@@ -791,11 +786,7 @@
         
         [self verifyProspectiveCopyList];
         
-        if ([_perspectiveCopiedList containsObject:file]) {
-            cell.editingAccessoryType = UITableViewCellAccessoryCheckmark;
-        } else {
-            cell.editingAccessoryType = UITableViewCellAccessoryNone;
-        }
+        cell.editingAccessoryType = [_perspectiveCopiedList containsObject:file]?UITableViewCellAccessoryCheckmark:UITableViewCellAccessoryNone;
         
         BOOL isDir;  
 

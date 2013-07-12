@@ -28,7 +28,6 @@
 		F106A4E5178865AD002D3BC8 /* DLSFTPUploadRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4D9178865AD002D3BC8 /* DLSFTPUploadRequest.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		F106A4E6178865AD002D3BC8 /* NSDictionary+SFTPFileAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4DB178865AD002D3BC8 /* NSDictionary+SFTPFileAttributes.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		F106A7CF178876B1002D3BC8 /* SFTPCreds.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A7CE178876B1002D3BC8 /* SFTPCreds.m */; };
-		F106A7D2178876CA002D3BC8 /* Keychain.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A7D1178876CA002D3BC8 /* Keychain.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		F10CBC5A1707D6E700C82AFB /* DroppinBadassBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */; };
 		F10CBC5D17080C6600C82AFB /* DropboxBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */; };
 		F1122A76142E4E8B00A04CC6 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */; };
@@ -154,7 +153,6 @@
 		F17F11231420017100CE45D7 /* fileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F17F11211420017100CE45D7 /* fileInfo.m */; };
 		F1847BBB16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F1847BBA16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m */; };
 		F19BB51C16E006CA0081C95B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F19BB51916E006CA0081C95B /* main.m */; };
-		F1A45E701704A15E00DD5FB9 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = F1A45E6F1704A15E00DD5FB9 /* KeychainItemWrapper.m */; };
 		F1A72948149876040049DBB6 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A72947149876040049DBB6 /* GameKit.framework */; };
 		F1A923FE140D4DDD003ACDAB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A923FD140D4DDD003ACDAB /* QuartzCore.framework */; };
 		F1B2489014E333E300C44E11 /* webDAVHelp.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B2488E14E333E200C44E11 /* webDAVHelp.m */; };
@@ -254,8 +252,6 @@
 		F106A4E8178866F2002D3BC8 /* DLSFTP-all.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DLSFTP-all.h"; sourceTree = "<group>"; };
 		F106A7CD178876B1002D3BC8 /* SFTPCreds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFTPCreds.h; sourceTree = "<group>"; };
 		F106A7CE178876B1002D3BC8 /* SFTPCreds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFTPCreds.m; sourceTree = "<group>"; };
-		F106A7D0178876CA002D3BC8 /* Keychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Keychain.h; sourceTree = "<group>"; };
-		F106A7D1178876CA002D3BC8 /* Keychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Keychain.m; sourceTree = "<group>"; };
 		F10CBC581707D6E700C82AFB /* DroppinBadassBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DroppinBadassBlocks.h; path = ../Categories/DroppinBadassBlocks.h; sourceTree = "<group>"; };
 		F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DroppinBadassBlocks.m; path = ../Categories/DroppinBadassBlocks.m; sourceTree = "<group>"; };
 		F10CBC5B17080C6600C82AFB /* DropboxBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxBrowserViewController.h; sourceTree = "<group>"; };
@@ -459,8 +455,6 @@
 		F19BB51916E006CA0081C95B /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F19BB51A16E006CA0081C95B /* SwiftLoad-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SwiftLoad-Info.plist"; sourceTree = "<group>"; };
 		F19BB51B16E006CA0081C95B /* SwiftLoad-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SwiftLoad-Prefix.pch"; sourceTree = "<group>"; };
-		F1A45E6E1704A15E00DD5FB9 /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
-		F1A45E6F1704A15E00DD5FB9 /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
 		F1A72947149876040049DBB6 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		F1A923FD140D4DDD003ACDAB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F1B2488D14E333E200C44E11 /* webDAVHelp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = webDAVHelp.h; sourceTree = "<group>"; };
@@ -951,8 +945,6 @@
 				F1BC30C917715DF300DAFA0A /* Hack.m */,
 				F10CBC581707D6E700C82AFB /* DroppinBadassBlocks.h */,
 				F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */,
-				F1A45E6E1704A15E00DD5FB9 /* KeychainItemWrapper.h */,
-				F1A45E6F1704A15E00DD5FB9 /* KeychainItemWrapper.m */,
 				F1693C6416DFAC59006E3739 /* SCRFTPRequest.h */,
 				F1693C6516DFAC59006E3739 /* SCRFTPRequest.m */,
 				F1BA8C7C17728500007AAF85 /* BGProcFactory.h */,
@@ -961,8 +953,6 @@
 				F1E9F78C177402B600EC345C /* StyleFactory.m */,
 				F106A7CD178876B1002D3BC8 /* SFTPCreds.h */,
 				F106A7CE178876B1002D3BC8 /* SFTPCreds.m */,
-				F106A7D0178876CA002D3BC8 /* Keychain.h */,
-				F106A7D1178876CA002D3BC8 /* Keychain.m */,
 				F14B819B1788E2D300ADEF99 /* SimpleKeychain.h */,
 				F14B819C1788E2D300ADEF99 /* SimpleKeychain.m */,
 			);
@@ -1278,7 +1268,6 @@
 				F17CEDE116FE724C00E7E47B /* FileCreationDialogue.m in Sources */,
 				F1CB7DAE16FFE99A002693B5 /* FTPLoginController.m in Sources */,
 				F1ED4B12170352D10056D55F /* NSString+mods.m in Sources */,
-				F1A45E701704A15E00DD5FB9 /* KeychainItemWrapper.m in Sources */,
 				F10CBC5A1707D6E700C82AFB /* DroppinBadassBlocks.m in Sources */,
 				F10CBC5D17080C6600C82AFB /* DropboxBrowserViewController.m in Sources */,
 				F13B58A7176D2C7E007EF22B /* HUDProgressView.m in Sources */,
@@ -1319,7 +1308,6 @@
 				F106A4E4178865AD002D3BC8 /* DLSFTPRequest.m in Sources */,
 				F106A4E5178865AD002D3BC8 /* DLSFTPUploadRequest.m in Sources */,
 				F106A4E6178865AD002D3BC8 /* NSDictionary+SFTPFileAttributes.m in Sources */,
-				F106A7D2178876CA002D3BC8 /* Keychain.m in Sources */,
 				F106A7CF178876B1002D3BC8 /* SFTPCreds.m in Sources */,
 				F14B81971788C39E00ADEF99 /* UIButton+SwiftLoad.m in Sources */,
 				F14B819A1788D26500ADEF99 /* SFTPDownload.m in Sources */,
