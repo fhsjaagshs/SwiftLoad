@@ -63,7 +63,6 @@
 		F14B81971788C39E00ADEF99 /* UIButton+SwiftLoad.m in Sources */ = {isa = PBXBuildFile; fileRef = F14B81961788C39E00ADEF99 /* UIButton+SwiftLoad.m */; };
 		F14B819A1788D26500ADEF99 /* SFTPDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = F14B81991788D26500ADEF99 /* SFTPDownload.m */; };
 		F14B819D1788E2D300ADEF99 /* SimpleKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = F14B819C1788E2D300ADEF99 /* SimpleKeychain.m */; };
-		F14D3F3B178F72F10067DB61 /* OpenInDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = F14D3F3A178F72F10067DB61 /* OpenInDialog.m */; };
 		F150D6B2177F5B9400E4C094 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F150D6B1177F5B9400E4C094 /* libsqlite3.dylib */; };
 		F150D6BF177F783E00E4C094 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = F150D6B5177F783E00E4C094 /* FMDatabase.m */; };
 		F150D6C0177F783E00E4C094 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F150D6B7177F783E00E4C094 /* FMDatabaseAdditions.m */; };
@@ -194,7 +193,6 @@
 		F1EB833D16D808AA009D7D2D /* bluetooth.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833216D808AA009D7D2D /* bluetooth.png */; };
 		F1EB833E16D808AA009D7D2D /* config.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833316D808AA009D7D2D /* config.png */; };
 		F1EB833F16D808AA009D7D2D /* delete.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833416D808AA009D7D2D /* delete.png */; };
-		F1EB834016D808AA009D7D2D /* dotted-pattern.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833516D808AA009D7D2D /* dotted-pattern.png */; };
 		F1EB834116D808AA009D7D2D /* dropbox.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833616D808AA009D7D2D /* dropbox.png */; };
 		F1EB834316D808AA009D7D2D /* inner-shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833816D808AA009D7D2D /* inner-shadow.png */; };
 		F1EB834516D808AA009D7D2D /* paperclip.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833A16D808AA009D7D2D /* paperclip.png */; };
@@ -314,8 +312,6 @@
 		F14B81991788D26500ADEF99 /* SFTPDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFTPDownload.m; sourceTree = "<group>"; };
 		F14B819B1788E2D300ADEF99 /* SimpleKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleKeychain.h; sourceTree = "<group>"; };
 		F14B819C1788E2D300ADEF99 /* SimpleKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleKeychain.m; sourceTree = "<group>"; };
-		F14D3F39178F72F10067DB61 /* OpenInDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenInDialog.h; sourceTree = "<group>"; };
-		F14D3F3A178F72F10067DB61 /* OpenInDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenInDialog.m; sourceTree = "<group>"; };
 		F150D6B1177F5B9400E4C094 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		F150D6B4177F783E00E4C094 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
 		F150D6B5177F783E00E4C094 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
@@ -512,7 +508,6 @@
 		F1EB833216D808AA009D7D2D /* bluetooth.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bluetooth.png; path = Images/bluetooth.png; sourceTree = "<group>"; };
 		F1EB833316D808AA009D7D2D /* config.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = config.png; path = Images/config.png; sourceTree = "<group>"; };
 		F1EB833416D808AA009D7D2D /* delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = delete.png; path = Images/delete.png; sourceTree = "<group>"; };
-		F1EB833516D808AA009D7D2D /* dotted-pattern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "dotted-pattern.png"; path = "Images/dotted-pattern.png"; sourceTree = "<group>"; };
 		F1EB833616D808AA009D7D2D /* dropbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dropbox.png; path = Images/dropbox.png; sourceTree = "<group>"; };
 		F1EB833816D808AA009D7D2D /* inner-shadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "inner-shadow.png"; path = "Images/inner-shadow.png"; sourceTree = "<group>"; };
 		F1EB833A16D808AA009D7D2D /* paperclip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = paperclip.png; path = Images/paperclip.png; sourceTree = "<group>"; };
@@ -782,7 +777,6 @@
 				F15507DA176EB0A90024FF03 /* dropbox@2x.png */,
 				F1EB833A16D808AA009D7D2D /* paperclip.png */,
 				F15507DB176EB0A90024FF03 /* paperclip@2x.png */,
-				F1EB833516D808AA009D7D2D /* dotted-pattern.png */,
 				F1EB833816D808AA009D7D2D /* inner-shadow.png */,
 			);
 			name = PullToReveal;
@@ -971,8 +965,6 @@
 				F106A7D1178876CA002D3BC8 /* Keychain.m */,
 				F14B819B1788E2D300ADEF99 /* SimpleKeychain.h */,
 				F14B819C1788E2D300ADEF99 /* SimpleKeychain.m */,
-				F14D3F39178F72F10067DB61 /* OpenInDialog.h */,
-				F14D3F3A178F72F10067DB61 /* OpenInDialog.m */,
 			);
 			path = Subclasses;
 			sourceTree = "<group>";
@@ -1149,7 +1141,6 @@
 				F1EB833D16D808AA009D7D2D /* bluetooth.png in Resources */,
 				F1EB833E16D808AA009D7D2D /* config.png in Resources */,
 				F1EB833F16D808AA009D7D2D /* delete.png in Resources */,
-				F1EB834016D808AA009D7D2D /* dotted-pattern.png in Resources */,
 				F1EB834116D808AA009D7D2D /* dropbox.png in Resources */,
 				F1EB834316D808AA009D7D2D /* inner-shadow.png in Resources */,
 				F1EB834516D808AA009D7D2D /* paperclip.png in Resources */,
@@ -1334,7 +1325,6 @@
 				F14B819A1788D26500ADEF99 /* SFTPDownload.m in Sources */,
 				F14B819D1788E2D300ADEF99 /* SimpleKeychain.m in Sources */,
 				F13B08B9178CEE05005201F7 /* WebDAVCredsPrompt.m in Sources */,
-				F14D3F3B178F72F10067DB61 /* OpenInDialog.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
