@@ -52,7 +52,7 @@
     self.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.85];
     
     self.layer.borderColor = [UIColor colorWithWhite:0.2 alpha:0.85].CGColor;
-    self.layer.borderWidth = 5;
+    self.layer.borderWidth = 2.5;
     self.layer.cornerRadius = 5;
     
     for (UIView *subview in self.subviews) {

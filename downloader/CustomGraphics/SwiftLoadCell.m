@@ -8,6 +8,10 @@
 
 #import "SwiftLoadCell.h"
 
+@interface SwiftLoadCell ()
+
+@end
+
 @implementation SwiftLoadCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
@@ -32,12 +36,11 @@
     return self;
 }
 
-
 - (void)drawRect:(CGRect)rect {
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     CGColorRef whiteColor = [UIColor whiteColor].CGColor;
-    CGColorRef separatorColor = [UIColor colorWithWhite:208.0/255.0 alpha:1.0].CGColor;
+   // CGColorRef separatorColor = [UIColor colorWithWhite:208.0/255.0 alpha:1.0].CGColor;
     CGContextSaveGState(context);
     
     CGContextSetFillColorWithColor(context, whiteColor);
@@ -45,7 +48,14 @@
     
     CGContextRestoreGState(context);
     
-    CGRect strokeRect = self.bounds;
+    CGContextSetStrokeColorWithColor(context, [UIColor colorWithWhite:208.0/255.0 alpha:1.0].CGColor);
+    CGContextSetLineWidth(context, 2.0);
+    CGContextSetLineCap(context, kCGLineCapRound);
+    
+    CGPoint points[] = { CGPointMake(50, self.bounds.origin.y-0.5), CGPointMake(self.bounds.size.width-50, self.bounds.origin.y-0.5) };
+    CGContextStrokeLineSegments(context, points, 2);
+    
+ /*   CGRect strokeRect = self.bounds;
     strokeRect.size.height -= 1;
     strokeRect = CGRectMake(strokeRect.origin.x+0.5, strokeRect.origin.y+0.5, strokeRect.size.width-1, strokeRect.size.height-1);
         
@@ -63,7 +73,7 @@
     CGContextMoveToPoint(context, startPoint.x + 0.5, startPoint.y + 0.5);
     CGContextAddLineToPoint(context, endPoint.x + 0.5, endPoint.y + 0.5);
     CGContextStrokePath(context);
-    CGContextRestoreGState(context);
+    CGContextRestoreGState(context);*/
 }
 
 @end

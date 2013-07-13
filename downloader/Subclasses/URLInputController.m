@@ -20,7 +20,7 @@
         
         self.tv = [[[UITextField alloc]init]autorelease];
         _tv.keyboardAppearance = UIKeyboardAppearanceAlert;
-        _tv.borderStyle = UITextBorderStyleBezel;
+        _tv.borderStyle = UITextBorderStyleNone;
         _tv.backgroundColor = [UIColor whiteColor];
         _tv.returnKeyType = UIReturnKeyDone;
         _tv.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -48,9 +48,9 @@
     [super layoutSubviews];
     
     if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication]statusBarOrientation])) {
-        _tv.frame = CGRectMake(12, 29, 254, 28);
+        _tv.frame = CGRectMake(15, 31, 255, 27);
     } else {
-        _tv.frame = CGRectMake(14, 42, 254, 30);
+        _tv.frame = CGRectMake(15, 45, 255, 27);
     }
     
     for (UIView *view in self.subviews) {

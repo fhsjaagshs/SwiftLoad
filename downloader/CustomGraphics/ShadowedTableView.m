@@ -26,6 +26,11 @@
 	return newShadow;
 }
 
+- (void)setShadowsHidden:(BOOL)hidden {
+    _topShadow.hidden = hidden;
+    _bottomShadow.hidden = hidden;
+}
+
 - (void)layoutSubviews {
 	[super layoutSubviews];
     

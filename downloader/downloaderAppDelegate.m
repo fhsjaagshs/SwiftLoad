@@ -592,19 +592,18 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     self.window = [[[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]]autorelease];
     self.viewController = [MyFilesViewController viewController];
     _window.rootViewController = self.viewController;
-    _window.backgroundColor = [UIColor colorWithRed:240.0f/255.0f green:248.0f/255.0f blue:1.0f alpha:1.0f];
+    //_window.backgroundColor = [UIColor colorWithRed:240.0f/255.0f green:248.0f/255.0f blue:1.0f alpha:1.0f];
+    _window.backgroundColor = [UIColor colorWithWhite:9.0f/10.0f alpha:1.0f];
     [_window makeKeyAndVisible];
 
-    UIImage *bbiImage = [[UIImage imageNamed:@"toolbar_icon"]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 4, 0, 4)];    
+    UIImage *bbiImage = [[UIImage imageNamed:@"toolbar_icon"]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 4, 0, 4)];
     [[UIBarButtonItem appearance]setBackgroundImage:bbiImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
 
     UIImage *navBarImage = [[UIImage imageNamed:@"statusbar"]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 150, 0, 150)];
     [[UINavigationBar appearance]setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
     [[UIToolbar appearance]setBackgroundImage:navBarImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
-    NSDictionary *navbarTitleTextAttributes = @{ UITextAttributeTextColor: [UIColor whiteColor] };
-    
-    [[UINavigationBar appearance]setTitleTextAttributes:navbarTitleTextAttributes];
-    //loadFonts();
+    [[UINavigationBar appearance]setTitleTextAttributes:@{ UITextAttributeTextColor: [UIColor whiteColor] }];
+    [[UIBarButtonItem appearance]setTitleTextAttributes:@{ UITextAttributeTextColor: [UIColor whiteColor], UITextAttributeTextShadowColor: [UIColor clearColor] } forState:UIControlStateNormal];
     
     return YES;
 }

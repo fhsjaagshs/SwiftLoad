@@ -24,6 +24,7 @@
     #import "MFMailComposeViewController+BlockExtensions.h"
     #import "NSString+mods.h"
     #import "UIButton+SwiftLoad.h"
+    #import "UIImage+Additions.h"
 
     #import "DLSFTP-all.h"
     #import "SFTPCreds.h"

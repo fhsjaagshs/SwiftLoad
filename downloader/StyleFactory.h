@@ -10,7 +10,7 @@
 
 @interface StyleFactory : NSObject
 
-+ (UIImageView *)backgroundImageView;
++ (UIView *)backgroundView;
 + (UIImageView *)buttonBarImageView;
 
 @end

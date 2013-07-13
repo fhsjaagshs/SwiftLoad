@@ -106,6 +106,7 @@
 		F1679ACA1787B3C1001369B1 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1679AC71787B3C1001369B1 /* libcrypto.a */; };
 		F1679ACB1787B3C1001369B1 /* libssh2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1679AC81787B3C1001369B1 /* libssh2.a */; };
 		F1679ACC1787B3C1001369B1 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1679AC91787B3C1001369B1 /* libssl.a */; };
+		F168EDAF1790C61000C21D6F /* UIImage+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F168EDAE1790C61000C21D6F /* UIImage+Additions.m */; };
 		F1693BFC16DFAA08006E3739 /* DDData.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BC916DFAA08006E3739 /* DDData.m */; };
 		F1693BFD16DFAA08006E3739 /* DDNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BCB16DFAA08006E3739 /* DDNumber.m */; };
 		F1693BFE16DFAA08006E3739 /* DDRange.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BCD16DFAA08006E3739 /* DDRange.m */; };
@@ -360,6 +361,8 @@
 		F1679AC71787B3C1001369B1 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "Libs/libssh2-for-iOS/lib/libcrypto.a"; sourceTree = "<group>"; };
 		F1679AC81787B3C1001369B1 /* libssh2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssh2.a; path = "Libs/libssh2-for-iOS/lib/libssh2.a"; sourceTree = "<group>"; };
 		F1679AC91787B3C1001369B1 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = "Libs/libssh2-for-iOS/lib/libssl.a"; sourceTree = "<group>"; };
+		F168EDAD1790C61000C21D6F /* UIImage+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Additions.h"; sourceTree = "<group>"; };
+		F168EDAE1790C61000C21D6F /* UIImage+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Additions.m"; sourceTree = "<group>"; };
 		F1693BC816DFAA08006E3739 /* DDData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDData.h; sourceTree = "<group>"; };
 		F1693BC916DFAA08006E3739 /* DDData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDData.m; sourceTree = "<group>"; };
 		F1693BCA16DFAA08006E3739 /* DDNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDNumber.h; sourceTree = "<group>"; };
@@ -918,6 +921,8 @@
 				F1847BBA16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m */,
 				F14B81951788C39E00ADEF99 /* UIButton+SwiftLoad.h */,
 				F14B81961788C39E00ADEF99 /* UIButton+SwiftLoad.m */,
+				F168EDAD1790C61000C21D6F /* UIImage+Additions.h */,
+				F168EDAE1790C61000C21D6F /* UIImage+Additions.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -1313,6 +1318,7 @@
 				F14B819A1788D26500ADEF99 /* SFTPDownload.m in Sources */,
 				F14B819D1788E2D300ADEF99 /* SimpleKeychain.m in Sources */,
 				F13B08B9178CEE05005201F7 /* WebDAVCredsPrompt.m in Sources */,
+				F168EDAF1790C61000C21D6F /* UIImage+Additions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

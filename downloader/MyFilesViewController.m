@@ -40,7 +40,7 @@
     _theCopyAndPasteButton.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.6f];
     _theCopyAndPasteButton.layer.cornerRadius = 7;
     _theCopyAndPasteButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin;
-    UIImage *grayImage = [self imageFilledWith:[UIColor colorWithWhite:1.0f alpha:1.0f] using:[UIImage imageNamed:@"clipboard"]];
+    UIImage *grayImage = [[UIImage imageNamed:@"clipboard"]imageFilledWith:[UIColor colorWithWhite:1.0f alpha:1.0f]];
     [_theCopyAndPasteButton setImage:grayImage forState:UIControlStateNormal];
     [_theCopyAndPasteButton addTarget:self action:@selector(showCopyPasteController) forControlEvents:UIControlEventTouchUpInside];
     
@@ -745,7 +745,7 @@
     
     if (cell == nil) {
         cell = [[[SwiftLoadCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier]autorelease];
-        
+
         DisclosureButton *button = [DisclosureButton button];
         [button addTarget:self action:@selector(accessoryButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         cell.accessoryView = button;
@@ -1193,12 +1193,12 @@
         
         UISwipeGestureRecognizer *rightSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeRight:)];
         rightSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
-        [self.sideSwipeView addGestureRecognizer:rightSwipeGestureRecognizer];
+        [_sideSwipeView addGestureRecognizer:rightSwipeGestureRecognizer];
         [rightSwipeGestureRecognizer release];
 
         UISwipeGestureRecognizer *leftSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeLeft:)];
         leftSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
-        [self.sideSwipeView addGestureRecognizer:leftSwipeGestureRecognizer];
+        [_sideSwipeView addGestureRecognizer:leftSwipeGestureRecognizer];
         [leftSwipeGestureRecognizer release];
     }
     
@@ -1226,30 +1226,13 @@
             button.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
             button.frame = CGRectMake([buttonData indexOfObject:buttonInfo]*((_sideSwipeView.bounds.size.width)/buttonData.count), 0, ((_sideSwipeView.bounds.size.width)/buttonData.count), _sideSwipeView.bounds.size.height);
             
-            UIImage *grayImage = [self imageFilledWith:[UIColor colorWithWhite:0.9 alpha:1.0] using:[UIImage imageNamed:[buttonInfo objectForKey:@"image"]]];
+            UIImage *grayImage = [[UIImage imageNamed:[buttonInfo objectForKey:@"image"]]imageFilledWith:[UIColor colorWithWhite:0.9 alpha:1.0]];
             [button setImage:grayImage forState:UIControlStateNormal];
             [button setTag:[buttonData indexOfObject:buttonInfo]+1];
             [button addTarget:self action:@selector(touchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
             [_sideSwipeView addSubview:button];
         }
     }
-}
-
-- (UIImage *)imageFilledWith:(UIColor *)color using:(UIImage *)startImage {
-    CGRect imageRect = CGRectMake(0, 0, CGImageGetWidth(startImage.CGImage), CGImageGetHeight(startImage.CGImage));
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGContextRef context = CGBitmapContextCreate(nil, imageRect.size.width, imageRect.size.height, 8, 0, colorSpace, kCGImageAlphaPremultipliedLast);
-    
-    CGContextClipToMask(context, imageRect, startImage.CGImage);
-    CGContextSetFillColorWithColor(context, color.CGColor);
-    CGContextFillRect(context, imageRect);
-    
-    CGImageRef newCGImage = CGBitmapContextCreateImage(context);
-    UIImage *newImage = [UIImage imageWithCGImage:newCGImage scale:startImage.scale orientation:startImage.imageOrientation];
-    CGContextRelease(context);
-    CGImageRelease(newCGImage);
-    CGColorSpaceRelease(colorSpace);
-    return newImage;
 }
 
 - (void)swipeLeft:(UISwipeGestureRecognizer *)recognizer {
@@ -1261,7 +1244,7 @@
 }
 
 - (void)swipe:(UISwipeGestureRecognizer *)recognizer direction:(UISwipeGestureRecognizerDirection)direction {
-    
+
     if (_theTableView.editing) {
         return;
     }
@@ -1280,7 +1263,7 @@
         
         if (cell != _sideSwipeCell && !_animatingSideSwipe) {
             [self setupSideSwipeView];
-            [self addSwipeViewTo:cell direction:direction];
+            [self addSwipeViewTo:cell direction:recognizer.direction];
         }
     }
 }

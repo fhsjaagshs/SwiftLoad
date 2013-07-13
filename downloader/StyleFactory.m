@@ -17,9 +17,9 @@
     return buttonBar;
 }
 
-+ (UIImageView *)backgroundImageView {
++ (UIView *)backgroundView {
     UIImageView *background = [[[UIImageView alloc]initWithFrame:[UIScreen mainScreen].applicationFrame]autorelease];
-    [background setImage:[UIImage imageNamed:@"Default"]];
+    [background setImage:[[UIColor colorWithWhite:0.9f alpha:1.0f]imageWithSize:[UIScreen mainScreen].applicationFrame.size]];
     background.userInteractionEnabled = YES;
     return background;
 }

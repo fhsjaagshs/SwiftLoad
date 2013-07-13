@@ -39,8 +39,7 @@
     [super loadView];
     BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
-    self.view = [StyleFactory backgroundImageView];
-    self.view.userInteractionEnabled = YES;
+    self.view = [StyleFactory backgroundView];
     
     UINavigationBar *navBar = [[[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
     navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
