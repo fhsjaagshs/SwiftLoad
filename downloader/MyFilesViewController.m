@@ -33,7 +33,7 @@
     UINavigationItem *topItem = [[[UINavigationItem alloc]initWithTitle:@"/"]autorelease];
     _editButton = [[[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(editTable)]autorelease];
     topItem.rightBarButtonItem = _editButton;
-    topItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showOptionsSheet:)]autorelease];
+    topItem.leftBarButtonItem = hamburger;//[[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showOptionsSheet:)]autorelease];
     [_navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:_navBar];
     [self.view bringSubviewToFront:_navBar];
@@ -71,6 +71,46 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(downloadsChanged) name:kDownloadChanged object:nil];
     
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryPlayback error:nil];
+}
+
+- (void)hamburgerCellWasSelectedAtIndex:(int)index {
+    if (index == 0) {
+        dedicatedTextEditor *textEditor = [dedicatedTextEditor viewController];
+        textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+        [self presentModalViewController:textEditor animated:YES];
+    } else if (index == 1) {
+        moviePlayerView *textEditor = [moviePlayerView viewController];
+        textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+        [self presentModalViewController:textEditor animated:YES];
+    } else if (index == 2) {
+        pictureView *textEditor = [pictureView viewController];
+        textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+        [self presentModalViewController:textEditor animated:YES];
+    } else if (index == 3) {
+        AudioPlayerViewController *textEditor = [AudioPlayerViewController viewController];
+        textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+        [self presentModalViewController:textEditor animated:YES];
+    } else if (index == 4) {
+        MyFilesViewDetailViewController *textEditor = [MyFilesViewDetailViewController viewController];
+        textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+        [self presentModalViewController:textEditor animated:YES];
+    } else if (index == 5) {
+        NSString *file = [kAppDelegate openFile];
+        UIDocumentInteractionController *controller = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:file]];
+        
+        BOOL opened = NO;
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            opened = [controller presentOpenInMenuFromRect:_sideSwipeCell.frame inView:_theTableView animated:YES];
+        } else {
+            opened = [controller presentOpenInMenuFromRect:self.view.frame inView:self.view animated:YES];
+        }
+        
+        if (!opened) {
+            [TransparentAlert showAlertWithTitle:@"No External Viewers" andMessage:[NSString stringWithFormat:@"No installed applications are capable of opening %@.",[file lastPathComponent]]];
+        }
+    }
+    [self removeSideSwipeView:YES];
 }
 
 - (void)setWatchdogCanGoYES {

@@ -9,11 +9,12 @@
 #import "Hamburger.h"
 #import "HamburgerCell.h"
 
-@interface HamburgerView : UIView
+@interface HamburgerView : UIView <UITableViewDataSource, UITableViewDelegate>
 
 + (HamburgerView *)view;
 
 @property (nonatomic, assign) id<HamburdgerViewDelegate> delegate;
+@property (nonatomic, retain) UITableView *theTableView;
 
 @end
 
@@ -28,7 +29,7 @@
 @implementation HamburgerButtonItem
 
 + (HamburgerButtonItem *)itemWithView:(UIView *)viewToMove {
-    HamburgerButtonItem *item = [[[HamburgerButtonItem alloc]init]autorelease];
+    HamburgerButtonItem *item = [[[HamburgerButtonItem alloc]initWithTitle:@"Ham" style:UIBarButtonItemStyleBordered target:nil action:nil]autorelease];
     [item setTarget:item];
     [item setAction:@selector(toggleState)];
     item.hamburgerView = [HamburgerView view];
@@ -56,7 +57,7 @@
     [_viewToMove insertSubview:_hamburgerView belowSubview:_viewToMove];
     [_viewToMove addSubview:_hideButton];
     [UIView animateWithDuration:0.3f animations:^{
-        _viewToMove.frame = CGRectMake(270, _viewToMove.frame.origin.y, _viewToMove.frame.size.width, _viewToMove.frame.size.height);
+        _viewToMove.frame = CGRectMake(250, _viewToMove.frame.origin.y, _viewToMove.frame.size.width, _viewToMove.frame.size.height);
     }];
 }
 
@@ -70,11 +71,7 @@
 
 @end
 
-@interface HamburgerView () <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, retain) UITableView *theTableView;
-
-@end
 
 @implementation HamburgerView
 
@@ -85,8 +82,9 @@
 - (id)init {
     self = [super init];
     if (self) {
+        self.userInteractionEnabled = YES;
         self.backgroundColor = [UIColor clearColor];
-        self.frame = CGRectMake(0, 0, 270, [[UIScreen mainScreen]applicationFrame].size.height);
+        self.frame = CGRectMake(-250, 0, 250, [[UIScreen mainScreen]applicationFrame].size.height);
         [self setup];
     }
     return self;
@@ -148,14 +146,13 @@
 - (void)setup {
     BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
     
-    self.theTableView = [[[CoolRefreshTableView alloc]initWithFrame:self.bounds style:UITableViewStylePlain]autorelease];
+    self.theTableView = [[[UITableView alloc]initWithFrame:self.bounds style:UITableViewStylePlain]autorelease];
     _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     _theTableView.backgroundColor = [UIColor clearColor];
-    _theTableView.rowHeight = iPad?60:44;
+    _theTableView.rowHeight = 44;
     _theTableView.dataSource = self;
     _theTableView.delegate = self;
-    _theTableView.allowsSelectionDuringEditing = YES;
     _theTableView.canCancelContentTouches = NO;
     [self addSubview:_theTableView];
 }

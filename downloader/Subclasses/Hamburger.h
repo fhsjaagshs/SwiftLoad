@@ -18,7 +18,7 @@
 @end
 
 @protocol HamburdgerViewDelegate <NSObject>
-
+@optional
 - (void)hamburgerCellWasSelectedAtIndex:(int)index;
 
 @end
