@@ -30,7 +30,7 @@
 @implementation HamburgerButtonItem
 
 + (HamburgerButtonItem *)itemWithView:(UIView *)viewToMove {
-    HamburgerButtonItem *item = [[[HamburgerButtonItem alloc]initWithTitle:@"Ham" style:UIBarButtonItemStyleBordered target:nil action:nil]autorelease];
+    HamburgerButtonItem *item = [[[HamburgerButtonItem alloc]initWithImage:[UIImage imageNamed:@"hamburger"] style:UIBarButtonItemStyleBordered target:nil action:nil]autorelease];
     [item setTarget:item];
     [item setAction:@selector(toggleState)];
     item.hamburgerView = [HamburgerView view];
@@ -46,20 +46,33 @@
     [_hamburgerView setDelegate:delegate];
 }
 
+- (void)showShadow {
+    _viewToMove.layer.shadowColor = [UIColor blackColor].CGColor;
+    _viewToMove.layer.shadowOffset = CGSizeMake(-3, 0);
+    _viewToMove.layer.shadowOpacity = 0.25;
+}
+
+- (void)clearShadow {
+    _viewToMove.layer.shadowColor = [UIColor clearColor].CGColor;
+    _viewToMove.layer.shadowOffset = CGSizeZero;
+}
+
 - (void)hide {
+    [self clearShadow];
     [UIView animateWithDuration:0.3f animations:^{
         _viewToMove.frame = CGRectMake(0, _viewToMove.frame.origin.y, _viewToMove.frame.size.width, _viewToMove.frame.size.height);
     } completion:^(BOOL finished) {
         [_hamburgerView removeFromSuperview];
         [_hideButton removeFromSuperview];
+        
     }];
 }
 
 - (void)show {
     [[kAppDelegate window]insertSubview:_hamburgerView belowSubview:_viewToMove];
     [_viewToMove addSubview:_hideButton];
+    [self showShadow];
     [UIView animateWithDuration:0.3f animations:^{
-        //_hamburgerView.frame = CGRectMake(0, 20, 250, [[UIScreen mainScreen]applicationFrame].size.height);
         _viewToMove.frame = CGRectMake(250, _viewToMove.frame.origin.y, _viewToMove.frame.size.width, _viewToMove.frame.size.height);
         
     }];

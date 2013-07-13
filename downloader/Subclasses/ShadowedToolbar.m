@@ -13,7 +13,7 @@
 - (void)willMoveToWindow:(UIWindow *)window {
     [super willMoveToWindow:window];
     self.layer.shadowColor = [UIColor blackColor].CGColor;
-    self.layer.shadowOffset = CGSizeMake(0.0, -3);
+    self.layer.shadowOffset = CGSizeMake(0, -3);
     self.layer.shadowOpacity = 0.25;
     self.layer.masksToBounds = NO;
     self.layer.shouldRasterize = YES;
