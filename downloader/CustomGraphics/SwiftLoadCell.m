@@ -18,7 +18,6 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.textLabel.backgroundColor = [UIColor clearColor];
-        self.textLabel.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         self.textLabel.highlightedTextColor = [UIColor blackColor];
         self.detailTextLabel.backgroundColor = [UIColor clearColor];    
         self.detailTextLabel.highlightedTextColor = [UIColor blackColor];
@@ -38,15 +37,11 @@
 
 - (void)drawRect:(CGRect)rect {
     CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    CGColorRef whiteColor = [UIColor whiteColor].CGColor;
-   // CGColorRef separatorColor = [UIColor colorWithWhite:208.0/255.0 alpha:1.0].CGColor;
+
     CGContextSaveGState(context);
     
-    CGContextSetFillColorWithColor(context, whiteColor);
+    CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
     CGContextFillRect(context, self.bounds);
-    
-    CGContextRestoreGState(context);
     
     CGContextSetStrokeColorWithColor(context, [UIColor colorWithWhite:208.0/255.0 alpha:1.0].CGColor);
     CGContextSetLineWidth(context, 2.0);
@@ -55,25 +50,7 @@
     CGPoint points[] = { CGPointMake(50, self.bounds.origin.y-0.5), CGPointMake(self.bounds.size.width-50, self.bounds.origin.y-0.5) };
     CGContextStrokeLineSegments(context, points, 2);
     
- /*   CGRect strokeRect = self.bounds;
-    strokeRect.size.height -= 1;
-    strokeRect = CGRectMake(strokeRect.origin.x+0.5, strokeRect.origin.y+0.5, strokeRect.size.width-1, strokeRect.size.height-1);
-        
-    CGContextSetStrokeColorWithColor(context, whiteColor);
-    CGContextSetLineWidth(context, 1.0);
-    CGContextStrokeRect(context, strokeRect);
-    
-    CGPoint startPoint = CGPointMake(self.bounds.origin.x, self.bounds.origin.y+self.bounds.size.height-1);
-    CGPoint endPoint = CGPointMake(self.bounds.origin.x+self.bounds.size.width-1, self.bounds.origin.y+self.bounds.size.height-1);
-    
-    CGContextSaveGState(context);
-    CGContextSetLineCap(context, kCGLineCapSquare);
-    CGContextSetStrokeColorWithColor(context, separatorColor);
-    CGContextSetLineWidth(context, 1.0);
-    CGContextMoveToPoint(context, startPoint.x + 0.5, startPoint.y + 0.5);
-    CGContextAddLineToPoint(context, endPoint.x + 0.5, endPoint.y + 0.5);
-    CGContextStrokePath(context);
-    CGContextRestoreGState(context);*/
+    CGContextRestoreGState(context);
 }
 
 @end
