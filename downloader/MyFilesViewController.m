@@ -35,15 +35,6 @@
     [self.view addSubview:_navBar];
     [self.view bringSubviewToFront:_navBar];
     
-    self.theCopyAndPasteButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _theCopyAndPasteButton.frame = CGRectMake(screenBounds.size.width-41, 85-36, 36, 36);
-    _theCopyAndPasteButton.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.6f];
-    _theCopyAndPasteButton.layer.cornerRadius = 7;
-    _theCopyAndPasteButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin;
-    UIImage *grayImage = [[UIImage imageNamed:@"clipboard"]imageFilledWith:[UIColor colorWithWhite:1.0f alpha:1.0f]];
-    [_theCopyAndPasteButton setImage:grayImage forState:UIControlStateNormal];
-    [_theCopyAndPasteButton addTarget:self action:@selector(showCopyPasteController) forControlEvents:UIControlEventTouchUpInside];
-    
     self.theTableView = [[[CoolRefreshTableView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44) style:UITableViewStylePlain]autorelease];
     _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -54,6 +45,16 @@
     _theTableView.allowsSelectionDuringEditing = YES;
     _theTableView.canCancelContentTouches = NO;
     [self.view addSubview:_theTableView];
+    
+    self.theCopyAndPasteButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _theCopyAndPasteButton.frame = CGRectMake(screenBounds.size.width-41, 49, 36, 36);
+    _theCopyAndPasteButton.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.6f];
+    _theCopyAndPasteButton.layer.cornerRadius = 7;
+    _theCopyAndPasteButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin;
+    [_theCopyAndPasteButton setImage:[UIImage imageNamed:@"clipboard"] forState:UIControlStateNormal];
+    [_theCopyAndPasteButton addTarget:self action:@selector(showCopyPasteController) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_theCopyAndPasteButton];
+    [_theCopyAndPasteButton setHidden:YES];
     
     ContentOffsetWatchdog *watchdog = [ContentOffsetWatchdog watchdogWithScrollView:_theTableView];
     watchdog.delegate = self;
@@ -71,19 +72,6 @@
 
 - (void)setWatchdogCanGoYES {
     self.watchdogCanGo = YES;
-}
-
-- (void)setCPButtonHidden:(BOOL)hidden {
-    if (hidden) {
-        if (_theCopyAndPasteButton.superview) {
-            [_theCopyAndPasteButton removeFromSuperview];
-        }
-    } else {
-        if (!_theCopyAndPasteButton.superview) {
-            [self.view addSubview:_theCopyAndPasteButton];
-            [self.view bringSubviewToFront:_theCopyAndPasteButton];
-        }
-    }
 }
 
 - (void)removeAllCheckmarks {
@@ -314,7 +302,7 @@
 - (void)updateCopyButtonState {
     
     if (!_theTableView.editing) {
-        [self setCPButtonHidden:YES];
+        _theCopyAndPasteButton.hidden = YES;
         return;
     }
     
@@ -325,7 +313,7 @@
     BOOL CLGT = (_copiedList.count > 0);
     BOOL shouldUnhide = ((persCLGT || CLGT) || (persCLGT && CLGT));
     
-    [self setCPButtonHidden:!shouldUnhide];
+    _theCopyAndPasteButton.hidden = !shouldUnhide;
 }
 
 - (void)reindexFilelist {

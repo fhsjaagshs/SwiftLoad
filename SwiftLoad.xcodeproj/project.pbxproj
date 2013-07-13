@@ -42,6 +42,10 @@
 		F11C403713F830780077F5D1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F11C403013F82FB40077F5D1 /* UIKit.framework */; };
 		F11FE417145F8218008ECC7E /* dedicatedTextEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = F11FE415145F8218008ECC7E /* dedicatedTextEditor.m */; };
 		F128A1DD157FDBFE001BC156 /* SettingsView.m in Sources */ = {isa = PBXBuildFile; fileRef = F128A1DB157FDBFE001BC156 /* SettingsView.m */; };
+		F137F33B1791D489008FCFD7 /* HamburgerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F137F33A1791D489008FCFD7 /* HamburgerView.m */; };
+		F137F33E1791D636008FCFD7 /* HamburgerButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F137F33D1791D636008FCFD7 /* HamburgerButton.m */; };
+		F137F3411791D896008FCFD7 /* HamburgerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F137F3401791D896008FCFD7 /* HamburgerCell.m */; };
+		F137F3441791DC68008FCFD7 /* HamburgerController.m in Sources */ = {isa = PBXBuildFile; fileRef = F137F3431791DC68008FCFD7 /* HamburgerController.m */; };
 		F13979A516E78F4E00F8B61B /* ArrowLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A116E78F4E00F8B61B /* ArrowLeft.png */; };
 		F13979A616E78F4E00F8B61B /* ArrowLeft@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A216E78F4E00F8B61B /* ArrowLeft@2x.png */; };
 		F13979A716E78F4E00F8B61B /* ArrowRight.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A316E78F4E00F8B61B /* ArrowRight.png */; };
@@ -278,6 +282,14 @@
 		F11FE415145F8218008ECC7E /* dedicatedTextEditor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = dedicatedTextEditor.m; sourceTree = "<group>"; };
 		F128A1DA157FDBFD001BC156 /* SettingsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsView.h; sourceTree = "<group>"; };
 		F128A1DB157FDBFE001BC156 /* SettingsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsView.m; sourceTree = "<group>"; };
+		F137F3391791D489008FCFD7 /* HamburgerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HamburgerView.h; sourceTree = "<group>"; };
+		F137F33A1791D489008FCFD7 /* HamburgerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HamburgerView.m; sourceTree = "<group>"; };
+		F137F33C1791D636008FCFD7 /* HamburgerButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HamburgerButton.h; sourceTree = "<group>"; };
+		F137F33D1791D636008FCFD7 /* HamburgerButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HamburgerButton.m; sourceTree = "<group>"; };
+		F137F33F1791D896008FCFD7 /* HamburgerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HamburgerCell.h; sourceTree = "<group>"; };
+		F137F3401791D896008FCFD7 /* HamburgerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HamburgerCell.m; sourceTree = "<group>"; };
+		F137F3421791DC68008FCFD7 /* HamburgerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HamburgerController.h; sourceTree = "<group>"; };
+		F137F3431791DC68008FCFD7 /* HamburgerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HamburgerController.m; sourceTree = "<group>"; };
 		F13979A116E78F4E00F8B61B /* ArrowLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ArrowLeft.png; path = Images/ArrowLeft.png; sourceTree = "<group>"; };
 		F13979A216E78F4E00F8B61B /* ArrowLeft@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ArrowLeft@2x.png"; path = "Images/ArrowLeft@2x.png"; sourceTree = "<group>"; };
 		F13979A316E78F4E00F8B61B /* ArrowRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ArrowRight.png; path = Images/ArrowRight.png; sourceTree = "<group>"; };
@@ -719,6 +731,7 @@
 		F1283AFE1780A79F006D8A79 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				F137F3451791DC70008FCFD7 /* Hamburger */,
 				F1693C2E16DFAB6E006E3739 /* CustomSlider.h */,
 				F1693C2F16DFAB6E006E3739 /* CustomSlider.m */,
 				F1693C2816DFAB6E006E3739 /* SwiftLoadCell.h */,
@@ -759,6 +772,21 @@
 				F1693C3716DFAB6E006E3739 /* ShadowedTableView.m */,
 			);
 			name = UI;
+			sourceTree = "<group>";
+		};
+		F137F3451791DC70008FCFD7 /* Hamburger */ = {
+			isa = PBXGroup;
+			children = (
+				F137F3421791DC68008FCFD7 /* HamburgerController.h */,
+				F137F3431791DC68008FCFD7 /* HamburgerController.m */,
+				F137F3391791D489008FCFD7 /* HamburgerView.h */,
+				F137F33A1791D489008FCFD7 /* HamburgerView.m */,
+				F137F33C1791D636008FCFD7 /* HamburgerButton.h */,
+				F137F33D1791D636008FCFD7 /* HamburgerButton.m */,
+				F137F33F1791D896008FCFD7 /* HamburgerCell.h */,
+				F137F3401791D896008FCFD7 /* HamburgerCell.m */,
+			);
+			name = Hamburger;
 			sourceTree = "<group>";
 		};
 		F14333E516F610DE00B279F9 /* PullToReveal */ = {
@@ -1319,6 +1347,10 @@
 				F14B819D1788E2D300ADEF99 /* SimpleKeychain.m in Sources */,
 				F13B08B9178CEE05005201F7 /* WebDAVCredsPrompt.m in Sources */,
 				F168EDAF1790C61000C21D6F /* UIImage+Additions.m in Sources */,
+				F137F33B1791D489008FCFD7 /* HamburgerView.m in Sources */,
+				F137F33E1791D636008FCFD7 /* HamburgerButton.m in Sources */,
+				F137F3411791D896008FCFD7 /* HamburgerCell.m in Sources */,
+				F137F3441791DC68008FCFD7 /* HamburgerController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
