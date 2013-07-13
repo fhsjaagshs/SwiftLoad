@@ -73,6 +73,13 @@
     }
 }
 
+- (void)dealloc {
+    [self setViewToMove:nil];
+    [self setHideButton:nil];
+    [self setHamburgerView:nil];
+    [super dealloc];
+}
+
 @end
 
 @implementation HamburgerView
@@ -159,6 +166,13 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     _theTableView.frame = self.bounds;
+}
+
+- (void)dealloc {
+    [self setDelegate:nil];
+    [self setItem:nil];
+    [self setTheTableView:nil];
+    [super dealloc];
 }
 
 @end
