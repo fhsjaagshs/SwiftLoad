@@ -75,42 +75,28 @@
 
 - (void)hamburgerCellWasSelectedAtIndex:(int)index {
     if (index == 0) {
-        dedicatedTextEditor *textEditor = [dedicatedTextEditor viewController];
-        textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-        [self presentModalViewController:textEditor animated:YES];
+        [[[[URLInputController alloc]initWithCompletionBlock:^(NSString *url) {
+            if (url.length > 0) {
+                if ([url hasPrefix:@"http"]) {
+                    [kAppDelegate downloadFromAppDelegate:url];
+                } else if ([url hasPrefix:@"ftp"]) {
+                    [kAppDelegate downloadFileUsingFtp:url];
+                }
+            }
+        }]autorelease]show];
     } else if (index == 1) {
-        moviePlayerView *textEditor = [moviePlayerView viewController];
-        textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-        [self presentModalViewController:textEditor animated:YES];
+        webDAVViewController *advc = [webDAVViewController viewController];
+        [self presentModalViewController:advc animated:YES];
     } else if (index == 2) {
-        pictureView *textEditor = [pictureView viewController];
-        textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-        [self presentModalViewController:textEditor animated:YES];
+        DropboxBrowserViewController *d = [DropboxBrowserViewController viewController];
+        [self presentModalViewController:d animated:YES];
     } else if (index == 3) {
-        AudioPlayerViewController *textEditor = [AudioPlayerViewController viewController];
-        textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-        [self presentModalViewController:textEditor animated:YES];
+        SFTPBrowserViewController *s = [SFTPBrowserViewController viewController];
+        [self presentModalViewController:s animated:YES];
     } else if (index == 4) {
-        MyFilesViewDetailViewController *textEditor = [MyFilesViewDetailViewController viewController];
-        textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-        [self presentModalViewController:textEditor animated:YES];
-    } else if (index == 5) {
-        NSString *file = [kAppDelegate openFile];
-        UIDocumentInteractionController *controller = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:file]];
-        
-        BOOL opened = NO;
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            opened = [controller presentOpenInMenuFromRect:_sideSwipeCell.frame inView:_theTableView animated:YES];
-        } else {
-            opened = [controller presentOpenInMenuFromRect:self.view.frame inView:self.view animated:YES];
-        }
-        
-        if (!opened) {
-            [TransparentAlert showAlertWithTitle:@"No External Viewers" andMessage:[NSString stringWithFormat:@"No installed applications are capable of opening %@.",[file lastPathComponent]]];
-        }
+        SettingsView *d = [SettingsView viewController];
+        [self presentModalViewController:d animated:YES];
     }
-    [self removeSideSwipeView:YES];
 }
 
 - (void)setWatchdogCanGoYES {

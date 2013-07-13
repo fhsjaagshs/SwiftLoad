@@ -15,6 +15,7 @@
 
 @property (nonatomic, assign) id<HamburdgerViewDelegate> delegate;
 @property (nonatomic, retain) UITableView *theTableView;
+@property (nonatomic, assign) HamburgerButtonItem *item;
 
 @end
 
@@ -33,6 +34,7 @@
     [item setTarget:item];
     [item setAction:@selector(toggleState)];
     item.hamburgerView = [HamburgerView view];
+    item.hamburgerView.item = item;
     item.viewToMove = viewToMove;
     item.hideButton = [UIButton buttonWithType:UIButtonTypeCustom];
     item.hideButton.frame = item.viewToMove.bounds;
@@ -41,7 +43,7 @@
 }
 
 - (void)setDelegate:(id<HamburdgerViewDelegate>)delegate {
-    [self.hamburgerView setDelegate:delegate];
+    [_hamburgerView setDelegate:delegate];
 }
 
 - (void)hide {
@@ -54,10 +56,12 @@
 }
 
 - (void)show {
-    [_viewToMove insertSubview:_hamburgerView belowSubview:_viewToMove];
+    [[kAppDelegate window]insertSubview:_hamburgerView belowSubview:_viewToMove];
     [_viewToMove addSubview:_hideButton];
     [UIView animateWithDuration:0.3f animations:^{
+        _hamburgerView.frame = CGRectMake(0, 20, 250, [[UIScreen mainScreen]applicationFrame].size.height);
         _viewToMove.frame = CGRectMake(250, _viewToMove.frame.origin.y, _viewToMove.frame.size.width, _viewToMove.frame.size.height);
+        
     }];
 }
 
@@ -71,8 +75,6 @@
 
 @end
 
-
-
 @implementation HamburgerView
 
 + (HamburgerView *)view {
@@ -84,7 +86,7 @@
     if (self) {
         self.userInteractionEnabled = YES;
         self.backgroundColor = [UIColor clearColor];
-        self.frame = CGRectMake(-250, 0, 250, [[UIScreen mainScreen]applicationFrame].size.height);
+        self.frame = CGRectMake(0, 0, 250, [[UIScreen mainScreen]applicationFrame].size.height);
         [self setup];
     }
     return self;
@@ -106,8 +108,6 @@
         cell = [HamburgerCell cell];
     }
     
-    // set title based on index
-    
     int row = indexPath.row;
     
     if (row == 0) {
@@ -126,9 +126,11 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (_delegate && [_delegate respondsToSelector:@selector(hamburgerWasSelectedAtIndex)]) {
+    if (_delegate && [_delegate respondsToSelector:@selector(hamburgerCellWasSelectedAtIndex:)]) {
+        [_item hide];
         [_delegate hamburgerCellWasSelectedAtIndex:indexPath.row];
     }
+    [_theTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 /*- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -144,8 +146,6 @@
  }*/
 
 - (void)setup {
-    BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
-    
     self.theTableView = [[[UITableView alloc]initWithFrame:self.bounds style:UITableViewStylePlain]autorelease];
     _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -153,7 +153,6 @@
     _theTableView.rowHeight = 44;
     _theTableView.dataSource = self;
     _theTableView.delegate = self;
-    _theTableView.canCancelContentTouches = NO;
     [self addSubview:_theTableView];
 }
 
