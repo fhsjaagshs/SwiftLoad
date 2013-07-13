@@ -28,14 +28,7 @@ static NSString *kCellIdentifierHamburger = @"hamburger";
         self.textLabel.highlightedTextColor = [UIColor blackColor];
         self.textLabel.textAlignment = UITextAlignmentCenter;
         self.selectedBackgroundView = [[[UIView alloc]init]autorelease];
-        self.selectedBackgroundView.backgroundColor = [UIColor darkGrayColor];
-        
-        /*if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            self.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:27];
-            self.detailTextLabel.font = [UIFont systemFontOfSize:20.0];
-        } else {
-            self.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:20];
-        }*/
+        self.selectedBackgroundView.backgroundColor = [UIColor lightGrayColor];
     }
     return self;
 }

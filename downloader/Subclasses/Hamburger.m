@@ -59,7 +59,7 @@
     [[kAppDelegate window]insertSubview:_hamburgerView belowSubview:_viewToMove];
     [_viewToMove addSubview:_hideButton];
     [UIView animateWithDuration:0.3f animations:^{
-        _hamburgerView.frame = CGRectMake(0, 20, 250, [[UIScreen mainScreen]applicationFrame].size.height);
+        //_hamburgerView.frame = CGRectMake(0, 20, 250, [[UIScreen mainScreen]applicationFrame].size.height);
         _viewToMove.frame = CGRectMake(250, _viewToMove.frame.origin.y, _viewToMove.frame.size.width, _viewToMove.frame.size.height);
         
     }];
@@ -93,7 +93,7 @@
     if (self) {
         self.userInteractionEnabled = YES;
         self.backgroundColor = [UIColor clearColor];
-        self.frame = CGRectMake(0, 0, 250, [[UIScreen mainScreen]applicationFrame].size.height);
+        self.frame = CGRectMake(0, 20, 250, [[UIScreen mainScreen]applicationFrame].size.height);
         [self setup];
     }
     return self;
