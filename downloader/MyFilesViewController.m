@@ -1352,7 +1352,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
-    [self refreshTableViewWithAnimation:UITableViewRowAnimationNone];
+    [_filelist removeAllObjects];
+    [_theTableView reloadData];
     [self.theTableView flashScrollIndicators];
     [self verifyIsCutBOOL];
     [self verifyProspectiveCopyList];
