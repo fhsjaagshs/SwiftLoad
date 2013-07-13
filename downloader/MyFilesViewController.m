@@ -13,7 +13,7 @@
 
 #define BOUNCE_PIXELS 5.0
 
-@interface MyFilesViewController ()
+@interface MyFilesViewController () <HamburdgerViewDelegate>
 @property (nonatomic, assign) BOOL watchdogCanGo;
 @end
 
@@ -24,6 +24,9 @@
     
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
+    
+    HamburgerButtonItem *hamburger = [HamburgerButtonItem itemWithView:self.view];
+    [hamburger setDelegate:self];
     
     self.navBar = [[[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
     _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;

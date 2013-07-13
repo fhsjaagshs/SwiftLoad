@@ -1,13 +1,74 @@
 //
-//  HamburgerView.m
+//  Hamburger.m
 //  SwiftLoad
 //
 //  Created by Nathaniel Symer on 7/13/13.
 //  Copyright (c) 2013 Nathaniel Symer. All rights reserved.
 //
 
-#import "HamburgerView.h"
+#import "Hamburger.h"
 #import "HamburgerCell.h"
+
+@interface HamburgerView : UIView
+
++ (HamburgerView *)view;
+
+@property (nonatomic, assign) id<HamburdgerViewDelegate> delegate;
+
+@end
+
+@interface HamburgerButtonItem ()
+
+@property (nonatomic, strong) HamburgerView *hamburgerView;
+@property (nonatomic, strong) UIButton *hideButton;
+@property (nonatomic, assign) UIView *viewToMove;
+
+@end
+
+@implementation HamburgerButtonItem
+
++ (HamburgerButtonItem *)itemWithView:(UIView *)viewToMove {
+    HamburgerButtonItem *item = [[[HamburgerButtonItem alloc]init]autorelease];
+    [item setTarget:item];
+    [item setAction:@selector(toggleState)];
+    item.hamburgerView = [HamburgerView view];
+    item.viewToMove = viewToMove;
+    item.hideButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    item.hideButton.frame = item.viewToMove.bounds;
+    [item.hideButton addTarget:item action:@selector(hide) forControlEvents:UIControlEventTouchDown];
+    return item;
+}
+
+- (void)setDelegate:(id<HamburdgerViewDelegate>)delegate {
+    [self.hamburgerView setDelegate:delegate];
+}
+
+- (void)hide {
+    [UIView animateWithDuration:0.3f animations:^{
+        _viewToMove.frame = CGRectMake(0, _viewToMove.frame.origin.y, _viewToMove.frame.size.width, _viewToMove.frame.size.height);
+    } completion:^(BOOL finished) {
+        [_hamburgerView removeFromSuperview];
+        [_hideButton removeFromSuperview];
+    }];
+}
+
+- (void)show {
+    [_viewToMove insertSubview:_hamburgerView belowSubview:_viewToMove];
+    [_viewToMove addSubview:_hideButton];
+    [UIView animateWithDuration:0.3f animations:^{
+        _viewToMove.frame = CGRectMake(270, _viewToMove.frame.origin.y, _viewToMove.frame.size.width, _viewToMove.frame.size.height);
+    }];
+}
+
+- (void)toggleState {
+    if (_hamburgerView.superview) {
+        [self hide];
+    } else {
+        [self show];
+    }
+}
+
+@end
 
 @interface HamburgerView () <UITableViewDataSource, UITableViewDelegate>
 
@@ -73,16 +134,16 @@
 }
 
 /*- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    // maybe, depends on how viewForHeaderInSection: works
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    // say main menu
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    // version label
-}*/
+ // maybe, depends on how viewForHeaderInSection: works
+ }
+ 
+ - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+ // say main menu
+ }
+ 
+ - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+ // version label
+ }*/
 
 - (void)setup {
     BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
@@ -105,3 +166,4 @@
 }
 
 @end
+

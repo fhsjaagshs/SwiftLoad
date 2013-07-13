@@ -1,5 +1,5 @@
 //
-//  HamburgerView.h
+//  Hamburger.h
 //  SwiftLoad
 //
 //  Created by Nathaniel Symer on 7/13/13.
@@ -10,11 +10,10 @@
 
 @protocol HamburdgerViewDelegate;
 
-@interface HamburgerView : UIView
+@interface HamburgerButtonItem : UIBarButtonItem
 
-+ (HamburgerView *)view;
-
-@property (nonatomic, assign) id<HamburdgerViewDelegate> delegate;
+- (void)setDelegate:(id<HamburdgerViewDelegate>)delegate;
++ (HamburgerButtonItem *)itemWithView:(UIView *)viewToMove;
 
 @end
 

@@ -26,6 +26,8 @@
     #import "UIButton+SwiftLoad.h"
     #import "UIImage+Additions.h"
 
+    #import "Hamburger"
+
     #import "DLSFTP-all.h"
     #import "SFTPCreds.h"
     #import "FMDatabase.h"
