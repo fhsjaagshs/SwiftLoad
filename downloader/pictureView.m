@@ -291,8 +291,4 @@
     return YES;
 }
 
-- (void)dealloc {
-    NSLog(@"%@ dealloc'd", NSStringFromClass([self class]));
-}
-
 @end

@@ -25,7 +25,7 @@
     [self.view bringSubviewToFront:navBar];
     
     UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-(iPad?200:200), screenBounds.size.width, iPad?200:150)];
-    textView.text = @"Server: IP address of iPhone\nPort: 8080\nConnection type: Non-SSL WebDAV\nUsername & Password: What you set in the previous window";
+    textView.text = @"Server: IP address of iPhone\nPort: 8080\nConnection type: Non-SSL WebDAV\nUsername & Password: What you set in settings";
     textView.backgroundColor = [UIColor clearColor];
     textView.textColor = [UIColor blackColor];
     textView.font = [UIFont boldSystemFontOfSize:18];
@@ -48,10 +48,6 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
     return (toInterfaceOrientation == UIInterfaceOrientationPortrait);
-}
-
-- (void)dealloc {
-    NSLog(@"%@ dealloc'd", NSStringFromClass([self class]));
 }
 
 @end

@@ -230,7 +230,6 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter]removeObserver:self];
-    NSLog(@"%@ dealloc'd", NSStringFromClass([self class]));
 }
 
 @end

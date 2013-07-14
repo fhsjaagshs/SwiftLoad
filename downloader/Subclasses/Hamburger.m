@@ -13,7 +13,7 @@
 
 + (HamburgerView *)view;
 
-@property (nonatomic, weak) id<HamburdgerViewDelegate> delegate;
+@property (nonatomic, weak) id<HamburgerViewDelegate> delegate;
 @property (nonatomic, strong) UITableView *theTableView;
 @property (nonatomic, weak) HamburgerButtonItem *item;
 
@@ -32,9 +32,10 @@
 + (HamburgerButtonItem *)itemWithView:(UIView *)viewToMove {
     HamburgerButtonItem *item = [[HamburgerButtonItem alloc]initWithImage:[UIImage imageNamed:@"hamburger"] style:UIBarButtonItemStyleBordered target:nil action:nil];
     [item setTarget:item];
-    [item setAction:@selector(toggleState)];
+    item.action = @selector(toggleState);
     item.hamburgerView = [HamburgerView view];
     item.hamburgerView.item = item;
+    item.hamburgerView.alpha = 0.0f;
     item.viewToMove = viewToMove;
     item.hideButton = [UIButton buttonWithType:UIButtonTypeCustom];
     item.hideButton.frame = item.viewToMove.bounds;
@@ -42,7 +43,7 @@
     return item;
 }
 
-- (void)setDelegate:(id<HamburdgerViewDelegate>)delegate {
+- (void)setDelegate:(id<HamburgerViewDelegate>)delegate {
     [_hamburgerView setDelegate:delegate];
 }
 
@@ -60,6 +61,7 @@
 - (void)hide {
     [self clearShadow];
     [UIView animateWithDuration:0.3f animations:^{
+        _hamburgerView.alpha = 0.0f;
         _viewToMove.frame = CGRectMake(0, _viewToMove.frame.origin.y, _viewToMove.frame.size.width, _viewToMove.frame.size.height);
     } completion:^(BOOL finished) {
         [_hamburgerView removeFromSuperview];
@@ -73,6 +75,7 @@
     [_viewToMove addSubview:_hideButton];
     [self showShadow];
     [UIView animateWithDuration:0.3f animations:^{
+        _hamburgerView.alpha = 1.0f;
         _viewToMove.frame = CGRectMake(250, _viewToMove.frame.origin.y, _viewToMove.frame.size.width, _viewToMove.frame.size.height);
         
     }];
@@ -176,11 +179,6 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     _theTableView.frame = self.bounds;
-}
-
-- (void)dealloc {
-    [self setDelegate:nil];
-    [self setItem:nil];
 }
 
 @end

@@ -8,16 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol HamburdgerViewDelegate;
+@protocol HamburgerViewDelegate;
 
 @interface HamburgerButtonItem : UIBarButtonItem
 
-- (void)setDelegate:(id<HamburdgerViewDelegate>)delegate;
+- (void)setDelegate:(id<HamburgerViewDelegate>)delegate;
 + (HamburgerButtonItem *)itemWithView:(UIView *)viewToMove;
 
 @end
 
-@protocol HamburdgerViewDelegate <NSObject>
+@protocol HamburgerViewDelegate <NSObject>
 @optional
 - (void)hamburgerCellWasSelectedAtIndex:(int)index;
 

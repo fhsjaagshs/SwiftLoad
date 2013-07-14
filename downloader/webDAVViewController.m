@@ -67,6 +67,7 @@
     tf.font = [UIFont systemFontOfSize:iPad?17:15];
     tf.editable = NO;
     tf.textAlignment = UITextAlignmentCenter;
+    tf.scrollEnabled = NO;
     [self.view addSubview:tf];
     
     self.urlLabel = [[UILabel alloc]initWithFrame:iPad?CGRectMake(20, 379, 728, 86):CGRectMake(0, sanitizeMesurement(283), screenBounds.size.width, 21)];
@@ -84,6 +85,7 @@
     btf.textAlignment = UITextAlignmentCenter;
     btf.textColor = [UIColor blackColor];
     btf.font = [UIFont systemFontOfSize:iPad?19:14];
+    btf.scrollEnabled = NO;
     btf.text = @"This WebDAV server is only active as long as this screen is open.";
     [self.view addSubview:btf];
     
@@ -152,10 +154,6 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
     return (toInterfaceOrientation == UIInterfaceOrientationPortrait);
-}
-
-- (void)dealloc {
-    NSLog(@"%@ dealloc'd", NSStringFromClass([self class]));
 }
 
 @end

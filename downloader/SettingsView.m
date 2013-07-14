@@ -8,6 +8,8 @@
 
 #import "SettingsView.h"
 
+static NSString *kJavaScriptBookmarklet = @"JavaScript:window.open(document.URL.replace('http://','swift://'));";
+
 @implementation SettingsView
 
 - (void)loadView {
@@ -59,8 +61,8 @@
     TransparentAlert *cav = [[TransparentAlert alloc]initWithTitle:@"Install Bookmarklet?" message:@"This bookmarklet allows you to download any file open in Safari. Clicking \"Sure!\" will overwrite your clipboard's content." completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
         
         if (buttonIndex == 1) {
-            [[UIPasteboard generalPasteboard]setString:@"JavaScript:string=document.URL;anotherString=string.replace('http://','swiftload://');window.open(anotherString);"];
-            TransparentAlert *av = [[TransparentAlert alloc]initWithTitle:@"Bookmarklet Copied!" message:@"Open Safari and create a bookmark, naming it \"SwiftLoad Download\". Enter editing mode in the bookmarks menu and tap the newly created bookmark. Paste the contents of the clipboard to the URL field of the newly created bookmark, replacing whatever is already there. Tap done then exit editing mode. To download files, just navigate to a page and tap the bookmark." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [[UIPasteboard generalPasteboard]setString:kJavaScriptBookmarklet];
+            TransparentAlert *av = [[TransparentAlert alloc]initWithTitle:@"Bookmarklet Copied!" message:@"Open Safari and create a bookmark, naming it \"Swift Download\". Open the bookmarks menu and enter editing mode. Tap the newly created bookmark and paste the contents of the clipboard to the URL field, replacing whatever is already there. Tap done then exit editing mode. To download files, just navigate to a page and tap the bookmark." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [av show];
         }
         

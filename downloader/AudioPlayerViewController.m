@@ -214,7 +214,7 @@
                     [ad hideHUD];
                     
                     if (error) {
-                        [TransparentAlert showAlertWithTitle:@"Conversion Error" andMessage:@"SwiftLoad could not convert the desired audio file."];
+                        [TransparentAlert showAlertWithTitle:@"Conversion Error" andMessage:@"Swift could not convert the desired audio file."];
                     } else {
                      //   UIImageView *checkmark = [[[UIImageView alloc]initWithImage:getCheckmarkImage()]autorelease];
                         [ad showHUDWithTitle:@"Complete"];
@@ -481,7 +481,6 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter]removeObserver:self];
-    NSLog(@"%@ dealloc'd", NSStringFromClass([self class]));
 }
 
 @end

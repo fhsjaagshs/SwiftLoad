@@ -324,5 +324,4 @@
     [self loadCurrentDirectoryFromSFTP];
 }
 
-
 @end

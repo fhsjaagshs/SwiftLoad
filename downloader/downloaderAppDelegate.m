@@ -667,6 +667,8 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         NSString *URLString = nil;
         if ([url.absoluteString hasPrefix:@"swiftload://"]) {
             URLString = [url.absoluteString stringByReplacingOccurrencesOfString:@"swiftload://" withString:@"http://"];
+        } else if ([url.absoluteString hasPrefix:@"swift://"]) {
+            URLString = [url.absoluteString stringByReplacingOccurrencesOfString:@"swift://" withString:@"http://"];
         } else {
             URLString = [url.absoluteString stringByReplacingOccurrencesOfString:@"dl://" withString:@"http://"];
         }
@@ -987,10 +989,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         [ftpRequest startRequest];
     }];
     [controller show];
-}
-
-- (void)dealloc {
-    NSLog(@"%@ dealloc'd", NSStringFromClass([self class]));
 }
 
 @end

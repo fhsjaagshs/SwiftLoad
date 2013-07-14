@@ -425,8 +425,4 @@ static NSString *CellIdentifier = @"dbcell";
     [self dismissModalViewControllerAnimated:YES];
 }
 
-- (void)dealloc {
-    NSLog(@"DropboxBrowserViewController dealloc'd");
-}
-
 @end

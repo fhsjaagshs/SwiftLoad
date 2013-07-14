@@ -13,7 +13,7 @@
 
 #define BOUNCE_PIXELS 5.0
 
-@interface MyFilesViewController () <HamburdgerViewDelegate>
+@interface MyFilesViewController () <HamburgerViewDelegate>
 @property (nonatomic, assign) BOOL watchdogCanGo;
 @end
 
@@ -939,7 +939,7 @@
             detail.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
             [self presentModalViewController:detail animated:YES];
         } else {
-            NSString *message = [NSString stringWithFormat:@"SwiftLoad cannot identify:\n%@\nPlease select what viewer to open it in.",file.lastPathComponent];
+            NSString *message = [NSString stringWithFormat:@"Swift cannot determine which editor to open \"%@\" in. Please select which viewer to open it in.",file.lastPathComponent];
             
             UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
                 [self actionSheetAction:actionSheet buttonIndex:buttonIndex];
@@ -1380,8 +1380,6 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter]removeObserver:self];
-    [self setSideSwipeCell:nil];
-    NSLog(@"%@ dealloc'd", NSStringFromClass([self class]));
 }
 
 @end
