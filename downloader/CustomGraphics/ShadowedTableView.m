@@ -20,9 +20,9 @@
 - (CAGradientLayer *)shadowAsInverse:(BOOL)inverse {
 	CAGradientLayer *newShadow = [[CAGradientLayer alloc]init];
 	newShadow.frame = CGRectMake(0, 0, self.frame.size.width,inverse?10:20);
-	CGColorRef darkColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:inverse?0.25:0.5].CGColor;
-	CGColorRef lightColor = [self.backgroundColor colorWithAlphaComponent:0.0].CGColor;
-	newShadow.colors = [NSArray arrayWithObjects:(__bridge id)(inverse?lightColor:darkColor), (__bridge id)(inverse?darkColor:lightColor), nil];
+    UIColor *darkColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:inverse?0.25:0.5];
+    UIColor *lightColor = [self.backgroundColor colorWithAlphaComponent:0.0];
+    newShadow.colors = @[inverse?(__bridge id)lightColor.CGColor:(__bridge id)darkColor.CGColor, inverse?(__bridge id)darkColor.CGColor:(__bridge id)lightColor.CGColor];
 	return newShadow;
 }
 
@@ -45,8 +45,7 @@
     NSArray *indexPathsForVisibleRows = [self indexPathsForVisibleRows];
     
     if (indexPathsForVisibleRows.count == 0) {
-        [_bottomShadow setHidden:YES];
-        [_topShadow setHidden:YES];
+        [self setShadowsHidden:YES];
 		return;
 	}
 	
