@@ -12,7 +12,7 @@
     BOOL shouldUnpauseAudioPlayer;
 }
 
-@property (nonatomic, retain) UIActionSheet *popupQuery;
-@property (nonatomic, retain) MPMoviePlayerController *moviePlayer;
+@property (nonatomic, strong) UIActionSheet *popupQuery;
+@property (nonatomic, strong) MPMoviePlayerController *moviePlayer;
 
 @end

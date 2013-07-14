@@ -16,16 +16,15 @@
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     self.view = [StyleFactory backgroundView];
     
-    UINavigationBar *navBar = [[[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
+    UINavigationBar *navBar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"WebDAV Setup"];
-    topItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)]autorelease];
+    topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
     [navBar pushNavigationItem:topItem animated:NO];
     [self.view addSubview:navBar];
     [self.view bringSubviewToFront:navBar];
-    [topItem release];
     
-    UITextView *textView = [[[UITextView alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-(iPad?200:200), screenBounds.size.width, iPad?200:150)]autorelease];
+    UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-(iPad?200:200), screenBounds.size.width, iPad?200:150)];
     textView.text = @"Server: IP address of iPhone\nPort: 8080\nConnection type: Non-SSL WebDAV\nUsername & Password: What you set in the previous window";
     textView.backgroundColor = [UIColor clearColor];
     textView.textColor = [UIColor blackColor];
@@ -34,7 +33,7 @@
     textView.editable = NO;
     [self.view addSubview:textView];
     
-    UIImageView *imageView = [[[UIImageView alloc]initWithFrame:iPad?CGRectMake(110, 131, 549, 287):CGRectMake(18, sanitizeMesurement(81), 285, 150)]autorelease];
+    UIImageView *imageView = [[UIImageView alloc]initWithFrame:iPad?CGRectMake(110, 131, 549, 287):CGRectMake(18, sanitizeMesurement(81), 285, 150)];
     imageView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle]pathForResource:@"config" ofType:@"png"]];
     [self.view addSubview:imageView];
 }
@@ -53,7 +52,6 @@
 
 - (void)dealloc {
     NSLog(@"%@ dealloc'd", NSStringFromClass([self class]));
-    [super dealloc];
 }
 
 @end

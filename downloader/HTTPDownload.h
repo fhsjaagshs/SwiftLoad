@@ -10,7 +10,7 @@
 
 @interface HTTPDownload : Download
 
-@property (nonatomic, retain) NSURL *url;
+@property (nonatomic, strong) NSURL *url;
 
 - (id)initWithURL:(NSURL *)aUrl;
 + (HTTPDownload *)downloadWithURL:(NSURL *)aURL;

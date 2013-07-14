@@ -16,16 +16,14 @@
     UINavigationBar *bar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]];
-    topItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)]autorelease];
-    topItem.rightBarButtonItem = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)]autorelease];
+    topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
+    topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
     [bar pushNavigationItem:topItem animated:NO];
     [self.view addSubview:bar];
     [self.view bringSubviewToFront:bar];
-    [bar release];
-    [topItem release];
     
     CGRect frame = CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44);
-    self.webView = [[[UIWebView alloc]initWithFrame:frame]autorelease];
+    self.webView = [[UIWebView alloc]initWithFrame:frame];
     self.webView.delegate = self;
     self.webView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.webView.backgroundColor = [UIColor clearColor];
@@ -63,7 +61,7 @@
     NSString *file = [kAppDelegate openFile];
     NSString *fileName = [file lastPathComponent];
     
-    self.popupQuery = [[[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",fileName] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+    self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",fileName] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         
         if (buttonIndex == 0) {
             [kAppDelegate printFile:file fromView:self.view];
@@ -77,7 +75,7 @@
             [self uploadToDropbox];
         }
         
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Print", @"Email File", @"Send Via Bluetooth", @"Upload to Server", @"Upload to Dropbox", nil]autorelease];
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Print", @"Email File", @"Send Via Bluetooth", @"Upload to Server", @"Upload to Dropbox", nil];
     
     self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     
@@ -97,10 +95,7 @@
 }
 
 - (void)dealloc {
-    [self setWebView:nil];
-    [self setPopupQuery:nil];
     NSLog(@"%@ dealloc'd", NSStringFromClass([self class]));
-    [super dealloc];
 }
 
 @end

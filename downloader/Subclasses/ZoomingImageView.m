@@ -24,7 +24,7 @@
     self.showsHorizontalScrollIndicator = YES;
     self.backgroundColor = [UIColor clearColor];
     
-    self.theImageView = [[[UIImageView alloc]initWithFrame:self.bounds]autorelease];
+    self.theImageView = [[UIImageView alloc]initWithFrame:self.bounds];
     self.theImageView.backgroundColor = [UIColor clearColor];
     self.theImageView.contentMode = UIViewContentModeScaleAspectFit;
     self.theImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -57,9 +57,5 @@
     return self.theImageView;
 }
 
-- (void)dealloc {
-    [self setTheImageView:nil];
-    [super dealloc];
-}
 
 @end

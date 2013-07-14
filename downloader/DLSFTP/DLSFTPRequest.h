@@ -40,7 +40,7 @@ typedef void(^DLSFTPRequestCancelHandler)(void);
 @interface DLSFTPRequest : NSObject
 
 @property (nonatomic, readonly, getter = isCancelled) BOOL cancelled;
-@property (nonatomic, weak) DLSFTPConnection *connection;
+@property (nonatomic, assign) DLSFTPConnection *connection;
 @property (nonatomic, readwrite, copy) DLSFTPRequestCancelHandler cancelHandler;
 @property (nonatomic, strong) NSError *error;
 @property (nonatomic, copy) id successBlock;

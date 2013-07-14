@@ -10,8 +10,8 @@
 
 @interface webDAVViewController : UIViewController
 
-@property (nonatomic, retain) HTTPServer *httpServer;
-@property (nonatomic, retain) UILabel *urlLabel;
-@property (nonatomic, retain) UILabel *onLabel;
+@property (nonatomic, strong) HTTPServer *httpServer;
+@property (nonatomic, strong) UILabel *urlLabel;
+@property (nonatomic, strong) UILabel *onLabel;
 
 @end

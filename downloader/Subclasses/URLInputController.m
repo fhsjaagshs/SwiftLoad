@@ -18,7 +18,7 @@
         
         self.message = @"Hey_man_hide_me";
         
-        self.tv = [[[UITextField alloc]init]autorelease];
+        self.tv = [[UITextField alloc]init];
         _tv.keyboardAppearance = UIKeyboardAppearanceAlert;
         _tv.borderStyle = UITextBorderStyleNone;
         _tv.backgroundColor = [UIColor whiteColor];
@@ -72,7 +72,6 @@
         
         if (block) {
             block(_tv.text);
-            Block_release(block);
         }
     }
     

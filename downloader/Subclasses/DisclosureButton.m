@@ -19,7 +19,7 @@
 }
 
 + (DisclosureButton *)button {
-    DisclosureButton *ret = [[[[self class]alloc]initWithFrame:CGRectMake(0, 0, 44, 44)]autorelease];
+    DisclosureButton *ret = [[[self class]alloc]initWithFrame:CGRectMake(0, 0, 44, 44)];
     ret.backgroundColor = [UIColor clearColor];
     return ret;
 }

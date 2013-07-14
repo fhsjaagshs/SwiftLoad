@@ -12,7 +12,7 @@ typedef enum {
 
 @interface PullToRefreshView : UIView 
 
-@property (nonatomic, assign) id<PullToRefreshViewDelegate> delegate;
+@property (nonatomic, weak) id<PullToRefreshViewDelegate> delegate;
 @property (nonatomic, assign, setter=setState:) PullToRefreshViewState state;
 
 - (void)finishedLoading;

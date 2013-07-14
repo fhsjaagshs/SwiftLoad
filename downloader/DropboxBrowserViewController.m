@@ -29,20 +29,20 @@ static NSString *CellIdentifier = @"dbcell";
 
 @interface DropboxBrowserViewController () <UITableViewDataSource, UITableViewDelegate, PullToRefreshViewDelegate>
 
-@property (nonatomic, retain) ShadowedTableView *theTableView;
-@property (nonatomic, retain) UIButton *backButton;
-@property (nonatomic, retain) UIButton *homeButton;
-@property (nonatomic, retain) ShadowedNavBar *navBar;
-@property (nonatomic, retain) PullToRefreshView *pull;
+@property (nonatomic, strong) ShadowedTableView *theTableView;
+@property (nonatomic, strong) UIButton *backButton;
+@property (nonatomic, strong) UIButton *homeButton;
+@property (nonatomic, strong) ShadowedNavBar *navBar;
+@property (nonatomic, strong) PullToRefreshView *pull;
 
-@property (nonatomic, retain) NSMutableArray *currentPathItems;
+@property (nonatomic, strong) NSMutableArray *currentPathItems;
 
-@property (nonatomic, retain) NSString *cursor;
+@property (nonatomic, strong) NSString *cursor;
 
 @property (nonatomic, assign) BOOL shouldMassInsert;
 
-@property (nonatomic, retain) FMDatabase *database;
-@property (nonatomic, retain) NSString *userID;
+@property (nonatomic, strong) FMDatabase *database;
+@property (nonatomic, strong) NSString *userID;
 
 @end
 
@@ -56,11 +56,11 @@ static NSString *CellIdentifier = @"dbcell";
     
     self.view = [StyleFactory backgroundView];
     
-    self.navBar = [[[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
+    self.navBar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    UINavigationItem *topItem = [[[UINavigationItem alloc]initWithTitle:@"/"]autorelease];
+    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"/"];
     topItem.rightBarButtonItem = nil;
-    topItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)]autorelease];
+    topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
     [_navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:_navBar];
     
@@ -83,7 +83,7 @@ static NSString *CellIdentifier = @"dbcell";
     [bbv addSubview:_backButton];
     [_backButton setHidden:YES];
     
-    self.theTableView = [[[ShadowedTableView alloc]initWithFrame:CGRectMake(0, 88, screenBounds.size.width, screenBounds.size.height-88) style:UITableViewStylePlain]autorelease];
+    self.theTableView = [[ShadowedTableView alloc]initWithFrame:CGRectMake(0, 88, screenBounds.size.width, screenBounds.size.height-88) style:UITableViewStylePlain];
     _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     _theTableView.backgroundColor = [UIColor clearColor];
@@ -92,7 +92,7 @@ static NSString *CellIdentifier = @"dbcell";
     _theTableView.delegate = self;
     [self.view addSubview:_theTableView];
     
-    self.pull = [[[PullToRefreshView alloc]initWithScrollView:_theTableView]autorelease];
+    self.pull = [[PullToRefreshView alloc]initWithScrollView:_theTableView];
     [_pull setDelegate:self];
     [_theTableView addSubview:_pull];
 
@@ -309,7 +309,7 @@ static NSString *CellIdentifier = @"dbcell";
     SwiftLoadCell *cell = (SwiftLoadCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
-        cell = [[[SwiftLoadCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier]autorelease];
+        cell = [[SwiftLoadCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
     NSDictionary *fileDict = [_currentPathItems objectAtIndex:indexPath.row];
@@ -351,7 +351,7 @@ static NSString *CellIdentifier = @"dbcell";
         [self refreshStateWithAnimationStyle:UITableViewRowAnimationLeft];
     } else {
         NSString *message = [NSString stringWithFormat:@"Do you wish to download \"%@\"?",filename];
-        UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+        UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             
             NSString *filePath = [_navBar.topItem.title stringByAppendingPathComponent:[fileDict objectForKey:NSFileName]];
             
@@ -369,15 +369,15 @@ static NSString *CellIdentifier = @"dbcell";
                     if (error) {
                         //[kAppDelegate showFailedAlertForFilename:path.lastPathComponent];
                     } else {
-                        [[[[TransparentAlert alloc]initWithTitle:[NSString stringWithFormat:@"Link For:\n%@",[path lastPathComponent]] message:link completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
+                        [[[TransparentAlert alloc]initWithTitle:[NSString stringWithFormat:@"Link For:\n%@",[path lastPathComponent]] message:link completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
                             if (buttonIndex == 1) {
                                 [[UIPasteboard generalPasteboard]setString:alertView.message];
                             }
-                        } cancelButtonTitle:@"OK" otherButtonTitles:@"Copy", nil]autorelease]show];
+                        } cancelButtonTitle:@"OK" otherButtonTitles:@"Copy", nil]show];
                     }
                 }];
             }
-        } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download", @"Get Link", nil]autorelease];
+        } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download", @"Get Link", nil];
         actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
         [actionSheet showInView:self.view];
     }
@@ -426,17 +426,7 @@ static NSString *CellIdentifier = @"dbcell";
 }
 
 - (void)dealloc {
-    [self setTheTableView:nil];
-    [self setHomeButton:nil];
-    [self setBackButton:nil];
-    [self setNavBar:nil];
-    [self setPull:nil];
-    [self setCurrentPathItems:nil];
-    [self setCursor:nil];
-    [self setDatabase:nil];
-    [self setUserID:nil];
     NSLog(@"DropboxBrowserViewController dealloc'd");
-    [super dealloc];
 }
 
 @end

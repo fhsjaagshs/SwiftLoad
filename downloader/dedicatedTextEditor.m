@@ -16,17 +16,16 @@
     hasEdited = NO;
     
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
-    self.navBar = [[[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
+    self.navBar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     self.navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]];
-    topItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)]autorelease];
-    topItem.rightBarButtonItem = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)]autorelease];
+    topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
+    topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
     [self.navBar pushNavigationItem:topItem animated:NO];
     [self.view addSubview:self.navBar];
     [self.view bringSubviewToFront:self.navBar];
-    [topItem release];
     
-    self.stepperFontAdjustment = [[[UIStepper alloc]initWithFrame:CGRectMake(0, 0, 94, 27)]autorelease];
+    self.stepperFontAdjustment = [[UIStepper alloc]initWithFrame:CGRectMake(0, 0, 94, 27)];
     
     /*for (UIView *view in self.stepperFontAdjustment.subviews) {
         if ([view isKindOfClass:[UIButton class]]) {
@@ -37,14 +36,14 @@
         }
     }*/
 
-    self.theTextView = [[[UITextView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44)]autorelease];
+    self.theTextView = [[UITextView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44)];
     self.theTextView.delegate = self;
     self.theTextView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-    self.toolBar = [[[ShadowedToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 44)]autorelease];
-    UIBarButtonItem *space = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil]autorelease];
-    UIBarButtonItem *hideKeyboard = [[[UIBarButtonItem alloc]initWithTitle:@"Hide" style:UIBarButtonItemStyleBordered target:self action:@selector(dismissKeyboard)]autorelease];
-    UIBarButtonItem *stepper = [[[UIBarButtonItem alloc]initWithCustomView:self.stepperFontAdjustment]autorelease];
+    self.toolBar = [[ShadowedToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
+    UIBarButtonItem *space = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    UIBarButtonItem *hideKeyboard = [[UIBarButtonItem alloc]initWithTitle:@"Hide" style:UIBarButtonItemStyleBordered target:self action:@selector(dismissKeyboard)];
+    UIBarButtonItem *stepper = [[UIBarButtonItem alloc]initWithCustomView:self.stepperFontAdjustment];
     self.toolBar.items = [NSArray arrayWithObjects:space, stepper, space, hideKeyboard, nil];
     
     [self.theTextView setInputAccessoryView:self.toolBar];
@@ -94,8 +93,8 @@
 - (void)showSaveButton {
     if (self.theTextView.isFirstResponder) {
         if (self.toolBar.items.count == 4) {
-            UIBarButtonItem *saveChanges = [[[UIBarButtonItem alloc]initWithTitle:@"Save" style:UIBarButtonItemStyleBordered target:self action:@selector(saveText)]autorelease];
-            NSMutableArray *items = [[self.toolBar.items mutableCopy]autorelease];
+            UIBarButtonItem *saveChanges = [[UIBarButtonItem alloc]initWithTitle:@"Save" style:UIBarButtonItemStyleBordered target:self action:@selector(saveText)];
+            NSMutableArray *items = [self.toolBar.items mutableCopy];
             [items insertObject:saveChanges atIndex:0];
             self.toolBar.items = items;
         }
@@ -104,7 +103,7 @@
 
 - (void)hideSaveButton {
     if (hasEdited) {
-        NSMutableArray *items = [[self.toolBar.items mutableCopy]autorelease];
+        NSMutableArray *items = [self.toolBar.items mutableCopy];
         [items removeObjectAtIndex:0];
         self.toolBar.items = items;
         hasEdited = NO;
@@ -193,7 +192,6 @@
     } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Send as SMS", @"Upload to Server", @"Upload to Dropbox", nil];
     
     [self setPopupQuery:sheet];
-    [sheet release];
     
     self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
 
@@ -209,20 +207,20 @@
     [self.view setBackgroundColor:[UIColor clearColor]];
     [kAppDelegate showHUDWithTitle:@"Loading..."];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+        @autoreleasepool {
         
-        NSString *fileContents = [self getStringFromFile];
+            NSString *fileContents = [self getStringFromFile];
+            
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                @autoreleasepool {
+                    [self.theTextView setText:fileContents];
+                    [self.theTextView setHidden:NO];
+                    [self.view setBackgroundColor:[UIColor whiteColor]];
+                    [kAppDelegate hideHUD];
+                }
+            });
         
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            NSAutoreleasePool *poolTwo = [[NSAutoreleasePool alloc]init];
-            [self.theTextView setText:fileContents];
-            [self.theTextView setHidden:NO];
-            [self.view setBackgroundColor:[UIColor whiteColor]];
-            [kAppDelegate hideHUD];
-            [poolTwo release];
-        });
-        
-        [pool release];
+        }
     });
 }
 
@@ -231,15 +229,8 @@
 }
 
 - (void)dealloc {
-    [self setPopupQuery:nil];
-    [self setStepperFontAdjustment:nil];
-    [self setFontSizeLabel:nil];
-    [self setTheTextView:nil];
-    [self setNavBar:nil];
-    [self setToolBar:nil];
     [[NSNotificationCenter defaultCenter]removeObserver:self];
     NSLog(@"%@ dealloc'd", NSStringFromClass([self class]));
-    [super dealloc];
 }
 
 @end

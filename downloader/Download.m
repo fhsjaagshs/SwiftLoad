@@ -84,8 +84,6 @@ NSString * const kBackgroundTaskDownload = @"download";
 
 - (void)dealloc {
     [self setDelegate:nil];
-    [self setFileName:nil];
-    [super dealloc];
 }
 
 @end

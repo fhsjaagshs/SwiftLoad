@@ -18,13 +18,13 @@
 }
 
 + (id)viewController {
-    UIViewController *vc = [[[[self class]alloc]init]autorelease];
+    UIViewController *vc = [[[self class]alloc]init];
     vc.view.backgroundColor = [UIColor clearColor];
     return vc;
 }
 
 + (id)viewControllerNib {
-    return [[[[self class]alloc]initWithAutoNib]autorelease];
+    return [[[self class]alloc]initWithAutoNib];
 }
 
 @end

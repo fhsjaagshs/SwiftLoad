@@ -12,7 +12,7 @@
 
 @interface ContentOffsetWatchdog : UIView
 
-@property (nonatomic, assign) id<ContentOffsetWatchdogDelegate> delegate;
+@property (nonatomic, weak) id<ContentOffsetWatchdogDelegate> delegate;
 
 - (id)initWithScrollView:(UIScrollView *)scrollView;
 + (id)watchdogWithScrollView:(UIScrollView *)scrollView;

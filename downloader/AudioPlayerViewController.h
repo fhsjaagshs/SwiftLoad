@@ -11,21 +11,21 @@
 
 @interface AudioPlayerViewController : UIViewController
 
-@property (nonatomic, retain) UILabel *secondsDisplay;
-@property (nonatomic, retain) UILabel *errorLabel;
-@property (nonatomic, retain) UILabel *secondsRemaining;
+@property (nonatomic, strong) UILabel *secondsDisplay;
+@property (nonatomic, strong) UILabel *errorLabel;
+@property (nonatomic, strong) UILabel *secondsRemaining;
 
-@property (nonatomic, retain) UIButton *pausePlay;
-@property (nonatomic, retain) UIButton *stopButton;
-@property (nonatomic, retain) UIButton *nxtTrack;
-@property (nonatomic, retain) UIButton *prevTrack;
-@property (nonatomic, retain) UITextView *infoField;
-@property (nonatomic, retain) CustomSlider *time;
-@property (nonatomic, retain) ShadowedNavBar *navBar;
+@property (nonatomic, strong) UIButton *pausePlay;
+@property (nonatomic, strong) UIButton *stopButton;
+@property (nonatomic, strong) UIButton *nxtTrack;
+@property (nonatomic, strong) UIButton *prevTrack;
+@property (nonatomic, strong) UITextView *infoField;
+@property (nonatomic, strong) CustomSlider *time;
+@property (nonatomic, strong) ShadowedNavBar *navBar;
 
-@property (nonatomic, retain) ToggleControl *loopControl;
+@property (nonatomic, strong) ToggleControl *loopControl;
 
-@property (nonatomic, retain) UIActionSheet *popupQuery;
+@property (nonatomic, strong) UIActionSheet *popupQuery;
 
 @property (nonatomic, assign) BOOL shouldStopCounter;
 @property (nonatomic, assign) BOOL notInPlayerView;

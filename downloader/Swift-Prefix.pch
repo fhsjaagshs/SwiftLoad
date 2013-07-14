@@ -58,6 +58,7 @@
 
     #import "DroppinBadassBlocks.h"
     #import "metadataRetriever.h"
+    #import "DownloadingCell.h"
     #import "MIMEUtils.h"
     #import "NetworkUtils.h"
     #import "Download.h"

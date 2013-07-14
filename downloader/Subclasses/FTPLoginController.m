@@ -11,9 +11,9 @@
 
 @interface FTPLoginController () <UIAlertViewDelegate, UITextFieldDelegate>
 
-@property (nonatomic, retain) UITextField *serverField;
-@property (nonatomic, retain) UITextField *usernameField;
-@property (nonatomic, retain) UITextField *passwordField;
+@property (nonatomic, strong) UITextField *serverField;
+@property (nonatomic, strong) UITextField *usernameField;
+@property (nonatomic, strong) UITextField *passwordField;
 @property (nonatomic, assign) BOOL urlPredefined;
 
 @end
@@ -29,7 +29,7 @@
 }
 
 - (void)setupTextViews {
-    self.serverField = [[[UITextField alloc]init]autorelease];
+    self.serverField = [[UITextField alloc]init];
     [self.serverField setKeyboardAppearance:UIKeyboardAppearanceAlert];
     [self.serverField setBorderStyle:UITextBorderStyleBezel];
     [self.serverField setBackgroundColor:[UIColor whiteColor]];
@@ -43,7 +43,7 @@
     [self.serverField setClearButtonMode:UITextFieldViewModeWhileEditing];
     self.serverField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     
-    self.usernameField = [[[UITextField alloc]init]autorelease];
+    self.usernameField = [[UITextField alloc]init];
     [self.usernameField setKeyboardAppearance:UIKeyboardAppearanceAlert];
     [self.usernameField setBorderStyle:UITextBorderStyleBezel];
     [self.usernameField setBackgroundColor:[UIColor whiteColor]];
@@ -57,7 +57,7 @@
     self.usernameField.clearButtonMode = UITextFieldViewModeWhileEditing;
     self.usernameField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     
-    self.passwordField = [[[UITextField alloc]init]autorelease];
+    self.passwordField = [[UITextField alloc]init];
     [self.passwordField setKeyboardAppearance:UIKeyboardAppearanceAlert];
     [self.passwordField setBorderStyle:UITextBorderStyleBezel];
     [self.passwordField setBackgroundColor:[UIColor whiteColor]];
@@ -112,11 +112,11 @@
         [[NSUserDefaults standardUserDefaults]setObject:self.usernameField.text forKey:_isSFTP?@"sftp.user_name":@"ftp.user_name"];
         void (^block)(NSString *username, NSString *password, NSString *url) = objc_getAssociatedObject(self, "blockCallback");
         block(self.usernameField.text, self.passwordField.text, self.serverField.text);
-        Block_release(block);
+        //Block_release(block);
     } else {
         void (^block)(NSString *username, NSString *password, NSString *url) = objc_getAssociatedObject(self, "blockCallback");
         block(@"cancel", nil, self.serverField.text);
-        Block_release(block);
+      //  Block_release(block);
     }
 }
 
@@ -221,7 +221,10 @@
     [self.usernameField becomeFirstResponder];
     
     if (self.textFieldDelegate && [self.textFieldDelegate respondsToSelector:self.didMoveOnSelector]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
         [self.textFieldDelegate performSelector:self.didMoveOnSelector withObject:self];
+#pragma clang diagnostic pop
     }
 }
 
@@ -233,11 +236,7 @@
 }
 
 - (void)dealloc {
-    [self setServerField:nil];
-    [self setUsernameField:nil];
-    [self setPasswordField:nil];
     [self setTextFieldDelegate:nil];
-    [super dealloc];
 }
 
 @end

@@ -10,14 +10,14 @@
 
 @interface FTPDownload ()
 
-@property (nonatomic, retain) SCRFTPRequest *request;
+@property (nonatomic, strong) SCRFTPRequest *request;
 
 @end
 
 @implementation FTPDownload
 
 + (FTPDownload *)downloadWithURL:(NSURL *)aURL {
-    return [[[[self class]alloc]initWithURL:aURL]autorelease];
+    return [[[self class]alloc]initWithURL:aURL];
 }
 
 - (id)initWithURL:(NSURL *)aUrl {
@@ -102,12 +102,5 @@
     self.fileName = [[request.ftpURL.absoluteString lastPathComponent]stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 }
 
-- (void)dealloc {
-    [self setUsername:nil];
-    [self setPassword:nil];
-    [self setUrl:nil];
-    [self setRequest:nil];
-    [super dealloc];
-}
 
 @end

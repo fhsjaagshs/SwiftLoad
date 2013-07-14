@@ -14,29 +14,29 @@
     [super loadView];
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     
-    self.navBar = [[[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
+    self.navBar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     self.navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    UINavigationItem *topItem = [[[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]]autorelease];
-    topItem.rightBarButtonItem = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showNoitcaSheet:)]autorelease];
-    topItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)]autorelease];
+    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]];
+    topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showNoitcaSheet:)];
+    topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
     [self.navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:self.navBar];
     [self.view bringSubviewToFront:self.navBar];
     
-    self.toolBar = [[[ShadowedToolbar alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-44, screenBounds.size.width, 44)]autorelease];
+    self.toolBar = [[ShadowedToolbar alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-44, screenBounds.size.width, 44)];
     self.toolBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     
-    UIBarButtonItem *space = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil]autorelease];
-    self.nextImg = [[[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"ArrowRight"] style:UIBarButtonItemStylePlain target:self action:@selector(nextImage)]autorelease];
+    UIBarButtonItem *space = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    self.nextImg = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"ArrowRight"] style:UIBarButtonItemStylePlain target:self action:@selector(nextImage)];
     [self.nextImg setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    self.prevImg = [[[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"ArrowLeft"] style:UIBarButtonItemStylePlain target:self action:@selector(previousImage)]autorelease];
+    self.prevImg = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"ArrowLeft"] style:UIBarButtonItemStylePlain target:self action:@selector(previousImage)];
     [self.prevImg setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     
     self.toolBar.items = [NSArray arrayWithObjects:space, self.prevImg, space, self.nextImg, space, nil];
     [self.view addSubview:self.toolBar];
     [self.view bringSubviewToFront:self.toolBar];
     
-    self.zoomingImageView = [[[ZoomingImageView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-88)]autorelease];
+    self.zoomingImageView = [[ZoomingImageView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-88)];
     self.zoomingImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
     [self.view addSubview:self.zoomingImageView];
     [self.view bringSubviewToFront:self.zoomingImageView];
@@ -56,7 +56,6 @@
     [tt setNumberOfTouchesRequired:1];
     [tt setDelegate:self];
     [self.zoomingImageView addGestureRecognizer:tt];
-    [tt release];
     
     NSString *currentDir = [kAppDelegate managerCurrentDir];
     NSArray *filesOfDir = [[[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
@@ -87,7 +86,6 @@
     [[NSUserDefaults standardUserDefaults]setInteger:numberInArray forKey:@"imageNumber"];
     
     [imageFiles removeAllObjects];
-    [imageFiles release];
 
     [self.zoomingImageView loadImage:[UIImage imageWithContentsOfFile:[kAppDelegate openFile]]];
 }
@@ -105,38 +103,37 @@
     [kAppDelegate showHUDWithTitle:@"Working..."];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+        @autoreleasepool {
 
-        NSString *file = [kAppDelegate openFile];
-        UIImage *image = [[UIImage alloc]initWithContentsOfFile:file];
-        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
-        [image release];
+            NSString *file = [kAppDelegate openFile];
+            UIImage *image = [[UIImage alloc]initWithContentsOfFile:file];
+            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
+            
+            [NSThread sleepForTimeInterval:0.5f];
+
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                @autoreleasepool {
+
+                    NSString *fileName = [file lastPathComponent];
+                    
+                    if (fileName.length > 14) {
+                        fileName = [[fileName substringToIndex:11]stringByAppendingString:@"..."];
+                    }
+                    
+              //  UIImageView *checkmark = [[UIImageView alloc]initWithImage:getCheckmarkImage()];
+                    
+                    [kAppDelegate hideHUD];
+                    
+                    [kAppDelegate showHUDWithTitle:@"Imported"];
+                    [kAppDelegate setSecondaryTitleOfVisibleHUD:fileName];
+                    [kAppDelegate setVisibleHudMode:MBProgressHUDModeCustomView];
+              //  [kAppDelegate setVisibleHudCustomView:checkmark];
+                    [kAppDelegate hideVisibleHudAfterDelay:1.0f];
+               // [checkmark release];
+                }
+            });
         
-        [NSThread sleepForTimeInterval:0.5f];
-
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            NSAutoreleasePool *poolTwo = [[NSAutoreleasePool alloc]init];
-
-            NSString *fileName = [file lastPathComponent];
-            
-            if (fileName.length > 14) {
-                fileName = [[fileName substringToIndex:11]stringByAppendingString:@"..."];
-            }
-            
-          //  UIImageView *checkmark = [[UIImageView alloc]initWithImage:getCheckmarkImage()];
-            
-            [kAppDelegate hideHUD];
-            
-            [kAppDelegate showHUDWithTitle:@"Imported"];
-            [kAppDelegate setSecondaryTitleOfVisibleHUD:fileName];
-            [kAppDelegate setVisibleHudMode:MBProgressHUDModeCustomView];
-          //  [kAppDelegate setVisibleHudCustomView:checkmark];
-            [kAppDelegate hideVisibleHudAfterDelay:1.0f];
-           // [checkmark release];
-            [poolTwo release];
-        });
-        
-        [pool release];
+        }
     });
 }
 
@@ -158,7 +155,7 @@
     NSString *file = [kAppDelegate openFile];
     NSString *fileName = [file lastPathComponent];
 
-    self.popupQuery = [[[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",fileName] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+    self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",fileName] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         
         if (buttonIndex == 0) {
             [kAppDelegate printFile:file fromView:self.view];
@@ -177,11 +174,9 @@
                 NSString *message = [[NSString alloc]initWithFormat:@"Sorry, the file \"%@\" is not an image or is corrupt.",fileName];
                 TransparentAlert *av = [[TransparentAlert alloc]initWithTitle:@"Failure Importing Image" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                 [av show];
-                [av release];
-                [message release];
             }
         }
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Print", @"Email File", @"Send Via Bluetooth", @"Upload to Server", @"Upload to Dropbox", @"Add to Photo Library", nil]autorelease];
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Print", @"Email File", @"Send Via Bluetooth", @"Upload to Server", @"Upload to Dropbox", @"Add to Photo Library", nil];
     
     self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     
@@ -214,7 +209,6 @@
     int lastImage = [imageFiles indexOfObject:[imageFiles lastObject]];
     
     [imageFiles removeAllObjects];
-    [imageFiles release];
     
     if (lastImage == newImageNumber) {
         [self.nextImg setEnabled:NO];
@@ -248,7 +242,6 @@
     NSString *newImagePath = [imageFiles objectAtIndex:newImageNumber];
     
     [imageFiles removeAllObjects];
-    [imageFiles release];
     
     if (newImageNumber == 0) {
         [self.prevImg setEnabled:NO];
@@ -299,14 +292,7 @@
 }
 
 - (void)dealloc {
-    [self setPopupQuery:nil];
-    [self setPrevImg:nil];
-    [self setNextImg:nil];
-    [self setNavBar:nil];
-    [self setToolBar:nil];
-    [self setZoomingImageView:nil];
     NSLog(@"%@ dealloc'd", NSStringFromClass([self class]));
-    [super dealloc];
 }
 
 @end

@@ -11,14 +11,14 @@
 
 @interface DropboxDownload ()
 
-@property (nonatomic, retain) NSString *path;
+@property (nonatomic, strong) NSString *path;
 
 @end
 
 @implementation DropboxDownload
 
 + (DropboxDownload *)downloadWithPath:(NSString *)path {
-    return [[[[self class]alloc]initWithPath:path]autorelease];
+    return [[[self class]alloc]initWithPath:path];
 }
 
 - (id)initWithPath:(NSString *)path {
@@ -48,9 +48,5 @@
     }];
 }
 
-- (void)dealloc {
-    [self setPath:nil];
-    [super dealloc];
-}
 
 @end

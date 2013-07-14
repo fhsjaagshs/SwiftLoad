@@ -67,7 +67,7 @@
     FMDatabase          *_db;
 }
 
-@property (atomic, retain) NSString *path;
+@property (atomic, strong) NSString *path;
 
 ///----------------------------------------------------
 /// @name Initialization, opening, and closing of queue

@@ -20,7 +20,7 @@
     
     NSURL *fileURL = [NSURL fileURLWithPath:filePath];
     
-    err = AudioFileOpenURL((CFURLRef)fileURL, kAudioFileReadPermission, 0, &fileID);
+    err = AudioFileOpenURL((__bridge CFURLRef)fileURL, kAudioFileReadPermission, 0, &fileID);
     if (err != noErr) {
         return [NSArray arrayWithObjects:@"---", @"---", @"---", nil];
     }
@@ -30,7 +30,7 @@
     
     err = AudioFileGetProperty(fileID, kAudioFilePropertyInfoDictionary, &piDataSize, &piDict);
     if (err != noErr) {
-        return [[[NSArray alloc]initWithObjects:@"---", @"---", @"---", nil]autorelease];
+        return [[NSArray alloc]initWithObjects:@"---", @"---", @"---", nil];
     }
     
     NSString *artistCF = (NSString *)CFDictionaryGetValue(piDict, CFSTR(kAFInfoDictionary_Artist));

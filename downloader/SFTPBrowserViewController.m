@@ -10,18 +10,18 @@
 
 @interface SFTPBrowserViewController () <PullToRefreshViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, retain) ShadowedTableView *theTableView;
-@property (nonatomic, retain) UIButton *backButton;
-@property (nonatomic, retain) ShadowedNavBar *navBar;
-@property (nonatomic, retain) PullToRefreshView *pull;
-@property (nonatomic, retain) NSString *currentURL;
-@property (nonatomic, retain) NSMutableArray *filedicts;
+@property (nonatomic, strong) ShadowedTableView *theTableView;
+@property (nonatomic, strong) UIButton *backButton;
+@property (nonatomic, strong) ShadowedNavBar *navBar;
+@property (nonatomic, strong) PullToRefreshView *pull;
+@property (nonatomic, strong) NSString *currentURL;
+@property (nonatomic, strong) NSMutableArray *filedicts;
 
-@property (nonatomic, retain) DLSFTPConnection *connection;
-@property (nonatomic, retain) NSString *username;
-@property (nonatomic, retain) NSString *password;
+@property (nonatomic, strong) DLSFTPConnection *connection;
+@property (nonatomic, strong) NSString *username;
+@property (nonatomic, strong) NSString *password;
 
-@property (nonatomic, retain) NSString *currentPath;
+@property (nonatomic, strong) NSString *currentPath;
 @end
 
 @implementation SFTPBrowserViewController
@@ -34,11 +34,11 @@
     
     self.view = [StyleFactory backgroundView];
     
-    self.navBar = [[[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
+    self.navBar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     self.navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    UINavigationItem *topItem = [[[UINavigationItem alloc]initWithTitle:@"/"]autorelease];
+    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"/"];
     topItem.rightBarButtonItem = nil;
-    topItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)]autorelease];
+    topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
     [self.navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:self.navBar];
     
@@ -54,7 +54,7 @@
     [bbv addSubview:_backButton];
     [_backButton setHidden:YES];
     
-    self.theTableView = [[[ShadowedTableView alloc]initWithFrame:CGRectMake(0, 88, screenBounds.size.width, screenBounds.size.height-88) style:UITableViewStylePlain]autorelease];
+    self.theTableView = [[ShadowedTableView alloc]initWithFrame:CGRectMake(0, 88, screenBounds.size.width, screenBounds.size.height-88) style:UITableViewStylePlain];
     self.theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.theTableView.backgroundColor = [UIColor clearColor];
@@ -63,7 +63,7 @@
     self.theTableView.delegate = self;
     [self.view addSubview:self.theTableView];
     
-    self.pull = [[[PullToRefreshView alloc]initWithScrollView:self.theTableView]autorelease];
+    self.pull = [[PullToRefreshView alloc]initWithScrollView:self.theTableView];
     [self.pull setDelegate:self];
     [self.theTableView addSubview:self.pull];
     
@@ -126,25 +126,25 @@
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     DLSFTPRequest *req = [[DLSFTPListFilesRequest alloc]initWithDirectoryPath:_currentPath successBlock:^(NSArray *array) {
         dispatch_sync(dispatch_get_main_queue(), ^{
-            NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+            @autoreleasepool {
             
-            for (DLSFTPFile *sftpFile in array) {
-                NSDictionary *dict = @{@"NSFileName": sftpFile.filename, NSFileType:[sftpFile.attributes objectForKey:NSFileType], NSFileSize: [sftpFile.attributes objectForKey:NSFileSize], @"NSFilePath": sftpFile.path};
-                [_filedicts addObject:dict];
-            }
+                for (DLSFTPFile *sftpFile in array) {
+                    NSDictionary *dict = @{@"NSFileName": sftpFile.filename, NSFileType:[sftpFile.attributes objectForKey:NSFileType], NSFileSize: [sftpFile.attributes objectForKey:NSFileSize], @"NSFilePath": sftpFile.path};
+                    [_filedicts addObject:dict];
+                }
         
-            [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-            [_pull finishedLoading];
-            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-            [pool release];
+                [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+                [_pull finishedLoading];
+                [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            }
         });
     } failureBlock:^(NSError *error) {
         dispatch_sync(dispatch_get_main_queue(), ^{
-            NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-            [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-            [_pull finishedLoading];
-            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-            [pool release];
+            @autoreleasepool {
+                [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+                [_pull finishedLoading];
+                [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            }
             [TransparentAlert showAlertWithTitle:@"SFTP Error" andMessage:@"There was an error loading the current directory via SFTP."]; // Improve this later
         });
     }];
@@ -163,7 +163,7 @@
 
 - (void)showInitialLoginController {
     
-    FTPLoginController *controller = [[[FTPLoginController alloc]initWithType:FTPLoginControllerTypeLogin andCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
+    FTPLoginController *controller = [[FTPLoginController alloc]initWithType:FTPLoginControllerTypeLogin andCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
         if ([username isEqualToString:@"cancel"]) {
             [self dismissModalViewControllerAnimated:YES];
         } else {
@@ -178,19 +178,19 @@
             [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
             [_connection connectWithSuccessBlock:^{
                 dispatch_sync(dispatch_get_main_queue(), ^{
-                    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-                    [self loadCurrentDirectoryFromSFTP];
-                    [pool release];
+                    @autoreleasepool {
+                        [self loadCurrentDirectoryFromSFTP];
+                    }
                 });
             } failureBlock:^(NSError *error) {
                 dispatch_sync(dispatch_get_main_queue(), ^{
-                    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-                    [TransparentAlert showAlertWithTitle:@"SFTP Login Error" andMessage:@"There was an issue logging in via SFTP."]; // improve this later
-                    [pool release];
+                    @autoreleasepool {
+                        [TransparentAlert showAlertWithTitle:@"SFTP Login Error" andMessage:@"There was an issue logging in via SFTP."]; // improve this later
+                    }
                 });
             }];
         }
-    }]autorelease];
+    }];
     controller.isSFTP = YES;
     controller.textFieldDelegate = self;
     controller.didMoveOnSelector = @selector(didMoveOn);
@@ -257,7 +257,7 @@
     SwiftLoadCell *cell = (SwiftLoadCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
-        cell = [[[SwiftLoadCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier]autorelease];
+        cell = [[SwiftLoadCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
     NSDictionary *fileDict = [_filedicts objectAtIndex:indexPath.row];
@@ -304,12 +304,12 @@
         }
     } else if ([filetype isEqualToString:(NSString *)NSFileTypeRegular]) {
         NSString *message = [NSString stringWithFormat:@"Do you wish to download \"%@\"?",filename];
-        UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+        UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             if (buttonIndex == 0) {
                 NSDictionary *creds = [SFTPCreds getCredsForURL:[NSURL URLWithString:_currentURL]];
                 [kAppDelegate downloadFileUsingSFTP:[self constructURLForFile:filename] withUsername:[creds objectForKey:@"username"] andPassword:[creds objectForKey:@"password"]];
             }
-        } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download", nil]autorelease];
+        } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download", nil];
         actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
         [actionSheet showInView:self.view];
     }
@@ -324,17 +324,5 @@
     [self loadCurrentDirectoryFromSFTP];
 }
 
-- (void)dealloc {
-    [self setTheTableView:nil];
-    [self setBackButton:nil];
-    [self setNavBar:nil];
-    [self setPull:nil];
-    [self setCurrentURL:nil];
-    [self setFiledicts:nil];
-    [self setConnection:nil];
-    [self setUsername:nil];
-    [self setPassword:nil];
-    [super dealloc];
-}
 
 @end

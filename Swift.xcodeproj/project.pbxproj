@@ -7,28 +7,28 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9BFF29FA15387C67007ED9B1 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF29F215387C67007ED9B1 /* ioapi.c */; };
-		9BFF29FB15387C67007ED9B1 /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF29F415387C67007ED9B1 /* mztools.c */; };
-		9BFF29FC15387C67007ED9B1 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF29F615387C67007ED9B1 /* unzip.c */; };
-		9BFF29FD15387C67007ED9B1 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF29F815387C67007ED9B1 /* zip.c */; };
-		9BFF2A0915387C6E007ED9B1 /* FileInZipInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0015387C6E007ED9B1 /* FileInZipInfo.m */; };
-		9BFF2A0A15387C6E007ED9B1 /* ZipException.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0215387C6E007ED9B1 /* ZipException.m */; };
-		9BFF2A0B15387C6E007ED9B1 /* ZipFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0415387C6E007ED9B1 /* ZipFile.m */; };
-		9BFF2A0C15387C6E007ED9B1 /* ZipReadStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0615387C6E007ED9B1 /* ZipReadStream.m */; };
-		9BFF2A0D15387C6E007ED9B1 /* ZipWriteStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0815387C6E007ED9B1 /* ZipWriteStream.m */; };
+		9BFF29FA15387C67007ED9B1 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF29F215387C67007ED9B1 /* ioapi.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9BFF29FB15387C67007ED9B1 /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF29F415387C67007ED9B1 /* mztools.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9BFF29FC15387C67007ED9B1 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF29F615387C67007ED9B1 /* unzip.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9BFF29FD15387C67007ED9B1 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF29F815387C67007ED9B1 /* zip.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9BFF2A0915387C6E007ED9B1 /* FileInZipInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0015387C6E007ED9B1 /* FileInZipInfo.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9BFF2A0A15387C6E007ED9B1 /* ZipException.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0215387C6E007ED9B1 /* ZipException.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9BFF2A0B15387C6E007ED9B1 /* ZipFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0415387C6E007ED9B1 /* ZipFile.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9BFF2A0C15387C6E007ED9B1 /* ZipReadStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0615387C6E007ED9B1 /* ZipReadStream.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9BFF2A0D15387C6E007ED9B1 /* ZipWriteStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0815387C6E007ED9B1 /* ZipWriteStream.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F101274617920BD2000C434E /* hamburger.png in Resources */ = {isa = PBXBuildFile; fileRef = F101274417920BD2000C434E /* hamburger.png */; };
 		F101274717920BD2000C434E /* hamburger@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F101274517920BD2000C434E /* hamburger@2x.png */; };
-		F106A4DC178865AD002D3BC8 /* DLSFTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4C7178865AD002D3BC8 /* DLSFTPConnection.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		F106A4DD178865AD002D3BC8 /* DLSFTPDownloadRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4C9178865AD002D3BC8 /* DLSFTPDownloadRequest.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		F106A4DE178865AD002D3BC8 /* DLSFTPFile.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4CB178865AD002D3BC8 /* DLSFTPFile.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		F106A4DF178865AD002D3BC8 /* DLSFTPListFilesRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4CD178865AD002D3BC8 /* DLSFTPListFilesRequest.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		F106A4E0178865AD002D3BC8 /* DLSFTPMakeDirectoryRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4CF178865AD002D3BC8 /* DLSFTPMakeDirectoryRequest.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		F106A4E1178865AD002D3BC8 /* DLSFTPMoveRenameRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4D1178865AD002D3BC8 /* DLSFTPMoveRenameRequest.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		F106A4E2178865AD002D3BC8 /* DLSFTPRemoveDirectoryRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4D3178865AD002D3BC8 /* DLSFTPRemoveDirectoryRequest.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		F106A4E3178865AD002D3BC8 /* DLSFTPRemoveFileRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4D5178865AD002D3BC8 /* DLSFTPRemoveFileRequest.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		F106A4E4178865AD002D3BC8 /* DLSFTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4D7178865AD002D3BC8 /* DLSFTPRequest.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		F106A4E5178865AD002D3BC8 /* DLSFTPUploadRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4D9178865AD002D3BC8 /* DLSFTPUploadRequest.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		F106A4E6178865AD002D3BC8 /* NSDictionary+SFTPFileAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4DB178865AD002D3BC8 /* NSDictionary+SFTPFileAttributes.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		F106A4DC178865AD002D3BC8 /* DLSFTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4C7178865AD002D3BC8 /* DLSFTPConnection.m */; };
+		F106A4DD178865AD002D3BC8 /* DLSFTPDownloadRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4C9178865AD002D3BC8 /* DLSFTPDownloadRequest.m */; };
+		F106A4DE178865AD002D3BC8 /* DLSFTPFile.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4CB178865AD002D3BC8 /* DLSFTPFile.m */; };
+		F106A4DF178865AD002D3BC8 /* DLSFTPListFilesRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4CD178865AD002D3BC8 /* DLSFTPListFilesRequest.m */; };
+		F106A4E0178865AD002D3BC8 /* DLSFTPMakeDirectoryRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4CF178865AD002D3BC8 /* DLSFTPMakeDirectoryRequest.m */; };
+		F106A4E1178865AD002D3BC8 /* DLSFTPMoveRenameRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4D1178865AD002D3BC8 /* DLSFTPMoveRenameRequest.m */; };
+		F106A4E2178865AD002D3BC8 /* DLSFTPRemoveDirectoryRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4D3178865AD002D3BC8 /* DLSFTPRemoveDirectoryRequest.m */; };
+		F106A4E3178865AD002D3BC8 /* DLSFTPRemoveFileRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4D5178865AD002D3BC8 /* DLSFTPRemoveFileRequest.m */; };
+		F106A4E4178865AD002D3BC8 /* DLSFTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4D7178865AD002D3BC8 /* DLSFTPRequest.m */; };
+		F106A4E5178865AD002D3BC8 /* DLSFTPUploadRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4D9178865AD002D3BC8 /* DLSFTPUploadRequest.m */; };
+		F106A4E6178865AD002D3BC8 /* NSDictionary+SFTPFileAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4DB178865AD002D3BC8 /* NSDictionary+SFTPFileAttributes.m */; };
 		F106A7CF178876B1002D3BC8 /* SFTPCreds.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A7CE178876B1002D3BC8 /* SFTPCreds.m */; };
 		F10CBC5A1707D6E700C82AFB /* DroppinBadassBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */; };
 		F10CBC5D17080C6600C82AFB /* DropboxBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */; };
@@ -111,31 +111,31 @@
 		F1679ACB1787B3C1001369B1 /* libssh2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1679AC81787B3C1001369B1 /* libssh2.a */; };
 		F1679ACC1787B3C1001369B1 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1679AC91787B3C1001369B1 /* libssl.a */; };
 		F168EDAF1790C61000C21D6F /* UIImage+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F168EDAE1790C61000C21D6F /* UIImage+Additions.m */; };
-		F1693BFC16DFAA08006E3739 /* DDData.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BC916DFAA08006E3739 /* DDData.m */; };
-		F1693BFD16DFAA08006E3739 /* DDNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BCB16DFAA08006E3739 /* DDNumber.m */; };
-		F1693BFE16DFAA08006E3739 /* DDRange.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BCD16DFAA08006E3739 /* DDRange.m */; };
-		F1693BFF16DFAA08006E3739 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BD016DFAA08006E3739 /* GCDAsyncSocket.m */; };
-		F1693C0016DFAA08006E3739 /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BD316DFAA08006E3739 /* DDAbstractDatabaseLogger.m */; };
-		F1693C0116DFAA08006E3739 /* DDASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BD516DFAA08006E3739 /* DDASLLogger.m */; };
-		F1693C0216DFAA08006E3739 /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BD716DFAA08006E3739 /* DDFileLogger.m */; };
-		F1693C0316DFAA08006E3739 /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BD916DFAA08006E3739 /* DDLog.m */; };
-		F1693C0416DFAA08006E3739 /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BDB16DFAA08006E3739 /* DDTTYLogger.m */; };
-		F1693C0516DFAA08006E3739 /* HTTPAuthenticationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BDD16DFAA08006E3739 /* HTTPAuthenticationRequest.m */; };
-		F1693C0616DFAA08006E3739 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BDF16DFAA08006E3739 /* HTTPConnection.m */; };
-		F1693C0716DFAA08006E3739 /* HTTPMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BE216DFAA08006E3739 /* HTTPMessage.m */; };
-		F1693C0816DFAA08006E3739 /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BE516DFAA08006E3739 /* HTTPServer.m */; };
-		F1693C0916DFAA08006E3739 /* HTTPAsyncFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BE816DFAA08006E3739 /* HTTPAsyncFileResponse.m */; };
-		F1693C0A16DFAA08006E3739 /* HTTPDataResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BEA16DFAA08006E3739 /* HTTPDataResponse.m */; };
-		F1693C0B16DFAA08006E3739 /* HTTPDynamicFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BEC16DFAA08006E3739 /* HTTPDynamicFileResponse.m */; };
-		F1693C0C16DFAA08006E3739 /* HTTPFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BEE16DFAA08006E3739 /* HTTPFileResponse.m */; };
-		F1693C0D16DFAA08006E3739 /* HTTPRedirectResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BF016DFAA08006E3739 /* HTTPRedirectResponse.m */; };
-		F1693C0E16DFAA08006E3739 /* DAVConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BF316DFAA08006E3739 /* DAVConnection.m */; };
-		F1693C0F16DFAA08006E3739 /* DAVResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BF516DFAA08006E3739 /* DAVResponse.m */; };
-		F1693C1016DFAA08006E3739 /* DELETEResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BF716DFAA08006E3739 /* DELETEResponse.m */; };
-		F1693C1116DFAA08006E3739 /* PUTResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BF916DFAA08006E3739 /* PUTResponse.m */; };
-		F1693C1216DFAA08006E3739 /* WebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BFB16DFAA08006E3739 /* WebSocket.m */; };
-		F1693C1A16DFAA92006E3739 /* BKChunkDataContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C1516DFAA92006E3739 /* BKChunkDataContainer.m */; };
-		F1693C1C16DFAA92006E3739 /* BKSessionController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C1916DFAA92006E3739 /* BKSessionController.m */; };
+		F1693BFC16DFAA08006E3739 /* DDData.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BC916DFAA08006E3739 /* DDData.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F1693BFD16DFAA08006E3739 /* DDNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BCB16DFAA08006E3739 /* DDNumber.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F1693BFE16DFAA08006E3739 /* DDRange.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BCD16DFAA08006E3739 /* DDRange.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F1693BFF16DFAA08006E3739 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BD016DFAA08006E3739 /* GCDAsyncSocket.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F1693C0016DFAA08006E3739 /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BD316DFAA08006E3739 /* DDAbstractDatabaseLogger.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F1693C0116DFAA08006E3739 /* DDASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BD516DFAA08006E3739 /* DDASLLogger.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F1693C0216DFAA08006E3739 /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BD716DFAA08006E3739 /* DDFileLogger.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F1693C0316DFAA08006E3739 /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BD916DFAA08006E3739 /* DDLog.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F1693C0416DFAA08006E3739 /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BDB16DFAA08006E3739 /* DDTTYLogger.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F1693C0516DFAA08006E3739 /* HTTPAuthenticationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BDD16DFAA08006E3739 /* HTTPAuthenticationRequest.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F1693C0616DFAA08006E3739 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BDF16DFAA08006E3739 /* HTTPConnection.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F1693C0716DFAA08006E3739 /* HTTPMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BE216DFAA08006E3739 /* HTTPMessage.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F1693C0816DFAA08006E3739 /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BE516DFAA08006E3739 /* HTTPServer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F1693C0916DFAA08006E3739 /* HTTPAsyncFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BE816DFAA08006E3739 /* HTTPAsyncFileResponse.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F1693C0A16DFAA08006E3739 /* HTTPDataResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BEA16DFAA08006E3739 /* HTTPDataResponse.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F1693C0B16DFAA08006E3739 /* HTTPDynamicFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BEC16DFAA08006E3739 /* HTTPDynamicFileResponse.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F1693C0C16DFAA08006E3739 /* HTTPFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BEE16DFAA08006E3739 /* HTTPFileResponse.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F1693C0D16DFAA08006E3739 /* HTTPRedirectResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BF016DFAA08006E3739 /* HTTPRedirectResponse.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F1693C0E16DFAA08006E3739 /* DAVConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BF316DFAA08006E3739 /* DAVConnection.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F1693C0F16DFAA08006E3739 /* DAVResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BF516DFAA08006E3739 /* DAVResponse.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F1693C1016DFAA08006E3739 /* DELETEResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BF716DFAA08006E3739 /* DELETEResponse.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F1693C1116DFAA08006E3739 /* PUTResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BF916DFAA08006E3739 /* PUTResponse.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F1693C1216DFAA08006E3739 /* WebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693BFB16DFAA08006E3739 /* WebSocket.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F1693C1A16DFAA92006E3739 /* BKChunkDataContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C1516DFAA92006E3739 /* BKChunkDataContainer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F1693C1C16DFAA92006E3739 /* BKSessionController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C1916DFAA92006E3739 /* BKSessionController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F1693C3D16DFAB6E006E3739 /* SwiftLoadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C2916DFAB6E006E3739 /* SwiftLoadCell.m */; };
 		F1693C4016DFAB6E006E3739 /* CustomSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C2F16DFAB6E006E3739 /* CustomSlider.m */; };
 		F1693C4416DFAB6E006E3739 /* ShadowedTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C3716DFAB6E006E3739 /* ShadowedTableView.m */; };
@@ -147,8 +147,8 @@
 		F1693C5C16DFAC0E006E3739 /* metadataRetriever.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C5616DFAC0E006E3739 /* metadataRetriever.m */; };
 		F1693C5D16DFAC0E006E3739 /* MIMEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C5816DFAC0E006E3739 /* MIMEUtils.m */; };
 		F1693C5E16DFAC0E006E3739 /* NetworkUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C5A16DFAC0E006E3739 /* NetworkUtils.m */; };
-		F1693C6816DFAC59006E3739 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C6116DFAC59006E3739 /* MBProgressHUD.m */; };
-		F1693C6A16DFAC59006E3739 /* SCRFTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C6516DFAC59006E3739 /* SCRFTPRequest.m */; };
+		F1693C6816DFAC59006E3739 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C6116DFAC59006E3739 /* MBProgressHUD.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F1693C6A16DFAC59006E3739 /* SCRFTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C6516DFAC59006E3739 /* SCRFTPRequest.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F1693C7316DFB9B5006E3739 /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1693C7216DFB9B5006E3739 /* DropboxSDK.framework */; };
 		F1798EAF1774177400310C37 /* ShadowedNavBar.m in Sources */ = {isa = PBXBuildFile; fileRef = F1798EAE1774177400310C37 /* ShadowedNavBar.m */; };
 		F1798EB2177417CF00310C37 /* ShadowedToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = F1798EB1177417CF00310C37 /* ShadowedToolbar.m */; };
@@ -161,7 +161,7 @@
 		F1A72948149876040049DBB6 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A72947149876040049DBB6 /* GameKit.framework */; };
 		F1A923FE140D4DDD003ACDAB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A923FD140D4DDD003ACDAB /* QuartzCore.framework */; };
 		F1B2489014E333E300C44E11 /* webDAVHelp.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B2488E14E333E200C44E11 /* webDAVHelp.m */; };
-		F1BA8C7E17728500007AAF85 /* BGProcFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BA8C7D17728500007AAF85 /* BGProcFactory.m */; };
+		F1BA8C7E17728500007AAF85 /* BGProcFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BA8C7D17728500007AAF85 /* BGProcFactory.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F1BC30CA17715DF300DAFA0A /* Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BC30C917715DF300DAFA0A /* Hack.m */; };
 		F1BE07E1176F793F00C4F038 /* Downloads.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BE07E0176F793F00C4F038 /* Downloads.m */; };
 		F1BE07E4176F7A1100C4F038 /* Download.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BE07E3176F7A1100C4F038 /* Download.m */; };
@@ -272,7 +272,7 @@
 		F118C74417713DAA00ED7384 /* ContentOffsetWatchdog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentOffsetWatchdog.m; sourceTree = "<group>"; };
 		F118C7461771425F00ED7384 /* PullToRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullToRefreshView.h; sourceTree = "<group>"; };
 		F118C7471771425F00ED7384 /* PullToRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullToRefreshView.m; sourceTree = "<group>"; };
-		F119CEF313F46DA6007D67E4 /* SwiftLoad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftLoad.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F119CEF313F46DA6007D67E4 /* Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F119CF0613F46DA6007D67E4 /* downloaderAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = downloaderAppDelegate.h; sourceTree = "<group>"; };
 		F119CF0713F46DA6007D67E4 /* downloaderAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = downloaderAppDelegate.m; sourceTree = "<group>"; };
 		F11C402D13F82F9D0077F5D1 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
@@ -466,8 +466,8 @@
 		F1847BB916E538C600006C25 /* MFMailComposeViewController+BlockExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MFMailComposeViewController+BlockExtensions.h"; sourceTree = "<group>"; };
 		F1847BBA16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MFMailComposeViewController+BlockExtensions.m"; sourceTree = "<group>"; };
 		F19BB51916E006CA0081C95B /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		F19BB51A16E006CA0081C95B /* SwiftLoad-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SwiftLoad-Info.plist"; sourceTree = "<group>"; };
-		F19BB51B16E006CA0081C95B /* SwiftLoad-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SwiftLoad-Prefix.pch"; sourceTree = "<group>"; };
+		F19BB51A16E006CA0081C95B /* Swift-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Swift-Info.plist"; sourceTree = "<group>"; };
+		F19BB51B16E006CA0081C95B /* Swift-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Swift-Prefix.pch"; sourceTree = "<group>"; };
 		F1A72947149876040049DBB6 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		F1A923FD140D4DDD003ACDAB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F1B2488D14E333E200C44E11 /* webDAVHelp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = webDAVHelp.h; sourceTree = "<group>"; };
@@ -656,7 +656,7 @@
 		F119CEF413F46DA6007D67E4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F119CEF313F46DA6007D67E4 /* SwiftLoad.app */,
+				F119CEF313F46DA6007D67E4 /* Swift.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1008,8 +1008,8 @@
 			isa = PBXGroup;
 			children = (
 				F19BB51916E006CA0081C95B /* main.m */,
-				F19BB51A16E006CA0081C95B /* SwiftLoad-Info.plist */,
-				F19BB51B16E006CA0081C95B /* SwiftLoad-Prefix.pch */,
+				F19BB51A16E006CA0081C95B /* Swift-Info.plist */,
+				F19BB51B16E006CA0081C95B /* Swift-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1108,9 +1108,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		F119CEF213F46DA6007D67E4 /* SwiftLoad */ = {
+		F119CEF213F46DA6007D67E4 /* Swift */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F119CF2B13F46DA7007D67E4 /* Build configuration list for PBXNativeTarget "SwiftLoad" */;
+			buildConfigurationList = F119CF2B13F46DA7007D67E4 /* Build configuration list for PBXNativeTarget "Swift" */;
 			buildPhases = (
 				F119CEEF13F46DA6007D67E4 /* Sources */,
 				F119CEF013F46DA6007D67E4 /* Frameworks */,
@@ -1120,9 +1120,9 @@
 			);
 			dependencies = (
 			);
-			name = SwiftLoad;
+			name = Swift;
 			productName = downloader;
-			productReference = F119CEF313F46DA6007D67E4 /* SwiftLoad.app */;
+			productReference = F119CEF313F46DA6007D67E4 /* Swift.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -1134,7 +1134,7 @@
 				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = "Nathaniel Symer";
 			};
-			buildConfigurationList = F119CEED13F46DA6007D67E4 /* Build configuration list for PBXProject "SwiftLoad" */;
+			buildConfigurationList = F119CEED13F46DA6007D67E4 /* Build configuration list for PBXProject "Swift" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -1146,7 +1146,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				F119CEF213F46DA6007D67E4 /* SwiftLoad */,
+				F119CEF213F46DA6007D67E4 /* Swift */,
 			);
 		};
 /* End PBXProject section */
@@ -1363,7 +1363,7 @@
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1376,7 +1376,7 @@
 				HEADER_SEARCH_PATHS = /usr/include/libxml2/;
 				INFOPLIST_FILE = "/Users/nathaniel/Documents/Code/SwiftLoad/downloader/SupportingFiles/SwiftLoad-Info.plist";
 				INFOPLIST_PREFIX_HEADER = "/Users/nathaniel/Documents/Code/SwiftLoad/downloader/SupportingFiles/SwiftLoad-Prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_LDFLAGS = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "AED9C462-0F79-46ED-9182-106437775B8F";
 				SDKROOT = iphoneos;
@@ -1395,6 +1395,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Corinna Wiedmer-Symer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -1402,7 +1403,7 @@
 				HEADER_SEARCH_PATHS = /usr/include/libxml2/;
 				INFOPLIST_FILE = "/Users/nathaniel/Documents/Code/SwiftLoad/downloader/SupportingFiles/SwiftLoad-Info.plist";
 				INFOPLIST_PREFIX_HEADER = "/Users/nathaniel/Documents/Code/SwiftLoad/downloader/SupportingFiles/SwiftLoad-Prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0786489C-1F43-4466-BC04-669FD8CE2E6C";
@@ -1417,6 +1418,7 @@
 		F119CF2C13F46DA7007D67E4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Corinna Wiedmer-Symer (RT2G2Q9WRP)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1425,22 +1427,22 @@
 					"\"$(SRCROOT)\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "downloader/SwiftLoad-Prefix.pch";
+				GCC_PREFIX_HEADER = "downloader/Swift-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
 					"${SRCROOT}/libs/**",
 					/usr/include/libxml2/,
 				);
-				INFOPLIST_FILE = "$(SRCROOT)/downloader/SwiftLoad-Info.plist";
+				INFOPLIST_FILE = "downloader/Swift-Info.plist";
 				INFOPLIST_PREFIX_HEADER = "/Users/nathaniel/Documents/Code/SwiftLoad/downloader/SwiftLoad-Prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/libs/\"",
 					"\"$(SRCROOT)/Libs/libssh2-for-iOS/lib\"",
 				);
-				PRODUCT_NAME = SwiftLoad;
+				PRODUCT_NAME = Swift;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "AED9C462-0F79-46ED-9182-106437775B8F";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1453,6 +1455,7 @@
 		F119CF2D13F46DA7007D67E4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Corinna Wiedmer-Symer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1461,22 +1464,22 @@
 					"\"$(SRCROOT)\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "downloader/SwiftLoad-Prefix.pch";
+				GCC_PREFIX_HEADER = "downloader/Swift-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
 					"${SRCROOT}/libs/**",
 					/usr/include/libxml2/,
 				);
-				INFOPLIST_FILE = "$(SRCROOT)/downloader/SwiftLoad-Info.plist";
+				INFOPLIST_FILE = "downloader/Swift-Info.plist";
 				INFOPLIST_PREFIX_HEADER = "/Users/nathaniel/Documents/Code/SwiftLoad/downloader/SwiftLoad-Prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/libs/\"",
 					"\"$(SRCROOT)/Libs/libssh2-for-iOS/lib\"",
 				);
-				PRODUCT_NAME = SwiftLoad;
+				PRODUCT_NAME = Swift;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0786489C-1F43-4466-BC04-669FD8CE2E6C";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1489,7 +1492,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F119CEED13F46DA6007D67E4 /* Build configuration list for PBXProject "SwiftLoad" */ = {
+		F119CEED13F46DA6007D67E4 /* Build configuration list for PBXProject "Swift" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F119CF2913F46DA7007D67E4 /* Debug */,
@@ -1498,7 +1501,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F119CF2B13F46DA7007D67E4 /* Build configuration list for PBXNativeTarget "SwiftLoad" */ = {
+		F119CF2B13F46DA7007D67E4 /* Build configuration list for PBXNativeTarget "Swift" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F119CF2C13F46DA7007D67E4 /* Debug */,

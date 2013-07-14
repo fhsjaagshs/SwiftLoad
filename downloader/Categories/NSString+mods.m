@@ -54,28 +54,28 @@
 - (NSString *)stringByAppendingPathComponent_URLSafe:(NSString *)str {
     NSURL *url = [NSURL URLWithString:self];
     NSString *newPath = [url.path stringByAppendingPathComponent:str];
-    NSURL *newURL = [[[NSURL alloc]initWithScheme:url.scheme host:url.host path:newPath]autorelease];
+    NSURL *newURL = [[NSURL alloc]initWithScheme:url.scheme host:url.host path:newPath];
     return newURL.absoluteString;
 }
 
 - (NSString *)stringByDeletingLastPathComponent_URLSafe {
     NSURL *url = [NSURL URLWithString:self];
     NSString *newPath = [url.path stringByDeletingLastPathComponent];
-    NSURL *newURL = [[[NSURL alloc]initWithScheme:url.scheme host:url.host path:newPath]autorelease];
+    NSURL *newURL = [[NSURL alloc]initWithScheme:url.scheme host:url.host path:newPath];
     return newURL.absoluteString;
 }
 
 - (NSString *)stringByDeletingPathExtension_URLSafe {
     NSURL *url = [NSURL URLWithString:self];
     NSString *newPath = [url.path stringByDeletingPathExtension];
-    NSURL *newURL = [[[NSURL alloc]initWithScheme:url.scheme host:url.host path:newPath]autorelease];
+    NSURL *newURL = [[NSURL alloc]initWithScheme:url.scheme host:url.host path:newPath];
     return newURL.absoluteString;
 }
 
 - (NSString *)stringByAppendingPathExtension_URLSafe:(NSString *)str {
     NSURL *url = [NSURL URLWithString:self];
     NSString *newPath = [url.path stringByAppendingPathExtension:str];
-    NSURL *newURL = [[[NSURL alloc]initWithScheme:url.scheme host:url.host path:newPath]autorelease];
+    NSURL *newURL = [[NSURL alloc]initWithScheme:url.scheme host:url.host path:newPath];
     return newURL.absoluteString;
 }
 

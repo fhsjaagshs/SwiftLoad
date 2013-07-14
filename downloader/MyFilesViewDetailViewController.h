@@ -10,7 +10,7 @@
 
 @interface MyFilesViewDetailViewController : UIViewController <UIWebViewDelegate>
 
-@property (nonatomic, retain) UIActionSheet *popupQuery;
-@property (nonatomic, retain) UIWebView *webView;
+@property (nonatomic, strong) UIActionSheet *popupQuery;
+@property (nonatomic, strong) UIWebView *webView;
 
 @end

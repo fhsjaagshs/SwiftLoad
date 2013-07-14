@@ -15,7 +15,7 @@
     self = [super initWithTitle:@"Create File or Directory" message:@"\n\n\n\n" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
     if (self) {
         objc_setAssociatedObject(self, "blockCallback", [block copy], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-        self.createFile = [[[UIButton alloc]initWithFrame:CGRectMake(12, 90, 126, 37)]autorelease];
+        self.createFile = [[UIButton alloc]initWithFrame:CGRectMake(12, 90, 126, 37)];
         [self.createFile setTitle:@"File" forState:UIControlStateNormal];
         [self.createFile addTarget:self action:@selector(file) forControlEvents:UIControlEventTouchUpInside];
         [self.createFile setTitleColor:[UIColor whiteColor]forState:UIControlStateNormal];
@@ -24,7 +24,7 @@
         [self.createFile setBackgroundColor:[UIColor clearColor]];
         self.createFile.titleLabel.shadowOffset = CGSizeMake(0, -1);
         
-        self.createDir = [[[UIButton alloc]initWithFrame:CGRectMake(145, 90, 126, 37)]autorelease];
+        self.createDir = [[UIButton alloc]initWithFrame:CGRectMake(145, 90, 126, 37)];
         [self.createDir setTitle:@"Directory" forState:UIControlStateNormal];
         [self.createDir addTarget:self action:@selector(dir) forControlEvents:UIControlEventTouchUpInside];
         [self.createDir setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -33,7 +33,7 @@
         [self.createDir setBackgroundColor:[UIColor clearColor]];
         self.createDir.titleLabel.shadowOffset = CGSizeMake(0, -1);
         
-        self.tv = [[[UITextField alloc]initWithFrame:CGRectMake(43, 48, 200, 31)]autorelease];
+        self.tv = [[UITextField alloc]initWithFrame:CGRectMake(43, 48, 200, 31)];
         self.tv.keyboardAppearance = UIKeyboardAppearanceAlert;
         self.tv.borderStyle = UITextBorderStyleBezel;
         self.tv.backgroundColor = [UIColor whiteColor];
@@ -102,7 +102,7 @@
 - (void)finishWithName:(NSString *)name andType:(FileCreationDialogueFileType)type {
     void (^block)(FileCreationDialogueFileType fileType, NSString *fileName) = objc_getAssociatedObject(self, "blockCallback");
 	block(type, name);
-    Block_release(block);
+  //  Block_release(block);
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {

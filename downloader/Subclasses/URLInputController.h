@@ -12,6 +12,6 @@
 
 - (id)initWithCompletionBlock:(void (^)(NSString *url))block;
 
-@property (nonatomic, retain) UITextField *tv;
+@property (nonatomic, strong) UITextField *tv;
 
 @end

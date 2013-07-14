@@ -28,8 +28,8 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 @interface downloaderAppDelegate : UIResponder <UIApplicationDelegate, BKSessionControllerDelegate, GKSessionDelegate, DBSessionDelegate, DBRestClientDelegate, MBProgressHUDDelegate, GKPeerPickerControllerDelegate, AVAudioPlayerDelegate>
 
-@property (nonatomic, retain) UIWindow *window;
-@property (nonatomic, retain) MyFilesViewController *viewController;
+@property (nonatomic, strong) UIWindow *window;
+@property (nonatomic, strong) MyFilesViewController *viewController;
 
 //@property (nonatomic, retain) DBRestClient *restClient;
 
@@ -37,7 +37,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 @property (nonatomic, assign) BOOL uiasVis;
 
 // Audio Player
-@property (nonatomic, retain) AVAudioPlayer *audioPlayer;
+@property (nonatomic, strong) AVAudioPlayer *audioPlayer;
 - (void)skipToPreviousTrack;
 - (void)skipToNextTrack;
 - (void)togglePlayPause;
@@ -45,8 +45,8 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (void)showMetadataInLockscreenWithArtist:(NSString *)artist title:(NSString *)title album:(NSString *)album;
 
 // File tracking
-@property (nonatomic, retain) NSString *openFile;
-@property (nonatomic, retain) NSString *managerCurrentDir;
+@property (nonatomic, strong) NSString *openFile;
+@property (nonatomic, strong) NSString *managerCurrentDir;
 
 // Printing
 - (void)printFile:(NSString *)file fromView:(UIView *)view;
@@ -56,12 +56,12 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (void)sendStringAsSMS:(NSString *)string fromViewController:(UIViewController *)vc;
 
 // Audio Player
-@property (nonatomic, retain) NSString *nowPlayingFile;
+@property (nonatomic, strong) NSString *nowPlayingFile;
 
 // Bluetooth File Transmission
-@property (nonatomic, retain) BKSessionController *sessionController;
-@property (nonatomic, retain) BKSessionController *sessionControllerSending;
-@property (nonatomic, retain) UIProgressView *progressView;
+@property (nonatomic, strong) BKSessionController *sessionController;
+@property (nonatomic, strong) BKSessionController *sessionControllerSending;
+@property (nonatomic, strong) UIProgressView *progressView;
 @property (nonatomic, assign) BOOL isReciever;
 
 - (void)killSession;

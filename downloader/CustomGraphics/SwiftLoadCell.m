@@ -21,7 +21,7 @@
         self.textLabel.highlightedTextColor = [UIColor blackColor];
         self.detailTextLabel.backgroundColor = [UIColor clearColor];    
         self.detailTextLabel.highlightedTextColor = [UIColor blackColor];
-        self.selectedBackgroundView = [[[UIView alloc]init]autorelease];
+        self.selectedBackgroundView = [[UIView alloc]init];
         self.selectedBackgroundView.backgroundColor = [UIColor colorWithWhite:208.0/255.0 alpha:1.0];
         self.detailTextLabel.textColor = [UIColor colorWithWhite:85.0/255.0 alpha:1.0];
         

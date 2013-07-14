@@ -26,17 +26,15 @@ UIImage * imageWithColorAndSize(UIColor *color, CGSize size) {
     return img;
 }
 
-static DownloadController *sharedInstance = nil;
-
 static NSString * const cellId = @"acellid";
 
 @interface DownloadController ()  <UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, retain) UIButton *button;
-@property (nonatomic, retain) UIActivityIndicatorView *activity;
+@property (nonatomic, strong) UIButton *button;
+@property (nonatomic, strong) UIActivityIndicatorView *activity;
 
-@property (nonatomic, retain) UITableView *theTableView;
-@property (nonatomic, retain) UIView *mainView;
+@property (nonatomic, strong) UITableView *theTableView;
+@property (nonatomic, strong) UIView *mainView;
 
 @end
 
@@ -72,7 +70,7 @@ static NSString * const cellId = @"acellid";
         
         float height = ([[Downloads sharedDownloads]numberDownloads]*45)+40;
         
-        self.mainView = [[[UIView alloc]initWithFrame:CGRectMake(padding, screenSize.height-5-height, screenSize.width-(padding*2), height)]autorelease];
+        self.mainView = [[UIView alloc]initWithFrame:CGRectMake(padding, screenSize.height-5-height, screenSize.width-(padding*2), height)];
         _mainView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.6f];
         _mainView.layer.cornerRadius = 10;
         
@@ -86,7 +84,7 @@ static NSString * const cellId = @"acellid";
         [backButton addTarget:self action:@selector(strikedownTableView) forControlEvents:UIControlEventTouchUpInside];
         [_mainView addSubview:backButton];
         
-        UILabel *dl = [[[UILabel alloc]initWithFrame:CGRectMake(100, 5, _mainView.bounds.size.width-180, 30)]autorelease];
+        UILabel *dl = [[UILabel alloc]initWithFrame:CGRectMake(100, 5, _mainView.bounds.size.width-180, 30)];
         dl.text = @"Downloads";
         dl.font = [UIFont boldSystemFontOfSize:20];
         dl.backgroundColor = [UIColor clearColor];
@@ -94,7 +92,7 @@ static NSString * const cellId = @"acellid";
         dl.textAlignment = UITextAlignmentCenter;
         [_mainView addSubview:dl];
         
-        self.theTableView = [[[UITableView alloc]initWithFrame:CGRectMake(0, 40, _mainView.bounds.size.width, ([[Downloads sharedDownloads]numberDownloads]*45))]autorelease];
+        self.theTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 40, _mainView.bounds.size.width, ([[Downloads sharedDownloads]numberDownloads]*45))];
         _theTableView.dataSource = self;
         _theTableView.delegate = self;
         _theTableView.allowsSelection = NO;
@@ -149,7 +147,7 @@ static NSString * const cellId = @"acellid";
     DownloadingCell *cell = (DownloadingCell *)[_theTableView dequeueReusableCellWithIdentifier:cellId];
     
     if (!cell) {
-        cell = [[[DownloadingCell alloc]initWithReuseIdentifier:cellId]autorelease];
+        cell = [[DownloadingCell alloc]initWithReuseIdentifier:cellId];
     }
     
     Download *download = [[Downloads sharedDownloads]downloadAtIndex:indexPath.row];
@@ -201,7 +199,7 @@ static NSString * const cellId = @"acellid";
     if (self) {
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notifReceived:) name:kDownloadChanged object:nil];
         
-        self.activity = [[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge]autorelease];
+        self.activity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         self.button = [UIButton buttonWithType:UIButtonTypeCustom];
         
         float awidth = _activity.frame.size.width;
@@ -230,48 +228,17 @@ static NSString * const cellId = @"acellid";
 //
 
 + (DownloadController *)sharedController {
-    @synchronized (self) {
-        if (sharedInstance == nil) {
-            [[self alloc]init];
-        }
-    }
-    return sharedInstance;
-}
-
-// Override stuff to make sure that the singleton is never dealloc'd. Fun.
-+ (id)allocWithZone:(NSZone *)zone {
-    @synchronized(self) {
-        if (sharedInstance == nil) {
-            sharedInstance = [super allocWithZone:zone];
-            return sharedInstance;
-        }
-    }
-    return nil;
-}
-
-- (id)retain {
-    return self;
-}
-
-- (oneway void)release {
-    // Do nothing
-}
-
-- (id)autorelease {
-    return self;
-}
-
-- (NSUInteger)retainCount {
-    return NSUIntegerMax;
+    static DownloadController *sharedController = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedController = [[DownloadController alloc]init];
+    });
+    
+    return sharedController;
 }
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter]removeObserver:self];
-    [self setButton:nil];
-    [self setActivity:nil];
-    [self setTheTableView:nil];
-    [self setMainView:nil];
-    [super dealloc];
 }
 
 @end

@@ -37,7 +37,7 @@
     
     if (source) {
         
-        err = ExtAudioFileOpenURL((CFURLRef)[NSURL fileURLWithPath:source], &sourceFile);
+        err = ExtAudioFileOpenURL((__bridge CFURLRef)[NSURL fileURLWithPath:source], &sourceFile);
         
         if (err != noErr) {
             if ([[NSFileManager defaultManager]fileExistsAtPath:destination]) {
@@ -74,7 +74,7 @@
         
         [[NSFileManager defaultManager]createFileAtPath:destination contents:nil attributes:nil];
         
-        err = ExtAudioFileCreateWithURL((CFURLRef)[NSURL fileURLWithPath:destination], kAudioFileM4AType, &destinationFormat, NULL, kAudioFileFlags_EraseFile, &destinationFile);
+        err = ExtAudioFileCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:destination], kAudioFileM4AType, &destinationFormat, NULL, kAudioFileFlags_EraseFile, &destinationFile);
         
         if (err != noErr) {
             if ([[NSFileManager defaultManager]fileExistsAtPath:destination]) {

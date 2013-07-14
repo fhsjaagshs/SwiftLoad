@@ -13,11 +13,11 @@
     BOOL hasEdited;
 }
 
-@property (nonatomic, retain) UIActionSheet *popupQuery;
-@property (nonatomic, retain) UITextView *theTextView;
-@property (nonatomic, retain) UIStepper *stepperFontAdjustment;
-@property (nonatomic, retain) UILabel *fontSizeLabel;
-@property (nonatomic, retain) ShadowedNavBar *navBar;
-@property (nonatomic, retain) ShadowedToolbar *toolBar;
+@property (nonatomic, strong) UIActionSheet *popupQuery;
+@property (nonatomic, strong) UITextView *theTextView;
+@property (nonatomic, strong) UIStepper *stepperFontAdjustment;
+@property (nonatomic, strong) UILabel *fontSizeLabel;
+@property (nonatomic, strong) ShadowedNavBar *navBar;
+@property (nonatomic, strong) ShadowedToolbar *toolBar;
 
 @end

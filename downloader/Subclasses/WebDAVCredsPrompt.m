@@ -11,15 +11,15 @@
 
 @interface WebDAVCredsPrompt () <UIAlertViewDelegate, UITextFieldDelegate>
 
-@property (nonatomic, retain) UITextField *usernameField;
-@property (nonatomic, retain) UITextField *passwordField;
+@property (nonatomic, strong) UITextField *usernameField;
+@property (nonatomic, strong) UITextField *passwordField;
 
 @end
 
 @implementation WebDAVCredsPrompt
 
 - (void)setupTextViews {
-    self.usernameField = [[[UITextField alloc]init]autorelease];
+    self.usernameField = [[UITextField alloc]init];
     _usernameField.frame = CGRectMake(13, 45, 257, 30);
     _usernameField.keyboardAppearance = UIKeyboardAppearanceAlert;
     _usernameField.borderStyle = UITextBorderStyleBezel;
@@ -34,7 +34,7 @@
     _usernameField.clearButtonMode = UITextFieldViewModeWhileEditing;
     _usernameField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     
-    self.passwordField = [[[UITextField alloc]init]autorelease];
+    self.passwordField = [[UITextField alloc]init];
     _passwordField.frame = CGRectMake(13, 85, 257, 30);
     _passwordField.keyboardAppearance = UIKeyboardAppearanceAlert;
     _passwordField.borderStyle = UITextBorderStyleBezel;
@@ -118,10 +118,7 @@
 }
 
 - (void)dealloc {
-    [self setUsernameField:nil];
-    [self setPasswordField:nil];
     [self setCredsDelegate:nil];
-    [super dealloc];
 }
 
 @end

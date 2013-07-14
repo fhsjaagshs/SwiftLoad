@@ -37,15 +37,15 @@
 
 /** Executed query */
 
-@property (atomic, retain) NSString *query;
+@property (atomic, strong) NSString *query;
 
 /** `NSMutableDictionary` mapping column names to numeric index */
 
-@property (readonly) NSMutableDictionary *columnNameToIndexMap;
+@property (weak, readonly) NSMutableDictionary *columnNameToIndexMap;
 
 /** `FMStatement` used by result set. */
 
-@property (atomic, retain) FMStatement *statement;
+@property (atomic, strong) FMStatement *statement;
 
 ///------------------------------------
 /// @name Creating and closing database

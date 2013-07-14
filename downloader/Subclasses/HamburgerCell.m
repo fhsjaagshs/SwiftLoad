@@ -27,7 +27,7 @@ static NSString *kCellIdentifierHamburger = @"hamburger";
         self.textLabel.backgroundColor = [UIColor clearColor];
         self.textLabel.highlightedTextColor = [UIColor blackColor];
         self.textLabel.textAlignment = UITextAlignmentCenter;
-        self.selectedBackgroundView = [[[UIView alloc]init]autorelease];
+        self.selectedBackgroundView = [[UIView alloc]init];
         self.selectedBackgroundView.backgroundColor = [UIColor lightGrayColor];
     }
     return self;

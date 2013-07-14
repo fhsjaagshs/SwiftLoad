@@ -28,17 +28,17 @@
     HamburgerButtonItem *hamburger = [HamburgerButtonItem itemWithView:self.view];
     [hamburger setDelegate:self];
     
-    self.navBar = [[[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
+    self.navBar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    UINavigationItem *topItem = [[[UINavigationItem alloc]initWithTitle:@"/"]autorelease];
-    _editButton = [[[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(editTable)]autorelease];
+    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"/"];
+    _editButton = [[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(editTable)];
     topItem.rightBarButtonItem = _editButton;
     topItem.leftBarButtonItem = hamburger;//[[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showOptionsSheet:)]autorelease];
     [_navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:_navBar];
     [self.view bringSubviewToFront:_navBar];
     
-    self.theTableView = [[[CoolRefreshTableView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44) style:UITableViewStylePlain]autorelease];
+    self.theTableView = [[CoolRefreshTableView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44) style:UITableViewStylePlain];
     _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     _theTableView.backgroundColor = [UIColor clearColor];
@@ -75,7 +75,7 @@
 
 - (void)hamburgerCellWasSelectedAtIndex:(int)index {
     if (index == 0) {
-        [[[[URLInputController alloc]initWithCompletionBlock:^(NSString *url) {
+        [[[URLInputController alloc]initWithCompletionBlock:^(NSString *url) {
             if (url.length > 0) {
                 if ([url hasPrefix:@"http"]) {
                     [kAppDelegate downloadFromAppDelegate:url];
@@ -83,7 +83,7 @@
                     [kAppDelegate downloadFileUsingFtp:url];
                 }
             }
-        }]autorelease]show];
+        }]show];
     } else if (index == 1) {
         webDAVViewController *advc = [webDAVViewController viewController];
         [self presentModalViewController:advc animated:YES];
@@ -117,37 +117,36 @@
     [ad showHUDWithTitle:_isCut?@"Moving Files...":@"Copying Files..."];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+        @autoreleasepool {
         
-        NSFileManager *fm = [[NSFileManager alloc]init];
-        
-        for (NSString *oldPath in _copiedList) {
-            [ad setSecondaryTitleOfVisibleHUD:[oldPath lastPathComponent]];
-            NSString *newPath = getNonConflictingFilePathForPath([location stringByAppendingPathComponent:[oldPath lastPathComponent]]);
+            NSFileManager *fm = [[NSFileManager alloc]init];
             
-            if (_isCut) {
-                [fm moveItemAtPath:oldPath toPath:newPath error:nil];
-                if ([oldPath isEqualToString:[kAppDelegate nowPlayingFile]]) {
-                    [kAppDelegate setNowPlayingFile:newPath];
+            for (NSString *oldPath in _copiedList) {
+                [ad setSecondaryTitleOfVisibleHUD:[oldPath lastPathComponent]];
+                NSString *newPath = getNonConflictingFilePathForPath([location stringByAppendingPathComponent:[oldPath lastPathComponent]]);
+                
+                if (_isCut) {
+                    [fm moveItemAtPath:oldPath toPath:newPath error:nil];
+                    if ([oldPath isEqualToString:[kAppDelegate nowPlayingFile]]) {
+                        [kAppDelegate setNowPlayingFile:newPath];
+                    }
+                } else {
+                    [fm copyItemAtPath:oldPath toPath:newPath error:nil];
                 }
-            } else {
-                [fm copyItemAtPath:oldPath toPath:newPath error:nil];
             }
+                       
+            
+            [self flushCopiedList];
+            
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                @autoreleasepool {
+                    [kAppDelegate hideHUD];
+                    [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
+                    [self updateCopyButtonState];
+                }
+            });
+        
         }
-                   
-        [fm release];
-        
-        [self flushCopiedList];
-        
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            NSAutoreleasePool *mainPool = [[NSAutoreleasePool alloc]init];
-            [kAppDelegate hideHUD];
-            [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
-            [self updateCopyButtonState];
-            [mainPool release];
-        });
-        
-        [pool release];
     });
 }
 
@@ -256,7 +255,7 @@
     [self verifyCopiedList];
     [self verifyProspectiveCopyList];
     
-    NSMutableDictionary *changedDict = [[(NSDictionary *)[notif object]mutableCopy]autorelease];
+    NSMutableDictionary *changedDict = [(NSDictionary *)[notif object]mutableCopy];
     
     NSString *old = [changedDict objectForKey:@"old"];
     NSString *new = [changedDict objectForKey:@"new"];
@@ -274,7 +273,7 @@
 }
 
 - (void)showCopyPasteController {
-    UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:nil completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:nil completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         
         NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
         
@@ -291,7 +290,7 @@
                 [self flushPerspectiveCopyList];
             }
         }*/ else if ([title isEqualToString:@"Delete"]) {
-            UIActionSheet *deleteConfirmation = [[[UIActionSheet alloc]initWithTitle:@"Are you Sure?" completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+            UIActionSheet *deleteConfirmation = [[UIActionSheet alloc]initWithTitle:@"Are you Sure?" completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
                 /*if (buttonIndex == 1) {
                     [self verifyCopiedList];
                     if (self.copiedList.count > 0) {
@@ -301,13 +300,13 @@
                 } else*/ if (buttonIndex == 0) {
                     [self deleteItemsInClipboard];
                 }
-            } cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Delete" otherButtonTitles:nil]autorelease];
+            } cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Delete" otherButtonTitles:nil];
             deleteConfirmation.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
             [deleteConfirmation showInView:self.view];
         }
         
         [self updateCopyButtonState];
-    } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil]autorelease];
+    } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil];
     
     actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     
@@ -365,80 +364,78 @@
     [[BGProcFactory sharedFactory]startProcForKey:@"inflate" andExpirationHandler:^{
         
     }];
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+    @autoreleasepool {
     
-    [UIApplication sharedApplication].idleTimerDisabled = YES;
-    ZipFile *unzipFile = [[ZipFile alloc]initWithFileName:file mode:ZipFileModeUnzip];
-    NSArray *infos = [unzipFile listFileInZipInfos];
-    
-    MBProgressHUD *HUDZ = [kAppDelegate getVisibleHUD];
-    
-    if (HUDZ.tag != 5) {
-        HUDZ = nil;
-    }
-    
-    HUDZ.progress = 0;
-    float unachivedBytes = 0;
-    float filesize = 0;
-    
-    for (FileInZipInfo *info in infos) {
-        filesize = filesize+info.length;
-    }
-    
-    for (FileInZipInfo *info in infos) {
-
-        [unzipFile locateFileInZip:info.name];
-        NSString *dirOfZip = [file stringByDeletingLastPathComponent];
-        NSString *writeLocation = [dirOfZip stringByAppendingPathComponent:info.name];
-        NSString *slash = [info.name substringFromIndex:[info.name length]-1];
+        [UIApplication sharedApplication].idleTimerDisabled = YES;
+        ZipFile *unzipFile = [[ZipFile alloc]initWithFileName:file mode:ZipFileModeUnzip];
+        NSArray *infos = [unzipFile listFileInZipInfos];
         
-        if ([slash isEqualToString:@"/"]) {
-            [[NSFileManager defaultManager]createDirectoryAtPath:writeLocation withIntermediateDirectories:NO attributes:nil error:nil];
-        } else {
-            if (![[NSFileManager defaultManager]fileExistsAtPath:writeLocation]) {
-                [[NSFileManager defaultManager]createFileAtPath:writeLocation contents:nil attributes:nil];
+        MBProgressHUD *HUDZ = [kAppDelegate getVisibleHUD];
+        
+        if (HUDZ.tag != 5) {
+            HUDZ = nil;
+        }
+        
+        HUDZ.progress = 0;
+        float unachivedBytes = 0;
+        float filesize = 0;
+        
+        for (FileInZipInfo *info in infos) {
+            filesize = filesize+info.length;
+        }
+        
+        for (FileInZipInfo *info in infos) {
+
+            [unzipFile locateFileInZip:info.name];
+            NSString *dirOfZip = [file stringByDeletingLastPathComponent];
+            NSString *writeLocation = [dirOfZip stringByAppendingPathComponent:info.name];
+            NSString *slash = [info.name substringFromIndex:[info.name length]-1];
             
-                NSFileHandle *file = [NSFileHandle fileHandleForWritingAtPath:writeLocation];
-        
-                ZipReadStream *read = [unzipFile readCurrentFileInZip];
-                
-                int buffSize = 1024*1024;
-
-                NSMutableData *buffer = [[NSMutableData alloc]initWithLength:buffSize];
-                do {
-                    [buffer setLength:buffSize];
-                    int bytesRead = [read readDataWithBuffer:buffer];
-                    if (bytesRead == 0) {
-                        break;
-                    } else {
-                        [buffer setLength:bytesRead];
-                        [file writeData:buffer];
-                        
-                        unachivedBytes = unachivedBytes+bytesRead;
-                        HUDZ.progress = (unachivedBytes/filesize);
-                    }
-                } while (YES);
-        
-                [file closeFile];
-                [read finishedReading];
-                [buffer release];
+            if ([slash isEqualToString:@"/"]) {
+                [[NSFileManager defaultManager]createDirectoryAtPath:writeLocation withIntermediateDirectories:NO attributes:nil error:nil];
             } else {
-                unachivedBytes = unachivedBytes+info.length;
-                HUDZ.progress = (unachivedBytes/filesize);
+                if (![[NSFileManager defaultManager]fileExistsAtPath:writeLocation]) {
+                    [[NSFileManager defaultManager]createFileAtPath:writeLocation contents:nil attributes:nil];
+                
+                    NSFileHandle *file = [NSFileHandle fileHandleForWritingAtPath:writeLocation];
+            
+                    ZipReadStream *read = [unzipFile readCurrentFileInZip];
+                    
+                    int buffSize = 1024*1024;
+
+                    NSMutableData *buffer = [[NSMutableData alloc]initWithLength:buffSize];
+                    do {
+                        [buffer setLength:buffSize];
+                        int bytesRead = [read readDataWithBuffer:buffer];
+                        if (bytesRead == 0) {
+                            break;
+                        } else {
+                            [buffer setLength:bytesRead];
+                            [file writeData:buffer];
+                            
+                            unachivedBytes = unachivedBytes+bytesRead;
+                            HUDZ.progress = (unachivedBytes/filesize);
+                        }
+                    } while (YES);
+            
+                    [file closeFile];
+                    [read finishedReading];
+                } else {
+                    unachivedBytes = unachivedBytes+info.length;
+                    HUDZ.progress = (unachivedBytes/filesize);
+                }
             }
         }
+        [unzipFile close];
+        
+        [kAppDelegate hideHUD];
+        
+        [UIApplication sharedApplication].idleTimerDisabled = NO;
+        [self refreshTableViewWithAnimation:UITableViewRowAnimationNone];
+        
+        [[BGProcFactory sharedFactory]endProcForKey:@"inflate"];
+    
     }
-    [unzipFile close];
-    [unzipFile release];
-    
-    [kAppDelegate hideHUD];
-    
-    [UIApplication sharedApplication].idleTimerDisabled = NO;
-    [self refreshTableViewWithAnimation:UITableViewRowAnimationNone];
-    
-    [[BGProcFactory sharedFactory]endProcForKey:@"inflate"];
-    
-    [pool release];
 }
 
 - (void)compressItems:(NSArray *)items intoZipFile:(NSString *)file {
@@ -450,190 +447,187 @@
 }
 
 - (void)compressItem:(NSString *)theFile intoZipFile:(NSString *)file {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+    @autoreleasepool {
     
-    [[BGProcFactory sharedFactory]startProcForKey:@"compress" andExpirationHandler:^{
+        [[BGProcFactory sharedFactory]startProcForKey:@"compress" andExpirationHandler:^{
+            
+        }];
         
-    }];
-    
-    [UIApplication sharedApplication].idleTimerDisabled = YES;
-    NSString *currentDir = [kAppDelegate managerCurrentDir];
-    
-    BOOL isDirMe;    
-    [[NSFileManager defaultManager]fileExistsAtPath:theFile isDirectory:&isDirMe];
-    
-    ZipFile *zipFile = [[ZipFile alloc]initWithFileName:file mode:(fileSize(file) == 0)?ZipFileModeCreate:ZipFileModeAppend];
+        [UIApplication sharedApplication].idleTimerDisabled = YES;
+        NSString *currentDir = [kAppDelegate managerCurrentDir];
+        
+        BOOL isDirMe;    
+        [[NSFileManager defaultManager]fileExistsAtPath:theFile isDirectory:&isDirMe];
+        
+        ZipFile *zipFile = [[ZipFile alloc]initWithFileName:file mode:(fileSize(file) == 0)?ZipFileModeCreate:ZipFileModeAppend];
 
-    if (!isDirMe) {
-        
-        ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:[theFile lastPathComponent] fileDate:fileDate(file)/*[NSDate dateWithTimeIntervalSinceNow:-86400.0]*/ compressionLevel:ZipCompressionLevelBest];
-        
-        NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:theFile];
-        
-        do {
-            int fsZ = fileSize(theFile);
-            int readLength = 1024*1024;
-            if (fsZ < readLength) {
-                readLength = fsZ;
-            }
-            NSData *readData = [fileHandle readDataOfLength:readLength];
-            if (readData.length == 0) {
-                break;
-            } else {
-                [stream1 writeData:readData];
-            }
-        } while (YES);
+        if (!isDirMe) {
             
-        [fileHandle closeFile];
+            ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:[theFile lastPathComponent] fileDate:fileDate(file)/*[NSDate dateWithTimeIntervalSinceNow:-86400.0]*/ compressionLevel:ZipCompressionLevelBest];
+            
+            NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:theFile];
+            
+            do {
+                int fsZ = fileSize(theFile);
+                int readLength = 1024*1024;
+                if (fsZ < readLength) {
+                    readLength = fsZ;
+                }
+                NSData *readData = [fileHandle readDataOfLength:readLength];
+                if (readData.length == 0) {
+                    break;
+                } else {
+                    [stream1 writeData:readData];
+                }
+            } while (YES);
+                
+            [fileHandle closeFile];
 
-        [stream1 finishedWriting];
-    } else {
-        
-        NSString *origDir = [theFile lastPathComponent];
-        NSString *dash = [origDir substringFromIndex:origDir.length-1];
-        
-        if (![dash isEqualToString:@"/"]) {
-            origDir = [origDir stringByAppendingString:@"/"];
-        }
-        
-        ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:origDir fileDate:fileDate(theFile)/*[NSDate dateWithTimeIntervalSinceNow:-86400.0]*/ compressionLevel:ZipCompressionLevelBest];
-        
-        NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:theFile];
-        
-        do {
-            NSData *readData = [fileHandle readDataOfLength:1024*1024];
-            if (readData.length == 0) {
-                break;
-            } else {
-                [stream1 writeData:readData];
+            [stream1 finishedWriting];
+        } else {
+            
+            NSString *origDir = [theFile lastPathComponent];
+            NSString *dash = [origDir substringFromIndex:origDir.length-1];
+            
+            if (![dash isEqualToString:@"/"]) {
+                origDir = [origDir stringByAppendingString:@"/"];
             }
-        } while (YES);
-        
-        [fileHandle closeFile];
-        
-        [stream1 finishedWriting];
-        
             
-        NSArray *array = [[NSFileManager defaultManager]contentsOfDirectoryAtPath:theFile error:nil]; // a directory being added to a zip
+            ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:origDir fileDate:fileDate(theFile)/*[NSDate dateWithTimeIntervalSinceNow:-86400.0]*/ compressionLevel:ZipCompressionLevelBest];
             
-        NSMutableArray *dirsInDir = [[NSMutableArray alloc]init];
+            NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:theFile];
             
-        for (NSString *filename in array) {
-            NSString *thing = [theFile stringByAppendingPathComponent:filename];
+            do {
+                NSData *readData = [fileHandle readDataOfLength:1024*1024];
+                if (readData.length == 0) {
+                    break;
+                } else {
+                    [stream1 writeData:readData];
+                }
+            } while (YES);
+            
+            [fileHandle closeFile];
+            
+            [stream1 finishedWriting];
+            
                 
-            BOOL shouldBeADir;
-            BOOL shouldBeADirOne = [[NSFileManager defaultManager]fileExistsAtPath:thing isDirectory:&shouldBeADir];
+            NSArray *array = [[NSFileManager defaultManager]contentsOfDirectoryAtPath:theFile error:nil]; // a directory being added to a zip
                 
-            if (shouldBeADir && shouldBeADirOne) {
-                [dirsInDir addObject:thing];
-            } else if (shouldBeADirOne) {
-                NSString *finalFN = [[theFile lastPathComponent]stringByAppendingPathComponent:filename];
-                ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:finalFN fileDate:[NSDate dateWithTimeIntervalSinceNow:-86400.0] compressionLevel:ZipCompressionLevelBest];
+            NSMutableArray *dirsInDir = [[NSMutableArray alloc]init];
                 
-                NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:thing];
-                
-                do {
-                    int fsZ = fileSize(thing);
-                    int readLength = 1024*1024;
-                    if (fsZ < readLength) {
-                        readLength = fsZ;
-                    }
-                    NSData *readData = [fileHandle readDataOfLength:readLength];
-                    if (readData.length == 0) {
-                        break;
-                    } else {
-                        [stream1 writeData:readData];
-                    }
-                } while (YES);
-                
-                [fileHandle closeFile];
-                   
-                [stream1 finishedWriting];
+            for (NSString *filename in array) {
+                NSString *thing = [theFile stringByAppendingPathComponent:filename];
+                    
+                BOOL shouldBeADir;
+                BOOL shouldBeADirOne = [[NSFileManager defaultManager]fileExistsAtPath:thing isDirectory:&shouldBeADir];
+                    
+                if (shouldBeADir && shouldBeADirOne) {
+                    [dirsInDir addObject:thing];
+                } else if (shouldBeADirOne) {
+                    NSString *finalFN = [[theFile lastPathComponent]stringByAppendingPathComponent:filename];
+                    ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:finalFN fileDate:[NSDate dateWithTimeIntervalSinceNow:-86400.0] compressionLevel:ZipCompressionLevelBest];
+                    
+                    NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:thing];
+                    
+                    do {
+                        int fsZ = fileSize(thing);
+                        int readLength = 1024*1024;
+                        if (fsZ < readLength) {
+                            readLength = fsZ;
+                        }
+                        NSData *readData = [fileHandle readDataOfLength:readLength];
+                        if (readData.length == 0) {
+                            break;
+                        } else {
+                            [stream1 writeData:readData];
+                        }
+                    } while (YES);
+                    
+                    [fileHandle closeFile];
+                       
+                    [stream1 finishedWriting];
+                }
             }
-        }
-        
-        NSMutableArray *holdingArray = [[NSMutableArray alloc]init];
-        
-        do {
+            
+            NSMutableArray *holdingArray = [[NSMutableArray alloc]init];
+            
+            do {
   
-            for (NSString *dir in dirsInDir) {
-            
-                NSString *dirRelative = [dir stringByReplacingOccurrencesOfString:[currentDir stringByAppendingString:@"/"]withString:@""]; // gets current directory in zip
-            
-                NSString *asdfasdf = [dirRelative substringFromIndex:[dirRelative length]-1];
-
-                if (![asdfasdf isEqualToString:@"/"]) {
-                    dirRelative = [dirRelative stringByAppendingString:@"/"];
-                }
-
-                ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:dirRelative fileDate:fileDate(dir)/*[NSDate dateWithTimeIntervalSinceNow:-86400.0]*/ compressionLevel:ZipCompressionLevelBest];
-                [stream1 writeData:[NSData dataWithContentsOfFile:dir]]; // okay not to chunk
-                [stream1 finishedWriting];
+                for (NSString *dir in dirsInDir) {
                 
-                NSArray *arrayZ = [[NSFileManager defaultManager]contentsOfDirectoryAtPath:dir error:nil];
-            
-                for (NSString *stringy in arrayZ) {
+                    NSString *dirRelative = [dir stringByReplacingOccurrencesOfString:[currentDir stringByAppendingString:@"/"]withString:@""]; // gets current directory in zip
+                
+                    NSString *asdfasdf = [dirRelative substringFromIndex:[dirRelative length]-1];
+
+                    if (![asdfasdf isEqualToString:@"/"]) {
+                        dirRelative = [dirRelative stringByAppendingString:@"/"];
+                    }
+
+                    ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:dirRelative fileDate:fileDate(dir)/*[NSDate dateWithTimeIntervalSinceNow:-86400.0]*/ compressionLevel:ZipCompressionLevelBest];
+                    [stream1 writeData:[NSData dataWithContentsOfFile:dir]]; // okay not to chunk
+                    [stream1 finishedWriting];
                     
-                    NSString *lolz = [dir stringByAppendingPathComponent:stringy]; // stringy used to be dir
-                    
-                    BOOL dirIsMe;
-                    [[NSFileManager defaultManager]fileExistsAtPath:lolz isDirectory:&dirIsMe];
-                    
-                    if (dirIsMe) {
-                        [holdingArray addObject:lolz];
-                    } else {
-                        NSString *nameOfFile = [dirRelative stringByAppendingPathComponent:stringy];
-                        ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:nameOfFile fileDate:/*[NSDate dateWithTimeIntervalSinceNow:-86400.0]*/fileDate(lolz) compressionLevel:ZipCompressionLevelBest];
-                    
-                        [[[NSFileManager defaultManager]attributesOfFileSystemForPath:lolz error:nil]fileCreationDate];
+                    NSArray *arrayZ = [[NSFileManager defaultManager]contentsOfDirectoryAtPath:dir error:nil];
+                
+                    for (NSString *stringy in arrayZ) {
                         
-                        NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:lolz];
+                        NSString *lolz = [dir stringByAppendingPathComponent:stringy]; // stringy used to be dir
                         
-                        do {
-                            NSData *readData = [fileHandle readDataOfLength:1024*1024];
-                            if (readData.length == 0) {
-                                break;
-                            } else {
-                                [stream1 writeData:readData];
-                            }
-                        } while (YES);
-                    
-                        [fileHandle closeFile];
-            
-                        [stream1 finishedWriting];
+                        BOOL dirIsMe;
+                        [[NSFileManager defaultManager]fileExistsAtPath:lolz isDirectory:&dirIsMe];
+                        
+                        if (dirIsMe) {
+                            [holdingArray addObject:lolz];
+                        } else {
+                            NSString *nameOfFile = [dirRelative stringByAppendingPathComponent:stringy];
+                            ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:nameOfFile fileDate:/*[NSDate dateWithTimeIntervalSinceNow:-86400.0]*/fileDate(lolz) compressionLevel:ZipCompressionLevelBest];
+                        
+                            [[[NSFileManager defaultManager]attributesOfFileSystemForPath:lolz error:nil]fileCreationDate];
+                            
+                            NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:lolz];
+                            
+                            do {
+                                NSData *readData = [fileHandle readDataOfLength:1024*1024];
+                                if (readData.length == 0) {
+                                    break;
+                                } else {
+                                    [stream1 writeData:readData];
+                                }
+                            } while (YES);
+                        
+                            [fileHandle closeFile];
+                
+                            [stream1 finishedWriting];
+                        }
                     }
                 }
-            }
-        
-            if (holdingArray.count == 0) {
-                break;
-            } else {
-                [dirsInDir removeAllObjects];
-                [dirsInDir addObjectsFromArray:holdingArray];
-                /*for (NSString *string in holdingArray) {
-                    [dirsInDir addObject:string];
-                }*/
-                [holdingArray removeAllObjects];
-            }
             
-        } while (YES);
-        [holdingArray release];
-        [dirsInDir release];
+                if (holdingArray.count == 0) {
+                    break;
+                } else {
+                    [dirsInDir removeAllObjects];
+                    [dirsInDir addObjectsFromArray:holdingArray];
+                    /*for (NSString *string in holdingArray) {
+                        [dirsInDir addObject:string];
+                    }*/
+                    [holdingArray removeAllObjects];
+                }
+                
+            } while (YES);
+        }
+        
+        [zipFile close];
+        
+        [self refreshTableViewWithAnimation:UITableViewRowAnimationNone];
+        
+        [[BGProcFactory sharedFactory]endProcForKey:@"compress"];
+        
+        [UIApplication sharedApplication].idleTimerDisabled = NO;
     }
-    
-    [zipFile close];
-    [zipFile release];
-    
-    [self refreshTableViewWithAnimation:UITableViewRowAnimationNone];
-    
-    [[BGProcFactory sharedFactory]endProcForKey:@"compress"];
-    
-    [UIApplication sharedApplication].idleTimerDisabled = NO;
-    [pool release];
 }
 
 - (void)showFileCreationDialogue {
-    [[[[FileCreationDialogue alloc]initWithCompletionBlock:^(FileCreationDialogueFileType fileType, NSString *fileName) {
+    [[[FileCreationDialogue alloc]initWithCompletionBlock:^(FileCreationDialogueFileType fileType, NSString *fileName) {
         NSString *thingToBeCreated = getNonConflictingFilePathForPath([[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:fileName]);
         if (fileType == FileCreationDialogueFileTypeFile) {
             [[NSFileManager defaultManager]createFileAtPath:thingToBeCreated contents:nil attributes:nil];
@@ -641,7 +635,7 @@
             [[NSFileManager defaultManager]createDirectoryAtPath:thingToBeCreated withIntermediateDirectories:NO attributes:nil error:nil];
         }
         [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
-    }]autorelease]show];
+    }]show];
 }
 
 - (void)recalculateDirs {
@@ -684,9 +678,9 @@
 }
 
 - (void)showOptionsSheet:(id)sender {
-    UIActionSheet *as = [[[UIActionSheet alloc]initWithTitle:nil completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+    UIActionSheet *as = [[UIActionSheet alloc]initWithTitle:nil completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         if (buttonIndex == 0) {
-            [[[[URLInputController alloc]initWithCompletionBlock:^(NSString *url) {
+            [[[URLInputController alloc]initWithCompletionBlock:^(NSString *url) {
                 if (url.length > 0) {
                     if ([url hasPrefix:@"http"]) {
                         [kAppDelegate downloadFromAppDelegate:url];
@@ -694,7 +688,7 @@
                         [kAppDelegate downloadFileUsingFtp:url];
                     }
                 }
-            }]autorelease]show];
+            }]show];
         } else if (buttonIndex == 1) {
             webDAVViewController *advc = [webDAVViewController viewController];
             [self presentModalViewController:advc animated:YES];
@@ -708,7 +702,7 @@
             SettingsView *d = [SettingsView viewController];
             [self presentModalViewController:d animated:YES];
         }
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download URL", @"WebDAV Server", @"Browse Dropbox", @"Browse SFTP", @"Settings", nil]autorelease];
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download URL", @"WebDAV Server", @"Browse Dropbox", @"Browse SFTP", @"Settings", nil];
     
     as.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     
@@ -761,7 +755,7 @@
     SwiftLoadCell *cell = (SwiftLoadCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
-        cell = [[[SwiftLoadCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier]autorelease];
+        cell = [[SwiftLoadCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
 
         DisclosureButton *button = [DisclosureButton button];
         [button addTarget:self action:@selector(accessoryButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -777,12 +771,10 @@
             UISwipeGestureRecognizer *rightSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeRight:)];
             rightSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
             [cell addGestureRecognizer:rightSwipeGestureRecognizer];
-            [rightSwipeGestureRecognizer release];
             
             UISwipeGestureRecognizer *leftSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeLeft:)];
             leftSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
             [cell addGestureRecognizer:leftSwipeGestureRecognizer];
-            [leftSwipeGestureRecognizer release];
         }
     }
 
@@ -883,7 +875,7 @@
         
         [self verifyCopiedList];
         
-        UIActionSheet *actionSheet = [[[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@",cell.textLabel.text] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+        UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@",cell.textLabel.text] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             
             NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
             
@@ -909,7 +901,7 @@
             }
             
             [self updateCopyButtonState];
-        } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil]autorelease];
+        } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil];
         
         actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
         
@@ -955,7 +947,6 @@
             
             sheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
             [sheet showInView:self.view];
-            [sheet release];
         }
     }
     
@@ -1047,21 +1038,20 @@
         [kAppDelegate setVisibleHudMode:MBProgressHUDModeIndeterminate];
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-            NSFileManager *fm = [[NSFileManager alloc]init];
-            [fm removeItemAtPath:removePath error:nil];
-            [fm release];
+            @autoreleasepool {
+                NSFileManager *fm = [[NSFileManager alloc]init];
+                [fm removeItemAtPath:removePath error:nil];
+                
+                [_filelist removeAllObjects];
+                
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    @autoreleasepool {
+                        [kAppDelegate hideHUD];
+                        [_theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
+                    }
+                });
             
-            [_filelist removeAllObjects];
-            
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                NSAutoreleasePool *mainPool = [[NSAutoreleasePool alloc]init];
-                [kAppDelegate hideHUD];
-                [_theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
-                [mainPool release];
-            });
-            
-            [pool release];
+            }
         });
         
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
@@ -1135,7 +1125,6 @@
             [self removeSideSwipeView:YES];
         }
         
-        [popupQuery release];
     } else if (number == 1) {
         
         if (![[DBSession sharedSession]isLinked]) {
@@ -1164,24 +1153,23 @@
                 [kAppDelegate setVisibleHudMode:MBProgressHUDModeIndeterminate];
                 
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-                    NSFileManager *fm = [[NSFileManager alloc]init];
-                    [fm removeItemAtPath:file error:nil];
-                    [fm release];
+                    @autoreleasepool {
+                        NSFileManager *fm = [[NSFileManager alloc]init];
+                        [fm removeItemAtPath:file error:nil];
+                        
+                        [_filelist removeAllObjects];
+                        
+                        NSIndexPath *indexPath = [_theTableView indexPathForCell:_sideSwipeCell];
+                        
+                        dispatch_sync(dispatch_get_main_queue(), ^{
+                            @autoreleasepool {
+                                [kAppDelegate hideHUD];
+                                [self removeSideSwipeView:NO];
+                                [_theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+                            }
+                        });
                     
-                    [_filelist removeAllObjects];
-                    
-                    NSIndexPath *indexPath = [_theTableView indexPathForCell:_sideSwipeCell];
-                    
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        NSAutoreleasePool *mainPool = [[NSAutoreleasePool alloc]init];
-                        [kAppDelegate hideHUD];
-                        [self removeSideSwipeView:NO];
-                        [_theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
-                        [mainPool release];
-                    });
-                    
-                    [pool release];
+                    }
                 });
 
                 
@@ -1190,14 +1178,13 @@
         } cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"I'm sure, Delete" otherButtonTitles:nil];
         popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
         [popupQuery showInView:self.view];
-        [popupQuery release];
     }
 }
 
 - (void)setupSideSwipeView {
 
     if (_sideSwipeView == nil) {
-        self.sideSwipeView = [[[UIView alloc]initWithFrame:CGRectMake(_theTableView.frame.origin.x, _theTableView.frame.origin.y, _theTableView.frame.size.width, _theTableView.rowHeight)]autorelease];
+        self.sideSwipeView = [[UIView alloc]initWithFrame:CGRectMake(_theTableView.frame.origin.x, _theTableView.frame.origin.y, _theTableView.frame.size.width, _theTableView.rowHeight)];
         _sideSwipeView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
         _sideSwipeView.backgroundColor = [UIColor darkGrayColor];
         
@@ -1206,17 +1193,14 @@
         shadowImageView.image = [[UIImage imageNamed:@"inner-shadow"]stretchableImageWithLeftCapWidth:10 topCapHeight:10];
         shadowImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         [_sideSwipeView addSubview:shadowImageView];
-        [shadowImageView release];
         
         UISwipeGestureRecognizer *rightSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeRight:)];
         rightSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
         [_sideSwipeView addGestureRecognizer:rightSwipeGestureRecognizer];
-        [rightSwipeGestureRecognizer release];
 
         UISwipeGestureRecognizer *leftSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeLeft:)];
         leftSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
         [_sideSwipeView addGestureRecognizer:leftSwipeGestureRecognizer];
-        [leftSwipeGestureRecognizer release];
     }
     
     BOOL shouldAddButtons = YES;
@@ -1396,16 +1380,8 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter]removeObserver:self];
-    [self setPerspectiveCopiedList:nil];
-    [self setCopiedList:nil];
-    [self setFilelist:nil];
-    [self setDirs:nil];
-    [self setEditButton:nil];
-    [self setTheTableView:nil];
-    [self setSideSwipeView:nil];
     [self setSideSwipeCell:nil];
     NSLog(@"%@ dealloc'd", NSStringFromClass([self class]));
-    [super dealloc];
 }
 
 @end

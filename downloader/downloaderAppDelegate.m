@@ -20,7 +20,6 @@ void fireNotification(NSString *filename) {
     notification.alertBody = [NSString stringWithFormat:@"Finished downloading: %@",filename];
     notification.soundName = UILocalNotificationDefaultSoundName;
     [[UIApplication sharedApplication]presentLocalNotificationNow:notification];
-    [notification release];
 }
 
 NSString * getResource(NSString *raw) {
@@ -116,9 +115,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
                 MPMediaItemArtwork *artwork = [[MPMediaItemArtwork alloc]initWithImage:image];
                 NSMutableDictionary *dict = [center.nowPlayingInfo mutableCopy];
                 [dict setObject:artwork forKey:MPMediaItemPropertyArtwork];
-                [artwork release];
                 center.nowPlayingInfo = dict;
-                [dict release];
             }
         }
     }];
@@ -144,7 +141,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (void)togglePlayPause {
     if (!self.audioPlayer.isPlaying) {
         [self.audioPlayer play];
-        self.nowPlayingFile = [[self.openFile copy]autorelease];
+        self.nowPlayingFile = [self.openFile copy];
         [AudioPlayerViewController notif_setPausePlayTitlePause];
         [AudioPlayerViewController notif_setShouldUpdateTime:YES];
     } else {
@@ -211,7 +208,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     NSString *loopContents = [NSString stringWithContentsOfFile:savedLoop encoding:NSUTF8StringEncoding error:nil];
     
     [self.audioPlayer stop];
-    self.audioPlayer = [[[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:newFile] error:&playingError]autorelease];
+    self.audioPlayer = [[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:newFile] error:&playingError];
     self.audioPlayer.delegate = self;
     self.audioPlayer.numberOfLoops = [loopContents isEqualToString:@"loop"]?-1:0;
     
@@ -279,7 +276,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [self showArtworkForFile:newFile];
     
     [self.audioPlayer stop];
-    self.audioPlayer = [[[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:newFile] error:&playingError]autorelease];
+    self.audioPlayer = [[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:newFile] error:&playingError];
     self.audioPlayer.delegate = self;
     self.audioPlayer.numberOfLoops = [loopContents isEqualToString:@"loop"]?-1:0;
     [AudioPlayerViewController notif_setLoop];
@@ -324,7 +321,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         [controller addAttachmentData:[NSData dataWithContentsOfFile:file] mimeType:[MIMEUtils fileMIMEType:file] fileName:[file lastPathComponent]];
         [controller setMessageBody:@"" isHTML:NO];
         [vc presentModalViewController:controller animated:YES];
-        [controller release];
     } else {
         [TransparentAlert showAlertWithTitle:@"Mail Unavailable" andMessage:@"In order to email files, you must set up an mail account in Settings."];
     }
@@ -341,7 +337,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         }];
         [controller setBody:string];
         [vc presentModalViewController:controller animated:YES];
-        [controller release];
     } else {
         [TransparentAlert showAlertWithTitle:@"SMS unavailable" andMessage:@"Please double check if you can send SMS messsages or iMessages."];
     }
@@ -353,35 +348,35 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 - (void)printFile:(NSString *)file fromView:(UIView *)view {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+        @autoreleasepool {
         
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            NSAutoreleasePool *poolTwo = [[NSAutoreleasePool alloc]init];
-            
-            UIPrintInteractionController *pic = [UIPrintInteractionController sharedPrintController];
-            UIPrintInfo *printInfo = [UIPrintInfo printInfo];
-            printInfo.outputType = UIPrintInfoOutputGeneral;
-            printInfo.jobName = [file lastPathComponent];
-            printInfo.duplex = UIPrintInfoDuplexLongEdge;
-            pic.printInfo = printInfo;
-            pic.showsPageRange = YES;
-            pic.printingItem = [NSURL fileURLWithPath:file];
-            
-            void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) = ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
-                if (error) {
-                    [TransparentAlert showAlertWithTitle:[NSString stringWithFormat:@"Error %u",error.code] andMessage:error.domain];
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                @autoreleasepool {
+                
+                    UIPrintInteractionController *pic = [UIPrintInteractionController sharedPrintController];
+                    UIPrintInfo *printInfo = [UIPrintInfo printInfo];
+                    printInfo.outputType = UIPrintInfoOutputGeneral;
+                    printInfo.jobName = [file lastPathComponent];
+                    printInfo.duplex = UIPrintInfoDuplexLongEdge;
+                    pic.printInfo = printInfo;
+                    pic.showsPageRange = YES;
+                    pic.printingItem = [NSURL fileURLWithPath:file];
+                    
+                    void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) = ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
+                        if (error) {
+                            [TransparentAlert showAlertWithTitle:[NSString stringWithFormat:@"Error %u",error.code] andMessage:error.domain];
+                        }
+                    };
+                    
+                    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+                        [pic presentFromRect:CGRectMake(716, 967, 44, 37) inView:view animated:YES completionHandler:completionHandler];
+                    } else {
+                        [pic presentAnimated:YES completionHandler:completionHandler];
+                    }
+                
                 }
-            };
-            
-            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-                [pic presentFromRect:CGRectMake(716, 967, 44, 37) inView:view animated:YES completionHandler:completionHandler];
-            } else {
-                [pic presentAnimated:YES completionHandler:completionHandler];
-            }
-            
-            [poolTwo release];
-        });
-        [pool release];
+            });
+        }
     });
 }
 
@@ -527,11 +522,11 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
                             if (error) {
                                 [TransparentAlert showAlertWithTitle:[NSString stringWithFormat:@"Error %d",error.code] andMessage:@"Upload succeeded, but there was a problem generating a sharable link."];
                             } else {
-                                [[[[TransparentAlert alloc]initWithTitle:[NSString stringWithFormat:@"Link For:\n%@",[path lastPathComponent]] message:link completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
+                                [[[TransparentAlert alloc]initWithTitle:[NSString stringWithFormat:@"Link For:\n%@",[path lastPathComponent]] message:link completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
                                     if (buttonIndex == 1) {
                                         [[UIPasteboard generalPasteboard]setString:alertView.message];
                                     }
-                                } cancelButtonTitle:@"OK" otherButtonTitles:@"Copy", nil]autorelease]show];
+                                } cancelButtonTitle:@"OK" otherButtonTitles:@"Copy", nil]show];
                             }
                         }];
                     }
@@ -581,7 +576,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     DBSession *session = [[DBSession alloc]initWithAppKey:@"ybpwmfq2z1jmaxi" appSecret:@"ua6hjow7hxx0y3a" root:kDBRootDropbox];
 	session.delegate = self;
 	[DBSession setSharedSession:session];
-    [session release];
     
     if (_sessionController.session && !_isReciever) {
         [self killSession];
@@ -590,7 +584,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         [self startSession];
     }
     
-    self.window = [[[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]]autorelease];
+    self.window = [[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]];
     self.viewController = [MyFilesViewController viewController];
     _window.rootViewController = self.viewController;
     //_window.backgroundColor = [UIColor colorWithRed:240.0f/255.0f green:248.0f/255.0f blue:1.0f alpha:1.0f];
@@ -800,7 +794,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 - (void)peerPickerController:(GKPeerPickerController *)picker didConnectPeer:(NSString *)peerID toSession:(GKSession *)session {
     
-    [[[[TransparentAlert alloc]initWithTitle:@"Connected" message:@"Would you like to send the file?" completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
+    [[[TransparentAlert alloc]initWithTitle:@"Connected" message:@"Would you like to send the file?" completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
         
         if (buttonIndex == 1) {
             [self sendBluetoothData];
@@ -808,11 +802,10 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
             [session disconnectFromAllPeers];
         }
         
-    } cancelButtonTitle:@"Cancel" otherButtonTitles:@"Send", nil]autorelease]show];
+    } cancelButtonTitle:@"Cancel" otherButtonTitles:@"Send", nil]show];
     
     BKSessionController *sTemp = [[BKSessionController alloc]initWithSession:session];
     self.sessionControllerSending = sTemp;
-    [sTemp release];
     
     self.sessionControllerSending.delegate = self;
     
@@ -857,9 +850,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (void)startSession {
     GKSession *session = [[GKSession alloc]initWithSessionID:nil displayName:nil sessionMode:GKSessionModeServer]; // change to peer
     BKSessionController *scTemp = [[BKSessionController alloc]initWithSession:session];
-    [session release];
     [self setSessionController:scTemp];
-    [scTemp release];
     self.sessionController.delegate = self;
     self.sessionController.session.delegate = self;
     self.sessionController.session.available = YES;
@@ -884,7 +875,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         [self.sessionController.session denyConnectionFromPeer:peerID];
     }
     
-    [[[[TransparentAlert alloc]initWithTitle:@"Connect?" message:@"Another person is trying to send you a file over bluetooth." completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
+    [[[TransparentAlert alloc]initWithTitle:@"Connect?" message:@"Another person is trying to send you a file over bluetooth." completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
         
         if (buttonIndex == 1) {
             [self.sessionController.session acceptConnectionFromPeer:peerID error:nil];
@@ -892,7 +883,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
             [self.sessionController.session denyConnectionFromPeer:peerID];
         }
         
-    } cancelButtonTitle:@"Cancel" otherButtonTitles:@"Connect", nil]autorelease]show];
+    } cancelButtonTitle:@"Cancel" otherButtonTitles:@"Connect", nil]show];
 }
 
 - (void)sessionControllerReceiverWillStartReceivingData:(NSNotification *)aNotification {
@@ -965,14 +956,12 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [self hideHUD];
     
     //[self showFinishedAlertForFilename:[request.ftpURL.absoluteString lastPathComponent]];
-    [request release];
 }
 
 - (void)uploadFailed:(SCRFTPRequest *)request {
     [self hideHUD];
     NSString *message = [NSString stringWithFormat:@"Your file was not uploaded because %@", [request.error localizedDescription]];
     [TransparentAlert showAlertWithTitle:@"Upload Failed" andMessage:message];
-    [request release];
 }
 
 - (void)uploadWillStart:(SCRFTPRequest *)request {
@@ -986,8 +975,8 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 - (void)showFTPUploadController {
-    FTPLoginController *controller = [[[FTPLoginController alloc]initWithType:FTPLoginControllerTypeUpload andCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
-        SCRFTPRequest *ftpRequest = [[SCRFTPRequest requestWithURL:[NSURL URLWithString:url] toUploadFile:self.openFile]retain];
+    FTPLoginController *controller = [[FTPLoginController alloc]initWithType:FTPLoginControllerTypeUpload andCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
+        SCRFTPRequest *ftpRequest = [SCRFTPRequest requestWithURL:[NSURL URLWithString:url] toUploadFile:self.openFile];
         ftpRequest.username = username;
         ftpRequest.password = password;
         ftpRequest.delegate = self;
@@ -996,21 +985,12 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         ftpRequest.willStartSelector = @selector(uploadWillStart:);
         ftpRequest.bytesWrittenSelector = @selector(uploadBytesWritten:);
         [ftpRequest startRequest];
-    }]autorelease];
+    }];
     [controller show];
 }
 
 - (void)dealloc {
-    [self setWindow:nil];
-    [self setViewController:nil];
-    [self setSessionController:nil];
-    [self setSessionControllerSending:nil];
-    [self setOpenFile:nil];
-    [self setNowPlayingFile:nil];
-    [self setProgressView:nil];
-    [self setManagerCurrentDir:nil];
     NSLog(@"%@ dealloc'd", NSStringFromClass([self class]));
-    [super dealloc];
 }
 
 @end

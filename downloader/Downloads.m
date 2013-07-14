@@ -8,11 +8,9 @@
 
 #import "Downloads.h"
 
-static Downloads *sharedInstance = nil;
-
 @interface Downloads ()
 
-@property (nonatomic, retain) NSMutableArray *downloadObjs;
+@property (nonatomic, strong) NSMutableArray *downloadObjs;
 
 @end
 
@@ -67,43 +65,14 @@ static Downloads *sharedInstance = nil;
 //
 
 + (Downloads *)sharedDownloads {
-    @synchronized (self) {
-        if (sharedInstance == nil) {
-            [[self alloc]init];
-        }
-    }
-    return sharedInstance;
+    static Downloads *shared = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        shared = [[Downloads alloc]init];
+    });
+    
+    return shared;
 }
 
-+ (id)allocWithZone:(NSZone *)zone {
-    @synchronized(self) {
-        if (sharedInstance == nil) {
-            sharedInstance = [super allocWithZone:zone];
-            return sharedInstance;
-        }
-    }
-    return nil;
-}
-
-- (id)retain {
-    return self;
-}
-
-- (oneway void)release {
-    // Do nothing
-}
-
-- (id)autorelease {
-    return self;
-}
-
-- (NSUInteger)retainCount {
-    return NSUIntegerMax;
-}
-
-- (void)dealloc {
-    [self setDownloadObjs:nil];
-    [super dealloc];
-}
 
 @end

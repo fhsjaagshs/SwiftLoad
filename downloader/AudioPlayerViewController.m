@@ -14,43 +14,43 @@
     [super loadView];
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     
-    self.navBar = [[[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
+    self.navBar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     self.navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    UINavigationItem *topItem = [[[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]]autorelease];
-    topItem.rightBarButtonItem = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)]autorelease];
-    topItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)]autorelease];
+    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]];
+    topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
+    topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
     [self.navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:self.navBar];
     [self.view bringSubviewToFront:self.navBar];
     
     BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
     
-    self.time = [[[CustomSlider alloc]initWithFrame:CGRectMake(5, iPad?357:sanitizeMesurement(219), screenBounds.size.width-10, 23)]autorelease];
+    self.time = [[CustomSlider alloc]initWithFrame:CGRectMake(5, iPad?357:sanitizeMesurement(219), screenBounds.size.width-10, 23)];
     [self.time addTarget:self action:@selector(sliderChanged) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.time];
     
-    self.prevTrack = [[[UIButton alloc]initWithFrame:iPad?CGRectMake(20, 533, 142, 51):CGRectMake(20, sanitizeMesurement(270), 72, 45)]autorelease];
+    self.prevTrack = [[UIButton alloc]initWithFrame:iPad?CGRectMake(20, 533, 142, 51):CGRectMake(20, sanitizeMesurement(270), 72, 45)];
     self.prevTrack.backgroundColor = [UIColor clearColor];
     [self.prevTrack setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
     [self.prevTrack setImage:[UIImage imageNamed:@"back_button_pressed"] forState:UIControlStateHighlighted];
     [self.prevTrack addTarget:kAppDelegate action:@selector(skipToPreviousTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.prevTrack];
     
-    self.nxtTrack = [[[UIButton alloc]initWithFrame:iPad?CGRectMake(599, 533, 142, 51):CGRectMake(228, sanitizeMesurement(270), 72, 45)]autorelease];
+    self.nxtTrack = [[UIButton alloc]initWithFrame:iPad?CGRectMake(599, 533, 142, 51):CGRectMake(228, sanitizeMesurement(270), 72, 45)];
     self.nxtTrack.backgroundColor = [UIColor clearColor];
     [self.nxtTrack setImage:[UIImage imageNamed:@"next_button"] forState:UIControlStateNormal];
     [self.nxtTrack setImage:[UIImage imageNamed:@"next_button_pressed"] forState:UIControlStateHighlighted];
     [self.nxtTrack addTarget:kAppDelegate action:@selector(skipToNextTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.nxtTrack];
     
-    self.pausePlay = [[[UIButton alloc]initWithFrame:iPad?CGRectMake(323, 533, 142, 51):CGRectMake(124, sanitizeMesurement(270), 72, 45)]autorelease];
+    self.pausePlay = [[UIButton alloc]initWithFrame:iPad?CGRectMake(323, 533, 142, 51):CGRectMake(124, sanitizeMesurement(270), 72, 45)];
     self.pausePlay.backgroundColor = [UIColor clearColor];
     [self.pausePlay setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
     [self.pausePlay setImage:[UIImage imageNamed:@"pause_selected"] forState:UIControlStateHighlighted];
     [self.pausePlay addTarget:kAppDelegate action:@selector(togglePlayPause) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.pausePlay];
     
-    self.infoField = [[[UITextView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, sanitizeMesurement(73))]autorelease];
+    self.infoField = [[UITextView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, sanitizeMesurement(73))];
     self.infoField.textAlignment = UITextAlignmentCenter;
     self.infoField.textColor = [UIColor blackColor];
     self.infoField.font = [UIFont systemFontOfSize:15];
@@ -58,7 +58,7 @@
     self.infoField.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.infoField];
     
-    self.loopControl = [[[ToggleControl alloc]initWithFrame:CGRectMake(self.view.bounds.size.width-50, self.view.bounds.size.height-50-44, 40, 40)]autorelease];
+    self.loopControl = [[ToggleControl alloc]initWithFrame:CGRectMake(self.view.bounds.size.width-50, self.view.bounds.size.height-50-44, 40, 40)];
     [_loopControl addTarget:self action:@selector(saveLoopState) forControlEvents:UIControlEventTouchUpInside];
     self.loopControl.backgroundColor = [UIColor clearColor];
     [_loopControl setImage:[UIImage imageNamed:@"loop_on"] forState:ToggleControlModeOn];
@@ -66,14 +66,14 @@
     [_loopControl setImage:[UIImage imageNamed:@"loop_pressed"] forState:ToggleControlModeIntermediate];
     [self.view addSubview:_loopControl];
     
-    self.secondsRemaining = [[[UILabel alloc]initWithFrame:iPad?CGRectMake(315, 220, 139, 35):CGRectMake(51, sanitizeMesurement(187), 112, 21)]autorelease];
+    self.secondsRemaining = [[UILabel alloc]initWithFrame:iPad?CGRectMake(315, 220, 139, 35):CGRectMake(51, sanitizeMesurement(187), 112, 21)];
     self.secondsRemaining.text = @"Time Elapsed:";
     self.secondsRemaining.backgroundColor = [UIColor clearColor];
     self.secondsRemaining.textColor = [UIColor blackColor];
     self.secondsRemaining.font = iPad?[UIFont boldSystemFontOfSize:20]:[UIFont systemFontOfSize:17];
     [self.view addSubview:self.secondsRemaining];
     
-    self.secondsDisplay = [[[UILabel alloc]initWithFrame:iPad?CGRectMake(0, 263, 768, 55):CGRectMake(164, sanitizeMesurement(185), 136, 27)]autorelease];
+    self.secondsDisplay = [[UILabel alloc]initWithFrame:iPad?CGRectMake(0, 263, 768, 55):CGRectMake(164, sanitizeMesurement(185), 136, 27)];
     self.secondsDisplay.font = [UIFont boldSystemFontOfSize:iPad?39:24];
     self.secondsDisplay.textColor = [UIColor blackColor];
     self.secondsDisplay.backgroundColor = [UIColor clearColor];
@@ -81,17 +81,17 @@
     self.secondsDisplay.text = @"0:00";
     [self.view addSubview:self.secondsDisplay];
     
-    self.errorLabel = [[[UILabel alloc]initWithFrame:iPad?CGRectMake(14, 311, 727, 113):CGRectMake(4, sanitizeMesurement(149), 313, 57)]autorelease];
+    self.errorLabel = [[UILabel alloc]initWithFrame:iPad?CGRectMake(14, 311, 727, 113):CGRectMake(4, sanitizeMesurement(149), 313, 57)];
     self.errorLabel.text = @"Error Playing Audio";
     self.errorLabel.backgroundColor = [UIColor clearColor];
     self.errorLabel.textColor = [UIColor blackColor];
     self.errorLabel.font = [UIFont boldSystemFontOfSize:iPad?72:33];
     [self.view addSubview:self.errorLabel];
     
-    UIToolbar *toolBar = [[[ShadowedToolbar alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-44, screenBounds.size.width, 44)]autorelease];
+    UIToolbar *toolBar = [[ShadowedToolbar alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-44, screenBounds.size.width, 44)];
     toolBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     
-    MPVolumeView *volView = [[[MPVolumeView alloc]initWithFrame:CGRectMake(0, 12, screenBounds.size.width-25, 20)]autorelease];
+    MPVolumeView *volView = [[MPVolumeView alloc]initWithFrame:CGRectMake(0, 12, screenBounds.size.width-25, 20)];
     volView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     
     for (UIView *view in volView.subviews) {
@@ -105,7 +105,7 @@
         }
     }
     
-    UIBarButtonItem *volume = [[[UIBarButtonItem alloc]initWithCustomView:volView]autorelease];
+    UIBarButtonItem *volume = [[UIBarButtonItem alloc]initWithCustomView:volView];
     
     toolBar.items = [NSArray arrayWithObjects:volume, nil];
     [self.view addSubview:toolBar];
@@ -136,7 +136,7 @@
     
     if (![file isEqualToString:ad.nowPlayingFile]) {
         [ad.audioPlayer stop];
-        ad.audioPlayer = [[[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:file] error:&playingError]autorelease];
+        ad.audioPlayer = [[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:file] error:&playingError];
         [ad.audioPlayer setDelegate:ad];
     }
 
@@ -201,31 +201,31 @@
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+        @autoreleasepool {
         
-        NSError *error = [AudioConverter convertAudioFileAtPath:ad.openFile progressObject:[ad getVisibleHUD]];
-        
-        [[BGProcFactory sharedFactory]endProcForKey:@"audio"];
-        
-        dispatch_sync(dispatch_get_main_queue(), ^{
+            NSError *error = [AudioConverter convertAudioFileAtPath:ad.openFile progressObject:[ad getVisibleHUD]];
             
-            NSAutoreleasePool *poolTwo = [[NSAutoreleasePool alloc]init];
+            [[BGProcFactory sharedFactory]endProcForKey:@"audio"];
             
-            [ad hideHUD];
-            
-            if (error) {
-                [TransparentAlert showAlertWithTitle:@"Conversion Error" andMessage:@"SwiftLoad could not convert the desired audio file."];
-            } else {
-             //   UIImageView *checkmark = [[[UIImageView alloc]initWithImage:getCheckmarkImage()]autorelease];
-                [ad showHUDWithTitle:@"Complete"];
-                [ad setSecondaryTitleOfVisibleHUD:fileName];
-                [ad setVisibleHudMode:MBProgressHUDModeCustomView];
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                
+                @autoreleasepool {
+                
+                    [ad hideHUD];
+                    
+                    if (error) {
+                        [TransparentAlert showAlertWithTitle:@"Conversion Error" andMessage:@"SwiftLoad could not convert the desired audio file."];
+                    } else {
+                     //   UIImageView *checkmark = [[[UIImageView alloc]initWithImage:getCheckmarkImage()]autorelease];
+                        [ad showHUDWithTitle:@"Complete"];
+                        [ad setSecondaryTitleOfVisibleHUD:fileName];
+                        [ad setVisibleHudMode:MBProgressHUDModeCustomView];
 //              /  [ad setVisibleHudCustomView:checkmark];
-                [ad hideVisibleHudAfterDelay:1.5];
-            }
-            [poolTwo release];
-        });
-        [pool release];
+                        [ad hideVisibleHudAfterDelay:1.5];
+                    }
+                }
+            });
+        }
     });
 }
 
@@ -285,18 +285,18 @@
     }
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
-        while (!self.shouldStopCounter) {
-            [NSThread sleepForTimeInterval:0.1f];
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                NSAutoreleasePool *poolTwo = [[NSAutoreleasePool alloc]init];
-                self.isGoing = YES;
-                [self updateTime];
-                [poolTwo release];
-            });
+        @autoreleasepool {
+            while (!self.shouldStopCounter) {
+                [NSThread sleepForTimeInterval:0.1f];
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    @autoreleasepool {
+                        self.isGoing = YES;
+                        [self updateTime];
+                    }
+                });
+            }
+            self.isGoing = NO;
         }
-        self.isGoing = NO;
-        [pool release];
     });
 }
 
@@ -481,19 +481,7 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter]removeObserver:self];
-    [self setPopupQuery:nil];
-    [self setPrevTrack:nil];
-    [self setNxtTrack:nil];
-    [self setSecondsRemaining:nil];
-    [self setStopButton:nil];
-    [self setErrorLabel:nil];
-    [self setLoopControl:nil];
-    [self setPausePlay:nil];
-    [self setTime:nil];
-    [self setSecondsDisplay:nil];
-    [self setInfoField:nil];
     NSLog(@"%@ dealloc'd", NSStringFromClass([self class]));
-    [super dealloc];
 }
 
 @end

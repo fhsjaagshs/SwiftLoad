@@ -16,13 +16,11 @@
     UINavigationBar *bar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]];
-    topItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)]autorelease];
-    topItem.rightBarButtonItem = [[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)]autorelease];
+    topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
+    topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
     [bar pushNavigationItem:topItem animated:NO];
     [self.view addSubview:bar];
     [self.view bringSubviewToFront:bar];
-    [bar release];
-    [topItem release];
     
     shouldUnpauseAudioPlayer = NO;
     
@@ -36,7 +34,6 @@
     
     MPMoviePlayerController *mpc = [[MPMoviePlayerController alloc]initWithContentURL:theMovieURL];
     [self setMoviePlayer:mpc];
-    [mpc release];
     
     self.moviePlayer.scalingMode = MPMovieScalingModeAspectFit;
     self.moviePlayer.repeatMode = MPMovieRepeatModeNone;
@@ -84,7 +81,7 @@
         return;
     }
     
-    self.popupQuery = [[[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",[[kAppDelegate openFile]lastPathComponent]] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+    self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",[[kAppDelegate openFile]lastPathComponent]] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         if (buttonIndex == 0) {
             [kAppDelegate sendFileInEmail:[kAppDelegate openFile] fromViewController:self];
         } else if (buttonIndex == 1) {
@@ -94,7 +91,7 @@
         } else if (buttonIndex == 3) {
             [self uploadToDropbox];
         }
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Upload to Server", @"Upload to Dropbox", nil]autorelease];
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Upload to Server", @"Upload to Dropbox", nil];
     
     self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
 
@@ -119,11 +116,8 @@
 }
 
 - (void)dealloc {
-    [self setPopupQuery:nil];
-    [self setMoviePlayer:nil];
     [[NSNotificationCenter defaultCenter]removeObserver:self];
     NSLog(@"%@ dealloc'd", NSStringFromClass([self class]));
-    [super dealloc];
 }
 
 @end

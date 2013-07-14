@@ -15,7 +15,7 @@
 - (void)reset;
 
 @property (nonatomic, assign, setter = setProgress:) float progress;
-@property (nonatomic, retain) UILabel *titleLabel;
+@property (nonatomic, strong) UILabel *titleLabel;
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
 

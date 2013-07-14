@@ -13,9 +13,9 @@
 
 + (HamburgerView *)view;
 
-@property (nonatomic, assign) id<HamburdgerViewDelegate> delegate;
-@property (nonatomic, retain) UITableView *theTableView;
-@property (nonatomic, assign) HamburgerButtonItem *item;
+@property (nonatomic, weak) id<HamburdgerViewDelegate> delegate;
+@property (nonatomic, strong) UITableView *theTableView;
+@property (nonatomic, weak) HamburgerButtonItem *item;
 
 @end
 
@@ -23,14 +23,14 @@
 
 @property (nonatomic, strong) HamburgerView *hamburgerView;
 @property (nonatomic, strong) UIButton *hideButton;
-@property (nonatomic, assign) UIView *viewToMove;
+@property (nonatomic, weak) UIView *viewToMove;
 
 @end
 
 @implementation HamburgerButtonItem
 
 + (HamburgerButtonItem *)itemWithView:(UIView *)viewToMove {
-    HamburgerButtonItem *item = [[[HamburgerButtonItem alloc]initWithImage:[UIImage imageNamed:@"hamburger"] style:UIBarButtonItemStyleBordered target:nil action:nil]autorelease];
+    HamburgerButtonItem *item = [[HamburgerButtonItem alloc]initWithImage:[UIImage imageNamed:@"hamburger"] style:UIBarButtonItemStyleBordered target:nil action:nil];
     [item setTarget:item];
     [item setAction:@selector(toggleState)];
     item.hamburgerView = [HamburgerView view];
@@ -88,9 +88,6 @@
 
 - (void)dealloc {
     [self setViewToMove:nil];
-    [self setHideButton:nil];
-    [self setHamburgerView:nil];
-    [super dealloc];
 }
 
 @end
@@ -98,7 +95,7 @@
 @implementation HamburgerView
 
 + (HamburgerView *)view {
-    return [[[[self class]alloc]init]autorelease];
+    return [[[self class]alloc]init];
 }
 
 - (id)init {
@@ -166,7 +163,7 @@
  }*/
 
 - (void)setup {
-    self.theTableView = [[[UITableView alloc]initWithFrame:self.bounds style:UITableViewStylePlain]autorelease];
+    self.theTableView = [[UITableView alloc]initWithFrame:self.bounds style:UITableViewStylePlain];
     _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     _theTableView.backgroundColor = [UIColor clearColor];
@@ -184,8 +181,6 @@
 - (void)dealloc {
     [self setDelegate:nil];
     [self setItem:nil];
-    [self setTheTableView:nil];
-    [super dealloc];
 }
 
 @end

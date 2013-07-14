@@ -12,7 +12,7 @@
 
 @interface WebDAVCredsPrompt : TransparentAlert
 
-@property (nonatomic, assign) id<WebDAVCredsPromptCredsDelegate> credsDelegate;
+@property (nonatomic, weak) id<WebDAVCredsPromptCredsDelegate> credsDelegate;
 
 - (id)initWithCredsDelegate:(id<WebDAVCredsPromptCredsDelegate>)delegate;
 

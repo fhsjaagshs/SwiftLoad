@@ -14,6 +14,6 @@
 - (void)resetAfterRotate;
 - (void)loadImage:(UIImage *)image;
 
-@property (nonatomic, retain) UIImageView *theImageView;
+@property (nonatomic, strong) UIImageView *theImageView;
 
 @end

@@ -24,8 +24,7 @@
 
 - (void)setText:(NSString *)text {
     if (_text != text) {
-        [_text release];
-        _text = [text retain];
+        _text = text;
         _textLabel.text = text;
     }
 }
@@ -65,8 +64,8 @@
         self.userInteractionEnabled = NO;
         self.layer.cornerRadius = 10;
         self.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
-        self.textLabel = [[[UILabel alloc]initWithFrame:CGRectMake(0, 25, self.frame.size.width, 20)]autorelease];
-        self.wfpView = [[[WhiteProgressView alloc]initWithFrame:CGRectMake(10, 5, self.frame.size.width-20, 20)]autorelease];
+        self.textLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 25, self.frame.size.width, 20)];
+        self.wfpView = [[WhiteProgressView alloc]initWithFrame:CGRectMake(10, 5, self.frame.size.width-20, 20)];
         _textLabel.backgroundColor = [UIColor clearColor];
         _textLabel.textAlignment = UITextAlignmentCenter;
         _textLabel.textColor = [UIColor whiteColor];
@@ -82,7 +81,7 @@
     HUDProgressView *pview = (HUDProgressView *)[window viewWithTag:tag];
     
     if (!pview) {
-        pview = [[[[self class]alloc]init]autorelease];
+        pview = [[[self class]alloc]init];
         pview.tag = tag;
         pview.frame = CGRectMake(10, [UIScreen mainScreen].bounds.size.height-60-(60*tag), [UIScreen mainScreen].applicationFrame.size.width-20, 50);
     }
@@ -101,7 +100,7 @@
 		}
 	}
     
-    return [[[[self class]alloc]init]autorelease];
+    return [[[self class]alloc]init];
 }
 
 @end

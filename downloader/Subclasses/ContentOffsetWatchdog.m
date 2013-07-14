@@ -10,14 +10,14 @@
 
 @interface ContentOffsetWatchdog () <UIScrollViewDelegate>
 
-@property (nonatomic, retain) UIScrollView *scrollView;
+@property (nonatomic, strong) UIScrollView *scrollView;
 
 @end
 
 @implementation ContentOffsetWatchdog
 
 + (id)watchdogWithScrollView:(UIScrollView *)scrollView {
-    return [[[[self class]alloc]initWithScrollView:scrollView]autorelease];
+    return [[[self class]alloc]initWithScrollView:scrollView];
 }
 
 - (id)initWithScrollView:(UIScrollView *)scroll {
@@ -48,9 +48,7 @@
 - (void)dealloc {
     [_scrollView removeFromSuperview];
 	[_scrollView removeObserver:self forKeyPath:@"contentOffset"];
-    [self setScrollView:nil];
     [self setDelegate:nil];
-    [super dealloc];
 }
 
 @end

@@ -14,11 +14,11 @@ extern NSString * const kDownloadChanged;
 
 @interface Download : NSObject
 
-@property (nonatomic, retain) NSString *fileName;
+@property (nonatomic, strong) NSString *fileName;
 @property (nonatomic, assign) BOOL complete;
 @property (nonatomic, assign) BOOL succeeded;
 
-@property (nonatomic, assign) DownloadingCell *delegate;
+@property (nonatomic, weak) DownloadingCell *delegate;
 
 - (void)stop;
 - (void)start;

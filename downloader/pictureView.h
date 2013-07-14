@@ -11,11 +11,11 @@
 
 @interface pictureView : UIViewController <UIGestureRecognizerDelegate>
 
-@property (nonatomic, retain) UIActionSheet *popupQuery;
-@property (nonatomic, retain) ZoomingImageView *zoomingImageView;
-@property (nonatomic, retain) UIBarButtonItem *prevImg;
-@property (nonatomic, retain) UIBarButtonItem *nextImg;
-@property (nonatomic, retain) ShadowedNavBar *navBar;
-@property (nonatomic, retain) ShadowedToolbar *toolBar;
+@property (nonatomic, strong) UIActionSheet *popupQuery;
+@property (nonatomic, strong) ZoomingImageView *zoomingImageView;
+@property (nonatomic, strong) UIBarButtonItem *prevImg;
+@property (nonatomic, strong) UIBarButtonItem *nextImg;
+@property (nonatomic, strong) ShadowedNavBar *navBar;
+@property (nonatomic, strong) ShadowedToolbar *toolBar;
 
 @end

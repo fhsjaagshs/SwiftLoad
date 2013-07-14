@@ -10,19 +10,19 @@
 
 @interface HTTPDownload ()
 
-@property (nonatomic, retain) NSURLConnection *connection;
+@property (nonatomic, strong) NSURLConnection *connection;
 @property (nonatomic, assign) float downloadedBytes;
 @property (nonatomic, assign) float fileSize;
-@property (nonatomic, retain) NSString *filePath;
-@property (nonatomic, retain) NSFileHandle *handle;
-@property (nonatomic, retain) NSMutableData *buffer;
+@property (nonatomic, strong) NSString *filePath;
+@property (nonatomic, strong) NSFileHandle *handle;
+@property (nonatomic, strong) NSMutableData *buffer;
 
 @end
 
 @implementation HTTPDownload
 
 + (HTTPDownload *)downloadWithURL:(NSURL *)aURL {
-    return [[[[self class]alloc]initWithURL:aURL]autorelease];
+    return [[[self class]alloc]initWithURL:aURL];
 }
 
 - (id)initWithURL:(NSURL *)aUrl {
@@ -63,7 +63,7 @@
     [theRequest setHTTPMethod:@"GET"];
 
     if ([NSURLConnection canHandleRequest:theRequest]) {
-        self.connection = [[[NSURLConnection alloc]initWithRequest:theRequest delegate:self startImmediately:NO]autorelease];
+        self.connection = [[NSURLConnection alloc]initWithRequest:theRequest delegate:self startImmediately:NO];
         [_connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
         [_connection start];
     } else {
@@ -116,13 +116,5 @@
     }
 }
 
-- (void)dealloc {
-    [self setHandle:nil];
-    [self setBuffer:nil];
-    [self setFilePath:nil];
-    [self setUrl:nil];
-    [self setConnection:nil];
-    [super dealloc];
-}
 
 @end

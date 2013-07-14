@@ -41,17 +41,16 @@
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     self.view = [StyleFactory backgroundView];
     
-    UINavigationBar *navBar = [[[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)]autorelease];
+    UINavigationBar *navBar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"WebDAV Server"];
-    topItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)]autorelease];
-    topItem.rightBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:@"Help" style:UIBarButtonItemStyleBordered target:self action:@selector(showHelp)]autorelease];
+    topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
+    topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Help" style:UIBarButtonItemStyleBordered target:self action:@selector(showHelp)];
     [navBar pushNavigationItem:topItem animated:NO];
     [self.view addSubview:navBar];
     [self.view bringSubviewToFront:navBar];
-    [topItem release];
     
-    self.onLabel = [[[UILabel alloc]initWithFrame:iPad?CGRectMake(234, 100, 300, 83):CGRectMake(0, sanitizeMesurement(44), screenBounds.size.width, 91)]autorelease];
+    self.onLabel = [[UILabel alloc]initWithFrame:iPad?CGRectMake(234, 100, 300, 83):CGRectMake(0, sanitizeMesurement(44), screenBounds.size.width, 91)];
     _onLabel.textAlignment = UITextAlignmentCenter;
     _onLabel.backgroundColor = [UIColor clearColor];
     _onLabel.textColor = [UIColor blackColor];
@@ -61,7 +60,7 @@
     _onLabel.shadowOffset = CGSizeMake(-1, -1);
     [self.view addSubview:_onLabel];
     
-    UITextView *tf = [[[UITextView alloc]initWithFrame:iPad?CGRectMake(158, 235, 453, 83):CGRectMake(40, sanitizeMesurement(160), 240, 83)]autorelease];
+    UITextView *tf = [[UITextView alloc]initWithFrame:iPad?CGRectMake(158, 235, 453, 83):CGRectMake(40, sanitizeMesurement(160), 240, 83)];
     tf.text = @"Use a WebDAV client like CyberDuck or Interarchy to connect to the following URL using the non-SSL protocol:";
     tf.textColor = [UIColor blackColor];
     tf.backgroundColor = [UIColor clearColor];
@@ -70,7 +69,7 @@
     tf.textAlignment = UITextAlignmentCenter;
     [self.view addSubview:tf];
     
-    self.urlLabel = [[[UILabel alloc]initWithFrame:iPad?CGRectMake(20, 379, 728, 86):CGRectMake(0, sanitizeMesurement(283), screenBounds.size.width, 21)]autorelease];
+    self.urlLabel = [[UILabel alloc]initWithFrame:iPad?CGRectMake(20, 379, 728, 86):CGRectMake(0, sanitizeMesurement(283), screenBounds.size.width, 21)];
     _urlLabel.textColor = myCyan;
     _urlLabel.backgroundColor = [UIColor clearColor];
     _urlLabel.font = [UIFont boldSystemFontOfSize:iPad?31:18];
@@ -79,7 +78,7 @@
     _urlLabel.textAlignment = UITextAlignmentCenter;
     [self.view addSubview:_urlLabel];
     
-    UITextView *btf = [[[UITextView alloc]initWithFrame:iPad?CGRectMake(158, 512, 453, 61):CGRectMake(40, sanitizeMesurement(326), 240, 50)]autorelease];
+    UITextView *btf = [[UITextView alloc]initWithFrame:iPad?CGRectMake(158, 512, 453, 61):CGRectMake(40, sanitizeMesurement(326), 240, 50)];
     btf.backgroundColor = [UIColor clearColor];
     btf.editable = NO;
     btf.textAlignment = UITextAlignmentCenter;
@@ -112,7 +111,7 @@
     
     [UIApplication sharedApplication].idleTimerDisabled = YES;
 
-    self.httpServer = [[[HTTPServer alloc]init]autorelease];
+    self.httpServer = [[HTTPServer alloc]init];
     [_httpServer setType:@"_http._tcp."];
     [_httpServer setConnectionClass:[PasswdWebDAVConnection class]];
     [_httpServer setPort:8080];
@@ -156,11 +155,7 @@
 }
 
 - (void)dealloc {
-    [self setHttpServer:nil];
-    [self setUrlLabel:nil];
-    [self setOnLabel:nil];
     NSLog(@"%@ dealloc'd", NSStringFromClass([self class]));
-    [super dealloc];
 }
 
 @end

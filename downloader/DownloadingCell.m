@@ -10,7 +10,7 @@
 
 @interface DownloadingCell ()
 
-@property (nonatomic, retain) WhiteProgressView *progressView;
+@property (nonatomic, strong) WhiteProgressView *progressView;
 
 @end
 
@@ -36,8 +36,8 @@
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.progressView = [[[WhiteProgressView alloc]initWithFrame:CGRectMake(5, 5, self.bounds.size.width-20, 20)]autorelease];
-        self.titleLabel = [[[UILabel alloc]initWithFrame:CGRectMake(0, 25, self.bounds.size.width, 20)]autorelease];
+        self.progressView = [[WhiteProgressView alloc]initWithFrame:CGRectMake(5, 5, self.bounds.size.width-20, 20)];
+        self.titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 25, self.bounds.size.width, 20)];
         _titleLabel.tag = 69;
         _titleLabel.backgroundColor = [UIColor clearColor];
         _titleLabel.textAlignment = UITextAlignmentCenter;
@@ -66,10 +66,5 @@
     }
 }
 
-- (void)dealloc {
-    [self setTitleLabel:nil];
-    [self setProgressView:nil];
-    [super dealloc];
-}
 
 @end

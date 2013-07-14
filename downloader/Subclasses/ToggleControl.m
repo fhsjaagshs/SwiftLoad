@@ -10,9 +10,9 @@
 
 @interface ToggleControl ()
 
-@property (nonatomic, retain) UIImage *onImage;
-@property (nonatomic, retain) UIImage *offImage;
-@property (nonatomic, retain) UIImage *pressedImage;
+@property (nonatomic, strong) UIImage *onImage;
+@property (nonatomic, strong) UIImage *offImage;
+@property (nonatomic, strong) UIImage *pressedImage;
 
 @property (nonatomic, assign) BOOL isCurrentlyPressed;
 
@@ -116,11 +116,5 @@
     [_isCurrentlyPressed?_pressedImage:(_currentMode == ToggleControlModeOn)?_onImage:_offImage drawInRect:self.bounds];
 }
 
-- (void)dealloc {
-    [self setOnImage:nil];
-    [self setOffImage:nil];
-    [self setPressedImage:nil];
-    [super dealloc];
-}
 
 @end

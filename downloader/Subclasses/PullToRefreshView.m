@@ -12,10 +12,10 @@
 
 @interface PullToRefreshView ()
 
-@property (nonatomic, retain) UILabel *statusLabel;
-@property (nonatomic, retain) CALayer *arrowImage;
-@property (nonatomic, retain) UIActivityIndicatorView *activityView;
-@property (nonatomic, retain) UIScrollView *scrollView;
+@property (nonatomic, strong) UILabel *statusLabel;
+@property (nonatomic, strong) CALayer *arrowImage;
+@property (nonatomic, strong) UIActivityIndicatorView *activityView;
+@property (nonatomic, strong) UIScrollView *scrollView;
 
 @end
 
@@ -51,7 +51,7 @@
 		self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.backgroundColor = [UIColor clearColor];
         
-        self.statusLabel = [[[UILabel alloc]initWithFrame:CGRectMake(0.0f, frame.size.height-38.0f, self.frame.size.width, 20.0f)]autorelease];
+        self.statusLabel = [[UILabel alloc]initWithFrame:CGRectMake(0.0f, frame.size.height-38.0f, self.frame.size.width, 20.0f)];
 		self.statusLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.statusLabel.font = [UIFont boldSystemFontOfSize:(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)?18:13];
 		self.statusLabel.textColor = [UIColor blackColor];
@@ -60,14 +60,14 @@
 		self.statusLabel.textAlignment = UITextAlignmentCenter;
 		[self addSubview:self.statusLabel];
         
-		self.arrowImage = [[[CALayer alloc]init]autorelease];
+		self.arrowImage = [[CALayer alloc]init];
         self.arrowImage.frame = CGRectMake(25.0f, frame.size.height - 60.0f, 30.7f, 52.0f); // 30.7f was 24.0f
 		self.arrowImage.contentsGravity = kCAGravityCenter;
         self.arrowImage.contentsScale = 2; // scale down the image regardless of retina. The image is by default the retina size.
         self.arrowImage.contents = (id)[UIImage imageNamed:@"arrow"].CGImage;
 		[self.layer addSublayer:self.arrowImage];
 
-        self.activityView = [[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray]autorelease];
+        self.activityView = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
 		self.activityView.frame = CGRectMake(30.0f, frame.size.height - 38.0f, 20.0f, 20.0f);
 		[self addSubview:self.activityView];
 
@@ -149,7 +149,6 @@
 - (void)dealloc {
 	[self.scrollView removeObserver:self forKeyPath:@"contentOffset"];
     [self setDelegate:nil];
-    [super dealloc];
 }
 
 @end

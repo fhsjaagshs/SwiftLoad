@@ -20,7 +20,7 @@ typedef enum {
 - (void)setUrl:(NSString *)url isPredefined:(BOOL)isPredef;
 
 @property (nonatomic, assign) SEL didMoveOnSelector;
-@property (nonatomic, assign) id textFieldDelegate;
+@property (nonatomic, weak) id textFieldDelegate;
 @property (nonatomic, assign, setter = setSFTP:) BOOL isSFTP;
 
 @end

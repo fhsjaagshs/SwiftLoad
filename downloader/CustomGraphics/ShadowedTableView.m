@@ -11,18 +11,18 @@
 #import <QuartzCore/QuartzCore.h>
 
 @interface ShadowedTableView ()
-@property (nonatomic, retain) CAGradientLayer *topShadow;
-@property (nonatomic, retain) CAGradientLayer *bottomShadow;
+@property (nonatomic, strong) CAGradientLayer *topShadow;
+@property (nonatomic, strong) CAGradientLayer *bottomShadow;
 @end
 
 @implementation ShadowedTableView
 
 - (CAGradientLayer *)shadowAsInverse:(BOOL)inverse {
-	CAGradientLayer *newShadow = [[[CAGradientLayer alloc]init]autorelease];
+	CAGradientLayer *newShadow = [[CAGradientLayer alloc]init];
 	newShadow.frame = CGRectMake(0, 0, self.frame.size.width,inverse?10:20);
 	CGColorRef darkColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:inverse?0.25:0.5].CGColor;
 	CGColorRef lightColor = [self.backgroundColor colorWithAlphaComponent:0.0].CGColor;
-	newShadow.colors = [NSArray arrayWithObjects:(id)(inverse?lightColor:darkColor), (id)(inverse?darkColor:lightColor), nil];
+	newShadow.colors = [NSArray arrayWithObjects:(__bridge id)(inverse?lightColor:darkColor), (__bridge id)(inverse?darkColor:lightColor), nil];
 	return newShadow;
 }
 
@@ -87,10 +87,5 @@
 	}
 }
 
-- (void)dealloc {
-    [self setTopShadow:nil];
-    [self setBottomShadow:nil];
-	[super dealloc];
-}
 
 @end

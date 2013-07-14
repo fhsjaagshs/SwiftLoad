@@ -10,9 +10,9 @@
 
 @interface FTPDownload : Download
 
-@property (nonatomic, retain) NSString *username;
-@property (nonatomic, retain) NSString *password;
-@property (nonatomic, retain) NSURL *url;
+@property (nonatomic, strong) NSString *username;
+@property (nonatomic, strong) NSString *password;
+@property (nonatomic, strong) NSURL *url;
 
 + (FTPDownload *)downloadWithURL:(NSURL *)aURL;
 

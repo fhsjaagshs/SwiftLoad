@@ -11,6 +11,6 @@
 
 @interface SettingsView : UIViewController <DBSessionDelegate, DBRestClientDelegate>
 
-@property (nonatomic, retain) UIButton *linkButton;
+@property (nonatomic, strong) UIButton *linkButton;
 
 @end

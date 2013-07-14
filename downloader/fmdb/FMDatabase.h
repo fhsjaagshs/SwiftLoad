@@ -119,7 +119,7 @@
 
 /** Dictionary of cached statements */
 
-@property (atomic, retain) NSMutableDictionary *cachedStatements;
+@property (atomic, strong) NSMutableDictionary *cachedStatements;
 
 ///---------------------
 /// @name Initialization
@@ -911,7 +911,7 @@
 
 /** SQL statement */
 
-@property (atomic, retain) NSString *query;
+@property (atomic, strong) NSString *query;
 
 /** SQLite sqlite3_stmt
  
