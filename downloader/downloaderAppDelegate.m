@@ -493,7 +493,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         if (error) {
             [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
             [self hideHUD];
-            [TransparentAlert showAlertWithTitle:@"Failure Uploading" andMessage:[NSString stringWithFormat:@"The file you tried to upload failed because: %@",error]];
+            [TransparentAlert showAlertWithTitle:@"Failure Uploading" andMessage:@"Swift could not connect to Dropbox."];
         } else {
             NSString *rev = nil;
             
@@ -517,7 +517,8 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
                     if (error) {
                         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                         [self hideHUD];
-                        [TransparentAlert showAlertWithTitle:@"Failure Uploading" andMessage:[NSString stringWithFormat:@"The file you tried to upload failed because: %@",error]];
+                        NSLog(@"Here: %@",error);
+                        [TransparentAlert showAlertWithTitle:@"Failure Uploading" andMessage:[NSString stringWithFormat:@"The file you tried to upload failed because: %@",error.localizedDescription]];
                     } else {
                         [DroppinBadassBlocks loadSharableLinkForFile:metadata.path andCompletionBlock:^(NSString *link, NSString *path, NSError *error) {
                             [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;

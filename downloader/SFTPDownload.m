@@ -42,11 +42,13 @@
         dispatch_sync(dispatch_get_main_queue(), ^{
             NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
             
-            DLSFTPDownloadRequest *req = [[DLSFTPDownloadRequest alloc]initWithRemotePath:_URL.path localPath:getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:self.fileName]) resume:NO successBlock:^(DLSFTPFile *file, NSDate *startTime, NSDate *finishTime) {
+            __block NSString *filePath = getNonConflictingFilePathForPath([NSTemporaryDirectory() stringByAppendingPathComponent:self.fileName]);
+            
+            DLSFTPDownloadRequest *req = [[DLSFTPDownloadRequest alloc]initWithRemotePath:_URL.path localPath:filePath resume:NO successBlock:^(DLSFTPFile *file, NSDate *startTime, NSDate *finishTime) {
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     NSAutoreleasePool *poolTwo = [[NSAutoreleasePool alloc]init];
                     [self showSuccess];
-                    NSLog(@"success");
+                    [[NSFileManager defaultManager]moveItemAtPath:filePath toPath:getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:self.fileName]) error:nil];
                     [poolTwo release];
                 });
             } failureBlock:^(NSError *error) {
