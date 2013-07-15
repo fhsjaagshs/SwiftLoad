@@ -8,8 +8,8 @@
 
 #import "CustomSlider.h"
 
-#define LIGHT_BLUE [UIColor colorWithRed:105.0f/255.0f green:179.0f/255.0f blue:216.0f/255.0f alpha:1.0].CGColor
-#define DARK_BLUE [UIColor colorWithRed:21.0/255.0 green:92.0/255.0 blue:136.0/255.0 alpha:1.0].CGColor
+#define LIGHT_BLUE [UIColor colorWithRed:105.0f/255.0f green:179.0f/255.0f blue:216.0f/255.0f alpha:1.0]
+#define DARK_BLUE [UIColor colorWithRed:21.0/255.0 green:92.0/255.0 blue:136.0/255.0 alpha:1.0]
 
 void drawLinearGradient(CGContextRef context, CGRect rect, CGColorRef startColor, CGColorRef  endColor);
 void drawGlossAndGradient(CGContextRef context, CGRect rect, CGColorRef startColor, CGColorRef endColor);
@@ -18,7 +18,7 @@ void drawLinearGradient(CGContextRef context, CGRect rect, CGColorRef startColor
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGFloat locations[] = { 0.0, 1.0 };
     
-    NSArray *colors = [NSArray arrayWithObjects:(__bridge id)startColor, (__bridge id)endColor, nil];
+    NSArray *colors = @[(__bridge id)(startColor), (__bridge id)(endColor)];
     
     CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (__bridge CFArrayRef) colors, locations);
     
@@ -38,12 +38,12 @@ void drawLinearGradient(CGContextRef context, CGRect rect, CGColorRef startColor
 void drawGlossAndGradient(CGContextRef context, CGRect rect, CGColorRef startColor, CGColorRef endColor) {
     drawLinearGradient(context, rect, startColor, endColor);
     
-    CGColorRef glossColor1 = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.35].CGColor;
-    CGColorRef glossColor2 = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.1].CGColor;
-    
     CGRect topHalf = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height/2);
     
-    drawLinearGradient(context, topHalf, glossColor1, glossColor2);
+    UIColor *glossColor1 = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.35];
+    UIColor *glossColor2 = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.1];
+    
+    drawLinearGradient(context, topHalf, glossColor1.CGColor, glossColor2.CGColor);
 }
 
 @implementation CustomSlider
@@ -65,16 +65,21 @@ void drawGlossAndGradient(CGContextRef context, CGRect rect, CGColorRef startCol
     UIGraphicsBeginImageContext(CGSizeMake(1, self.bounds.size.height));
     CGContextRef context = UIGraphicsGetCurrentContext();		
     UIGraphicsPushContext(context);
+    
+    UIColor *lightBlue = LIGHT_BLUE;
+    UIColor *darkBlue = DARK_BLUE;
 
-    CGColorRef shadowColor = [UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.5].CGColor;
+    CGColorRef shadowColor = CGColorRetain([UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.5].CGColor);
     
     CGContextSaveGState(context);
     CGContextSetShadowWithColor(context, CGSizeMake(0, 2), 3.0, shadowColor);
-    CGContextSetFillColorWithColor(context, DARK_BLUE);
+    CGContextSetFillColorWithColor(context, darkBlue.CGColor);
     CGContextFillRect(context, self.bounds);
     CGContextRestoreGState(context);
     
-    drawGlossAndGradient(context, self.bounds, LIGHT_BLUE, DARK_BLUE);
+    CGColorRetain(shadowColor);
+    
+    drawGlossAndGradient(context, self.bounds, lightBlue.CGColor, darkBlue.CGColor);
     
     UIGraphicsPopContext();								
     
@@ -86,17 +91,19 @@ void drawGlossAndGradient(CGContextRef context, CGRect rect, CGColorRef startCol
 - (UIImage *)maximumImage {
     UIGraphicsBeginImageContext(CGSizeMake(1, self.bounds.size.height));
     CGContextRef context = UIGraphicsGetCurrentContext();		
-    UIGraphicsPushContext(context);	   
-
-    CGColorRef shadowColor = [UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.5].CGColor;
+    UIGraphicsPushContext(context);
     
+    UIColor *lightBlue = LIGHT_BLUE;
+    UIColor *darkBlue = DARK_BLUE;
+
     CGContextSaveGState(context);
-    CGContextSetShadowWithColor(context, CGSizeMake(0, 2), 3.0, shadowColor);
-    CGContextSetFillColorWithColor(context, LIGHT_BLUE);
+    UIColor *color = [UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.5];
+    CGContextSetShadowWithColor(context, CGSizeMake(0, 2), 3.0, color.CGColor);
+    CGContextSetFillColorWithColor(context, lightBlue.CGColor);
     CGContextFillRect(context, self.bounds);
     CGContextRestoreGState(context);
     
-    drawGlossAndGradient(context, self.bounds, DARK_BLUE, LIGHT_BLUE);
+    drawGlossAndGradient(context, self.bounds, darkBlue.CGColor, lightBlue.CGColor);
     
     UIGraphicsPopContext();								
     
