@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CustomSlider.h"
 
 @interface AudioPlayerViewController : UIViewController
 
@@ -20,7 +19,7 @@
 @property (nonatomic, strong) UIButton *nxtTrack;
 @property (nonatomic, strong) UIButton *prevTrack;
 @property (nonatomic, strong) UITextView *infoField;
-@property (nonatomic, strong) CustomSlider *time;
+@property (nonatomic, strong) UISlider *time;
 @property (nonatomic, strong) ShadowedNavBar *navBar;
 
 @property (nonatomic, strong) ToggleControl *loopControl;
