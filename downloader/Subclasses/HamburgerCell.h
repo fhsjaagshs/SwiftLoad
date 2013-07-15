@@ -10,6 +10,8 @@
 
 @interface HamburgerCell : UITableViewCell
 
+@property (nonatomic, assign) BOOL isFirstCell;
+
 + (HamburgerCell *)dequeueReusableCellFromTableView:(UITableView *)tableView;
 + (HamburgerCell *)cell;
 

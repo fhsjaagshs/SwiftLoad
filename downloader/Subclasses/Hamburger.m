@@ -24,6 +24,7 @@
 @property (nonatomic, strong) HamburgerView *hamburgerView;
 @property (nonatomic, strong) UIButton *hideButton;
 @property (nonatomic, weak) UIView *viewToMove;
+@property (nonatomic, weak) UIColor *originalBackgroundColor;
 
 @end
 
@@ -59,20 +60,25 @@
 }
 
 - (void)hide {
-    [self clearShadow];
+    
     [UIView animateWithDuration:0.3f animations:^{
+        _viewToMove.layer.shadowOpacity = 0.0f;
         _hamburgerView.alpha = 0.0f;
         _viewToMove.frame = CGRectMake(0, _viewToMove.frame.origin.y, _viewToMove.frame.size.width, _viewToMove.frame.size.height);
     } completion:^(BOOL finished) {
         [_hamburgerView removeFromSuperview];
         [_hideButton removeFromSuperview];
-        
+        [_viewToMove setBackgroundColor:_originalBackgroundColor];
+        [self clearShadow];
     }];
 }
 
 - (void)show {
-    [[kAppDelegate window]insertSubview:_hamburgerView belowSubview:_viewToMove];
+    UIWindow *mainWindow = [kAppDelegate window];
+    [mainWindow insertSubview:_hamburgerView belowSubview:_viewToMove];
     [_viewToMove addSubview:_hideButton];
+    self.originalBackgroundColor = _viewToMove.backgroundColor;
+    [_viewToMove setBackgroundColor:mainWindow.backgroundColor];
     [self showShadow];
     [UIView animateWithDuration:0.3f animations:^{
         _hamburgerView.alpha = 1.0f;
@@ -130,6 +136,8 @@
     
     int row = indexPath.row;
     
+    cell.isFirstCell = (indexPath.row == 0);
+    
     if (row == 0) {
         cell.textLabel.text = @"Download URL";
     } else if (row == 1) {
@@ -141,6 +149,8 @@
     } else if (row == 4) {
         cell.textLabel.text = @"Settings";
     }
+    
+    [cell setNeedsDisplay];
     
     return cell;
 }

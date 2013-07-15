@@ -31,6 +31,7 @@
         } else {
             self.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:20];
         }
+        self.isFirstCell = NO;
     }
     return self;
 }
@@ -43,12 +44,14 @@
     CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
     CGContextFillRect(context, self.bounds);
     
-    CGContextSetStrokeColorWithColor(context, [UIColor colorWithWhite:208.0/255.0 alpha:1.0].CGColor);
-    CGContextSetLineWidth(context, 2.0);
-    CGContextSetLineCap(context, kCGLineCapRound);
-    
-    CGPoint points[] = { CGPointMake(50, self.bounds.origin.y-0.5), CGPointMake(self.bounds.size.width-50, self.bounds.origin.y-0.5) };
-    CGContextStrokeLineSegments(context, points, 2);
+    if (!_isFirstCell) {
+        CGContextSetStrokeColorWithColor(context, [UIColor colorWithWhite:208.0/255.0 alpha:1.0].CGColor);
+        CGContextSetLineWidth(context, 2.0);
+        CGContextSetLineCap(context, kCGLineCapRound);
+        
+        CGPoint points[] = { CGPointMake(50, self.bounds.origin.y-0.5), CGPointMake(self.bounds.size.width-50, self.bounds.origin.y-0.5) };
+        CGContextStrokeLineSegments(context, points, 2);
+    }
     
     CGContextRestoreGState(context);
 }

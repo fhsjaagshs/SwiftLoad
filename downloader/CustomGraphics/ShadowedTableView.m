@@ -19,9 +19,9 @@
 
 - (CAGradientLayer *)shadowAsInverse:(BOOL)inverse {
 	CAGradientLayer *newShadow = [[CAGradientLayer alloc]init];
-	newShadow.frame = CGRectMake(0, 0, self.frame.size.width,inverse?10:20);
-    UIColor *darkColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:inverse?0.25:0.5];
-    UIColor *lightColor = [self.backgroundColor colorWithAlphaComponent:0.0];
+	newShadow.frame = CGRectMake(0, 0, self.frame.size.width, 10);
+    UIColor *darkColor = [[UIColor darkGrayColor]colorWithAlphaComponent:inverse?0.125f:0.25f];
+    UIColor *lightColor = [UIColor clearColor];
     newShadow.colors = @[inverse?(__bridge id)lightColor.CGColor:(__bridge id)darkColor.CGColor, inverse?(__bridge id)darkColor.CGColor:(__bridge id)lightColor.CGColor];
 	return newShadow;
 }
@@ -85,6 +85,5 @@
         [_bottomShadow setHidden:YES];
 	}
 }
-
 
 @end

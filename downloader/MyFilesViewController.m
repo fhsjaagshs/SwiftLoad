@@ -777,6 +777,8 @@
             [cell addGestureRecognizer:leftSwipeGestureRecognizer];
         }
     }
+    
+    cell.isFirstCell = (indexPath.row == 0);
 
     if (_theTableView.editing && indexPath.row == _filelist.count) {
         cell.textLabel.text = @"Create New File/Directory";
@@ -826,6 +828,7 @@
             }
         }
     }
+    [cell setNeedsDisplay];
     return cell;
 }
 

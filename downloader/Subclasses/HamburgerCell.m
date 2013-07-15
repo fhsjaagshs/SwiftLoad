@@ -34,18 +34,20 @@ static NSString *kCellIdentifierHamburger = @"hamburger";
 }
 
 - (void)drawRect:(CGRect)rect {
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    CGContextSaveGState(context);
-    
-    CGContextSetStrokeColorWithColor(context, [UIColor colorWithWhite:187.0/255.0 alpha:1.0].CGColor);
-    CGContextSetLineWidth(context, 2.0);
-    CGContextSetLineCap(context, kCGLineCapRound);
-    
-    CGPoint points[] = { CGPointMake(50, self.bounds.origin.y-0.5), CGPointMake(self.bounds.size.width-50, self.bounds.origin.y-0.5) };
-    CGContextStrokeLineSegments(context, points, 2);
-    
-    CGContextRestoreGState(context);
+    if (!_isFirstCell) {
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        
+        CGContextSaveGState(context);
+        
+        CGContextSetStrokeColorWithColor(context, [UIColor colorWithWhite:187.0/255.0 alpha:1.0].CGColor);
+        CGContextSetLineWidth(context, 2.0);
+        CGContextSetLineCap(context, kCGLineCapRound);
+        
+        CGPoint points[] = { CGPointMake(50, self.bounds.origin.y-0.5), CGPointMake(self.bounds.size.width-50, self.bounds.origin.y-0.5) };
+        CGContextStrokeLineSegments(context, points, 2);
+        
+        CGContextRestoreGState(context);
+    }
 }
 
 @end

@@ -10,4 +10,6 @@
 
 @interface SwiftLoadCell : UITableViewCell
 
+@property (nonatomic, assign) BOOL isFirstCell;
+
 @end
