@@ -71,7 +71,7 @@
 
     #import "HTTPServer.h"
     #import "DAVConnection.h"
-    #import "BKSessionController.h"
+    #import "BluetoothManager.h"
     #import "SCRFTPRequest.h"
 
     #import "webDAVHelp.h"

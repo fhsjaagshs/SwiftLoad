@@ -149,6 +149,7 @@
 		F1693C6816DFAC59006E3739 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C6116DFAC59006E3739 /* MBProgressHUD.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F1693C6A16DFAC59006E3739 /* SCRFTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C6516DFAC59006E3739 /* SCRFTPRequest.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F1693C7316DFB9B5006E3739 /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1693C7216DFB9B5006E3739 /* DropboxSDK.framework */; };
+		F172BC7D1794B59300AC1483 /* BluetoothManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BC7C1794B59300AC1483 /* BluetoothManager.m */; };
 		F1798EAF1774177400310C37 /* ShadowedNavBar.m in Sources */ = {isa = PBXBuildFile; fileRef = F1798EAE1774177400310C37 /* ShadowedNavBar.m */; };
 		F1798EB2177417CF00310C37 /* ShadowedToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = F1798EB1177417CF00310C37 /* ShadowedToolbar.m */; };
 		F17CEDE116FE724C00E7E47B /* FileCreationDialogue.m in Sources */ = {isa = PBXBuildFile; fileRef = F17CEDE016FE724C00E7E47B /* FileCreationDialogue.m */; };
@@ -449,6 +450,8 @@
 		F1693C6416DFAC59006E3739 /* SCRFTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCRFTPRequest.h; sourceTree = "<group>"; };
 		F1693C6516DFAC59006E3739 /* SCRFTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCRFTPRequest.m; sourceTree = "<group>"; };
 		F1693C7216DFB9B5006E3739 /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DropboxSDK.framework; path = downloader/DropboxSDK.framework; sourceTree = "<group>"; };
+		F172BC7B1794B59300AC1483 /* BluetoothManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BluetoothManager.h; sourceTree = "<group>"; };
+		F172BC7C1794B59300AC1483 /* BluetoothManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BluetoothManager.m; sourceTree = "<group>"; };
 		F1798EAD1774177400310C37 /* ShadowedNavBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShadowedNavBar.h; sourceTree = "<group>"; };
 		F1798EAE1774177400310C37 /* ShadowedNavBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShadowedNavBar.m; sourceTree = "<group>"; };
 		F1798EB0177417CF00310C37 /* ShadowedToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShadowedToolbar.h; sourceTree = "<group>"; };
@@ -977,6 +980,8 @@
 				F106A7CE178876B1002D3BC8 /* SFTPCreds.m */,
 				F14B819B1788E2D300ADEF99 /* SimpleKeychain.h */,
 				F14B819C1788E2D300ADEF99 /* SimpleKeychain.m */,
+				F172BC7B1794B59300AC1483 /* BluetoothManager.h */,
+				F172BC7C1794B59300AC1483 /* BluetoothManager.m */,
 			);
 			path = Subclasses;
 			sourceTree = "<group>";
@@ -1341,6 +1346,7 @@
 				F168EDAF1790C61000C21D6F /* UIImage+Additions.m in Sources */,
 				F137F3481791FC5A008FCFD7 /* Hamburger.m in Sources */,
 				F137F34B1791FD14008FCFD7 /* HamburgerCell.m in Sources */,
+				F172BC7D1794B59300AC1483 /* BluetoothManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

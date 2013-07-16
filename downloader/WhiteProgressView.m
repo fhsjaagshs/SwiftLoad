@@ -47,7 +47,9 @@
     self.redrawRed = NO;
     self.redrawGreen = NO;
     self.isIndeterminate = NO;
-    [self setNeedsDisplay];
+    [UIView animateWithDuration:0.1 animations:^{
+        [self setNeedsDisplay];
+    }];
 }
 
 - (void)drawRect:(CGRect)rect {
