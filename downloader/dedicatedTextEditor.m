@@ -181,7 +181,8 @@
         if (buttonIndex == 0) {
             [kAppDelegate sendFileInEmail:file fromViewController:self];
         } else if (buttonIndex == 1) {
-            [kAppDelegate showBTController];
+            [kAppDelegate prepareFileForBTSending:file];
+            //[kAppDelegate showBTController];
         } else if (buttonIndex == 2) {
             [kAppDelegate sendStringAsSMS:[NSString stringWithContentsOfFile:file encoding:theEncoding error:nil] fromViewController:self];
         } else if (buttonIndex == 3) {

@@ -25,4 +25,6 @@ typedef void (^finishBlock)(BOOL succeeded,BOOLcancelled);*/
 @property (nonatomic, copy) void(^completionBlock)(BOOL succeeded,BOOL cancelled);
 @property (nonatomic, copy) void(^startedBlock)(void);
 
+@property (nonatomic, assign) BOOL isSender;
+
 @end

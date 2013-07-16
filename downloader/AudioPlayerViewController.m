@@ -327,7 +327,8 @@
         if (buttonIndex == 0) {
             [kAppDelegate sendFileInEmail:file fromViewController:self];
         } else if (buttonIndex == 1) {
-            [kAppDelegate showBTController];
+            [kAppDelegate prepareFileForBTSending:file];
+            //[kAppDelegate showBTController];
         } else if (buttonIndex == 2) {
             [kAppDelegate showFTPUploadController];
         } else if (buttonIndex == 3) {

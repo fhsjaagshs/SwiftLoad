@@ -59,6 +59,9 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 @property (nonatomic, strong) NSString *nowPlayingFile;
 
 // Bluetooth File Transmission
+
+- (void)prepareFileForBTSending:(NSString *)file;
+
 /*@property (nonatomic, strong) BKSessionController *sessionController;
 @property (nonatomic, strong) BKSessionController *sessionControllerSending;
 @property (nonatomic, strong) UIProgressView *progressView;

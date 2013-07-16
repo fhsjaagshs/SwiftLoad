@@ -1138,7 +1138,8 @@
         
         [self removeSideSwipeView:YES];
     } else if (number == 2) {
-        [kAppDelegate showBTController];
+        [kAppDelegate prepareFileForBTSending:file];
+        //[kAppDelegate showBTController];
         [self removeSideSwipeView:YES];
     } else if (number == 3) {
         [kAppDelegate sendFileInEmail:file fromViewController:self];

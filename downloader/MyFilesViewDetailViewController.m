@@ -68,7 +68,8 @@
         } else if (buttonIndex == 1) {
             [kAppDelegate sendFileInEmail:file fromViewController:self];
         } else if (buttonIndex == 2) {
-            [kAppDelegate showBTController];
+            [kAppDelegate prepareFileForBTSending:file];
+            //[kAppDelegate showBTController];
         } else if (buttonIndex == 3) {
             [kAppDelegate showFTPUploadController];
         } else if (buttonIndex == 4) {

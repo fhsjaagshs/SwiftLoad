@@ -11,7 +11,6 @@
 
 static NSString *kFlagKey = @"f";
 static NSString *kDataKey = @"d";
-static NSString *kProgressKey = @"p";
 static NSString *kFilenameKey = @"n";
 static NSString *kFilesizeKey = @"s";
 
@@ -22,7 +21,6 @@ static NSString *kFilesizeKey = @"s";
 @property (nonatomic, strong) NSString *targetPath;
 
 @property (nonatomic, strong) GKSession *session;
-@property (nonatomic, assign) BOOL isSender;
 @property (nonatomic, strong) NSString *filename;
 @property (nonatomic, strong) NSFileHandle *handle;
 
