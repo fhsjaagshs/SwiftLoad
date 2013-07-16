@@ -380,6 +380,27 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     });
 }
 
+- (void)prepareFileForBTSending:(NSString *)file {
+    [[BluetoothManager sharedManager]loadFile:file];
+    [[BluetoothManager sharedManager]setStartedBlock:^{
+        // show some sort of HUD
+    }];
+    [[BluetoothManager sharedManager]setProgressBlock:^(float progress) {
+        // show some sort of progress thing
+    }];
+    [[BluetoothManager sharedManager]setCompletionBlock:^(BOOL succeeded, BOOL cancelled) {
+        if (!cancelled) {
+            if (succeeded) {
+                // success alert
+            } else {
+                // failure alert
+            }
+        }
+    }];
+    
+    [[BluetoothManager sharedManager]searchForPeers];
+}
+
 //
 // AppDelegate Downloading
 //
@@ -567,6 +588,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [Downloads sharedDownloads];
     [DownloadController sharedController];
     [BGProcFactory sharedFactory];
+    [BluetoothManager sharedManager];
     
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryPlayback error:nil];
     [[UIApplication sharedApplication]beginReceivingRemoteControlEvents];
@@ -577,12 +599,12 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 	session.delegate = self;
 	[DBSession setSharedSession:session];
     
-    if (_sessionController.session && !_isReciever) {
+    /*if (_sessionController.session && !_isReciever) {
         [self killSession];
         [self startSession];
     } else if (!_sessionController.session) {
         [self startSession];
-    }
+    }*/
     
     self.window = [[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]];
     self.viewController = [MyFilesViewController viewController];
@@ -604,23 +626,23 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    if (!self.isReciever) {
+    /*if (!self.isReciever) {
         [self killSession];
-    }
+    }*/
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application  {
-    if (self.sessionController.session && !self.isReciever) {
+    /*if (self.sessionController.session && !self.isReciever) {
         [self killSession];
         [self startSession];
     } else if (self.sessionController.session == nil) {
          [self startSession];
-    }
+    }*/
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     [[BGProcFactory sharedFactory]endAllTasks];
-    [self killSession];
+  //  [self killSession];
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
@@ -746,6 +768,8 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     hud.labelText = title;
     [hud hide:YES afterDelay:1.5];
 }
+
+/*
 
 //
 // BT Sending
@@ -924,7 +948,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [[BGProcFactory sharedFactory]endProcForKey:@"bt_rec"];
     
     [TransparentAlert showAlertWithTitle:@"Success" andMessage:@"Your file was successfully received."];
-}
+}*/
 
 //
 // SFTP Download

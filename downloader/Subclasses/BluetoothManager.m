@@ -28,6 +28,9 @@ static NSString *kFilesizeKey = @"s";
 
 @property (nonatomic, assign) float readBytes;
 @property (nonatomic, strong) NSString *originFilePath;
+@property (nonatomic, assign) BOOL shouldShowConnectionPrompts;
+
+@property (nonatomic, strong) TransparentAlert *searchingAlert;
 
 @end
 
@@ -74,21 +77,27 @@ static NSString *kFilesizeKey = @"s";
     self.handle = nil;
     self.receivedBytes = 0;
     self.targetPath = nil;
+    self.shouldShowConnectionPrompts = NO;
 }
 
 - (void)searchForPeers {
     _session.available = YES;
-    // show picker
+    self.shouldShowConnectionPrompts = YES;
+    self.searchingAlert = [[TransparentAlert alloc]initWithTitle:@"Searching for other iPhones" message:@"Swift only supports sending files to other bluetooth enabled iPhones running a copy of Swift." completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
+        [self reset];
+    } cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+    [_searchingAlert show];
 }
 
 - (void)session:(GKSession *)session peer:(NSString *)peerID didChangeState:(GKPeerConnectionState)state {
     switch (state) {
         case GKPeerStateAvailable: {
-            if (![peerID isEqualToString:_session.peerID]) {
+            if (![peerID isEqualToString:_session.peerID] && _shouldShowConnectionPrompts) {
                 [[[TransparentAlert alloc]initWithTitle:@"Connect?" message:[NSString stringWithFormat:@"Would you like to connect to %@",[_session displayNameForPeer:peerID]] completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
                     if (buttonIndex == 1) {
                         [_session connectToPeer:peerID withTimeout:30];
                         self.isSender = YES;
+                        self.shouldShowConnectionPrompts = NO;
                     }
                 } cancelButtonTitle:@"No" otherButtonTitles:@"YES", nil]show];
             }
@@ -195,6 +204,11 @@ static NSString *kFilesizeKey = @"s";
         self.filename = [dict objectForKey:kFilenameKey];
         self.targetPath = getNonConflictingFilePathForPath([NSTemporaryDirectory() stringByAppendingPathComponent:_filename]);
         self.handle = [NSFileHandle fileHandleForWritingAtPath:_targetPath];
+        
+        if (_startedBlock) {
+            _startedBlock();
+        }
+        
         [self sendData:[self response]];
     } else if ([flag isEqualToString:@"data"]) {
         if (!_isSender) {

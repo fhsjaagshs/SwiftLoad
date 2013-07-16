@@ -26,7 +26,7 @@ float sanitizeMesurement(float measurement);
 NSString * getNonConflictingFilePathForPath(NSString *path);
 void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID inPropertyID, UInt32 inPropertyValueSize, const void *inPropertyValue);
 
-@interface downloaderAppDelegate : UIResponder <UIApplicationDelegate, BKSessionControllerDelegate, GKSessionDelegate, DBSessionDelegate, DBRestClientDelegate, MBProgressHUDDelegate, GKPeerPickerControllerDelegate, AVAudioPlayerDelegate>
+@interface downloaderAppDelegate : UIResponder <UIApplicationDelegate, GKSessionDelegate, DBSessionDelegate, DBRestClientDelegate, MBProgressHUDDelegate, GKPeerPickerControllerDelegate, AVAudioPlayerDelegate>
 
 @property (nonatomic, strong) UIWindow *window;
 @property (nonatomic, strong) MyFilesViewController *viewController;
@@ -59,16 +59,16 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 @property (nonatomic, strong) NSString *nowPlayingFile;
 
 // Bluetooth File Transmission
-@property (nonatomic, strong) BKSessionController *sessionController;
+/*@property (nonatomic, strong) BKSessionController *sessionController;
 @property (nonatomic, strong) BKSessionController *sessionControllerSending;
 @property (nonatomic, strong) UIProgressView *progressView;
-@property (nonatomic, assign) BOOL isReciever;
+@property (nonatomic, assign) BOOL isReciever;*/
 
-- (void)killSession;
+/*- (void)killSession;
 - (void)startSession;
 - (void)makeSessionUnavailable;
 - (void)makeSessionAvailable;
-- (void)showBTController;
+- (void)showBTController;*/
 
 // Dropbox Uploading
 - (void)uploadLocalFile:(NSString *)localPath;

@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-typedef void (^progressBlock)(float progress);
-typedef void (^startedBlock)();
-typedef void (^finishBlock)(BOOL succeeded, BOOL cancelled);
+/*typedef void (^progressBlock)(float progress);
+typedef void (^startedBlock)(void);
+typedef void (^finishBlock)(BOOL succeeded,BOOLcancelled);*/
 
 @interface BluetoothManager : NSObject
 
@@ -21,8 +21,8 @@ typedef void (^finishBlock)(BOOL succeeded, BOOL cancelled);
 - (void)loadFile:(NSString *)path;
 - (NSString *)getFilename;
 
-@property (nonatomic, copy) progressBlock progressBlock;
-@property (nonatomic, copy) finishBlock completionBlock;
-@property (nonatomic, copy) startedBlock startedBlock;
+@property (nonatomic, copy) void(^progressBlock)(float progress);
+@property (nonatomic, copy) void(^completionBlock)(BOOL succeeded,BOOL cancelled);
+@property (nonatomic, copy) void(^startedBlock)(void);
 
 @end
