@@ -25,13 +25,6 @@ static NSString * const kShortMessage = @"\n\n\n";
 
 @implementation PeerPicker
 
-- (void)setState:(PeerPickerState)state {
-    _state = state;
-    NSLog(@"state change");
-    self.message = (state == PeerPickerStateNormal)?kLongMessage:kShortMessage;
-    [self setNeedsLayout];
-}
-
 + (PeerPicker *)peerPicker {
     return [[[self class]alloc]initWithTitle:nil message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:nil];
 }
@@ -39,7 +32,6 @@ static NSString * const kShortMessage = @"\n\n\n";
 - (id)initWithTitle:(NSString *)title message:(NSString *)message delegate:(id)delegate cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ... {
     self = [super initWithTitle:nil message:kLongMessage delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
     if (self) {
-        
         self.peers = [NSMutableArray array];
         self.ignoredPeerIDs = [NSMutableArray array];
         
@@ -47,8 +39,8 @@ static NSString * const kShortMessage = @"\n\n\n";
         [self addSubview:_theImageView];
         
         self.activityIndicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        [self addSubview:_activityIndicator];
         [_activityIndicator startAnimating];
+        [self addSubview:_activityIndicator];
         
         self.searchingLabel = [[UILabel alloc]init];
         _searchingLabel.textAlignment = UITextAlignmentLeft;
@@ -72,16 +64,14 @@ static NSString * const kShortMessage = @"\n\n\n";
         _session.available = NO;
         
         [_ignoredPeerIDs addObject:_session.peerID];
-        
-        self.state = PeerPickerStateNormal;
     }
     return self;
 }
 
-- (void)show {
+/*- (void)show {
     [super show];
     _session.available = YES;
-}
+}*/
 
 - (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex {
     [_peers removeAllObjects];
@@ -91,32 +81,19 @@ static NSString * const kShortMessage = @"\n\n\n";
     [super layoutSubviews];
     
     for (UIView *view in self.subviews) {
-        if ([view isKindOfClass:[UILabel class]] && ![view isEqual:_searchingLabel]) {
+        if ([view isKindOfClass:[UILabel class]]) {
 			[view setHidden:YES];
 		}
     }
-    
     float width = self.frame.size.width;
-    
-    if (_state == PeerPickerStateNormal) {
-        _searchingLabel.hidden = NO;
-        _theImageView.hidden = NO;
-        _theImageView.hidden = NO;
-        _activityIndicator.hidden = NO;
-        _theImageView.frame = CGRectMake((width/2)-30, 10, 30, 30);
-        _searchingLabel.frame = CGRectMake((width/2)-40, 45, 120, 25);
-        _activityIndicator.frame = CGRectMake((width/2)-70, 45, 25, 25);
-        _theTableView.frame = CGRectMake(30, 75, width-90, self.frame.size.height-170);
-        _searchingLabel.text = @"Searching...";
-        [_theTableView reloadData];
-    } else if (_state == PeerPickerStateConnecting) {
-        _theImageView.hidden = YES;
-        _theTableView.hidden = YES;
-        _searchingLabel.text = @"Connecting...";
-        _searchingLabel.frame = CGRectMake((width/2)-60, 10, 120, 25);
-        _activityIndicator.frame = CGRectMake((width/2)-25, 50, 25, 25);
-    }
-    [_activityIndicator startAnimating];
+    _theTableView.hidden = NO;
+    _theImageView.hidden = NO;
+    _searchingLabel.hidden = NO;
+    _activityIndicator.hidden = NO;
+    _theTableView.frame = CGRectMake(30, 75, width-90, self.frame.size.height-170);
+    _theImageView.frame = CGRectMake((width/2)-30, 10, 30, 30);
+    _activityIndicator.frame = CGRectMake((width/2)-70, 45, 25, 25);
+    _searchingLabel.frame = CGRectMake((width/2)-40, 45, 120, 25);
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -153,7 +130,6 @@ static NSString * const kShortMessage = @"\n\n\n";
 - (void)session:(GKSession *)session peer:(NSString *)peerID didChangeState:(GKPeerConnectionState)state {
     switch (state) {
         case GKPeerStateAvailable: {
-            NSLog(@"Found Peer: %@",[_session displayNameForPeer:peerID]);
             if (![_peers containsObject:peerID] && ![_ignoredPeerIDs containsObject:peerID]) {
                 [_peers addObject:peerID];
                 [_theTableView reloadData];

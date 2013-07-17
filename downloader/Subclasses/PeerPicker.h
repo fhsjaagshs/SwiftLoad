@@ -8,16 +8,10 @@
 
 #import "TransparentAlert.h"
 
-typedef enum {
-    PeerPickerStateNormal,
-    PeerPickerStateConnecting
-} PeerPickerState;
-
 @interface PeerPicker : TransparentAlert
 
 + (PeerPicker *)peerPicker;
 
-@property (nonatomic, assign, setter = setState:) PeerPickerState state;
 @property (nonatomic, strong)  NSMutableArray *ignoredPeerIDs;
 
 @property (nonatomic, copy) void(^peerPickedBlock)(NSString *peerID);

@@ -28,8 +28,6 @@ static NSString *kFilesizeKey = @"s";
 @property (nonatomic, assign) float readBytes;
 @property (nonatomic, strong) NSString *originFilePath;
 
-@property (nonatomic, strong) PeerPicker *picker;
-
 @property (nonatomic, assign) BOOL isTransferring;
 
 @end
@@ -48,9 +46,7 @@ static NSString *kFilesizeKey = @"s";
 - (id)init {
     self = [super init];
     if (self) {
-        self.picker = [PeerPicker peerPicker];
         [self loadSession];
-        [_picker.ignoredPeerIDs addObject:_session.peerID];
     }
     return self;
 }
@@ -101,7 +97,6 @@ static NSString *kFilesizeKey = @"s";
 
 - (void)reset {
     _session.available = YES;
-    _picker.state = PeerPickerStateNormal;
     self.originFilePath = nil;
     self.isSender = NO;
     self.readBytes = 0;
@@ -116,20 +111,24 @@ static NSString *kFilesizeKey = @"s";
 - (void)searchForPeers {
     self.isSender = YES;
     self.isTransferring = YES;
-    _picker.state = PeerPickerStateNormal;
+    _session.available = NO;
+    
+    PeerPicker *picker = [PeerPicker peerPicker];
+    
+    [picker.ignoredPeerIDs addObject:_session.peerID];
+    
     __weak BluetoothManager *weakManager = self;
-    [_picker setPeerPickedBlock:^(NSString *peerID) {
+    [picker setPeerPickedBlock:^(NSString *peerID) {
         weakManager.isSender = YES;
         [weakManager.session connectToPeer:peerID withTimeout:30];
-        [weakManager.picker setState:PeerPickerStateConnecting];
     }];
     
-    [_picker setCancelledBlock:^{
+    [picker setCancelledBlock:^{
         weakManager.isSender = NO;
         weakManager.session.available = YES;
         [weakManager reset];
     }];
-    [_picker show];
+    [picker show];
 }
 
 - (void)session:(GKSession *)session peer:(NSString *)peerID didChangeState:(GKPeerConnectionState)state {
@@ -143,8 +142,6 @@ static NSString *kFilesizeKey = @"s";
         case GKPeerStateConnected: {
             
             self.isTransferring = YES;
-            
-            [_picker dismissWithClickedButtonIndex:0 animated:YES];
             
             _session.available = NO;
             
