@@ -58,6 +58,10 @@ static NSString *kFilesizeKey = @"s";
     return self;
 }
 
+- (void)refresh {
+    
+}
+
 - (void)finish {
     self.isTransferring = NO;
     [_session disconnectFromAllPeers];
@@ -250,13 +254,6 @@ static NSString *kFilesizeKey = @"s";
             if (progress == 1) {
                 [[NSFileManager defaultManager]moveItemAtPath:_targetPath toPath:getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:_filename]) error:nil];
                 [self finish];
-                
-                /*self.isTransferring = NO;
-                
-                
-                if (_completionBlock) {
-                    _completionBlock(YES,NO);
-                }*/
             }
             
         }
@@ -270,10 +267,6 @@ static NSString *kFilesizeKey = @"s";
             
             if (progress == 1) {
                 [self finish];
-                /*if (_completionBlock) {
-                    _completionBlock(YES,NO);
-                }
-                self.isTransferring = NO;*/
             } else {
                 [self sendData:[self data:[self readData]]];
             }

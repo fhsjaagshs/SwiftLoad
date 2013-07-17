@@ -112,8 +112,6 @@
 		F1679ACB1787B3C1001369B1 /* libssh2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1679AC81787B3C1001369B1 /* libssh2.a */; };
 		F1679ACC1787B3C1001369B1 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1679AC91787B3C1001369B1 /* libssl.a */; };
 		F168EDAF1790C61000C21D6F /* UIImage+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F168EDAE1790C61000C21D6F /* UIImage+Additions.m */; };
-		F1693C1A16DFAA92006E3739 /* BKChunkDataContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C1516DFAA92006E3739 /* BKChunkDataContainer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		F1693C1C16DFAA92006E3739 /* BKSessionController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C1916DFAA92006E3739 /* BKSessionController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F1693C3D16DFAB6E006E3739 /* SwiftLoadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C2916DFAB6E006E3739 /* SwiftLoadCell.m */; };
 		F1693C4416DFAB6E006E3739 /* ShadowedTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C3716DFAB6E006E3739 /* ShadowedTableView.m */; };
 		F1693C4E16DFABA6006E3739 /* UIActionSheet+BlockExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C4716DFABA6006E3739 /* UIActionSheet+BlockExtensions.m */; };
@@ -385,10 +383,6 @@
 		F1679AC91787B3C1001369B1 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = "Libs/libssh2-for-iOS/lib/libssl.a"; sourceTree = "<group>"; };
 		F168EDAD1790C61000C21D6F /* UIImage+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Additions.h"; sourceTree = "<group>"; };
 		F168EDAE1790C61000C21D6F /* UIImage+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Additions.m"; sourceTree = "<group>"; };
-		F1693C1416DFAA92006E3739 /* BKChunkDataContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKChunkDataContainer.h; sourceTree = "<group>"; };
-		F1693C1516DFAA92006E3739 /* BKChunkDataContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKChunkDataContainer.m; sourceTree = "<group>"; };
-		F1693C1816DFAA92006E3739 /* BKSessionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKSessionController.h; sourceTree = "<group>"; };
-		F1693C1916DFAA92006E3739 /* BKSessionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKSessionController.m; sourceTree = "<group>"; };
 		F1693C2816DFAB6E006E3739 /* SwiftLoadCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwiftLoadCell.h; path = ../CustomGraphics/SwiftLoadCell.h; sourceTree = "<group>"; };
 		F1693C2916DFAB6E006E3739 /* SwiftLoadCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwiftLoadCell.m; path = ../CustomGraphics/SwiftLoadCell.m; sourceTree = "<group>"; };
 		F1693C3616DFAB6E006E3739 /* ShadowedTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShadowedTableView.h; path = ../CustomGraphics/ShadowedTableView.h; sourceTree = "<group>"; };
@@ -857,17 +851,6 @@
 			path = fmdb;
 			sourceTree = "<group>";
 		};
-		F1693C1316DFAA92006E3739 /* BKSessionController */ = {
-			isa = PBXGroup;
-			children = (
-				F1693C1416DFAA92006E3739 /* BKChunkDataContainer.h */,
-				F1693C1516DFAA92006E3739 /* BKChunkDataContainer.m */,
-				F1693C1816DFAA92006E3739 /* BKSessionController.h */,
-				F1693C1916DFAA92006E3739 /* BKSessionController.m */,
-			);
-			path = BKSessionController;
-			sourceTree = "<group>";
-		};
 		F1693C4516DFABA6006E3739 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
@@ -1113,7 +1096,6 @@
 				F172BC7E1794EC4500AC1483 /* CocoaHTTPServer */,
 				F106A4C4178865AD002D3BC8 /* DLSFTP */,
 				F150D6B3177F783E00E4C094 /* FMDatabase */,
-				F1693C1316DFAA92006E3739 /* BKSessionController */,
 				9BFF29FE15387C6E007ED9B1 /* Objective-Zip */,
 			);
 			name = Libraries;
@@ -1327,8 +1309,6 @@
 				9BFF2A0C15387C6E007ED9B1 /* ZipReadStream.m in Sources */,
 				9BFF2A0D15387C6E007ED9B1 /* ZipWriteStream.m in Sources */,
 				F128A1DD157FDBFE001BC156 /* SettingsView.m in Sources */,
-				F1693C1A16DFAA92006E3739 /* BKChunkDataContainer.m in Sources */,
-				F1693C1C16DFAA92006E3739 /* BKSessionController.m in Sources */,
 				F1693C3D16DFAB6E006E3739 /* SwiftLoadCell.m in Sources */,
 				F1693C4416DFAB6E006E3739 /* ShadowedTableView.m in Sources */,
 				F1693C4E16DFABA6006E3739 /* UIActionSheet+BlockExtensions.m in Sources */,

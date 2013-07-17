@@ -607,13 +607,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         }
     }];
     
-    /*if (_sessionController.session && !_isReciever) {
-        [self killSession];
-        [self startSession];
-    } else if (!_sessionController.session) {
-        [self startSession];
-    }*/
-    
     self.window = [[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]];
     self.viewController = [MyFilesViewController viewController];
     _window.rootViewController = self.viewController;
@@ -633,24 +626,12 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     return YES;
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application {
-    /*if (!self.isReciever) {
-        [self killSession];
-    }*/
-}
-
 - (void)applicationWillEnterForeground:(UIApplication *)application  {
-    /*if (self.sessionController.session && !self.isReciever) {
-        [self killSession];
-        [self startSession];
-    } else if (self.sessionController.session == nil) {
-         [self startSession];
-    }*/
+    [[BluetoothManager sharedManager]refresh];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     [[BGProcFactory sharedFactory]endAllTasks];
-  //  [self killSession];
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
@@ -776,187 +757,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     hud.labelText = title;
     [hud hide:YES afterDelay:1.5];
 }
-
-/*
-
-//
-// BT Sending
-//
-
-- (void)showBTController {
-    [self makeSessionUnavailable];
-    GKPeerPickerController *peerPicker = [[GKPeerPickerController alloc]init];
-    peerPicker.delegate = self;
-    peerPicker.connectionTypesMask = GKPeerPickerConnectionTypeNearby;
-    [peerPicker show];
-}
-
-- (void)sendBluetoothData {
-    
-    [self showHUDWithTitle:@"Sending File..."];
-    
-    NSString *fileName = [self.openFile lastPathComponent];
-    
-    if (fileName.length > 14) {
-        fileName = [[fileName substringToIndex:11] stringByAppendingString:@"..."];
-    }
-    
-    [self setSecondaryTitleOfVisibleHUD:fileName];
-    
-    NSString *filePath = self.openFile;
-    
-    if (filePath.length == 0) {
-        filePath = [self nowPlayingFile];
-    }
-    
-    if (filePath.length == 0) {
-        [self hideHUD];
-        [self.sessionControllerSending disconnect];
-        [self setSessionControllerSending:nil];
-        [self makeSessionAvailable];
-        [TransparentAlert showAlertWithTitle:@"Internal Error" andMessage:@"The file could not be sent due to an internal error. Please try again later."];
-        return;
-    }
-    
-    NSData *file = [NSData dataWithContentsOfFile:filePath];
-    NSString *fileNameSending = [filePath lastPathComponent];
-    NSArray *array = [NSArray arrayWithObjects:fileNameSending, file, nil];
-    NSData *finalData = [NSKeyedArchiver archivedDataWithRootObject:array];
-    [self.sessionControllerSending sendDataToAllPeers:finalData];
-    [[BGProcFactory sharedFactory]startProcForKey:@"Bluetooth" andExpirationHandler:nil];
-}
-
-- (void)peerPickerController:(GKPeerPickerController *)picker didConnectPeer:(NSString *)peerID toSession:(GKSession *)session {
-    
-    [[[TransparentAlert alloc]initWithTitle:@"Connected" message:@"Would you like to send the file?" completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
-        
-        if (buttonIndex == 1) {
-            [self sendBluetoothData];
-        } else {
-            [session disconnectFromAllPeers];
-        }
-        
-    } cancelButtonTitle:@"Cancel" otherButtonTitles:@"Send", nil]show];
-    
-    BKSessionController *sTemp = [[BKSessionController alloc]initWithSession:session];
-    self.sessionControllerSending = sTemp;
-    
-    self.sessionControllerSending.delegate = self;
-    
-    picker.delegate = nil;
-    [picker dismiss];
-}
-
-- (void)peerPickerControllerDidCancel:(GKPeerPickerController *)picker {
-	picker.delegate = nil;
-    [self makeSessionAvailable];
-}
-
-- (void)sessionControllerSenderDidReceiveData {
-    if ([MBProgressHUD HUDForView:self.window].mode != MBProgressHUDModeDeterminate) {
-        [self setVisibleHudMode:MBProgressHUDModeDeterminate];
-    }
-    [self setProgressOfVisibleHUD:self.sessionControllerSending.progress];
-}
-
-- (void)sessionControllerSenderDidFinishSendingData:(NSNotification *)aNotification {
-    [self hideHUD];
-    [TransparentAlert showAlertWithTitle:@"Sent" andMessage:@"Your file has been successfully sent."];
-    [self.sessionControllerSending disconnect];
-    [self setSessionControllerSending:nil];
-    [self makeSessionAvailable];
-    [[BGProcFactory sharedFactory]endProcForKey:@"Bluetooth"];
-}
-
-- (void)sessionControllerPeerDidDisconnect:(NSNotification *)aNotification {
-    [self hideHUD];
-    [TransparentAlert showAlertWithTitle:@"Bluetooth Disconnected" andMessage:@"The device you were connected to has been disconnected."];
-    [self.sessionControllerSending.session disconnectFromAllPeers];
-    [self setSessionControllerSending:nil];
-    [self makeSessionAvailable];
-    [[BGProcFactory sharedFactory]endProcForKey:@"Bluetooth"];
-}
-
-//
-// BT Reciever methods
-//
-
-- (void)startSession {
-    GKSession *session = [[GKSession alloc]initWithSessionID:nil displayName:nil sessionMode:GKSessionModeServer]; // change to peer
-    BKSessionController *scTemp = [[BKSessionController alloc]initWithSession:session];
-    [self setSessionController:scTemp];
-    self.sessionController.delegate = self;
-    self.sessionController.session.delegate = self;
-    self.sessionController.session.available = YES;
-}
-
-- (void)killSession {
-    [self.sessionController setSession:nil];
-    [self setSessionController:nil];
-}
-
-- (void)makeSessionUnavailable {
-    self.sessionController.session.available = NO;
-} 
-
-- (void)makeSessionAvailable {
-    self.sessionController.session.available = YES;
-}
-
-- (void)session:(GKSession *)session didReceiveConnectionRequestFromPeer:(NSString *)peerID {
-    
-    if ([MBProgressHUD HUDForView:self.window]) {
-        [self.sessionController.session denyConnectionFromPeer:peerID];
-    }
-    
-    [[[TransparentAlert alloc]initWithTitle:@"Connect?" message:@"Another person is trying to send you a file over bluetooth." completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
-        
-        if (buttonIndex == 1) {
-            [self.sessionController.session acceptConnectionFromPeer:peerID error:nil];
-        } else {
-            [self.sessionController.session denyConnectionFromPeer:peerID];
-        }
-        
-    } cancelButtonTitle:@"Cancel" otherButtonTitles:@"Connect", nil]show];
-}
-
-- (void)sessionControllerReceiverWillStartReceivingData:(NSNotification *)aNotification {
-    
-    [[BGProcFactory sharedFactory]startProcForKey:@"bt_rec" andExpirationHandler:nil];
-    
-    self.isReciever = YES;
-    
-    [self showHUDWithTitle:@"Receiving File..."];
-    [self setVisibleHudMode:MBProgressHUDModeDeterminate];
-}
-
-- (void)sessionControllerReceiverDidReceiveData:(NSNotification *)aNotification {
-    [self setProgressOfVisibleHUD:self.sessionController.progress];
-}
-
-- (void)sessionControllerReceiverDidFinishReceivingData:(NSNotification *)aNotification {
-    self.isReciever = NO;
-    NSArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:self.sessionController.receivedData];
-    
-    if (array.count == 0) {
-        [TransparentAlert showAlertWithTitle:@"File Transfer Failed" andMessage:@"There was an error receiving your file."];
-        return;
-    }
-    
-    NSData *file = [array objectAtIndex:1];
-    NSString *name = [array objectAtIndex:0];
-    NSString *docsDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)objectAtIndex:0];
-    
-    [self hideHUD];
-    
-    NSString *finalLocation = getNonConflictingFilePathForPath([docsDir stringByAppendingPathComponent:name]);
-    [[NSFileManager defaultManager]createFileAtPath:finalLocation contents:file attributes:nil];
-    [self.sessionController.receivedData setLength:0];
-    
-    [[BGProcFactory sharedFactory]endProcForKey:@"bt_rec"];
-    
-    [TransparentAlert showAlertWithTitle:@"Success" andMessage:@"Your file was successfully received."];
-}*/
 
 //
 // SFTP Download

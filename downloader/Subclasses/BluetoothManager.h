@@ -17,6 +17,7 @@ typedef void (^finishBlock)(BOOL succeeded,BOOLcancelled);*/
 + (BluetoothManager *)sharedManager;
 
 - (void)cancel;
+- (void)refresh;
 - (void)searchForPeers;
 - (void)loadFile:(NSString *)path;
 - (NSString *)getFilename;
