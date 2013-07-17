@@ -8,6 +8,7 @@
 
 #import "BluetoothManager.h"
 #import <GameKit/GameKit.h>
+#import "PeerPicker.h"
 
 static NSString *kFlagKey = @"f";
 static NSString *kDataKey = @"d";
@@ -26,9 +27,9 @@ static NSString *kFilesizeKey = @"s";
 
 @property (nonatomic, assign) float readBytes;
 @property (nonatomic, strong) NSString *originFilePath;
-@property (nonatomic, assign) BOOL shouldShowConnectionPrompts;
 
 @property (nonatomic, strong) TransparentAlert *searchingAlert;
+@property (nonatomic, strong) PeerPicker *picker;
 
 @end
 
@@ -46,10 +47,12 @@ static NSString *kFilesizeKey = @"s";
 - (id)init {
     self = [super init];
     if (self) {
+        self.picker = [PeerPicker peerPicker];
         self.session = [[GKSession alloc]initWithSessionID:@"swift_bluetooth" displayName:nil sessionMode:GKSessionModePeer];
         [_session setDataReceiveHandler:self withContext:nil];
         _session.delegate = self;
         _session.available = YES;
+        [_picker.ignoredPeerIDs addObject:_session.peerID];
     }
     return self;
 }
@@ -64,6 +67,7 @@ static NSString *kFilesizeKey = @"s";
 
 - (void)reset {
     _session.available = YES;
+    _picker.state = PeerPickerStateNormal;
     self.originFilePath = nil;
     self.progressBlock = nil;
     self.completionBlock = nil;
@@ -75,31 +79,25 @@ static NSString *kFilesizeKey = @"s";
     self.handle = nil;
     self.receivedBytes = 0;
     self.targetPath = nil;
-    self.shouldShowConnectionPrompts = NO;
 }
 
 - (void)searchForPeers {
-    _session.available = YES;
-    self.shouldShowConnectionPrompts = YES;
-    self.searchingAlert = [[TransparentAlert alloc]initWithTitle:@"Searching for other iPhones" message:@"Swift only supports sending files to other bluetooth enabled iPhones running a copy of Swift." completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
-        [self reset];
-    } cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-    [_searchingAlert show];
+    _session.available = NO;
+    __weak BluetoothManager *weakManager = self;
+    [_picker setPeerPickedBlock:^(NSString *peerID) {
+        [weakManager.session connectToPeer:peerID withTimeout:30];
+        weakManager.isSender = YES;
+    }];
+    
+    [_picker setCancelledBlock:^{
+        weakManager.session.available = YES;
+        [weakManager reset];
+    }];
+    [_picker show];
 }
 
 - (void)session:(GKSession *)session peer:(NSString *)peerID didChangeState:(GKPeerConnectionState)state {
     switch (state) {
-        case GKPeerStateAvailable: {
-            if (![peerID isEqualToString:_session.peerID] && _shouldShowConnectionPrompts) {
-                [[[TransparentAlert alloc]initWithTitle:@"Connect?" message:[NSString stringWithFormat:@"Would you like to connect to %@",[_session displayNameForPeer:peerID]] completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
-                    if (buttonIndex == 1) {
-                        [_session connectToPeer:peerID withTimeout:30];
-                        self.isSender = YES;
-                        self.shouldShowConnectionPrompts = NO;
-                    }
-                } cancelButtonTitle:@"No" otherButtonTitles:@"YES", nil]show];
-            }
-        } break;
         case GKPeerStateDisconnected: {
             [TransparentAlert showAlertWithTitle:@"Bluetooth Disconnected" andMessage:@"You have been disconnected from the other iPhone."];
             if (_completionBlock) {
@@ -119,7 +117,9 @@ static NSString *kFilesizeKey = @"s";
             }
         } break;
         case GKPeerStateConnecting: {
-            // show connecting HUD or something
+            if (_isSender) {
+                [_picker setState:PeerPickerStateConnecting];
+            }
         } break;
         case GKPeerStateUnavailable: {
             _session.available = YES;

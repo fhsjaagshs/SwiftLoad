@@ -52,6 +52,7 @@
 		F13979A816E78F4E00F8B61B /* ArrowRight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A416E78F4E00F8B61B /* ArrowRight@2x.png */; };
 		F13B08B9178CEE05005201F7 /* WebDAVCredsPrompt.m in Sources */ = {isa = PBXBuildFile; fileRef = F13B08B8178CEE05005201F7 /* WebDAVCredsPrompt.m */; };
 		F13B58A7176D2C7E007EF22B /* HUDProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = F13B58A6176D2C7E007EF22B /* HUDProgressView.m */; };
+		F13BECF4179604380012E4B4 /* PeerPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = F13BECF3179604380012E4B4 /* PeerPicker.m */; };
 		F1444581145A04A30026CDB7 /* pictureView.m in Sources */ = {isa = PBXBuildFile; fileRef = F144457F145A04A30026CDB7 /* pictureView.m */; };
 		F14478381770826A00C5204A /* DownloadController.m in Sources */ = {isa = PBXBuildFile; fileRef = F14478371770826A00C5204A /* DownloadController.m */; };
 		F144783E177092B800C5204A /* DownloadingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F144783D177092B800C5204A /* DownloadingCell.m */; };
@@ -132,7 +133,6 @@
 		F172BCC51794EC4500AC1483 /* DDRange.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BC851794EC4500AC1483 /* DDRange.m */; };
 		F172BCC61794EC4500AC1483 /* About.txt in Resources */ = {isa = PBXBuildFile; fileRef = F172BC871794EC4500AC1483 /* About.txt */; };
 		F172BCC71794EC4500AC1483 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BC891794EC4500AC1483 /* GCDAsyncSocket.m */; };
-		F172BCC81794EC4500AC1483 /* About.txt in Resources */ = {isa = PBXBuildFile; fileRef = F172BC8B1794EC4500AC1483 /* About.txt */; };
 		F172BCC91794EC4500AC1483 /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BC8D1794EC4500AC1483 /* DDAbstractDatabaseLogger.m */; };
 		F172BCCA1794EC4500AC1483 /* DDASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BC8F1794EC4500AC1483 /* DDASLLogger.m */; };
 		F172BCCB1794EC4500AC1483 /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BC911794EC4500AC1483 /* DDFileLogger.m */; };
@@ -170,6 +170,7 @@
 		F1A72948149876040049DBB6 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A72947149876040049DBB6 /* GameKit.framework */; };
 		F1A923FE140D4DDD003ACDAB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A923FD140D4DDD003ACDAB /* QuartzCore.framework */; };
 		F1B2489014E333E300C44E11 /* webDAVHelp.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B2488E14E333E200C44E11 /* webDAVHelp.m */; };
+		F1B2C0FC17961A0E00AD5A04 /* PeerPickerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B2C0FB17961A0E00AD5A04 /* PeerPickerCell.m */; };
 		F1BA8C7E17728500007AAF85 /* BGProcFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BA8C7D17728500007AAF85 /* BGProcFactory.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F1BC30CA17715DF300DAFA0A /* Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BC30C917715DF300DAFA0A /* Hack.m */; };
 		F1BE07E1176F793F00C4F038 /* Downloads.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BE07E0176F793F00C4F038 /* Downloads.m */; };
@@ -305,6 +306,8 @@
 		F13B08B8178CEE05005201F7 /* WebDAVCredsPrompt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebDAVCredsPrompt.m; sourceTree = "<group>"; };
 		F13B58A5176D2C7E007EF22B /* HUDProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HUDProgressView.h; path = ../HUDProgressView.h; sourceTree = "<group>"; };
 		F13B58A6176D2C7E007EF22B /* HUDProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HUDProgressView.m; path = ../HUDProgressView.m; sourceTree = "<group>"; };
+		F13BECF2179604380012E4B4 /* PeerPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeerPicker.h; sourceTree = "<group>"; };
+		F13BECF3179604380012E4B4 /* PeerPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeerPicker.m; sourceTree = "<group>"; };
 		F144457E145A04A30026CDB7 /* pictureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pictureView.h; sourceTree = "<group>"; };
 		F144457F145A04A30026CDB7 /* pictureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pictureView.m; sourceTree = "<group>"; };
 		F14478361770826A00C5204A /* DownloadController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadController.h; sourceTree = "<group>"; };
@@ -422,7 +425,6 @@
 		F172BC871794EC4500AC1483 /* About.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = About.txt; sourceTree = "<group>"; };
 		F172BC881794EC4500AC1483 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
 		F172BC891794EC4500AC1483 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
-		F172BC8B1794EC4500AC1483 /* About.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = About.txt; sourceTree = "<group>"; };
 		F172BC8C1794EC4500AC1483 /* DDAbstractDatabaseLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDAbstractDatabaseLogger.h; sourceTree = "<group>"; };
 		F172BC8D1794EC4500AC1483 /* DDAbstractDatabaseLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDAbstractDatabaseLogger.m; sourceTree = "<group>"; };
 		F172BC8E1794EC4500AC1483 /* DDASLLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDASLLogger.h; sourceTree = "<group>"; };
@@ -496,6 +498,8 @@
 		F1A923FD140D4DDD003ACDAB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F1B2488D14E333E200C44E11 /* webDAVHelp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = webDAVHelp.h; sourceTree = "<group>"; };
 		F1B2488E14E333E200C44E11 /* webDAVHelp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = webDAVHelp.m; sourceTree = "<group>"; };
+		F1B2C0FA17961A0E00AD5A04 /* PeerPickerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeerPickerCell.h; sourceTree = "<group>"; };
+		F1B2C0FB17961A0E00AD5A04 /* PeerPickerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeerPickerCell.m; sourceTree = "<group>"; };
 		F1BA8C7C17728500007AAF85 /* BGProcFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BGProcFactory.h; sourceTree = "<group>"; };
 		F1BA8C7D17728500007AAF85 /* BGProcFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BGProcFactory.m; sourceTree = "<group>"; };
 		F1BC30C817715DF300DAFA0A /* Hack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Hack.h; path = ../Hack.h; sourceTree = "<group>"; };
@@ -593,7 +597,6 @@
 		9B9DA4CE15561D0100C260AD /* Custom Classes */ = {
 			isa = PBXGroup;
 			children = (
-				F1BE07E5176F7A1B00C4F038 /* Download Controller */,
 				F1DA5247176E8181009A43CD /* Libraries */,
 				F1693C4516DFABA6006E3739 /* Categories */,
 				F1693C5216DFAC0E006E3739 /* Utility Classes */,
@@ -805,7 +808,20 @@
 			name = Hamburger;
 			sourceTree = "<group>";
 		};
-		F14333E516F610DE00B279F9 /* PullToReveal */ = {
+		F13BECF917960D790012E4B4 /* Bluetooth */ = {
+			isa = PBXGroup;
+			children = (
+				F13BECF2179604380012E4B4 /* PeerPicker.h */,
+				F13BECF3179604380012E4B4 /* PeerPicker.m */,
+				F1B2C0FA17961A0E00AD5A04 /* PeerPickerCell.h */,
+				F1B2C0FB17961A0E00AD5A04 /* PeerPickerCell.m */,
+				F172BC7B1794B59300AC1483 /* BluetoothManager.h */,
+				F172BC7C1794B59300AC1483 /* BluetoothManager.m */,
+			);
+			name = Bluetooth;
+			sourceTree = "<group>";
+		};
+		F14333E516F610DE00B279F9 /* SwipeToReveal */ = {
 			isa = PBXGroup;
 			children = (
 				F1EB833116D808AA009D7D2D /* action.png */,
@@ -820,7 +836,7 @@
 				F15507DB176EB0A90024FF03 /* paperclip@2x.png */,
 				F1EB833816D808AA009D7D2D /* inner-shadow.png */,
 			);
-			name = PullToReveal;
+			name = SwipeToReveal;
 			sourceTree = "<group>";
 		};
 		F150D6B3177F783E00E4C094 /* FMDatabase */ = {
@@ -893,6 +909,8 @@
 		F1693C5F16DFAC59006E3739 /* Subclasses */ = {
 			isa = PBXGroup;
 			children = (
+				F1BE07E5176F7A1B00C4F038 /* Download Controller */,
+				F13BECF917960D790012E4B4 /* Bluetooth */,
 				F1283AFE1780A79F006D8A79 /* UI */,
 				F1BC30C817715DF300DAFA0A /* Hack.h */,
 				F1BC30C917715DF300DAFA0A /* Hack.m */,
@@ -908,8 +926,6 @@
 				F106A7CE178876B1002D3BC8 /* SFTPCreds.m */,
 				F14B819B1788E2D300ADEF99 /* SimpleKeychain.h */,
 				F14B819C1788E2D300ADEF99 /* SimpleKeychain.m */,
-				F172BC7B1794B59300AC1483 /* BluetoothManager.h */,
-				F172BC7C1794B59300AC1483 /* BluetoothManager.m */,
 			);
 			path = Subclasses;
 			sourceTree = "<group>";
@@ -965,7 +981,6 @@
 		F172BC8A1794EC4500AC1483 /* CocoaLumberjack */ = {
 			isa = PBXGroup;
 			children = (
-				F172BC8B1794EC4500AC1483 /* About.txt */,
 				F172BC8C1794EC4500AC1483 /* DDAbstractDatabaseLogger.h */,
 				F172BC8D1794EC4500AC1483 /* DDAbstractDatabaseLogger.m */,
 				F172BC8E1794EC4500AC1483 /* DDASLLogger.h */,
@@ -1089,6 +1104,7 @@
 				F144783D177092B800C5204A /* DownloadingCell.m */,
 			);
 			name = "Download Controller";
+			path = ..;
 			sourceTree = "<group>";
 		};
 		F1DA5247176E8181009A43CD /* Libraries */ = {
@@ -1107,7 +1123,7 @@
 			isa = PBXGroup;
 			children = (
 				F1798EAC1774168B00310C37 /* Packagaing */,
-				F14333E516F610DE00B279F9 /* PullToReveal */,
+				F14333E516F610DE00B279F9 /* SwipeToReveal */,
 				F1E9F7801773FDC900EC345C /* arrow_disclosure.png */,
 				F1E9F7811773FDC900EC345C /* arrow_disclosure@2x.png */,
 				F1E9F7871773FECB00EC345C /* arrow_disclosure_highlighted.png */,
@@ -1280,7 +1296,6 @@
 				F101274617920BD2000C434E /* hamburger.png in Resources */,
 				F101274717920BD2000C434E /* hamburger@2x.png in Resources */,
 				F172BCC61794EC4500AC1483 /* About.txt in Resources */,
-				F172BCC81794EC4500AC1483 /* About.txt in Resources */,
 				F172BCD01794EC4500AC1483 /* README.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1410,6 +1425,8 @@
 				F172BCE01794EC4500AC1483 /* PUTResponse.m in Sources */,
 				F172BCE11794EC4500AC1483 /* WebSocket.m in Sources */,
 				F172BCE41794EC6700AC1483 /* HTTPConnection.m in Sources */,
+				F13BECF4179604380012E4B4 /* PeerPicker.m in Sources */,
+				F1B2C0FC17961A0E00AD5A04 /* PeerPickerCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
