@@ -28,8 +28,9 @@ static NSString *kFilesizeKey = @"s";
 @property (nonatomic, assign) float readBytes;
 @property (nonatomic, strong) NSString *originFilePath;
 
-@property (nonatomic, strong) TransparentAlert *searchingAlert;
 @property (nonatomic, strong) PeerPicker *picker;
+
+@property (nonatomic, assign) BOOL isTransferring;
 
 @end
 
@@ -57,6 +58,23 @@ static NSString *kFilesizeKey = @"s";
     return self;
 }
 
+- (void)finish {
+    self.isTransferring = NO;
+    [_session disconnectFromAllPeers];
+    if (_completionBlock) {
+        _completionBlock(YES,NO);
+    }
+    [self reset];
+}
+
+- (void)fail {
+    [_session disconnectFromAllPeers];
+    if (_completionBlock) {
+        _completionBlock(NO,NO);
+    }
+    [self reset];
+}
+
 - (void)cancel {
     [_session disconnectFromAllPeers];
     if (_completionBlock) {
@@ -69,9 +87,6 @@ static NSString *kFilesizeKey = @"s";
     _session.available = YES;
     _picker.state = PeerPickerStateNormal;
     self.originFilePath = nil;
-    self.progressBlock = nil;
-    self.completionBlock = nil;
-    self.startedBlock = nil;
     self.isSender = NO;
     self.readBytes = 0;
     self.filesize = 0;
@@ -79,17 +94,22 @@ static NSString *kFilesizeKey = @"s";
     self.handle = nil;
     self.receivedBytes = 0;
     self.targetPath = nil;
+    self.isTransferring = NO;
 }
 
 - (void)searchForPeers {
-    _session.available = NO;
+    self.isSender = YES;
+    self.isTransferring = YES;
+    _picker.state = PeerPickerStateNormal;
     __weak BluetoothManager *weakManager = self;
     [_picker setPeerPickedBlock:^(NSString *peerID) {
-        [weakManager.session connectToPeer:peerID withTimeout:30];
         weakManager.isSender = YES;
+        [weakManager.session connectToPeer:peerID withTimeout:30];
+        [weakManager.picker setState:PeerPickerStateConnecting];
     }];
     
     [_picker setCancelledBlock:^{
+        weakManager.isSender = NO;
         weakManager.session.available = YES;
         [weakManager reset];
     }];
@@ -99,13 +119,16 @@ static NSString *kFilesizeKey = @"s";
 - (void)session:(GKSession *)session peer:(NSString *)peerID didChangeState:(GKPeerConnectionState)state {
     switch (state) {
         case GKPeerStateDisconnected: {
-            [TransparentAlert showAlertWithTitle:@"Bluetooth Disconnected" andMessage:@"You have been disconnected from the other iPhone."];
-            if (_completionBlock) {
-                _completionBlock(NO, NO);
+            _session.available = YES;
+            if (_isTransferring) {
+                [TransparentAlert showAlertWithTitle:@"Bluetooth Disconnected" andMessage:@"You have been disconnected from the other iPhone."];
+                [self fail];
             }
-            [self cancel];
         } break;
         case GKPeerStateConnected: {
+            
+            [_picker dismissWithClickedButtonIndex:0 animated:YES];
+            
             _session.available = NO;
             
             if (_startedBlock) {
@@ -116,26 +139,21 @@ static NSString *kFilesizeKey = @"s";
                 [self sendData:[self info]];
             }
         } break;
-        case GKPeerStateConnecting: {
-            if (_isSender) {
-                [_picker setState:PeerPickerStateConnecting];
-            }
-        } break;
-        case GKPeerStateUnavailable: {
-            _session.available = YES;
-        } break;
         default:
             break;
     }
 }
 
 - (void)session:(GKSession *)session didFailWithError:(NSError *)error {
-    [TransparentAlert showAlertWithTitle:@"Bluetooth Error" andMessage:error.localizedDescription];
-    [self reset];
+    if (self.isTransferring) {
+        [TransparentAlert showAlertWithTitle:@"Bluetooth Error" andMessage:error.localizedDescription];
+        [self fail];
+    }
 }
 
 - (void)session:(GKSession *)session didReceiveConnectionRequestFromPeer:(NSString *)peerID {
     self.isSender = NO;
+    NSLog(@"Received From sender: %@",[_session displayNameForPeer:peerID]);
     [[[TransparentAlert alloc]initWithTitle:@"Connect?" message:[NSString stringWithFormat:@"Would you like to connect to %@",[_session displayNameForPeer:peerID]] completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
         if (buttonIndex == 1) {
             [_session acceptConnectionFromPeer:peerID error:nil];
@@ -146,8 +164,10 @@ static NSString *kFilesizeKey = @"s";
 }
 
 - (void)session:(GKSession *)session connectionWithPeerFailed:(NSString *)peerID withError:(NSError *)error {
-    [TransparentAlert showAlertWithTitle:@"Bluetooth Error" andMessage:error.localizedDescription];
-    [self reset];
+    if (self.isTransferring) {
+        [TransparentAlert showAlertWithTitle:@"Bluetooth Connection Failed" andMessage:error.localizedDescription];
+        [self fail];
+    }
 }
 
 - (void)receiveData:(NSData *)data fromPeer:(NSString *)peer inSession:(GKSession *)session context:(void *)context {
@@ -177,6 +197,7 @@ static NSString *kFilesizeKey = @"s";
 }
 
 - (void)writeData:(NSData *)data {
+    [_handle seekToEndOfFile];
     [_handle writeData:data];
 }
 
@@ -198,9 +219,11 @@ static NSString *kFilesizeKey = @"s";
     NSString *flag = [dict objectForKey:kFlagKey];
     
     if ([flag isEqualToString:@"info"]) {
+        self.isTransferring = YES;
         self.filesize = [[dict objectForKey:kFilesizeKey]floatValue];
         self.filename = [dict objectForKey:kFilenameKey];
         self.targetPath = getNonConflictingFilePathForPath([NSTemporaryDirectory() stringByAppendingPathComponent:_filename]);
+        [[NSFileManager defaultManager]createFileAtPath:_targetPath contents:nil attributes:nil];
         self.handle = [NSFileHandle fileHandleForWritingAtPath:_targetPath];
         
         if (_startedBlock) {
@@ -210,36 +233,50 @@ static NSString *kFilesizeKey = @"s";
         [self sendData:[self response]];
     } else if ([flag isEqualToString:@"data"]) {
         if (!_isSender) {
-            self.receivedBytes += data.length;
+            NSData *fileData = [dict objectForKey:kDataKey];
+            
+            self.receivedBytes += fileData.length;
+            
             float progress = _receivedBytes/_filesize;
             
+            [self writeData:fileData];
+            
+            if (_progressBlock) {
+                _progressBlock(progress);
+            }
+            
+            [self sendData:[self response]];
+            
             if (progress == 1) {
+                [[NSFileManager defaultManager]moveItemAtPath:_targetPath toPath:getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:_filename]) error:nil];
+                [self finish];
+                
+                /*self.isTransferring = NO;
+                
+                
                 if (_completionBlock) {
                     _completionBlock(YES,NO);
-                    [[NSFileManager defaultManager]moveItemAtPath:_targetPath toPath:getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:_filename]) error:nil];
-                }
-            } else {
-                if (_progressBlock) {
-                    _progressBlock(progress);
-                }
+                }*/
             }
-            [self sendData:[self response]];
+            
         }
     } else if ([flag isEqualToString:@"response"]) {
         if (_isSender) {
             float progress = _readBytes/_filesize;
             
-            if (progress == 1) {
-                if (_completionBlock) {
-                    _completionBlock(YES,NO);
-                }
-            } else {
-                if (_progressBlock) {
-                    _progressBlock(progress);
-                }
+            if (_progressBlock) {
+                _progressBlock(progress);
             }
             
-            [self sendData:[self data:[self readData]]];
+            if (progress == 1) {
+                [self finish];
+                /*if (_completionBlock) {
+                    _completionBlock(YES,NO);
+                }
+                self.isTransferring = NO;*/
+            } else {
+                [self sendData:[self data:[self readData]]];
+            }
         }
     }
 }

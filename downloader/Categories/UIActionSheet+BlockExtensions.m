@@ -40,8 +40,10 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
 	void (^block)(NSUInteger buttonIndex, UIActionSheet *actionSheet) = objc_getAssociatedObject(self, "blockCallback");
-	block(buttonIndex, self);
-	//Block_release(block);
+    
+    if (block) {
+        block(buttonIndex, self);
+    }
 }
 
 @end

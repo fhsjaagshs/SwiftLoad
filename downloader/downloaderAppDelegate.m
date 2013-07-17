@@ -382,29 +382,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 - (void)prepareFileForBTSending:(NSString *)file {
     [[BluetoothManager sharedManager]loadFile:file];
-    [[BluetoothManager sharedManager]setStartedBlock:^{
-        [[BGProcFactory sharedFactory]startProcForKey:@"bluetooth_ft" andExpirationHandler:^{
-            [[BluetoothManager sharedManager]cancel];
-        }];
-        
-        [self showHUDWithTitle:[[BluetoothManager sharedManager]isSender]?@"Sending":@"Receiving"];
-        [self setSecondaryTitleOfVisibleHUD:[[BluetoothManager sharedManager]getFilename]];
-        [self setVisibleHudMode:MBProgressHUDModeDeterminate];
-    }];
-    [[BluetoothManager sharedManager]setProgressBlock:^(float progress) {
-        [self setProgressOfVisibleHUD:progress];
-    }];
-    [[BluetoothManager sharedManager]setCompletionBlock:^(BOOL succeeded, BOOL cancelled) {
-        [[BGProcFactory sharedFactory]endProcForKey:@"bluetooth_ft"];
-        if (!cancelled) {
-            if (succeeded) {
-                [TransparentAlert showAlertWithTitle:@"Success" andMessage:[NSString stringWithFormat:@"\"%@\" has been successfully %@.",[[BluetoothManager sharedManager]getFilename],[[BluetoothManager sharedManager]isSender]?@"sent":@"received"]];
-            } else {
-                [TransparentAlert showAlertWithTitle:@"Failure" andMessage:[NSString stringWithFormat:@"There was an error %@ \"%@\".",[[BluetoothManager sharedManager]isSender]?@"sent":@"received",[[BluetoothManager sharedManager]getFilename]]];
-            }
-        }
-    }];
-    
     [[BluetoothManager sharedManager]searchForPeers];
 }
 
@@ -605,6 +582,30 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     DBSession *session = [[DBSession alloc]initWithAppKey:@"ybpwmfq2z1jmaxi" appSecret:@"ua6hjow7hxx0y3a" root:kDBRootDropbox];
 	session.delegate = self;
 	[DBSession setSharedSession:session];
+    
+    [[BluetoothManager sharedManager]setStartedBlock:^{
+        [[BGProcFactory sharedFactory]startProcForKey:@"bluetooth_ft" andExpirationHandler:^{
+            [[BluetoothManager sharedManager]cancel];
+        }];
+        
+        [self showHUDWithTitle:[[BluetoothManager sharedManager]isSender]?@"Sending":@"Receiving"];
+        [self setSecondaryTitleOfVisibleHUD:[[BluetoothManager sharedManager]getFilename]];
+        [self setVisibleHudMode:MBProgressHUDModeDeterminate];
+    }];
+    [[BluetoothManager sharedManager]setProgressBlock:^(float progress) {
+        [self setProgressOfVisibleHUD:progress];
+    }];
+    [[BluetoothManager sharedManager]setCompletionBlock:^(BOOL succeeded, BOOL cancelled) {
+        [[BGProcFactory sharedFactory]endProcForKey:@"bluetooth_ft"];
+        [self hideHUD];
+        if (!cancelled) {
+            if (succeeded) {
+                [TransparentAlert showAlertWithTitle:@"Success" andMessage:[NSString stringWithFormat:@"\"%@\" has been successfully %@.",[[BluetoothManager sharedManager]getFilename],[[BluetoothManager sharedManager]isSender]?@"sent":@"received"]];
+            } else {
+                [TransparentAlert showAlertWithTitle:@"Failure" andMessage:[NSString stringWithFormat:@"There was an error %@ \"%@\".",[[BluetoothManager sharedManager]isSender]?@"sent":@"received",[[BluetoothManager sharedManager]getFilename]]];
+            }
+        }
+    }];
     
     /*if (_sessionController.session && !_isReciever) {
         [self killSession];

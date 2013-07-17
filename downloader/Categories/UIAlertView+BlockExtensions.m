@@ -35,8 +35,10 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	void (^block)(NSUInteger buttonIndex, UIAlertView *alertView) = objc_getAssociatedObject(self, "blockCallback");
-	block(buttonIndex, self);
- //   Block_release(block);
+    
+    if (block) {
+        block(buttonIndex, self);
+    }
 }
 
 @end

@@ -14,7 +14,7 @@ static NSString * const kShortMessage = @"\n\n\n";
 
 static NSString * const kCellID = @"PeerPicker";
 
-@interface PeerPicker () <GKSessionDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface PeerPicker () <GKSessionDelegate, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) GKSession *session;
 @property (nonatomic, strong) UITableView *theTableView;
@@ -38,7 +38,7 @@ static NSString * const kCellID = @"PeerPicker";
 }
 
 - (id)initWithTitle:(NSString *)title message:(NSString *)message delegate:(id)delegate cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ... {
-    self = [super initWithTitle:nil message:kLongMessage delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+    self = [super initWithTitle:nil message:kLongMessage delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
     if (self) {
         
         self.peers = [NSMutableArray array];
@@ -70,7 +70,7 @@ static NSString * const kCellID = @"PeerPicker";
         
         self.session = [[GKSession alloc]initWithSessionID:@"swift_bluetooth" displayName:nil sessionMode:GKSessionModePeer];
         _session.delegate = self;
-        _session.available = YES;
+        _session.available = NO;
         
         [_ignoredPeerIDs addObject:_session.peerID];
         
@@ -81,6 +81,11 @@ static NSString * const kCellID = @"PeerPicker";
 
 - (void)show {
     [super show];
+    _session.available = YES;
+}
+
+- (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex {
+    [_peers removeAllObjects];
 }
 
 - (void)layoutSubviews {
@@ -111,8 +116,7 @@ static NSString * const kCellID = @"PeerPicker";
         _searchingLabel.text = @"Connecting...";
         _searchingLabel.frame = CGRectMake((width/2)-60, 10, 120, 25);
         _activityIndicator.frame = CGRectMake((width/2)-25, 50, 25, 25);
-        _activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
-        
+       // _activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
     }
 }
 
@@ -150,6 +154,7 @@ static NSString * const kCellID = @"PeerPicker";
 - (void)session:(GKSession *)session peer:(NSString *)peerID didChangeState:(GKPeerConnectionState)state {
     switch (state) {
         case GKPeerStateAvailable: {
+            NSLog(@"Found Peer: %@",[_session displayNameForPeer:peerID]);
             if (![_peers containsObject:peerID] && ![_ignoredPeerIDs containsObject:peerID]) {
                 [_peers addObject:peerID];
                 [_theTableView reloadData];
