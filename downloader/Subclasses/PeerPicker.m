@@ -14,7 +14,7 @@ static NSString * const kShortMessage = @"\n\n\n";
 
 static NSString * const kCellID = @"PeerPicker";
 
-@interface PeerPicker () <GKSessionDelegate, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
+@interface PeerPicker () <GKSessionDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) GKSession *session;
 @property (nonatomic, strong) UITableView *theTableView;
@@ -38,7 +38,7 @@ static NSString * const kCellID = @"PeerPicker";
 }
 
 - (id)initWithTitle:(NSString *)title message:(NSString *)message delegate:(id)delegate cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ... {
-    self = [super initWithTitle:nil message:kLongMessage delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+    self = [super initWithTitle:nil message:kLongMessage delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
     if (self) {
         
         self.peers = [NSMutableArray array];
@@ -145,10 +145,6 @@ static NSString * const kCellID = @"PeerPicker";
         _peerPickedBlock([_peers objectAtIndex:indexPath.row]);
     }
     [_theTableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    [self dismissWithClickedButtonIndex:buttonIndex animated:YES];
 }
 
 - (void)session:(GKSession *)session peer:(NSString *)peerID didChangeState:(GKPeerConnectionState)state {
