@@ -17,13 +17,16 @@ typedef void (^finishBlock)(BOOL succeeded,BOOLcancelled);*/
 + (BluetoothManager *)sharedManager;
 
 - (void)cancel;
-- (void)refresh;
+
+- (void)prepareForBackground;
+- (void)prepareForForeground;
+
 - (void)searchForPeers;
 - (void)loadFile:(NSString *)path;
 - (NSString *)getFilename;
 
 @property (nonatomic, copy) void(^progressBlock)(float progress);
-@property (nonatomic, copy) void(^completionBlock)(BOOL succeeded,BOOL cancelled);
+@property (nonatomic, copy) void(^completionBlock)(NSError *error,BOOL cancelled);
 @property (nonatomic, copy) void(^startedBlock)(void);
 
 @property (nonatomic, assign) BOOL isSender;

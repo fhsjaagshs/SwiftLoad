@@ -12,8 +12,6 @@
 static NSString * const kLongMessage = @"\n\n\n\n\n\n\n\n\n";
 static NSString * const kShortMessage = @"\n\n\n";
 
-static NSString * const kCellID = @"PeerPicker";
-
 @interface PeerPicker () <GKSessionDelegate, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) GKSession *session;
@@ -29,6 +27,7 @@ static NSString * const kCellID = @"PeerPicker";
 
 - (void)setState:(PeerPickerState)state {
     _state = state;
+    NSLog(@"state change");
     self.message = (state == PeerPickerStateNormal)?kLongMessage:kShortMessage;
     [self setNeedsLayout];
 }
@@ -109,15 +108,15 @@ static NSString * const kCellID = @"PeerPicker";
         _activityIndicator.frame = CGRectMake((width/2)-70, 45, 25, 25);
         _theTableView.frame = CGRectMake(30, 75, width-90, self.frame.size.height-170);
         _searchingLabel.text = @"Searching...";
-        self.message = kLongMessage;
+        [_theTableView reloadData];
     } else if (_state == PeerPickerStateConnecting) {
         _theImageView.hidden = YES;
         _theTableView.hidden = YES;
         _searchingLabel.text = @"Connecting...";
         _searchingLabel.frame = CGRectMake((width/2)-60, 10, 120, 25);
         _activityIndicator.frame = CGRectMake((width/2)-25, 50, 25, 25);
-       // _activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
     }
+    [_activityIndicator startAnimating];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -130,10 +129,10 @@ static NSString * const kCellID = @"PeerPicker";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    PeerPickerCell *cell = (PeerPickerCell *)[_theTableView dequeueReusableCellWithIdentifier:kCellID];
+    PeerPickerCell *cell = (PeerPickerCell *)[_theTableView dequeueReusableCellWithIdentifier:@"PeerPicker"];
     
     if (cell == nil) {
-        cell = [[PeerPickerCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellID];
+        cell = [[PeerPickerCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PeerPicker"];
     }
 
     cell.isFirstCell = (indexPath.row == 0);

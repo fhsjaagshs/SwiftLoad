@@ -49,32 +49,44 @@ static NSString *kFilesizeKey = @"s";
     self = [super init];
     if (self) {
         self.picker = [PeerPicker peerPicker];
-        self.session = [[GKSession alloc]initWithSessionID:@"swift_bluetooth" displayName:nil sessionMode:GKSessionModePeer];
-        [_session setDataReceiveHandler:self withContext:nil];
-        _session.delegate = self;
-        _session.available = YES;
+        [self loadSession];
         [_picker.ignoredPeerIDs addObject:_session.peerID];
     }
     return self;
 }
 
-- (void)refresh {
-    
+- (void)loadSession {
+    self.session = [[GKSession alloc]initWithSessionID:@"swift_bluetooth" displayName:nil sessionMode:GKSessionModePeer];
+    [_session setDataReceiveHandler:self withContext:nil];
+    _session.delegate = self;
+    _session.available = YES;
+}
+
+- (void)prepareForBackground {
+    if (!_isTransferring) {
+        [self setSession:nil];
+    }
+}
+
+- (void)prepareForForeground {
+    if (!_isTransferring) {
+        [self loadSession];
+    }
 }
 
 - (void)finish {
     self.isTransferring = NO;
     [_session disconnectFromAllPeers];
     if (_completionBlock) {
-        _completionBlock(YES,NO);
+        _completionBlock(nil,NO);
     }
     [self reset];
 }
 
-- (void)fail {
+- (void)failWithError:(NSError *)error {
     [_session disconnectFromAllPeers];
     if (_completionBlock) {
-        _completionBlock(NO,NO);
+        _completionBlock(error,NO);
     }
     [self reset];
 }
@@ -82,7 +94,7 @@ static NSString *kFilesizeKey = @"s";
 - (void)cancel {
     [_session disconnectFromAllPeers];
     if (_completionBlock) {
-        _completionBlock(NO,YES);
+        _completionBlock(nil,YES);
     }
     [self reset];
 }
@@ -125,11 +137,12 @@ static NSString *kFilesizeKey = @"s";
         case GKPeerStateDisconnected: {
             _session.available = YES;
             if (_isTransferring) {
-                [TransparentAlert showAlertWithTitle:@"Bluetooth Disconnected" andMessage:@"You have been disconnected from the other iPhone."];
-                [self fail];
+                [self failWithError:[NSError errorWithDomain:@"You have been disconnected from the other iPhone" code:-1 userInfo:nil]];
             }
         } break;
         case GKPeerStateConnected: {
+            
+            self.isTransferring = YES;
             
             [_picker dismissWithClickedButtonIndex:0 animated:YES];
             
@@ -149,15 +162,13 @@ static NSString *kFilesizeKey = @"s";
 }
 
 - (void)session:(GKSession *)session didFailWithError:(NSError *)error {
-    if (self.isTransferring) {
-        [TransparentAlert showAlertWithTitle:@"Bluetooth Error" andMessage:error.localizedDescription];
-        [self fail];
+    if (_isTransferring) {
+        [self failWithError:error];
     }
 }
 
 - (void)session:(GKSession *)session didReceiveConnectionRequestFromPeer:(NSString *)peerID {
     self.isSender = NO;
-    NSLog(@"Received From sender: %@",[_session displayNameForPeer:peerID]);
     [[[TransparentAlert alloc]initWithTitle:@"Connect?" message:[NSString stringWithFormat:@"Would you like to connect to %@",[_session displayNameForPeer:peerID]] completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
         if (buttonIndex == 1) {
             [_session acceptConnectionFromPeer:peerID error:nil];
@@ -168,9 +179,8 @@ static NSString *kFilesizeKey = @"s";
 }
 
 - (void)session:(GKSession *)session connectionWithPeerFailed:(NSString *)peerID withError:(NSError *)error {
-    if (self.isTransferring) {
-        [TransparentAlert showAlertWithTitle:@"Bluetooth Connection Failed" andMessage:error.localizedDescription];
-        [self fail];
+    if (_isTransferring) {
+        [self failWithError:error];
     }
 }
 
