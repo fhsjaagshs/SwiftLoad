@@ -364,7 +364,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
                     
                     void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) = ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
                         if (error) {
-                            [TransparentAlert showAlertWithTitle:[NSString stringWithFormat:@"Error %u",error.code] andMessage:error.domain];
+                            [TransparentAlert showAlertWithTitle:[NSString stringWithFormat:@"Error %u",error.code] andMessage:error.localizedDescription];
                         }
                     };
                     
