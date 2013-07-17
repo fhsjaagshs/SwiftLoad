@@ -46,6 +46,7 @@ static NSString * const kShortMessage = @"\n\n\n";
         _searchingLabel.textAlignment = UITextAlignmentLeft;
         _searchingLabel.textColor = [UIColor blackColor];
         _searchingLabel.backgroundColor = [UIColor clearColor];
+        _searchingLabel.text = @"Searching...";
         [self addSubview:_searchingLabel];
         
         self.theTableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain];
@@ -61,17 +62,12 @@ static NSString * const kShortMessage = @"\n\n\n";
         
         self.session = [[GKSession alloc]initWithSessionID:@"swift_bluetooth" displayName:nil sessionMode:GKSessionModePeer];
         _session.delegate = self;
-        _session.available = NO;
+        _session.available = YES;
         
         [_ignoredPeerIDs addObject:_session.peerID];
     }
     return self;
 }
-
-/*- (void)show {
-    [super show];
-    _session.available = YES;
-}*/
 
 - (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex {
     [_peers removeAllObjects];
@@ -124,7 +120,8 @@ static NSString * const kShortMessage = @"\n\n\n";
     if (_peerPickedBlock) {
         _peerPickedBlock([_peers objectAtIndex:indexPath.row]);
     }
-    [_theTableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self dismissWithClickedButtonIndex:0 animated:YES];
+    [_theTableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
 - (void)session:(GKSession *)session peer:(NSString *)peerID didChangeState:(GKPeerConnectionState)state {
