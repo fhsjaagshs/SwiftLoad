@@ -177,7 +177,7 @@ static NSString *kFilesizeKey = @"s";
 
 - (void)session:(GKSession *)session connectionWithPeerFailed:(NSString *)peerID withError:(NSError *)error {
     if (_isTransferring) {
-        [self failWithError:error];
+        [self failWithError:[NSError errorWithDomain:@"Swift failed to connect to the other iPhone" code:-1 userInfo:nil]];
     }
 }
 
