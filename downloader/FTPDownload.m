@@ -8,9 +8,15 @@
 
 #import "FTPDownload.h"
 
-@interface FTPDownload ()
+@interface FTPDownload () <NSStreamDelegate>
 
-@property (nonatomic, strong) SCRFTPRequest *request;
+@property (nonatomic, strong) NSInputStream *readStream;
+@property (nonatomic, strong) NSFileHandle *handle;
+
+@property (nonatomic, assign) int bufferSize;
+@property (nonatomic, assign) float fileSize;
+@property (nonatomic, assign) float bytesRead;
+
 
 @end
 
@@ -24,13 +30,22 @@
     self = [super init];
     if (self) {
         self.url = aUrl;
+        self.bufferSize = 32768; // start with 32KB buffer, increase it if reads fill it
     }
     return self;
 }
 
+- (void)killReadStream {
+    [_readStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    _readStream.delegate = nil;
+    [_readStream close];
+    self.readStream = nil;
+}
+
 - (void)stop {
     [super stop];
-    [_request cancelRequest];
+    [self killReadStream];
+    [_handle closeFile];
 }
 
 - (void)start {
@@ -42,6 +57,66 @@
     }
     
     [self downloadFileUsingFtp:_url withUsername:_username andPassword:_password];
+}
+
+- (void)handleDownloadEvent:(NSStreamEvent)eventCode {
+    switch (eventCode) {
+        case NSStreamEventOpenCompleted: {
+            _fileSize = [[_readStream propertyForKey:(id)kCFStreamPropertyFTPResourceSize]integerValue];
+        } break;
+        case NSStreamEventHasBytesAvailable: {
+            uint8_t buffer[_bufferSize];
+            NSInteger bytesRead = [_readStream read:buffer maxLength:sizeof(buffer)];
+            
+            _bytesRead += bytesRead;
+            
+            if (bytesRead == -1) {
+                [self showFailure];
+                return;
+            } else if (bytesRead == 0) {
+                [_readStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+                _readStream.delegate = nil;
+                [_readStream close];
+                self.readStream = nil;
+                [self showSuccess];
+            } else {
+                [_handle writeData:[NSData dataWithBytes:buffer length:sizeof(buffer)]];
+            }
+        } break;
+        case NSStreamEventErrorOccurred: {
+            CFStreamError err = CFReadStreamGetError((CFReadStreamRef)_readStream);
+            
+            if (err.domain == kCFStreamErrorDomainFTP) {
+                // error out
+            }
+        } break;
+        default: {
+        } break;
+    }
+}
+
+
+- (void)downloadFileUsingFTP:(NSURL *)url {
+    
+    self.fileName = url.absoluteString.lastPathComponent;
+    
+    CFReadStreamRef readStreamTemp = CFReadStreamCreateWithFTPURL(kCFAllocatorDefault, (__bridge CFURLRef)url);
+    if (!readStreamTemp) {
+        [self showFailure];
+        return;
+    }
+    
+    NSString *path = getNonConflictingFilePathForPath([[kDocsDir stringByAppendingPathComponent:self.fileName]percentSanitize]);
+    [[NSFileManager defaultManager]createFileAtPath:path contents:nil attributes:nil];
+    self.handle = [NSFileHandle fileHandleForWritingAtPath:path];
+    
+    self.readStream = (__bridge NSInputStream *)readStreamTemp;
+    CFRelease(readStreamTemp);
+    [_readStream setProperty:@"anonymous" forKey:(id)kCFStreamPropertyFTPUserName];
+    [_readStream setProperty:@"" forKey:(id)kCFStreamPropertyFTPPassword];
+    _readStream.delegate = self;
+    [_readStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    [_readStream open];
 }
 
 - (void)downloadFileUsingFtp:(NSURL *)url withUsername:(NSString *)username andPassword:(NSString *)password {
