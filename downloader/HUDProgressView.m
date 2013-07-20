@@ -46,7 +46,7 @@
 }
 
 - (void)show {
-    [[((downloaderAppDelegate *)[[UIApplication sharedApplication]delegate])window]addSubview:self];
+    [[[[UIApplication sharedApplication]delegate]window]addSubview:self];
 }
 
 - (void)hide {
@@ -77,7 +77,7 @@
 }
 
 + (HUDProgressView *)progressViewWithTag:(int)tag {
-    UIWindow *window = [((downloaderAppDelegate *)[[UIApplication sharedApplication]delegate])window];
+    UIWindow *window = [[[UIApplication sharedApplication]delegate]window];
     HUDProgressView *pview = (HUDProgressView *)[window viewWithTag:tag];
     
     if (!pview) {
@@ -90,7 +90,7 @@
 
 + (HUDProgressView *)progressView {
     
-    UIWindow *window = [((downloaderAppDelegate *)[[UIApplication sharedApplication]delegate])window];
+    UIWindow *window = [[[UIApplication sharedApplication]delegate]window];
     
 	NSArray *subviews = window.subviews;
 	Class hudClass = [HUDProgressView class];

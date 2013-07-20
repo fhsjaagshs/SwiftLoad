@@ -72,7 +72,6 @@
     #import "HTTPServer.h"
     #import "DAVConnection.h"
     #import "BluetoothManager.h"
-    #import "SCRFTPRequest.h"
 
     #import "webDAVHelp.h"
     #import "MyFilesViewDetailViewController.h"
@@ -94,6 +93,6 @@
     #import "ZipReadStream.h"
 
     #import "AudioConverter.h"
-    #import "downloaderAppDelegate.h"
+    #import "AppDelegate.h"
 
 #endif

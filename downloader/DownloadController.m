@@ -101,7 +101,7 @@ static NSString * const cellId = @"acellid";
         [_mainView addSubview:_theTableView];
     }
     
-    [[((downloaderAppDelegate *)[[UIApplication sharedApplication]delegate])window]addSubview:_mainView];
+    [[kAppDelegate window]addSubview:_mainView];
 }
 
 - (void)strikedownTableView {
@@ -169,7 +169,7 @@ static NSString * const cellId = @"acellid";
 
 - (void)show {
     [UIView animateWithDuration:0.25 animations:^{
-        [[((downloaderAppDelegate *)[[UIApplication sharedApplication]delegate])window]addSubview:self];
+        [[kAppDelegate window]addSubview:self];
     }];
 }
 

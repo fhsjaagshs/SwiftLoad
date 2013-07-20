@@ -112,7 +112,7 @@
 
 - (void)pasteInLocation:(NSString *)location {
     
-    downloaderAppDelegate *ad = kAppDelegate;
+    AppDelegate *ad = kAppDelegate;
     
     [ad showHUDWithTitle:_isCut?@"Moving Files...":@"Copying Files..."];
     
@@ -834,7 +834,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    downloaderAppDelegate *ad = kAppDelegate;
+    AppDelegate *ad = kAppDelegate;
     UITableViewCell *cell = [_theTableView cellForRowAtIndexPath:indexPath];
     int cellCount = [_theTableView numberOfRowsInSection:0];
 

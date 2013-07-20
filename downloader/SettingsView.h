@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "downloaderAppDelegate.h"
 
 @interface SettingsView : UIViewController <DBSessionDelegate, DBRestClientDelegate>
 

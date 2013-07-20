@@ -37,7 +37,7 @@
 		F1178B6F1775245400337813 /* TransparentAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = F1178B6E1775245400337813 /* TransparentAlert.m */; };
 		F118C74517713DAA00ED7384 /* ContentOffsetWatchdog.m in Sources */ = {isa = PBXBuildFile; fileRef = F118C74417713DAA00ED7384 /* ContentOffsetWatchdog.m */; };
 		F118C7481771425F00ED7384 /* PullToRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = F118C7471771425F00ED7384 /* PullToRefreshView.m */; };
-		F119CF0813F46DA6007D67E4 /* downloaderAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F119CF0713F46DA6007D67E4 /* downloaderAppDelegate.m */; };
+		F119CF0813F46DA6007D67E4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F119CF0713F46DA6007D67E4 /* AppDelegate.m */; };
 		F11C402E13F82F9D0077F5D1 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F11C402D13F82F9D0077F5D1 /* MessageUI.framework */; };
 		F11C403513F82FE00077F5D1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F11C403413F82FE00077F5D1 /* CoreGraphics.framework */; };
 		F11C403613F830720077F5D1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F11C403213F82FD10077F5D1 /* Foundation.framework */; };
@@ -123,7 +123,6 @@
 		F1693C5D16DFAC0E006E3739 /* MIMEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C5816DFAC0E006E3739 /* MIMEUtils.m */; };
 		F1693C5E16DFAC0E006E3739 /* NetworkUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C5A16DFAC0E006E3739 /* NetworkUtils.m */; };
 		F1693C6816DFAC59006E3739 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C6116DFAC59006E3739 /* MBProgressHUD.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		F1693C6A16DFAC59006E3739 /* SCRFTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C6516DFAC59006E3739 /* SCRFTPRequest.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F1693C7316DFB9B5006E3739 /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1693C7216DFB9B5006E3739 /* DropboxSDK.framework */; };
 		F172BC7D1794B59300AC1483 /* BluetoothManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BC7C1794B59300AC1483 /* BluetoothManager.m */; };
 		F172BCC31794EC4500AC1483 /* DDData.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BC811794EC4500AC1483 /* DDData.m */; };
@@ -281,8 +280,8 @@
 		F118C7461771425F00ED7384 /* PullToRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullToRefreshView.h; sourceTree = "<group>"; };
 		F118C7471771425F00ED7384 /* PullToRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullToRefreshView.m; sourceTree = "<group>"; };
 		F119CEF313F46DA6007D67E4 /* Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swift.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F119CF0613F46DA6007D67E4 /* downloaderAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = downloaderAppDelegate.h; sourceTree = "<group>"; };
-		F119CF0713F46DA6007D67E4 /* downloaderAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = downloaderAppDelegate.m; sourceTree = "<group>"; };
+		F119CF0613F46DA6007D67E4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		F119CF0713F46DA6007D67E4 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		F11C402D13F82F9D0077F5D1 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		F11C403013F82FB40077F5D1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F11C403213F82FD10077F5D1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -405,8 +404,6 @@
 		F1693C5A16DFAC0E006E3739 /* NetworkUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkUtils.m; sourceTree = "<group>"; };
 		F1693C6016DFAC59006E3739 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		F1693C6116DFAC59006E3739 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
-		F1693C6416DFAC59006E3739 /* SCRFTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCRFTPRequest.h; sourceTree = "<group>"; };
-		F1693C6516DFAC59006E3739 /* SCRFTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCRFTPRequest.m; sourceTree = "<group>"; };
 		F1693C7216DFB9B5006E3739 /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DropboxSDK.framework; path = downloader/DropboxSDK.framework; sourceTree = "<group>"; };
 		F172BC7B1794B59300AC1483 /* BluetoothManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BluetoothManager.h; sourceTree = "<group>"; };
 		F172BC7C1794B59300AC1483 /* BluetoothManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BluetoothManager.m; sourceTree = "<group>"; };
@@ -727,8 +724,8 @@
 				F149A683149176E60038F1FC /* moviePlayerView.m */,
 				F15277CE13F4B08800338673 /* MyFilesViewDetailViewController.h */,
 				F15277CF13F4B08800338673 /* MyFilesViewDetailViewController.m */,
-				F119CF0613F46DA6007D67E4 /* downloaderAppDelegate.h */,
-				F119CF0713F46DA6007D67E4 /* downloaderAppDelegate.m */,
+				F119CF0613F46DA6007D67E4 /* AppDelegate.h */,
+				F119CF0713F46DA6007D67E4 /* AppDelegate.m */,
 				F128A1DA157FDBFD001BC156 /* SettingsView.h */,
 				F128A1DB157FDBFE001BC156 /* SettingsView.m */,
 				F17F11201420017100CE45D7 /* fileInfo.h */,
@@ -899,8 +896,6 @@
 				F1BC30C917715DF300DAFA0A /* Hack.m */,
 				F10CBC581707D6E700C82AFB /* DroppinBadassBlocks.h */,
 				F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */,
-				F1693C6416DFAC59006E3739 /* SCRFTPRequest.h */,
-				F1693C6516DFAC59006E3739 /* SCRFTPRequest.m */,
 				F1BA8C7C17728500007AAF85 /* BGProcFactory.h */,
 				F1BA8C7D17728500007AAF85 /* BGProcFactory.m */,
 				F1E9F78B177402B600EC345C /* StyleFactory.h */,
@@ -1289,7 +1284,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F119CF0813F46DA6007D67E4 /* downloaderAppDelegate.m in Sources */,
+				F119CF0813F46DA6007D67E4 /* AppDelegate.m in Sources */,
 				F15277D113F4B08800338673 /* MyFilesViewDetailViewController.m in Sources */,
 				F1EDE3F613F8708600C17B2A /* MyFilesViewController.m in Sources */,
 				F17DC65F140C45690015F613 /* AudioPlayerViewController.m in Sources */,
@@ -1320,7 +1315,6 @@
 				F1693C5D16DFAC0E006E3739 /* MIMEUtils.m in Sources */,
 				F1693C5E16DFAC0E006E3739 /* NetworkUtils.m in Sources */,
 				F1693C6816DFAC59006E3739 /* MBProgressHUD.m in Sources */,
-				F1693C6A16DFAC59006E3739 /* SCRFTPRequest.m in Sources */,
 				F19BB51C16E006CA0081C95B /* main.m in Sources */,
 				F1847BBB16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m in Sources */,
 				F1C7A6B716E8178F0082D4D3 /* ZoomingImageView.m in Sources */,

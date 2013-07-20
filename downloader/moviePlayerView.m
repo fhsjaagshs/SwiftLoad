@@ -64,7 +64,7 @@
     
     [self.moviePlayer stop];
     
-    downloaderAppDelegate *ad = kAppDelegate;
+    AppDelegate *ad = kAppDelegate;
     
     if (shouldUnpauseAudioPlayer) {
         [ad.audioPlayer prepareToPlay];

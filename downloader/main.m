@@ -11,7 +11,7 @@
 
 int main(int argc, char *argv[]) {
     @autoreleasepool {
-        int retVal = UIApplicationMain(argc, argv, @"Hack", @"downloaderAppDelegate");
+        int retVal = UIApplicationMain(argc, argv, @"Hack", @"AppDelegate");
         return retVal;
     }
 }

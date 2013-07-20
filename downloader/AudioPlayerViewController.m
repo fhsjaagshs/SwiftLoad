@@ -115,7 +115,7 @@
     
     [self setupNotifs];
     
-    downloaderAppDelegate *ad = kAppDelegate;
+    AppDelegate *ad = kAppDelegate;
     
     NSString *file = ad.openFile;
     NSString *currentDir = [file stringByDeletingLastPathComponent];
@@ -187,7 +187,7 @@
 
 - (void)startConverting {
     
-    downloaderAppDelegate *ad = kAppDelegate;
+    AppDelegate *ad = kAppDelegate;
     
     NSString *fileName = [ad.openFile lastPathComponent];
     
@@ -257,7 +257,7 @@
 
 - (void)close {
     
-    downloaderAppDelegate *ad = kAppDelegate;
+    AppDelegate *ad = kAppDelegate;
     
     if (!ad.audioPlayer.isPlaying) {
         [ad.audioPlayer stop];

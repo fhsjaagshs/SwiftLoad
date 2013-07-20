@@ -6,7 +6,9 @@
 //  Copyright 2011 Nathaniel Symer. All rights reserved.
 //
 
-#import "downloaderAppDelegate.h"
+NSString * const NSFileName = @"NSFileName";
+
+#import "AppDelegate.h"
 
 void fireNotification(NSString *filename) {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
@@ -68,7 +70,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     }
 }
 
-@implementation downloaderAppDelegate
+@implementation AppDelegate
 
 //
 // Audio Player
@@ -649,32 +651,21 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     }
     
     if ([[DBSession sharedSession]handleOpenURL:url]) {
-        if ([[DBSession sharedSession]isLinked]) {
-            [[NSNotificationCenter defaultCenter]postNotificationName:@"db_auth_success" object:nil];
-        } else {
-            [[NSNotificationCenter defaultCenter]postNotificationName:@"db_auth_failure" object:nil];
-        }
+        [[NSNotificationCenter defaultCenter]postNotificationName:[[DBSession sharedSession]isLinked]?@"db_auth_success":@"db_auth_failure" object:nil];
         return YES;
     }
     
-    if ([url isFileURL]) {
-        NSString *fileInDocsDir = getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:[url.absoluteString lastPathComponent]]);
+    if (url.isFileURL) {
         NSString *inboxDir = [kDocsDir stringByAppendingPathComponent:@"Inbox"];
-        NSString *fileInInboxDir = [inboxDir stringByAppendingPathComponent:[url.absoluteString lastPathComponent]];
-        [[NSFileManager defaultManager]moveItemAtPath:fileInInboxDir toPath:fileInDocsDir error:nil];
-        
         NSArray *filesInIndexDir = [[NSFileManager defaultManager]contentsOfDirectoryAtPath:inboxDir error:nil];
         
-        if (filesInIndexDir.count == 0) {
-            [[NSFileManager defaultManager]removeItemAtPath:inboxDir error:nil];
-        } else {
-            for (NSString *string in filesInIndexDir) {
-                NSString *newLocation = getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:string]);
-                NSString *oldLocation = [inboxDir stringByAppendingPathComponent:string];
-                [[NSFileManager defaultManager]moveItemAtPath:oldLocation toPath:newLocation error:nil];
-            }
-            [[NSFileManager defaultManager]removeItemAtPath:inboxDir error:nil];
+        for (NSString *filename in filesInIndexDir) {
+            NSString *newLocation = getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:filename]);
+            NSString *oldLocation = [inboxDir stringByAppendingPathComponent:filename];
+            [[NSFileManager defaultManager]moveItemAtPath:oldLocation toPath:newLocation error:nil];
         }
+    
+        [[NSFileManager defaultManager]removeItemAtPath:inboxDir error:nil];
         
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         fireNotification(url.absoluteString.lastPathComponent);
@@ -684,10 +675,11 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
             URLString = [url.absoluteString stringByReplacingOccurrencesOfString:@"swiftload://" withString:@"http://"];
         } else if ([url.absoluteString hasPrefix:@"swift://"]) {
             URLString = [url.absoluteString stringByReplacingOccurrencesOfString:@"swift://" withString:@"http://"];
-        } else {
-            URLString = [url.absoluteString stringByReplacingOccurrencesOfString:@"dl://" withString:@"http://"];
         }
-        [self downloadFromAppDelegate:URLString];
+        
+        if (URLString.length > 0) {
+            [self downloadFromAppDelegate:URLString];
+        }
     }
 
     return YES;
@@ -779,47 +771,5 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     FTPDownload *download = [FTPDownload downloadWithURL:[NSURL URLWithString:url]];
     [[Downloads sharedDownloads]addDownload:download];
 }
-
-/*
-//
-// FTP Upload
-//
-
-- (void)uploadFinished:(SCRFTPRequest *)request {
-    [self hideHUD];
-    
-    //[self showFinishedAlertForFilename:[request.ftpURL.absoluteString lastPathComponent]];
-}
-
-- (void)uploadFailed:(SCRFTPRequest *)request {
-    [self hideHUD];
-    NSString *message = [NSString stringWithFormat:@"Your file was not uploaded because %@", [request.error localizedDescription]];
-    [TransparentAlert showAlertWithTitle:@"Upload Failed" andMessage:message];
-}
-
-- (void)uploadWillStart:(SCRFTPRequest *)request {
-    [self showHUDWithTitle:@"Uploading..."];
-    [self setSecondaryTitleOfVisibleHUD:[request.ftpURL.absoluteString lastPathComponent]];
-    [self setVisibleHudMode:MBProgressHUDModeDeterminate];
-}
-
-- (void)uploadBytesWritten:(SCRFTPRequest *)request {
-    [self setProgressOfVisibleHUD:[MBProgressHUD HUDForView:self.window].progress+(request.bytesWritten/request.fileSize)];
-}
-
-- (void)showFTPUploadController {
-    FTPLoginController *controller = [[FTPLoginController alloc]initWithType:FTPLoginControllerTypeUpload andCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
-        SCRFTPRequest *ftpRequest = [SCRFTPRequest requestWithURL:[NSURL URLWithString:url] toUploadFile:self.openFile];
-        ftpRequest.username = username;
-        ftpRequest.password = password;
-        ftpRequest.delegate = self;
-        ftpRequest.didFinishSelector = @selector(uploadFinished:);
-        ftpRequest.didFailSelector = @selector(uploadFailed:);
-        ftpRequest.willStartSelector = @selector(uploadWillStart:);
-        ftpRequest.bytesWrittenSelector = @selector(uploadBytesWritten:);
-        [ftpRequest startRequest];
-    }];
-    [controller show];
-}*/
 
 @end

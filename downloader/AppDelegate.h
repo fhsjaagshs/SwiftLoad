@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#define kAppDelegate (downloaderAppDelegate *)[[UIApplication sharedApplication]delegate]
+#define kAppDelegate (AppDelegate *)[[UIApplication sharedApplication]delegate]
 #define mainVC (downloaderViewController *)[(downloaderAppDelegate *)[[UIApplication sharedApplication]delegate]viewController]
 #define kDocsDir [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 #define kLibDir [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0]
@@ -20,13 +20,15 @@
 #define KILL_TIMER(q) if (q) {[q invalidate]; q=nil;}
 #define myCyan [UIColor colorWithRed:46.0f/255.0f green:1.0f blue:1.0f alpha:1.0f]
 
+extern NSString * const NSFileName;
+
 void fireNotification(NSString *filename);
 NSString * getResource(NSString *raw);
 float sanitizeMesurement(float measurement);
 NSString * getNonConflictingFilePathForPath(NSString *path);
 void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID inPropertyID, UInt32 inPropertyValueSize, const void *inPropertyValue);
 
-@interface downloaderAppDelegate : UIResponder <UIApplicationDelegate, GKSessionDelegate, DBSessionDelegate, DBRestClientDelegate, MBProgressHUDDelegate, GKPeerPickerControllerDelegate, AVAudioPlayerDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate, GKSessionDelegate, DBSessionDelegate, DBRestClientDelegate, MBProgressHUDDelegate, GKPeerPickerControllerDelegate, AVAudioPlayerDelegate>
 
 @property (nonatomic, strong) UIWindow *window;
 @property (nonatomic, strong) MyFilesViewController *viewController;
