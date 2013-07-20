@@ -36,9 +36,51 @@ static NSString * const cellId = @"acellid";
 @property (nonatomic, strong) UITableView *theTableView;
 @property (nonatomic, strong) UIView *mainView;
 
+@property (nonatomic, strong) NSMutableArray *downloadObjs;
+
 @end
 
 @implementation DownloadController
+
+//
+// Download Management
+//
+
+- (int)indexOfDownload:(Download *)download {
+    return [_downloadObjs indexOfObject:download];
+}
+
+- (int)numberDownloads {
+    return _downloadObjs.count;
+}
+
+- (void)removeAllDownloads {
+    for (Download *download in _downloadObjs) {
+        [self removeDownload:download];
+    }
+}
+
+- (void)removeDownload:(Download *)download {
+    [download stop];
+    [_downloadObjs removeObject:download];
+}
+
+- (void)addDownload:(Download *)download {
+    [_downloadObjs addObject:download];
+    [download start];
+}
+
+- (void)removeDownloadAtIndex:(int)index {
+    [self removeDownload:[_downloadObjs objectAtIndex:index]];
+}
+
+- (Download *)downloadAtIndex:(int)index {
+    return [_downloadObjs objectAtIndex:index];
+}
+
+- (int)tagForDownload:(Download *)download {
+    return [_downloadObjs indexOfObject:download];
+}
 
 //
 // Notification
@@ -46,7 +88,7 @@ static NSString * const cellId = @"acellid";
 
 - (void)notifReceived:(NSNotification *)notif {
     [_theTableView reloadData];
-    [self updateButtonNumber:[[Downloads sharedDownloads]numberDownloads]];
+    [self updateButtonNumber:[self numberDownloads]];
     [self updateSizes];
 }
 
@@ -56,9 +98,9 @@ static NSString * const cellId = @"acellid";
 
 - (void)updateSizes {
     [UIView animateWithDuration:0.25 animations:^{
-        float height = ([[Downloads sharedDownloads]numberDownloads]*45)+40;
+        float height = ([self numberDownloads]*45)+40;
         _mainView.frame = CGRectMake(_mainView.frame.origin.x, [[UIScreen mainScreen]bounds].size.height-5-height, _mainView.frame.size.width, height);
-        _theTableView.frame = CGRectMake(0, 40, _mainView.frame.size.width, ([[Downloads sharedDownloads]numberDownloads]*45));
+        _theTableView.frame = CGRectMake(0, 40, _mainView.frame.size.width, ([self numberDownloads]*45));
     }];
 }
 
@@ -68,7 +110,7 @@ static NSString * const cellId = @"acellid";
         CGSize screenSize = [[UIScreen mainScreen]bounds].size;
         float padding = 5;
         
-        float height = ([[Downloads sharedDownloads]numberDownloads]*45)+40;
+        float height = ([self numberDownloads]*45)+40;
         
         self.mainView = [[UIView alloc]initWithFrame:CGRectMake(padding, screenSize.height-5-height, screenSize.width-(padding*2), height)];
         _mainView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.6f];
@@ -92,7 +134,7 @@ static NSString * const cellId = @"acellid";
         dl.textAlignment = UITextAlignmentCenter;
         [_mainView addSubview:dl];
         
-        self.theTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 40, _mainView.bounds.size.width, ([[Downloads sharedDownloads]numberDownloads]*45))];
+        self.theTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 40, _mainView.bounds.size.width, ([self numberDownloads]*45))];
         _theTableView.dataSource = self;
         _theTableView.delegate = self;
         _theTableView.allowsSelection = NO;
@@ -108,7 +150,7 @@ static NSString * const cellId = @"acellid";
     [UIView animateWithDuration:0.25 animations:^{
         [_mainView removeFromSuperview];
         [self setHidden:NO];
-        if ([[Downloads sharedDownloads]numberDownloads] == 0) {
+        if ([self numberDownloads] == 0) {
             [_theTableView removeFromSuperview];
             [self setMainView:nil];
             [self setTheTableView:nil];
@@ -121,7 +163,7 @@ static NSString * const cellId = @"acellid";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [[Downloads sharedDownloads]numberDownloads];
+    return [self numberDownloads];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -136,10 +178,10 @@ static NSString * const cellId = @"acellid";
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         [_theTableView beginUpdates];
         [_theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
-        [[Downloads sharedDownloads]removeDownloadAtIndex:indexPath.row];
+        [self removeDownloadAtIndex:indexPath.row];
         [_theTableView endUpdates];
         [self updateSizes];
-        [self updateButtonNumber:[[Downloads sharedDownloads]numberDownloads]];
+        [self updateButtonNumber:[self numberDownloads]];
     }
 }
 
@@ -150,7 +192,7 @@ static NSString * const cellId = @"acellid";
         cell = [[DownloadingCell alloc]initWithReuseIdentifier:cellId];
     }
     
-    Download *download = [[Downloads sharedDownloads]downloadAtIndex:indexPath.row];
+    Download *download = [self downloadAtIndex:indexPath.row];
     download.delegate = cell;
     cell.titleLabel.text = [download.fileName percentSanitize];
     return cell;

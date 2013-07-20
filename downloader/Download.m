@@ -34,7 +34,7 @@ float const kClearOutDelay = 0.6f;
     if (_delegate) {
         [_delegate reset];
     }
-    [[Downloads sharedDownloads]removeDownload:self];
+    [[DownloadController sharedController]removeDownload:self];
     [[NSNotificationCenter defaultCenter]postNotificationName:kDownloadChanged object:self];
 }
 

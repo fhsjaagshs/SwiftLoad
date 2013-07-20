@@ -357,7 +357,7 @@ static NSString *CellIdentifier = @"dbcell";
             
             if (buttonIndex == 0) {
                 DropboxDownload *dl = [DropboxDownload downloadWithPath:filePath];
-                [[Downloads sharedDownloads]addDownload:dl];
+                [[DownloadController sharedController]addDownload:dl];
             } else if (buttonIndex == 1) {
                 
                 [kAppDelegate showHUDWithTitle:@"Loading Link..."];

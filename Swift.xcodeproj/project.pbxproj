@@ -170,7 +170,6 @@
 		F1B2C0FC17961A0E00AD5A04 /* PeerPickerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B2C0FB17961A0E00AD5A04 /* PeerPickerCell.m */; };
 		F1BA8C7E17728500007AAF85 /* BGProcFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BA8C7D17728500007AAF85 /* BGProcFactory.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F1BC30CA17715DF300DAFA0A /* Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BC30C917715DF300DAFA0A /* Hack.m */; };
-		F1BE07E1176F793F00C4F038 /* Downloads.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BE07E0176F793F00C4F038 /* Downloads.m */; };
 		F1BE07E4176F7A1100C4F038 /* Download.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BE07E3176F7A1100C4F038 /* Download.m */; };
 		F1C0CEFC1661AEC6001B1B42 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F1C0CEFB1661AEC6001B1B42 /* libz.1.2.5.dylib */; };
 		F1C7A6B716E8178F0082D4D3 /* ZoomingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1C7A6B616E8178F0082D4D3 /* ZoomingImageView.m */; };
@@ -495,8 +494,6 @@
 		F1BA8C7D17728500007AAF85 /* BGProcFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BGProcFactory.m; sourceTree = "<group>"; };
 		F1BC30C817715DF300DAFA0A /* Hack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Hack.h; path = ../Hack.h; sourceTree = "<group>"; };
 		F1BC30C917715DF300DAFA0A /* Hack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Hack.m; path = ../Hack.m; sourceTree = "<group>"; };
-		F1BE07DF176F793F00C4F038 /* Downloads.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Downloads.h; sourceTree = "<group>"; };
-		F1BE07E0176F793F00C4F038 /* Downloads.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Downloads.m; sourceTree = "<group>"; };
 		F1BE07E2176F7A1100C4F038 /* Download.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Download.h; sourceTree = "<group>"; };
 		F1BE07E3176F7A1100C4F038 /* Download.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Download.m; sourceTree = "<group>"; };
 		F1C0CEFB1661AEC6001B1B42 /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
@@ -1064,8 +1061,6 @@
 		F1BE07E5176F7A1B00C4F038 /* Download Controller */ = {
 			isa = PBXGroup;
 			children = (
-				F1BE07DF176F793F00C4F038 /* Downloads.h */,
-				F1BE07E0176F793F00C4F038 /* Downloads.m */,
 				F14B81981788D26500ADEF99 /* SFTPDownload.h */,
 				F14B81991788D26500ADEF99 /* SFTPDownload.m */,
 				F1F0EBC41785F75900878F7D /* FTPDownload.h */,
@@ -1324,7 +1319,6 @@
 				F10CBC5A1707D6E700C82AFB /* DroppinBadassBlocks.m in Sources */,
 				F10CBC5D17080C6600C82AFB /* DropboxBrowserViewController.m in Sources */,
 				F13B58A7176D2C7E007EF22B /* HUDProgressView.m in Sources */,
-				F1BE07E1176F793F00C4F038 /* Downloads.m in Sources */,
 				F1BE07E4176F7A1100C4F038 /* Download.m in Sources */,
 				F14478381770826A00C5204A /* DownloadController.m in Sources */,
 				F144783E177092B800C5204A /* DownloadingCell.m in Sources */,

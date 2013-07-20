@@ -473,7 +473,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     
     HTTPDownload *download = [HTTPDownload downloadWithURL:url];
     download.fileName = [url.absoluteString.lastPathComponent stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    [[Downloads sharedDownloads]addDownload:download];
+    [[DownloadController sharedController]addDownload:download];
 }
 
 - (BOOL)isInForground {
@@ -571,7 +571,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     // Trust me
-    [Downloads sharedDownloads];
     [DownloadController sharedController];
     [BGProcFactory sharedFactory];
     [BluetoothManager sharedManager];
@@ -761,7 +760,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 - (void)downloadFileUsingSFTP:(NSURL *)url withUsername:(NSString *)username andPassword:(NSString *)password {
     SFTPDownload *download = [SFTPDownload downloadWithURL:url username:username andPassword:password];
-    [[Downloads sharedDownloads]addDownload:download];
+    [[DownloadController sharedController]addDownload:download];
 }
 
 //
@@ -770,7 +769,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 - (void)downloadFileUsingFTP:(NSString *)url {
     FTPDownload *download = [FTPDownload downloadWithURL:[NSURL URLWithString:url]];
-    [[Downloads sharedDownloads]addDownload:download];
+    [[DownloadController sharedController]addDownload:download];
 }
 
 @end
