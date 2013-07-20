@@ -775,17 +775,12 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 // FTP Download
 //
 
-- (void)downloadFileUsingFtp:(NSString *)url {
-    [self downloadFileUsingFtp:url withUsername:@"anonymous" andPassword:@""];
-}
-
-- (void)downloadFileUsingFtp:(NSString *)url withUsername:(NSString *)username andPassword:(NSString *)password {
+- (void)downloadFileUsingFTP:(NSString *)url {
     FTPDownload *download = [FTPDownload downloadWithURL:[NSURL URLWithString:url]];
-    download.username = username;
-    download.password = password;
     [[Downloads sharedDownloads]addDownload:download];
 }
 
+/*
 //
 // FTP Upload
 //
@@ -825,6 +820,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         [ftpRequest startRequest];
     }];
     [controller show];
-}
+}*/
 
 @end

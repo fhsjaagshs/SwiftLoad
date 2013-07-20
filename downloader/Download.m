@@ -11,6 +11,7 @@
 
 NSString * const kDownloadChanged = @"downloadDone";
 NSString * const kBackgroundTaskDownload = @"download";
+float const kClearOutDelay = 0.6f;
 
 @implementation Download
 
@@ -62,7 +63,7 @@ NSString * const kBackgroundTaskDownload = @"download";
         [_delegate drawRed];
     }
     
-    [self performSelector:@selector(clearOutMyself) withObject:nil afterDelay:0.6f];
+    [self performSelector:@selector(clearOutMyself) withObject:nil afterDelay:kClearOutDelay];
     [self cancelBackgroundTask];
 }
 
@@ -78,12 +79,8 @@ NSString * const kBackgroundTaskDownload = @"download";
         [_delegate drawGreen];
     }
     
-    [self performSelector:@selector(clearOutMyself) withObject:nil afterDelay:0.6f];
+    [self performSelector:@selector(clearOutMyself) withObject:nil afterDelay:kClearOutDelay];
     [self cancelBackgroundTask];
-}
-
-- (void)dealloc {
-    [self setDelegate:nil];
 }
 
 @end

@@ -165,10 +165,8 @@
             [kAppDelegate prepareFileForBTSending:file];
             //[kAppDelegate showBTController];
         } else if (buttonIndex == 3) {
-            [kAppDelegate showFTPUploadController];
-        } else if (buttonIndex == 4) {
             [self uploadToDropbox];
-        } else if (buttonIndex == 5) {
+        } else if (buttonIndex == 4) {
             if ([MIMEUtils isImageFile:file]) {
                 [self addToTheRoll];
             } else {
@@ -177,7 +175,7 @@
                 [av show];
             }
         }
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Print", @"Email File", @"Send Via Bluetooth", @"Upload to Server", @"Upload to Dropbox", @"Add to Photo Library", nil];
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Print", @"Email File", @"Send Via Bluetooth", @"Upload to Dropbox", @"Add to Photo Library", nil];
     
     self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     

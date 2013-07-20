@@ -69,14 +69,11 @@
             [kAppDelegate sendFileInEmail:file fromViewController:self];
         } else if (buttonIndex == 2) {
             [kAppDelegate prepareFileForBTSending:file];
-            //[kAppDelegate showBTController];
         } else if (buttonIndex == 3) {
-            [kAppDelegate showFTPUploadController];
-        } else if (buttonIndex == 4) {
             [self uploadToDropbox];
         }
         
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Print", @"Email File", @"Send Via Bluetooth", @"Upload to Server", @"Upload to Dropbox", nil];
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Print", @"Email File", @"Send Via Bluetooth", @"Upload to Dropbox", nil];
     
     self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     

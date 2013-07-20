@@ -80,7 +80,7 @@
                 if ([url hasPrefix:@"http"]) {
                     [kAppDelegate downloadFromAppDelegate:url];
                 } else if ([url hasPrefix:@"ftp"]) {
-                    [kAppDelegate downloadFileUsingFtp:url];
+                    [kAppDelegate downloadFileUsingFTP:url];
                 }
             }
         }]show];
@@ -685,7 +685,7 @@
                     if ([url hasPrefix:@"http"]) {
                         [kAppDelegate downloadFromAppDelegate:url];
                     } else if ([url hasPrefix:@"ftp"]) {
-                        [kAppDelegate downloadFileUsingFtp:url];
+                        [kAppDelegate downloadFileUsingFTP:url];
                     }
                 }
             }]show];

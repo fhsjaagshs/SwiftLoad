@@ -15,6 +15,7 @@ extern NSString * const kDownloadChanged;
 @interface Download : NSObject
 
 @property (nonatomic, strong) NSString *fileName;
+@property (nonatomic, strong) NSString *temporaryPath;
 @property (nonatomic, assign) BOOL complete;
 @property (nonatomic, assign) BOOL succeeded;
 

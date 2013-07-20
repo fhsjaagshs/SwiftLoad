@@ -328,15 +328,12 @@
             [kAppDelegate sendFileInEmail:file fromViewController:self];
         } else if (buttonIndex == 1) {
             [kAppDelegate prepareFileForBTSending:file];
-            //[kAppDelegate showBTController];
         } else if (buttonIndex == 2) {
-            [kAppDelegate showFTPUploadController];
-        } else if (buttonIndex == 3) {
             [self uploadToDropbox];
-        } else if (buttonIndex == 4) {
+        } else if (buttonIndex == 3) {
             [self startConverting];
         }
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Upload to Server", @"Upload to Dropbox", @"Convert to AAC", nil];
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Upload to Dropbox", @"Convert to AAC", nil];
     
     self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     

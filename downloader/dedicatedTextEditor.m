@@ -182,15 +182,12 @@
             [kAppDelegate sendFileInEmail:file fromViewController:self];
         } else if (buttonIndex == 1) {
             [kAppDelegate prepareFileForBTSending:file];
-            //[kAppDelegate showBTController];
         } else if (buttonIndex == 2) {
             [kAppDelegate sendStringAsSMS:[NSString stringWithContentsOfFile:file encoding:theEncoding error:nil] fromViewController:self];
         } else if (buttonIndex == 3) {
-            [kAppDelegate showFTPUploadController];
-        } else if (buttonIndex == 4) {
             [self uploadToDropbox];
         }
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Send as SMS", @"Upload to Server", @"Upload to Dropbox", nil];
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Send as SMS", @"Upload to Dropbox", nil];
     
     [self setPopupQuery:sheet];
     

@@ -64,13 +64,15 @@
     
     [self.moviePlayer stop];
     
+    downloaderAppDelegate *ad = kAppDelegate;
+    
     if (shouldUnpauseAudioPlayer) {
-        [[kAppDelegate audioPlayer]prepareToPlay];
-        [[kAppDelegate audioPlayer]play];
+        [ad.audioPlayer prepareToPlay];
+        [ad.audioPlayer play];
     }
 
     [self dismissModalViewControllerAnimated:YES];
-    [kAppDelegate setOpenFile:nil];
+    [ad setOpenFile:nil];
 }
 
 - (void)showActionSheet:(id)sender {
@@ -86,13 +88,10 @@
             [kAppDelegate sendFileInEmail:[kAppDelegate openFile] fromViewController:self];
         } else if (buttonIndex == 1) {
             [kAppDelegate prepareFileForBTSending:[kAppDelegate openFile]];
-            //[kAppDelegate showBTController];
         } else if (buttonIndex == 2) {
-            [kAppDelegate showFTPUploadController];
-        } else if (buttonIndex == 3) {
             [self uploadToDropbox];
         }
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Upload to Server", @"Upload to Dropbox", nil];
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Upload to Dropbox", nil];
     
     self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
 
