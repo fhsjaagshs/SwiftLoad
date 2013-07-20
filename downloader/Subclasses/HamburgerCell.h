@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface HamburgerCell : UITableViewCell
+@interface HamburgerCell : UITableViewCell;
 
 @property (nonatomic, assign) BOOL isFirstCell;
 

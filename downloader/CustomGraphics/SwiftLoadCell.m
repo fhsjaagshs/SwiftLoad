@@ -17,13 +17,14 @@
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.textLabel.backgroundColor = [UIColor clearColor];
+        self.textLabel.backgroundColor = [UIColor whiteColor];
         self.textLabel.highlightedTextColor = [UIColor blackColor];
-        self.detailTextLabel.backgroundColor = [UIColor clearColor];    
+        self.detailTextLabel.backgroundColor = [UIColor whiteColor];
         self.detailTextLabel.highlightedTextColor = [UIColor blackColor];
         self.selectedBackgroundView = [[UIView alloc]init];
         self.selectedBackgroundView.backgroundColor = [UIColor colorWithWhite:208.0/255.0 alpha:1.0];
         self.detailTextLabel.textColor = [UIColor colorWithWhite:85.0/255.0 alpha:1.0];
+        self.opaque = YES;
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             self.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:27];
@@ -34,6 +35,23 @@
         self.isFirstCell = NO;
     }
     return self;
+}
+
+- (void)setSelected:(BOOL)selected {
+    
+    if (selected) {
+        // clear them up
+        self.textLabel.backgroundColor = [UIColor clearColor];
+        self.detailTextLabel.backgroundColor = [UIColor clearColor];
+        self.accessoryView.backgroundColor = [UIColor clearColor];
+    } else {
+        self.textLabel.backgroundColor = [UIColor whiteColor];
+        self.detailTextLabel.backgroundColor = [UIColor whiteColor];
+        self.accessoryView.backgroundColor = [UIColor whiteColor];
+        // revert to white BG's
+    }
+    
+    [super setSelected:selected];
 }
 
 - (void)drawRect:(CGRect)rect {

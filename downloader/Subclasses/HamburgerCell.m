@@ -23,12 +23,12 @@ static NSString *kCellIdentifierHamburger = @"hamburger";
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.backgroundColor = [UIColor clearColor];
-        self.textLabel.backgroundColor = [UIColor clearColor];
+        self.textLabel.backgroundColor = bgcolor;
         self.textLabel.highlightedTextColor = [UIColor blackColor];
         self.textLabel.textAlignment = UITextAlignmentCenter;
         self.selectedBackgroundView = [[UIView alloc]init];
         self.selectedBackgroundView.backgroundColor = [UIColor lightGrayColor];
+        self.opaque = YES;
     }
     return self;
 }

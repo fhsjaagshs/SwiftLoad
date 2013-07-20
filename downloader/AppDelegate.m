@@ -610,6 +610,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     }];
     
     self.window = [[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]];
+    self.window.opaque = YES;
     self.viewController = [MyFilesViewController viewController];
     _window.rootViewController = self.viewController;
     //_window.backgroundColor = [UIColor colorWithRed:240.0f/255.0f green:248.0f/255.0f blue:1.0f alpha:1.0f];
@@ -623,7 +624,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [[UINavigationBar appearance]setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
     [[UIToolbar appearance]setBackgroundImage:navBarImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
     [[UINavigationBar appearance]setTitleTextAttributes:@{ UITextAttributeTextColor: [UIColor whiteColor] }];
-    [[UIBarButtonItem appearance]setTitleTextAttributes:@{ UITextAttributeTextColor: [UIColor whiteColor], UITextAttributeTextShadowColor: [UIColor clearColor] } forState:UIControlStateNormal];
+    [[UIBarButtonItem appearance]setTitleTextAttributes:@{ UITextAttributeTextColor: [UIColor whiteColor], UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(0, 0)] } forState:UIControlStateNormal];
     
     return YES;
 }

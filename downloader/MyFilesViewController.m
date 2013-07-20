@@ -67,6 +67,8 @@
     self.animatingSideSwipe = NO;
     self.watchdogCanGo = YES;
     
+    self.view.opaque = YES;
+    
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(copiedListChanged:) name:@"copiedlistchanged" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(downloadsChanged) name:kDownloadChanged object:nil];
     
@@ -760,6 +762,7 @@
         DisclosureButton *button = [DisclosureButton button];
         [button addTarget:self action:@selector(accessoryButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         cell.accessoryView = button;
+        cell.accessoryView.backgroundColor = [UIColor whiteColor];
             
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             cell.accessoryView.center = CGPointMake(735, (cell.bounds.size.height)/2);

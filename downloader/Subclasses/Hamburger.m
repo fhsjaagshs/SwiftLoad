@@ -25,6 +25,7 @@
 @property (nonatomic, strong) UIButton *hideButton;
 @property (nonatomic, weak) UIView *viewToMove;
 @property (nonatomic, weak) UIColor *originalBackgroundColor;
+@property (nonatomic, assign) BOOL originalOpacity;
 
 @end
 
@@ -38,6 +39,8 @@
     item.hamburgerView.item = item;
     item.hamburgerView.alpha = 0.0f;
     item.viewToMove = viewToMove;
+    item.viewToMove.layer.shadowPath = [UIBezierPath bezierPathWithRect:item.viewToMove.bounds].CGPath;
+    item.viewToMove.layer.shadowColor = [UIColor blackColor].CGColor;
     item.hideButton = [UIButton buttonWithType:UIButtonTypeCustom];
     item.hideButton.frame = item.viewToMove.bounds;
     [item.hideButton addTarget:item action:@selector(hide) forControlEvents:UIControlEventTouchDown];
@@ -49,18 +52,14 @@
 }
 
 - (void)showShadow {
-    _viewToMove.layer.shadowColor = [UIColor blackColor].CGColor;
     _viewToMove.layer.shadowOffset = CGSizeMake(-3, 0);
-    _viewToMove.layer.shadowOpacity = 0.25;
 }
 
 - (void)clearShadow {
-    _viewToMove.layer.shadowColor = [UIColor clearColor].CGColor;
     _viewToMove.layer.shadowOffset = CGSizeZero;
 }
 
 - (void)hide {
-    
     [UIView animateWithDuration:0.3f animations:^{
         _viewToMove.layer.shadowOpacity = 0.0f;
         _hamburgerView.alpha = 0.0f;
@@ -69,7 +68,8 @@
         [_hamburgerView removeFromSuperview];
         [_hideButton removeFromSuperview];
         [_viewToMove setBackgroundColor:_originalBackgroundColor];
-        [self clearShadow];
+        _viewToMove.layer.shadowOffset = CGSizeZero;
+        _viewToMove.layer.shouldRasterize = NO;
     }];
 }
 
@@ -79,11 +79,13 @@
     [_viewToMove addSubview:_hideButton];
     self.originalBackgroundColor = _viewToMove.backgroundColor;
     [_viewToMove setBackgroundColor:mainWindow.backgroundColor];
-    [self showShadow];
+    _viewToMove.layer.shadowOffset = CGSizeMake(-3, 0);
+    _viewToMove.layer.shouldRasterize = YES;
+    _viewToMove.layer.rasterizationScale = [UIScreen mainScreen].scale;
     [UIView animateWithDuration:0.3f animations:^{
+        _viewToMove.layer.shadowOpacity = 0.25f;
         _hamburgerView.alpha = 1.0f;
         _viewToMove.frame = CGRectMake(250, _viewToMove.frame.origin.y, _viewToMove.frame.size.width, _viewToMove.frame.size.height);
-        
     }];
 }
 
@@ -111,9 +113,18 @@
     self = [super init];
     if (self) {
         self.userInteractionEnabled = YES;
-        self.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = bgcolor;
         self.frame = CGRectMake(0, 20, 250, [[UIScreen mainScreen]applicationFrame].size.height);
-        [self setup];
+        self.opaque = YES;
+        self.theTableView = [[UITableView alloc]initWithFrame:self.bounds style:UITableViewStylePlain];
+        _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        _theTableView.backgroundColor = bgcolor;
+        _theTableView.rowHeight = 44;
+        _theTableView.dataSource = self;
+        _theTableView.delegate = self;
+        _theTableView.opaque = YES;
+        [self addSubview:_theTableView];
     }
     return self;
 }
@@ -132,6 +143,7 @@
     
     if (cell == nil) {
         cell = [HamburgerCell cell];
+        cell.backgroundColor = self.backgroundColor;
     }
     
     int row = indexPath.row;
@@ -163,6 +175,10 @@
     [_theTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+/*- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    return [NSString stringWithFormat:@"Version %@",[[NSBundle mainBundle]objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
+}*/
+
 /*- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
  // maybe, depends on how viewForHeaderInSection: works
  }
@@ -174,17 +190,6 @@
  - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
  // version label
  }*/
-
-- (void)setup {
-    self.theTableView = [[UITableView alloc]initWithFrame:self.bounds style:UITableViewStylePlain];
-    _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    _theTableView.backgroundColor = [UIColor clearColor];
-    _theTableView.rowHeight = 44;
-    _theTableView.dataSource = self;
-    _theTableView.delegate = self;
-    [self addSubview:_theTableView];
-}
 
 - (void)layoutSubviews {
     [super layoutSubviews];

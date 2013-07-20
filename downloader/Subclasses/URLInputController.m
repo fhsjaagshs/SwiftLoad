@@ -20,7 +20,7 @@
         
         self.tv = [[UITextField alloc]init];
         _tv.keyboardAppearance = UIKeyboardAppearanceAlert;
-        _tv.borderStyle = UITextBorderStyleNone;
+        _tv.borderStyle = UITextBorderStyleLine;
         _tv.backgroundColor = [UIColor whiteColor];
         _tv.returnKeyType = UIReturnKeyDone;
         _tv.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -31,6 +31,8 @@
         _tv.adjustsFontSizeToFitWidth = YES;
         _tv.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tv.text = [[NSUserDefaults standardUserDefaults]objectForKey:@"myDefaults"];
+        _tv.layer.borderWidth = 1.5;
+        _tv.layer.borderColor = [UIColor whiteColor].CGColor;
         [_tv addTarget:self action:@selector(donePressed) forControlEvents:UIControlEventEditingDidEndOnExit];
 
         [self addSubview:_tv];
@@ -53,10 +55,10 @@
         _tv.frame = CGRectMake(15, 45, 255, 27);
     }
     
-    for (UIView *view in self.subviews) {
+    for (UIView *view in [self.subviews mutableCopy]) {
         if ([view isKindOfClass:[UILabel class]]) {
             if ([[(UILabel *)view text]isEqualToString:self.message]) {
-                [view setHidden:YES];
+                [view removeFromSuperview];
             }
         }
     }
