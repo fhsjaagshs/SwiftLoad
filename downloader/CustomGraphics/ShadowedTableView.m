@@ -11,78 +11,49 @@
 #import <QuartzCore/QuartzCore.h>
 
 @interface ShadowedTableView ()
-@property (nonatomic, strong) CAGradientLayer *topShadow;
-@property (nonatomic, strong) CAGradientLayer *bottomShadow;
+
+@property (nonatomic, weak) UITableViewCell *topCell;
+@property (nonatomic, weak) UITableViewCell *bottomCell;
+
 @end
 
 @implementation ShadowedTableView
 
-- (CAGradientLayer *)shadowAsInverse:(BOOL)inverse {
-	CAGradientLayer *newShadow = [[CAGradientLayer alloc]init];
-	newShadow.frame = CGRectMake(0, 0, self.frame.size.width, 10);
-    UIColor *darkColor = [[UIColor darkGrayColor]colorWithAlphaComponent:inverse?0.125f:0.25f];
-    UIColor *lightColor = [UIColor clearColor];
-    newShadow.colors = @[inverse?(__bridge id)lightColor.CGColor:(__bridge id)darkColor.CGColor, inverse?(__bridge id)darkColor.CGColor:(__bridge id)lightColor.CGColor];
-	return newShadow;
-}
-
-- (void)setShadowsHidden:(BOOL)hidden {
-    _topShadow.hidden = hidden;
-    _bottomShadow.hidden = hidden;
-}
-
 - (void)layoutSubviews {
-	[super layoutSubviews];
-    
-    if (!_topShadow) {
-        self.topShadow = [self shadowAsInverse:YES];
-    }
-    
-    if (!_bottomShadow) {
-        self.bottomShadow = [self shadowAsInverse:NO];
-    }
-    
+    [super layoutSubviews];
+
     NSArray *indexPathsForVisibleRows = [self indexPathsForVisibleRows];
     
     if (indexPathsForVisibleRows.count == 0) {
-        [self setShadowsHidden:YES];
 		return;
 	}
-	
+    
 	NSIndexPath *firstRow = [indexPathsForVisibleRows objectAtIndex:0];
 	if (firstRow.section == 0 && firstRow.row == 0) {
-		UIView *cell = [self cellForRowAtIndexPath:firstRow];
-		if (!_topShadow) {
-			self.topShadow = [self shadowAsInverse:YES];
-			[cell.layer insertSublayer:_topShadow atIndex:cell.subviews.count-1];
-		} else if ([cell.layer.sublayers indexOfObjectIdenticalTo:_topShadow] != 0) {
-			[cell.layer insertSublayer:_topShadow atIndex:cell.subviews.count-1];
-		}
-        [_topShadow setHidden:NO];
-		CGRect shadowFrame = _topShadow.frame;
-		shadowFrame.size.width = cell.frame.size.width;
-		shadowFrame.origin.y = -10;
-		_topShadow.frame = shadowFrame;
+        self.topCell = [self cellForRowAtIndexPath:firstRow];
+        _topCell.layer.shouldRasterize = YES;
+        _topCell.layer.rasterizationScale = [UIScreen mainScreen].scale;
+        _topCell.layer.shadowPath = [UIBezierPath bezierPathWithRect:_topCell.bounds].CGPath;
+        _topCell.layer.shadowColor = [UIColor blackColor].CGColor;
+        _topCell.layer.shadowOpacity = 0.2f;
 	} else {
-        [_topShadow setHidden:YES];
+        _topCell.layer.shadowPath = nil;
+        _topCell.layer.shadowOpacity = 0.0f;
+        _topCell.layer.shouldRasterize = NO;
 	}
-
+    
 	NSIndexPath *lastRow = [indexPathsForVisibleRows lastObject];
 	if (lastRow.section == (self.numberOfSections-1) && lastRow.row == [self numberOfRowsInSection:lastRow.section]-1) {
-		UIView *cell = [self cellForRowAtIndexPath:lastRow];
-		if (!_bottomShadow) {
-			self.bottomShadow = [self shadowAsInverse:NO];
-			[cell.layer insertSublayer:_bottomShadow atIndex:0];
-		} else if ([cell.layer.sublayers indexOfObjectIdenticalTo:_bottomShadow] != 0) {
-            [cell.layer insertSublayer:_bottomShadow atIndex:0];
-		}
-        [_bottomShadow setHidden:NO];
-		CGRect shadowFrame = _bottomShadow.frame;
-		shadowFrame.size.width = cell.frame.size.width;
-		shadowFrame.origin.y = cell.frame.size.height;
-		_bottomShadow.frame = shadowFrame;
-	} else {
-        [_bottomShadow setHidden:YES];
+		self.bottomCell = [self cellForRowAtIndexPath:lastRow];
+        _bottomCell.layer.shouldRasterize = YES;
+        _bottomCell.layer.rasterizationScale = [UIScreen mainScreen].scale;
+        _bottomCell.layer.shadowPath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 8, _bottomCell.bounds.size.width, 44)].CGPath;
+        _bottomCell.layer.shadowColor = [UIColor blackColor].CGColor;
+        _bottomCell.layer.shadowOpacity = 0.25f;
+    } else {
+        _bottomCell.layer.shadowPath = nil;
+        _bottomCell.layer.shadowOpacity = 0.0f;
+        _bottomCell.layer.shouldRasterize = NO;
 	}
 }
 

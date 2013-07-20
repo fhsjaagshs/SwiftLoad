@@ -11,6 +11,4 @@
 
 @interface ShadowedTableView : UITableView
 
-- (void)setShadowsHidden:(BOOL)hidden;
-
 @end

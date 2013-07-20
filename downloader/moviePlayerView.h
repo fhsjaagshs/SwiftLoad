@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface moviePlayerView : UIViewController {
-    BOOL shouldUnpauseAudioPlayer;
+    
 }
 
 @property (nonatomic, strong) UIActionSheet *popupQuery;

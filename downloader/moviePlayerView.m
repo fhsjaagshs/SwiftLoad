@@ -8,6 +8,12 @@
 
 #import "moviePlayerView.h"
 
+@interface moviePlayerView ()
+
+@property (nonatomic, assign) BOOL shouldUnpauseAudioPlayer;
+
+@end
+
 @implementation moviePlayerView
 
 - (void)loadView {
@@ -22,29 +28,26 @@
     [self.view addSubview:bar];
     [self.view bringSubviewToFront:bar];
     
-    shouldUnpauseAudioPlayer = NO;
+    self.shouldUnpauseAudioPlayer = NO;
     
-    if ([[kAppDelegate audioPlayer]isPlaying]) {
-        [[kAppDelegate audioPlayer]pause];
-        shouldUnpauseAudioPlayer = YES;
+    AppDelegate *ad = kAppDelegate;
+    
+    if (ad.audioPlayer.isPlaying) {
+        [ad.audioPlayer pause];
+        self.shouldUnpauseAudioPlayer = YES;
     }
+
+    self.moviePlayer = [[MPMoviePlayerController alloc]initWithContentURL:[NSURL fileURLWithPath:[kAppDelegate openFile]]];
+    _moviePlayer.scalingMode = MPMovieScalingModeAspectFit;
+    _moviePlayer.repeatMode = MPMovieRepeatModeNone;
+    [_moviePlayer.backgroundView removeFromSuperview];
+    [self.view addSubview:_moviePlayer.view];
     
-    NSString *moviePath = [kAppDelegate openFile];
-    NSURL *theMovieURL = [NSURL fileURLWithPath:moviePath];
+    _moviePlayer.view.frame = CGRectMake(0, 44, self.view.bounds.size.width, self.view.bounds.size.height-44);
+    _moviePlayer.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-    MPMoviePlayerController *mpc = [[MPMoviePlayerController alloc]initWithContentURL:theMovieURL];
-    [self setMoviePlayer:mpc];
-    
-    self.moviePlayer.scalingMode = MPMovieScalingModeAspectFit;
-    self.moviePlayer.repeatMode = MPMovieRepeatModeNone;
-    [self.moviePlayer.backgroundView removeFromSuperview];
-    [self.view addSubview:self.moviePlayer.view];
-    
-    self.moviePlayer.view.frame = CGRectMake(0, 44, self.view.bounds.size.width, self.view.bounds.size.height-44);
-    self.moviePlayer.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    
-    [self.moviePlayer prepareToPlay];
-    [self.moviePlayer play];
+    [_moviePlayer prepareToPlay];
+    [_moviePlayer play];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(moviePlayerDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
 }
@@ -66,7 +69,7 @@
     
     AppDelegate *ad = kAppDelegate;
     
-    if (shouldUnpauseAudioPlayer) {
+    if (self.shouldUnpauseAudioPlayer) {
         [ad.audioPlayer prepareToPlay];
         [ad.audioPlayer play];
     }
@@ -77,8 +80,8 @@
 
 - (void)showActionSheet:(id)sender {
     
-    if (self.popupQuery && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [self.popupQuery dismissWithClickedButtonIndex:self.popupQuery.cancelButtonIndex animated:YES];
+    if (_popupQuery && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        [_popupQuery dismissWithClickedButtonIndex:_popupQuery.cancelButtonIndex animated:YES];
         self.popupQuery = nil;
         return;
     }
@@ -93,12 +96,12 @@
         }
     } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Upload to Dropbox", nil];
     
-    self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+    _popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [self.popupQuery showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];
+        [_popupQuery showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];
     } else {
-        [self.popupQuery showInView:self.view];
+        [_popupQuery showInView:self.view];
     }
 }
 
@@ -107,8 +110,8 @@
 }
 
 - (void)moviePlayerDidFinish:(NSNotification *)notification {
-    [self.moviePlayer stop];
-    self.moviePlayer.initialPlaybackTime = -1;
+    [_moviePlayer stop];
+    _moviePlayer.initialPlaybackTime = -1;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {

@@ -24,18 +24,31 @@
     
     CGRect frame = CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44);
     self.webView = [[UIWebView alloc]initWithFrame:frame];
-    self.webView.delegate = self;
-    self.webView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    self.webView.backgroundColor = [UIColor clearColor];
-    self.webView.contentMode = UIViewContentModeScaleAspectFit;
-    self.webView.scalesPageToFit = YES;
-    self.webView.dataDetectorTypes = UIDataDetectorTypeLink;
+    _webView.delegate = self;
+    _webView.opaque = YES;
+    _webView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    _webView.backgroundColor = [UIColor clearColor];
+    _webView.contentMode = UIViewContentModeScaleAspectFit;
+    _webView.scalesPageToFit = YES;
+    _webView.dataDetectorTypes = UIDataDetectorTypeLink;
+    _webView.layer.rasterizationScale = [[UIScreen mainScreen]scale];
+    _webView.layer.shouldRasterize = YES;
     
-    [self.view addSubview:self.webView];
-    [self.view bringSubviewToFront:self.webView];
+    [self.view addSubview:_webView];
+    [self.view bringSubviewToFront:_webView];
 
     NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:[kAppDelegate openFile]] cachePolicy:NSURLCacheStorageAllowed timeoutInterval:60.0];
-    [self.webView loadRequest:req];
+    [_webView loadRequest:req];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    _webView.backgroundColor = bgcolor;
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    _webView.backgroundColor = [UIColor clearColor];
 }
 
 - (void)uploadToDropbox {
