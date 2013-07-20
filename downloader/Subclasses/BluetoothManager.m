@@ -52,7 +52,7 @@ static NSString *kFilesizeKey = @"s";
 }
 
 - (void)loadSession {
-    self.session = [[GKSession alloc]initWithSessionID:@"swift_bluetooth" displayName:nil sessionMode:GKSessionModePeer];
+    self.session = [[GKSession alloc]initWithSessionID:@"swift_bluetooth" displayName:[[UIDevice currentDevice]name] sessionMode:GKSessionModePeer];
     [_session setDataReceiveHandler:self withContext:nil];
     _session.delegate = self;
     _session.available = YES;
@@ -71,7 +71,6 @@ static NSString *kFilesizeKey = @"s";
 }
 
 - (void)finish {
-    self.isTransferring = NO;
     [_session disconnectFromAllPeers];
     if (_completionBlock) {
         _completionBlock(nil,NO);
@@ -124,8 +123,6 @@ static NSString *kFilesizeKey = @"s";
     }];
     
     [picker setCancelledBlock:^{
-        weakManager.isSender = NO;
-        weakManager.session.available = YES;
         [weakManager reset];
     }];
     [picker show];

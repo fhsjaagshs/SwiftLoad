@@ -1186,7 +1186,7 @@
 }
 
 - (void)setupSideSwipeView {
-
+ 
     if (_sideSwipeView == nil) {
         self.sideSwipeView = [[UIView alloc]initWithFrame:CGRectMake(_theTableView.frame.origin.x, _theTableView.frame.origin.y, _theTableView.frame.size.width, _theTableView.rowHeight)];
         _sideSwipeView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
@@ -1205,38 +1205,32 @@
         UISwipeGestureRecognizer *leftSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeLeft:)];
         leftSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
         [_sideSwipeView addGestureRecognizer:leftSwipeGestureRecognizer];
-    }
-    
-    BOOL shouldAddButtons = YES;
-    
-    for (UIView *view in _sideSwipeView.subviews) {
-        if ([view isKindOfClass:[UIButton class]]) {
-            shouldAddButtons = NO;
-            break;
+    } else {
+        for (UIView *view in _sideSwipeView.subviews) {
+            if ([view isKindOfClass:[UIButton class]]) {
+                [view removeFromSuperview];
+            }
         }
     }
     
-    if (shouldAddButtons) {
+    NSMutableArray *buttonData = [NSMutableArray arrayWithObjects:@{@"title": @"Action", @"image": @"action"}, @{@"title": @"FTP", @"image": @"dropbox"}, @{@"title": @"Bluetooth", @"image": @"bluetooth"}, @{@"title": @"Email", @"image": @"paperclip"}, @{@"title": @"Delete", @"image": @"delete"}, nil];
+    
+    NSString *filePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:_sideSwipeCell.textLabel.text];
+    
+    if ([filePath isEqualToString:[kAppDelegate nowPlayingFile]]) {
+        [buttonData removeObject:buttonData.lastObject];
+    }
+    
+    for (NSDictionary *buttonInfo in buttonData) {
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.frame = CGRectMake([buttonData indexOfObject:buttonInfo]*((_sideSwipeView.bounds.size.width)/buttonData.count), 0, ((_sideSwipeView.bounds.size.width)/buttonData.count), _sideSwipeView.bounds.size.height);
+        button.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
         
-        NSMutableArray *buttonData = [NSMutableArray arrayWithObjects:@{@"title": @"Action", @"image": @"action"}, @{@"title": @"FTP", @"image": @"dropbox"}, @{@"title": @"Bluetooth", @"image": @"bluetooth"}, @{@"title": @"Email", @"image": @"paperclip"}, @{@"title": @"Delete", @"image": @"delete"}, nil];
-        
-        NSString *filePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:_sideSwipeCell.textLabel.text];
-        
-        if ([filePath isEqualToString:[kAppDelegate nowPlayingFile]]) {
-            [buttonData removeObject:buttonData.lastObject];
-        }
-        
-        for (NSDictionary *buttonInfo in buttonData) {
-            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-            button.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
-            button.frame = CGRectMake([buttonData indexOfObject:buttonInfo]*((_sideSwipeView.bounds.size.width)/buttonData.count), 0, ((_sideSwipeView.bounds.size.width)/buttonData.count), _sideSwipeView.bounds.size.height);
-            
-            UIImage *grayImage = [[UIImage imageNamed:[buttonInfo objectForKey:@"image"]]imageFilledWith:[UIColor colorWithWhite:0.9 alpha:1.0]];
-            [button setImage:grayImage forState:UIControlStateNormal];
-            [button setTag:[buttonData indexOfObject:buttonInfo]+1];
-            [button addTarget:self action:@selector(touchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
-            [_sideSwipeView addSubview:button];
-        }
+        UIImage *grayImage = [[UIImage imageNamed:[buttonInfo objectForKey:@"image"]]imageFilledWith:[UIColor colorWithWhite:0.9 alpha:1.0]];
+        [button setImage:grayImage forState:UIControlStateNormal];
+        [button setTag:[buttonData indexOfObject:buttonInfo]+1];
+        [button addTarget:self action:@selector(touchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
+        [_sideSwipeView addSubview:button];
     }
 }
 

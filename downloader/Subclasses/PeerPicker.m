@@ -71,6 +71,7 @@ static NSString * const kShortMessage = @"\n\n\n";
 
 - (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex {
     [_peers removeAllObjects];
+    [self setSession:nil];
 }
 
 - (void)layoutSubviews {
