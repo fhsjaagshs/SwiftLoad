@@ -14,7 +14,8 @@
 
 @property (nonatomic, weak) id<ContentOffsetWatchdogDelegate> delegate;
 
-- (id)initWithScrollView:(UIScrollView *)scrollView;
+- (void)resetOffset;
+
 + (id)watchdogWithScrollView:(UIScrollView *)scrollView;
 
 @end
@@ -22,7 +23,7 @@
 @protocol ContentOffsetWatchdogDelegate <NSObject>
 
 @optional
-- (void)watchdogWasTripped;
-- (BOOL)shouldTripWatchdog;
+- (void)watchdogWasTripped:(ContentOffsetWatchdog *)watchdog;
+- (BOOL)shouldTripWatchdog:(ContentOffsetWatchdog *)watchdog;;
 
 @end

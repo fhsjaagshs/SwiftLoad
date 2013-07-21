@@ -589,15 +589,20 @@ static NSString *CellIdentifier = @"Cell";
     [self removeSideSwipeView:NO];
 }
 
-- (BOOL)shouldTripWatchdog {
+- (BOOL)shouldTripWatchdog:(ContentOffsetWatchdog *)watchdog {
     return (![[kAppDelegate managerCurrentDir]isEqualToString:kDocsDir] && _watchdogCanGo && !_theTableView.isDecelerating);
 }
 
-- (void)watchdogWasTripped {
-    [self goBackDir];
-    [_filelist removeAllObjects];
-    [_theTableView reloadDataWithCoolAnimationType:CoolRefreshAnimationStyleBackward];
-    self.watchdogCanGo = NO;
+- (void)watchdogWasTripped:(ContentOffsetWatchdog *)watchdog {
+    if (!_theTableView.editing) {
+        [watchdog resetOffset];
+        [self goBackDir];
+        [_filelist removeAllObjects];
+        [_theTableView reloadDataWithCoolAnimationType:CoolRefreshAnimationStyleBackward];
+        self.watchdogCanGo = NO;
+    } else {
+        [self showFileCreationDialogue];
+    }
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
