@@ -35,7 +35,7 @@ static NSString *CellIdentifier = @"Cell";
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"/"];
     _editButton = [[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(editTable)];
     topItem.rightBarButtonItem = _editButton;
-    topItem.leftBarButtonItem = hamburger;//[[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showOptionsSheet:)]autorelease];
+    topItem.leftBarButtonItem = hamburger;
     [_navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:_navBar];
     [self.view bringSubviewToFront:_navBar];
@@ -107,6 +107,32 @@ static NSString *CellIdentifier = @"Cell";
     self.watchdogCanGo = YES;
 }
 
+- (void)copyFilesWithIsCut:(BOOL)isCut {
+    if (!_copiedList) {
+        self.copiedList = [NSMutableArray array];
+    } else {
+        [_copiedList removeAllObjects];
+    }
+    
+    self.isCut = isCut;
+    
+    for (NSIndexPath *indexPath in _theTableView.indexPathsForSelectedRows) {
+        [_theTableView cellForRowAtIndexPath:indexPath].selected = NO;
+        NSString *filename = [_filelist objectAtIndex:indexPath.row];
+        NSString *currentPath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:filename];
+        [_copiedList addObject:currentPath];
+    }
+}
+
+- (void)deleteSelectedFiles {
+    for (NSIndexPath *indexPath in _theTableView.indexPathsForSelectedRows) {
+        [_theTableView cellForRowAtIndexPath:indexPath].selected = NO;
+        NSString *filename = [_filelist objectAtIndex:indexPath.row];
+        NSString *currentPath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:filename];
+        [[NSFileManager defaultManager]removeItemAtPath:currentPath error:nil];
+    }
+}
+
 - (void)pasteInLocation:(NSString *)location {
     
     AppDelegate *ad = kAppDelegate;
@@ -131,9 +157,9 @@ static NSString *CellIdentifier = @"Cell";
                     [fm copyItemAtPath:oldPath toPath:newPath error:nil];
                 }
             }
-                       
-            [self flushCopiedList];
             
+            [_copiedList removeAllObjects];
+
             dispatch_sync(dispatch_get_main_queue(), ^{
                 @autoreleasepool {
                     [kAppDelegate hideHUD];
@@ -144,129 +170,6 @@ static NSString *CellIdentifier = @"Cell";
         
         }
     });
-}
-
-- (void)deleteItemsInClipboard {
-    // disselect all rows
-    for (NSString *file in _perspectiveCopiedList) {
-        [[NSFileManager defaultManager]removeItemAtPath:file error:nil];
-    }
-    [self flushCopiedList];
-    [self flushPerspectiveCopyList];
-    [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
-    [self updateCopyButtonState];
-}
-
-- (void)copyFilesWithIsCut:(BOOL)cut {
-    self.isCut = cut;
-    [self saveIsCutBOOL];
-    [self verifyProspectiveCopyList];
-    [self flushCopiedList];
-    [_copiedList addObjectsFromArray:_perspectiveCopiedList];
-    [self flushPerspectiveCopyList];
-    [self saveCopiedList];
-    [self updateCopyButtonState];
- //   [self removeAllCheckmarks];
-}
-
-// BOOL value of YES is success adding to the array
-- (BOOL)addItemToPerspectiveCopyList:(NSString *)item {
-    [self verifyProspectiveCopyList];
-    [self verifyCopiedList];
-    
-    if (_copiedList.count > 0) {
-        return NO;
-    }
-    
-    if (![_perspectiveCopiedList containsObject:item]) {
-        [_perspectiveCopiedList addObject:item];
-        return YES;
-    }
-    
-    return NO;
-}
-
-- (void)removeItemFromPerspectiveCopyList:(NSString *)item {
-    [self verifyProspectiveCopyList];
-    if ([_perspectiveCopiedList containsObject:item]) {
-        [_perspectiveCopiedList removeObject:item];
-    }
-}
-
-- (void)saveIsCutBOOL {
-    [[NSUserDefaults standardUserDefaults]setBool:_isCut forKey:@"isCutBool"];
-}
-
-- (void)verifyIsCutBOOL {
-    self.isCut = [[NSUserDefaults standardUserDefaults]boolForKey:@"isCutBool"];
-}
-
-- (void)saveProspectiveCopyList {
-    [[NSUserDefaults standardUserDefaults]setObject:_perspectiveCopiedList forKey:@"saved_copy_list_pers"];
-}
-
-- (void)flushPerspectiveCopyList {
-    [_perspectiveCopiedList removeAllObjects];
-    [self saveProspectiveCopyList];
-}
-
-- (void)verifyProspectiveCopyList {
-    if (_perspectiveCopiedList.count == 0) {
-        self.perspectiveCopiedList = [NSMutableArray array];
-    }
-    
-    NSArray *listFromDefaults = [[NSUserDefaults standardUserDefaults]objectForKey:@"saved_copy_list_pers"];
-    
-    for (id obj in listFromDefaults) {
-        if (![_perspectiveCopiedList containsObject:obj]) {
-            [_perspectiveCopiedList addObject:obj];
-        }
-    }
-}
-
-- (void)flushCopiedList {
-    [_copiedList removeAllObjects];
-    [self saveCopiedList];
-}
-
-- (void)saveCopiedList {
-    [[NSUserDefaults standardUserDefaults]setObject:_copiedList forKey:@"saved_copied_list"];
-}
-
-- (void)verifyCopiedList {
-    if (_copiedList.count == 0) {
-        self.copiedList = [NSMutableArray array];
-    }
-    
-    NSArray *listFromDefaults = [[NSUserDefaults standardUserDefaults]objectForKey:@"saved_copied_list"];
-    
-    for (id obj in listFromDefaults) {
-        if (![_copiedList containsObject:obj]) {
-            [_copiedList addObject:obj];
-        }
-    }
-}
-
-- (void)copiedListChanged:(NSNotification *)notif {
-    
-    [self verifyCopiedList];
-    [self verifyProspectiveCopyList];
-    
-    NSMutableDictionary *changedDict = [(NSDictionary *)[notif object]mutableCopy];
-    
-    NSString *old = [changedDict objectForKey:@"old"];
-    NSString *new = [changedDict objectForKey:@"new"];
-    
-    if ([_copiedList containsObject:old]) {
-        [_copiedList replaceObjectAtIndex:[_copiedList indexOfObject:old] withObject:new];
-    }
-    
-    if ([_perspectiveCopiedList containsObject:old]) {
-        [_perspectiveCopiedList replaceObjectAtIndex:[_perspectiveCopiedList indexOfObject:old] withObject:new];
-    }
-    
-    [self saveCopiedList];
-    [self saveProspectiveCopyList];
 }
 
 - (void)showCopyPasteController {
@@ -283,7 +186,7 @@ static NSString *CellIdentifier = @"Cell";
         } else if ([title isEqualToString:@"Delete"]) {
             UIActionSheet *deleteConfirmation = [[UIActionSheet alloc]initWithTitle:@"Are you Sure?" completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
                 if (buttonIndex == 0) {
-                    [self deleteItemsInClipboard];
+                    [self deleteSelectedFiles];
                 }
             } cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Delete" otherButtonTitles:nil];
             deleteConfirmation.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
@@ -294,8 +197,6 @@ static NSString *CellIdentifier = @"Cell";
     } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil];
     
     actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
-    
-    [self verifyCopiedList];
     
     if (_copiedList.count == 0) {
         [actionSheet addButtonWithTitle:@"Copy"];
@@ -318,8 +219,6 @@ static NSString *CellIdentifier = @"Cell";
         _theCopyAndPasteButton.hidden = YES;
         return;
     }
-    
-    [self verifyCopiedList];
     
     BOOL persCLGT = (_theTableView.indexPathsForSelectedRows.count > 0);
     BOOL CLGT = (_copiedList.count > 0);
@@ -345,9 +244,11 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)inflate:(NSString *)file {
+    
     [[BGProcFactory sharedFactory]startProcForKey:@"inflate" andExpirationHandler:^{
         
     }];
+    
     @autoreleasepool {
     
         [UIApplication sharedApplication].idleTimerDisabled = YES;
@@ -821,8 +722,6 @@ static NSString *CellIdentifier = @"Cell";
         
     } else if ([[[file pathExtension]lowercaseString]isEqualToString:@"zip"]) {
         
-        [self verifyCopiedList];
-        
         UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@",cell.textLabel.text] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             
             NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
@@ -835,8 +734,6 @@ static NSString *CellIdentifier = @"Cell";
                     [ad setTagOfVisibleHUD:4];
                     
                     [self compressItems:_copiedList intoZipFile:[ad.managerCurrentDir stringByAppendingPathComponent:[[actionSheet.title componentsSeparatedByString:@" "]lastObject]]];
-                    [self flushCopiedList];
-                    [self flushPerspectiveCopyList];
                 }
             } else if ([title isEqualToString:@"Decompress"]) {
                 if (fileSize(file) > 0) {
@@ -907,11 +804,11 @@ static NSString *CellIdentifier = @"Cell";
     
     if (_theTableView.editing) {
         [_theTableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+        [self updateCopyButtonState];
         return nil;
     }
     
     return indexPath;
-    
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -932,6 +829,8 @@ static NSString *CellIdentifier = @"Cell";
     _theTableView.allowsMultipleSelectionDuringEditing = !_theTableView.editing;
     _editButton.title = _theTableView.editing?@"Edit":@"Done";
     [_theTableView setEditing:!_theTableView.editing animated:YES];
+    
+    [self updateCopyButtonState];
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -1259,17 +1158,6 @@ static NSString *CellIdentifier = @"Cell";
     [_filelist removeAllObjects];
     [_theTableView reloadData];
     [self.theTableView flashScrollIndicators];
-    [self verifyIsCutBOOL];
-    [self verifyProspectiveCopyList];
-    [self verifyCopiedList];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [self flushCopiedList];
-    [self flushPerspectiveCopyList];
-    self.isCut = NO;
-    [self saveIsCutBOOL];
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {

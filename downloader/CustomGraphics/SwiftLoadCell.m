@@ -47,6 +47,8 @@
         self.selectedBackgroundView.backgroundColor = [UIColor colorWithWhite:208.0/255.0 alpha:1.0];
         self.detailTextLabel.textColor = [UIColor colorWithWhite:85.0/255.0 alpha:1.0];
         self.accessoryView.backgroundColor = [UIColor clearColor];
+        self.multipleSelectionBackgroundView = [[UIView alloc]init];
+        self.multipleSelectionBackgroundView.backgroundColor = [UIColor clearColor];
         self.opaque = YES;
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
