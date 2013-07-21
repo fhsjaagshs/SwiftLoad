@@ -9,22 +9,18 @@
 #import <UIKit/UIKit.h>
 #import "ShadowedTableView.h"
 #import "ShadowedNavBar.h"
-#import "CoolRefreshTableView.h"
 
 @interface MyFilesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIDocumentInteractionControllerDelegate, ContentOffsetWatchdogDelegate>
 
 // Copy/Cut/Paste
 @property (nonatomic, strong) NSMutableArray *copiedList;
-@property (nonatomic, strong) NSMutableArray *perspectiveCopiedList;
 @property (nonatomic, assign) BOOL isCut;
-
-//@property (nonatomic, retain) UIDocumentInteractionController *docController;
 
 @property (nonatomic, strong) NSMutableArray *filelist;
 @property (nonatomic, strong) NSMutableArray *dirs;
 
 @property (nonatomic, strong) UIBarButtonItem *editButton;
-@property (nonatomic, strong) CoolRefreshTableView *theTableView;
+@property (nonatomic, strong) ShadowedTableView *theTableView;
 @property (nonatomic, strong) ShadowedNavBar *navBar;
 @property (nonatomic, strong) UIButton *theCopyAndPasteButton;
 

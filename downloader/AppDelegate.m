@@ -310,10 +310,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     }
 }
 
-//
-// Emailing
-//
-
 - (void)sendFileInEmail:(NSString *)file fromViewController:(UIViewController *)vc {
     if ([MFMailComposeViewController canSendMail]) {
         MFMailComposeViewController *controller = [[MFMailComposeViewController alloc]initWithCompletionHandler:^(MFMailComposeViewController *controller, MFMailComposeResult result, NSError *error) {
@@ -328,10 +324,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     }
 }
 
-//
-// Texting
-//
-
 - (void)sendStringAsSMS:(NSString *)string fromViewController:(UIViewController *)vc {
     if ([MFMessageComposeViewController canSendText]) {
         MFMessageComposeViewController *controller = [[MFMessageComposeViewController alloc]initWithCompletionHandler:^(MFMessageComposeViewController *controller, MessageComposeResult result) {
@@ -344,42 +336,27 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     }
 }
 
-//
-// Printing
-//
-
 - (void)printFile:(NSString *)file fromView:(UIView *)view {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        @autoreleasepool {
-        
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                @autoreleasepool {
-                
-                    UIPrintInteractionController *pic = [UIPrintInteractionController sharedPrintController];
-                    UIPrintInfo *printInfo = [UIPrintInfo printInfo];
-                    printInfo.outputType = UIPrintInfoOutputGeneral;
-                    printInfo.jobName = [file lastPathComponent];
-                    printInfo.duplex = UIPrintInfoDuplexLongEdge;
-                    pic.printInfo = printInfo;
-                    pic.showsPageRange = YES;
-                    pic.printingItem = [NSURL fileURLWithPath:file];
-                    
-                    void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) = ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
-                        if (error) {
-                            [TransparentAlert showAlertWithTitle:[NSString stringWithFormat:@"Error %u",error.code] andMessage:error.localizedDescription];
-                        }
-                    };
-                    
-                    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-                        [pic presentFromRect:CGRectMake(716, 967, 44, 37) inView:view animated:YES completionHandler:completionHandler];
-                    } else {
-                        [pic presentAnimated:YES completionHandler:completionHandler];
-                    }
-                
-                }
-            });
+    UIPrintInteractionController *pic = [UIPrintInteractionController sharedPrintController];
+    UIPrintInfo *printInfo = [UIPrintInfo printInfo];
+    printInfo.outputType = UIPrintInfoOutputGeneral;
+    printInfo.jobName = [file lastPathComponent];
+    printInfo.duplex = UIPrintInfoDuplexLongEdge;
+    pic.printInfo = printInfo;
+    pic.showsPageRange = YES;
+    pic.printingItem = [NSURL fileURLWithPath:file];
+    
+    void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) = ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
+        if (error) {
+            [TransparentAlert showAlertWithTitle:[NSString stringWithFormat:@"Error %u",error.code] andMessage:error.localizedDescription];
         }
-    });
+    };
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        [pic presentFromRect:CGRectMake(716, 967, 44, 37) inView:view animated:YES completionHandler:completionHandler];
+    } else {
+        [pic presentAnimated:YES completionHandler:completionHandler];
+    }
 }
 
 - (void)prepareFileForBTSending:(NSString *)file {
@@ -387,72 +364,14 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [[BluetoothManager sharedManager]searchForPeers];
 }
 
-//
-// AppDelegate Downloading
-//
-
-/*- (void)showFinishedAlertForFilename:(NSString *)fileName {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    
-    if (fileName.length > 14) {
-        fileName = [[fileName substringToIndex:11]stringByAppendingString:@"..."];
-    }
-
-    UILocalNotification *notification = [[UILocalNotification alloc]init];
-    notification.fireDate = [NSDate date];
-    notification.alertBody = [NSString stringWithFormat:@"Finished downloading: %@",fileName];
-    notification.soundName = UILocalNotificationDefaultSoundName;
-    [[UIApplication sharedApplication]presentLocalNotificationNow:notification];
-    [notification release];
- 
-    [[HUDProgressView progressViewWithTag:0]redrawGreen];
-    [[HUDProgressView progressViewWithTag:0]hideAfterDelay:1.5f];
-}
-
-- (void)showExistsAlertForFilename:(NSString *)fnZ {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    
-    if (fnZ.length > 14) {
-        fnZ = [[fnZ substringToIndex:11]stringByAppendingString:@"..."];
-    }
-    
-    UILocalNotification *notification = [[UILocalNotification alloc]init];
-    notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:0];
-    notification.alertBody = [NSString stringWithFormat:@"Already Exists: %@",fnZ];
-    notification.soundName = UILocalNotificationDefaultSoundName;
-    [[UIApplication sharedApplication]presentLocalNotificationNow:notification];
-    [notification release];
-
-    if ([self isInForground]) {
-        TransparentAlert *av = [[TransparentAlert alloc]initWithTitle:@"File Exists" message:[NSString stringWithFormat:@"\"%@\" already exists.",fnZ] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [av show];
-        [av release];
-    }
-}*/
-
-/*- (void)showFailedAlertForFilename:(NSString *)fileName {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    
-    if (fileName.length > 14) {
-        fileName = [[fileName substringToIndex:11]stringByAppendingString:@"..."];
-    }
-    
-    UILocalNotification *notification = [[UILocalNotification alloc]init];
-    notification.fireDate = [NSDate date];
-    notification.alertBody = [NSString stringWithFormat:@"Download Failed: %@",fileName];
-    notification.soundName = UILocalNotificationDefaultSoundName;
-    [[UIApplication sharedApplication]presentLocalNotificationNow:notification];
-    [notification release];
-    
-    if ([self isInForground]) {
-        NSString *message = [NSString stringWithFormat:@"SwiftLoad failed to download \"%@\". Please try again later.",fileName];
-        TransparentAlert *av = [[TransparentAlert alloc]initWithTitle:@"Oops..." message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [av show];
-        [av release];
-    }
-}*/
-
 - (void)downloadFromAppDelegate:(NSString *)stouPrelim {
+    if (![stouPrelim hasPrefix:@"http"]) {
+        if (![stouPrelim hasPrefix:@"ftp"]) {
+            [TransparentAlert showAlertWithTitle:@"Invalid URL" andMessage:@"The URL you have provided is not HTTP or FTP."];
+            return;
+        }
+        stouPrelim = [NSString stringWithFormat:@"http://%@",stouPrelim];
+    }
     
     NSURL *url = [NSURL URLWithString:stouPrelim];
     
@@ -461,18 +380,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         return;
     }
     
-    if (![stouPrelim hasPrefix:@"http"]) {
-        
-        if ([stouPrelim hasPrefix:@"sftp"] || [stouPrelim hasPrefix:@"rsync"] || [stouPrelim hasPrefix:@"afp"]) {
-            [TransparentAlert showAlertWithTitle:@"Invalid URL" andMessage:@"The URL you have provided is not HTTP or FTP."];
-            return;
-        }
-        
-        stouPrelim = [NSString stringWithFormat:@"http://%@",stouPrelim];
-    }
-    
     HTTPDownload *download = [HTTPDownload downloadWithURL:url];
-    download.fileName = [url.absoluteString.lastPathComponent stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [[DownloadController sharedController]addDownload:download];
 }
 
@@ -480,10 +388,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     return ([[UIApplication sharedApplication]applicationState] == UIApplicationStateActive || [[UIApplication sharedApplication]applicationState] == UIApplicationStateInactive);
 }
 
-//
 // Dropbox Upload
-// 
-
 - (void)uploadLocalFile:(NSString *)localPath {
     [self showHUDWithTitle:@"Preparing"];
     [self setVisibleHudMode:MBProgressHUDModeIndeterminate];
@@ -519,7 +424,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
                     if (error) {
                         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                         [self hideHUD];
-                        NSLog(@"Here: %@",error);
                         [TransparentAlert showAlertWithTitle:@"Failure Uploading" andMessage:[NSString stringWithFormat:@"The file you tried to upload failed because: %@",error.localizedDescription]];
                     } else {
                         [DroppinBadassBlocks loadSharableLinkForFile:metadata.path andCompletionBlock:^(NSString *link, NSString *path, NSError *error) {
@@ -571,8 +475,8 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     // Trust me
-    [DownloadController sharedController];
     [BGProcFactory sharedFactory];
+    [DownloadController sharedController];
     [BluetoothManager sharedManager];
     
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryPlayback error:nil];
@@ -612,7 +516,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     self.window.opaque = YES;
     self.viewController = [MyFilesViewController viewController];
     _window.rootViewController = self.viewController;
-    //_window.backgroundColor = [UIColor colorWithRed:240.0f/255.0f green:248.0f/255.0f blue:1.0f alpha:1.0f];
     _window.backgroundColor = [UIColor colorWithWhite:9.0f/10.0f alpha:1.0f];
     [_window makeKeyAndVisible];
 
@@ -754,18 +657,10 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [hud hide:YES afterDelay:1.5];
 }
 
-//
-// SFTP Download
-//
-
 - (void)downloadFileUsingSFTP:(NSURL *)url withUsername:(NSString *)username andPassword:(NSString *)password {
     SFTPDownload *download = [SFTPDownload downloadWithURL:url username:username andPassword:password];
     [[DownloadController sharedController]addDownload:download];
 }
-
-//
-// FTP Download
-//
 
 - (void)downloadFileUsingFTP:(NSString *)url {
     FTPDownload *download = [FTPDownload downloadWithURL:[NSURL URLWithString:url]];

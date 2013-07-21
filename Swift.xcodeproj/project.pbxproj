@@ -53,6 +53,8 @@
 		F13B08B9178CEE05005201F7 /* WebDAVCredsPrompt.m in Sources */ = {isa = PBXBuildFile; fileRef = F13B08B8178CEE05005201F7 /* WebDAVCredsPrompt.m */; };
 		F13B58A7176D2C7E007EF22B /* HUDProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = F13B58A6176D2C7E007EF22B /* HUDProgressView.m */; };
 		F13BECF4179604380012E4B4 /* PeerPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = F13BECF3179604380012E4B4 /* PeerPicker.m */; };
+		F1434B38179AFF41001A672C /* TasksController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1434B37179AFF41001A672C /* TasksController.m */; };
+		F1434B3E179B21C1001A672C /* UITableView+CoolRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = F1434B3D179B21C1001A672C /* UITableView+CoolRefresh.m */; };
 		F1444581145A04A30026CDB7 /* pictureView.m in Sources */ = {isa = PBXBuildFile; fileRef = F144457F145A04A30026CDB7 /* pictureView.m */; };
 		F14478381770826A00C5204A /* DownloadController.m in Sources */ = {isa = PBXBuildFile; fileRef = F14478371770826A00C5204A /* DownloadController.m */; };
 		F144783E177092B800C5204A /* DownloadingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F144783D177092B800C5204A /* DownloadingCell.m */; };
@@ -213,7 +215,6 @@
 		F1F114C7142AA3F400199C3C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F114C6142AA3F400199C3C /* CFNetwork.framework */; };
 		F1F114E3142AA73F00199C3C /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F114E2142AA73F00199C3C /* MobileCoreServices.framework */; };
 		F1FCF12A17710BAA004A42B8 /* URLInputController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1FCF12917710BAA004A42B8 /* URLInputController.m */; };
-		F1FCF12D17711DE3004A42B8 /* CoolRefreshTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1FCF12C17711DE3004A42B8 /* CoolRefreshTableView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -304,6 +305,10 @@
 		F13B58A6176D2C7E007EF22B /* HUDProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HUDProgressView.m; path = ../HUDProgressView.m; sourceTree = "<group>"; };
 		F13BECF2179604380012E4B4 /* PeerPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeerPicker.h; sourceTree = "<group>"; };
 		F13BECF3179604380012E4B4 /* PeerPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeerPicker.m; sourceTree = "<group>"; };
+		F1434B36179AFF41001A672C /* TasksController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TasksController.h; sourceTree = "<group>"; };
+		F1434B37179AFF41001A672C /* TasksController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TasksController.m; sourceTree = "<group>"; };
+		F1434B3C179B21C1001A672C /* UITableView+CoolRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+CoolRefresh.h"; sourceTree = "<group>"; };
+		F1434B3D179B21C1001A672C /* UITableView+CoolRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+CoolRefresh.m"; sourceTree = "<group>"; };
 		F144457E145A04A30026CDB7 /* pictureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pictureView.h; sourceTree = "<group>"; };
 		F144457F145A04A30026CDB7 /* pictureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pictureView.m; sourceTree = "<group>"; };
 		F14478361770826A00C5204A /* DownloadController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadController.h; sourceTree = "<group>"; };
@@ -547,8 +552,6 @@
 		F1F114E4142AA74F00199C3C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		F1FCF12817710BAA004A42B8 /* URLInputController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URLInputController.h; sourceTree = "<group>"; };
 		F1FCF12917710BAA004A42B8 /* URLInputController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URLInputController.m; sourceTree = "<group>"; };
-		F1FCF12B17711DE3004A42B8 /* CoolRefreshTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoolRefreshTableView.h; sourceTree = "<group>"; };
-		F1FCF12C17711DE3004A42B8 /* CoolRefreshTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoolRefreshTableView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -773,8 +776,6 @@
 				F1CB7DAD16FFE99A002693B5 /* FTPLoginController.m */,
 				F13B08B7178CEE05005201F7 /* WebDAVCredsPrompt.h */,
 				F13B08B8178CEE05005201F7 /* WebDAVCredsPrompt.m */,
-				F1FCF12B17711DE3004A42B8 /* CoolRefreshTableView.h */,
-				F1FCF12C17711DE3004A42B8 /* CoolRefreshTableView.m */,
 				F1798EAD1774177400310C37 /* ShadowedNavBar.h */,
 				F1798EAE1774177400310C37 /* ShadowedNavBar.m */,
 				F1798EB0177417CF00310C37 /* ShadowedToolbar.h */,
@@ -827,6 +828,15 @@
 			name = SwipeToReveal;
 			sourceTree = "<group>";
 		};
+		F1434B35179AFF0B001A672C /* Tasks Controller */ = {
+			isa = PBXGroup;
+			children = (
+				F1434B36179AFF41001A672C /* TasksController.h */,
+				F1434B37179AFF41001A672C /* TasksController.m */,
+			);
+			name = "Tasks Controller";
+			sourceTree = "<group>";
+		};
 		F150D6B3177F783E00E4C094 /* FMDatabase */ = {
 			isa = PBXGroup;
 			children = (
@@ -864,6 +874,8 @@
 				F14B81961788C39E00ADEF99 /* UIButton+SwiftLoad.m */,
 				F168EDAD1790C61000C21D6F /* UIImage+Additions.h */,
 				F168EDAE1790C61000C21D6F /* UIImage+Additions.m */,
+				F1434B3C179B21C1001A672C /* UITableView+CoolRefresh.h */,
+				F1434B3D179B21C1001A672C /* UITableView+CoolRefresh.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -886,6 +898,7 @@
 		F1693C5F16DFAC59006E3739 /* Subclasses */ = {
 			isa = PBXGroup;
 			children = (
+				F1434B35179AFF0B001A672C /* Tasks Controller */,
 				F1283AFE1780A79F006D8A79 /* UI */,
 				F1BE07E5176F7A1B00C4F038 /* Download Controller */,
 				F13BECF917960D790012E4B4 /* Bluetooth */,
@@ -1324,7 +1337,6 @@
 				F144783E177092B800C5204A /* DownloadingCell.m in Sources */,
 				F14478411770B25900C5204A /* WhiteProgressView.m in Sources */,
 				F1FCF12A17710BAA004A42B8 /* URLInputController.m in Sources */,
-				F1FCF12D17711DE3004A42B8 /* CoolRefreshTableView.m in Sources */,
 				F118C74517713DAA00ED7384 /* ContentOffsetWatchdog.m in Sources */,
 				F118C7481771425F00ED7384 /* PullToRefreshView.m in Sources */,
 				F1BC30CA17715DF300DAFA0A /* Hack.m in Sources */,
@@ -1395,6 +1407,8 @@
 				F172BCE41794EC6700AC1483 /* HTTPConnection.m in Sources */,
 				F13BECF4179604380012E4B4 /* PeerPicker.m in Sources */,
 				F1B2C0FC17961A0E00AD5A04 /* PeerPickerCell.m in Sources */,
+				F1434B38179AFF41001A672C /* TasksController.m in Sources */,
+				F1434B3E179B21C1001A672C /* UITableView+CoolRefresh.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

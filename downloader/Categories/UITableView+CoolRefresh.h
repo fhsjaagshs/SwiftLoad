@@ -1,12 +1,12 @@
 //
-//  CoolRefreshTableView.h
-//  SwiftLoad
+//  UITableView+CoolRefresh.h
+//  Swift
 //
-//  Created by Nathaniel Symer on 6/18/13.
+//  Created by Nathaniel Symer on 7/20/13.
 //  Copyright (c) 2013 Nathaniel Symer. All rights reserved.
 //
 
-#import "ShadowedTableView.h"
+#import <UIKit/UIKit.h>
 
 typedef enum {
     CoolRefreshAnimationStyleBackward,
@@ -14,7 +14,7 @@ typedef enum {
     CoolRefreshAnimationStyleNone
 } CoolRefreshAnimationStyle;
 
-@interface CoolRefreshTableView : ShadowedTableView
+@interface UITableView (CoolRefresh)
 
 - (void)reloadDataWithCoolAnimationType:(CoolRefreshAnimationStyle)style;
 

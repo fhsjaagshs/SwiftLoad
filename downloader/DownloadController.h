@@ -13,7 +13,7 @@
 - (void)hide;
 - (void)show;
 
-- (void)updateButtonNumber:(int)number;
+//- (void)updateButtonNumber:(int)number;
 
 - (void)removeAllDownloads;
 - (void)removeDownload:(Download *)download;
@@ -21,10 +21,7 @@
 
 - (void)removeDownloadAtIndex:(int)index;
 
-- (Download *)downloadAtIndex:(int)index;
 - (int)indexOfDownload:(Download *)download;
-
-- (int)numberDownloads;
 
 + (DownloadController *)sharedController;
 

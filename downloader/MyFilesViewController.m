@@ -13,6 +13,8 @@
 
 #define BOUNCE_PIXELS 5.0
 
+static NSString *CellIdentifier = @"Cell";
+
 @interface MyFilesViewController () <HamburgerViewDelegate>
 @property (nonatomic, assign) BOOL watchdogCanGo;
 @end
@@ -38,14 +40,14 @@
     [self.view addSubview:_navBar];
     [self.view bringSubviewToFront:_navBar];
     
-    self.theTableView = [[CoolRefreshTableView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44) style:UITableViewStylePlain];
+    self.theTableView = [[ShadowedTableView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44) style:UITableViewStylePlain];
     _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _theTableView.allowsMultipleSelectionDuringEditing = YES;
     _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     _theTableView.backgroundColor = [UIColor clearColor];
     _theTableView.rowHeight = iPad?60:44;
     _theTableView.dataSource = self;
     _theTableView.delegate = self;
-    _theTableView.allowsSelectionDuringEditing = YES;
     _theTableView.canCancelContentTouches = NO;
     [self.view addSubview:_theTableView];
     
@@ -105,13 +107,6 @@
     self.watchdogCanGo = YES;
 }
 
-- (void)removeAllCheckmarks {
-    for (int i = 0; i < _filelist.count; i++) {
-        UITableViewCell *cell = [_theTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-        cell.editingAccessoryType = UITableViewCellEditingStyleNone;
-    }
-}
-
 - (void)pasteInLocation:(NSString *)location {
     
     AppDelegate *ad = kAppDelegate;
@@ -137,7 +132,6 @@
                 }
             }
                        
-            
             [self flushCopiedList];
             
             dispatch_sync(dispatch_get_main_queue(), ^{
@@ -153,6 +147,7 @@
 }
 
 - (void)deleteItemsInClipboard {
+    // disselect all rows
     for (NSString *file in _perspectiveCopiedList) {
         [[NSFileManager defaultManager]removeItemAtPath:file error:nil];
     }
@@ -171,7 +166,7 @@
     [self flushPerspectiveCopyList];
     [self saveCopiedList];
     [self updateCopyButtonState];
-    [self removeAllCheckmarks];
+ //   [self removeAllCheckmarks];
 }
 
 // BOOL value of YES is success adding to the array
@@ -285,21 +280,9 @@
             [self copyFilesWithIsCut:YES];
         } else if ([title isEqualToString:@"Paste"]) {
             [self pasteInLocation:[kAppDelegate managerCurrentDir]];
-        } /*else if ([title isEqualToString:@"Cancel"]) {
-            [self verifyCopiedList];
-            if (self.copiedList.count > 0) {
-                [self flushCopiedList];
-                [self flushPerspectiveCopyList];
-            }
-        }*/ else if ([title isEqualToString:@"Delete"]) {
+        } else if ([title isEqualToString:@"Delete"]) {
             UIActionSheet *deleteConfirmation = [[UIActionSheet alloc]initWithTitle:@"Are you Sure?" completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-                /*if (buttonIndex == 1) {
-                    [self verifyCopiedList];
-                    if (self.copiedList.count > 0) {
-                        [self flushCopiedList];
-                        [self flushPerspectiveCopyList];
-                    }
-                } else*/ if (buttonIndex == 0) {
+                if (buttonIndex == 0) {
                     [self deleteItemsInClipboard];
                 }
             } cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Delete" otherButtonTitles:nil];
@@ -336,10 +319,9 @@
         return;
     }
     
-    [self verifyProspectiveCopyList];
     [self verifyCopiedList];
     
-    BOOL persCLGT = (_perspectiveCopiedList.count > 0);
+    BOOL persCLGT = (_theTableView.indexPathsForSelectedRows.count > 0);
     BOOL CLGT = (_copiedList.count > 0);
     BOOL shouldUnhide = ((persCLGT || CLGT) || (persCLGT && CLGT));
     
@@ -730,7 +712,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     [self reindexFilelist];
-    return _theTableView.editing?_filelist.count+1:_filelist.count;
+    return _filelist.count;
 }
 
 - (void)accessoryButtonPressed:(id)sender {
@@ -752,9 +734,7 @@
 
     [self reindexFilelist];
     
-    static NSString *CellIdentifier = @"Cell";
-    
-    SwiftLoadCell *cell = (SwiftLoadCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
         cell = [[SwiftLoadCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
@@ -781,56 +761,38 @@
         }
     }
     
-    cell.isFirstCell = (indexPath.row == 0);
-
-    if (_theTableView.editing && indexPath.row == _filelist.count) {
-        cell.textLabel.text = @"Create New File/Directory";
-        cell.detailTextLabel.text = nil;
-        cell.editingAccessoryType = UITableViewCellAccessoryNone;
+    NSString *filesObjectAtIndex = [_filelist objectAtIndex:indexPath.row];
+    NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:filesObjectAtIndex];
+    
+    cell.textLabel.text = filesObjectAtIndex;
+    
+    BOOL isDir;
+    
+    if ([[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir] && isDir) {
+        cell.detailTextLabel.text = @"Directory";
         for (UIGestureRecognizer *rec in cell.gestureRecognizers) {
             rec.enabled = NO;
         }
     } else {
-        NSString *filesObjectAtIndex = [_filelist objectAtIndex:indexPath.row];
-        NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:filesObjectAtIndex];
-
-        BOOL isTheSame = [cell.textLabel.text isEqualToString:filesObjectAtIndex];
-        
-        cell.textLabel.text = filesObjectAtIndex;
-        
-        [self verifyProspectiveCopyList];
-        
-        cell.editingAccessoryType = [_perspectiveCopiedList containsObject:file]?UITableViewCellAccessoryCheckmark:UITableViewCellAccessoryNone;
-        
-        BOOL isDir;  
-
-        if ([[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir] && isDir) {
-            cell.detailTextLabel.text = @"Directory";
-            for (UIGestureRecognizer *rec in cell.gestureRecognizers) {
-                rec.enabled = NO;
-            }
-        } else {
-            for (UIGestureRecognizer *rec in cell.gestureRecognizers) {
-                rec.enabled = YES;
-            }
-            if (!isTheSame) {
-                NSString *detailText = [file.pathExtension.lowercaseString isEqualToString:@"zip"]?@"Archive, ":@"File, ";
-                
-                float fileSize = fileSize(file);
-                
-                if (fileSize < 1024.0) {
-                    detailText = [detailText stringByAppendingFormat:@"%.0f Byte%@",fileSize,(fileSize > 1)?@"s":@""];
-                } else if (fileSize < (1024*1024) && fileSize > 1024.0 ) {
-                    fileSize = fileSize/1014;
-                    detailText = [detailText stringByAppendingFormat:@"%.0f KB",fileSize];
-                } else if (fileSize < (1024*1024*1024) && fileSize > (1024*1024)) {
-                    fileSize = fileSize/(1024*1024);
-                    detailText = [detailText stringByAppendingFormat:@"%.0f MB",fileSize];
-                }
-                cell.detailTextLabel.text = detailText;
-            }
+        for (UIGestureRecognizer *rec in cell.gestureRecognizers) {
+            rec.enabled = YES;
         }
+        NSString *detailText = [file.pathExtension.lowercaseString isEqualToString:@"zip"]?@"Archive, ":@"File, ";
+        
+        float fileSize = fileSize(file);
+        
+        if (fileSize < 1024.0) {
+            detailText = [detailText stringByAppendingFormat:@"%.0f Byte%@",fileSize,(fileSize > 1)?@"s":@""];
+        } else if (fileSize < (1024*1024) && fileSize > 1024.0 ) {
+            fileSize = fileSize/1014;
+            detailText = [detailText stringByAppendingFormat:@"%.0f KB",fileSize];
+        } else if (fileSize < (1024*1024*1024) && fileSize > (1024*1024)) {
+            fileSize = fileSize/(1024*1024);
+            detailText = [detailText stringByAppendingFormat:@"%.0f MB",fileSize];
+        }
+        cell.detailTextLabel.text = detailText;
     }
+    
     [cell setNeedsDisplay];
     return cell;
 }
@@ -839,33 +801,13 @@
     
     AppDelegate *ad = kAppDelegate;
     UITableViewCell *cell = [_theTableView cellForRowAtIndexPath:indexPath];
-    int cellCount = [_theTableView numberOfRowsInSection:0];
 
     NSString *file = [ad.managerCurrentDir stringByAppendingPathComponent:cell.textLabel.text];
     ad.openFile = file;
 
     BOOL isDir;
     
-    if (_theTableView.editing) {
-        
-        if (indexPath.row == cellCount-1) {
-            [self showFileCreationDialogue];
-        } else {
-            if ([_perspectiveCopiedList containsObject:file]) {
-                [self removeItemFromPerspectiveCopyList:file];
-                cell.editingAccessoryType = UITableViewCellAccessoryNone;
-            } else {
-                if ([self addItemToPerspectiveCopyList:file]) {
-                    cell.editingAccessoryType = UITableViewCellAccessoryCheckmark;
-                } else {
-                    cell.editingAccessoryType = UITableViewCellAccessoryNone;
-                }
-            }
-            
-            [self updateCopyButtonState];
-        }
-        
-    } else if ([[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir] && isDir) {
+    if ([[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir] && isDir) {
         
         _navBar.topItem.title = [_navBar.topItem.title stringByAppendingPathComponent:file.lastPathComponent];
         
@@ -956,7 +898,20 @@
         }
     }
     
-    [self.theTableView deselectRowAtIndexPath:indexPath animated:YES];
+    [_theTableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    [self removeSideSwipeView:NO];
+    
+    if (_theTableView.editing) {
+        [_theTableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+        return nil;
+    }
+    
+    return indexPath;
+    
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -974,36 +929,9 @@
     [self removeSideSwipeView:NO];
     [self reindexFilelist];
     
-    if (_theTableView.editing) {
-        [_editButton setTitle:@"Edit"];
-        
-        [_theTableView beginUpdates];
-        [_theTableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_filelist.count inSection:0]] withRowAnimation:UITableViewRowAnimationLeft];
-        [_theTableView setEditing:NO animated:YES];
-        [_theTableView endUpdates];
-        
-        for (int i = 0; i < _filelist.count; i++) {
-            UITableViewCell *cell = [_theTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-            [cell setEditing:NO animated:YES];
-            cell.editingAccessoryType = UITableViewCellEditingStyleNone;
-        }
-        
-        [self flushPerspectiveCopyList];
-        
-    } else {
-        [_editButton setTitle:@"Done"];
-
-        [_theTableView beginUpdates];
-        [_theTableView setEditing:YES animated:YES];
-        [_theTableView insertRowsAtIndexPaths:[NSArray arrayWithObjects:[NSIndexPath indexPathForRow:self.filelist.count inSection:0], nil] withRowAnimation:UITableViewRowAnimationLeft];
-        [_theTableView endUpdates];
-
-        for (int i = 0; i < _filelist.count; i++) {
-            UITableViewCell *cell = [_theTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-            [cell setEditing:YES animated:YES];
-        }
-    }
-    [self updateCopyButtonState];
+    _theTableView.allowsMultipleSelectionDuringEditing = !_theTableView.editing;
+    _editButton.title = _theTableView.editing?@"Edit":@"Done";
+    [_theTableView setEditing:!_theTableView.editing animated:YES];
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -1012,8 +940,9 @@
         return UITableViewCellEditingStyleNone;
     }
     
-    if (!_theTableView.editing) {
-        
+    if (_theTableView.editing) {
+        return UITableViewCellEditingStyleNone;
+    } else {
         [self reindexFilelist];
         
         NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:[_filelist objectAtIndex:indexPath.row]];
@@ -1026,42 +955,20 @@
             return UITableViewCellEditingStyleDelete;
         }
         return UITableViewCellEditingStyleNone;
-    } else {
-        if (indexPath.row == _filelist.count) {
-            return UITableViewCellEditingStyleInsert;
-        }
-        return UITableViewCellEditingStyleDelete;
     }
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        NSString *cellName = [self.theTableView cellForRowAtIndexPath:indexPath].textLabel.text;
+        NSString *cellName = [_theTableView cellForRowAtIndexPath:indexPath].textLabel.text;
         NSString *removePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:cellName];
         
-        [kAppDelegate showHUDWithTitle:@"Deleting"];
-        [kAppDelegate setTitleOfVisibleHUD:cellName];
-        [kAppDelegate setVisibleHudMode:MBProgressHUDModeIndeterminate];
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            @autoreleasepool {
-                NSFileManager *fm = [[NSFileManager alloc]init];
-                [fm removeItemAtPath:removePath error:nil];
-                
-                [_filelist removeAllObjects];
-                
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    @autoreleasepool {
-                        [kAppDelegate hideHUD];
-                        [_theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
-                    }
-                });
-            
-            }
-        });
-        
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        [self showFileCreationDialogue];
+        [_theTableView beginUpdates];
+        [_theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
+        NSFileManager *fm = [[NSFileManager alloc]init];
+        [fm removeItemAtPath:removePath error:nil];
+        [_filelist removeAllObjects];
+        [_theTableView endUpdates];
     }
 }
 
@@ -1285,11 +1192,6 @@
     } completion:^(BOOL finished) {
         self.animatingSideSwipe = NO;
     }];
-}
-
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self removeSideSwipeView:NO];
-    return indexPath;
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {

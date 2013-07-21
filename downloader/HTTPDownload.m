@@ -29,6 +29,7 @@
     self = [super init];
     if (self) {
         self.url = aUrl;
+        self.fileName = [_url.absoluteString.lastPathComponent percentSanitize];
         self.buffer = [NSMutableData data];
     }
     return self;
@@ -72,7 +73,11 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSHTTPURLResponse *)response {
-    self.fileName = [response.URL.absoluteString lastPathComponent];
+    NSString *suggestedFilename = response.suggestedFilename;
+    self.fileName = (suggestedFilename.length > 0)?suggestedFilename:[response.URL.absoluteString lastPathComponent];
+    if (self.delegate) {
+        self.delegate.textLabel.text = self.fileName;
+    }
     self.filePath = getNonConflictingFilePathForPath([NSTemporaryDirectory() stringByAppendingPathComponent:[self.fileName percentSanitize]]);
     self.fileSize = [response expectedContentLength];
     [[NSFileManager defaultManager]createFileAtPath:_filePath contents:nil attributes:nil];

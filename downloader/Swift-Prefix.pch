@@ -25,6 +25,7 @@
     #import "NSString+mods.h"
     #import "UIButton+SwiftLoad.h"
     #import "UIImage+Additions.h"
+    #import "UITableView+CoolRefresh.h"
 
     #import "Hamburger.h"
 

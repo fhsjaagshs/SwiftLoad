@@ -1,29 +1,26 @@
 //
-//  CoolRefreshTableView.m
-//  SwiftLoad
+//  UITableView+CoolRefresh.m
+//  Swift
 //
-//  Created by Nathaniel Symer on 6/18/13.
+//  Created by Nathaniel Symer on 7/20/13.
 //  Copyright (c) 2013 Nathaniel Symer. All rights reserved.
 //
 
-#import "CoolRefreshTableView.h"
+#import "UITableView+CoolRefresh.h"
+#import <objc/runtime.h>
 
-@interface CoolRefreshTableView ()
+CoolRefreshAnimationStyle animationStyle;
 
-@property (nonatomic, assign) CoolRefreshAnimationStyle animationStyle;
-
-@end
-
-@implementation CoolRefreshTableView
+@implementation UITableView (CoolRefresh)
 
 - (void)animationDidStart:(CAAnimation *)anim {
-    if (_animationStyle == CoolRefreshAnimationStyleForward) {
+    if (animationStyle == CoolRefreshAnimationStyleForward) {
         self.contentOffset = CGPointZero;
     }
 }
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
-    if (_animationStyle == CoolRefreshAnimationStyleBackward) {
+    if (animationStyle == CoolRefreshAnimationStyleBackward) {
         [UIView animateWithDuration:0.1 animations:^{
             self.contentOffset = CGPointZero;
         }];
@@ -34,7 +31,7 @@
     
     [self reloadData];
     
-    self.animationStyle = style;
+    animationStyle = style;
     
     if (style == CoolRefreshAnimationStyleNone) {
         return;
