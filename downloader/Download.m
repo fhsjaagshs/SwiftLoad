@@ -9,7 +9,6 @@
 #import "Download.h"
 #import "DownloadingCell.h"
 
-NSString * const kDownloadChanged = @"downloadDone";
 NSString * const kBackgroundTaskDownload = @"download";
 float const kClearOutDelay = 0.6f;
 
@@ -35,7 +34,7 @@ float const kClearOutDelay = 0.6f;
         [_delegate reset];
     }
     [[DownloadController sharedController]removeDownload:self];
-    [[NSNotificationCenter defaultCenter]postNotificationName:kDownloadChanged object:self];
+    [[DownloadController sharedController]downloadsChanged];
 }
 
 - (void)stop {
@@ -55,7 +54,7 @@ float const kClearOutDelay = 0.6f;
 
 - (void)start {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    [[NSNotificationCenter defaultCenter]postNotificationName:kDownloadChanged object:self];
+    [[DownloadController sharedController]downloadsChanged];
     self.complete = NO;
     self.succeeded = NO;
     [self startBackgroundTask];

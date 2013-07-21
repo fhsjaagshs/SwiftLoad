@@ -74,7 +74,7 @@ static NSString * const cellId = @"acellid";
     return [_downloadObjs indexOfObject:download];
 }
 
-- (void)notifReceived:(NSNotification *)notif {
+- (void)downloadsChanged {
     [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     [self updateSizes];
 }
@@ -220,8 +220,6 @@ static NSString * const cellId = @"acellid";
 - (id)init {
     self = [super init];
     if (self) {
-        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notifReceived:) name:kDownloadChanged object:nil];
-        
         self.activity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         self.button = [UIButton buttonWithType:UIButtonTypeCustom];
         

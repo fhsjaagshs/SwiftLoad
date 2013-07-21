@@ -33,6 +33,9 @@
     #import "SFTPCreds.h"
     #import "FMDatabase.h"
     #import "SimpleKeychain.h"
+    #import "Appirater.h"
+
+    #import "FilesystemMonitor.h"
 
     #import "StyleFactory.h"
     #import "BGProcFactory.h"

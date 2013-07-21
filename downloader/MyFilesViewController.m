@@ -72,9 +72,16 @@ static NSString *CellIdentifier = @"Cell";
     self.view.opaque = YES;
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(copiedListChanged:) name:@"copiedlistchanged" object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(downloadsChanged) name:kDownloadChanged object:nil];
     
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryPlayback error:nil];
+    
+    __weak MyFilesViewController *weakself = self;
+    
+    [[FilesystemMonitor sharedMonitor]setChangedHandler:^{
+        [weakself refreshTableViewWithAnimation:UITableViewRowAnimationFade];
+    }];
+    
+    [[FilesystemMonitor sharedMonitor]startMonitoringDirectory:kDocsDir];
 }
 
 - (void)hamburgerCellWasSelectedAtIndex:(int)index {
@@ -234,10 +241,6 @@ static NSString *CellIdentifier = @"Cell";
         self.filelist = [NSMutableArray array];
         [_filelist addObjectsFromArray:[[[NSFileManager defaultManager]contentsOfDirectoryAtPath:[kAppDelegate managerCurrentDir] error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)]];
     }
-}
-
-- (void)downloadsChanged {
-    [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
 }
 
 - (void)refreshTableViewWithAnimation:(UITableViewRowAnimation)rowAnim {

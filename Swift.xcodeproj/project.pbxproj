@@ -44,6 +44,9 @@
 		F11C403713F830780077F5D1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F11C403013F82FB40077F5D1 /* UIKit.framework */; };
 		F11FE417145F8218008ECC7E /* dedicatedTextEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = F11FE415145F8218008ECC7E /* dedicatedTextEditor.m */; };
 		F128A1DD157FDBFE001BC156 /* SettingsView.m in Sources */ = {isa = PBXBuildFile; fileRef = F128A1DB157FDBFE001BC156 /* SettingsView.m */; };
+		F130452F179C594F00D7DB4D /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = F130452D179C594F00D7DB4D /* Appirater.m */; };
+		F1304531179C5A4100D7DB4D /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1304530179C5A4100D7DB4D /* StoreKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		F1304534179C5E6A00D7DB4D /* FilesystemMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = F1304533179C5E6A00D7DB4D /* FilesystemMonitor.m */; };
 		F137F3481791FC5A008FCFD7 /* Hamburger.m in Sources */ = {isa = PBXBuildFile; fileRef = F137F3471791FC5A008FCFD7 /* Hamburger.m */; };
 		F137F34B1791FD14008FCFD7 /* HamburgerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F137F34A1791FD14008FCFD7 /* HamburgerCell.m */; };
 		F13979A516E78F4E00F8B61B /* ArrowLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A116E78F4E00F8B61B /* ArrowLeft.png */; };
@@ -291,6 +294,12 @@
 		F11FE415145F8218008ECC7E /* dedicatedTextEditor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = dedicatedTextEditor.m; sourceTree = "<group>"; };
 		F128A1DA157FDBFD001BC156 /* SettingsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsView.h; sourceTree = "<group>"; };
 		F128A1DB157FDBFE001BC156 /* SettingsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsView.m; sourceTree = "<group>"; };
+		F130452C179C594F00D7DB4D /* Appirater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Appirater.h; sourceTree = "<group>"; };
+		F130452D179C594F00D7DB4D /* Appirater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Appirater.m; sourceTree = "<group>"; };
+		F130452E179C594F00D7DB4D /* AppiraterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppiraterDelegate.h; sourceTree = "<group>"; };
+		F1304530179C5A4100D7DB4D /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		F1304532179C5E6A00D7DB4D /* FilesystemMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilesystemMonitor.h; sourceTree = "<group>"; };
+		F1304533179C5E6A00D7DB4D /* FilesystemMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilesystemMonitor.m; sourceTree = "<group>"; };
 		F137F3461791FC5A008FCFD7 /* Hamburger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hamburger.h; sourceTree = "<group>"; };
 		F137F3471791FC5A008FCFD7 /* Hamburger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Hamburger.m; sourceTree = "<group>"; };
 		F137F3491791FD13008FCFD7 /* HamburgerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HamburgerCell.h; sourceTree = "<group>"; };
@@ -564,9 +573,9 @@
 				F1679ACC1787B3C1001369B1 /* libssl.a in Frameworks */,
 				F150D6B2177F5B9400E4C094 /* libsqlite3.dylib in Frameworks */,
 				F1C0CEFC1661AEC6001B1B42 /* libz.1.2.5.dylib in Frameworks */,
-				F1122A76142E4E8B00A04CC6 /* MediaPlayer.framework in Frameworks */,
-				F1D3A573157A8F9E00A2D141 /* Security.framework in Frameworks */,
 				F166BC1914E21973003E5A07 /* libxml2.dylib in Frameworks */,
+				F1D3A573157A8F9E00A2D141 /* Security.framework in Frameworks */,
+				F1122A76142E4E8B00A04CC6 /* MediaPlayer.framework in Frameworks */,
 				F149A6781491686D0038F1FC /* AudioToolbox.framework in Frameworks */,
 				F1A72948149876040049DBB6 /* GameKit.framework in Frameworks */,
 				F1F114C7142AA3F400199C3C /* CFNetwork.framework in Frameworks */,
@@ -578,6 +587,7 @@
 				F11C403713F830780077F5D1 /* UIKit.framework in Frameworks */,
 				F11C403613F830720077F5D1 /* Foundation.framework in Frameworks */,
 				F11C402E13F82F9D0077F5D1 /* MessageUI.framework in Frameworks */,
+				F1304531179C5A4100D7DB4D /* StoreKit.framework in Frameworks */,
 				F1693C7316DFB9B5006E3739 /* DropboxSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -689,6 +699,7 @@
 				F150D6B1177F5B9400E4C094 /* libsqlite3.dylib */,
 				F166BC1814E21973003E5A07 /* libxml2.dylib */,
 				F1C0CEFB1661AEC6001B1B42 /* libz.1.2.5.dylib */,
+				F1304530179C5A4100D7DB4D /* StoreKit.framework */,
 				9B50F4E51613C4CD0040F394 /* CoreMedia.framework */,
 				F1D3A572157A8F9E00A2D141 /* Security.framework */,
 				F1A72947149876040049DBB6 /* GameKit.framework */,
@@ -784,6 +795,16 @@
 				F1693C3716DFAB6E006E3739 /* ShadowedTableView.m */,
 			);
 			name = UI;
+			sourceTree = "<group>";
+		};
+		F130452B179C594300D7DB4D /* Appirater */ = {
+			isa = PBXGroup;
+			children = (
+				F130452C179C594F00D7DB4D /* Appirater.h */,
+				F130452D179C594F00D7DB4D /* Appirater.m */,
+				F130452E179C594F00D7DB4D /* AppiraterDelegate.h */,
+			);
+			name = Appirater;
 			sourceTree = "<group>";
 		};
 		F137F3451791DC70008FCFD7 /* Hamburger */ = {
@@ -914,6 +935,8 @@
 				F106A7CE178876B1002D3BC8 /* SFTPCreds.m */,
 				F14B819B1788E2D300ADEF99 /* SimpleKeychain.h */,
 				F14B819C1788E2D300ADEF99 /* SimpleKeychain.m */,
+				F1304532179C5E6A00D7DB4D /* FilesystemMonitor.h */,
+				F1304533179C5E6A00D7DB4D /* FilesystemMonitor.m */,
 			);
 			path = Subclasses;
 			sourceTree = "<group>";
@@ -1096,6 +1119,7 @@
 		F1DA5247176E8181009A43CD /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				F130452B179C594300D7DB4D /* Appirater */,
 				F172BC7E1794EC4500AC1483 /* CocoaHTTPServer */,
 				F106A4C4178865AD002D3BC8 /* DLSFTP */,
 				F150D6B3177F783E00E4C094 /* FMDatabase */,
@@ -1409,6 +1433,8 @@
 				F1B2C0FC17961A0E00AD5A04 /* PeerPickerCell.m in Sources */,
 				F1434B38179AFF41001A672C /* TasksController.m in Sources */,
 				F1434B3E179B21C1001A672C /* UITableView+CoolRefresh.m in Sources */,
+				F130452F179C594F00D7DB4D /* Appirater.m in Sources */,
+				F1304534179C5E6A00D7DB4D /* FilesystemMonitor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

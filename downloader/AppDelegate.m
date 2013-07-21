@@ -528,6 +528,13 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [[UINavigationBar appearance]setTitleTextAttributes:@{ UITextAttributeTextColor: [UIColor whiteColor] }];
     [[UIBarButtonItem appearance]setTitleTextAttributes:@{ UITextAttributeTextColor: [UIColor whiteColor], UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(0, 0)] } forState:UIControlStateNormal];
     
+    [Appirater setAppId:@"469762999"];
+    [Appirater setDaysUntilPrompt:5];
+    [Appirater setUsesUntilPrompt:10];
+    [Appirater setSignificantEventsUntilPrompt:-1];
+    [Appirater setTimeBeforeReminding:2];
+    [Appirater appLaunched:YES];
+    
     return YES;
 }
 
@@ -537,9 +544,11 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 - (void)applicationWillEnterForeground:(UIApplication *)application  {
     [[BluetoothManager sharedManager]prepareForForeground];
+    [Appirater appEnteredForeground:YES];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
+    [[FilesystemMonitor sharedMonitor]invalidate];
     [[BGProcFactory sharedFactory]endAllTasks];
 }
 
