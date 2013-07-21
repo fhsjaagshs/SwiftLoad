@@ -38,8 +38,8 @@
     if ([keyPath isEqualToString:@"contentOffset"]) {
         if ((_scrollView.isDecelerating || _scrollView.isDragging) || (_scrollView.isDragging && _scrollView.isDecelerating)) {
             if (_scrollView.contentOffset.y < -30) {
-                if ([_delegate respondsToSelector:@selector(shouldTripWatchdog)]) {
-                    if ([_delegate shouldTripWatchdog:self] && [_delegate respondsToSelector:@selector(watchdogWasTripped)]) {
+                if ([_delegate respondsToSelector:@selector(shouldTripWatchdog:)]) {
+                    if ([_delegate shouldTripWatchdog:self] && [_delegate respondsToSelector:@selector(watchdogWasTripped:)]) {
                         [_delegate watchdogWasTripped:self];
                     }
                 }
