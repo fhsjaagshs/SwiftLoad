@@ -40,6 +40,13 @@ float const kClearOutDelay = 0.6f;
 
 - (void)stop {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    
+    if ([[NSFileManager defaultManager]fileExistsAtPath:_temporaryPath]) {
+        [[NSFileManager defaultManager]removeItemAtPath:_temporaryPath error:nil];
+    }
+    
+   // [self clearOutMyself]; // Maybe?
+    
     self.complete = YES;
     self.succeeded = NO;
     self.fileName = nil;
@@ -56,6 +63,11 @@ float const kClearOutDelay = 0.6f;
 
 - (void)showFailure {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    
+    if ([[NSFileManager defaultManager]fileExistsAtPath:_temporaryPath]) {
+        [[NSFileManager defaultManager]removeItemAtPath:_temporaryPath error:nil];
+    }
+    
     self.complete = YES;
     self.succeeded = NO;
     
@@ -69,6 +81,9 @@ float const kClearOutDelay = 0.6f;
 
 - (void)showSuccess {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    
+    NSString *targetPath = getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:[_fileName percentSanitize]]);
+    [[NSFileManager defaultManager]moveItemAtPath:_temporaryPath toPath:targetPath error:nil];
     
     fireNotification(_fileName);
     

@@ -13,7 +13,6 @@
 @property (nonatomic, strong) NSURLConnection *connection;
 @property (nonatomic, assign) float downloadedBytes;
 @property (nonatomic, assign) float fileSize;
-@property (nonatomic, strong) NSString *filePath;
 @property (nonatomic, strong) NSFileHandle *handle;
 @property (nonatomic, strong) NSMutableData *buffer;
 
@@ -35,22 +34,10 @@
     return self;
 }
 
-- (void)showFailure {
-    [super showFailure];
-    [[NSFileManager defaultManager]removeItemAtPath:_filePath error:nil];
-}
-
-- (void)showSuccess {
-    [super showSuccess];
-    NSString *targetPath = getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:[self.fileName percentSanitize]]);
-    [[NSFileManager defaultManager]moveItemAtPath:_filePath toPath:targetPath error:nil];
-}
-
 - (void)stop {
     [super stop];
     [_connection cancel];
     [_buffer setLength:0];
-    [[NSFileManager defaultManager]removeItemAtPath:_filePath error:nil];
     self.downloadedBytes = 0;
     self.fileSize = 0;
 }
@@ -73,15 +60,16 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSHTTPURLResponse *)response {
-    NSString *suggestedFilename = response.suggestedFilename;
-    self.fileName = (suggestedFilename.length > 0)?suggestedFilename:[response.URL.absoluteString lastPathComponent];
+    self.fileName = (response.suggestedFilename.length > 0)?response.suggestedFilename:[response.URL.absoluteString lastPathComponent];
+    
     if (self.delegate) {
         self.delegate.textLabel.text = self.fileName;
     }
-    self.filePath = getNonConflictingFilePathForPath([NSTemporaryDirectory() stringByAppendingPathComponent:[self.fileName percentSanitize]]);
+    
+    self.temporaryPath = getNonConflictingFilePathForPath([NSTemporaryDirectory() stringByAppendingPathComponent:[self.fileName percentSanitize]]);
     self.fileSize = [response expectedContentLength];
-    [[NSFileManager defaultManager]createFileAtPath:_filePath contents:nil attributes:nil];
-    self.handle = [NSFileHandle fileHandleForWritingAtPath:_filePath];
+    [[NSFileManager defaultManager]createFileAtPath:self.temporaryPath contents:nil attributes:nil];
+    self.handle = [NSFileHandle fileHandleForWritingAtPath:self.temporaryPath];
 }
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)receivedData {
@@ -99,21 +87,24 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    [_connection cancel];
+    [_buffer setLength:0];
+    self.downloadedBytes = 0;
+    self.fileSize = 0;
     [self showFailure];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    self.fileName = [self.fileName stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    self.fileName = [self.fileName percentSanitize];
 
     if (_downloadedBytes > 0) {
         
         if (_buffer.length > 0) {
             [_handle writeData:_buffer];
+            [_buffer setLength:0];
             [_handle synchronizeFile];
         }
-        
-        [_buffer setLength:0];
         
         [self showSuccess];
     } else {

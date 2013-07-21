@@ -37,7 +37,7 @@
 
 - (void)start {
     [super start];
-    [DroppinBadassBlocks loadFile:_path intoPath:getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:self.fileName]) withCompletionBlock:^(DBMetadata *metadata, NSError *error) {
+    [DroppinBadassBlocks loadFile:_path intoPath:getNonConflictingFilePathForPath([NSTemporaryDirectory() stringByAppendingPathComponent:self.fileName]) withCompletionBlock:^(DBMetadata *metadata, NSError *error) {
         if (error) {
             [self showFailure];
         } else {

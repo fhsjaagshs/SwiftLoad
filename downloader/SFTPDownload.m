@@ -25,7 +25,7 @@
     self = [super init];
     if (self) {
         self.URL = url;
-        self.fileName = _URL.path.lastPathComponent;
+        self.fileName = [_URL.path.lastPathComponent percentSanitize];
         self.connection = [[DLSFTPConnection alloc]initWithHostname:_URL.host username:username password:password];
     }
     return self;
@@ -34,21 +34,21 @@
 - (void)stop {
     [super stop];
     [_connection cancelAllRequests];
+    [_connection disconnect];
 }
 
 - (void)start {
     [super start];
+    
+    self.temporaryPath = getNonConflictingFilePathForPath([NSTemporaryDirectory() stringByAppendingPathComponent:self.fileName]);
+    
     [_connection connectWithSuccessBlock:^{
         dispatch_sync(dispatch_get_main_queue(), ^{
             @autoreleasepool {
-            
-                __weak NSString *filePath = getNonConflictingFilePathForPath([NSTemporaryDirectory() stringByAppendingPathComponent:self.fileName]);
-                
-                DLSFTPDownloadRequest *req = [[DLSFTPDownloadRequest alloc]initWithRemotePath:_URL.path localPath:filePath resume:NO successBlock:^(DLSFTPFile *file, NSDate *startTime, NSDate *finishTime) {
+                DLSFTPDownloadRequest *req = [[DLSFTPDownloadRequest alloc]initWithRemotePath:_URL.path localPath:self.temporaryPath resume:NO successBlock:^(DLSFTPFile *file, NSDate *startTime, NSDate *finishTime) {
                     dispatch_sync(dispatch_get_main_queue(), ^{
                         @autoreleasepool {
                             [self showSuccess];
-                            [[NSFileManager defaultManager]moveItemAtPath:filePath toPath:getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:self.fileName]) error:nil];
                         }
                     });
                 } failureBlock:^(NSError *error) {
@@ -66,7 +66,6 @@
                 }];
                 
                 [_connection submitRequest:req];
-            
             }
         });
     } failureBlock:^(NSError *error) {

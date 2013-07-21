@@ -12,11 +12,9 @@
 
 @property (nonatomic, strong) NSInputStream *readStream;
 @property (nonatomic, strong) NSFileHandle *handle;
-
 @property (nonatomic, assign) int bufferSize;
 @property (nonatomic, assign) float fileSize;
 @property (nonatomic, assign) float bytesRead;
-
 
 @end
 
@@ -78,6 +76,7 @@
                 [self showSuccess];
             } else {
                 [_handle writeData:[NSData dataWithBytes:buffer length:bytesRead]];
+                [_handle synchronizeFile];
             }
         } break;
         case NSStreamEventErrorOccurred: {
@@ -92,7 +91,6 @@
     }
 }
 
-
 - (void)downloadFileUsingFTP:(NSURL *)url {
     
     self.fileName = url.absoluteString.lastPathComponent;
@@ -103,9 +101,9 @@
         return;
     }
     
-    NSString *path = getNonConflictingFilePathForPath([[kDocsDir stringByAppendingPathComponent:self.fileName]percentSanitize]);
-    [[NSFileManager defaultManager]createFileAtPath:path contents:nil attributes:nil];
-    self.handle = [NSFileHandle fileHandleForWritingAtPath:path];
+    self.temporaryPath = getNonConflictingFilePathForPath([[NSTemporaryDirectory() stringByAppendingPathComponent:self.fileName]percentSanitize]);
+    [[NSFileManager defaultManager]createFileAtPath:self.temporaryPath contents:nil attributes:nil];
+    self.handle = [NSFileHandle fileHandleForWritingAtPath:self.temporaryPath];
     
     self.readStream = (__bridge NSInputStream *)readStreamTemp;
     CFRelease(readStreamTemp);
