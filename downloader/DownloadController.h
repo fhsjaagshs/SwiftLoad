@@ -23,6 +23,4 @@
 
 + (DownloadController *)sharedController;
 
-- (void)downloadsChanged;
-
 @end

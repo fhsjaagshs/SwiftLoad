@@ -364,19 +364,31 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [[BluetoothManager sharedManager]searchForPeers];
 }
 
-- (void)downloadFromAppDelegate:(NSString *)stouPrelim {
-    if (![stouPrelim hasPrefix:@"http"]) {
-        if (![stouPrelim hasPrefix:@"ftp"]) {
-            [TransparentAlert showAlertWithTitle:@"Invalid URL" andMessage:@"The URL you have provided is not HTTP or FTP."];
-            return;
-        }
-        stouPrelim = [NSString stringWithFormat:@"http://%@",stouPrelim];
+- (void)downloadFileUsingSFTP:(NSURL *)url withUsername:(NSString *)username andPassword:(NSString *)password {
+    SFTPDownload *download = [SFTPDownload downloadWithURL:url username:username andPassword:password];
+    [[DownloadController sharedController]addDownload:download];
+}
+
+- (void)downloadFile:(NSString *)stouPrelim {
+    
+    if (stouPrelim.length == 0) {
+        return;
     }
     
     NSURL *url = [NSURL URLWithString:stouPrelim];
     
+    if (url.scheme.length == 0) {
+        url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@",stouPrelim]];
+    }
+    
     if (!url) {
         [TransparentAlert showAlertWithTitle:@"Invalid URL" andMessage:@"The URL you have provided is somehow bogus."];
+        return;
+    }
+    
+    if ([url.scheme isEqualToString:@"ftp"]) {
+        FTPDownload *download = [FTPDownload downloadWithURL:url];
+        [[DownloadController sharedController]addDownload:download];
         return;
     }
     
@@ -385,7 +397,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 - (BOOL)isInForground {
-    return ([[UIApplication sharedApplication]applicationState] == UIApplicationStateActive || [[UIApplication sharedApplication]applicationState] == UIApplicationStateInactive);
+    return [[UIApplication sharedApplication]applicationState] != UIApplicationStateBackground;
 }
 
 // Dropbox Upload
@@ -475,6 +487,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     // Trust me
+    [FilesystemMonitor sharedMonitor];
     [BGProcFactory sharedFactory];
     [DownloadController sharedController];
     [BluetoothManager sharedManager];
@@ -590,7 +603,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         }
         
         if (URLString.length > 0) {
-            [self downloadFromAppDelegate:URLString];
+            [self downloadFile:URLString];
         }
     }
 
@@ -664,16 +677,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     hud.mode = MBProgressHUDModeText;
     hud.labelText = title;
     [hud hide:YES afterDelay:1.5];
-}
-
-- (void)downloadFileUsingSFTP:(NSURL *)url withUsername:(NSString *)username andPassword:(NSString *)password {
-    SFTPDownload *download = [SFTPDownload downloadWithURL:url username:username andPassword:password];
-    [[DownloadController sharedController]addDownload:download];
-}
-
-- (void)downloadFileUsingFTP:(NSString *)url {
-    FTPDownload *download = [FTPDownload downloadWithURL:[NSURL URLWithString:url]];
-    [[DownloadController sharedController]addDownload:download];
 }
 
 @end

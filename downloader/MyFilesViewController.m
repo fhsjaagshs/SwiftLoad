@@ -87,13 +87,7 @@ static NSString *CellIdentifier = @"Cell";
 - (void)hamburgerCellWasSelectedAtIndex:(int)index {
     if (index == 0) {
         [[[URLInputController alloc]initWithCompletionBlock:^(NSString *url) {
-            if (url.length > 0) {
-                if ([url hasPrefix:@"http"]) {
-                    [kAppDelegate downloadFromAppDelegate:url];
-                } else if ([url hasPrefix:@"ftp"]) {
-                    [kAppDelegate downloadFileUsingFTP:url];
-                }
-            }
+            [kAppDelegate downloadFile:url];
         }]show];
     } else if (index == 1) {
         webDAVViewController *advc = [webDAVViewController viewController];
@@ -571,13 +565,7 @@ static NSString *CellIdentifier = @"Cell";
     UIActionSheet *as = [[UIActionSheet alloc]initWithTitle:nil completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         if (buttonIndex == 0) {
             [[[URLInputController alloc]initWithCompletionBlock:^(NSString *url) {
-                if (url.length > 0) {
-                    if ([url hasPrefix:@"http"]) {
-                        [kAppDelegate downloadFromAppDelegate:url];
-                    } else if ([url hasPrefix:@"ftp"]) {
-                        [kAppDelegate downloadFileUsingFTP:url];
-                    }
-                }
+                [kAppDelegate downloadFile:url];
             }]show];
         } else if (buttonIndex == 1) {
             webDAVViewController *advc = [webDAVViewController viewController];

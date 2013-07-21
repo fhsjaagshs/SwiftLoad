@@ -34,7 +34,6 @@ float const kClearOutDelay = 0.6f;
         [_delegate reset];
     }
     [[DownloadController sharedController]removeDownload:self];
-    [[DownloadController sharedController]downloadsChanged];
 }
 
 - (void)stop {
@@ -54,7 +53,6 @@ float const kClearOutDelay = 0.6f;
 
 - (void)start {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    [[DownloadController sharedController]downloadsChanged];
     self.complete = NO;
     self.succeeded = NO;
     [self startBackgroundTask];
@@ -80,6 +78,8 @@ float const kClearOutDelay = 0.6f;
 
 - (void)showSuccess {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    
+    NSLog(@"%@",_temporaryPath);
     
     NSString *targetPath = getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:[_fileName percentSanitize]]);
     [[NSFileManager defaultManager]moveItemAtPath:_temporaryPath toPath:targetPath error:nil];

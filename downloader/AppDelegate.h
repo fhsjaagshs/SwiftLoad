@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 
 #define kAppDelegate (AppDelegate *)[[UIApplication sharedApplication]delegate]
-#define mainVC (downloaderViewController *)[(downloaderAppDelegate *)[[UIApplication sharedApplication]delegate]viewController]
 #define kDocsDir [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 #define kLibDir [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 #define kCachesDir [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0]
@@ -34,11 +33,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 @property (nonatomic, strong) UIWindow *window;
 @property (nonatomic, strong) MyFilesViewController *viewController;
 
-//@property (nonatomic, retain) DBRestClient *restClient;
-
-// ActionSheets
-@property (nonatomic, assign) BOOL uiasVis;
-
 // Audio Player
 @property (nonatomic, strong) AVAudioPlayer *audioPlayer;
 - (void)skipToPreviousTrack;
@@ -62,27 +56,14 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 @property (nonatomic, strong) NSString *nowPlayingFile;
 
 // Bluetooth File Transmission
-
 - (void)prepareFileForBTSending:(NSString *)file;
-
-/*@property (nonatomic, strong) BKSessionController *sessionController;
-@property (nonatomic, strong) BKSessionController *sessionControllerSending;
-@property (nonatomic, strong) UIProgressView *progressView;
-@property (nonatomic, assign) BOOL isReciever;*/
-
-/*- (void)killSession;
-- (void)startSession;
-- (void)makeSessionUnavailable;
-- (void)makeSessionAvailable;
-- (void)showBTController;*/
 
 // Dropbox Uploading
 - (void)uploadLocalFile:(NSString *)localPath;
 
-// FTP
-//- (void)showFTPUploadController;
-- (void)downloadFileUsingFTP:(NSString *)url;
+// Downloading
 - (void)downloadFileUsingSFTP:(NSURL *)url withUsername:(NSString *)username andPassword:(NSString *)password;
+- (void)downloadFile:(NSString *)stouPrelim;
 
 // HUD management
 - (void)setVisibleHudCustomView:(UIView *)view;
@@ -101,8 +82,5 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 // Downloading-specific HUDs
 //- (void)showFailedAlertForFilename:(NSString *)fileName;
 //- (void)showFinishedAlertForFilename:(NSString *)fileName;
-
-// Downloading
-- (void)downloadFromAppDelegate:(NSString *)stouPrelim;
 
 @end

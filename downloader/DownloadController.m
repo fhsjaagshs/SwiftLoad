@@ -59,11 +59,13 @@ static NSString * const cellId = @"acellid";
 - (void)removeDownload:(Download *)download {
     [download stop];
     [_downloadObjs removeObject:download];
+    [self updateSizes];
 }
 
 - (void)addDownload:(Download *)download {
     [_downloadObjs addObject:download];
     [download start];
+    [self updateSizes];
 }
 
 - (void)removeDownloadAtIndex:(int)index {
@@ -74,13 +76,7 @@ static NSString * const cellId = @"acellid";
     return [_downloadObjs indexOfObject:download];
 }
 
-- (void)downloadsChanged {
-    [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-    [self updateSizes];
-}
-
 - (void)updateSizes {
-    
     if (_downloadObjs.count == 0) {
         [_button setTitle:@"0" forState:UIControlStateNormal];
         if (self.superview) {
@@ -93,6 +89,8 @@ static NSString * const cellId = @"acellid";
         
         [_button setTitle:[NSString stringWithFormat:@"%d",_downloadObjs.count] forState:UIControlStateNormal];
     }
+    
+    [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     
     [UIView animateWithDuration:0.25 animations:^{
         float height = (_downloadObjs.count*45)+40;
@@ -220,6 +218,7 @@ static NSString * const cellId = @"acellid";
 - (id)init {
     self = [super init];
     if (self) {
+        NSLog(@"aha");
         self.activity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         self.button = [UIButton buttonWithType:UIButtonTypeCustom];
         
@@ -240,6 +239,8 @@ static NSString * const cellId = @"acellid";
         [self addSubview:_activity];
         [self addSubview:_button];
         [_activity startAnimating];
+        
+        self.downloadObjs = [NSMutableArray array];
     }
     return self;
 }
@@ -256,10 +257,6 @@ static NSString * const cellId = @"acellid";
     });
     
     return sharedController;
-}
-
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
 
 @end
