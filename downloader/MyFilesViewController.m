@@ -220,6 +220,8 @@ static NSString *CellIdentifier = @"Cell";
         return;
     }
     
+    NSLog(@"%@",_theTableView.indexPathsForSelectedRows);
+    
     BOOL persCLGT = (_theTableView.indexPathsForSelectedRows.count > 0);
     BOOL CLGT = (_copiedList.count > 0);
     BOOL shouldUnhide = ((persCLGT || CLGT) || (persCLGT && CLGT));
@@ -794,7 +796,6 @@ static NSString *CellIdentifier = @"Cell";
             [sheet showInView:self.view];
         }
     }
-    
     [_theTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -804,6 +805,16 @@ static NSString *CellIdentifier = @"Cell";
     
     if (_theTableView.editing) {
         [_theTableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+        [self updateCopyButtonState];
+        return nil;
+    }
+    
+    return indexPath;
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (_theTableView.editing) {
+        [_theTableView deselectRowAtIndexPath:indexPath animated:YES];
         [self updateCopyButtonState];
         return nil;
     }
