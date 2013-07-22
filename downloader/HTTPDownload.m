@@ -91,7 +91,6 @@
     [_buffer setLength:0];
     self.downloadedBytes = 0;
     self.fileSize = 0;
-    NSLog(@"%@",error);
     [self showFailure];
 }
 

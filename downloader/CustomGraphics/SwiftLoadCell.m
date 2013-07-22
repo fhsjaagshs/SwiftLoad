@@ -70,10 +70,6 @@
     CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
     CGContextFillRect(context, self.bounds);
     
-    if (_isFirstCell) {
-        NSLog(@"I don't like fat chicks");
-    }
-    
     if (!_isFirstCell) {
         CGContextSetStrokeColorWithColor(context, [UIColor colorWithWhite:208.0/255.0 alpha:1.0].CGColor);
         CGContextSetLineWidth(context, 2.0);
