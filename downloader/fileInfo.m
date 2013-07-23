@@ -105,6 +105,8 @@
         [TransparentAlert showAlertWithTitle:@"Filename Unavailable" andMessage:message];
         [_fileName becomeFirstResponder];
     } else {
+        [_fileName resignFirstResponder];
+        _navBar.topItem.rightBarButtonItem = nil;
         if ([[NSFileManager defaultManager]isWritableFileAtPath:file] && [[NSFileManager defaultManager]isReadableFileAtPath:file]) {
             
             NSDictionary *copyListChange = @{ @"old": file, @"new": newFilePath };
