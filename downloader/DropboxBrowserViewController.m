@@ -102,6 +102,13 @@ static NSString *CellIdentifier = @"dbcell";
     [_database open];
     [_database executeUpdate:@"CREATE TABLE IF NOT EXISTS dropbox_data (id INTEGER PRIMARY KEY AUTOINCREMENT, lowercasepath VARCHAR(255) DEFAULT NULL, filename VARCHAR(255) DEFAULT NULL, date INTEGER, size INTEGER, type INTEGER)"];
     [_database close];
+    
+    if (![[DBSession sharedSession]isLinked]) {
+        [[DBSession sharedSession]linkFromController:self];
+    } else {
+        [_pull setState:PullToRefreshViewStateLoading];
+        [self loadUserID];
+    }
 }
 
 + (void)clearDatabase {
@@ -229,15 +236,6 @@ static NSString *CellIdentifier = @"dbcell";
     [dict setObject:_cursor forKey:_userID];
     NSData *json = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONReadingMutableContainers error:nil];
     [json writeToFile:filePath atomically:YES];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    if (![[DBSession sharedSession]isLinked]) {
-        [[DBSession sharedSession]linkFromController:self];
-    } else {
-        [_pull setState:PullToRefreshViewStateLoading];
-        [self loadUserID];
-    }
 }
 
 - (void)updateFileListing {
