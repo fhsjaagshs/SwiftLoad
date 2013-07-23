@@ -10,10 +10,4 @@
 
 @interface fileInfo : UIViewController <UITextFieldDelegate> 
 
-@property (nonatomic, strong) UILabel *staticMD5Label;
-@property (nonatomic, strong) UITextField *fileName;
-@property (nonatomic, strong) UILabel *md5Field;
-@property (nonatomic, strong) UILabel *moddateLabel;
-@property (nonatomic, strong) UIBarButtonItem *revertButton;
-
 @end

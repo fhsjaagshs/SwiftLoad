@@ -71,7 +71,7 @@ static NSString *CellIdentifier = @"Cell";
     
     self.view.opaque = YES;
     
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(copiedListChanged:) name:@"copiedlistchanged" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(copiedListChanged:) name:kCopyListChangedNotification object:nil];
     
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryPlayback error:nil];
     
@@ -106,6 +106,13 @@ static NSString *CellIdentifier = @"Cell";
 
 - (void)setWatchdogCanGoYES {
     self.watchdogCanGo = YES;
+}
+
+- (void)copiedListChanged:(NSNotification *)notif {
+    if (_copiedList.count > 0) {
+        NSDictionary *changeDict = [NSDictionary dictionaryWithDictionary:(NSDictionary *)(notif.object)];
+        [_copiedList replaceObjectAtIndex:[_copiedList indexOfObject:[changeDict objectForKey:@"old"]] withObject:[changeDict objectForKey:@"new"]];
+    }
 }
 
 - (void)copyFilesWithIsCut:(BOOL)isCut {

@@ -21,6 +21,7 @@
 #define bgcolor [UIColor colorWithWhite:9.0f/10.0f alpha:1.0f]
 
 extern NSString * const NSFileName;
+extern NSString * const kCopyListChangedNotification;
 
 void fireNotification(NSString *filename);
 NSString * getResource(NSString *raw);

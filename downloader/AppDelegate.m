@@ -6,9 +6,10 @@
 //  Copyright 2011 Nathaniel Symer. All rights reserved.
 //
 
-NSString * const NSFileName = @"NSFileName";
-
 #import "AppDelegate.h"
+
+NSString * const NSFileName = @"NSFileName";
+NSString * const kCopyListChangedNotification = @"copiedlistchanged";
 
 void fireNotification(NSString *filename) {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
