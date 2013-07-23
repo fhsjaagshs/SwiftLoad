@@ -231,14 +231,6 @@
     });
 }
 
-- (void)uploadToDropbox {
-    if ([[DBSession sharedSession]isLinked]) {
-        [kAppDelegate uploadLocalFile:[kAppDelegate openFile]];
-    } else {
-        [[DBSession sharedSession]linkFromController:self];
-    }
-}
-
 - (void)hideControls:(BOOL)hide {
     [self.time setHidden:hide];
     [self.pausePlay setHidden:hide];
@@ -329,7 +321,7 @@
         } else if (buttonIndex == 1) {
             [kAppDelegate prepareFileForBTSending:file];
         } else if (buttonIndex == 2) {
-            [self uploadToDropbox];
+            [kAppDelegate uploadLocalFile:[kAppDelegate openFile]];
         } else if (buttonIndex == 3) {
             [self startConverting];
         }

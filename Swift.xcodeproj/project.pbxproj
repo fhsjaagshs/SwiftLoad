@@ -42,7 +42,7 @@
 		F11C403513F82FE00077F5D1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F11C403413F82FE00077F5D1 /* CoreGraphics.framework */; };
 		F11C403613F830720077F5D1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F11C403213F82FD10077F5D1 /* Foundation.framework */; };
 		F11C403713F830780077F5D1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F11C403013F82FB40077F5D1 /* UIKit.framework */; };
-		F11FE417145F8218008ECC7E /* dedicatedTextEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = F11FE415145F8218008ECC7E /* dedicatedTextEditor.m */; };
+		F11FE417145F8218008ECC7E /* TextEditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F11FE415145F8218008ECC7E /* TextEditorViewController.m */; };
 		F128A1DD157FDBFE001BC156 /* SettingsView.m in Sources */ = {isa = PBXBuildFile; fileRef = F128A1DB157FDBFE001BC156 /* SettingsView.m */; };
 		F130452F179C594F00D7DB4D /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = F130452D179C594F00D7DB4D /* Appirater.m */; };
 		F1304531179C5A4100D7DB4D /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1304530179C5A4100D7DB4D /* StoreKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -290,8 +290,8 @@
 		F11C403213F82FD10077F5D1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F11C403413F82FE00077F5D1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		F11C405913F83CA20077F5D1 /* MyFilesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyFilesViewController.h; sourceTree = "<group>"; };
-		F11FE414145F8218008ECC7E /* dedicatedTextEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dedicatedTextEditor.h; sourceTree = "<group>"; };
-		F11FE415145F8218008ECC7E /* dedicatedTextEditor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = dedicatedTextEditor.m; sourceTree = "<group>"; };
+		F11FE414145F8218008ECC7E /* TextEditorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextEditorViewController.h; sourceTree = "<group>"; };
+		F11FE415145F8218008ECC7E /* TextEditorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextEditorViewController.m; sourceTree = "<group>"; };
 		F128A1DA157FDBFD001BC156 /* SettingsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsView.h; sourceTree = "<group>"; };
 		F128A1DB157FDBFE001BC156 /* SettingsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsView.m; sourceTree = "<group>"; };
 		F130452C179C594F00D7DB4D /* Appirater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Appirater.h; sourceTree = "<group>"; };
@@ -727,8 +727,8 @@
 				F1EDE3F513F8708600C17B2A /* MyFilesViewController.m */,
 				F17DC660140C456E0015F613 /* AudioPlayerViewController.h */,
 				F17DC65E140C45690015F613 /* AudioPlayerViewController.m */,
-				F11FE414145F8218008ECC7E /* dedicatedTextEditor.h */,
-				F11FE415145F8218008ECC7E /* dedicatedTextEditor.m */,
+				F11FE414145F8218008ECC7E /* TextEditorViewController.h */,
+				F11FE415145F8218008ECC7E /* TextEditorViewController.m */,
 				F144457E145A04A30026CDB7 /* pictureView.h */,
 				F144457F145A04A30026CDB7 /* pictureView.m */,
 				F149A682149176E60038F1FC /* moviePlayerView.h */,
@@ -1322,7 +1322,7 @@
 				F17DC65F140C45690015F613 /* AudioPlayerViewController.m in Sources */,
 				F17F11231420017100CE45D7 /* fileInfo.m in Sources */,
 				F1444581145A04A30026CDB7 /* pictureView.m in Sources */,
-				F11FE417145F8218008ECC7E /* dedicatedTextEditor.m in Sources */,
+				F11FE417145F8218008ECC7E /* TextEditorViewController.m in Sources */,
 				F149A685149176E60038F1FC /* moviePlayerView.m in Sources */,
 				F166BBC414E2171A003E5A07 /* webDAVViewController.m in Sources */,
 				F1B2489014E333E300C44E11 /* webDAVHelp.m in Sources */,

@@ -777,9 +777,9 @@ static NSString *CellIdentifier = @"Cell";
             pView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
             [self presentModalViewController:pView animated:YES];
         } else if ([MIMEUtils isTextFile:file] && !isHTML) {
-            dedicatedTextEditor *dte = [dedicatedTextEditor viewController];
-            dte.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-            [self presentModalViewController:dte animated:YES];
+            TextEditorViewController *textEditor = [TextEditorViewController viewController];
+            textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+            [self presentModalViewController:textEditor animated:YES];
         } else if ([MIMEUtils isVideoFile:file]) {
             moviePlayerView *mpv = [moviePlayerView viewController];
             mpv.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
@@ -892,7 +892,7 @@ static NSString *CellIdentifier = @"Cell";
     }
     
     if (buttonIndex == 0) {
-        dedicatedTextEditor *textEditor = [dedicatedTextEditor viewController];
+        TextEditorViewController *textEditor = [TextEditorViewController viewController];
         textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
         [self presentModalViewController:textEditor animated:YES];
     } else if (buttonIndex == 1) {
@@ -952,13 +952,7 @@ static NSString *CellIdentifier = @"Cell";
         }
         
     } else if (number == 1) {
-        
-        if (![[DBSession sharedSession]isLinked]) {
-            [[DBSession sharedSession]linkFromController:self];
-        } else {
-            [kAppDelegate uploadLocalFile:file];
-        }
-        
+        [kAppDelegate uploadLocalFile:file];
         [self removeSideSwipeView:YES];
     } else if (number == 2) {
         [kAppDelegate prepareFileForBTSending:file];

@@ -80,7 +80,7 @@
     #import "MyFilesViewDetailViewController.h"
     #import "AudioPlayerViewController.h"
     #import "pictureView.h"
-    #import "dedicatedTextEditor.h"
+    #import "TextEditorViewController.h"
     #import "moviePlayerView.h"
     #import "fileInfo.h"
     #import "webDAVViewController.h"

@@ -25,7 +25,6 @@
     CGRect frame = CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44);
     self.webView = [[UIWebView alloc]initWithFrame:frame];
     _webView.delegate = self;
-    _webView.opaque = YES;
     _webView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _webView.backgroundColor = [UIColor clearColor];
     _webView.contentMode = UIViewContentModeScaleAspectFit;
@@ -39,24 +38,6 @@
 
     NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:[kAppDelegate openFile]] cachePolicy:NSURLCacheStorageAllowed timeoutInterval:60.0];
     [_webView loadRequest:req];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    _webView.backgroundColor = bgcolor;
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    _webView.backgroundColor = [UIColor clearColor];
-}
-
-- (void)uploadToDropbox {
-    if (![[DBSession sharedSession]isLinked]) {
-        [[DBSession sharedSession]linkFromController:self];
-    } else {
-        [kAppDelegate uploadLocalFile:[kAppDelegate openFile]];
-    }
 }
 
 - (void)close {
@@ -83,7 +64,7 @@
         } else if (buttonIndex == 2) {
             [kAppDelegate prepareFileForBTSending:file];
         } else if (buttonIndex == 3) {
-            [self uploadToDropbox];
+            [kAppDelegate uploadLocalFile:[kAppDelegate openFile]];
         }
         
     } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Print", @"Email File", @"Send Via Bluetooth", @"Upload to Dropbox", nil];
@@ -98,7 +79,7 @@
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-    [self.webView setNeedsDisplay];
+    [_webView setNeedsDisplay];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {

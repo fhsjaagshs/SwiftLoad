@@ -41,23 +41,14 @@
     _moviePlayer.scalingMode = MPMovieScalingModeAspectFit;
     _moviePlayer.repeatMode = MPMovieRepeatModeNone;
     [_moviePlayer.backgroundView removeFromSuperview];
-    [self.view addSubview:_moviePlayer.view];
-    
     _moviePlayer.view.frame = CGRectMake(0, 44, self.view.bounds.size.width, self.view.bounds.size.height-44);
     _moviePlayer.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [self.view addSubview:_moviePlayer.view];
     
     [_moviePlayer prepareToPlay];
     [_moviePlayer play];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(moviePlayerDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
-}
-
-- (void)uploadToDropbox {
-    if (![[DBSession sharedSession]isLinked]) {
-        [[DBSession sharedSession]linkFromController:self];
-    } else {
-        [kAppDelegate uploadLocalFile:[kAppDelegate openFile]];
-    }
 }
 
 - (void)close {
@@ -92,7 +83,7 @@
         } else if (buttonIndex == 1) {
             [kAppDelegate prepareFileForBTSending:[kAppDelegate openFile]];
         } else if (buttonIndex == 2) {
-            [self uploadToDropbox];
+            [kAppDelegate uploadLocalFile:[kAppDelegate openFile]];
         }
     } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Upload to Dropbox", nil];
     

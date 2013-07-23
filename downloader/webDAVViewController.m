@@ -71,11 +71,9 @@
     [self.view addSubview:tf];
     
     self.urlLabel = [[UILabel alloc]initWithFrame:iPad?CGRectMake(20, 379, 728, 86):CGRectMake(0, sanitizeMesurement(283), screenBounds.size.width, 21)];
-    _urlLabel.textColor = myCyan;
+    _urlLabel.textColor = [UIColor darkGrayColor];
     _urlLabel.backgroundColor = [UIColor clearColor];
     _urlLabel.font = [UIFont boldSystemFontOfSize:iPad?31:18];
-    _urlLabel.shadowColor = [UIColor darkGrayColor];
-    _urlLabel.shadowOffset = CGSizeMake(-1, -1);
     _urlLabel.textAlignment = UITextAlignmentCenter;
     [self.view addSubview:_urlLabel];
     

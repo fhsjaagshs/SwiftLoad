@@ -403,6 +403,12 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 // Dropbox Upload
 - (void)uploadLocalFile:(NSString *)localPath {
+    
+    if (![[DBSession sharedSession]isLinked]) {
+        [[DBSession sharedSession]linkFromController:_viewController];
+        return;
+    }
+    
     [self showHUDWithTitle:@"Preparing"];
     [self setVisibleHudMode:MBProgressHUDModeIndeterminate];
     

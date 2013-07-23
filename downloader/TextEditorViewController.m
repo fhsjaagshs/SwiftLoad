@@ -6,14 +6,24 @@
 //  Copyright 2011 Nathaniel Symer. All rights reserved.
 //
 
-#import "dedicatedTextEditor.h"
+#import "TextEditorViewController.h"
 
-@implementation dedicatedTextEditor
+@interface TextEditorViewController () <MFMessageComposeViewControllerDelegate, UITextViewDelegate>
+
+@property (nonatomic, strong) UIActionSheet *popupQuery;
+@property (nonatomic, strong) UITextView *theTextView;
+@property (nonatomic, strong) ShadowedNavBar *navBar;
+@property (nonatomic, strong) ShadowedToolbar *toolBar;
+
+@property (nonatomic, assign) NSStringEncoding theEncoding;
+@property (nonatomic, assign) BOOL hasEdited;
+
+@end
+
+@implementation TextEditorViewController
 
 - (void)loadView {
     [super loadView];
-    
-    hasEdited = NO;
     
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     self.navBar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
@@ -24,17 +34,6 @@
     [self.navBar pushNavigationItem:topItem animated:NO];
     [self.view addSubview:self.navBar];
     [self.view bringSubviewToFront:self.navBar];
-    
-    self.stepperFontAdjustment = [[UIStepper alloc]initWithFrame:CGRectMake(0, 0, 94, 27)];
-    
-    /*for (UIView *view in self.stepperFontAdjustment.subviews) {
-        if ([view isKindOfClass:[UIButton class]]) {
-            UIButton *button = (UIButton *)view;
-            UIImage *toobarImage = [[UIImage imageNamed:@"toolbar_icon"]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 4, 0, 4)];
-            [button setBackgroundImage:toobarImage forState:UIControlStateNormal];
-            [button setBackgroundImage:toobarImage forState:UIControlStateHighlighted];
-        }
-    }*/
 
     self.theTextView = [[UITextView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44)];
     self.theTextView.delegate = self;
@@ -43,46 +42,44 @@
     self.toolBar = [[ShadowedToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
     UIBarButtonItem *space = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     UIBarButtonItem *hideKeyboard = [[UIBarButtonItem alloc]initWithTitle:@"Hide" style:UIBarButtonItemStyleBordered target:self action:@selector(dismissKeyboard)];
-    UIBarButtonItem *stepper = [[UIBarButtonItem alloc]initWithCustomView:self.stepperFontAdjustment];
-    self.toolBar.items = [NSArray arrayWithObjects:space, stepper, space, hideKeyboard, nil];
+    self.toolBar.items = @[space, hideKeyboard];
     
     [self.theTextView setInputAccessoryView:self.toolBar];
     
     [self.view addSubview:self.theTextView];
     [self.view bringSubviewToFront:self.theTextView];
     
-    self.stepperFontAdjustment.value = 14;
-    
     [self registerForKeyboardNotifications];
-    [self stepperStepped];
     [self loadText];
 }
 
 - (void)saveText {
-    if (!theEncoding) {
-        theEncoding = NSUTF8StringEncoding;
+    if (!_theEncoding) {
+        self.theEncoding = NSUTF8StringEncoding;
     }
     
-    [self.theTextView.text writeToFile:[kAppDelegate openFile] atomically:YES encoding:theEncoding error:nil];
+    [_theTextView.text writeToFile:[kAppDelegate openFile] atomically:YES encoding:_theEncoding error:nil];
     [self hideSaveButton];
 }
 
-- (NSString *)getStringFromFile {
+- (NSString *)getStringFromFile {    
+    NSStringEncoding encodingsToTest[] = { NSUTF8StringEncoding, NSASCIIStringEncoding, NSUTF16BigEndianStringEncoding, NSUTF16LittleEndianStringEncoding, NSUTF16StringEncoding, NSUTF32BigEndianStringEncoding, NSUTF32LittleEndianStringEncoding, NSUTF32StringEncoding, NSNEXTSTEPStringEncoding, NSJapaneseEUCStringEncoding, NSISOLatin1StringEncoding, NSSymbolStringEncoding, NSNonLossyASCIIStringEncoding, NSShiftJISStringEncoding, NSISOLatin2StringEncoding, NSUnicodeStringEncoding, NSWindowsCP1251StringEncoding, NSWindowsCP1252StringEncoding, NSWindowsCP1253StringEncoding, NSWindowsCP1254StringEncoding, NSWindowsCP1250StringEncoding, NSISO2022JPStringEncoding, NSMacOSRomanStringEncoding, NSUTF16BigEndianStringEncoding, NSUTF16LittleEndianStringEncoding, NSUTF32StringEncoding, NSUTF32BigEndianStringEncoding, NSUTF32LittleEndianStringEncoding };
     
-    NSString *filePath = [kAppDelegate openFile];
-    
-    NSStringEncoding myEncodingToTest[] = { NSUTF8StringEncoding, NSASCIIStringEncoding, NSUTF16BigEndianStringEncoding, NSUTF16LittleEndianStringEncoding, NSUTF16StringEncoding, NSUTF32BigEndianStringEncoding, NSUTF32LittleEndianStringEncoding, NSUTF32StringEncoding, NSNEXTSTEPStringEncoding, NSJapaneseEUCStringEncoding, NSISOLatin1StringEncoding, NSSymbolStringEncoding, NSNonLossyASCIIStringEncoding, NSShiftJISStringEncoding, NSISOLatin2StringEncoding, NSUnicodeStringEncoding, NSWindowsCP1251StringEncoding, NSWindowsCP1252StringEncoding, NSWindowsCP1253StringEncoding, NSWindowsCP1254StringEncoding, NSWindowsCP1250StringEncoding, NSISO2022JPStringEncoding, NSMacOSRomanStringEncoding, NSUTF16BigEndianStringEncoding, NSUTF16LittleEndianStringEncoding, NSUTF32StringEncoding, NSUTF32BigEndianStringEncoding, NSUTF32LittleEndianStringEncoding };
-    int howManyEncodings = sizeof(myEncodingToTest)/sizeof(NSStringEncoding);
+    int numberOfEncodings = sizeof(encodingsToTest)/sizeof(NSStringEncoding);
     
     NSString *stringToReturn = nil;
     
-    for (int i = 0; (i < howManyEncodings); i++) {
+    NSString *filePath = [kAppDelegate openFile];
+    
+    for (int i = 0; i < numberOfEncodings; i++) {
         
-        NSString *testString = [NSString stringWithContentsOfFile:filePath encoding:myEncodingToTest[i] error:nil];
+        NSStringEncoding currentEndcoding = encodingsToTest[i];
+        
+        NSString *testString = [NSString stringWithContentsOfFile:filePath encoding:currentEndcoding error:nil];
 
         if (testString.length > 0 && testString != nil) {
             stringToReturn = testString;
-            theEncoding = myEncodingToTest[i];
+            self.theEncoding = currentEndcoding;
             break;
         }
     }
@@ -91,36 +88,22 @@
 }
 
 - (void)showSaveButton {
-    if (self.theTextView.isFirstResponder) {
-        if (self.toolBar.items.count == 4) {
+    if (_theTextView.isFirstResponder) {
+        if (_toolBar.items.count == 4) {
             UIBarButtonItem *saveChanges = [[UIBarButtonItem alloc]initWithTitle:@"Save" style:UIBarButtonItemStyleBordered target:self action:@selector(saveText)];
-            NSMutableArray *items = [self.toolBar.items mutableCopy];
+            NSMutableArray *items = [_toolBar.items mutableCopy];
             [items insertObject:saveChanges atIndex:0];
-            self.toolBar.items = items;
+            _toolBar.items = items;
         }
     }
 }
 
 - (void)hideSaveButton {
-    if (hasEdited) {
-        NSMutableArray *items = [self.toolBar.items mutableCopy];
+    if (_hasEdited) {
+        NSMutableArray *items = [_toolBar.items mutableCopy];
         [items removeObjectAtIndex:0];
-        self.toolBar.items = items;
-        hasEdited = NO;
-    }
-}
-
-- (void)stepperStepped {
-    [self.theTextView setFont:[UIFont systemFontOfSize:self.stepperFontAdjustment.value]];
-    NSString *newLabel = [NSString stringWithFormat:@"%dpt",(int)self.stepperFontAdjustment.value];
-    [self.fontSizeLabel setText:newLabel];
-}
-
-- (void)uploadToDropbox {
-    if (![[DBSession sharedSession]isLinked]) {
-        [[DBSession sharedSession]linkFromController:self];
-    } else {
-        [kAppDelegate uploadLocalFile:[kAppDelegate openFile]];
+        _toolBar.items = items;
+        self.hasEdited = NO;
     }
 }
 
@@ -146,12 +129,9 @@
 }
 
 - (void)keyboardWasShown:(NSNotification*)aNotification {
+    BOOL isLandscape = UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication]statusBarOrientation]);
     CGSize kbSize = [[[aNotification userInfo]objectForKey:UIKeyboardFrameBeginUserInfoKey]CGRectValue].size;
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0, 0, kbSize.height, 0);
-    
-    if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication]statusBarOrientation])) {
-        contentInsets = UIEdgeInsetsMake(0, 0, kbSize.width, 0);
-    }
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0, 0, isLandscape?kbSize.width:kbSize.height, 0);
     
     self.theTextView.contentInset = contentInsets;
     self.theTextView.scrollIndicatorInsets = contentInsets;
@@ -164,7 +144,7 @@
 
 - (void)textViewDidChange:(UITextView *)textView {
     [self showSaveButton];
-    hasEdited = YES;
+    self.hasEdited = YES;
 }
 
 - (void)showActionSheet:(id)sender {
@@ -183,9 +163,9 @@
         } else if (buttonIndex == 1) {
             [kAppDelegate prepareFileForBTSending:file];
         } else if (buttonIndex == 2) {
-            [kAppDelegate sendStringAsSMS:[NSString stringWithContentsOfFile:file encoding:theEncoding error:nil] fromViewController:self];
+            [kAppDelegate sendStringAsSMS:[NSString stringWithContentsOfFile:file encoding:_theEncoding error:nil] fromViewController:self];
         } else if (buttonIndex == 3) {
-            [self uploadToDropbox];
+            [kAppDelegate uploadLocalFile:[kAppDelegate openFile]];
         }
     } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Send as SMS", @"Upload to Dropbox", nil];
     

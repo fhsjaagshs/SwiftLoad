@@ -17,7 +17,7 @@
     self.navBar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     self.navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]];
-    topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showNoitcaSheet:)];
+    topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
     [self.navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:self.navBar];
@@ -90,14 +90,6 @@
     [self.zoomingImageView loadImage:[UIImage imageWithContentsOfFile:[kAppDelegate openFile]]];
 }
 
-- (void)uploadToDropbox {
-    if (![[DBSession sharedSession]isLinked]) {
-        [[DBSession sharedSession]linkFromController:self];
-    } else {
-        [kAppDelegate uploadLocalFile:[kAppDelegate openFile]];
-    }
-}
-
 - (void)addToTheRoll {
     
     [kAppDelegate showHUDWithTitle:@"Working..."];
@@ -144,7 +136,8 @@
     [kAppDelegate setOpenFile:nil];
 }
 
-- (void)showNoitcaSheet:(id)sender {
+// Action in reverse is Noitca
+- (void)showActionSheet:(id)sender {
     
     if (self.popupQuery && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         [self.popupQuery dismissWithClickedButtonIndex:self.popupQuery.cancelButtonIndex animated:YES];
@@ -163,16 +156,14 @@
             [kAppDelegate sendFileInEmail:file fromViewController:self];
         } else if (buttonIndex == 2) {
             [kAppDelegate prepareFileForBTSending:file];
-            //[kAppDelegate showBTController];
         } else if (buttonIndex == 3) {
-            [self uploadToDropbox];
+            [kAppDelegate uploadLocalFile:[kAppDelegate openFile]];
         } else if (buttonIndex == 4) {
             if ([MIMEUtils isImageFile:file]) {
                 [self addToTheRoll];
             } else {
-                NSString *message = [[NSString alloc]initWithFormat:@"Sorry, the file \"%@\" is not an image or is corrupt.",fileName];
-                TransparentAlert *av = [[TransparentAlert alloc]initWithTitle:@"Failure Importing Image" message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                [av show];
+                NSString *message = [[NSString alloc]initWithFormat:@"Swift was unable to add \"%@\" to the camera roll.",fileName];
+                [TransparentAlert showAlertWithTitle:@"Import Failure" andMessage:message];
             }
         }
     } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Print", @"Email File", @"Send Via Bluetooth", @"Upload to Dropbox", @"Add to Photo Library", nil];
