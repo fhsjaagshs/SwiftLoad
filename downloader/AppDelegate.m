@@ -554,9 +554,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [Appirater setSignificantEventsUntilPrompt:-1];
     [Appirater setTimeBeforeReminding:2];
     [Appirater appLaunched:YES];
-    
-    [[DownloadController sharedController]show];
-    
+
     return YES;
 }
 

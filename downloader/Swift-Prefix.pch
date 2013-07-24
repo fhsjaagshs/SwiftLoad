@@ -40,7 +40,6 @@
     #import "StyleFactory.h"
     #import "BGProcFactory.h"
 
-    #import "AGWindowView.h"
     #import "ZoomingImageView.h"
     #import "ContentOffsetWatchdog.h"
     #import "WhiteProgressView.h"

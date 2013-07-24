@@ -77,7 +77,6 @@
 		F150D6C0177F783E00E4C094 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F150D6B7177F783E00E4C094 /* FMDatabaseAdditions.m */; };
 		F150D6C2177F783E00E4C094 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = F150D6BB177F783E00E4C094 /* FMDatabaseQueue.m */; };
 		F150D6C4177F783E00E4C094 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = F150D6BE177F783E00E4C094 /* FMResultSet.m */; };
-		F152313A179F7BCE000C4996 /* AGWindowView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1523139179F7BCE000C4996 /* AGWindowView.m */; };
 		F15277D113F4B08800338673 /* MyFilesViewDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F15277CF13F4B08800338673 /* MyFilesViewDetailViewController.m */; };
 		F15507D5176EAFE50024FF03 /* action@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F15507D4176EAFE50024FF03 /* action@2x.png */; };
 		F15507D7176EB0290024FF03 /* bluetooth@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F15507D6176EB0290024FF03 /* bluetooth@2x.png */; };
@@ -351,8 +350,6 @@
 		F150D6BB177F783E00E4C094 /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseQueue.m; sourceTree = "<group>"; };
 		F150D6BD177F783E00E4C094 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
 		F150D6BE177F783E00E4C094 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
-		F1523138179F7BCD000C4996 /* AGWindowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AGWindowView.h; path = "../../../../../Downloads/AGWindowView-master/Source/AGWindowView.h"; sourceTree = "<group>"; };
-		F1523139179F7BCE000C4996 /* AGWindowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AGWindowView.m; path = "../../../../../Downloads/AGWindowView-master/Source/AGWindowView.m"; sourceTree = "<group>"; };
 		F15277CE13F4B08800338673 /* MyFilesViewDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyFilesViewDetailViewController.h; sourceTree = "<group>"; };
 		F15277CF13F4B08800338673 /* MyFilesViewDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFilesViewDetailViewController.m; sourceTree = "<group>"; };
 		F15507D4176EAFE50024FF03 /* action@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "action@2x.png"; path = "Images/action@2x.png"; sourceTree = "<group>"; };
@@ -776,8 +773,6 @@
 				F13B58A6176D2C7E007EF22B /* HUDProgressView.m */,
 				F1693C6016DFAC59006E3739 /* MBProgressHUD.h */,
 				F1693C6116DFAC59006E3739 /* MBProgressHUD.m */,
-				F1523138179F7BCD000C4996 /* AGWindowView.h */,
-				F1523139179F7BCE000C4996 /* AGWindowView.m */,
 				F118C74317713DAA00ED7384 /* ContentOffsetWatchdog.h */,
 				F118C74417713DAA00ED7384 /* ContentOffsetWatchdog.m */,
 				F118C7461771425F00ED7384 /* PullToRefreshView.h */,
@@ -1440,7 +1435,6 @@
 				F1434B3E179B21C1001A672C /* UITableView+CoolRefresh.m in Sources */,
 				F130452F179C594F00D7DB4D /* Appirater.m in Sources */,
 				F1304534179C5E6A00D7DB4D /* FilesystemMonitor.m in Sources */,
-				F152313A179F7BCE000C4996 /* AGWindowView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

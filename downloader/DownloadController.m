@@ -10,6 +10,7 @@
 #import "DownloadingCell.h"
 
 UIImage * imageWithColorAndSize(UIColor *color, CGSize size);
+CGFloat UIInterfaceOrientationAngleOfOrientation(UIInterfaceOrientation orientation);
 
 UIImage * imageWithColorAndSize(UIColor *color, CGSize size) {
     UIGraphicsBeginImageContext(size);
@@ -26,12 +27,10 @@ UIImage * imageWithColorAndSize(UIColor *color, CGSize size) {
     return img;
 }
 
-CGFloat UIInterfaceOrientationAngleOfOrientation(UIInterfaceOrientation orientation)
-{
+CGFloat UIInterfaceOrientationAngleOfOrientation(UIInterfaceOrientation orientation) {
     CGFloat angle;
     
-    switch (orientation)
-    {
+    switch (orientation) {
         case UIInterfaceOrientationPortraitUpsideDown:
             angle = M_PI;
             break;
@@ -109,25 +108,6 @@ static NSString * const cellId = @"DownloadCell";
 
 - (void)didRotate:(NSNotification *)notification {
     [self layoutSubviews];
-    /*float padding = 5;
-    CGSize screenSize = [[[UIApplication sharedApplication]keyWindow]bounds].size;
-    float height = (_downloadObjs.count*45)+40;
-    
-    CGFloat angle = UIInterfaceOrientationAngleOfOrientation([UIApplication sharedApplication].statusBarOrientation);
-    CGAffineTransform transform = CGAffineTransformMakeRotation(angle);
-    self.transform = transform;
-    
-    if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
-        if (_mainView) {
-            _mainView.transform = CGAffineTransformTranslate(transform, -screenSize.height/2, (screenSize.width/2)-(_mainView.bounds.size.height/2));
-            _mainView.frame = CGRectMake(padding, padding, height, screenSize.height-(padding*2)); // height and width, x and y are reversed
-        }
-    } else {
-        if (_mainView) {
-            _mainView.transform = CGAffineTransformIdentity;
-            _mainView.frame = CGRectMake(padding, screenSize.height-padding-height, screenSize.width-(padding*2), height);
-        }
-    }*/
 }
 
 - (void)layoutSubviews {
@@ -140,16 +120,22 @@ static NSString * const cellId = @"DownloadCell";
     self.transform = transform;
     
     if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
-        if (_mainView) {
-            _mainView.transform = CGAffineTransformTranslate(transform, -screenSize.height/2, (screenSize.width/2)-(_mainView.bounds.size.height/2));
-            _mainView.frame = CGRectMake(padding, padding, height, screenSize.height-(padding*2)); // height and width, x and y are reversed
-        }
+        _mainView.transform = CGAffineTransformTranslate(transform, -screenSize.height/2, (screenSize.width/2)-(_mainView.bounds.size.height/2));
+        _mainView.frame = CGRectMake(padding, padding, height, screenSize.height-(padding*2)); // height and width, x and y are reversed
     } else {
-        if (_mainView) {
-            _mainView.transform = CGAffineTransformIdentity;
-            _mainView.frame = CGRectMake(padding, screenSize.height-padding-height, screenSize.width-(padding*2), height);
-        }
+        _mainView.transform = CGAffineTransformIdentity;
+        _mainView.frame = CGRectMake(padding, screenSize.height-padding-height, screenSize.width-(padding*2), height);
     }
+    
+    _theTableView.frame = CGRectMake(0, 40, _mainView.frame.size.width, (_downloadObjs.count*45));
+    
+    float awidth = _activity.frame.size.width;
+    float aheight = _activity.frame.size.height;
+
+    self.frame = CGRectMake(10, screenSize.height-10-aheight-5, awidth+5, aheight+5);
+    
+    _button.frame = self.bounds;
+    _activity.frame = self.bounds;
 }
 
 //
@@ -173,33 +159,14 @@ static NSString * const cellId = @"DownloadCell";
     [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     
     [UIView animateWithDuration:0.25 animations:^{
-        [self setNeedsLayout];
-        /*float height = (_downloadObjs.count*45)+40;
-        
-        float padding = 5;
-        CGSize screenSize = [[[UIApplication sharedApplication]keyWindow]bounds].size;
-        
-        if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
-            _mainView.frame = CGRectMake(padding, padding, height, screenSize.height-(padding*2));
-            //_theTableView.frame = CGRectMake(0, 40, _mainView.frame.size.width, (_downloadObjs.count*45));
-        } else {
-            _mainView.frame = CGRectMake(_mainView.frame.origin.x, [[UIScreen mainScreen]bounds].size.height-5-height, _mainView.frame.size.width, height);
-            //_theTableView.frame = CGRectMake(0, 40, _mainView.frame.size.width, (_downloadObjs.count*45));
-        }
-        _theTableView.frame = CGRectMake(0, 40, _mainView.frame.size.width, (_downloadObjs.count*45));*/
+        [self layoutSubviews]; // it's legit because I don't call through to super.
     }];
 }
 
 - (void)setupTableView {
 
     if (!_mainView) {
-        CGSize screenSize = [[UIScreen mainScreen]bounds].size;
-        float padding = 5;
-        
-        float height = (_downloadObjs.count*45)+40;
-        
-        self.mainView = [[UIView alloc]initWithFrame:CGRectMake(padding, screenSize.height-5-height, screenSize.width-(padding*2), height)];
-        //_mainView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleHeight;
+        self.mainView = [[UIView alloc]init];
         _mainView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.6f];
         _mainView.layer.cornerRadius = 10;
         
@@ -222,7 +189,7 @@ static NSString * const cellId = @"DownloadCell";
         dl.textAlignment = UITextAlignmentCenter;
         [_mainView addSubview:dl];
         
-        self.theTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 40, _mainView.bounds.size.width, (_downloadObjs.count*45))];
+        self.theTableView = [[UITableView alloc]init];
         _theTableView.dataSource = self;
         _theTableView.delegate = self;
         _theTableView.allowsSelection = NO;
@@ -236,11 +203,6 @@ static NSString * const cellId = @"DownloadCell";
     [UIView animateWithDuration:0.25 animations:^{
         [_mainView removeFromSuperview];
         [self setHidden:NO];
-        if (_downloadObjs.count == 0) {
-            [_theTableView removeFromSuperview];
-            [self setMainView:nil];
-            [self setTheTableView:nil];
-        }
     }];
 }
 
@@ -313,18 +275,8 @@ static NSString * const cellId = @"DownloadCell";
         self.activity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         self.button = [UIButton buttonWithType:UIButtonTypeCustom];
         
-        float awidth = _activity.frame.size.width;
-        float aheight = _activity.frame.size.height;
-        
-        CGSize screenSize = [[UIScreen mainScreen]bounds].size;
-        float whenMinimizedPadding = 10;
-        
-        self.frame = CGRectMake(whenMinimizedPadding, screenSize.height-whenMinimizedPadding-aheight-5, awidth+5, aheight+5);
         self.backgroundColor = [UIColor colorWithWhite:0 alpha:0.8];
         self.layer.cornerRadius = 7.5;
-        
-        _button.frame = self.bounds;
-        _activity.frame = self.bounds;
         
         [_button addTarget:self action:@selector(showTableViewer) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_activity];
