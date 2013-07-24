@@ -108,12 +108,32 @@ static NSString * const cellId = @"DownloadCell";
 }
 
 - (void)didRotate:(NSNotification *)notification {
-    float padding = 5;
+    [self layoutSubviews];
+    /*float padding = 5;
     CGSize screenSize = [[[UIApplication sharedApplication]keyWindow]bounds].size;
     float height = (_downloadObjs.count*45)+40;
     
-    NSLog(@"Orientation at rotate notification: %d",[UIApplication sharedApplication].statusBarOrientation);
-    NSLog(@"Window bounds: %@", NSStringFromCGRect([[[UIApplication sharedApplication]keyWindow]bounds]));
+    CGFloat angle = UIInterfaceOrientationAngleOfOrientation([UIApplication sharedApplication].statusBarOrientation);
+    CGAffineTransform transform = CGAffineTransformMakeRotation(angle);
+    self.transform = transform;
+    
+    if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
+        if (_mainView) {
+            _mainView.transform = CGAffineTransformTranslate(transform, -screenSize.height/2, (screenSize.width/2)-(_mainView.bounds.size.height/2));
+            _mainView.frame = CGRectMake(padding, padding, height, screenSize.height-(padding*2)); // height and width, x and y are reversed
+        }
+    } else {
+        if (_mainView) {
+            _mainView.transform = CGAffineTransformIdentity;
+            _mainView.frame = CGRectMake(padding, screenSize.height-padding-height, screenSize.width-(padding*2), height);
+        }
+    }*/
+}
+
+- (void)layoutSubviews {
+    float padding = 5;
+    CGSize screenSize = [[[UIApplication sharedApplication]keyWindow]bounds].size;
+    float height = (_downloadObjs.count*45)+40;
     
     CGFloat angle = UIInterfaceOrientationAngleOfOrientation([UIApplication sharedApplication].statusBarOrientation);
     CGAffineTransform transform = CGAffineTransformMakeRotation(angle);
@@ -153,16 +173,20 @@ static NSString * const cellId = @"DownloadCell";
     [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     
     [UIView animateWithDuration:0.25 animations:^{
-        float height = (_downloadObjs.count*45)+40;
+        [self setNeedsLayout];
+        /*float height = (_downloadObjs.count*45)+40;
+        
+        float padding = 5;
+        CGSize screenSize = [[[UIApplication sharedApplication]keyWindow]bounds].size;
         
         if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
-            _mainView.frame = CGRectMake(5+height, _mainView.frame.origin.x, height, _mainView.frame.size.width);
+            _mainView.frame = CGRectMake(padding, padding, height, screenSize.height-(padding*2));
             //_theTableView.frame = CGRectMake(0, 40, _mainView.frame.size.width, (_downloadObjs.count*45));
         } else {
             _mainView.frame = CGRectMake(_mainView.frame.origin.x, [[UIScreen mainScreen]bounds].size.height-5-height, _mainView.frame.size.width, height);
             //_theTableView.frame = CGRectMake(0, 40, _mainView.frame.size.width, (_downloadObjs.count*45));
         }
-        _theTableView.frame = CGRectMake(0, 40, _mainView.frame.size.width, (_downloadObjs.count*45));
+        _theTableView.frame = CGRectMake(0, 40, _mainView.frame.size.width, (_downloadObjs.count*45));*/
     }];
 }
 
@@ -206,8 +230,6 @@ static NSString * const cellId = @"DownloadCell";
         _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         [_mainView addSubview:_theTableView];
     }
-    
-    [[kAppDelegate window]addSubview:_mainView];
 }
 
 - (void)strikedownTableView {
@@ -268,7 +290,7 @@ static NSString * const cellId = @"DownloadCell";
 - (void)showTableViewer {
     [UIView animateWithDuration:0.25 animations:^{
         [self setHidden:YES];
-        [self setupTableView];
+        [[kAppDelegate window]addSubview:_mainView];
     }];
 }
 
@@ -295,10 +317,10 @@ static NSString * const cellId = @"DownloadCell";
         float aheight = _activity.frame.size.height;
         
         CGSize screenSize = [[UIScreen mainScreen]bounds].size;
-        float padding = 10;
+        float whenMinimizedPadding = 10;
         
+        self.frame = CGRectMake(whenMinimizedPadding, screenSize.height-whenMinimizedPadding-aheight-5, awidth+5, aheight+5);
         self.backgroundColor = [UIColor colorWithWhite:0 alpha:0.8];
-        self.frame = CGRectMake(padding, screenSize.height-padding-aheight-5, awidth+5, aheight+5);
         self.layer.cornerRadius = 7.5;
         
         _button.frame = self.bounds;
@@ -310,6 +332,8 @@ static NSString * const cellId = @"DownloadCell";
         [_activity startAnimating];
         
         self.downloadObjs = [NSMutableArray array];
+        
+        [self setupTableView];
     }
     return self;
 }
