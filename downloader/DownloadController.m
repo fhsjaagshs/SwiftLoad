@@ -256,19 +256,14 @@ static NSString * const cellId = @"DownloadCell";
 }
 
 - (void)show {
-    [[kAppDelegate window]addSubview:self];
-    self.hidden = YES;
     [UIView animateWithDuration:0.25 animations:^{
-        self.hidden = NO;
+        [[kAppDelegate window]addSubview:self];
     }];
 }
 
 - (void)hide {
     [UIView animateWithDuration:0.25 animations:^{
-        self.hidden = YES;
-    } completion:^(BOOL finished) {
         [self removeFromSuperview];
-        self.hidden = NO;
     }];
 }
 
@@ -300,7 +295,6 @@ static NSString * const cellId = @"DownloadCell";
     dispatch_once(&onceToken, ^{
         sharedController = [[DownloadController alloc]init];
     });
-    
     return sharedController;
 }
 
