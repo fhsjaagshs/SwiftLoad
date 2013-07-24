@@ -117,22 +117,21 @@ static NSString * const cellId = @"DownloadCell";
     
     CGFloat angle = UIInterfaceOrientationAngleOfOrientation([UIApplication sharedApplication].statusBarOrientation);
     CGAffineTransform transform = CGAffineTransformMakeRotation(angle);
-    self.transform = transform;
     
     if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
+        // height and width are switched because UIWindow doesn't rotate its coordinate plane
+        self.transform = CGAffineTransformTranslate(transform, -screenSize.height/2, (screenSize.width/2)-(self.bounds.size.height/2));
         _mainView.transform = CGAffineTransformTranslate(transform, -screenSize.height/2, (screenSize.width/2)-(_mainView.bounds.size.height/2));
         _mainView.frame = CGRectMake(padding, padding, height, screenSize.height-(padding*2)); // height and width, x and y are reversed
     } else {
+        self.transform = CGAffineTransformIdentity;
         _mainView.transform = CGAffineTransformIdentity;
         _mainView.frame = CGRectMake(padding, screenSize.height-padding-height, screenSize.width-(padding*2), height);
     }
     
     _theTableView.frame = CGRectMake(0, 40, _mainView.frame.size.width, (_downloadObjs.count*45));
-    
-    float awidth = _activity.frame.size.width;
-    float aheight = _activity.frame.size.height;
 
-    self.frame = CGRectMake(10, screenSize.height-10-aheight-5, awidth+5, aheight+5);
+    self.frame = CGRectMake(10, screenSize.height-10-42-5, 42+5, 42+5);
     
     _button.frame = self.bounds;
     _activity.frame = self.bounds;
@@ -168,12 +167,12 @@ static NSString * const cellId = @"DownloadCell";
     if (!_mainView) {
         self.mainView = [[UIView alloc]init];
         _mainView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.6f];
-        _mainView.layer.cornerRadius = 10;
+        _mainView.layer.cornerRadius = 5;
         
         UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
         backButton.frame = CGRectMake(5, 5, 50, 30);
         backButton.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.8f];
-        backButton.layer.cornerRadius = 7;
+        backButton.layer.cornerRadius = 5;
         [backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [backButton setBackgroundImage:imageWithColorAndSize([UIColor colorWithWhite:0.5f alpha:0.6f], backButton.frame.size) forState:UIControlStateHighlighted];
         [backButton setTitle:@"Close" forState:UIControlStateNormal];
@@ -257,14 +256,19 @@ static NSString * const cellId = @"DownloadCell";
 }
 
 - (void)show {
+    [[kAppDelegate window]addSubview:self];
+    self.hidden = YES;
     [UIView animateWithDuration:0.25 animations:^{
-        [[kAppDelegate window]addSubview:self];
+        self.hidden = NO;
     }];
 }
 
 - (void)hide {
     [UIView animateWithDuration:0.25 animations:^{
+        self.hidden = YES;
+    } completion:^(BOOL finished) {
         [self removeFromSuperview];
+        self.hidden = NO;
     }];
 }
 
@@ -289,10 +293,6 @@ static NSString * const cellId = @"DownloadCell";
     }
     return self;
 }
-
-//
-// Singleton crap
-//
 
 + (DownloadController *)sharedController {
     static DownloadController *sharedController = nil;
