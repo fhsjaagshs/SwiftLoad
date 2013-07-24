@@ -15,7 +15,7 @@
 @property (nonatomic, strong) UILabel *statusLabel;
 @property (nonatomic, strong) CALayer *arrowImage;
 @property (nonatomic, strong) UIActivityIndicatorView *activityView;
-@property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, weak) UIScrollView *scrollView;
 
 @end
 
@@ -148,7 +148,6 @@
 
 - (void)dealloc {
 	[self.scrollView removeObserver:self forKeyPath:@"contentOffset"];
-    [self setDelegate:nil];
 }
 
 @end

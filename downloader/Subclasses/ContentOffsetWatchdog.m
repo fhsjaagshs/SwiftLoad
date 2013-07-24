@@ -10,7 +10,13 @@
 
 @interface ContentOffsetWatchdog () <UIScrollViewDelegate>
 
-@property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, weak) UIScrollView *scrollView;
+@property (nonatomic, strong) UILabel *statusLabel;
+
+@property (nonatomic, strong) NSString *initialTextInternal;
+@property (nonatomic, strong) NSString *trippedTextInternal;
+
+@property (nonatomic, assign) BOOL shouldReturnToNormal;
 
 @end
 
@@ -21,8 +27,18 @@
 }
 
 - (id)initWithScrollView:(UIScrollView *)scroll {
-    self = [super initWithFrame:CGRectMake(0, -1*scroll.bounds.size.height, scroll.bounds.size.width, scroll.bounds.size.height)];
+    CGRect frame = CGRectMake(0, -1*scroll.bounds.size.height, scroll.bounds.size.width, scroll.bounds.size.height);
+    self = [super initWithFrame:frame];
     if (self) {
+        self.statusLabel = [[UILabel alloc]initWithFrame:CGRectMake(0.0f, frame.size.height-38.0f, self.frame.size.width, 20.0f)];
+		_statusLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        _statusLabel.font = [UIFont boldSystemFontOfSize:(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)?18:13];
+		_statusLabel.textColor = [UIColor darkGrayColor];
+		_statusLabel.shadowOffset = CGSizeZero;
+		_statusLabel.backgroundColor = [UIColor clearColor];
+		_statusLabel.textAlignment = UITextAlignmentCenter;
+		[self addSubview:_statusLabel];
+        
         [self setScrollView:scroll];
         [_scrollView addSubview:self];
         [_scrollView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:NULL];
@@ -30,17 +46,53 @@
     return self;
 }
 
+- (void)setMode:(WatchdogMode)mode {
+    _mode = mode;
+    _statusLabel.hidden = (_mode == WatchdogModeNormal);
+}
+
 - (void)resetOffset {
     _scrollView.contentOffset = CGPointZero;
+}
+
+- (void)setInitialText:(NSString *)text {
+    _statusLabel.text = text;
+    self.initialTextInternal = text;
+}
+
+- (void)setTrippedText:(NSString *)text {
+    self.trippedTextInternal = text;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([keyPath isEqualToString:@"contentOffset"]) {
         if ((_scrollView.isDecelerating || _scrollView.isDragging) || (_scrollView.isDragging && _scrollView.isDecelerating)) {
-            if (_scrollView.contentOffset.y < -30) {
-                if ([_delegate respondsToSelector:@selector(shouldTripWatchdog:)]) {
-                    if ([_delegate shouldTripWatchdog:self] && [_delegate respondsToSelector:@selector(watchdogWasTripped:)]) {
-                        [_delegate watchdogWasTripped:self];
+            if (_mode == WatchdogModeNormal) {
+                if (_scrollView.contentOffset.y < -30) {
+                    if ([_delegate respondsToSelector:@selector(shouldTripWatchdog:)]) {
+                        if ([_delegate shouldTripWatchdog:self] && [_delegate respondsToSelector:@selector(watchdogWasTripped:)]) {
+                            [_delegate watchdogWasTripped:self];
+                        }
+                    }
+                }
+            } else if (_mode == WatchdogModePullToRefresh) {
+                if (_scrollView.isDragging) {
+                    if (_scrollView.contentOffset.y < -60) {
+                        _statusLabel.text = _trippedTextInternal;
+                        self.shouldReturnToNormal = YES;
+                    } else {
+                        self.shouldReturnToNormal = NO;
+                        _statusLabel.text = _initialTextInternal;
+                    }
+                } else {
+                    if (_shouldReturnToNormal) {
+                        self.shouldReturnToNormal = NO;
+                        _statusLabel.text = _initialTextInternal;
+                        if ([_delegate respondsToSelector:@selector(shouldTripWatchdog:)]) {
+                            if ([_delegate shouldTripWatchdog:self] && [_delegate respondsToSelector:@selector(watchdogWasTripped:)]) {
+                                [_delegate watchdogWasTripped:self];
+                            }
+                        }
                     }
                 }
             }
@@ -49,9 +101,7 @@
 }
 
 - (void)dealloc {
-    [_scrollView removeFromSuperview];
 	[_scrollView removeObserver:self forKeyPath:@"contentOffset"];
-    [self setDelegate:nil];
 }
 
 @end

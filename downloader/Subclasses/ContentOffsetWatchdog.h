@@ -8,13 +8,22 @@
 
 #import "ShadowedTableView.h"
 
+typedef enum {
+    WatchdogModeNormal,
+    WatchdogModePullToRefresh
+} WatchdogMode;
+
 @protocol ContentOffsetWatchdogDelegate;
 
 @interface ContentOffsetWatchdog : UIView
 
 @property (nonatomic, weak) id<ContentOffsetWatchdogDelegate> delegate;
+@property (nonatomic, assign, setter=setMode:) WatchdogMode mode;
 
 - (void)resetOffset;
+
+- (void)setInitialText:(NSString *)text;
+- (void)setTrippedText:(NSString *)text;
 
 + (id)watchdogWithScrollView:(UIScrollView *)scrollView;
 

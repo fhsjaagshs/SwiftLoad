@@ -17,6 +17,7 @@ static NSString *CellIdentifier = @"Cell";
 
 @interface MyFilesViewController () <HamburgerViewDelegate>
 @property (nonatomic, assign) BOOL watchdogCanGo;
+@property (nonatomic, strong) ContentOffsetWatchdog *watchdog;
 @end
 
 @implementation MyFilesViewController
@@ -61,8 +62,11 @@ static NSString *CellIdentifier = @"Cell";
     [self.view addSubview:_theCopyAndPasteButton];
     [_theCopyAndPasteButton setHidden:YES];
     
-    ContentOffsetWatchdog *watchdog = [ContentOffsetWatchdog watchdogWithScrollView:_theTableView];
-    watchdog.delegate = self;
+    self.watchdog = [ContentOffsetWatchdog watchdogWithScrollView:_theTableView];
+    _watchdog.delegate = self;
+    _watchdog.mode = WatchdogModeNormal;
+    [_watchdog setInitialText:@"Pull to Create File"];
+    [_watchdog setTrippedText:@"Release to Create File"];
     
     [kAppDelegate setManagerCurrentDir:kDocsDir];
     
@@ -175,7 +179,6 @@ static NSString *CellIdentifier = @"Cell";
                     [self updateCopyButtonState];
                 }
             });
-        
         }
     });
 }
@@ -227,8 +230,6 @@ static NSString *CellIdentifier = @"Cell";
         _theCopyAndPasteButton.hidden = YES;
         return;
     }
-    
-    NSLog(@"%@",_theTableView.indexPathsForSelectedRows);
     
     BOOL persCLGT = (_theTableView.indexPathsForSelectedRows.count > 0);
     BOOL CLGT = (_copiedList.count > 0);
@@ -597,17 +598,24 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (BOOL)shouldTripWatchdog:(ContentOffsetWatchdog *)watchdog {
+    
+    if (_theTableView.editing) {
+        return YES;
+    }
+    
     return (![[kAppDelegate managerCurrentDir]isEqualToString:kDocsDir] && _watchdogCanGo && !_theTableView.isDecelerating);
 }
 
 - (void)watchdogWasTripped:(ContentOffsetWatchdog *)watchdog {
-    if (!_theTableView.editing) {
-        [watchdog resetOffset];
+    
+    [_watchdog resetOffset];
+    
+    if (_watchdog.mode == WatchdogModeNormal) {
         [self goBackDir];
         [_filelist removeAllObjects];
         [_theTableView reloadDataWithCoolAnimationType:CoolRefreshAnimationStyleBackward];
         self.watchdogCanGo = NO;
-    } else {
+    } else if (_watchdog.mode == WatchdogModePullToRefresh) {
         [self showFileCreationDialogue];
     }
 }
@@ -840,6 +848,7 @@ static NSString *CellIdentifier = @"Cell";
     [self removeSideSwipeView:NO];
     [self reindexFilelist];
     
+    _watchdog.mode = _theTableView.editing?WatchdogModeNormal:WatchdogModePullToRefresh;
     _theTableView.allowsMultipleSelectionDuringEditing = !_theTableView.editing;
     _editButton.title = _theTableView.editing?@"Edit":@"Done";
     [_theTableView setEditing:!_theTableView.editing animated:YES];
