@@ -138,11 +138,12 @@ static NSString *CellIdentifier = @"Cell";
 
 - (void)deleteSelectedFiles {
     for (NSIndexPath *indexPath in _theTableView.indexPathsForSelectedRows) {
-        [_theTableView cellForRowAtIndexPath:indexPath].selected = NO;
+        [_theTableView deselectRowAtIndexPath:indexPath animated:NO];
         NSString *filename = [_filelist objectAtIndex:indexPath.row];
         NSString *currentPath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:filename];
         [[NSFileManager defaultManager]removeItemAtPath:currentPath error:nil];
     }
+    [self updateCopyButtonState];
 }
 
 - (void)pasteInLocation:(NSString *)location {

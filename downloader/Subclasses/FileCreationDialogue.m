@@ -16,39 +16,43 @@
     if (self) {
         objc_setAssociatedObject(self, "blockCallback", block, OBJC_ASSOCIATION_COPY_NONATOMIC);
         self.createFile = [[UIButton alloc]init];
-        [self.createFile setTitle:@"File" forState:UIControlStateNormal];
-        [self.createFile addTarget:self action:@selector(file) forControlEvents:UIControlEventTouchUpInside];
-        [self.createFile setTitleColor:[UIColor whiteColor]forState:UIControlStateNormal];
-        self.createFile.titleLabel.font = [UIFont boldSystemFontOfSize:18];
-        [self.createFile setTitleShadowColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [self.createFile setBackgroundColor:[UIColor clearColor]];
-        self.createFile.titleLabel.shadowOffset = CGSizeMake(0, -1);
+        [_createFile setTitle:@"File" forState:UIControlStateNormal];
+        [_createFile addTarget:self action:@selector(file) forControlEvents:UIControlEventTouchUpInside];
+        [_createFile setTitleColor:[UIColor whiteColor]forState:UIControlStateNormal];
+        _createFile.titleLabel.font = [UIFont boldSystemFontOfSize:18];
+        [_createFile setTitleShadowColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [_createFile setBackgroundColor:[UIColor clearColor]];
+        _createFile.titleLabel.shadowOffset = CGSizeMake(0, -1);
         
         self.createDir = [[UIButton alloc]init];
-        [self.createDir setTitle:@"Directory" forState:UIControlStateNormal];
-        [self.createDir addTarget:self action:@selector(dir) forControlEvents:UIControlEventTouchUpInside];
-        [self.createDir setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        self.createDir.titleLabel.font = [UIFont boldSystemFontOfSize:18];
-        [self.createDir setTitleShadowColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [self.createDir setBackgroundColor:[UIColor clearColor]];
-        self.createDir.titleLabel.shadowOffset = CGSizeMake(0, -1);
+        [_createDir setTitle:@"Directory" forState:UIControlStateNormal];
+        [_createDir addTarget:self action:@selector(dir) forControlEvents:UIControlEventTouchUpInside];
+        [_createDir setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        _createDir.titleLabel.font = [UIFont boldSystemFontOfSize:18];
+        [_createDir setTitleShadowColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [_createDir setBackgroundColor:[UIColor clearColor]];
+        _createDir.titleLabel.shadowOffset = CGSizeMake(0, -1);
         
         self.tv = [[UITextField alloc]init];
-        self.tv.keyboardAppearance = UIKeyboardAppearanceAlert;
-        self.tv.borderStyle = UITextBorderStyleBezel;
-        self.tv.backgroundColor = [UIColor whiteColor];
-        self.tv.returnKeyType = UIReturnKeyDone;
-        self.tv.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        self.tv.autocorrectionType = UITextAutocorrectionTypeNo;
-        self.tv.placeholder = @"File/Directory Name";
-        self.tv.font = [UIFont boldSystemFontOfSize:18];
-        self.tv.adjustsFontSizeToFitWidth = YES;
-        [self.tv addTarget:self.tv action:@selector(resignFirstResponder) forControlEvents:UIControlEventEditingDidEndOnExit];
+        _tv.keyboardAppearance = UIKeyboardAppearanceAlert;
+        _tv.borderStyle = UITextBorderStyleLine;
+        _tv.backgroundColor = [UIColor whiteColor];
+        _tv.returnKeyType = UIReturnKeyDone;
+        _tv.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        _tv.autocorrectionType = UITextAutocorrectionTypeNo;
+        _tv.placeholder = @"file or directory name";
+        _tv.textAlignment = UITextAlignmentCenter;
+        _tv.font = [UIFont systemFontOfSize:17];
+        _tv.adjustsFontSizeToFitWidth = YES;
+        _tv.layer.borderWidth = 1.5;
+        _tv.layer.borderColor = [UIColor whiteColor].CGColor;
+        _tv.opaque = YES;
+        [_tv addTarget:_tv action:@selector(resignFirstResponder) forControlEvents:UIControlEventEditingDidEndOnExit];
         
-        [self addSubview:self.createFile];
-        [self addSubview:self.createDir];
-        [self addSubview:self.tv];
-        [self.tv becomeFirstResponder];
+        [self addSubview:_createFile];
+        [self addSubview:_createDir];
+        [self addSubview:_tv];
+        [_tv becomeFirstResponder];
     }
     return self;
 }
@@ -56,41 +60,25 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication]statusBarOrientation])) {
-        self.createFile.frame = CGRectMake(13.5, 0.5*self.bounds.size.height-10, ((self.bounds.size.width-27)/2)-13.5, 37);
-        self.createDir.frame = CGRectMake(self.createFile.frame.size.width+27, self.createFile.frame.origin.y, ((self.bounds.size.width-27)/2), 37);
-        _tv.frame = CGRectMake(15, 31, 255, 31);
-    } else {
-        self.createFile.frame = CGRectMake(13.5, 0.5*self.bounds.size.height-5, ((self.bounds.size.width-27)/2)-13.5, 37);
-        self.createDir.frame = CGRectMake(self.createFile.frame.size.width+27, self.createFile.frame.origin.y, ((self.bounds.size.width-27)/2), 37);
-        _tv.frame = CGRectMake(15, 45, 255, 31);
-    }
-    
-    if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication]statusBarOrientation])) {
-        for (UIView *view in self.subviews) {
-            if ([view isKindOfClass:NSClassFromString(@"UIAlertButton")]) {
-                CGRect frame = view.frame;
-                frame.origin.y += 7;
-                view.frame = frame;
-            }
-        }
-    }
+    BOOL landscape = UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication]statusBarOrientation]);
+    _tv.frame = CGRectMake(15, landscape?31:45, 255, 27);
+    _createFile.frame = CGRectMake(13.5, (self.bounds.size.height/2)-(landscape?10:5), ((self.bounds.size.width-54)/2), 37);
+    _createDir.frame = CGRectMake(_createFile.frame.size.width+27, _createFile.frame.origin.y, ((self.bounds.size.width-27)/2), 37);
 }
 
 - (void)file {
     [self dismissWithClickedButtonIndex:0 animated:YES];
-    [self finishWithName:self.tv.text andType:FileCreationDialogueFileTypeFile];
+    [self finishWithName:_tv.text andType:FileCreationDialogueFileTypeFile];
 }
 
 - (void)dir {
     [self dismissWithClickedButtonIndex:0 animated:YES];
-    [self finishWithName:self.tv.text andType:FileCreationDialogueFileTypeDirectory];
+    [self finishWithName:_tv.text andType:FileCreationDialogueFileTypeDirectory];
 }
 
 - (void)finishWithName:(NSString *)name andType:(FileCreationDialogueFileType)type {
     void (^block)(FileCreationDialogueFileType fileType, NSString *fileName) = objc_getAssociatedObject(self, "blockCallback");
 	block(type, name);
-  //  Block_release(block);
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {

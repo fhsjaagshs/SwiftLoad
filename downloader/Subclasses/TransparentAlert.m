@@ -61,16 +61,23 @@
 }
 
 - (void)layoutSubviews {
+    
     UIImage *buttonImage = [[self drawButtonImage]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
     UIImage *buttonImagePressed = [[self drawButtonImagePressed]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
     for (UIView *subview in [self.subviews mutableCopy]) {
         
+        if ([subview isKindOfClass:NSClassFromString(@"UIAlertButton")]) {
+            CGRect frame = subview.frame;
+            frame.origin.y += 7;
+            subview.frame = frame;
+        }
+        
         if ([subview isKindOfClass:NSClassFromString(@"UIAlertTextView")]) {
-            [subview removeFromSuperview];
+            [subview setHidden:YES];
         }
 		
 		if ([subview isMemberOfClass:[UIImageView class]]) {
-            [subview removeFromSuperview];
+            [subview setHidden:YES];
 		}
         
         if ([subview isKindOfClass:[UIControl class]] && ![subview isKindOfClass:[UITextField class]]) {

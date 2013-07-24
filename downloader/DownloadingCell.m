@@ -37,24 +37,26 @@
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     if (self) {
         self.progressView = [[WhiteProgressView alloc]initWithFrame:CGRectMake(5, 5, self.bounds.size.width-20, 20)];
-        self.titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 25, self.bounds.size.width, 20)];
-        _titleLabel.tag = 69;
-        _titleLabel.backgroundColor = [UIColor clearColor];
-        _titleLabel.textAlignment = UITextAlignmentCenter;
-        _titleLabel.textColor = [UIColor whiteColor];
-        _titleLabel.font = [UIFont boldSystemFontOfSize:12];
+        self.customTitleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 25, self.bounds.size.width, 20)];
+        _customTitleLabel.tag = 69;
+        _customTitleLabel.backgroundColor = [UIColor clearColor];
+        _customTitleLabel.textAlignment = UITextAlignmentCenter;
+        _customTitleLabel.textColor = [UIColor whiteColor];
+        _customTitleLabel.font = [UIFont boldSystemFontOfSize:12];
         
-        [self.contentView addSubview:_titleLabel];
+        [self.contentView addSubview:_customTitleLabel];
         [self.contentView addSubview:_progressView];
         
         self.contentView.backgroundColor = [UIColor clearColor];
         self.backgroundView.backgroundColor = [UIColor clearColor];
         self.backgroundColor = [UIColor clearColor];
+        [self.detailTextLabel removeFromSuperview];
+        [self.textLabel removeFromSuperview];
     }
     return self;
 }
 
-- (void)layoutSubviews {
+/*- (void)layoutSubviews {
     [super layoutSubviews];
     
     Class labelclass = [UILabel class];
@@ -64,6 +66,6 @@
             [view removeFromSuperview];
         }
     }
-}
+}*/
 
 @end

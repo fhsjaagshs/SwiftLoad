@@ -17,7 +17,6 @@
             [[kAppDelegate viewController]setWatchdogCanGoYES];
         }
     }
-    
     [super sendEvent:event];
 }
 

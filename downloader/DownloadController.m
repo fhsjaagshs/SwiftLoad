@@ -26,7 +26,30 @@ UIImage * imageWithColorAndSize(UIColor *color, CGSize size) {
     return img;
 }
 
-static NSString * const cellId = @"acellid";
+CGFloat UIInterfaceOrientationAngleOfOrientation(UIInterfaceOrientation orientation)
+{
+    CGFloat angle;
+    
+    switch (orientation)
+    {
+        case UIInterfaceOrientationPortraitUpsideDown:
+            angle = M_PI;
+            break;
+        case UIInterfaceOrientationLandscapeLeft:
+            angle = -M_PI/2;
+            break;
+        case UIInterfaceOrientationLandscapeRight:
+            angle = M_PI/2;
+            break;
+        default:
+            angle = 0.0;
+            break;
+    }
+    
+    return angle;
+}
+
+static NSString * const cellId = @"DownloadCell";
 
 @interface DownloadController ()  <UITableViewDelegate, UITableViewDataSource>
 
@@ -76,6 +99,43 @@ static NSString * const cellId = @"acellid";
     return [_downloadObjs indexOfObject:download];
 }
 
+//
+// Rotation
+//
+
+- (void)registerForNotif {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRotate:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+}
+
+- (void)didRotate:(NSNotification *)notification {
+    float padding = 5;
+    CGSize screenSize = [[[UIApplication sharedApplication]keyWindow]bounds].size;
+    float height = (_downloadObjs.count*45)+40;
+    
+    NSLog(@"Orientation at rotate notification: %d",[UIApplication sharedApplication].statusBarOrientation);
+    NSLog(@"Window bounds: %@", NSStringFromCGRect([[[UIApplication sharedApplication]keyWindow]bounds]));
+    
+    CGFloat angle = UIInterfaceOrientationAngleOfOrientation([UIApplication sharedApplication].statusBarOrientation);
+    CGAffineTransform transform = CGAffineTransformMakeRotation(angle);
+    self.transform = transform;
+    
+    if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
+        if (_mainView) {
+            _mainView.transform = CGAffineTransformTranslate(transform, -screenSize.height/2, (screenSize.width/2)-(_mainView.bounds.size.height/2));
+            _mainView.frame = CGRectMake(padding, padding, height, screenSize.height-(padding*2)); // height and width, x and y are reversed
+        }
+    } else {
+        if (_mainView) {
+            _mainView.transform = CGAffineTransformIdentity;
+            _mainView.frame = CGRectMake(padding, screenSize.height-padding-height, screenSize.width-(padding*2), height);
+        }
+    }
+}
+
+//
+// UI
+//
+
 - (void)updateSizes {
     if (_downloadObjs.count == 0) {
         [_button setTitle:@"0" forState:UIControlStateNormal];
@@ -94,7 +154,14 @@ static NSString * const cellId = @"acellid";
     
     [UIView animateWithDuration:0.25 animations:^{
         float height = (_downloadObjs.count*45)+40;
-        _mainView.frame = CGRectMake(_mainView.frame.origin.x, [[UIScreen mainScreen]bounds].size.height-5-height, _mainView.frame.size.width, height);
+        
+        if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
+            _mainView.frame = CGRectMake(5+height, _mainView.frame.origin.x, height, _mainView.frame.size.width);
+            //_theTableView.frame = CGRectMake(0, 40, _mainView.frame.size.width, (_downloadObjs.count*45));
+        } else {
+            _mainView.frame = CGRectMake(_mainView.frame.origin.x, [[UIScreen mainScreen]bounds].size.height-5-height, _mainView.frame.size.width, height);
+            //_theTableView.frame = CGRectMake(0, 40, _mainView.frame.size.width, (_downloadObjs.count*45));
+        }
         _theTableView.frame = CGRectMake(0, 40, _mainView.frame.size.width, (_downloadObjs.count*45));
     }];
 }
@@ -108,6 +175,7 @@ static NSString * const cellId = @"acellid";
         float height = (_downloadObjs.count*45)+40;
         
         self.mainView = [[UIView alloc]initWithFrame:CGRectMake(padding, screenSize.height-5-height, screenSize.width-(padding*2), height)];
+        //_mainView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleHeight;
         _mainView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.6f];
         _mainView.layer.cornerRadius = 10;
         
@@ -123,6 +191,7 @@ static NSString * const cellId = @"acellid";
         
         UILabel *dl = [[UILabel alloc]initWithFrame:CGRectMake(100, 5, _mainView.bounds.size.width-180, 30)];
         dl.text = @"Downloads";
+        dl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         dl.font = [UIFont boldSystemFontOfSize:20];
         dl.backgroundColor = [UIColor clearColor];
         dl.textColor = [UIColor whiteColor];
@@ -188,7 +257,7 @@ static NSString * const cellId = @"acellid";
     
     Download *download = [_downloadObjs objectAtIndex:indexPath.row];
     download.delegate = cell;
-    cell.titleLabel.text = [download.fileName percentSanitize];
+    cell.customTitleLabel.text = [download.fileName percentSanitize];
     return cell;
 }
 
@@ -218,7 +287,7 @@ static NSString * const cellId = @"acellid";
 - (id)init {
     self = [super init];
     if (self) {
-        NSLog(@"aha");
+        [self registerForNotif];
         self.activity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         self.button = [UIButton buttonWithType:UIButtonTypeCustom];
         

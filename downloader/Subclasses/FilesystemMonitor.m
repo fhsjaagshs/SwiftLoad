@@ -47,7 +47,7 @@ static void KQCallback(CFFileDescriptorRef kqRef, CFOptionFlags callBackTypes, v
     
     dirFD = -1;
     kq = -1;
-    dirKQRef = NULL;
+    dirKQRef = nil;
     
     return self;
 }
@@ -58,7 +58,7 @@ static void KQCallback(CFFileDescriptorRef kqRef, CFOptionFlags callBackTypes, v
     struct kevent event;
     struct timespec timeout = {0, 0};
     
-    int eventCount = kevent(kq, NULL, 0, &event, 1, &timeout);
+    int eventCount = kevent(kq, nil, 0, &event, 1, &timeout);
     
     assert((eventCount >= 0) && (eventCount < 2));
     
@@ -71,7 +71,7 @@ static void KQCallback(CFFileDescriptorRef kqRef, CFOptionFlags callBackTypes, v
 
 - (BOOL)startMonitoringDirectory:(NSString *)dirPath {
     // Double initializing is not going to work...
-    if ((dirKQRef == NULL) && (dirFD == -1) && (kq == -1)) {
+    if ((dirKQRef == nil) && (dirFD == -1) && (kq == -1)) {
         // Open the directory we're going to watch
         dirFD = open([dirPath fileSystemRepresentation], O_EVTONLY);
         if (dirFD >= 0) {
@@ -79,12 +79,12 @@ static void KQCallback(CFFileDescriptorRef kqRef, CFOptionFlags callBackTypes, v
             kq = kqueue();
             if (kq >= 0) {
                 struct kevent eventToAdd;
-                eventToAdd.ident  = dirFD;
+                eventToAdd.ident = dirFD;
                 eventToAdd.filter = EVFILT_VNODE;
-                eventToAdd.flags  = EV_ADD | EV_CLEAR;
+                eventToAdd.flags = EV_ADD | EV_CLEAR;
                 eventToAdd.fflags = NOTE_WRITE;
-                eventToAdd.data   = 0;
-                eventToAdd.udata  = NULL;
+                eventToAdd.data = 0;
+                eventToAdd.udata = nil;
                 
                 int errNum = kevent(kq, &eventToAdd, 1, NULL, 0, NULL);
                 if (errNum == 0) {
@@ -121,10 +121,10 @@ static void KQCallback(CFFileDescriptorRef kqRef, CFOptionFlags callBackTypes, v
 }
 
 - (void)invalidate {
-    if (dirKQRef != NULL) {
+    if (dirKQRef != nil) {
         CFFileDescriptorInvalidate(dirKQRef);
         CFRelease(dirKQRef);
-        dirKQRef = NULL;
+        dirKQRef = nil;
         // We don't need to close the kq, CFFileDescriptorInvalidate closed it instead.
         // Change the value so no one thinks it's still live.
         kq = -1;
