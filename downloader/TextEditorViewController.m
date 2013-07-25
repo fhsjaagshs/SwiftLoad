@@ -165,7 +165,7 @@
         } else if (buttonIndex == 2) {
             [kAppDelegate sendStringAsSMS:[NSString stringWithContentsOfFile:file encoding:_theEncoding error:nil] fromViewController:self];
         } else if (buttonIndex == 3) {
-            [kAppDelegate uploadLocalFile:[kAppDelegate openFile]];
+            [kAppDelegate uploadLocalFile:[kAppDelegate openFile] fromViewController:self];
         }
     } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Send as SMS", @"Upload to Dropbox", nil];
     

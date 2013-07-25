@@ -321,7 +321,7 @@
         } else if (buttonIndex == 1) {
             [kAppDelegate prepareFileForBTSending:file];
         } else if (buttonIndex == 2) {
-            [kAppDelegate uploadLocalFile:[kAppDelegate openFile]];
+            [kAppDelegate uploadLocalFile:[kAppDelegate openFile] fromViewController:self];
         } else if (buttonIndex == 3) {
             [self startConverting];
         }

@@ -50,10 +50,16 @@
         self.contentView.backgroundColor = [UIColor clearColor];
         self.backgroundView.backgroundColor = [UIColor clearColor];
         self.backgroundColor = [UIColor clearColor];
-        [self.detailTextLabel removeFromSuperview];
+        self.textLabel.textColor = [UIColor clearColor];
+        self.textLabel.userInteractionEnabled = NO;
         [self.textLabel removeFromSuperview];
     }
     return self;
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    [self.detailTextLabel removeFromSuperview];
 }
 
 /*- (void)layoutSubviews {

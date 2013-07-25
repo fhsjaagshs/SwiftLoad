@@ -157,7 +157,7 @@
         } else if (buttonIndex == 2) {
             [kAppDelegate prepareFileForBTSending:file];
         } else if (buttonIndex == 3) {
-            [kAppDelegate uploadLocalFile:[kAppDelegate openFile]];
+            [kAppDelegate uploadLocalFile:[kAppDelegate openFile] fromViewController:self];
         } else if (buttonIndex == 4) {
             if ([MIMEUtils isImageFile:file]) {
                 [self addToTheRoll];

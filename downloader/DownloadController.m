@@ -114,25 +114,9 @@ static NSString * const cellId = @"DownloadCell";
     float padding = 5;
     CGSize screenSize = [[[UIApplication sharedApplication]keyWindow]bounds].size;
     float height = (_downloadObjs.count*45)+40;
-    
-    CGFloat angle = UIInterfaceOrientationAngleOfOrientation([UIApplication sharedApplication].statusBarOrientation);
-    CGAffineTransform transform = CGAffineTransformMakeRotation(angle);
-    
-    if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
-        // height and width are switched because UIWindow doesn't rotate its coordinate plane
-        self.transform = CGAffineTransformTranslate(transform, -screenSize.height/2, (screenSize.width/2)-(self.bounds.size.height/2));
-        _mainView.transform = CGAffineTransformTranslate(transform, -screenSize.height/2, (screenSize.width/2)-(_mainView.bounds.size.height/2));
-        _mainView.frame = CGRectMake(padding, padding, height, screenSize.height-(padding*2)); // height and width, x and y are reversed
-    } else {
-        self.transform = CGAffineTransformIdentity;
-        _mainView.transform = CGAffineTransformIdentity;
-        _mainView.frame = CGRectMake(padding, screenSize.height-padding-height, screenSize.width-(padding*2), height);
-    }
-    
+    _mainView.frame = CGRectMake(padding, screenSize.height-padding-height, screenSize.width-(padding*2), height);
     _theTableView.frame = CGRectMake(0, 40, _mainView.frame.size.width, (_downloadObjs.count*45));
-
     self.frame = CGRectMake(10, screenSize.height-10-42-5, 42+5, 42+5);
-    
     _button.frame = self.bounds;
     _activity.frame = self.bounds;
 }
@@ -285,6 +269,7 @@ static NSString * const cellId = @"DownloadCell";
         self.downloadObjs = [NSMutableArray array];
         
         [self setupTableView];
+        [self setNeedsLayout];
     }
     return self;
 }

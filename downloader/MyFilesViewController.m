@@ -43,7 +43,6 @@ static NSString *CellIdentifier = @"Cell";
     
     self.theTableView = [[ShadowedTableView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44) style:UITableViewStylePlain];
     _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    _theTableView.allowsMultipleSelectionDuringEditing = YES;
     _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     _theTableView.backgroundColor = [UIColor clearColor];
     _theTableView.rowHeight = iPad?60:44;
@@ -76,8 +75,6 @@ static NSString *CellIdentifier = @"Cell";
     self.view.opaque = YES;
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(copiedListChanged:) name:kCopyListChangedNotification object:nil];
-    
-    [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryPlayback error:nil];
     
     __weak MyFilesViewController *weakself = self;
     
@@ -962,11 +959,10 @@ static NSString *CellIdentifier = @"Cell";
         }
         
     } else if (number == 1) {
-        [kAppDelegate uploadLocalFile:file];
+        [kAppDelegate uploadLocalFile:file fromViewController:self];
         [self removeSideSwipeView:YES];
     } else if (number == 2) {
         [kAppDelegate prepareFileForBTSending:file];
-        //[kAppDelegate showBTController];
         [self removeSideSwipeView:YES];
     } else if (number == 3) {
         [kAppDelegate sendFileInEmail:file fromViewController:self];
@@ -979,31 +975,16 @@ static NSString *CellIdentifier = @"Cell";
             
             if (buttonIndex == actionSheet.destructiveButtonIndex) {
                 
-                [kAppDelegate showHUDWithTitle:@"Deleting"];
-                [kAppDelegate setTitleOfVisibleHUD:file.lastPathComponent];
-                [kAppDelegate setVisibleHudMode:MBProgressHUDModeIndeterminate];
+                NSIndexPath *indexPath = [_theTableView indexPathForCell:_sideSwipeCell];
+                [self removeSideSwipeView:NO];
                 
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    @autoreleasepool {
-                        NSFileManager *fm = [[NSFileManager alloc]init];
-                        [fm removeItemAtPath:file error:nil];
-                        
-                        [_filelist removeAllObjects];
-                        
-                        NSIndexPath *indexPath = [_theTableView indexPathForCell:_sideSwipeCell];
-                        
-                        dispatch_sync(dispatch_get_main_queue(), ^{
-                            @autoreleasepool {
-                                [kAppDelegate hideHUD];
-                                [self removeSideSwipeView:NO];
-                                [_theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
-                            }
-                        });
-                    
-                    }
-                });
-
+                [_theTableView beginUpdates];
+                [[NSFileManager defaultManager]removeItemAtPath:file error:nil];
                 
+                [_theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+                
+                [_filelist removeAllObjects];
+                [_theTableView endUpdates];
             }
             
         } cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"I'm sure, Delete" otherButtonTitles:nil];
@@ -1173,18 +1154,15 @@ static NSString *CellIdentifier = @"Cell";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
-    [_filelist removeAllObjects];
-    [_theTableView reloadData];
-    [self.theTableView flashScrollIndicators];
+    [_theTableView flashScrollIndicators];
 }
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-    [self removeSideSwipeView:NO];
-    [self setupSideSwipeView];
+- (NSUInteger)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
-    return YES;
+    return (toInterfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 - (void)dealloc {

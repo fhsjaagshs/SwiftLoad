@@ -402,10 +402,10 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 // Dropbox Upload
-- (void)uploadLocalFile:(NSString *)localPath {
+- (void)uploadLocalFile:(NSString *)localPath fromViewController:(UIViewController *)controller {
     
     if (![[DBSession sharedSession]isLinked]) {
-        [[DBSession sharedSession]linkFromController:_viewController];
+        [[DBSession sharedSession]linkFromController:controller];
         return;
     }
     

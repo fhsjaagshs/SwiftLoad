@@ -83,7 +83,7 @@
         } else if (buttonIndex == 1) {
             [kAppDelegate prepareFileForBTSending:[kAppDelegate openFile]];
         } else if (buttonIndex == 2) {
-            [kAppDelegate uploadLocalFile:[kAppDelegate openFile]];
+            [kAppDelegate uploadLocalFile:[kAppDelegate openFile] fromViewController:self];
         }
     } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Upload to Dropbox", nil];
     
