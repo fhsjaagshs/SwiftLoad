@@ -71,40 +71,47 @@
     
     self.temporaryPath = getNonConflictingFilePathForPath([NSTemporaryDirectory() stringByAppendingPathComponent:[self.fileName percentSanitize]]);
     self.fileSize = [response expectedContentLength];
+    NSLog(@"FileSize: %f",self.fileSize);
     [[NSFileManager defaultManager]createFileAtPath:self.temporaryPath contents:nil attributes:nil];
     self.handle = [NSFileHandle fileHandleForWritingAtPath:self.temporaryPath];
     
     __weak HTTPDownload *weakself = self;
     
-    [_handle setWriteabilityHandler:^(NSFileHandle *handle) {
-        if (!weakself.isAppending && weakself.buffer.length > 0) {
-            NSData *data = weakself.buffer;
-            [weakself.buffer setLength:0];
-            [handle seekToEndOfFile];
-            [handle writeData:data];
-            [handle synchronizeFile];
-            weakself.writtenBytes += data.length;
-            
-            if (weakself.writtenBytes == weakself.fileSize) {
-                [handle closeFile];
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    @autoreleasepool {
-                        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-                        [weakself showSuccess];
-                    }
-                });
+    if (_fileSize != -1) {
+        [_handle setWriteabilityHandler:^(NSFileHandle *handle) {
+            if (!weakself.isAppending && weakself.buffer.length > 0) {
+                NSData *data = [weakself.buffer copy];
+                [weakself.buffer setLength:0];
+                [handle seekToEndOfFile];
+                [handle writeData:data];
+                [handle synchronizeFile];
+                weakself.writtenBytes += data.length;
+                
+                if (weakself.writtenBytes == weakself.fileSize) {
+                    [handle closeFile];
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        @autoreleasepool {
+                            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+                            [weakself showSuccess];
+                        }
+                    });
+                }
             }
-        }
-    }];
+        }];
+    }
 }
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)receivedData {
     self.downloadedBytes += receivedData.length;
     
-    self.isAppending = YES;
-    [_buffer appendData:receivedData];
-    self.isAppending = NO;
-    
+    if (_fileSize == -1) {
+        [_handle writeData:receivedData];
+    } else {
+        self.isAppending = YES;
+        [_buffer appendData:receivedData];
+        self.isAppending = NO;
+    }
+
     [self.delegate setProgress:((_fileSize == -1)?1:((float)_downloadedBytes/(float)_fileSize))];
 }
 
@@ -120,6 +127,11 @@
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 
+    if (_fileSize == -1) {
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        [self showSuccess];
+    }
+    
     if (_downloadedBytes == 0) {
         [self showFailure];
     }

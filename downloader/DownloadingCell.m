@@ -16,6 +16,8 @@
 
 @implementation DownloadingCell
 
+
+
 - (void)reset {
     [self setProgress:0.0f];
 }
@@ -36,8 +38,8 @@
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.progressView = [[WhiteProgressView alloc]initWithFrame:CGRectMake(5, 5, self.bounds.size.width-20, 20)];
-        self.customTitleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 25, self.bounds.size.width, 20)];
+        self.progressView = [[WhiteProgressView alloc]init];
+        self.customTitleLabel = [[UILabel alloc]init];
         _customTitleLabel.tag = 69;
         _customTitleLabel.backgroundColor = [UIColor clearColor];
         _customTitleLabel.textAlignment = UITextAlignmentCenter;
@@ -60,18 +62,9 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     [self.detailTextLabel removeFromSuperview];
+    _progressView.frame = CGRectMake(5, 5, self.bounds.size.width-20, 20);
+    _customTitleLabel.frame = CGRectMake(0, 25, self.bounds.size.width, 20);
+    [_progressView setNeedsDisplay];
 }
-
-/*- (void)layoutSubviews {
-    [super layoutSubviews];
-    
-    Class labelclass = [UILabel class];
-    
-    for (UIView *view in self.subviews) {
-        if ([view isKindOfClass:labelclass] && view.tag != 69) {
-            [view removeFromSuperview];
-        }
-    }
-}*/
 
 @end
