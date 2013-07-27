@@ -35,8 +35,6 @@
 + (void)notif_setPausePlayTitlePause;
 + (void)notif_setLoop;
 + (void)notif_setControlsHidden:(BOOL)flag;
-+ (void)notif_setNxtTrackHidden:(BOOL)flag;
-+ (void)notif_setPrevTrackHidden:(BOOL)flag;
 + (void)notif_setInfoFieldText:(NSString *)string;
 + (void)notif_setSongTitleText:(NSString *)string;
 + (void)notif_setShouldUpdateTime:(BOOL)flag;

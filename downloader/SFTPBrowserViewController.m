@@ -22,6 +22,9 @@
 @property (nonatomic, strong) NSString *password;
 
 @property (nonatomic, strong) NSString *currentPath;
+
+@property (nonatomic, strong) FMDatabase *memCache;
+
 @end
 
 @implementation SFTPBrowserViewController
@@ -70,6 +73,10 @@
     self.filedicts = [NSMutableArray array];
     
     [self showInitialLoginController];
+    
+    self.memCache = [FMDatabase databaseWithPath:nil]; // nil path means that the database will be created in memory: lighting fuckin fast
+    
+    [_memCache executeUpdate:@"CREATE TABLE sftp_cache (id INTEGER PRIMARY KEY AUTOINCREMENT, parentpath VARCHAR(255) DEFAULT NULL, filename VARCHAR(255) DEFAULT NULL, type VARCHAR(255) DEFAULT NULL, size INTEGER)"];
 }
 
 - (void)goBackDir {
@@ -95,19 +102,51 @@
 }
 
 - (void)cacheCurrentDir {
-    NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"sftp_directory_cache.json"];
-    NSData *json = [NSData dataWithContentsOfFile:cachePath];
-    NSMutableDictionary *savedDict = [[NSFileManager defaultManager]fileExistsAtPath:cachePath]?[NSJSONSerialization JSONObjectWithData:json options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
-
-    [savedDict setObject:_filedicts forKey:[self fixURL:_currentURL]];
     
-    NSData *jsontowrite = [NSJSONSerialization dataWithJSONObject:savedDict options:NSJSONReadingMutableContainers error:nil];
-    [jsontowrite writeToFile:cachePath atomically:YES];
+    FMResultSet *set = [_memCache executeQuery:@"SELECT filename,type,size FROM sftp_cache WHERE parentpath = ?",@""];
+    
+    while ([set next]) {
+        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+        [dict setObject:[set stringForColumn:@"filename"] forKey:NSFileName];
+        [dict setObject:[NSNumber numberWithLongLong:[set intForColumn:@"size"]] forKey:NSFileSize];
+        [dict setObject:([set intForColumn:@"type"] == 1)?NSFileTypeRegular:NSFileTypeDirectory forKey:NSFileType];
+        [_filedicts addObject:dict];
+    }
+    
+    NSMutableString *query = [NSMutableString stringWithFormat:@"INSERT INTO sftp_cache (parentpath,filename,type,size) VALUES "];
+    
+    for (NSDictionary *dict in _filedicts) {
+        NSString *filename = [dict objectForKey:NSFileName];
+        NSString *parentpath = [self fixURL:_currentURL];
+        NSString *type = [dict objectForKey:NSFileType];
+        int size = [[dict objectForKey:NSFileSize]intValue];
+        [query appendFormat:@"(\"%@\",\"%@\",\"%@\",%d),",parentpath,filename,type,size];
+    }
+    
+    [query deleteCharactersInRange:NSMakeRange(query.length-1, 1)];
+    
+    [_memCache executeUpdate:query];
 }
 
 - (void)loadCurrentDirectoryFromCache {
     self.filedicts = [NSMutableArray array];
-    NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"sftp_directory_cache.json"];
+    
+    FMResultSet *set = [_memCache executeQuery:@"SELECT filename,type,size FROM sftp_cache WHERE parentpath = ?",[self fixURL:_currentURL]];
+    
+    while ([set next]) {
+        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+        [dict setObject:[set stringForColumn:@"filename"] forKey:NSFileName];
+        [dict setObject:[NSNumber numberWithLongLong:[set intForColumn:@"size"]] forKey:NSFileSize];
+        [dict setObject:[set stringForColumn:@"type"] forKey:NSFileType];
+        [_filedicts addObject:dict];
+    }
+    
+    if (_filedicts.count == 0) {
+        [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+        [self loadCurrentDirectoryFromSFTP];
+    }
+    
+    /*NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"sftp_directory_cache.json"];
     NSData *json = [NSData dataWithContentsOfFile:cachePath];
     NSMutableDictionary *savedDict = [[NSFileManager defaultManager]fileExistsAtPath:cachePath]?[NSJSONSerialization JSONObjectWithData:json options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
     
@@ -119,7 +158,7 @@
         [_filedicts removeAllObjects];
         [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
         [self loadCurrentDirectoryFromSFTP];
-    }
+    }*/
 }
 
 - (void)loadCurrentDirectoryFromSFTP {
@@ -261,7 +300,7 @@
     }
     
     NSDictionary *fileDict = [_filedicts objectAtIndex:indexPath.row];
-    NSString *filename = [fileDict objectForKey:@"NSFileName"];
+    NSString *filename = [fileDict objectForKey:NSFileName];
     
     cell.textLabel.text = filename;
     
@@ -298,7 +337,7 @@
     
     if ([filetype isEqualToString:(NSString *)NSFileTypeDirectory]) {
         [self addComponentToPath:filename];
-        [self loadCurrentDirectoryFromCache];
+        [self loadCurrentDirectoryFromSFTP];
         if (_currentPath.length > 1) {
             [_backButton setHidden:NO];
         }

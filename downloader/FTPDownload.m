@@ -11,10 +11,14 @@
 @interface FTPDownload () <NSStreamDelegate>
 
 @property (nonatomic, strong) NSInputStream *readStream;
-@property (nonatomic, strong) NSFileHandle *handle;
 @property (nonatomic, assign) int bufferSize;
 @property (nonatomic, assign) float fileSize;
 @property (nonatomic, assign) float bytesRead;
+
+@property (nonatomic, strong) NSFileHandle *handle;
+@property (nonatomic, strong) NSMutableData *tempBuffer;
+@property (nonatomic, assign) BOOL isAppending;
+@property (nonatomic, assign) float writtenBytes;
 
 @end
 
@@ -28,7 +32,8 @@
     self = [super init];
     if (self) {
         self.url = aUrl;
-        self.bufferSize = (1024*1024); // start with 1MB buffer, increase it if reads fill it
+        self.bufferSize = (1024*1024); // start with 1MB buffer, increase it if reads fill it, decrease it if reads don't fill it
+        self.tempBuffer = [NSMutableData data];
     }
     return self;
 }
@@ -69,14 +74,15 @@
             _bytesRead += bytesRead;
             
             if (bytesRead == -1) {
+                [_handle closeFile];
                 [self showFailure];
                 return;
             } else if (bytesRead == 0) {
                 [self killReadStream];
-                [self showSuccess];
             } else {
-                [_handle writeData:[NSData dataWithBytes:buffer length:bytesRead]];
-                [_handle synchronizeFile];
+                self.isAppending = YES;
+                [_tempBuffer appendBytes:buffer length:bytesRead];
+                self.isAppending = NO;
             }
         } break;
         case NSStreamEventErrorOccurred: {
@@ -104,6 +110,27 @@
     self.temporaryPath = getNonConflictingFilePathForPath([[NSTemporaryDirectory() stringByAppendingPathComponent:self.fileName]percentSanitize]);
     [[NSFileManager defaultManager]createFileAtPath:self.temporaryPath contents:nil attributes:nil];
     self.handle = [NSFileHandle fileHandleForWritingAtPath:self.temporaryPath];
+    
+    __weak FTPDownload *weakself = self;
+    
+    [_handle setWriteabilityHandler:^(NSFileHandle *handle) {
+        if (!weakself.isAppending && weakself.tempBuffer.length > 0) {
+            NSData *data = weakself.tempBuffer;
+            [weakself.tempBuffer setLength:0];
+            [handle writeData:data];
+            [handle synchronizeFile];
+            weakself.writtenBytes += data.length;
+            
+            if (weakself.writtenBytes == weakself.fileSize) {
+                [handle closeFile];
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    @autoreleasepool {
+                        [weakself showSuccess];
+                    }
+                });
+            }
+        }
+    }];
     
     self.readStream = (__bridge NSInputStream *)readStreamTemp;
     CFRelease(readStreamTemp);

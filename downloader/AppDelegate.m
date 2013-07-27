@@ -154,6 +154,51 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     }
 }
 
+- (void)playFile:(NSString *)file {
+    NSString *currentDir = [file stringByDeletingLastPathComponent];
+    
+    NSArray *filesOfDir = [[[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+    NSMutableArray *audioFiles = [NSMutableArray array];
+    
+    for (NSString *filename in filesOfDir) {
+        if ([MIMEUtils isAudioFile:filename]) {
+            [audioFiles addObject:[currentDir stringByAppendingPathComponent:filename]];
+        }
+    }
+    
+    NSError *playingError = nil;
+    
+    if (![file isEqualToString:_nowPlayingFile]) {
+        [_audioPlayer stop];
+        self.audioPlayer = [[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:file] error:&playingError];
+        [_audioPlayer setDelegate:self];
+    }
+    
+    NSArray *iA = [metadataRetriever getMetadataForFile:file];
+    
+    NSString *artist = [iA objectAtIndex:0];
+    NSString *title = [iA objectAtIndex:1];
+    NSString *album = [iA objectAtIndex:2];
+    
+    NSString *metadata = [NSString stringWithFormat:@"%@\n%@\n%@",artist,title,album];
+    
+    if ([artist isEqualToString:@"---"] && [title isEqualToString:@"---"] && [album isEqualToString:@"---"]) {
+        [self showMetadataInLockscreenWithArtist:@"" title:[file lastPathComponent] album:@""];
+    } else {
+        [self showMetadataInLockscreenWithArtist:artist title:title album:album];
+    }
+    
+    [AudioPlayerViewController notif_setInfoFieldText:metadata];
+
+    [self showArtworkForFile:file];
+    
+    [_audioPlayer play];
+    self.nowPlayingFile = file;
+    
+    [AudioPlayerViewController notif_setControlsHidden:(playingError != nil)];
+    [AudioPlayerViewController notif_setShouldUpdateTime:(playingError == nil)];
+}
+
 - (void)skipToPreviousTrack {
     
     if (self.audioPlayer.currentTime > 5) {
@@ -165,25 +210,19 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     NSArray *filesOfDir = [[[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
     NSMutableArray *audioFiles = [NSMutableArray array];
     
-    for (NSString *object in filesOfDir) {
-        NSString *newObject = [currentDir stringByAppendingPathComponent:object];
-        if ([MIMEUtils isAudioFile:newObject]) {
-            [audioFiles addObject:newObject];
+    for (NSString *filename in filesOfDir) {
+        if ([MIMEUtils isAudioFile:filename]) {
+            [audioFiles addObject:[currentDir stringByAppendingPathComponent:filename]];
         }
     }
 
-    int nextIndex = [audioFiles indexOfObject:self.nowPlayingFile]-1;
+    int nextIndex = [audioFiles indexOfObject:_nowPlayingFile]-1;
     
     if (nextIndex < 0) {
-        [AudioPlayerViewController notif_setPrevTrackHidden:YES];
-        return;
+        nextIndex = audioFiles.count-1;
     }
     
-    if (nextIndex == 0) {
-        [AudioPlayerViewController notif_setPrevTrackHidden:YES];
-    }
-    
-    [AudioPlayerViewController notif_setNxtTrackHidden:NO];
+   // [AudioPlayerViewController notif_setNxtTrackHidden:NO];
     
     NSString *newFile = [audioFiles objectAtIndex:nextIndex];
     [self setOpenFile:newFile];
@@ -231,27 +270,19 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     NSArray *filesOfDir = [[[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
     NSMutableArray *audioFiles = [NSMutableArray array];
     
-    for (NSString *object in filesOfDir) {
-        NSString *newObject = [currentDir stringByAppendingPathComponent:object];
-        if ([MIMEUtils isAudioFile:newObject]) {
-            [audioFiles addObject:newObject];
+    for (NSString *filename in filesOfDir) {
+        if ([MIMEUtils isAudioFile:filename]) {
+            [audioFiles addObject:[currentDir stringByAppendingPathComponent:filename]];
         }
     }
 
     int maxIndex = audioFiles.count-1;
-    int nextIndex = [audioFiles indexOfObject:self.nowPlayingFile]+1;
+    int nextIndex = [audioFiles indexOfObject:_nowPlayingFile]+1;
     
     if (nextIndex > maxIndex) {
-        [AudioPlayerViewController notif_setNxtTrackHidden:YES];
-        return;
+        nextIndex = 0;
     }
-    
-    if (nextIndex == maxIndex) {
-        [AudioPlayerViewController notif_setNxtTrackHidden:YES];
-    }
-    
-    [AudioPlayerViewController notif_setPrevTrackHidden:NO];
-    
+
     NSString *newFile = [audioFiles objectAtIndex:nextIndex];
     [self setOpenFile:newFile];
     
@@ -314,7 +345,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (void)sendFileInEmail:(NSString *)file fromViewController:(UIViewController *)vc {
     if ([MFMailComposeViewController canSendMail]) {
         MFMailComposeViewController *controller = [[MFMailComposeViewController alloc]initWithCompletionHandler:^(MFMailComposeViewController *controller, MFMailComposeResult result, NSError *error) {
-            [vc dismissModalViewControllerAnimated:YES];
+            [controller dismissModalViewControllerAnimated:YES];
         }];
         [controller setSubject:@"Your file"];
         [controller addAttachmentData:[NSData dataWithContentsOfFile:file] mimeType:[MIMEUtils fileMIMEType:file] fileName:[file lastPathComponent]];
@@ -328,7 +359,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (void)sendStringAsSMS:(NSString *)string fromViewController:(UIViewController *)vc {
     if ([MFMessageComposeViewController canSendText]) {
         MFMessageComposeViewController *controller = [[MFMessageComposeViewController alloc]initWithCompletionHandler:^(MFMessageComposeViewController *controller, MessageComposeResult result) {
-            [vc dismissModalViewControllerAnimated:YES];
+            [controller dismissModalViewControllerAnimated:YES];
         }];
         [controller setBody:string];
         [vc presentModalViewController:controller animated:YES];

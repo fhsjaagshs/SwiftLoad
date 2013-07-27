@@ -79,8 +79,6 @@ float const kClearOutDelay = 0.6f;
 - (void)showSuccess {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     
-    NSLog(@"%@",_temporaryPath);
-    
     NSString *targetPath = getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:[_fileName percentSanitize]]);
     [[NSFileManager defaultManager]moveItemAtPath:_temporaryPath toPath:targetPath error:nil];
     

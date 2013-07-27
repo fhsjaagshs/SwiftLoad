@@ -36,6 +36,8 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 // Audio Player
 @property (nonatomic, strong) AVAudioPlayer *audioPlayer;
+@property (nonatomic, strong) NSString *nowPlayingFile;
+- (void)playFile:(NSString *)file;
 - (void)skipToPreviousTrack;
 - (void)skipToNextTrack;
 - (void)togglePlayPause;
@@ -52,9 +54,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 // Emailing
 - (void)sendFileInEmail:(NSString *)file fromViewController:(UIViewController *)vc;
 - (void)sendStringAsSMS:(NSString *)string fromViewController:(UIViewController *)vc;
-
-// Audio Player
-@property (nonatomic, strong) NSString *nowPlayingFile;
 
 // Bluetooth File Transmission
 - (void)prepareFileForBTSending:(NSString *)file;

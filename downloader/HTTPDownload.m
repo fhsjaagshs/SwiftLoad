@@ -16,6 +16,9 @@
 @property (nonatomic, strong) NSFileHandle *handle;
 @property (nonatomic, strong) NSMutableData *buffer;
 
+@property (nonatomic, assign) BOOL isAppending;
+@property (nonatomic, assign) float writtenBytes;
+
 @end
 
 @implementation HTTPDownload
@@ -60,7 +63,7 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSHTTPURLResponse *)response {
-    self.fileName = (response.suggestedFilename.length > 0)?response.suggestedFilename:[response.URL.absoluteString lastPathComponent];
+    self.fileName = (response.suggestedFilename.length > 0)?response.suggestedFilename:[[response.URL.absoluteString lastPathComponent]percentSanitize];
     
     if (self.delegate) {
         self.delegate.textLabel.text = self.fileName;
@@ -70,18 +73,37 @@
     self.fileSize = [response expectedContentLength];
     [[NSFileManager defaultManager]createFileAtPath:self.temporaryPath contents:nil attributes:nil];
     self.handle = [NSFileHandle fileHandleForWritingAtPath:self.temporaryPath];
+    
+    __weak HTTPDownload *weakself = self;
+    
+    [_handle setWriteabilityHandler:^(NSFileHandle *handle) {
+        if (!weakself.isAppending && weakself.buffer.length > 0) {
+            NSData *data = weakself.buffer;
+            [weakself.buffer setLength:0];
+            [handle seekToEndOfFile];
+            [handle writeData:data];
+            [handle synchronizeFile];
+            weakself.writtenBytes += data.length;
+            
+            if (weakself.writtenBytes == weakself.fileSize) {
+                [handle closeFile];
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    @autoreleasepool {
+                        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+                        [weakself showSuccess];
+                    }
+                });
+            }
+        }
+    }];
 }
 
 - (void)connection:(NSURLConnection *)theConnection didReceiveData:(NSData *)receivedData {
     self.downloadedBytes += receivedData.length;
     
+    self.isAppending = YES;
     [_buffer appendData:receivedData];
-    
-    if (_buffer.length > 131072) { // 128 KB
-        [_handle writeData:_buffer];
-        [_buffer setLength:0];
-        [_handle synchronizeFile];
-    }
+    self.isAppending = NO;
     
     [self.delegate setProgress:((_fileSize == -1)?1:((float)_downloadedBytes/(float)_fileSize))];
 }
@@ -89,6 +111,7 @@
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     [_connection cancel];
     [_buffer setLength:0];
+    [_handle closeFile];
     self.downloadedBytes = 0;
     self.fileSize = 0;
     [self showFailure];
@@ -96,18 +119,8 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    self.fileName = [self.fileName percentSanitize];
 
-    if (_downloadedBytes > 0) {
-        
-        if (_buffer.length > 0) {
-            [_handle writeData:_buffer];
-            [_buffer setLength:0];
-            [_handle synchronizeFile];
-        }
-        
-        [self showSuccess];
-    } else {
+    if (_downloadedBytes == 0) {
         [self showFailure];
     }
 }

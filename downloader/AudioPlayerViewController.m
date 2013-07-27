@@ -115,59 +115,7 @@
     
     [self setupNotifs];
     
-    AppDelegate *ad = kAppDelegate;
-    
-    NSString *file = ad.openFile;
-    NSString *currentDir = [file stringByDeletingLastPathComponent];
-    
-    NSArray *filesOfDir = [[[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-    NSMutableArray *audioFiles = [NSMutableArray array];
-    
-    for (NSString *object in filesOfDir) {
-        NSString *newObject = [currentDir stringByAppendingPathComponent:object];
-        if ([MIMEUtils isAudioFile:newObject]) {
-            [audioFiles addObject:newObject];
-        }
-    }
-    
-    int fileIndex = [audioFiles indexOfObject:file];
-    [self.prevTrack setHidden:(fileIndex == 0)];
-    [self.nxtTrack setHidden:(fileIndex == audioFiles.count-1)];
-
-    NSError *playingError = nil;
-    
-    if (![file isEqualToString:ad.nowPlayingFile]) {
-        [ad.audioPlayer stop];
-        ad.audioPlayer = [[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:file] error:&playingError];
-        [ad.audioPlayer setDelegate:ad];
-    }
-
-    NSArray *iA = [metadataRetriever getMetadataForFile:file];
-    
-    NSString *artist = [iA objectAtIndex:0];
-    NSString *title = [iA objectAtIndex:1];
-    NSString *album = [iA objectAtIndex:2];
-    
-    NSString *metadata = [NSString stringWithFormat:@"%@\n%@\n%@",artist,title,album];
-    
-    if ([artist isEqualToString:@"---"] && [title isEqualToString:@"---"] && [album isEqualToString:@"---"]) {
-        [ad showMetadataInLockscreenWithArtist:@"" title:[file lastPathComponent] album:@""];
-    } else {
-        [ad showMetadataInLockscreenWithArtist:artist title:title album:album];
-    }
-    
-    [self.infoField setText:metadata];
-    
-    [ad showArtworkForFile:file];
-    
-    [self hideControls:(playingError != nil)];
-    
-    [ad.audioPlayer play];
-    [ad setNowPlayingFile:file];
-    
-    if (!playingError) {
-        [self startUpdatingTime];
-    }
+    [kAppDelegate playFile:[kAppDelegate openFile]];
     
     NSString *loopContents = [NSString stringWithContentsOfFile:[kLibDir stringByAppendingPathComponent:@"loop.txt"] encoding:NSUTF8StringEncoding error:nil];
     [self setLoopOn:[loopContents isEqualToString:@"loop"]];
@@ -403,8 +351,6 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setPausePlayTitlePause) name:@"setPausePlayTitlePause" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setLoopNotif) name:@"setLoopNotif" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(hideControlsString:) name:@"hideControlsString:" object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setNxtTrackHidden:) name:@"setNxtTrackHidden:" object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setPrevTrackHidden:) name:@"setPrevTrackHidden:" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setInfoFieldText:) name:@"setInfoFieldText:" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setSongTitleText:) name:@"setSongTitleText:" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(startUpdatingTime) name:@"updTime1" object:nil];
@@ -428,22 +374,6 @@
         [[NSNotificationCenter defaultCenter]postNotificationName:@"hideControlsString:" object:@"YES"];
     } else {
         [[NSNotificationCenter defaultCenter]postNotificationName:@"hideControlsString:" object:@"NO"];
-    }
-}
-
-+ (void)notif_setNxtTrackHidden:(BOOL)flag {
-    if (flag) {
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"setNxtTrackHidden:" object:@"YES"];
-    } else {
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"setNxtTrackHidden:" object:@"NO"];
-    }
-}
-
-+ (void)notif_setPrevTrackHidden:(BOOL)flag {
-    if (flag) {
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"setPrevTrackHidden:" object:@"YES"];
-    } else {
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"setPrevTrackHidden:" object:@"NO"];
     }
 }
 

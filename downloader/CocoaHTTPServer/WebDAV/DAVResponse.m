@@ -39,19 +39,30 @@ static void _AddPropertyResponse(NSString* itemPath, NSString* resourcePath, DAV
           }
           
           if ((properties & kDAVProperty_CreationDate) && [attributes objectForKey:NSFileCreationDate]) {
-            NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
-            formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-            formatter.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
-            formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss'+00:00'";
-            [xmlString appendFormat:@"<D:creationdate>%@</D:creationdate>", [formatter stringFromDate:[attributes fileCreationDate]]];
+              
+            static NSDateFormatter *createdAtFormatter = nil;
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+              createdAtFormatter = [[NSDateFormatter alloc] init];
+              createdAtFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+              createdAtFormatter.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
+              createdAtFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss'+00:00'";
+            });
+
+            [xmlString appendFormat:@"<D:creationdate>%@</D:creationdate>", [createdAtFormatter stringFromDate:[attributes fileCreationDate]]];
           }
           
           if ((properties & kDAVProperty_LastModified) && [attributes objectForKey:NSFileModificationDate]) {
-            NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
-            formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-            formatter.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
-            formatter.dateFormat = @"EEE', 'd' 'MMM' 'yyyy' 'HH:mm:ss' GMT'";
-            [xmlString appendFormat:@"<D:getlastmodified>%@</D:getlastmodified>", [formatter stringFromDate:[attributes fileModificationDate]]];
+            static NSDateFormatter *lastModifiedFormatter = nil;
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+              lastModifiedFormatter = [[NSDateFormatter alloc] init];
+              lastModifiedFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+              lastModifiedFormatter.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
+              lastModifiedFormatter.dateFormat = @"EEE', 'd' 'MMM' 'yyyy' 'HH:mm:ss' GMT'";
+            });
+
+            [xmlString appendFormat:@"<D:getlastmodified>%@</D:getlastmodified>", [lastModifiedFormatter stringFromDate:[attributes fileModificationDate]]];
           }
           
           if ((properties & kDAVProperty_ContentLength) && !isDirectory && [attributes objectForKey:NSFileSize]) {
