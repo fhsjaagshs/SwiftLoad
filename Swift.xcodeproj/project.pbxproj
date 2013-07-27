@@ -56,7 +56,6 @@
 		F13B08B9178CEE05005201F7 /* WebDAVCredsPrompt.m in Sources */ = {isa = PBXBuildFile; fileRef = F13B08B8178CEE05005201F7 /* WebDAVCredsPrompt.m */; };
 		F13B58A7176D2C7E007EF22B /* HUDProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = F13B58A6176D2C7E007EF22B /* HUDProgressView.m */; };
 		F13BECF4179604380012E4B4 /* PeerPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = F13BECF3179604380012E4B4 /* PeerPicker.m */; };
-		F1434B38179AFF41001A672C /* TasksController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1434B37179AFF41001A672C /* TasksController.m */; };
 		F1434B3E179B21C1001A672C /* UITableView+CoolRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = F1434B3D179B21C1001A672C /* UITableView+CoolRefresh.m */; };
 		F1444581145A04A30026CDB7 /* pictureView.m in Sources */ = {isa = PBXBuildFile; fileRef = F144457F145A04A30026CDB7 /* pictureView.m */; };
 		F14478381770826A00C5204A /* DownloadController.m in Sources */ = {isa = PBXBuildFile; fileRef = F14478371770826A00C5204A /* DownloadController.m */; };
@@ -314,8 +313,6 @@
 		F13B58A6176D2C7E007EF22B /* HUDProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HUDProgressView.m; path = ../HUDProgressView.m; sourceTree = "<group>"; };
 		F13BECF2179604380012E4B4 /* PeerPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeerPicker.h; sourceTree = "<group>"; };
 		F13BECF3179604380012E4B4 /* PeerPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeerPicker.m; sourceTree = "<group>"; };
-		F1434B36179AFF41001A672C /* TasksController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TasksController.h; sourceTree = "<group>"; };
-		F1434B37179AFF41001A672C /* TasksController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TasksController.m; sourceTree = "<group>"; };
 		F1434B3C179B21C1001A672C /* UITableView+CoolRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+CoolRefresh.h"; sourceTree = "<group>"; };
 		F1434B3D179B21C1001A672C /* UITableView+CoolRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+CoolRefresh.m"; sourceTree = "<group>"; };
 		F144457E145A04A30026CDB7 /* pictureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pictureView.h; sourceTree = "<group>"; };
@@ -849,15 +846,6 @@
 			name = SwipeToReveal;
 			sourceTree = "<group>";
 		};
-		F1434B35179AFF0B001A672C /* Tasks Controller */ = {
-			isa = PBXGroup;
-			children = (
-				F1434B36179AFF41001A672C /* TasksController.h */,
-				F1434B37179AFF41001A672C /* TasksController.m */,
-			);
-			name = "Tasks Controller";
-			sourceTree = "<group>";
-		};
 		F150D6B3177F783E00E4C094 /* FMDatabase */ = {
 			isa = PBXGroup;
 			children = (
@@ -919,7 +907,6 @@
 		F1693C5F16DFAC59006E3739 /* Subclasses */ = {
 			isa = PBXGroup;
 			children = (
-				F1434B35179AFF0B001A672C /* Tasks Controller */,
 				F1283AFE1780A79F006D8A79 /* UI */,
 				F1BE07E5176F7A1B00C4F038 /* Download Controller */,
 				F13BECF917960D790012E4B4 /* Bluetooth */,
@@ -1431,7 +1418,6 @@
 				F172BCE41794EC6700AC1483 /* HTTPConnection.m in Sources */,
 				F13BECF4179604380012E4B4 /* PeerPicker.m in Sources */,
 				F1B2C0FC17961A0E00AD5A04 /* PeerPickerCell.m in Sources */,
-				F1434B38179AFF41001A672C /* TasksController.m in Sources */,
 				F1434B3E179B21C1001A672C /* UITableView+CoolRefresh.m in Sources */,
 				F130452F179C594F00D7DB4D /* Appirater.m in Sources */,
 				F1304534179C5E6A00D7DB4D /* FilesystemMonitor.m in Sources */,

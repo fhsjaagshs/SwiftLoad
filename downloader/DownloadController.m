@@ -155,7 +155,7 @@ static NSString * const cellId = @"DownloadCell";
         
         UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
         backButton.frame = CGRectMake(5, 5, 50, 30);
-        backButton.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.8f];
+        backButton.backgroundColor = [UIColor colorWithWhite:1.0f alpha:1.0f];
         backButton.layer.cornerRadius = 5;
         [backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [backButton setBackgroundImage:imageWithColorAndSize([UIColor colorWithWhite:0.5f alpha:0.6f], backButton.frame.size) forState:UIControlStateHighlighted];
