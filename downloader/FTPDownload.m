@@ -99,7 +99,7 @@
 
 - (void)downloadFileUsingFTP:(NSURL *)url {
     
-    self.fileName = url.absoluteString.lastPathComponent;
+    self.name = url.absoluteString.lastPathComponent;
     
     CFReadStreamRef readStreamTemp = CFReadStreamCreateWithFTPURL(kCFAllocatorDefault, (__bridge CFURLRef)url);
     if (!readStreamTemp) {
@@ -107,7 +107,7 @@
         return;
     }
     
-    self.temporaryPath = getNonConflictingFilePathForPath([[NSTemporaryDirectory() stringByAppendingPathComponent:self.fileName]percentSanitize]);
+    self.temporaryPath = getNonConflictingFilePathForPath([[NSTemporaryDirectory() stringByAppendingPathComponent:self.name]percentSanitize]);
     [[NSFileManager defaultManager]createFileAtPath:self.temporaryPath contents:nil attributes:nil];
     self.handle = [NSFileHandle fileHandleForWritingAtPath:self.temporaryPath];
     

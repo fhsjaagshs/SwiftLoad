@@ -7,33 +7,23 @@
 //
 
 #import "Download.h"
-#import "DownloadingCell.h"
 
-NSString * const kBackgroundTaskDownload = @"download";
 float const kClearOutDelay = 0.6f;
+
+@interface Download ()
+
+@property (nonatomic, strong) NSString *bgTaskIdentifier;
+
+@end
 
 @implementation Download
 
-- (void)handleBackgroundTaskExpiration {
-    
-}
-
-- (void)cancelBackgroundTask {
-    [[BGProcFactory sharedFactory]endProcForKey:kBackgroundTaskDownload];
-}
-
-- (void)startBackgroundTask {
-    [[BGProcFactory sharedFactory]startProcForKey:kBackgroundTaskDownload andExpirationHandler:^{
-        [self stop];
-        [self handleBackgroundTaskExpiration];
-    }];
-}
-
-- (void)clearOutMyself {
-    if (_delegate) {
-        [_delegate reset];
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        self.bgTaskIdentifier = [NSString stringWithFormat:@"download-%u",arc4random()];
     }
-    [[DownloadController sharedController]removeDownload:self];
+    return self;
 }
 
 - (void)stop {
@@ -42,20 +32,11 @@ float const kClearOutDelay = 0.6f;
     if ([[NSFileManager defaultManager]fileExistsAtPath:_temporaryPath]) {
         [[NSFileManager defaultManager]removeItemAtPath:_temporaryPath error:nil];
     }
-    
-   // [self clearOutMyself]; // Maybe?
-    
-    self.complete = YES;
-    self.succeeded = NO;
-    self.fileName = nil;
-    [self cancelBackgroundTask];
 }
 
 - (void)start {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    self.complete = NO;
-    self.succeeded = NO;
-    [self startBackgroundTask];
+    [super start];
 }
 
 - (void)showFailure {
@@ -64,35 +45,17 @@ float const kClearOutDelay = 0.6f;
     if ([[NSFileManager defaultManager]fileExistsAtPath:_temporaryPath]) {
         [[NSFileManager defaultManager]removeItemAtPath:_temporaryPath error:nil];
     }
-    
-    self.complete = YES;
-    self.succeeded = NO;
-    
-    if (_delegate) {
-        [_delegate drawRed];
-    }
-    
-    [self performSelector:@selector(clearOutMyself) withObject:nil afterDelay:kClearOutDelay];
-    [self cancelBackgroundTask];
+    [super showFailure];
 }
 
 - (void)showSuccess {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     
-    NSString *targetPath = getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:[_fileName percentSanitize]]);
+    NSString *targetPath = getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:[self.name percentSanitize]]);
     [[NSFileManager defaultManager]moveItemAtPath:_temporaryPath toPath:targetPath error:nil];
     
-    fireNotification(_fileName);
-    
-    self.complete = YES;
-    self.succeeded = YES;
-    
-    if (_delegate) {
-        [_delegate drawGreen];
-    }
-    
-    [self performSelector:@selector(clearOutMyself) withObject:nil afterDelay:kClearOutDelay];
-    [self cancelBackgroundTask];
+    fireNotification(self.name);
+    [super showSuccess];
 }
 
 @end

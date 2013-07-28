@@ -31,7 +31,7 @@
     self = [super init];
     if (self) {
         self.url = aUrl;
-        self.fileName = [_url.absoluteString.lastPathComponent percentSanitize];
+        self.name = [_url.absoluteString.lastPathComponent percentSanitize];
         self.buffer = [NSMutableData data];
     }
     return self;
@@ -63,13 +63,13 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSHTTPURLResponse *)response {
-    self.fileName = (response.suggestedFilename.length > 0)?response.suggestedFilename:[[response.URL.absoluteString lastPathComponent]percentSanitize];
+    self.name = (response.suggestedFilename.length > 0)?response.suggestedFilename:[[response.URL.absoluteString lastPathComponent]percentSanitize];
     
     if (self.delegate) {
-        self.delegate.textLabel.text = self.fileName;
+        self.delegate.textLabel.text = self.name;
     }
     
-    self.temporaryPath = getNonConflictingFilePathForPath([NSTemporaryDirectory() stringByAppendingPathComponent:[self.fileName percentSanitize]]);
+    self.temporaryPath = getNonConflictingFilePathForPath([NSTemporaryDirectory() stringByAppendingPathComponent:[self.name percentSanitize]]);
     self.fileSize = [response expectedContentLength];
     NSLog(@"FileSize: %f",self.fileSize);
     [[NSFileManager defaultManager]createFileAtPath:self.temporaryPath contents:nil attributes:nil];

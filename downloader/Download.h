@@ -10,21 +10,9 @@
 
 @class DownloadingCell;
 
-@interface Download : NSObject
+@interface Download : Task
 
-@property (nonatomic, strong) NSString *fileName;
+//@property (nonatomic, strong) NSString *fileName;
 @property (nonatomic, strong) NSString *temporaryPath;
-@property (nonatomic, assign) BOOL complete;
-@property (nonatomic, assign) BOOL succeeded;
-
-@property (nonatomic, weak) DownloadingCell *delegate;
-
-- (void)stop;
-- (void)start;
-
-- (void)showSuccess;
-- (void)showFailure;
-
-- (void)handleBackgroundTaskExpiration;
 
 @end

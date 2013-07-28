@@ -7,7 +7,6 @@
 //
 
 #import "DropboxDownload.h"
-#import "DownloadingCell.h"
 
 @interface DropboxDownload ()
 
@@ -25,7 +24,7 @@
     self = [super init];
     if (self) {
         self.path = path;
-        self.fileName = [path lastPathComponent];
+        self.name = [path lastPathComponent];
     }
     return self;
 }
@@ -37,7 +36,7 @@
 
 - (void)start {
     [super start];
-    [DroppinBadassBlocks loadFile:_path intoPath:getNonConflictingFilePathForPath([NSTemporaryDirectory() stringByAppendingPathComponent:self.fileName]) withCompletionBlock:^(DBMetadata *metadata, NSError *error) {
+    [DroppinBadassBlocks loadFile:_path intoPath:getNonConflictingFilePathForPath([NSTemporaryDirectory() stringByAppendingPathComponent:self.name]) withCompletionBlock:^(DBMetadata *metadata, NSError *error) {
         if (error) {
             [self showFailure];
         } else {

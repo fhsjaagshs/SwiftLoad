@@ -62,15 +62,18 @@
 
     #import "DroppinBadassBlocks.h"
     #import "metadataRetriever.h"
-    #import "DownloadingCell.h"
     #import "MIMEUtils.h"
     #import "NetworkUtils.h"
+
+    #import "Task.h"
+    #import "TaskController.h"
+    #import "TaskCell.h"
+
     #import "Download.h"
     #import "DropboxDownload.h"
     #import "HTTPDownload.h"
     #import "FTPDownload.h"
     #import "SFTPDownload.h"
-    #import "DownloadController.h"
 
     #import "HTTPServer.h"
     #import "DAVConnection.h"

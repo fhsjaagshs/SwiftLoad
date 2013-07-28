@@ -1,56 +1,16 @@
 //
-//  DownloadController.m
-//  SwiftLoad
+//  TaskController.m
+//  Swift
 //
-//  Created by Nathaniel Symer on 6/18/13.
+//  Created by Nathaniel Symer on 7/28/13.
 //  Copyright (c) 2013 Nathaniel Symer. All rights reserved.
 //
 
-#import "DownloadController.h"
-#import "DownloadingCell.h"
+#import "TaskController.h"
 
-UIImage * imageWithColorAndSize(UIColor *color, CGSize size);
-CGFloat UIInterfaceOrientationAngleOfOrientation(UIInterfaceOrientation orientation);
+static NSString * const cellId = @"TaskCell";
 
-UIImage * imageWithColorAndSize(UIColor *color, CGSize size) {
-    UIGraphicsBeginImageContext(size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetFillColorWithColor(context,color.CGColor);
-    
-    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, size.width, size.height) cornerRadius:7];
-    
-    CGContextAddPath(context, path.CGPath);
-    CGContextFillPath(context);
-    
-    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return img;
-}
-
-CGFloat UIInterfaceOrientationAngleOfOrientation(UIInterfaceOrientation orientation) {
-    CGFloat angle;
-    
-    switch (orientation) {
-        case UIInterfaceOrientationPortraitUpsideDown:
-            angle = M_PI;
-            break;
-        case UIInterfaceOrientationLandscapeLeft:
-            angle = -M_PI/2;
-            break;
-        case UIInterfaceOrientationLandscapeRight:
-            angle = M_PI/2;
-            break;
-        default:
-            angle = 0.0;
-            break;
-    }
-    
-    return angle;
-}
-
-static NSString * const cellId = @"DownloadCell";
-
-@interface DownloadController ()  <UITableViewDelegate, UITableViewDataSource>
+@interface TaskController ()  <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) UIButton *button;
 @property (nonatomic, strong) UIActivityIndicatorView *activity;
@@ -58,44 +18,46 @@ static NSString * const cellId = @"DownloadCell";
 @property (nonatomic, strong) UITableView *theTableView;
 @property (nonatomic, strong) UIView *mainView;
 
-@property (nonatomic, strong) NSMutableArray *downloadObjs;
+@property (nonatomic, strong) NSMutableArray *taskObjs;
 
 @end
 
-@implementation DownloadController
+@implementation TaskController
 
 //
-// Download Management
+// Task Management
 //
 
-- (int)indexOfDownload:(Download *)download {
-    return [_downloadObjs indexOfObject:download];
+- (int)indexOfTask:(Task *)task {
+    return [_taskObjs indexOfObject:task];
 }
 
-- (void)removeAllDownloads {
-    for (Download *download in _downloadObjs) {
-        [self removeDownload:download];
+- (void)removeAllTasks {
+    for (Task *task in _taskObjs) {
+        [task stop];
+        [_taskObjs removeObject:task];
     }
-}
-
-- (void)removeDownload:(Download *)download {
-    [download stop];
-    [_downloadObjs removeObject:download];
     [self updateSizes];
 }
 
-- (void)addDownload:(Download *)download {
-    [_downloadObjs addObject:download];
-    [download start];
+- (void)removeTask:(Task *)task {
+    [task stop];
+    [_taskObjs removeObject:task];
     [self updateSizes];
 }
 
-- (void)removeDownloadAtIndex:(int)index {
-    [self removeDownload:[_downloadObjs objectAtIndex:index]];
+- (void)addTask:(Task *)task {
+    [_taskObjs addObject:task];
+    [task start];
+    [self updateSizes];
 }
 
-- (int)tagForDownload:(Download *)download {
-    return [_downloadObjs indexOfObject:download];
+- (void)removeTaskAtIndex:(int)index {
+    [self removeTask:[_taskObjs objectAtIndex:index]];
+}
+
+- (int)tagForTask:(Task *)task {
+    return [_taskObjs indexOfObject:task];
 }
 
 //
@@ -113,9 +75,9 @@ static NSString * const cellId = @"DownloadCell";
 - (void)layoutSubviews {
     float padding = 5;
     CGSize screenSize = [[[UIApplication sharedApplication]keyWindow]bounds].size;
-    float height = (_downloadObjs.count*45)+40;
+    float height = (_taskObjs.count*45)+40;
     _mainView.frame = CGRectMake(padding, screenSize.height-padding-height, screenSize.width-(padding*2), height);
-    _theTableView.frame = CGRectMake(0, 40, _mainView.frame.size.width, (_downloadObjs.count*45));
+    _theTableView.frame = CGRectMake(0, 40, _mainView.frame.size.width, (_taskObjs.count*45));
     self.frame = CGRectMake(10, screenSize.height-10-42-5, 42+5, 42+5);
     _button.frame = self.bounds;
     _activity.frame = self.bounds;
@@ -126,7 +88,7 @@ static NSString * const cellId = @"DownloadCell";
 //
 
 - (void)updateSizes {
-    if (_downloadObjs.count == 0) {
+    if (_taskObjs.count == 0) {
         [_button setTitle:@"0" forState:UIControlStateNormal];
         if (self.superview) {
             [self hide];
@@ -136,18 +98,18 @@ static NSString * const cellId = @"DownloadCell";
             [self show];
         }
         
-        [_button setTitle:[NSString stringWithFormat:@"%d",_downloadObjs.count] forState:UIControlStateNormal];
+        [_button setTitle:[NSString stringWithFormat:@"%d",_taskObjs.count] forState:UIControlStateNormal];
     }
     
     [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     
     [UIView animateWithDuration:0.25 animations:^{
-        [self layoutSubviews]; // it's legit because I don't call through to super.
+        [self setNeedsLayout];
     }];
 }
 
 - (void)setupTableView {
-
+    
     if (!_mainView) {
         self.mainView = [[UIView alloc]init];
         _mainView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.6f];
@@ -158,13 +120,13 @@ static NSString * const cellId = @"DownloadCell";
         backButton.backgroundColor = [UIColor colorWithWhite:1.0f alpha:1.0f];
         backButton.layer.cornerRadius = 5;
         [backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [backButton setBackgroundImage:imageWithColorAndSize([UIColor colorWithWhite:0.5f alpha:0.6f], backButton.frame.size) forState:UIControlStateHighlighted];
+        [backButton setBackgroundImage:[[UIColor colorWithWhite:0.5f alpha:0.6f]imageWithSize:backButton.frame.size] forState:UIControlStateHighlighted];
         [backButton setTitle:@"Close" forState:UIControlStateNormal];
         [backButton addTarget:self action:@selector(strikedownTableView) forControlEvents:UIControlEventTouchUpInside];
         [_mainView addSubview:backButton];
         
         UILabel *dl = [[UILabel alloc]initWithFrame:CGRectMake(100, 5, _mainView.bounds.size.width-180, 30)];
-        dl.text = @"Downloads";
+        dl.text = @"Tasks";
         dl.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         dl.font = [UIFont boldSystemFontOfSize:20];
         dl.backgroundColor = [UIColor clearColor];
@@ -194,7 +156,7 @@ static NSString * const cellId = @"DownloadCell";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _downloadObjs.count;
+    return _taskObjs.count;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -209,22 +171,21 @@ static NSString * const cellId = @"DownloadCell";
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         [_theTableView beginUpdates];
         [_theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
-        [self removeDownloadAtIndex:indexPath.row];
+        [self removeTaskAtIndex:indexPath.row];
         [_theTableView endUpdates];
-        [self updateSizes];
     }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    DownloadingCell *cell = (DownloadingCell *)[_theTableView dequeueReusableCellWithIdentifier:cellId];
+    TaskCell *cell = (TaskCell *)[_theTableView dequeueReusableCellWithIdentifier:cellId];
     
     if (!cell) {
-        cell = [[DownloadingCell alloc]initWithReuseIdentifier:cellId];
+        cell = [[TaskCell alloc]initWithReuseIdentifier:cellId];
     }
     
-    Download *download = [_downloadObjs objectAtIndex:indexPath.row];
-    download.delegate = cell;
-    cell.customTitleLabel.text = [download.fileName percentSanitize];
+    Task *task = [_taskObjs objectAtIndex:indexPath.row];
+    task.delegate = cell;
+    cell.customTitleLabel.text = [task.name percentSanitize];
     return cell;
 }
 
@@ -266,7 +227,7 @@ static NSString * const cellId = @"DownloadCell";
         [self addSubview:_button];
         [_activity startAnimating];
         
-        self.downloadObjs = [NSMutableArray array];
+        self.taskObjs = [NSMutableArray array];
         
         [self setupTableView];
         [self setNeedsLayout];
@@ -274,13 +235,14 @@ static NSString * const cellId = @"DownloadCell";
     return self;
 }
 
-+ (DownloadController *)sharedController {
-    static DownloadController *sharedController = nil;
++ (TaskController *)sharedController {
+    static TaskController *sharedController = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sharedController = [[DownloadController alloc]init];
+        sharedController = [[TaskController alloc]init];
     });
     return sharedController;
 }
 
 @end
+

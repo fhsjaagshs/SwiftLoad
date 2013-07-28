@@ -1,22 +1,20 @@
 //
-//  DownloadingCell.m
-//  SwiftLoad
+//  TaskCell.m
+//  Swift
 //
-//  Created by Nathaniel Symer on 6/18/13.
+//  Created by Nathaniel Symer on 7/28/13.
 //  Copyright (c) 2013 Nathaniel Symer. All rights reserved.
 //
 
-#import "DownloadingCell.h"
+#import "TaskCell.h"
 
-@interface DownloadingCell ()
+@interface TaskCell ()
 
 @property (nonatomic, strong) WhiteProgressView *progressView;
 
 @end
 
-@implementation DownloadingCell
-
-
+@implementation TaskCell
 
 - (void)reset {
     [self setProgress:0.0f];

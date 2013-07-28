@@ -58,8 +58,6 @@
 		F13BECF4179604380012E4B4 /* PeerPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = F13BECF3179604380012E4B4 /* PeerPicker.m */; };
 		F1434B3E179B21C1001A672C /* UITableView+CoolRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = F1434B3D179B21C1001A672C /* UITableView+CoolRefresh.m */; };
 		F1444581145A04A30026CDB7 /* pictureView.m in Sources */ = {isa = PBXBuildFile; fileRef = F144457F145A04A30026CDB7 /* pictureView.m */; };
-		F14478381770826A00C5204A /* DownloadController.m in Sources */ = {isa = PBXBuildFile; fileRef = F14478371770826A00C5204A /* DownloadController.m */; };
-		F144783E177092B800C5204A /* DownloadingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F144783D177092B800C5204A /* DownloadingCell.m */; };
 		F14478411770B25900C5204A /* WhiteProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = F14478401770B25900C5204A /* WhiteProgressView.m */; };
 		F145023B1781181700096202 /* DropboxDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = F145023A1781181700096202 /* DropboxDownload.m */; };
 		F145023E1781243000096202 /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = F145023C1781243000096202 /* arrow.png */; };
@@ -167,6 +165,9 @@
 		F17DC662140C489B0015F613 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F17DC661140C489B0015F613 /* AVFoundation.framework */; };
 		F17F11231420017100CE45D7 /* fileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F17F11211420017100CE45D7 /* fileInfo.m */; };
 		F1847BBB16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F1847BBA16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m */; };
+		F18D19C317A5A479009A8D07 /* Task.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D19C217A5A479009A8D07 /* Task.m */; };
+		F18D19C617A5A7B1009A8D07 /* TaskController.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D19C517A5A7B1009A8D07 /* TaskController.m */; };
+		F18D19CB17A5AB53009A8D07 /* TaskCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D19CA17A5AB53009A8D07 /* TaskCell.m */; };
 		F19BB51C16E006CA0081C95B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F19BB51916E006CA0081C95B /* main.m */; };
 		F1A72948149876040049DBB6 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A72947149876040049DBB6 /* GameKit.framework */; };
 		F1A923FE140D4DDD003ACDAB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A923FD140D4DDD003ACDAB /* QuartzCore.framework */; };
@@ -317,14 +318,10 @@
 		F1434B3D179B21C1001A672C /* UITableView+CoolRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+CoolRefresh.m"; sourceTree = "<group>"; };
 		F144457E145A04A30026CDB7 /* pictureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pictureView.h; sourceTree = "<group>"; };
 		F144457F145A04A30026CDB7 /* pictureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pictureView.m; sourceTree = "<group>"; };
-		F14478361770826A00C5204A /* DownloadController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadController.h; sourceTree = "<group>"; };
-		F14478371770826A00C5204A /* DownloadController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadController.m; sourceTree = "<group>"; };
-		F144783C177092B800C5204A /* DownloadingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadingCell.h; sourceTree = "<group>"; };
-		F144783D177092B800C5204A /* DownloadingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadingCell.m; sourceTree = "<group>"; };
 		F144783F1770B25900C5204A /* WhiteProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WhiteProgressView.h; path = ../WhiteProgressView.h; sourceTree = "<group>"; };
 		F14478401770B25900C5204A /* WhiteProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WhiteProgressView.m; path = ../WhiteProgressView.m; sourceTree = "<group>"; };
-		F14502391781181700096202 /* DropboxDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxDownload.h; sourceTree = "<group>"; };
-		F145023A1781181700096202 /* DropboxDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxDownload.m; sourceTree = "<group>"; };
+		F14502391781181700096202 /* DropboxDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DropboxDownload.h; path = ../DropboxDownload.h; sourceTree = "<group>"; };
+		F145023A1781181700096202 /* DropboxDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DropboxDownload.m; path = ../DropboxDownload.m; sourceTree = "<group>"; };
 		F145023C1781243000096202 /* arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow.png; sourceTree = "<group>"; };
 		F145023D1781243000096202 /* arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow@2x.png"; sourceTree = "<group>"; };
 		F149A6771491686D0038F1FC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -334,8 +331,8 @@
 		F14B81921788C37600ADEF99 /* button_icon_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_icon_pressed@2x.png"; sourceTree = "<group>"; };
 		F14B81951788C39E00ADEF99 /* UIButton+SwiftLoad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+SwiftLoad.h"; sourceTree = "<group>"; };
 		F14B81961788C39E00ADEF99 /* UIButton+SwiftLoad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+SwiftLoad.m"; sourceTree = "<group>"; };
-		F14B81981788D26500ADEF99 /* SFTPDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFTPDownload.h; sourceTree = "<group>"; };
-		F14B81991788D26500ADEF99 /* SFTPDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFTPDownload.m; sourceTree = "<group>"; };
+		F14B81981788D26500ADEF99 /* SFTPDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SFTPDownload.h; path = ../SFTPDownload.h; sourceTree = "<group>"; };
+		F14B81991788D26500ADEF99 /* SFTPDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SFTPDownload.m; path = ../SFTPDownload.m; sourceTree = "<group>"; };
 		F14B819B1788E2D300ADEF99 /* SimpleKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleKeychain.h; sourceTree = "<group>"; };
 		F14B819C1788E2D300ADEF99 /* SimpleKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleKeychain.m; sourceTree = "<group>"; };
 		F150D6B1177F5B9400E4C094 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -492,6 +489,12 @@
 		F17F11211420017100CE45D7 /* fileInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = fileInfo.m; sourceTree = "<group>"; };
 		F1847BB916E538C600006C25 /* MFMailComposeViewController+BlockExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MFMailComposeViewController+BlockExtensions.h"; sourceTree = "<group>"; };
 		F1847BBA16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MFMailComposeViewController+BlockExtensions.m"; sourceTree = "<group>"; };
+		F18D19C117A5A479009A8D07 /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
+		F18D19C217A5A479009A8D07 /* Task.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Task.m; sourceTree = "<group>"; };
+		F18D19C417A5A7B1009A8D07 /* TaskController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskController.h; sourceTree = "<group>"; };
+		F18D19C517A5A7B1009A8D07 /* TaskController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskController.m; sourceTree = "<group>"; };
+		F18D19C917A5AB53009A8D07 /* TaskCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskCell.h; sourceTree = "<group>"; };
+		F18D19CA17A5AB53009A8D07 /* TaskCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskCell.m; sourceTree = "<group>"; };
 		F19BB51916E006CA0081C95B /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F19BB51A16E006CA0081C95B /* Swift-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Swift-Info.plist"; sourceTree = "<group>"; };
 		F19BB51B16E006CA0081C95B /* Swift-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Swift-Prefix.pch"; sourceTree = "<group>"; };
@@ -505,8 +508,8 @@
 		F1BA8C7D17728500007AAF85 /* BGProcFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BGProcFactory.m; sourceTree = "<group>"; };
 		F1BC30C817715DF300DAFA0A /* Hack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Hack.h; path = ../Hack.h; sourceTree = "<group>"; };
 		F1BC30C917715DF300DAFA0A /* Hack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Hack.m; path = ../Hack.m; sourceTree = "<group>"; };
-		F1BE07E2176F7A1100C4F038 /* Download.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Download.h; sourceTree = "<group>"; };
-		F1BE07E3176F7A1100C4F038 /* Download.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Download.m; sourceTree = "<group>"; };
+		F1BE07E2176F7A1100C4F038 /* Download.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Download.h; path = ../Download.h; sourceTree = "<group>"; };
+		F1BE07E3176F7A1100C4F038 /* Download.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Download.m; path = ../Download.m; sourceTree = "<group>"; };
 		F1C0CEFB1661AEC6001B1B42 /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
 		F1C7A6B516E8178F0082D4D3 /* ZoomingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoomingImageView.h; sourceTree = "<group>"; };
 		F1C7A6B616E8178F0082D4D3 /* ZoomingImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoomingImageView.m; sourceTree = "<group>"; };
@@ -548,10 +551,10 @@
 		F1ED4B10170352D10056D55F /* NSString+mods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+mods.h"; sourceTree = "<group>"; };
 		F1ED4B11170352D10056D55F /* NSString+mods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+mods.m"; sourceTree = "<group>"; };
 		F1EDE3F513F8708600C17B2A /* MyFilesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFilesViewController.m; sourceTree = "<group>"; };
-		F1F0EBC11785D9E900878F7D /* HTTPDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPDownload.h; sourceTree = "<group>"; };
-		F1F0EBC21785D9EA00878F7D /* HTTPDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPDownload.m; sourceTree = "<group>"; };
-		F1F0EBC41785F75900878F7D /* FTPDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTPDownload.h; sourceTree = "<group>"; };
-		F1F0EBC51785F75900878F7D /* FTPDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTPDownload.m; sourceTree = "<group>"; };
+		F1F0EBC11785D9E900878F7D /* HTTPDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HTTPDownload.h; path = ../HTTPDownload.h; sourceTree = "<group>"; };
+		F1F0EBC21785D9EA00878F7D /* HTTPDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HTTPDownload.m; path = ../HTTPDownload.m; sourceTree = "<group>"; };
+		F1F0EBC41785F75900878F7D /* FTPDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FTPDownload.h; path = ../FTPDownload.h; sourceTree = "<group>"; };
+		F1F0EBC51785F75900878F7D /* FTPDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FTPDownload.m; path = ../FTPDownload.m; sourceTree = "<group>"; };
 		F1F114C4142AA29F00199C3C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		F1F114C6142AA3F400199C3C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		F1F114E2142AA73F00199C3C /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -907,8 +910,8 @@
 		F1693C5F16DFAC59006E3739 /* Subclasses */ = {
 			isa = PBXGroup;
 			children = (
+				F18D19C017A5A46B009A8D07 /* Tasks */,
 				F1283AFE1780A79F006D8A79 /* UI */,
-				F1BE07E5176F7A1B00C4F038 /* Download Controller */,
 				F13BECF917960D790012E4B4 /* Bluetooth */,
 				F1BC30C817715DF300DAFA0A /* Hack.h */,
 				F1BC30C917715DF300DAFA0A /* Hack.m */,
@@ -1071,17 +1074,21 @@
 			name = Packagaing;
 			sourceTree = "<group>";
 		};
-		F19BB51816E006680081C95B /* Supporting Files */ = {
+		F18D19C017A5A46B009A8D07 /* Tasks */ = {
 			isa = PBXGroup;
 			children = (
-				F19BB51916E006CA0081C95B /* main.m */,
-				F19BB51A16E006CA0081C95B /* Swift-Info.plist */,
-				F19BB51B16E006CA0081C95B /* Swift-Prefix.pch */,
+				F18D19C817A5A8B5009A8D07 /* Task Subclasses */,
+				F18D19C117A5A479009A8D07 /* Task.h */,
+				F18D19C217A5A479009A8D07 /* Task.m */,
+				F18D19C417A5A7B1009A8D07 /* TaskController.h */,
+				F18D19C517A5A7B1009A8D07 /* TaskController.m */,
+				F18D19C917A5AB53009A8D07 /* TaskCell.h */,
+				F18D19CA17A5AB53009A8D07 /* TaskCell.m */,
 			);
-			name = "Supporting Files";
+			name = Tasks;
 			sourceTree = "<group>";
 		};
-		F1BE07E5176F7A1B00C4F038 /* Download Controller */ = {
+		F18D19C717A5A8AB009A8D07 /* Downloads */ = {
 			isa = PBXGroup;
 			children = (
 				F14B81981788D26500ADEF99 /* SFTPDownload.h */,
@@ -1094,13 +1101,26 @@
 				F1F0EBC21785D9EA00878F7D /* HTTPDownload.m */,
 				F1BE07E2176F7A1100C4F038 /* Download.h */,
 				F1BE07E3176F7A1100C4F038 /* Download.m */,
-				F14478361770826A00C5204A /* DownloadController.h */,
-				F14478371770826A00C5204A /* DownloadController.m */,
-				F144783C177092B800C5204A /* DownloadingCell.h */,
-				F144783D177092B800C5204A /* DownloadingCell.m */,
 			);
-			name = "Download Controller";
-			path = ..;
+			name = Downloads;
+			sourceTree = "<group>";
+		};
+		F18D19C817A5A8B5009A8D07 /* Task Subclasses */ = {
+			isa = PBXGroup;
+			children = (
+				F18D19C717A5A8AB009A8D07 /* Downloads */,
+			);
+			name = "Task Subclasses";
+			sourceTree = "<group>";
+		};
+		F19BB51816E006680081C95B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F19BB51916E006CA0081C95B /* main.m */,
+				F19BB51A16E006CA0081C95B /* Swift-Info.plist */,
+				F19BB51B16E006CA0081C95B /* Swift-Prefix.pch */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		F1DA5247176E8181009A43CD /* Libraries */ = {
@@ -1344,8 +1364,6 @@
 				F10CBC5D17080C6600C82AFB /* DropboxBrowserViewController.m in Sources */,
 				F13B58A7176D2C7E007EF22B /* HUDProgressView.m in Sources */,
 				F1BE07E4176F7A1100C4F038 /* Download.m in Sources */,
-				F14478381770826A00C5204A /* DownloadController.m in Sources */,
-				F144783E177092B800C5204A /* DownloadingCell.m in Sources */,
 				F14478411770B25900C5204A /* WhiteProgressView.m in Sources */,
 				F1FCF12A17710BAA004A42B8 /* URLInputController.m in Sources */,
 				F118C74517713DAA00ED7384 /* ContentOffsetWatchdog.m in Sources */,
@@ -1421,6 +1439,9 @@
 				F1434B3E179B21C1001A672C /* UITableView+CoolRefresh.m in Sources */,
 				F130452F179C594F00D7DB4D /* Appirater.m in Sources */,
 				F1304534179C5E6A00D7DB4D /* FilesystemMonitor.m in Sources */,
+				F18D19C317A5A479009A8D07 /* Task.m in Sources */,
+				F18D19C617A5A7B1009A8D07 /* TaskController.m in Sources */,
+				F18D19CB17A5AB53009A8D07 /* TaskCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

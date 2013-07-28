@@ -25,7 +25,7 @@
     self = [super init];
     if (self) {
         self.URL = url;
-        self.fileName = [_URL.path.lastPathComponent percentSanitize];
+        self.name = [_URL.path.lastPathComponent percentSanitize];
         self.connection = [[DLSFTPConnection alloc]initWithHostname:_URL.host username:username password:password];
     }
     return self;
@@ -40,7 +40,7 @@
 - (void)start {
     [super start];
     
-    self.temporaryPath = getNonConflictingFilePathForPath([NSTemporaryDirectory() stringByAppendingPathComponent:self.fileName]);
+    self.temporaryPath = getNonConflictingFilePathForPath([NSTemporaryDirectory() stringByAppendingPathComponent:self.name]);
     
     [_connection connectWithSuccessBlock:^{
         dispatch_sync(dispatch_get_main_queue(), ^{

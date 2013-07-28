@@ -976,14 +976,12 @@ static NSString *CellIdentifier = @"Cell";
             if (buttonIndex == actionSheet.destructiveButtonIndex) {
                 
                 NSIndexPath *indexPath = [_theTableView indexPathForCell:_sideSwipeCell];
-                [self removeSideSwipeView:NO];
-                
+
                 [_theTableView beginUpdates];
                 [[NSFileManager defaultManager]removeItemAtPath:file error:nil];
-                
                 [_theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
-                
-                [_filelist removeAllObjects];
+                [_filelist removeObjectAtIndex:indexPath.row];
+                [self removeSideSwipeView:NO];
                 [_theTableView endUpdates];
             }
             
@@ -1147,7 +1145,7 @@ static NSString *CellIdentifier = @"Cell";
         
         if (_sideSwipeCell != nil) {
             _sideSwipeCell.frame = CGRectMake(0, _sideSwipeCell.frame.origin.y, _sideSwipeCell.frame.size.width, _sideSwipeCell.frame.size.height);
-            [self setSideSwipeCell:nil];
+            self.sideSwipeCell = nil;
         }
     }
 }

@@ -398,7 +398,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 - (void)downloadFileUsingSFTP:(NSURL *)url withUsername:(NSString *)username andPassword:(NSString *)password {
     SFTPDownload *download = [SFTPDownload downloadWithURL:url username:username andPassword:password];
-    [[DownloadController sharedController]addDownload:download];
+    [[TaskController sharedController]addTask:download];
 }
 
 - (void)downloadFile:(NSString *)stouPrelim {
@@ -420,12 +420,12 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     
     if ([url.scheme isEqualToString:@"ftp"]) {
         FTPDownload *download = [FTPDownload downloadWithURL:url];
-        [[DownloadController sharedController]addDownload:download];
+        [[TaskController sharedController]addTask:download];
         return;
     }
     
     HTTPDownload *download = [HTTPDownload downloadWithURL:url];
-    [[DownloadController sharedController]addDownload:download];
+    [[TaskController sharedController]addTask:download];
 }
 
 - (BOOL)isInForground {
@@ -527,7 +527,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     // Trust me
     [FilesystemMonitor sharedMonitor];
     [BGProcFactory sharedFactory];
-    [DownloadController sharedController];
+    [TaskController sharedController];
     [BluetoothManager sharedManager];
     
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryPlayback error:nil];
