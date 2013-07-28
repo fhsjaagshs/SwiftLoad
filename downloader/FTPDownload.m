@@ -46,9 +46,9 @@
 }
 
 - (void)stop {
-    [super stop];
     [self killReadStream];
     [_handle closeFile];
+    [super stop];
 }
 
 - (void)start {

@@ -38,14 +38,6 @@
     [self inflate];
 }
 
-- (void)showFailure {
-    [super showFailure];
-}
-
-- (void)showSuccess {
-    [super showSuccess];
-}
-
 - (void)inflate {
     
     if (![[NSFileManager defaultManager]fileExistsAtPath:_file]) {

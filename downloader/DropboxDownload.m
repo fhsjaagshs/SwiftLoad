@@ -24,14 +24,14 @@
     self = [super init];
     if (self) {
         self.path = path;
-        self.name = [path lastPathComponent];
+        self.name = path.lastPathComponent;
     }
     return self;
 }
 
 - (void)stop {
-    [super stop];
     [DroppinBadassBlocks cancel];
+    [super stop];
 }
 
 - (void)start {

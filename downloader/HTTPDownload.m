@@ -38,11 +38,12 @@
 }
 
 - (void)stop {
-    [super stop];
     [_connection cancel];
     [_buffer setLength:0];
+    [_handle closeFile];
     self.downloadedBytes = 0;
     self.fileSize = 0;
+    [super stop];
 }
 
 - (void)start {

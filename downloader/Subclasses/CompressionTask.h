@@ -10,4 +10,6 @@
 
 @interface CompressionTask : Task
 
++ (CompressionTask *)taskWithItems:(NSArray *)items andZipFile:(NSString *)zipFile;
+
 @end

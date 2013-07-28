@@ -8,23 +8,7 @@
 
 #import "Download.h"
 
-float const kClearOutDelay = 0.6f;
-
-@interface Download ()
-
-@property (nonatomic, strong) NSString *bgTaskIdentifier;
-
-@end
-
 @implementation Download
-
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        self.bgTaskIdentifier = [NSString stringWithFormat:@"download-%u",arc4random()];
-    }
-    return self;
-}
 
 - (void)stop {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;

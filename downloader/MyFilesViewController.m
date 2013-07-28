@@ -303,7 +303,7 @@ static NSString *CellIdentifier = @"Cell";
                 origDir = [origDir stringByAppendingString:@"/"];
             }
             
-            ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:origDir fileDate:fileDate(theFile)/*[NSDate dateWithTimeIntervalSinceNow:-86400.0]*/ compressionLevel:ZipCompressionLevelBest];
+            ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:origDir fileDate:fileDate(theFile) compressionLevel:ZipCompressionLevelBest];
             
             NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:theFile];
             

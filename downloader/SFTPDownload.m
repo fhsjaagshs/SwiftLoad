@@ -32,9 +32,9 @@
 }
 
 - (void)stop {
-    [super stop];
     [_connection cancelAllRequests];
     [_connection disconnect];
+    [super stop];
 }
 
 - (void)start {
