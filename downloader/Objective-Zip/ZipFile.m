@@ -312,8 +312,7 @@
 	[components setSecond:file_info.tmu_date.tm_sec];
 	NSDate *date = [[NSCalendar currentCalendar] dateFromComponents:components];
 	
-	FileInZipInfo *info = [[FileInZipInfo alloc]initWithName:name length:file_info.uncompressed_size level:level crypted:crypted size:file_info.compressed_size date:date crc32:file_info.crc];
-	return [info autorelease];
+    return [FileInZipInfo infoWithName:name length:file_info.uncompressed_size level:level crypted:crypted size:file_info.compressed_size date:date crc32:file_info.crc];
 }
 
 - (ZipReadStream *)readCurrentFileInZip {
