@@ -70,6 +70,7 @@
     #import "TaskCell.h"
 
     #import "UnzippingTask.h"
+    #import "CompressionTask.h"
 
     #import "Download.h"
     #import "DropboxDownload.h"
