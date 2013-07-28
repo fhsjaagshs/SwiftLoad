@@ -33,18 +33,17 @@
 
 #import "FileInZipInfo.h"
 
-
 @implementation FileInZipInfo
 
-- (id) initWithName:(NSString *)name length:(NSUInteger)length level:(ZipCompressionLevel)level crypted:(BOOL)crypted size:(NSUInteger)size date:(NSDate *)date crc32:(NSUInteger)crc32 {
+- (id)initWithName:(NSString *)name length:(NSUInteger)length level:(ZipCompressionLevel)level crypted:(BOOL)crypted size:(NSUInteger)size date:(NSDate *)date crc32:(NSUInteger)crc32 {
 	if (self= [super init]) {
-		_name= [name retain];
-		_length= length;
-		_level= level;
-		_crypted= crypted;
-		_size= size;
-		_date= [date retain];
-		_crc32= crc32;
+		_name = [name retain];
+		_length = length;
+		_level = level;
+		_crypted = crypted;
+		_size = size;
+		_date = [date retain];
+		_crc32 = crc32;
 	}
 	
 	return self;
@@ -55,13 +54,5 @@
 	[_name release];
 	[super dealloc];
 }
-
-@synthesize name= _name;
-@synthesize length= _length;
-@synthesize level= _level;
-@synthesize crypted= _crypted;
-@synthesize size= _size;
-@synthesize date= _date;
-@synthesize crc32= _crc32;
 
 @end

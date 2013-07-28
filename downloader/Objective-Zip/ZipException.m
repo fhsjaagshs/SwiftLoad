@@ -36,22 +36,30 @@
 
 @implementation ZipException
 
-- (id) initWithReason:(NSString *)reason {
-	if (self= [super initWithName:@"ZipException" reason:reason userInfo:nil]) {
-		_error= 0;
++ (ZipException *)exceptionWithReason:(NSString *)reason {
+    return [[[[self class]alloc]initWithReason:reason]autorelease];
+}
+
++ (ZipException *)exceptionWithReason:(NSString *)reason andError:(int)error {
+    return [[[[self class]alloc]initWithError:error reason:reason]autorelease];
+}
+
+- (id)initWithReason:(NSString *)reason {
+    self = [super initWithName:@"ZipException" reason:reason userInfo:nil];
+	if (self) {
+		_error = 0;
 	}
 	
 	return self;
 }
 
-- (id) initWithError:(NSInteger)error reason:(NSString *)reason {
-	if (self= [super initWithName:@"ZipException" reason:reason userInfo:nil]) {
-		_error= error;
+- (id)initWithError:(NSInteger)error reason:(NSString *)reason {
+    self = [super initWithName:@"ZipException" reason:reason userInfo:nil];
+	if (self) {
+		_error = error;
 	}
 	
 	return self;
 }
-
-@synthesize error= _error;
 
 @end

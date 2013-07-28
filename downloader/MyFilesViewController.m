@@ -273,7 +273,7 @@ static NSString *CellIdentifier = @"Cell";
 
         if (!isDirMe) {
             
-            ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:[theFile lastPathComponent] fileDate:fileDate(file)/*[NSDate dateWithTimeIntervalSinceNow:-86400.0]*/ compressionLevel:ZipCompressionLevelBest];
+            ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:[theFile lastPathComponent] fileDate:fileDate(file) compressionLevel:ZipCompressionLevelBest];
             
             NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:theFile];
             
@@ -373,7 +373,7 @@ static NSString *CellIdentifier = @"Cell";
                         dirRelative = [dirRelative stringByAppendingString:@"/"];
                     }
 
-                    ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:dirRelative fileDate:fileDate(dir)/*[NSDate dateWithTimeIntervalSinceNow:-86400.0]*/ compressionLevel:ZipCompressionLevelBest];
+                    ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:dirRelative fileDate:fileDate(dir) compressionLevel:ZipCompressionLevelBest];
                     [stream1 writeData:[NSData dataWithContentsOfFile:dir]]; // okay not to chunk
                     [stream1 finishedWriting];
                     
@@ -390,7 +390,7 @@ static NSString *CellIdentifier = @"Cell";
                             [holdingArray addObject:lolz];
                         } else {
                             NSString *nameOfFile = [dirRelative stringByAppendingPathComponent:stringy];
-                            ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:nameOfFile fileDate:/*[NSDate dateWithTimeIntervalSinceNow:-86400.0]*/fileDate(lolz) compressionLevel:ZipCompressionLevelBest];
+                            ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:nameOfFile fileDate:fileDate(lolz) compressionLevel:ZipCompressionLevelBest];
                         
                             [[[NSFileManager defaultManager]attributesOfFileSystemForPath:lolz error:nil]fileCreationDate];
                             
@@ -417,9 +417,6 @@ static NSString *CellIdentifier = @"Cell";
                 } else {
                     [dirsInDir removeAllObjects];
                     [dirsInDir addObjectsFromArray:holdingArray];
-                    /*for (NSString *string in holdingArray) {
-                        [dirsInDir addObject:string];
-                    }*/
                     [holdingArray removeAllObjects];
                 }
                 

@@ -34,15 +34,14 @@
 #import <Foundation/Foundation.h>
 
 
-@interface ZipException : NSException {
-	
-@private	
-	NSInteger _error;
-}
+@interface ZipException : NSException
 
-- (id) initWithReason:(NSString *)reason;
-- (id) initWithError:(NSInteger)error reason:(NSString *)reason;
+- (id)initWithReason:(NSString *)reason;
+- (id)initWithError:(int)error reason:(NSString *)reason;
 
-@property (nonatomic, readonly) NSInteger error;
++ (ZipException *)exceptionWithReason:(NSString *)reason;
++ (ZipException *)exceptionWithReason:(NSString *)reason andError:(int)error;
+
+@property (nonatomic, readonly) int error;
 
 @end
