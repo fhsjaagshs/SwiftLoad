@@ -113,6 +113,7 @@
 		F1679ACA1787B3C1001369B1 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1679AC71787B3C1001369B1 /* libcrypto.a */; };
 		F1679ACB1787B3C1001369B1 /* libssh2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1679AC81787B3C1001369B1 /* libssh2.a */; };
 		F1679ACC1787B3C1001369B1 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1679AC91787B3C1001369B1 /* libssl.a */; };
+		F1681E8F17A5BE9B00ACAAD0 /* UnzippingTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F1681E8E17A5BE9B00ACAAD0 /* UnzippingTask.m */; };
 		F168EDAF1790C61000C21D6F /* UIImage+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F168EDAE1790C61000C21D6F /* UIImage+Additions.m */; };
 		F1693C3D16DFAB6E006E3739 /* SwiftLoadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C2916DFAB6E006E3739 /* SwiftLoadCell.m */; };
 		F1693C4416DFAB6E006E3739 /* ShadowedTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C3716DFAB6E006E3739 /* ShadowedTableView.m */; };
@@ -387,6 +388,8 @@
 		F1679AC71787B3C1001369B1 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "Libs/libssh2-for-iOS/lib/libcrypto.a"; sourceTree = "<group>"; };
 		F1679AC81787B3C1001369B1 /* libssh2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssh2.a; path = "Libs/libssh2-for-iOS/lib/libssh2.a"; sourceTree = "<group>"; };
 		F1679AC91787B3C1001369B1 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = "Libs/libssh2-for-iOS/lib/libssl.a"; sourceTree = "<group>"; };
+		F1681E8D17A5BE9B00ACAAD0 /* UnzippingTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnzippingTask.h; sourceTree = "<group>"; };
+		F1681E8E17A5BE9B00ACAAD0 /* UnzippingTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnzippingTask.m; sourceTree = "<group>"; };
 		F168EDAD1790C61000C21D6F /* UIImage+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Additions.h"; sourceTree = "<group>"; };
 		F168EDAE1790C61000C21D6F /* UIImage+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Additions.m"; sourceTree = "<group>"; };
 		F1693C2816DFAB6E006E3739 /* SwiftLoadCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwiftLoadCell.h; path = ../CustomGraphics/SwiftLoadCell.h; sourceTree = "<group>"; };
@@ -1109,6 +1112,8 @@
 			isa = PBXGroup;
 			children = (
 				F18D19C717A5A8AB009A8D07 /* Downloads */,
+				F1681E8D17A5BE9B00ACAAD0 /* UnzippingTask.h */,
+				F1681E8E17A5BE9B00ACAAD0 /* UnzippingTask.m */,
 			);
 			name = "Task Subclasses";
 			sourceTree = "<group>";
@@ -1442,6 +1447,7 @@
 				F18D19C317A5A479009A8D07 /* Task.m in Sources */,
 				F18D19C617A5A7B1009A8D07 /* TaskController.m in Sources */,
 				F18D19CB17A5AB53009A8D07 /* TaskCell.m in Sources */,
+				F1681E8F17A5BE9B00ACAAD0 /* UnzippingTask.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

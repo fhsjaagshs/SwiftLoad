@@ -248,86 +248,6 @@ static NSString *CellIdentifier = @"Cell";
     [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:rowAnim];
 }
 
-- (void)inflate:(NSString *)file {
-    
-    [[BGProcFactory sharedFactory]startProcForKey:@"inflate" andExpirationHandler:^{
-        
-    }];
-    
-    @autoreleasepool {
-    
-        [UIApplication sharedApplication].idleTimerDisabled = YES;
-        ZipFile *unzipFile = [[ZipFile alloc]initWithFileName:file mode:ZipFileModeUnzip];
-        NSArray *infos = [unzipFile listFileInZipInfos];
-        
-        MBProgressHUD *HUDZ = [kAppDelegate getVisibleHUD];
-        
-        if (HUDZ.tag != 5) {
-            HUDZ = nil;
-        }
-        
-        HUDZ.progress = 0;
-        float unachivedBytes = 0;
-        float filesize = 0;
-        
-        for (FileInZipInfo *info in infos) {
-            filesize = filesize+info.length;
-        }
-        
-        for (FileInZipInfo *info in infos) {
-
-            [unzipFile locateFileInZip:info.name];
-            NSString *dirOfZip = [file stringByDeletingLastPathComponent];
-            NSString *writeLocation = [dirOfZip stringByAppendingPathComponent:info.name];
-            NSString *slash = [info.name substringFromIndex:[info.name length]-1];
-            
-            if ([slash isEqualToString:@"/"]) {
-                [[NSFileManager defaultManager]createDirectoryAtPath:writeLocation withIntermediateDirectories:NO attributes:nil error:nil];
-            } else {
-                if (![[NSFileManager defaultManager]fileExistsAtPath:writeLocation]) {
-                    [[NSFileManager defaultManager]createFileAtPath:writeLocation contents:nil attributes:nil];
-                
-                    NSFileHandle *file = [NSFileHandle fileHandleForWritingAtPath:writeLocation];
-            
-                    ZipReadStream *read = [unzipFile readCurrentFileInZip];
-                    
-                    int buffSize = 1024*1024;
-
-                    NSMutableData *buffer = [[NSMutableData alloc]initWithLength:buffSize];
-                    do {
-                        [buffer setLength:buffSize];
-                        int bytesRead = [read readDataWithBuffer:buffer];
-                        if (bytesRead == 0) {
-                            break;
-                        } else {
-                            [buffer setLength:bytesRead];
-                            [file writeData:buffer];
-                            
-                            unachivedBytes = unachivedBytes+bytesRead;
-                            HUDZ.progress = (unachivedBytes/filesize);
-                        }
-                    } while (YES);
-            
-                    [file closeFile];
-                    [read finishedReading];
-                } else {
-                    unachivedBytes = unachivedBytes+info.length;
-                    HUDZ.progress = (unachivedBytes/filesize);
-                }
-            }
-        }
-        [unzipFile close];
-        
-        [kAppDelegate hideHUD];
-        
-        [UIApplication sharedApplication].idleTimerDisabled = NO;
-        [self refreshTableViewWithAnimation:UITableViewRowAnimationNone];
-        
-        [[BGProcFactory sharedFactory]endProcForKey:@"inflate"];
-    
-    }
-}
-
 - (void)compressItems:(NSArray *)items intoZipFile:(NSString *)file {
     for (NSString *theFile in items) {
         [kAppDelegate setSecondaryTitleOfVisibleHUD:theFile.lastPathComponent];
@@ -748,11 +668,8 @@ static NSString *CellIdentifier = @"Cell";
                 }
             } else if ([title isEqualToString:@"Decompress"]) {
                 if (fileSize(file) > 0) {
-                    [ad showHUDWithTitle:@"Inflating..."];
-                    [ad setSecondaryTitleOfVisibleHUD:[file lastPathComponent]];
-                    [ad setVisibleHudMode:MBProgressHUDModeDeterminate];
-                    [ad setTagOfVisibleHUD:5];
-                    [NSThread detachNewThreadSelector:@selector(inflate:) toTarget:self withObject:file];
+                    UnzippingTask *task = [UnzippingTask taskWithFile:file];
+                    [[TaskController sharedController]addTask:task];
                 }
             }
             

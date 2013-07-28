@@ -65,7 +65,7 @@
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSHTTPURLResponse *)response {
     self.name = (response.suggestedFilename.length > 0)?response.suggestedFilename:[[response.URL.absoluteString lastPathComponent]percentSanitize];
     
-    if (self.delegate) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(setText:)]) {
         [self.delegate setText:self.name];
     }
     

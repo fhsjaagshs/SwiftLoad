@@ -69,6 +69,8 @@
     #import "TaskController.h"
     #import "TaskCell.h"
 
+    #import "UnzippingTask.h"
+
     #import "Download.h"
     #import "DropboxDownload.h"
     #import "HTTPDownload.h"

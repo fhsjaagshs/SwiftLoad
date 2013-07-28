@@ -32,6 +32,7 @@ float const kClearOutDelay = 0.6f;
     if ([[NSFileManager defaultManager]fileExistsAtPath:_temporaryPath]) {
         [[NSFileManager defaultManager]removeItemAtPath:_temporaryPath error:nil];
     }
+    [super stop];
 }
 
 - (void)start {
