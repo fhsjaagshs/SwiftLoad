@@ -36,4 +36,6 @@
 
 - (void)setProgress:(float)progress;
 
+- (void)setText:(NSString *)string;
+
 @end

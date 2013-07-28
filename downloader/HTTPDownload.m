@@ -66,7 +66,7 @@
     self.name = (response.suggestedFilename.length > 0)?response.suggestedFilename:[[response.URL.absoluteString lastPathComponent]percentSanitize];
     
     if (self.delegate) {
-        self.delegate.textLabel.text = self.name;
+        [self.delegate setText:self.name];
     }
     
     self.temporaryPath = getNonConflictingFilePathForPath([NSTemporaryDirectory() stringByAppendingPathComponent:[self.name percentSanitize]]);

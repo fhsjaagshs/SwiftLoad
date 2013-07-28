@@ -16,6 +16,10 @@
 
 @implementation TaskCell
 
+- (void)setText:(NSString *)text {
+    _customTitleLabel.text = text;
+}
+
 - (void)reset {
     [self setProgress:0.0f];
 }
