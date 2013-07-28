@@ -32,8 +32,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ZipFile.h"
-
+#import "ZipFileEnums.h"
 
 @interface FileInZipInfo : NSObject
 

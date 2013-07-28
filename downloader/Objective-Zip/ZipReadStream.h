@@ -35,17 +35,13 @@
 
 #include "unzip.h"
 
+@interface ZipReadStream : NSObject
 
-@interface ZipReadStream : NSObject {
-	NSString *_fileNameInZip;
-	
-@private
-	unzFile _unzFile;
-}
+@property (nonatomic, readonly) NSString *filenameInZip;
 
-- (id) initWithUnzFileStruct:(unzFile)unzFile fileNameInZip:(NSString *)fileNameInZip;
++ (ZipReadStream *)readStreamWithUnzipStruct:(unzFile)zipFile andFileNameInZip:(NSString *)fileNameInZip;
 
-- (NSUInteger) readDataWithBuffer:(NSMutableData *)buffer;
-- (void) finishedReading;
+- (int)readDataWithBuffer:(NSMutableData *)buffer;
+- (void)finishedReading;
 
 @end

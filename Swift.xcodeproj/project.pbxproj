@@ -393,6 +393,7 @@
 		F1681E8E17A5BE9B00ACAAD0 /* UnzippingTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnzippingTask.m; sourceTree = "<group>"; };
 		F1681E9017A5C28D00ACAAD0 /* CompressionTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompressionTask.h; sourceTree = "<group>"; };
 		F1681E9117A5C28D00ACAAD0 /* CompressionTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompressionTask.m; sourceTree = "<group>"; };
+		F1681E9317A5D51E00ACAAD0 /* ZipFileEnums.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZipFileEnums.h; sourceTree = "<group>"; };
 		F168EDAD1790C61000C21D6F /* UIImage+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Additions.h"; sourceTree = "<group>"; };
 		F168EDAE1790C61000C21D6F /* UIImage+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Additions.m"; sourceTree = "<group>"; };
 		F1693C2816DFAB6E006E3739 /* SwiftLoadCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwiftLoadCell.h; path = ../CustomGraphics/SwiftLoadCell.h; sourceTree = "<group>"; };
@@ -633,6 +634,7 @@
 			isa = PBXGroup;
 			children = (
 				9BFF29F015387C67007ED9B1 /* MiniZip */,
+				F1681E9317A5D51E00ACAAD0 /* ZipFileEnums.h */,
 				9BFF29FF15387C6E007ED9B1 /* FileInZipInfo.h */,
 				9BFF2A0015387C6E007ED9B1 /* FileInZipInfo.m */,
 				9BFF2A0115387C6E007ED9B1 /* ZipException.h */,
