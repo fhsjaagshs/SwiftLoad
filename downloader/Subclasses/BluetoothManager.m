@@ -30,6 +30,8 @@ static NSString *kFilesizeKey = @"s";
 
 @property (nonatomic, assign) BOOL isTransferring;
 
+@property (nonatomic, assign) float chunkSize;
+
 @end
 
 @implementation BluetoothManager
@@ -195,11 +197,15 @@ static NSString *kFilesizeKey = @"s";
     self.originFilePath = path;
     self.handle = [NSFileHandle fileHandleForReadingAtPath:_originFilePath];
     self.filesize = [[[NSFileManager defaultManager]attributesOfItemAtPath:_originFilePath error:nil]fileSize];
+    self.chunkSize = self.filesize/50;
+    if (_chunkSize > 80000) {
+        self.chunkSize = 80000;
+    }
 }
 
 - (NSData *)readData {
     [_handle seekToFileOffset:_readBytes];
-    NSData *data = [_handle readDataOfLength:80000];
+    NSData *data = [_handle readDataOfLength:_chunkSize];
     _readBytes += data.length;
     return data;
 }
