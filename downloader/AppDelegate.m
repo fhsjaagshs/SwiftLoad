@@ -391,11 +391,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     }
 }
 
-- (void)prepareFileForBTSending:(NSString *)file {
-    [[BluetoothManager sharedManager]loadFile:file];
-    [[BluetoothManager sharedManager]searchForPeers];
-}
-
 - (void)downloadFileUsingSFTP:(NSURL *)url withUsername:(NSString *)username andPassword:(NSString *)password {
     SFTPDownload *download = [SFTPDownload downloadWithURL:url username:username andPassword:password];
     [[TaskController sharedController]addTask:download];
@@ -540,27 +535,8 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 	[DBSession setSharedSession:session];
     
     [[BluetoothManager sharedManager]setStartedBlock:^{
-        [[BGProcFactory sharedFactory]startProcForKey:@"bluetooth_ft" andExpirationHandler:^{
-            [[BluetoothManager sharedManager]cancel];
-        }];
-        
-        [self showHUDWithTitle:[[BluetoothManager sharedManager]isSender]?@"Sending":@"Receiving"];
-        [self setSecondaryTitleOfVisibleHUD:[[BluetoothManager sharedManager]getFilename]];
-        [self setVisibleHudMode:MBProgressHUDModeDeterminate];
-    }];
-    [[BluetoothManager sharedManager]setProgressBlock:^(float progress) {
-        [self setProgressOfVisibleHUD:progress];
-    }];
-    [[BluetoothManager sharedManager]setCompletionBlock:^(NSError *error, BOOL cancelled) {
-        [[BGProcFactory sharedFactory]endProcForKey:@"bluetooth_ft"];
-        [self hideHUD];
-        if (!cancelled) {
-            if (!error) {
-                [TransparentAlert showAlertWithTitle:@"Success" andMessage:[NSString stringWithFormat:@"\"%@\" has been successfully %@.",[[BluetoothManager sharedManager]getFilename],[[BluetoothManager sharedManager]isSender]?@"sent":@"received"]];
-            } else {
-                [TransparentAlert showAlertWithTitle:@"Bluetooth Error" andMessage:error.domain];
-            }
-        }
+        BluetoothTask *task = [BluetoothTask task];
+        [[TaskController sharedController]addTask:task];
     }];
     
     self.window = [[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]];

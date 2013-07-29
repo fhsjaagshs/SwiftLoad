@@ -55,9 +55,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (void)sendFileInEmail:(NSString *)file fromViewController:(UIViewController *)vc;
 - (void)sendStringAsSMS:(NSString *)string fromViewController:(UIViewController *)vc;
 
-// Bluetooth File Transmission
-- (void)prepareFileForBTSending:(NSString *)file;
-
 // Dropbox Uploading
 - (void)uploadLocalFile:(NSString *)localPath fromViewController:(UIViewController *)controller;
 

@@ -161,7 +161,7 @@
         if (buttonIndex == 0) {
             [kAppDelegate sendFileInEmail:file fromViewController:self];
         } else if (buttonIndex == 1) {
-            [kAppDelegate prepareFileForBTSending:file];
+            [BluetoothTask sendFile:file];
         } else if (buttonIndex == 2) {
             [kAppDelegate sendStringAsSMS:[NSString stringWithContentsOfFile:file encoding:_theEncoding error:nil] fromViewController:self];
         } else if (buttonIndex == 3) {

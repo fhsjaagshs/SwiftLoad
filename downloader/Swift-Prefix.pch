@@ -71,6 +71,7 @@
 
     #import "UnzippingTask.h"
     #import "CompressionTask.h"
+    #import "BluetoothTask.h"
 
     #import "Download.h"
     #import "DropboxDownload.h"

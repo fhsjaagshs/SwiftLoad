@@ -687,7 +687,7 @@ static NSString *CellIdentifier = @"Cell";
         [kAppDelegate uploadLocalFile:file fromViewController:self];
         [self removeSideSwipeView:YES];
     } else if (number == 2) {
-        [kAppDelegate prepareFileForBTSending:file];
+        [BluetoothTask sendFile:file];
         [self removeSideSwipeView:YES];
     } else if (number == 3) {
         [kAppDelegate sendFileInEmail:file fromViewController:self];
