@@ -45,7 +45,7 @@
 @implementation ZipReadStream
 
 + (ZipReadStream *)readStreamWithUnzipStruct:(unzFile)zipFile andFileNameInZip:(NSString *)fileNameInZip {
-    return [[[[self class]alloc]initWithUnzFileStruct:zipFile fileNameInZip:fileNameInZip]autorelease];
+    return [[[self class]alloc]initWithUnzFileStruct:zipFile fileNameInZip:fileNameInZip];
 }
 
 - (id)initWithUnzFileStruct:(unzFile)unzFile fileNameInZip:(NSString *)fileNameInZip {
@@ -71,11 +71,6 @@
 		NSString *reason = [NSString stringWithFormat:@"Error in closing \"%@\" in the zipfile",_filenameInZip];
 		@throw [ZipException exceptionWithReason:reason andError:err];
 	}
-}
-
-- (void)dealloc {
-    [_filenameInZip release];
-    [super dealloc];
 }
 
 @end

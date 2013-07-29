@@ -54,7 +54,7 @@
 - (id)initWithFileName:(NSString *)fileName mode:(ZipFileMode)mode {
     self = [super init];
 	if (self) {
-		_fileName = [fileName retain];
+		_fileName = fileName;
 		_mode = mode;
 		
 		switch (mode) {
@@ -91,12 +91,11 @@
 	return self;
 }
 
-- (void)dealloc {
-	[_fileName release];
-	[super dealloc];
-}
-
 - (zip_fileinfo)zipFileInfoWithDate:(NSDate *)filedate {
+    NSLog(@"Date: %@",filedate);
+    if (!filedate) {
+        filedate = [NSDate date];
+    }
     NSDateComponents *components = [[NSCalendar currentCalendar] components:(NSSecondCalendarUnit | NSMinuteCalendarUnit | NSHourCalendarUnit | NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit) fromDate:filedate];
     zip_fileinfo zi;
 	zi.tmz_date.tm_sec = components.second;
@@ -303,7 +302,7 @@
 	
 	BOOL crypted = ((file_info.flag & 1) != 0);
 	
-	NSDateComponents *components = [[[NSDateComponents alloc]init]autorelease];
+	NSDateComponents *components = [[NSDateComponents alloc]init];
 	[components setDay:file_info.tmu_date.tm_mday];
 	[components setMonth:file_info.tmu_date.tm_mon+1];
 	[components setYear:file_info.tmu_date.tm_year];

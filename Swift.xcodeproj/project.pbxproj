@@ -7,15 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9BFF29FA15387C67007ED9B1 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF29F215387C67007ED9B1 /* ioapi.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9BFF29FB15387C67007ED9B1 /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF29F415387C67007ED9B1 /* mztools.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9BFF29FC15387C67007ED9B1 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF29F615387C67007ED9B1 /* unzip.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9BFF29FD15387C67007ED9B1 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF29F815387C67007ED9B1 /* zip.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9BFF2A0915387C6E007ED9B1 /* FileInZipInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0015387C6E007ED9B1 /* FileInZipInfo.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9BFF2A0A15387C6E007ED9B1 /* ZipException.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0215387C6E007ED9B1 /* ZipException.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9BFF2A0B15387C6E007ED9B1 /* ZipFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0415387C6E007ED9B1 /* ZipFile.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9BFF2A0C15387C6E007ED9B1 /* ZipReadStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0615387C6E007ED9B1 /* ZipReadStream.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9BFF2A0D15387C6E007ED9B1 /* ZipWriteStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0815387C6E007ED9B1 /* ZipWriteStream.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9BFF29FA15387C67007ED9B1 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF29F215387C67007ED9B1 /* ioapi.c */; };
+		9BFF29FB15387C67007ED9B1 /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF29F415387C67007ED9B1 /* mztools.c */; };
+		9BFF29FC15387C67007ED9B1 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF29F615387C67007ED9B1 /* unzip.c */; };
+		9BFF29FD15387C67007ED9B1 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF29F815387C67007ED9B1 /* zip.c */; };
+		9BFF2A0915387C6E007ED9B1 /* FileInZipInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0015387C6E007ED9B1 /* FileInZipInfo.m */; };
+		9BFF2A0A15387C6E007ED9B1 /* ZipException.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0215387C6E007ED9B1 /* ZipException.m */; };
+		9BFF2A0B15387C6E007ED9B1 /* ZipFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0415387C6E007ED9B1 /* ZipFile.m */; };
+		9BFF2A0C15387C6E007ED9B1 /* ZipReadStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0615387C6E007ED9B1 /* ZipReadStream.m */; };
+		9BFF2A0D15387C6E007ED9B1 /* ZipWriteStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0815387C6E007ED9B1 /* ZipWriteStream.m */; };
 		F101274617920BD2000C434E /* hamburger.png in Resources */ = {isa = PBXBuildFile; fileRef = F101274417920BD2000C434E /* hamburger.png */; };
 		F101274717920BD2000C434E /* hamburger@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F101274517920BD2000C434E /* hamburger@2x.png */; };
 		F106A4DC178865AD002D3BC8 /* DLSFTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4C7178865AD002D3BC8 /* DLSFTPConnection.m */; };

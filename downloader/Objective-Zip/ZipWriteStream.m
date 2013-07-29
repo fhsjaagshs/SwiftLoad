@@ -44,7 +44,7 @@
 @implementation ZipWriteStream
 
 + (ZipWriteStream *)writeStreamWithZipStruct:(zipFile)zipFile andFileNameInZip:(NSString *)fileNameInZip {
-    return [[[[self class]alloc]initWithZipFileStruct:zipFile fileNameInZip:fileNameInZip]autorelease];
+    return [[[self class]alloc]initWithZipFileStruct:zipFile fileNameInZip:fileNameInZip];
 }
 
 - (id)initWithZipFileStruct:(zipFile)zipFile fileNameInZip:(NSString *)fileNameInZip {
@@ -69,11 +69,6 @@
 		NSString *reason = [NSString stringWithFormat:@"Error closing \"%@\"",_filenameInZip];
 		@throw [ZipException exceptionWithReason:reason andError:err];
 	}
-}
-
-- (void)dealloc {
-    [_filenameInZip release];
-    [super dealloc];
 }
 
 @end

@@ -37,11 +37,11 @@
 @implementation ZipException
 
 + (ZipException *)exceptionWithReason:(NSString *)reason {
-    return [[[[self class]alloc]initWithReason:reason]autorelease];
+    return [[[self class]alloc]initWithReason:reason];
 }
 
 + (ZipException *)exceptionWithReason:(NSString *)reason andError:(int)error {
-    return [[[[self class]alloc]initWithError:error reason:reason]autorelease];
+    return [[[self class]alloc]initWithError:error reason:reason];
 }
 
 - (id)initWithReason:(NSString *)reason {
@@ -58,7 +58,6 @@
 	if (self) {
 		_error = error;
 	}
-	
 	return self;
 }
 

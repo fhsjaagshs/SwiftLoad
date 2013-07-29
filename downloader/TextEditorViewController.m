@@ -89,7 +89,7 @@
 
 - (void)showSaveButton {
     if (_theTextView.isFirstResponder) {
-        if (_toolBar.items.count == 4) {
+        if (_toolBar.items.count == 2) {
             UIBarButtonItem *saveChanges = [[UIBarButtonItem alloc]initWithTitle:@"Save" style:UIBarButtonItemStyleBordered target:self action:@selector(saveText)];
             NSMutableArray *items = [_toolBar.items mutableCopy];
             [items insertObject:saveChanges atIndex:0];

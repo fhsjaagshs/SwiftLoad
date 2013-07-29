@@ -36,26 +36,20 @@
 @implementation FileInZipInfo
 
 + (FileInZipInfo *)infoWithName:(NSString *)name length:(NSUInteger)length level:(ZipCompressionLevel)level crypted:(BOOL)crypted size:(NSUInteger)size date:(NSDate *)date crc32:(NSUInteger)crc32 {
-    return [[[[self class]alloc]initWithName:name length:length level:level crypted:crypted size:size date:date crc32:crc32]autorelease];
+    return [[[self class]alloc]initWithName:name length:length level:level crypted:crypted size:size date:date crc32:crc32];
 }
 
 - (id)initWithName:(NSString *)name length:(NSUInteger)length level:(ZipCompressionLevel)level crypted:(BOOL)crypted size:(NSUInteger)size date:(NSDate *)date crc32:(NSUInteger)crc32 {
     if (self= [super init]) {
-		_name = [name retain];
+		_name = name;
         _length = length;
 		_level = level;
 		_crypted = crypted;
 		_size = size;
-		_date = [date retain];
+		_date = date;
 		_crc32 = crc32;
 	}
 	return self;
-}
-
-- (void) dealloc {
-	[_date release];
-	[_name release];
-	[super dealloc];
 }
 
 @end

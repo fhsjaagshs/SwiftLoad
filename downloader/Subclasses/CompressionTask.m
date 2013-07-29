@@ -137,7 +137,6 @@
                     NSMutableArray *holdingArray = [[NSMutableArray alloc]init];
                     
                     do {
-                        
                         for (NSString *dir in dirsInDir) {
                             
                             NSString *dirRelative = [dir stringByReplacingOccurrencesOfString:[currentDir stringByAppendingString:@"/"]withString:@""]; // gets current directory in zip
@@ -201,7 +200,9 @@
                 [zipFile close];
                 
                 dispatch_sync(dispatch_get_main_queue(), ^{
-                    [self showSuccess];
+                    @autoreleasepool {
+                        [self showSuccess];
+                    }
                 });
             }
         }

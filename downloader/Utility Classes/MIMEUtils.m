@@ -11,7 +11,7 @@
 @implementation MIMEUtils
 
 + (NSString *)fileMIMEType:(NSString *)file {
-    CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)[[file pathExtension]lowercaseString], nil);
+    CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge  CFStringRef)[[file pathExtension]lowercaseString], nil);
     CFStringRef MIMEType = UTTypeCopyPreferredTagWithClass(UTI, kUTTagClassMIMEType);
     CFRelease(UTI);
     return (__bridge NSString *)MIMEType;
