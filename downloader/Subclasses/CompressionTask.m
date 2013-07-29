@@ -30,6 +30,10 @@
     return self;
 }
 
+- (BOOL)canStop {
+    return NO;
+}
+
 - (void)start {
     [super start];
     [self compress];

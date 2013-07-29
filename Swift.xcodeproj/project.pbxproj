@@ -123,7 +123,6 @@
 		F1693C4F16DFABA6006E3739 /* UIAlertView+BlockExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C4916DFABA6006E3739 /* UIAlertView+BlockExtensions.m */; };
 		F1693C5016DFABA6006E3739 /* UIScrollView+UIScrollView_ZoomToPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C4B16DFABA6006E3739 /* UIScrollView+UIScrollView_ZoomToPoint.m */; };
 		F1693C5116DFABA6006E3739 /* UIViewController+AutoNib.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C4D16DFABA6006E3739 /* UIViewController+AutoNib.m */; };
-		F1693C5B16DFAC0E006E3739 /* AudioConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C5416DFAC0E006E3739 /* AudioConverter.m */; };
 		F1693C5C16DFAC0E006E3739 /* metadataRetriever.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C5616DFAC0E006E3739 /* metadataRetriever.m */; };
 		F1693C5D16DFAC0E006E3739 /* MIMEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C5816DFAC0E006E3739 /* MIMEUtils.m */; };
 		F1693C5E16DFAC0E006E3739 /* NetworkUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C5A16DFAC0E006E3739 /* NetworkUtils.m */; };
@@ -171,6 +170,7 @@
 		F18D19C317A5A479009A8D07 /* Task.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D19C217A5A479009A8D07 /* Task.m */; };
 		F18D19C617A5A7B1009A8D07 /* TaskController.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D19C517A5A7B1009A8D07 /* TaskController.m */; };
 		F18D19CB17A5AB53009A8D07 /* TaskCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D19CA17A5AB53009A8D07 /* TaskCell.m */; };
+		F195B3FD17A6DD640057889F /* AudioConversionTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F195B3FC17A6DD640057889F /* AudioConversionTask.m */; };
 		F19BB51C16E006CA0081C95B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F19BB51916E006CA0081C95B /* main.m */; };
 		F1A72948149876040049DBB6 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A72947149876040049DBB6 /* GameKit.framework */; };
 		F1A923FE140D4DDD003ACDAB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A923FD140D4DDD003ACDAB /* QuartzCore.framework */; };
@@ -411,8 +411,6 @@
 		F1693C4B16DFABA6006E3739 /* UIScrollView+UIScrollView_ZoomToPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+UIScrollView_ZoomToPoint.m"; sourceTree = "<group>"; };
 		F1693C4C16DFABA6006E3739 /* UIViewController+AutoNib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+AutoNib.h"; sourceTree = "<group>"; };
 		F1693C4D16DFABA6006E3739 /* UIViewController+AutoNib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+AutoNib.m"; sourceTree = "<group>"; };
-		F1693C5316DFAC0E006E3739 /* AudioConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioConverter.h; sourceTree = "<group>"; };
-		F1693C5416DFAC0E006E3739 /* AudioConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioConverter.m; sourceTree = "<group>"; };
 		F1693C5516DFAC0E006E3739 /* metadataRetriever.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = metadataRetriever.h; sourceTree = "<group>"; };
 		F1693C5616DFAC0E006E3739 /* metadataRetriever.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = metadataRetriever.m; sourceTree = "<group>"; };
 		F1693C5716DFAC0E006E3739 /* MIMEUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MIMEUtils.h; sourceTree = "<group>"; };
@@ -505,6 +503,8 @@
 		F18D19C517A5A7B1009A8D07 /* TaskController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskController.m; sourceTree = "<group>"; };
 		F18D19C917A5AB53009A8D07 /* TaskCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskCell.h; sourceTree = "<group>"; };
 		F18D19CA17A5AB53009A8D07 /* TaskCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskCell.m; sourceTree = "<group>"; };
+		F195B3FB17A6DD640057889F /* AudioConversionTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioConversionTask.h; sourceTree = "<group>"; };
+		F195B3FC17A6DD640057889F /* AudioConversionTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioConversionTask.m; sourceTree = "<group>"; };
 		F19BB51916E006CA0081C95B /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F19BB51A16E006CA0081C95B /* Swift-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Swift-Info.plist"; sourceTree = "<group>"; };
 		F19BB51B16E006CA0081C95B /* Swift-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Swift-Prefix.pch"; sourceTree = "<group>"; };
@@ -906,8 +906,6 @@
 		F1693C5216DFAC0E006E3739 /* Utility Classes */ = {
 			isa = PBXGroup;
 			children = (
-				F1693C5316DFAC0E006E3739 /* AudioConverter.h */,
-				F1693C5416DFAC0E006E3739 /* AudioConverter.m */,
 				F1693C5516DFAC0E006E3739 /* metadataRetriever.h */,
 				F1693C5616DFAC0E006E3739 /* metadataRetriever.m */,
 				F1693C5716DFAC0E006E3739 /* MIMEUtils.h */,
@@ -1126,6 +1124,8 @@
 				F1681E9117A5C28D00ACAAD0 /* CompressionTask.m */,
 				F11EE83217A6CFFC007DF21A /* BluetoothTask.h */,
 				F11EE83317A6CFFC007DF21A /* BluetoothTask.m */,
+				F195B3FB17A6DD640057889F /* AudioConversionTask.h */,
+				F195B3FC17A6DD640057889F /* AudioConversionTask.m */,
 			);
 			name = "Task Subclasses";
 			sourceTree = "<group>";
@@ -1366,7 +1366,6 @@
 				F1693C4F16DFABA6006E3739 /* UIAlertView+BlockExtensions.m in Sources */,
 				F1693C5016DFABA6006E3739 /* UIScrollView+UIScrollView_ZoomToPoint.m in Sources */,
 				F1693C5116DFABA6006E3739 /* UIViewController+AutoNib.m in Sources */,
-				F1693C5B16DFAC0E006E3739 /* AudioConverter.m in Sources */,
 				F1693C5C16DFAC0E006E3739 /* metadataRetriever.m in Sources */,
 				F1693C5D16DFAC0E006E3739 /* MIMEUtils.m in Sources */,
 				F1693C5E16DFAC0E006E3739 /* NetworkUtils.m in Sources */,
@@ -1462,6 +1461,7 @@
 				F1681E8F17A5BE9B00ACAAD0 /* UnzippingTask.m in Sources */,
 				F1681E9217A5C28D00ACAAD0 /* CompressionTask.m in Sources */,
 				F11EE83417A6CFFC007DF21A /* BluetoothTask.m in Sources */,
+				F195B3FD17A6DD640057889F /* AudioConversionTask.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

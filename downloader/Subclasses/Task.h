@@ -21,6 +21,8 @@
 - (void)stop;
 - (void)start;
 
+- (BOOL)canStop;
+
 - (void)showSuccess;
 - (void)showFailure;
 

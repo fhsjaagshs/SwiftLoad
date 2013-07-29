@@ -1,16 +1,48 @@
 //
-//  AudioConverter.m
-//  SwiftLoad
+//  AudioConversionTask.m
+//  Swift
 //
-//  Created by Nathaniel Symer on 12/8/12.
-//  Copyright (c) 2012 Nathaniel Symer. All rights reserved.
+//  Created by Nathaniel Symer on 7/29/13.
+//  Copyright (c) 2013 Nathaniel Symer. All rights reserved.
 //
 
-#import "AudioConverter.h"
+#import "AudioConversionTask.h"
 
-@implementation AudioConverter
+@interface AudioConversionTask ()
 
-+ (NSError *)convertAudioFileAtPath:(NSString *)source progressObject:(id)progressObject {
+@property (nonatomic, strong) NSString *sourceFilePath;
+
+@end
+
+@implementation AudioConversionTask
+
++ (AudioConversionTask *)taskWithSourceAudioFile:(NSString *)source {
+    return [[[self class]alloc]initWithSourceAudioFile:source];
+}
+
+- (instancetype)initWithSourceAudioFile:(NSString *)source {
+    self = [super init];
+    if (self) {
+        self.sourceFilePath = source;
+    }
+    return self;
+}
+
+- (BOOL)canStop {
+    return NO;
+}
+
+- (void)start {
+    [super start];
+    NSError *error = [self convert];
+    if (error) {
+        [self showFailure];
+    } else {
+        [self showSuccess];
+    }
+}
+
+- (NSError *)convert {
     
     OSStatus err = noErr;
     
@@ -23,11 +55,10 @@
     if (err != noErr) {
         return [NSError errorWithDomain:@"Please verify that your device supports harware accelerated video encoding." code:1 userInfo:nil];
     }
-
-    NSString *destination = [[source stringByDeletingPathExtension]stringByAppendingPathExtension:@"m4a"];
+    
+    NSString *destination = [[_sourceFilePath stringByDeletingPathExtension]stringByAppendingPathExtension:@"m4a"];
     
     UInt32 priorMixOverrideValue;
-    
     UInt32 size;
     
     AudioSessionGetProperty(kAudioSessionProperty_OverrideCategoryMixWithOthers, &size, &priorMixOverrideValue);
@@ -35,9 +66,9 @@
     ExtAudioFileRef sourceFile;
     AudioStreamBasicDescription sourceFormat;
     
-    if (source) {
+    if (_sourceFilePath.length > 0) {
         
-        err = ExtAudioFileOpenURL((__bridge CFURLRef)[NSURL fileURLWithPath:source], &sourceFile);
+        err = ExtAudioFileOpenURL((__bridge CFURLRef)[NSURL fileURLWithPath:_sourceFilePath], &sourceFile);
         
         if (err != noErr) {
             if ([[NSFileManager defaultManager]fileExistsAtPath:destination]) {
@@ -47,7 +78,7 @@
         }
         
         err = ExtAudioFileGetProperty(sourceFile, kExtAudioFileProperty_FileDataFormat, &size, &sourceFormat);
-
+        
         if (err != noErr) {
             if ([[NSFileManager defaultManager]fileExistsAtPath:destination]) {
                 [[NSFileManager defaultManager]removeItemAtPath:destination error:nil];
@@ -82,7 +113,7 @@
             }
             return [NSError errorWithDomain:@"Couldn't open the source file." code:1 userInfo:nil];
         }
-
+        
         AudioStreamBasicDescription clientFormat;
         if (sourceFormat.mFormatID == kAudioFormatLinearPCM) {
             clientFormat = sourceFormat;
@@ -117,7 +148,7 @@
             return [NSError errorWithDomain:@"Couldn't setup intermediate conversion format." code:1 userInfo:nil];
         }
         
-
+        
         AudioConverterRef converter;
         size = sizeof(converter);
         
@@ -167,7 +198,6 @@
             
             sourceFrameOffset += numFrames;
             
-            
             OSStatus status = ExtAudioFileWrite(destinationFile, numFrames, &fillBufList);
             
             if (status == kExtAudioFileError_CodecUnavailableInputNotConsumed) {
@@ -184,23 +214,21 @@
             
             if (reportProgress && [NSDate timeIntervalSinceReferenceDate]-lastProgressReport > 0.1) {
                 lastProgressReport = [NSDate timeIntervalSinceReferenceDate];
-
-                if ([progressObject respondsToSelector:@selector(setProgress:)]) {
-                    [progressObject setProgress:(double)sourceFrameOffset/lengthInFrames];
+                
+                if (self.delegate && [self.delegate respondsToSelector:@selector(setProgress:)]) {
+                    [self.delegate setProgress:sourceFrameOffset/lengthInFrames];
                 }
             }
         }
         
-        if ([progressObject respondsToSelector:@selector(setProgress:)]) {
-            [progressObject setProgress:1.0f];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(setProgress:)]) {
+            [self.delegate setProgress:1.0f];
         }
         
         if (sourceFile) {
             ExtAudioFileDispose(sourceFile);
         }
         ExtAudioFileDispose(destinationFile);
-        
-        
     } else {
         [[NSFileManager defaultManager]removeItemAtPath:destination error:nil];
         if (priorMixOverrideValue) {

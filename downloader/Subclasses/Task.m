@@ -26,6 +26,10 @@ float const kClearOutDelayTask = 0.6f;
     return self;
 }
 
+- (BOOL)canStop {
+    return YES;
+}
+
 - (void)handleBackgroundTaskExpiration {
     
 }

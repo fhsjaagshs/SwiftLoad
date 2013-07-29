@@ -134,49 +134,8 @@
 }
 
 - (void)startConverting {
-    
-    AppDelegate *ad = kAppDelegate;
-    
-    NSString *fileName = [ad.openFile lastPathComponent];
-    
-    if (fileName.length > 14) {
-        fileName = [[fileName substringToIndex:11]stringByAppendingString:@"..."];
-    }
-    
-    [[BGProcFactory sharedFactory]startProcForKey:@"audio" andExpirationHandler:nil];
-
-    [ad showHUDWithTitle:@"Converting"];
-    [ad setSecondaryTitleOfVisibleHUD:fileName];
-    [ad setVisibleHudMode:MBProgressHUDModeDeterminate];
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        @autoreleasepool {
-        
-            NSError *error = [AudioConverter convertAudioFileAtPath:ad.openFile progressObject:[ad getVisibleHUD]];
-            
-            [[BGProcFactory sharedFactory]endProcForKey:@"audio"];
-            
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                
-                @autoreleasepool {
-                
-                    [ad hideHUD];
-                    
-                    if (error) {
-                        [TransparentAlert showAlertWithTitle:@"Conversion Error" andMessage:@"Swift could not convert the desired audio file."];
-                    } else {
-                     //   UIImageView *checkmark = [[[UIImageView alloc]initWithImage:getCheckmarkImage()]autorelease];
-                        [ad showHUDWithTitle:@"Complete"];
-                        [ad setSecondaryTitleOfVisibleHUD:fileName];
-                        [ad setVisibleHudMode:MBProgressHUDModeCustomView];
-//              /  [ad setVisibleHudCustomView:checkmark];
-                        [ad hideVisibleHudAfterDelay:1.5];
-                    }
-                }
-            });
-        }
-    });
+    AudioConversionTask *task = [AudioConversionTask taskWithSourceAudioFile:[kAppDelegate openFile]];
+    [[TaskController sharedController]addTask:task];
 }
 
 - (void)hideControls:(BOOL)hide {

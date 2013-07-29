@@ -19,6 +19,11 @@
     return [[[self class]alloc]init];
 }
 
+- (BOOL)canStop {
+    return NO;
+    // TODO: cancel bluetooth transfers
+}
+
 - (id)init {
     self = [super init];
     if (self) {

@@ -29,6 +29,10 @@
     return [[[self class]alloc]initWithFile:file];
 }
 
+- (BOOL)canStop {
+    return NO;
+}
+
 - (void)stop {
     [super stop];
 }
