@@ -43,11 +43,10 @@
                 
                 BOOL isDirMe;
                 [[NSFileManager defaultManager]fileExistsAtPath:theFile isDirectory:&isDirMe];
-                
+
                 ZipFile *zipFile = [[ZipFile alloc]initWithFileName:_zipFileLocation mode:(fileSize(_zipFileLocation) == 0)?ZipFileModeCreate:ZipFileModeAppend];
                 
                 if (!isDirMe) {
-                    
                     ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:[theFile lastPathComponent] fileDate:fileDate(theFile) compressionLevel:ZipCompressionLevelBest];
                     
                     NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:theFile];

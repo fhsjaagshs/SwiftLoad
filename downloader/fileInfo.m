@@ -48,7 +48,6 @@
     _fileName.font = [UIFont systemFontOfSize:14];
     _fileName.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     _fileName.textAlignment = UITextAlignmentCenter;
-    //_fileName.delegate = self;
     _fileName.text = [[kAppDelegate openFile]lastPathComponent];
     [_fileName addTarget:self action:@selector(textFieldDidEndOnExit) forControlEvents:UIControlEventEditingDidEndOnExit];
     [_fileName addTarget:self action:@selector(textFieldDidChange) forControlEvents:UIControlEventEditingChanged];
@@ -76,8 +75,7 @@
         _md5Field.font = [UIFont systemFontOfSize:iPad?23:17];
         _md5Field.textColor = [UIColor blackColor];
         [self.view addSubview:_md5Field];
-        
-        NSDate *modDate = [[[NSFileManager defaultManager]attributesOfItemAtPath:[kAppDelegate openFile] error:nil]fileModificationDate];
+
         NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
         [formatter setTimeStyle:NSDateFormatterNoStyle];
         [formatter setDateStyle:NSDateFormatterMediumStyle];
@@ -89,7 +87,7 @@
         moddateLabel.textAlignment = UITextAlignmentCenter;
         moddateLabel.backgroundColor = [UIColor clearColor];
         moddateLabel.textColor = [UIColor blackColor];
-        moddateLabel.text = [NSString stringWithFormat:@"Last Modified: %@",[formatter stringFromDate:modDate]];
+        moddateLabel.text = [NSString stringWithFormat:@"Last Modified: %@",[formatter stringFromDate:fileDate([kAppDelegate openFile])]];
         [self.view addSubview:moddateLabel];
         [self doMD5];
     }
@@ -136,12 +134,7 @@
 }
 
 - (void)textFieldDidChange {
-    
-    if ([_fileName.text isEqualToString:[[kAppDelegate openFile]lastPathComponent]]) {
-        _navBar.topItem.rightBarButtonItem = nil;
-    } else {
-        _navBar.topItem.rightBarButtonItem = _revertButton;
-    }
+    _navBar.topItem.rightBarButtonItem = [_fileName.text isEqualToString:[[kAppDelegate openFile]lastPathComponent]]?nil:_revertButton;
 }
 
 - (void)revertAction {

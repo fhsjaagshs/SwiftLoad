@@ -92,10 +92,6 @@
 }
 
 - (zip_fileinfo)zipFileInfoWithDate:(NSDate *)filedate {
-    NSLog(@"Date: %@",filedate);
-    if (!filedate) {
-        filedate = [NSDate date];
-    }
     NSDateComponents *components = [[NSCalendar currentCalendar] components:(NSSecondCalendarUnit | NSMinuteCalendarUnit | NSHourCalendarUnit | NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit) fromDate:filedate];
     zip_fileinfo zi;
 	zi.tmz_date.tm_sec = components.second;

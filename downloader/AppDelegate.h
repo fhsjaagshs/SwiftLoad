@@ -13,7 +13,7 @@
 #define kLibDir [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 #define kCachesDir [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 #define fileSize(file) (float)[[[NSFileManager defaultManager]attributesOfItemAtPath:file error:nil]fileSize]
-#define fileDate(file) [[[NSFileManager defaultManager]attributesOfFileSystemForPath:file error:nil]fileCreationDate]
+#define fileDate(file) [[[NSFileManager defaultManager]attributesOfItemAtPath:file error:nil]fileModificationDate]
 #define NSUserDefaultsOFK(key) [[NSUserDefaults standardUserDefaults]objectForKey:key]
 #define NSUserDefaultsOFKKill(key) [[NSUserDefaults standardUserDefaults]removeObjectForKey:key]
 #define KILL_TIMER(q) if (q) {[q invalidate]; q=nil;}
