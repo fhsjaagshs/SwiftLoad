@@ -196,7 +196,7 @@ static NSString *kFilesizeKey = @"s";
     self.filename = [path lastPathComponent];
     self.originFilePath = path;
     self.handle = [NSFileHandle fileHandleForReadingAtPath:_originFilePath];
-    self.filesize = [[[NSFileManager defaultManager]attributesOfItemAtPath:_originFilePath error:nil]fileSize];
+    self.filesize = fileSize(_originFilePath);
     self.chunkSize = self.filesize/50;
     if (_chunkSize > 80000) {
         self.chunkSize = 80000;
