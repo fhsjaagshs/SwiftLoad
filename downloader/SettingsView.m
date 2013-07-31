@@ -8,7 +8,7 @@
 
 #import "SettingsView.h"
 
-static NSString *kJavaScriptBookmarklet = @"JavaScript:window.open(document.URL.replace('http://','swift://'));";
+static NSString * const kJavaScriptBookmarklet = @"JavaScript:window.open(document.URL.replace('http://','swift://'));";
 
 @implementation SettingsView
 
@@ -28,19 +28,20 @@ static NSString *kJavaScriptBookmarklet = @"JavaScript:window.open(document.URL.
     BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
     
     self.linkButton = [UIButton customizedButton];
-    _linkButton.frame = CGRectMake(iPad?313:88, iPad?396:sanitizeMesurement(189), 143, 37);
+    _linkButton.frame = CGRectMake((self.view.bounds.size.width/2)-1, iPad?396:sanitizeMesurement(189), 2, 37);
     [_linkButton addTarget:self action:@selector(linkOrUnlink) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_linkButton];
     
     UIButton *bookmarkletButton = [UIButton customizedButton];
-    bookmarkletButton.frame = CGRectMake(iPad?302:75, iPad?483:sanitizeMesurement(265), 170, 37);
+    bookmarkletButton.frame = CGRectMake((self.view.bounds.size.width/2)-1, iPad?483:sanitizeMesurement(265), 2, 37);
     [bookmarkletButton addTarget:self action:@selector(showBookmarkletInstallationAV) forControlEvents:UIControlEventTouchUpInside];
     [bookmarkletButton setTitle:@"Install Bookmarklet" forState:UIControlStateNormal];
     [self.view addSubview:bookmarkletButton];
+    [bookmarkletButton resizeForTitle];
     
     UIButton *setCredsButton = [UIButton customizedButton];
-    setCredsButton.frame = CGRectMake((self.view.bounds.size.width/2), self.view.bounds.size.height-37-10, 5, 37);
-    [setCredsButton setTitle:@"Set User" forState:UIControlStateNormal];
+    setCredsButton.frame = CGRectMake((self.view.bounds.size.width/2)-1, self.view.bounds.size.height-37-10, 2, 37);
+    [setCredsButton setTitle:@"Set WebDAV User" forState:UIControlStateNormal];
     [setCredsButton addTarget:self action:@selector(showCredsController) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:setCredsButton];
     [setCredsButton resizeForTitle];

@@ -102,14 +102,7 @@
         _onLabel.text = @"WebDAV server is OFF";
         _urlLabel.text = @"You are not connected to WiFi";
         [self killServer];
-        return;
     }
-    
-    if (_httpServer.isRunning) {
-        return;
-    }
-    
-    [UIApplication sharedApplication].idleTimerDisabled = YES;
 
     self.httpServer = [[HTTPServer alloc]init];
     [_httpServer setType:@"_http._tcp."];
@@ -131,9 +124,10 @@
         } else {
             _onLabel.text = @"WebDAV server is ON";
             [self.urlLabel setText:[NSString stringWithFormat:@"http://%@:8080/",rawIP]];
+            [UIApplication sharedApplication].idleTimerDisabled = YES;
         }
     }
-    [self performSelector:@selector(createServer) withObject:nil afterDelay:5.0];
+    [self performSelector:@selector(createServer) withObject:nil afterDelay:_httpServer.isRunning?30.0:5.0];
 }
 
 - (void)close {
