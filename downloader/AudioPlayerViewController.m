@@ -226,7 +226,7 @@
         } else if (buttonIndex == 2) {
             [kAppDelegate uploadLocalFile:[kAppDelegate openFile] fromViewController:self];
         }
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Upload to Dropbox", nil];
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send via Bluetooth", @"Upload to Dropbox", nil];
     
     self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     
