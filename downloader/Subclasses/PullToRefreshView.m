@@ -15,7 +15,7 @@
 @property (nonatomic, strong) UILabel *statusLabel;
 @property (nonatomic, strong) CALayer *arrowImage;
 @property (nonatomic, strong) UIActivityIndicatorView *activityView;
-@property (nonatomic, weak) UIScrollView *scrollView;
+@property (nonatomic, strong) UIScrollView *scrollView;
 
 @end
 

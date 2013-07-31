@@ -68,7 +68,7 @@
         
         if ([subview isKindOfClass:NSClassFromString(@"UIAlertButton")]) {
             CGRect frame = subview.frame;
-            frame.origin.y += 7;
+            frame.origin.y += 5;
             subview.frame = frame;
         }
         

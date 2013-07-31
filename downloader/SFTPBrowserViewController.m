@@ -55,8 +55,7 @@
     [_backButton setTitle:@"Back" forState:UIControlStateNormal];
     [_backButton addTarget:self action:@selector(goBackDir) forControlEvents:UIControlEventTouchUpInside];
     [bbv addSubview:_backButton];
-    [_backButton setHidden:YES];
-    
+
     self.theTableView = [[ShadowedTableView alloc]initWithFrame:CGRectMake(0, 88, screenBounds.size.width, screenBounds.size.height-88) style:UITableViewStylePlain];
     self.theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -75,11 +74,16 @@
     [self showInitialLoginController];
     
     self.memCache = [FMDatabase databaseWithPath:nil]; // nil path means that the database will be created in memory: lighting fuckin fast
-    
+    [_memCache open];
     [_memCache executeUpdate:@"CREATE TABLE sftp_cache (id INTEGER PRIMARY KEY AUTOINCREMENT, parentpath VARCHAR(255) DEFAULT NULL, filename VARCHAR(255) DEFAULT NULL, type VARCHAR(255) DEFAULT NULL, size INTEGER)"];
 }
 
 - (void)goBackDir {
+    
+    [_connection cancelAllRequests];
+    
+    [_filedicts removeAllObjects];
+    
     [self deleteLastPathComponent];
     [self loadCurrentDirectoryFromCache];
     
@@ -103,21 +107,13 @@
 
 - (void)cacheCurrentDir {
     
-    FMResultSet *set = [_memCache executeQuery:@"SELECT filename,type,size FROM sftp_cache WHERE parentpath = ?",@""];
+    NSString *parentpath = [self fixURL:_currentURL];
     
-    while ([set next]) {
-        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-        [dict setObject:[set stringForColumn:@"filename"] forKey:NSFileName];
-        [dict setObject:[NSNumber numberWithLongLong:[set intForColumn:@"size"]] forKey:NSFileSize];
-        [dict setObject:([set intForColumn:@"type"] == 1)?NSFileTypeRegular:NSFileTypeDirectory forKey:NSFileType];
-        [_filedicts addObject:dict];
-    }
-    
+    [_memCache executeUpdate:@"DELETE * FROM sftp_cache WHERE parentpath=?",parentpath];
     NSMutableString *query = [NSMutableString stringWithFormat:@"INSERT INTO sftp_cache (parentpath,filename,type,size) VALUES "];
     
     for (NSDictionary *dict in _filedicts) {
         NSString *filename = [dict objectForKey:NSFileName];
-        NSString *parentpath = [self fixURL:_currentURL];
         NSString *type = [dict objectForKey:NSFileType];
         int size = [[dict objectForKey:NSFileSize]intValue];
         [query appendFormat:@"(\"%@\",\"%@\",\"%@\",%d),",parentpath,filename,type,size];
@@ -131,7 +127,7 @@
 - (void)loadCurrentDirectoryFromCache {
     self.filedicts = [NSMutableArray array];
     
-    FMResultSet *set = [_memCache executeQuery:@"SELECT filename,type,size FROM sftp_cache WHERE parentpath = ?",[self fixURL:_currentURL]];
+    FMResultSet *set = [_memCache executeQuery:@"SELECT filename,type,size FROM sftp_cache WHERE parentpath=\"?\"",[self fixURL:_currentURL]];
     
     while ([set next]) {
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
@@ -142,37 +138,29 @@
     }
     
     if (_filedicts.count == 0) {
-        [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
         [self loadCurrentDirectoryFromSFTP];
-    }
-    
-    /*NSString *cachePath = [kCachesDir stringByAppendingPathComponent:@"sftp_directory_cache.json"];
-    NSData *json = [NSData dataWithContentsOfFile:cachePath];
-    NSMutableDictionary *savedDict = [[NSFileManager defaultManager]fileExistsAtPath:cachePath]?[NSJSONSerialization JSONObjectWithData:json options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
-    
-    if ([savedDict objectForKey:[self fixURL:_currentURL]]) {
-        [_filedicts addObjectsFromArray:[savedDict objectForKey:[self fixURL:_currentURL]]];
-        [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-        [_pull finishedLoading];
     } else {
-        [_filedicts removeAllObjects];
-        [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-        [self loadCurrentDirectoryFromSFTP];
-    }*/
+        [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationRight];
+    }
 }
 
 - (void)loadCurrentDirectoryFromSFTP {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    [_pull setState:PullToRefreshViewStateLoading];
+    self.filedicts = [NSMutableArray array];
+    [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+    
     DLSFTPRequest *req = [[DLSFTPListFilesRequest alloc]initWithDirectoryPath:_currentPath successBlock:^(NSArray *array) {
         dispatch_sync(dispatch_get_main_queue(), ^{
             @autoreleasepool {
-            
                 for (DLSFTPFile *sftpFile in array) {
                     NSDictionary *dict = @{@"NSFileName": sftpFile.filename, NSFileType:[sftpFile.attributes objectForKey:NSFileType], NSFileSize: [sftpFile.attributes objectForKey:NSFileSize], @"NSFilePath": sftpFile.path};
                     [_filedicts addObject:dict];
                 }
         
-                [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+                [self cacheCurrentDir];
+                
+                [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationRight];
                 [_pull finishedLoading];
                 [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
             }
@@ -215,6 +203,7 @@
             self.password = password;
             self.connection = [[DLSFTPConnection alloc]initWithHostname:URL.host username:_username password:_password];
             [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+            [_pull setState:PullToRefreshViewStateLoading];
             [_connection connectWithSuccessBlock:^{
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     @autoreleasepool {
@@ -270,9 +259,11 @@
 }
 
 - (void)close {
+    [_connection cancelAllRequests];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [_connection cancelAllRequests];
-        [_connection disconnect];
+        @autoreleasepool {
+            [_connection disconnect];
+        }
     });
     [self dismissModalViewControllerAnimated:YES];
 }
@@ -300,9 +291,8 @@
     }
     
     NSDictionary *fileDict = [_filedicts objectAtIndex:indexPath.row];
-    NSString *filename = [fileDict objectForKey:NSFileName];
-    
-    cell.textLabel.text = filename;
+
+    cell.textLabel.text = [fileDict objectForKey:NSFileName];
     
     if ([(NSString *)[fileDict objectForKey:NSFileType] isEqualToString:(NSString *)NSFileTypeRegular]) {
         float fileSize = [[fileDict objectForKey:NSFileSize]intValue];
@@ -321,6 +311,10 @@
     } else {
         cell.detailTextLabel.text = @"Directory";
     }
+    
+    cell.isFirstCell = (indexPath.row == 0);
+    
+    [cell setNeedsDisplay];
     
     return cell;
 }
@@ -360,6 +354,7 @@
 }
 
 - (void)pullToRefreshViewShouldRefresh:(PullToRefreshView *)view {
+    [_connection cancelAllRequests];
     [self loadCurrentDirectoryFromSFTP];
 }
 

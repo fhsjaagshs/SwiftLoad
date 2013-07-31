@@ -53,7 +53,7 @@
     if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication]statusBarOrientation])) {
         _tv.frame = CGRectMake(15, 31, 255, 27);
     } else {
-        _tv.frame = CGRectMake(15, 45, 255, 27);
+        _tv.frame = CGRectMake(15, 47.5, 255, 27);
     }
     
     for (UIView *view in [self.subviews mutableCopy]) {
