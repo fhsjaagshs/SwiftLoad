@@ -534,11 +534,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 	session.delegate = self;
 	[DBSession setSharedSession:session];
     
-    [[BluetoothManager sharedManager]setStartedBlock:^{
-        BluetoothTask *task = [BluetoothTask task];
-        [[TaskController sharedController]addTask:task];
-    }];
-    
     self.window = [[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]];
     self.window.opaque = YES;
     self.viewController = [MyFilesViewController viewController];

@@ -8,28 +8,40 @@
 
 #import "BluetoothTask.h"
 
+@interface BluetoothTask ()
+
+@property (nonatomic, strong) NSString *file;
+
+@end
+
 @implementation BluetoothTask
 
-+ (void)sendFile:(NSString *)file {
-    [[BluetoothManager sharedManager]loadFile:file];
-    [[BluetoothManager sharedManager]searchForPeers];
-}
-
-+ (BluetoothTask *)task {
-    return [[[self class]alloc]init];
++ (BluetoothTask *)taskWithFile:(NSString *)file {
+    return [[[self class]alloc]initWithFile:file];
 }
 
 - (BOOL)canStop {
-    return NO;
-    // TODO: cancel bluetooth transfers
+    return YES;
 }
 
-- (id)init {
+- (id)initWithFile:(NSString *)file {
     self = [super init];
     if (self) {
+        self.file = file;
         [self setup];
     }
     return self;
+}
+
+- (void)stop {
+    [super stop];
+    [[BluetoothManager sharedManager]cancel];
+}
+
+- (void)start {
+    [super start];
+    [[BluetoothManager sharedManager]loadFile:_file];
+    [[BluetoothManager sharedManager]searchForPeers];
 }
 
 - (void)setup {

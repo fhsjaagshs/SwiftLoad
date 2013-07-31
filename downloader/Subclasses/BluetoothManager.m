@@ -136,6 +136,10 @@ static NSString *kFilesizeKey = @"s";
             _session.available = YES;
             if (_isTransferring) {
                 [self failWithError:[NSError errorWithDomain:@"You have been disconnected from the other iPhone" code:-1 userInfo:nil]];
+                
+                if (_targetPath.length) {
+                    [[NSFileManager defaultManager]removeItemAtPath:_targetPath error:nil];
+                }
             }
         } break;
         case GKPeerStateConnected: {
@@ -265,7 +269,6 @@ static NSString *kFilesizeKey = @"s";
                 [[NSFileManager defaultManager]moveItemAtPath:_targetPath toPath:getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:_filename]) error:nil];
                 [self finish];
             }
-            
         }
     } else if ([flag isEqualToString:@"response"]) {
         if (_isSender) {

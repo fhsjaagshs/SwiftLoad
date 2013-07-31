@@ -10,7 +10,6 @@
 
 @interface BluetoothTask : Task
 
-+ (BluetoothTask *)task;
-+ (void)sendFile:(NSString *)file;
++ (BluetoothTask *)taskWithFile:(NSString *)file;
 
 @end

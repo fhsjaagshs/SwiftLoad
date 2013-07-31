@@ -81,7 +81,8 @@
         if (buttonIndex == 0) {
             [kAppDelegate sendFileInEmail:[kAppDelegate openFile] fromViewController:self];
         } else if (buttonIndex == 1) {
-            [BluetoothTask sendFile:[kAppDelegate openFile]];
+            BluetoothTask *task = [BluetoothTask taskWithFile:[kAppDelegate openFile]];
+            [[TaskController sharedController]addTask:task];
         } else if (buttonIndex == 2) {
             [kAppDelegate uploadLocalFile:[kAppDelegate openFile] fromViewController:self];
         }

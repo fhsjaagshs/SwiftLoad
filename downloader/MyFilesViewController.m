@@ -378,7 +378,7 @@ static NSString *CellIdentifier = @"Cell";
 
     [self reindexFilelist];
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    SwiftLoadCell *cell = (SwiftLoadCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
         cell = [[SwiftLoadCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
@@ -421,6 +421,7 @@ static NSString *CellIdentifier = @"Cell";
         for (UIGestureRecognizer *rec in cell.gestureRecognizers) {
             rec.enabled = YES;
         }
+        
         NSString *detailText = [file.pathExtension.lowercaseString isEqualToString:@"zip"]?@"Archive, ":@"File, ";
         
         float fileSize = fileSize(file);
@@ -436,6 +437,8 @@ static NSString *CellIdentifier = @"Cell";
         }
         cell.detailTextLabel.text = detailText;
     }
+    
+    cell.isFirstCell = (indexPath.row == 0);
     
     [cell setNeedsDisplay];
     return cell;
@@ -687,7 +690,8 @@ static NSString *CellIdentifier = @"Cell";
         [kAppDelegate uploadLocalFile:file fromViewController:self];
         [self removeSideSwipeView:YES];
     } else if (number == 2) {
-        [BluetoothTask sendFile:file];
+        BluetoothTask *task = [BluetoothTask taskWithFile:[kAppDelegate openFile]];
+        [[TaskController sharedController]addTask:task];
         [self removeSideSwipeView:YES];
     } else if (number == 3) {
         [kAppDelegate sendFileInEmail:file fromViewController:self];
