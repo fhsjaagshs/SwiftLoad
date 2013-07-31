@@ -30,45 +30,33 @@
     
     err = AudioFileGetProperty(fileID, kAudioFilePropertyInfoDictionary, &piDataSize, &piDict);
     if (err != noErr) {
-        return [[NSArray alloc]initWithObjects:@"---", @"---", @"---", nil];
+        return [NSArray arrayWithObjects:@"---", @"---", @"---", nil];
     }
     
-    NSString *artistCF = (NSString *)CFDictionaryGetValue(piDict, CFSTR(kAFInfoDictionary_Artist));
-    NSString *songCF = (NSString *)CFDictionaryGetValue(piDict, CFSTR(kAFInfoDictionary_Title));
-    NSString *albumCF = (NSString *)CFDictionaryGetValue(piDict, CFSTR(kAFInfoDictionary_Album));
+    NSString *artist = (NSString *)CFDictionaryGetValue(piDict, CFSTR("artist")); // kAFInfoDictionary_Artist
+    NSString *song = (NSString *)CFDictionaryGetValue(piDict, CFSTR("title")); // kAFInfoDictionary_Title
+    NSString *album = (NSString *)CFDictionaryGetValue(piDict, CFSTR("album")); // kAFInfoDictionary_Album
     
-    NSString *artist = [NSString stringWithFormat:@"%@",artistCF];
-    NSString *song = [NSString stringWithFormat:@"%@",songCF];
-    NSString *album = [NSString stringWithFormat:@"%@",albumCF];
-
-    NSString *artistNil = @"---";
-    NSString *songNil = @"---";
-    NSString *albumNil = @"---";
+    CFRelease(piDict);
     
-    BOOL artistIsNil = [artist isEqualToString:@"(null)"];
-    BOOL albumIsNil = [album isEqualToString:@"(null)"];
-    BOOL songIsNil = [song isEqualToString:@"(null)"];
+    NSMutableArray *initArray = [NSMutableArray arrayWithCapacity:3];
     
-    NSMutableArray *initArray = [NSMutableArray arrayWithCapacity:10];
-    
-    if (artistIsNil) {
-        [initArray addObject:artistNil];
+    if ([artist isEqualToString:@"(null)"] || artist.length == 0) {
+        [initArray addObject:@"---"];
     } else {
         [initArray addObject:artist];
     }
-    if (songIsNil) {
-        [initArray addObject:songNil];
+    if ([song isEqualToString:@"(null)"] || song.length == 0) {
+        [initArray addObject:@"---"];
     } else {
         [initArray addObject:song];
     } 
     
-    if (albumIsNil) {
-        [initArray addObject:albumNil];
+    if ([song isEqualToString:@"(null)"] || song.length == 0) {
+        [initArray addObject:@"---"];
     } else {
         [initArray addObject:album];
     }
-    
-    CFRelease(piDict);
 
     return [NSArray arrayWithArray:initArray];
 }

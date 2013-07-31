@@ -133,11 +133,6 @@
     [_loopControl setCurrentMode:on?ToggleControlModeOn:ToggleControlModeOff];
 }
 
-- (void)startConverting {
-    AudioConversionTask *task = [AudioConversionTask taskWithSourceAudioFile:[kAppDelegate openFile]];
-    [[TaskController sharedController]addTask:task];
-}
-
 - (void)hideControls:(BOOL)hide {
     [self.time setHidden:hide];
     [self.pausePlay setHidden:hide];
@@ -230,10 +225,8 @@
             [[TaskController sharedController]addTask:task];
         } else if (buttonIndex == 2) {
             [kAppDelegate uploadLocalFile:[kAppDelegate openFile] fromViewController:self];
-        } else if (buttonIndex == 3) {
-            [self startConverting];
         }
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Upload to Dropbox", @"Convert to AAC", nil];
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Upload to Dropbox", nil];
     
     self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     

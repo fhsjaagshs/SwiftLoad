@@ -56,16 +56,16 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
 }
 
 void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID inPropertyID, UInt32 inPropertyValueSize, const void *inPropertyValue) {
-    
     if (inPropertyID == kAudioSessionProperty_AudioRouteChange) {
-        CFNumberRef routeChangeReasonRef = CFDictionaryGetValue((CFDictionaryRef)inPropertyValue, CFSTR(kAudioSession_AudioRouteChangeKey_Reason));
+        CFNumberRef routeChangeReasonRef = CFDictionaryGetValue((CFDictionaryRef)inPropertyValue, CFSTR("OutputDeviceDidChange_Reason"));
         
         SInt32 routeChangeReason;
         CFNumberGetValue(routeChangeReasonRef, kCFNumberSInt32Type, &routeChangeReason);
         
-        if (routeChangeReason == kAudioSessionRouteChangeReason_OldDeviceUnavailable) {
-            if ([[kAppDelegate audioPlayer]isPlaying]) {
-                [[kAppDelegate audioPlayer]pause];
+        if (routeChangeReason == 2) { // 2 = kAudioSessionRouteChangeReason_OldDeviceUnavailable
+            AVAudioPlayer *audioPlayer = [kAppDelegate audioPlayer];
+            if (audioPlayer.isPlaying) {
+                [audioPlayer pause];
             }
         }
     }
