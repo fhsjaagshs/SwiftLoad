@@ -34,12 +34,24 @@
 
 - (void)start {
     [super start];
-    NSError *error = [self convert];
-    if (error) {
-        [self showFailure];
-    } else {
-        [self showSuccess];
-    }
+    [self convertAsync];
+}
+
+- (void)convertAsync {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        @autoreleasepool {
+            NSError *error = [self convert];
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                @autoreleasepool {
+                    if (error) {
+                        [self showFailure];
+                    } else {
+                        [self showSuccess];
+                    }
+                }
+            });
+        }
+    });
 }
 
 - (NSError *)convert {
