@@ -20,5 +20,6 @@
 @protocol HamburgerViewDelegate <NSObject>
 @optional
 - (void)hamburgerCellWasSelectedAtIndex:(int)index;
+- (void)taskAtIndex:(int)index;
 
 @end

@@ -144,7 +144,6 @@
 }
 
 - (void)close {
-    [_fileName resignFirstResponder];
     [self dismissModalViewControllerAnimated:YES];
 }
 

@@ -8,17 +8,9 @@
 
 #import "HamburgerCell.h"
 
-static NSString *kCellIdentifierHamburger = @"hamburger";
+
 
 @implementation HamburgerCell
-
-+ (HamburgerCell *)cell {
-    return [[[self class]alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifierHamburger];
-}
-
-+ (HamburgerCell *)dequeueReusableCellFromTableView:(UITableView *)tableView {
-    return (HamburgerCell *)[tableView dequeueReusableCellWithIdentifier:kCellIdentifierHamburger];
-}
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];

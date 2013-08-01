@@ -9,6 +9,10 @@
 #import "Hamburger.h"
 #import "HamburgerCell.h"
 
+static NSString *kCellIdentifierHamburger = @"hamburgertext";
+static NSString * const kCellIdentifierHamburgerSeparator = @"hamburgersep";
+static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
+
 @interface HamburgerView : UIView <UITableViewDataSource, UITableViewDelegate>
 
 + (HamburgerView *)view;
@@ -139,32 +143,48 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    HamburgerCell *cell = [HamburgerCell dequeueReusableCellFromTableView:tableView];
-    
-    if (cell == nil) {
-        cell = [HamburgerCell cell];
-        cell.backgroundColor = self.backgroundColor;
-    }
-    
     int row = indexPath.row;
     
-    cell.isFirstCell = (indexPath.row == 0);
-    
-    if (row == 0) {
-        cell.textLabel.text = @"Download URL";
-    } else if (row == 1) {
-        cell.textLabel.text = @"WebDAV Server";
-    } else if (row == 2) {
-        cell.textLabel.text = @"Browse Dropbox";
-    } else if (row == 3) {
-        cell.textLabel.text = @"Browse SFTP";
-    } else if (row == 4) {
-        cell.textLabel.text = @"Settings";
+    if (row < 5) {
+        HamburgerCell *cell = (HamburgerCell *)[tableView dequeueReusableCellWithIdentifier:kCellIdentifierHamburger];
+        
+        if (cell == nil) {
+            cell = [[HamburgerCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifierHamburger];
+            cell.backgroundColor = self.backgroundColor;
+        }
+        
+        cell.isFirstCell = (indexPath.row == 0);
+        
+        if (row == 0) {
+            cell.textLabel.text = @"Download URL";
+        } else if (row == 1) {
+            cell.textLabel.text = @"WebDAV Server";
+        } else if (row == 2) {
+            cell.textLabel.text = @"Browse Dropbox";
+        } else if (row == 3) {
+            cell.textLabel.text = @"Browse SFTP";
+        } else if (row == 4) {
+            cell.textLabel.text = @"Settings";
+        }
+        
+        [cell setNeedsDisplay];
+        
+        return cell;
+    } else if (row == 5) {
+        // dashed separator
+    } else {
+        TaskCell *cell = (TaskCell *)[_theTableView dequeueReusableCellWithIdentifier:kCellIdentifierHamburgerTask];
+        
+        if (!cell) {
+            cell = [[TaskCell alloc]initWithReuseIdentifier:kCellIdentifierHamburgerTask];
+        }
+        
+        Task *task = [[TaskController sharedController] objectAtIndex:indexPath.row];
+        task.delegate = cell;
+        cell.customTitleLabel.text = [task.name percentSanitize];
     }
     
-    [cell setNeedsDisplay];
-    
-    return cell;
+    return nil;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
