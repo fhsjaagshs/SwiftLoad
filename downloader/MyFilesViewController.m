@@ -422,18 +422,18 @@ static NSString *CellIdentifier = @"Cell";
             rec.enabled = YES;
         }
         
-        NSString *detailText = [file.pathExtension.lowercaseString isEqualToString:@"zip"]?@"Archive, ":@"File, ";
+        NSMutableString *detailText = [NSMutableString stringWithString:[file.pathExtension.lowercaseString isEqualToString:@"zip"]?@"Archive, ":@"File, "];
         
         float fileSize = fileSize(file);
         
         if (fileSize < 1024.0) {
-            detailText = [detailText stringByAppendingFormat:@"%.0f Byte%@",fileSize,(fileSize > 1)?@"s":@""];
+            [detailText appendFormat:@"%.0f Byte%@",fileSize,(fileSize > 1)?@"s":@""];
         } else if (fileSize < (1024*1024) && fileSize > 1024.0 ) {
             fileSize = fileSize/1014;
-            detailText = [detailText stringByAppendingFormat:@"%.0f KB",fileSize];
+            [detailText appendFormat:@"%.0f KB",fileSize];
         } else if (fileSize < (1024*1024*1024) && fileSize > (1024*1024)) {
             fileSize = fileSize/(1024*1024);
-            detailText = [detailText stringByAppendingFormat:@"%.0f MB",fileSize];
+            [detailText appendFormat:@"%.0f MB",fileSize];
         }
         cell.detailTextLabel.text = detailText;
     }
