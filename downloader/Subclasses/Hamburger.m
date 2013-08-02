@@ -87,7 +87,6 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
     _viewToMove.layer.shadowOffset = CGSizeMake(-3, 0);
     _viewToMove.layer.shouldRasterize = YES;
     _viewToMove.layer.rasterizationScale = [UIScreen mainScreen].scale;
-    [self.hamburgerView.theTableView reloadData];
     [UIView animateWithDuration:0.3f animations:^{
         _viewToMove.layer.shadowOpacity = 0.25f;
         _hamburgerView.alpha = 1.0f;
