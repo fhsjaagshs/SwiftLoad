@@ -43,6 +43,7 @@
     #import "ZoomingImageView.h"
     #import "ContentOffsetWatchdog.h"
     #import "WhiteProgressView.h"
+    #import "CircularProgressView.h"
     #import "HUDProgressView.h"
     #import "TransparentAlert.h"
     #import "ToggleControl.h"

@@ -33,6 +33,10 @@
     return NO;
 }
 
+- (NSString *)verb {
+    return @"Decompressing";
+}
+
 - (void)stop {
     [super stop];
 }

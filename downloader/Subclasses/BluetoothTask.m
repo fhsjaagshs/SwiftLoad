@@ -24,6 +24,10 @@
     return YES;
 }
 
+- (NSString *)verb {
+    return [[BluetoothManager sharedManager]isSender]?@"Sending":@"Receiving";
+}
+
 - (id)initWithFile:(NSString *)file {
     self = [super init];
     if (self) {
@@ -48,7 +52,7 @@
     
     __weak BluetoothTask *weakself = self;
     
-    self.name = [NSString stringWithFormat:@"%@: %@",[[BluetoothManager sharedManager]isSender]?@"Sending":@"Receiving",[[BluetoothManager sharedManager]getFilename]];
+    self.name = [[BluetoothManager sharedManager]getFilename];
     [[BluetoothManager sharedManager]setProgressBlock:^(float progress) {
         [weakself.delegate setProgress:progress];
     }];

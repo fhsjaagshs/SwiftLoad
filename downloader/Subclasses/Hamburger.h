@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+extern NSString * const kHamburgerTaskUpdateNotification;
+
 @protocol HamburgerViewDelegate;
 
 @interface HamburgerButtonItem : UIBarButtonItem

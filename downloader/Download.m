@@ -19,6 +19,10 @@
     [super stop];
 }
 
+- (NSString *)verb {
+    return @"Downloading";
+}
+
 - (void)start {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     [super start];

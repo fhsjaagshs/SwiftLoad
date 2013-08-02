@@ -10,9 +10,6 @@
 
 @interface TaskController : UIView
 
-- (void)hide;
-- (void)show;
-
 - (void)removeAllTasks;
 - (void)removeTask:(Task *)download;
 - (void)addTask:(Task *)download;

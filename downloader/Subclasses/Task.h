@@ -28,6 +28,8 @@
 
 - (void)handleBackgroundTaskExpiration;
 
+- (NSString *)verb;
+
 @end
 
 @protocol TaskDelegate <NSObject>
@@ -39,5 +41,6 @@
 - (void)setProgress:(float)progress;
 
 - (void)setText:(NSString *)string;
+- (void)setDetailText:(NSString *)string;
 
 @end

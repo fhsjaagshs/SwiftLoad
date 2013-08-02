@@ -10,14 +10,18 @@
 
 @interface TaskCell ()
 
-@property (nonatomic, strong) WhiteProgressView *progressView;
+@property (nonatomic, strong) CircularProgressView *progressView;
 
 @end
 
 @implementation TaskCell
 
 - (void)setText:(NSString *)text {
-    _customTitleLabel.text = text;
+    self.textLabel.text = text;
+}
+
+- (void)setDetailText:(NSString *)string {
+    self.detailTextLabel.text = string;
 }
 
 - (void)reset {
@@ -38,35 +42,19 @@
 }
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier {
-    self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+    self = [super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.progressView = [[WhiteProgressView alloc]init];
-        self.customTitleLabel = [[UILabel alloc]init];
-        _customTitleLabel.tag = 69;
-        _customTitleLabel.backgroundColor = [UIColor clearColor];
-        _customTitleLabel.textAlignment = UITextAlignmentCenter;
-        _customTitleLabel.textColor = [UIColor whiteColor];
-        _customTitleLabel.font = [UIFont boldSystemFontOfSize:12];
+        self.textLabel.textColor = [UIColor blackColor];
+        self.detailTextLabel.textColor = [UIColor darkGrayColor];
         
-        [self.contentView addSubview:_customTitleLabel];
-        [self.contentView addSubview:_progressView];
+        self.progressView = [[CircularProgressView alloc]initWithFrame:CGRectMake(2, 2, 40, 40)];
+        self.accessoryView = _progressView;
         
         self.contentView.backgroundColor = [UIColor clearColor];
         self.backgroundView.backgroundColor = [UIColor clearColor];
         self.backgroundColor = [UIColor clearColor];
-        self.textLabel.textColor = [UIColor clearColor];
-        self.textLabel.userInteractionEnabled = NO;
-        [self.textLabel removeFromSuperview];
     }
     return self;
-}
-
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    [self.detailTextLabel removeFromSuperview];
-    _progressView.frame = CGRectMake(5, 5, self.bounds.size.width-20, 20);
-    _customTitleLabel.frame = CGRectMake(0, 25, self.bounds.size.width, 20);
-    [_progressView setNeedsDisplay];
 }
 
 @end

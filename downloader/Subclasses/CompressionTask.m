@@ -34,6 +34,10 @@
     return NO;
 }
 
+- (NSString *)verb {
+    return @"Compressing";
+}
+
 - (void)start {
     [super start];
     [self compress];

@@ -34,6 +34,10 @@ float const kClearOutDelayTask = 0.6f;
     
 }
 
+- (NSString *)verb {
+    return @"";
+}
+
 - (void)cancelBackgroundTask {
     [[BGProcFactory sharedFactory]endProcForKey:_bgTaskIdentifer];
 }
@@ -50,18 +54,21 @@ float const kClearOutDelayTask = 0.6f;
         [_delegate reset];
     }
     [[TaskController sharedController]removeTask:self];
+    [[NSNotificationCenter defaultCenter]postNotificationName:kHamburgerTaskUpdateNotification object:nil];
 }
 
 - (void)stop {
     self.complete = YES;
     self.succeeded = NO;
     [self cancelBackgroundTask];
+    [self performSelector:@selector(clearOutMyself) withObject:nil afterDelay:kClearOutDelayTask];
 }
 
 - (void)start {
     self.complete = NO;
     self.succeeded = NO;
     [self startBackgroundTask];
+    [[NSNotificationCenter defaultCenter]postNotificationName:kHamburgerTaskUpdateNotification object:nil];
 }
 
 - (void)showFailure {
@@ -69,7 +76,7 @@ float const kClearOutDelayTask = 0.6f;
     self.complete = YES;
     self.succeeded = NO;
     
-    if (_delegate) {
+    if (_delegate && [_delegate respondsToSelector:@selector(drawRed)]) {
         [_delegate drawRed];
     }
     

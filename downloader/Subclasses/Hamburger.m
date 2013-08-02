@@ -9,6 +9,7 @@
 #import "Hamburger.h"
 #import "HamburgerCell.h"
 
+NSString * const kHamburgerTaskUpdateNotification = @"kHamburgerTaskUpdateNotification";
 static NSString *kCellIdentifierHamburger = @"hamburgertext";
 static NSString * const kCellIdentifierHamburgerSeparator = @"hamburgersep";
 static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
@@ -86,6 +87,7 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
     _viewToMove.layer.shadowOffset = CGSizeMake(-3, 0);
     _viewToMove.layer.shouldRasterize = YES;
     _viewToMove.layer.rasterizationScale = [UIScreen mainScreen].scale;
+    [self.hamburgerView.theTableView reloadData];
     [UIView animateWithDuration:0.3f animations:^{
         _viewToMove.layer.shadowOpacity = 0.25f;
         _hamburgerView.alpha = 1.0f;
@@ -116,6 +118,7 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 - (id)init {
     self = [super init];
     if (self) {
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(tasksChanged) name:kHamburgerTaskUpdateNotification object:nil];
         self.userInteractionEnabled = YES;
         self.backgroundColor = bgcolor;
         self.frame = CGRectMake(0, 20, 250, [[UIScreen mainScreen]applicationFrame].size.height);
@@ -133,12 +136,18 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
     return self;
 }
 
+- (void)tasksChanged {
+    [UIView transitionWithView:_theTableView duration:0.3f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+         [_theTableView reloadData];
+     } completion:nil];
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return (section == 0)?4:[[TaskController sharedController]numberOfTasks];
+    return (section == 0)?5:[[TaskController sharedController]numberOfTasks];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return ([[TaskController sharedController]numberOfTasks] > 0)?2:1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -170,16 +179,19 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
         [cell setNeedsDisplay];
         
         return cell;
-    } else {
+    } else if (indexPath.section == 1) {
         TaskCell *cell = (TaskCell *)[_theTableView dequeueReusableCellWithIdentifier:kCellIdentifierHamburgerTask];
         
         if (!cell) {
             cell = [[TaskCell alloc]initWithReuseIdentifier:kCellIdentifierHamburgerTask];
         }
         
-        Task *task = [[TaskController sharedController]taskAtIndex:indexPath.row];
+        Task *task = [[TaskController sharedController]taskAtIndex:row];
         task.delegate = cell;
-        cell.customTitleLabel.text = [task.name percentSanitize];
+        [cell setText:[task.name percentSanitize]];
+        [cell setDetailText:[task verb]];
+
+        return cell;
     }
     
     return nil;
@@ -209,21 +221,25 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
     [_theTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-/*- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
-    return [NSString stringWithFormat:@"Version %@",[[NSBundle mainBundle]objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
-}*/
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return @"Cancel";
+}
 
-/*- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
- // maybe, depends on how viewForHeaderInSection: works
- }
- 
- - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
- // say main menu
- }
- 
- - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
- // version label
- }*/
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 1 && indexPath.row < [[TaskController sharedController]numberOfTasks]-1) {
+        return [[[TaskController sharedController]taskAtIndex:indexPath.row]canStop];
+    }
+    return NO;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [_theTableView beginUpdates];
+        [_theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+        [[TaskController sharedController]removeTaskAtIndex:indexPath.row];
+        [_theTableView endUpdates];
+    }
+}
 
 - (void)layoutSubviews {
     [super layoutSubviews];
