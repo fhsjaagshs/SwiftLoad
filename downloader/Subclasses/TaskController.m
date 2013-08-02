@@ -28,6 +28,14 @@ static NSString * const cellId = @"TaskCell";
 // Task Management
 //
 
+- (int)numberOfTasks {
+    return _taskObjs.count;
+}
+
+- (Task *)taskAtIndex:(int)index {
+    return [_taskObjs objectAtIndex:index];
+}
+
 - (int)indexOfTask:(Task *)task {
     return [_taskObjs indexOfObject:task];
 }

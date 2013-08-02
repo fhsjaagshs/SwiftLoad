@@ -17,9 +17,13 @@
 - (void)removeTask:(Task *)download;
 - (void)addTask:(Task *)download;
 
+- (Task *)taskAtIndex:(int)index;
+
 - (void)removeTaskAtIndex:(int)index;
 
 - (int)indexOfTask:(Task *)download;
+
+- (int)numberOfTasks;
 
 + (TaskController *)sharedController;
 

@@ -106,6 +106,7 @@
 		F1564B0C1776A27900E53B42 /* loop_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1564B0A1776A27900E53B42 /* loop_pressed@2x.png */; };
 		F16187A517760311005D4568 /* button_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = F16187A317760311005D4568 /* button_icon.png */; };
 		F16187A617760311005D4568 /* button_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F16187A417760311005D4568 /* button_icon@2x.png */; };
+		F163C4E617AB508D007AB612 /* DashedLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = F163C4E517AB508D007AB612 /* DashedLineView.m */; };
 		F165C3E816E44244004B81F1 /* clipboard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F165C3E716E44244004B81F1 /* clipboard@2x.png */; };
 		F165C3EC16E445E5004B81F1 /* clipboard.png in Resources */ = {isa = PBXBuildFile; fileRef = F165C3EB16E445E5004B81F1 /* clipboard.png */; };
 		F166BBC414E2171A003E5A07 /* webDAVViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F166BBC214E2171A003E5A07 /* webDAVViewController.m */; };
@@ -381,6 +382,8 @@
 		F1564B0A1776A27900E53B42 /* loop_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loop_pressed@2x.png"; sourceTree = "<group>"; };
 		F16187A317760311005D4568 /* button_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_icon.png; sourceTree = "<group>"; };
 		F16187A417760311005D4568 /* button_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_icon@2x.png"; sourceTree = "<group>"; };
+		F163C4E417AB508D007AB612 /* DashedLineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashedLineView.h; sourceTree = "<group>"; };
+		F163C4E517AB508D007AB612 /* DashedLineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DashedLineView.m; sourceTree = "<group>"; };
 		F165C3E716E44244004B81F1 /* clipboard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clipboard@2x.png"; sourceTree = "<group>"; };
 		F165C3EB16E445E5004B81F1 /* clipboard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clipboard.png; sourceTree = "<group>"; };
 		F166BBC114E2171A003E5A07 /* webDAVViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = webDAVViewController.h; sourceTree = "<group>"; };
@@ -822,6 +825,8 @@
 				F137F3471791FC5A008FCFD7 /* Hamburger.m */,
 				F137F3491791FD13008FCFD7 /* HamburgerCell.h */,
 				F137F34A1791FD14008FCFD7 /* HamburgerCell.m */,
+				F163C4E417AB508D007AB612 /* DashedLineView.h */,
+				F163C4E517AB508D007AB612 /* DashedLineView.m */,
 			);
 			name = Hamburger;
 			sourceTree = "<group>";
@@ -1456,6 +1461,7 @@
 				F1681E8F17A5BE9B00ACAAD0 /* UnzippingTask.m in Sources */,
 				F1681E9217A5C28D00ACAAD0 /* CompressionTask.m in Sources */,
 				F11EE83417A6CFFC007DF21A /* BluetoothTask.m in Sources */,
+				F163C4E617AB508D007AB612 /* DashedLineView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -134,18 +134,18 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 5;
+    return (section == 0)?4:[[TaskController sharedController]numberOfTasks];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 2;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     int row = indexPath.row;
     
-    if (row < 5) {
+    if (indexPath.section == 0) {
         HamburgerCell *cell = (HamburgerCell *)[tableView dequeueReusableCellWithIdentifier:kCellIdentifierHamburger];
         
         if (cell == nil) {
@@ -170,8 +170,6 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
         [cell setNeedsDisplay];
         
         return cell;
-    } else if (row == 5) {
-        // dashed separator
     } else {
         TaskCell *cell = (TaskCell *)[_theTableView dequeueReusableCellWithIdentifier:kCellIdentifierHamburgerTask];
         
@@ -179,9 +177,25 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
             cell = [[TaskCell alloc]initWithReuseIdentifier:kCellIdentifierHamburgerTask];
         }
         
-        Task *task = [[TaskController sharedController] objectAtIndex:indexPath.row];
+        Task *task = [[TaskController sharedController]taskAtIndex:indexPath.row];
         task.delegate = cell;
         cell.customTitleLabel.text = [task.name percentSanitize];
+    }
+    
+    return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (section == 1) {
+        return ([[TaskController sharedController]numberOfTasks] > 0)?10:0;
+    }
+    return 0;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (section == 1 && [[TaskController sharedController]numberOfTasks] > 0) {
+        DashedLineView *dashedLineView = [[DashedLineView alloc]initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 5)];
+        return dashedLineView;
     }
     
     return nil;
