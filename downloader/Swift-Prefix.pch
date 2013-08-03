@@ -39,6 +39,7 @@
 
     #import "StyleFactory.h"
     #import "BGProcFactory.h"
+    #import "NetworkActivityController.h"
 
     #import "ZoomingImageView.h"
     #import "ContentOffsetWatchdog.h"

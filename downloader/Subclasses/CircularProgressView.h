@@ -13,6 +13,8 @@
 - (void)drawGreen;
 - (void)drawRed;
 
+- (void)reset;
+
 @property (nonatomic, assign, setter = setProgress:) float progress;
 
 @end

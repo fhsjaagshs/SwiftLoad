@@ -31,7 +31,7 @@ float const kClearOutDelayTask = 0.6f;
 }
 
 - (void)handleBackgroundTaskExpiration {
-    
+    [self stop];
 }
 
 - (NSString *)verb {
@@ -44,7 +44,6 @@ float const kClearOutDelayTask = 0.6f;
 
 - (void)startBackgroundTask {
     [[BGProcFactory sharedFactory]startProcForKey:_bgTaskIdentifer andExpirationHandler:^{
-        [self stop];
         [self handleBackgroundTaskExpiration];
     }];
 }
@@ -53,6 +52,9 @@ float const kClearOutDelayTask = 0.6f;
     if (_delegate) {
         [_delegate reset];
     }
+    
+    self.delegate = nil;
+    
     [[TaskController sharedController]removeTask:self];
     [[NSNotificationCenter defaultCenter]postNotificationName:kHamburgerTaskUpdateNotification object:nil];
 }

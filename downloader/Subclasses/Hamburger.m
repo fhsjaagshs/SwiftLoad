@@ -136,9 +136,7 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 }
 
 - (void)tasksChanged {
-    [UIView transitionWithView:_theTableView duration:0.3f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-         [_theTableView reloadData];
-     } completion:nil];
+    [_theTableView reloadData];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -189,7 +187,7 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
         task.delegate = cell;
         [cell setText:[task.name percentSanitize]];
         [cell setDetailText:[task verb]];
-
+        
         return cell;
     }
     
@@ -212,6 +210,13 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
     return nil;
 }
 
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 1)
+        return nil;
+    
+    return indexPath;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (_delegate && [_delegate respondsToSelector:@selector(hamburgerCellWasSelectedAtIndex:)]) {
         [_item hide];
@@ -225,7 +230,7 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 1 && indexPath.row < [[TaskController sharedController]numberOfTasks]-1) {
+    if (indexPath.section == 1 && indexPath.row < [[TaskController sharedController]numberOfTasks]) {
         return [[[TaskController sharedController]taskAtIndex:indexPath.row]canStop];
     }
     return NO;
@@ -233,9 +238,13 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [_theTableView beginUpdates];
-        [_theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
         [[TaskController sharedController]removeTaskAtIndex:indexPath.row];
+        [_theTableView beginUpdates];
+        [_theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        
+        if ([[TaskController sharedController]numberOfTasks] == 0) {
+            [_theTableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
         [_theTableView endUpdates];
     }
 }
@@ -243,6 +252,10 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 - (void)layoutSubviews {
     [super layoutSubviews];
     _theTableView.frame = self.bounds;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
 
 @end

@@ -17,6 +17,12 @@
 
 @implementation CircularProgressView
 
+- (void)reset {
+    self.progress = 0.0f;
+    self.isFinished = NO;
+    [self setNeedsDisplay];
+}
+
 - (void)drawGreen {
     self.isFinished = YES;
     self.succeeded = YES;
@@ -35,7 +41,7 @@
 }
 
 - (id)init {
-	return [self initWithFrame:CGRectMake(0.f, 0.f, 37.f, 37.f)];
+	return [self initWithFrame:CGRectMake(0.0f, 0.0f, 37.0f, 37.0f)];
 }
 
 - (id)initWithFrame:(CGRect)frame {
@@ -43,7 +49,7 @@
 	if (self) {
 		self.backgroundColor = [UIColor clearColor];
 		self.opaque = NO;
-		_progress = 0.f;
+		_progress = 0.0f;
 	}
 	return self;
 }

@@ -38,13 +38,16 @@ static NSString * const cellId = @"TaskCell";
 
 - (void)removeAllTasks {
     for (Task *task in _taskObjs) {
-        [task stop];
-        [_taskObjs removeObject:task];
+        [self removeTask:task];
     }
 }
 
 - (void)removeTask:(Task *)task {
-    [task stop];
+    
+    if (!task.complete) {
+        [task stop];
+    }
+    
     [_taskObjs removeObject:task];
 }
 

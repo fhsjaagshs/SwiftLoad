@@ -11,7 +11,7 @@
 @implementation Download
 
 - (void)stop {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    [[NetworkActivityController sharedController]hideIfPossible];
     
     if ([[NSFileManager defaultManager]fileExistsAtPath:_temporaryPath]) {
         [[NSFileManager defaultManager]removeItemAtPath:_temporaryPath error:nil];
@@ -24,13 +24,13 @@
 }
 
 - (void)start {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    [[NetworkActivityController sharedController]show];
     [super start];
 }
 
 - (void)showFailure {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    
+    [[NetworkActivityController sharedController]hideIfPossible];
+
     if ([[NSFileManager defaultManager]fileExistsAtPath:_temporaryPath]) {
         [[NSFileManager defaultManager]removeItemAtPath:_temporaryPath error:nil];
     }
@@ -38,8 +38,8 @@
 }
 
 - (void)showSuccess {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    
+    [[NetworkActivityController sharedController]hideIfPossible];
+
     NSString *targetPath = getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:[self.name percentSanitize]]);
     [[NSFileManager defaultManager]moveItemAtPath:_temporaryPath toPath:targetPath error:nil];
     

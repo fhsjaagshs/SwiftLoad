@@ -25,7 +25,8 @@
 }
 
 - (void)reset {
-    [self setProgress:0.0f];
+    self.progress = 0.0f;
+    [_progressView reset];
 }
 
 - (void)drawGreen {

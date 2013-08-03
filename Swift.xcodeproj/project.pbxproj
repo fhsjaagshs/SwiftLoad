@@ -171,6 +171,7 @@
 		F18D19C617A5A7B1009A8D07 /* TaskController.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D19C517A5A7B1009A8D07 /* TaskController.m */; };
 		F18D19CB17A5AB53009A8D07 /* TaskCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D19CA17A5AB53009A8D07 /* TaskCell.m */; };
 		F19BB51C16E006CA0081C95B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F19BB51916E006CA0081C95B /* main.m */; };
+		F19FD8AD17ACDB2500B60C3B /* NetworkActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = F19FD8AC17ACDB2500B60C3B /* NetworkActivityController.m */; };
 		F1A72948149876040049DBB6 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A72947149876040049DBB6 /* GameKit.framework */; };
 		F1A923FE140D4DDD003ACDAB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A923FD140D4DDD003ACDAB /* QuartzCore.framework */; };
 		F1B2489014E333E300C44E11 /* webDAVHelp.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B2488E14E333E200C44E11 /* webDAVHelp.m */; };
@@ -505,6 +506,8 @@
 		F19BB51916E006CA0081C95B /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F19BB51A16E006CA0081C95B /* Swift-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Swift-Info.plist"; sourceTree = "<group>"; };
 		F19BB51B16E006CA0081C95B /* Swift-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Swift-Prefix.pch"; sourceTree = "<group>"; };
+		F19FD8AB17ACDB2400B60C3B /* NetworkActivityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkActivityController.h; sourceTree = "<group>"; };
+		F19FD8AC17ACDB2500B60C3B /* NetworkActivityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkActivityController.m; sourceTree = "<group>"; };
 		F1A72947149876040049DBB6 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		F1A923FD140D4DDD003ACDAB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F1B2488D14E333E200C44E11 /* webDAVHelp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = webDAVHelp.h; sourceTree = "<group>"; };
@@ -923,6 +926,8 @@
 				F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */,
 				F1BA8C7C17728500007AAF85 /* BGProcFactory.h */,
 				F1BA8C7D17728500007AAF85 /* BGProcFactory.m */,
+				F19FD8AB17ACDB2400B60C3B /* NetworkActivityController.h */,
+				F19FD8AC17ACDB2500B60C3B /* NetworkActivityController.m */,
 				F1E9F78B177402B600EC345C /* StyleFactory.h */,
 				F1E9F78C177402B600EC345C /* StyleFactory.m */,
 				F106A7CD178876B1002D3BC8 /* SFTPCreds.h */,
@@ -1456,6 +1461,7 @@
 				F11EE83417A6CFFC007DF21A /* BluetoothTask.m in Sources */,
 				F163C4E617AB508D007AB612 /* DashedLineView.m in Sources */,
 				F163C4E917AB59B1007AB612 /* CircularProgressView.m in Sources */,
+				F19FD8AD17ACDB2500B60C3B /* NetworkActivityController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
