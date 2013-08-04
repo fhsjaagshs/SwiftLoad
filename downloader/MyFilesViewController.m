@@ -883,7 +883,6 @@ static NSString *CellIdentifier = @"Cell";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     [_theTableView flashScrollIndicators];
-    [_theTableView reloadData];
 }
 
 - (NSUInteger)supportedInterfaceOrientations {

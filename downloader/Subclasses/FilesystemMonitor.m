@@ -82,7 +82,8 @@ static void KQCallback(CFFileDescriptorRef kqRef, CFOptionFlags callBackTypes, v
                 eventToAdd.ident = dirFD;
                 eventToAdd.filter = EVFILT_VNODE;
                 eventToAdd.flags = EV_ADD | EV_CLEAR;
-                eventToAdd.fflags = NOTE_WRITE;
+                eventToAdd.fflags = NOTE_WRITE | NOTE_DELETE | NOTE_EXTEND | NOTE_ATTRIB | NOTE_LINK | NOTE_RENAME;
+                
                 eventToAdd.data = 0;
                 eventToAdd.udata = nil;
                 
