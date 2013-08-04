@@ -80,6 +80,9 @@
     #import "FTPDownload.h"
     #import "SFTPDownload.h"
 
+    #import "Upload.h"
+    #import "DropboxUpload.h"
+
     #import "HTTPServer.h"
     #import "DAVConnection.h"
     #import "BluetoothManager.h"

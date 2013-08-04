@@ -211,7 +211,7 @@ static NSString *CellIdentifier = @"dbcell";
 
 - (void)loadUserID {
     if (_userID.length == 0) {
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+        [[NetworkActivityController sharedController]show];
         [DroppinBadassBlocks loadAccountInfoWithCompletionBlock:^(DBAccountInfo *info, NSError *error) {
             if (error) {
                 [TransparentAlert showAlertWithTitle:[NSString stringWithFormat:@"Dropbox Error %d",error.code] andMessage:[error localizedDescription]];
@@ -239,10 +239,10 @@ static NSString *CellIdentifier = @"dbcell";
 }
 
 - (void)updateFileListing {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    [[NetworkActivityController sharedController]show];
     [DroppinBadassBlocks loadDelta:_cursor withCompletionHandler:^(NSArray *entries, NSString *cursor, BOOL hasMore, BOOL shouldReset, NSError *error) {
         if (error) {
-            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            [[NetworkActivityController sharedController]hideIfPossible];
             self.shouldMassInsert = NO;
         } else {
             if (shouldReset) {
@@ -284,7 +284,7 @@ static NSString *CellIdentifier = @"dbcell";
                 [self saveCursor];
                 self.shouldMassInsert = NO;
                 [self refreshStateWithAnimationStyle:UITableViewRowAnimationFade];
-                [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+                [[NetworkActivityController sharedController]hideIfPossible];
             }
         }
     }];
@@ -418,7 +418,7 @@ static NSString *CellIdentifier = @"dbcell";
 }
 
 - (void)close {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    [[NetworkActivityController sharedController]hideIfPossible];
     [DroppinBadassBlocks cancel];
     [self dismissModalViewControllerAnimated:YES];
 }

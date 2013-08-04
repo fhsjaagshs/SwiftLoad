@@ -20,7 +20,7 @@
     self = [super init];
     if (self) {
         self.file = file;
-        self.name = [NSString stringWithFormat:@"Unzipping: %@",file.lastPathComponent];
+        self.name = file.lastPathComponent;
     }
     return self;
 }

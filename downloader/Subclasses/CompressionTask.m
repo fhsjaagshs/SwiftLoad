@@ -26,6 +26,7 @@
     if (self) {
         self.itemsToCompress = items;
         self.zipFileLocation = zipFile;
+        self.name = zipFile.lastPathComponent;
     }
     return self;
 }

@@ -30,6 +30,8 @@
 		F106A4E5178865AD002D3BC8 /* DLSFTPUploadRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4D9178865AD002D3BC8 /* DLSFTPUploadRequest.m */; };
 		F106A4E6178865AD002D3BC8 /* NSDictionary+SFTPFileAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4DB178865AD002D3BC8 /* NSDictionary+SFTPFileAttributes.m */; };
 		F106A7CF178876B1002D3BC8 /* SFTPCreds.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A7CE178876B1002D3BC8 /* SFTPCreds.m */; };
+		F106ABDE17ADE5120076E57F /* DropboxUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = F106ABDD17ADE5120076E57F /* DropboxUpload.m */; };
+		F106ABE117ADE54A0076E57F /* Upload.m in Sources */ = {isa = PBXBuildFile; fileRef = F106ABE017ADE54A0076E57F /* Upload.m */; };
 		F10CBC5A1707D6E700C82AFB /* DroppinBadassBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */; };
 		F10CBC5D17080C6600C82AFB /* DropboxBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */; };
 		F1122A76142E4E8B00A04CC6 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */; };
@@ -272,6 +274,10 @@
 		F106A4E8178866F2002D3BC8 /* DLSFTP-all.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DLSFTP-all.h"; sourceTree = "<group>"; };
 		F106A7CD178876B1002D3BC8 /* SFTPCreds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFTPCreds.h; sourceTree = "<group>"; };
 		F106A7CE178876B1002D3BC8 /* SFTPCreds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFTPCreds.m; sourceTree = "<group>"; };
+		F106ABDC17ADE5120076E57F /* DropboxUpload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxUpload.h; sourceTree = "<group>"; };
+		F106ABDD17ADE5120076E57F /* DropboxUpload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxUpload.m; sourceTree = "<group>"; };
+		F106ABDF17ADE54A0076E57F /* Upload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Upload.h; sourceTree = "<group>"; };
+		F106ABE017ADE54A0076E57F /* Upload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Upload.m; sourceTree = "<group>"; };
 		F10CBC581707D6E700C82AFB /* DroppinBadassBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DroppinBadassBlocks.h; path = ../Categories/DroppinBadassBlocks.h; sourceTree = "<group>"; };
 		F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DroppinBadassBlocks.m; path = ../Categories/DroppinBadassBlocks.m; sourceTree = "<group>"; };
 		F10CBC5B17080C6600C82AFB /* DropboxBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxBrowserViewController.h; sourceTree = "<group>"; };
@@ -681,6 +687,17 @@
 				F106A4E8178866F2002D3BC8 /* DLSFTP-all.h */,
 			);
 			path = DLSFTP;
+			sourceTree = "<group>";
+		};
+		F106ABDB17ADE5000076E57F /* Uploads */ = {
+			isa = PBXGroup;
+			children = (
+				F106ABDC17ADE5120076E57F /* DropboxUpload.h */,
+				F106ABDD17ADE5120076E57F /* DropboxUpload.m */,
+				F106ABDF17ADE54A0076E57F /* Upload.h */,
+				F106ABE017ADE54A0076E57F /* Upload.m */,
+			);
+			name = Uploads;
 			sourceTree = "<group>";
 		};
 		F119CEE813F46DA6007D67E4 = {
@@ -1119,6 +1136,7 @@
 		F18D19C817A5A8B5009A8D07 /* Task Subclasses */ = {
 			isa = PBXGroup;
 			children = (
+				F106ABDB17ADE5000076E57F /* Uploads */,
 				F18D19C717A5A8AB009A8D07 /* Downloads */,
 				F1681E8D17A5BE9B00ACAAD0 /* UnzippingTask.h */,
 				F1681E8E17A5BE9B00ACAAD0 /* UnzippingTask.m */,
@@ -1462,6 +1480,8 @@
 				F163C4E617AB508D007AB612 /* DashedLineView.m in Sources */,
 				F163C4E917AB59B1007AB612 /* CircularProgressView.m in Sources */,
 				F19FD8AD17ACDB2500B60C3B /* NetworkActivityController.m in Sources */,
+				F106ABDE17ADE5120076E57F /* DropboxUpload.m in Sources */,
+				F106ABE117ADE54A0076E57F /* Upload.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

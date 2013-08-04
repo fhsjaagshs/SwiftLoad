@@ -145,7 +145,7 @@
 }
 
 - (void)loadCurrentDirectoryFromSFTP {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    [[NetworkActivityController sharedController]show];
     [_pull setState:PullToRefreshViewStateLoading];
     self.filedicts = [NSMutableArray array];
     [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
@@ -162,7 +162,7 @@
                 
                 [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationRight];
                 [_pull finishedLoading];
-                [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+                [[NetworkActivityController sharedController]hideIfPossible];
             }
         });
     } failureBlock:^(NSError *error) {
@@ -170,7 +170,7 @@
             @autoreleasepool {
                 [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
                 [_pull finishedLoading];
-                [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+                [[NetworkActivityController sharedController]hideIfPossible];
             }
             [TransparentAlert showAlertWithTitle:@"SFTP Error" andMessage:@"There was an error loading the current directory via SFTP."]; // Improve this later
         });
@@ -202,7 +202,7 @@
             self.username = username;
             self.password = password;
             self.connection = [[DLSFTPConnection alloc]initWithHostname:URL.host username:_username password:_password];
-            [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+            [[NetworkActivityController sharedController]show];
             [_pull setState:PullToRefreshViewStateLoading];
             [_connection connectWithSuccessBlock:^{
                 dispatch_sync(dispatch_get_main_queue(), ^{

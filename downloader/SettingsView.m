@@ -89,6 +89,7 @@ static NSString * const kJavaScriptBookmarklet = @"JavaScript:window.open(docume
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [_linkButton setTitle:[[DBSession sharedSession]isLinked]?@"Unlink Dropbox":@"Link Dropbox" forState:UIControlStateNormal];
+    [_linkButton resizeForTitle];
 }
 
 - (void)dropboxAuthenticationFailed {

@@ -12,7 +12,7 @@ NSString * const NSFileName = @"NSFileName";
 NSString * const kCopyListChangedNotification = @"copiedlistchanged";
 
 void fireNotification(NSString *filename) {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    [[NetworkActivityController sharedController]hideIfPossible];
     
     if (filename.length > 14) {
         filename = [[filename substringToIndex:11]stringByAppendingString:@"..."];
@@ -430,6 +430,8 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 // Dropbox Upload
 - (void)uploadLocalFile:(NSString *)localPath fromViewController:(UIViewController *)controller {
     
+    
+    
     if (![[DBSession sharedSession]isLinked]) {
         [[DBSession sharedSession]linkFromController:controller];
         return;
@@ -438,12 +440,12 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [self showHUDWithTitle:@"Preparing"];
     [self setVisibleHudMode:MBProgressHUDModeIndeterminate];
     
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    [[NetworkActivityController sharedController]show];
     
     [DroppinBadassBlocks loadMetadata:@"/" withCompletionBlock:^(DBMetadata *metadata, NSError *error) {
         
         if (error) {
-            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            [[NetworkActivityController sharedController]hideIfPossible];
             [self hideHUD];
             [TransparentAlert showAlertWithTitle:@"Failure Uploading" andMessage:@"Swift could not connect to Dropbox."];
         } else {
@@ -456,7 +458,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
                     }
                     
                     if ([file.filename isEqualToString:[self.openFile lastPathComponent]]) {
-                        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+                        [[NetworkActivityController sharedController]show];
                         rev = file.rev;
                         break;
                     }
@@ -467,12 +469,12 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
                 [DroppinBadassBlocks uploadFile:[self.openFile lastPathComponent] toPath:@"/" withParentRev:rev fromPath:localPath withBlock:^(NSString *destPath, NSString *srcPath, DBMetadata *metadata, NSError *error) {
                     
                     if (error) {
-                        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+                        [[NetworkActivityController sharedController]hideIfPossible];
                         [self hideHUD];
                         [TransparentAlert showAlertWithTitle:@"Failure Uploading" andMessage:[NSString stringWithFormat:@"The file you tried to upload failed because: %@",error.localizedDescription]];
                     } else {
                         [DroppinBadassBlocks loadSharableLinkForFile:metadata.path andCompletionBlock:^(NSString *link, NSString *path, NSError *error) {
-                            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+                            [[NetworkActivityController sharedController]hideIfPossible];
                             [self hideHUD];
                             
                             if (error) {
@@ -601,7 +603,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     
         [[NSFileManager defaultManager]removeItemAtPath:inboxDir error:nil];
         
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        [[NetworkActivityController sharedController]hideIfPossible];
         fireNotification(url.absoluteString.lastPathComponent);
     } else {
         NSString *URLString = nil;
