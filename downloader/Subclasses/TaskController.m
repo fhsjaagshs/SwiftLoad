@@ -10,13 +10,7 @@
 
 static NSString * const cellId = @"TaskCell";
 
-@interface TaskController ()  <UITableViewDelegate, UITableViewDataSource>
-
-@property (nonatomic, strong) UIButton *button;
-@property (nonatomic, strong) UIActivityIndicatorView *activity;
-
-@property (nonatomic, strong) UITableView *theTableView;
-@property (nonatomic, strong) UIView *mainView;
+@interface TaskController ()
 
 @property (nonatomic, strong) NSMutableArray *taskObjs;
 

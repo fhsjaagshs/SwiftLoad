@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface TaskController : UIView
+@interface TaskController : NSObject
 
 - (void)removeAllTasks;
 - (void)removeTask:(Task *)download;
