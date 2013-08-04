@@ -39,8 +39,6 @@
     
     CFRelease(piDict);
     
-    NSLog(@"%@\n%@\n%@",artist,song,album);
-    
     NSMutableArray *initArray = [NSMutableArray arrayWithCapacity:3];
     
     if ([artist isEqualToString:@"(null)"] || artist.length == 0) {
