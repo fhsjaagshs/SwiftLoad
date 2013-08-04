@@ -48,7 +48,7 @@
         self.textLabel.textColor = [UIColor blackColor];
         self.detailTextLabel.textColor = [UIColor darkGrayColor];
         
-        self.progressView = [[CircularProgressView alloc]initWithFrame:CGRectMake(2, 2, 40, 40)];
+        self.progressView = [[CircularProgressView alloc]initWithFrame:CGRectMake(5, 5, 37, 37)];
         self.accessoryView = _progressView;
         
         self.contentView.backgroundColor = [UIColor clearColor];

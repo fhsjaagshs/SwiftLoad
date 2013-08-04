@@ -49,7 +49,6 @@
 	if (self) {
 		self.backgroundColor = [UIColor clearColor];
 		self.opaque = NO;
-		_progress = 0.0f;
 	}
 	return self;
 }
@@ -68,7 +67,7 @@
     
     // Draw background
     
-    CGContextSetStrokeColorWithColor(context, drawColor.CGColor);
+    CGContextSetStrokeColorWithColor(context, [UIColor darkGrayColor].CGColor);
     CGContextSetFillColorWithColor(context, [drawColor colorWithAlphaComponent:0.1f].CGColor);
     
     CGContextSetLineWidth(context, 2.0f);
