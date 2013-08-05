@@ -134,12 +134,29 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)deleteSelectedFiles {
+    NSArray *selectedRows = [_theTableView.indexPathsForSelectedRows copy];
+    
+    [[FilesystemMonitor sharedMonitor]invalidate];
+    
+    [_theTableView beginUpdates];
+    
+    NSMutableArray *itemsToRemove = [NSMutableArray arrayWithCapacity:selectedRows.count];
+    
     for (NSIndexPath *indexPath in _theTableView.indexPathsForSelectedRows) {
-        [_theTableView deselectRowAtIndexPath:indexPath animated:NO];
         NSString *filename = [_filelist objectAtIndex:indexPath.row];
+        [itemsToRemove addObject:filename];
         NSString *currentPath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:filename];
         [[NSFileManager defaultManager]removeItemAtPath:currentPath error:nil];
+        [_theTableView deselectRowAtIndexPath:indexPath animated:NO];
     }
+    
+    [_filelist removeObjectsInArray:itemsToRemove];
+    
+    [_theTableView deleteRowsAtIndexPaths:selectedRows withRowAnimation:UITableViewRowAnimationRight];
+    [_theTableView endUpdates];
+    
+    [[FilesystemMonitor sharedMonitor]startMonitoringDirectory:kDocsDir];
+    
     [self updateCopyButtonState];
 }
 
@@ -704,16 +721,20 @@ static NSString *CellIdentifier = @"Cell";
             
             if (buttonIndex == actionSheet.destructiveButtonIndex) {
                 
+                [[FilesystemMonitor sharedMonitor]invalidate];
+                
                 NSIndexPath *indexPath = [_theTableView indexPathForCell:_sideSwipeCell];
 
+                [self removeSideSwipeView:NO];
+                
                 [_filelist removeObjectAtIndex:indexPath.row];
                 [[NSFileManager defaultManager]removeItemAtPath:file error:nil];
                 
-                [self removeSideSwipeView:NO];
-                
                 [_theTableView beginUpdates];
-                [_theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                [_theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
                 [_theTableView endUpdates];
+
+                [[FilesystemMonitor sharedMonitor]startMonitoringDirectory:kDocsDir];
             }
             
         } cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"I'm sure, Delete" otherButtonTitles:nil];
