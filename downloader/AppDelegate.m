@@ -174,6 +174,18 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         [_audioPlayer setDelegate:self];
     }
     
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        @autoreleasepool {
+            [_audioPlayer prepareToPlay];
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                @autoreleasepool {
+                    [_audioPlayer play];
+                    self.nowPlayingFile = file;
+                }
+            });
+        }
+    });
+    
     NSArray *iA = [metadataRetriever getMetadataForFile:file];
     
     NSString *artist = [iA objectAtIndex:0];
@@ -191,9 +203,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [AudioPlayerViewController notif_setInfoFieldText:metadata];
 
     [self showArtworkForFile:file];
-    
-    [_audioPlayer play];
-    self.nowPlayingFile = file;
     
     [AudioPlayerViewController notif_setControlsHidden:(playingError != nil)];
     [AudioPlayerViewController notif_setShouldUpdateTime:(playingError == nil)];
@@ -222,12 +231,28 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         nextIndex = audioFiles.count-1;
     }
     
-   // [AudioPlayerViewController notif_setNxtTrackHidden:NO];
-    
     NSString *newFile = [audioFiles objectAtIndex:nextIndex];
     [self setOpenFile:newFile];
     
     NSError *playingError = nil;
+
+    [self.audioPlayer stop];
+    self.audioPlayer = [[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:newFile] error:&playingError];
+    self.audioPlayer.delegate = self;
+    self.audioPlayer.numberOfLoops = [[NSUserDefaults standardUserDefaults]boolForKey:@"loop"]?-1:0;
+    [AudioPlayerViewController notif_setLoop];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        @autoreleasepool {
+            [_audioPlayer prepareToPlay];
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                @autoreleasepool {
+                    [_audioPlayer play];
+                    self.nowPlayingFile = newFile;
+                }
+            });
+        }
+    });
     
     [AudioPlayerViewController notif_setSongTitleText:[newFile lastPathComponent]];
     
@@ -246,19 +271,8 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     
     [self showArtworkForFile:newFile];
     
-    NSString *savedLoop = [kLibDir stringByAppendingPathComponent:@"loop.txt"];
-    NSString *loopContents = [NSString stringWithContentsOfFile:savedLoop encoding:NSUTF8StringEncoding error:nil];
-    
-    [self.audioPlayer stop];
-    self.audioPlayer = [[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:newFile] error:&playingError];
-    self.audioPlayer.delegate = self;
-    self.audioPlayer.numberOfLoops = [loopContents isEqualToString:@"loop"]?-1:0;
-    
     [AudioPlayerViewController notif_setLoop];
     
-    [self.audioPlayer play];
-    
-    [self setNowPlayingFile:newFile];
     [AudioPlayerViewController notif_setControlsHidden:(playingError != nil)];
     [AudioPlayerViewController notif_setShouldUpdateTime:(playingError == nil)];
 }
@@ -288,6 +302,25 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     
     NSError *playingError = nil;
     
+    
+    [self.audioPlayer stop];
+    self.audioPlayer = [[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:newFile] error:&playingError];
+    self.audioPlayer.delegate = self;
+    self.audioPlayer.numberOfLoops = [[NSUserDefaults standardUserDefaults]boolForKey:@"loop"]?-1:0;
+    [AudioPlayerViewController notif_setLoop];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        @autoreleasepool {
+            [_audioPlayer prepareToPlay];
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                @autoreleasepool {
+                    [_audioPlayer play];
+                    self.nowPlayingFile = newFile;
+                }
+            });
+        }
+    });
+    
     [AudioPlayerViewController notif_setSongTitleText:[newFile lastPathComponent]];
     
     NSArray *iA = [metadataRetriever getMetadataForFile:newFile];
@@ -295,11 +328,8 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     NSString *title = [iA objectAtIndex:1];
     NSString *album = [iA objectAtIndex:2];
     NSString *metadata = [NSString stringWithFormat:@"%@\n%@\n%@",artist,title,album];
-
-    [AudioPlayerViewController notif_setInfoFieldText:metadata];
     
-    NSString *savedLoop = [kLibDir stringByAppendingPathComponent:@"loop.txt"];
-    NSString *loopContents = [NSString stringWithContentsOfFile:savedLoop encoding:NSUTF8StringEncoding error:nil];
+    [AudioPlayerViewController notif_setInfoFieldText:metadata];
     
     if ([artist isEqualToString:@"---"] && [title isEqualToString:@"---"] && [album isEqualToString:@"---"]) {
         [self showMetadataInLockscreenWithArtist:@"" title:[newFile lastPathComponent] album:@""];
@@ -309,14 +339,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     
     [self showArtworkForFile:newFile];
     
-    [self.audioPlayer stop];
-    self.audioPlayer = [[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:newFile] error:&playingError];
-    self.audioPlayer.delegate = self;
-    self.audioPlayer.numberOfLoops = [loopContents isEqualToString:@"loop"]?-1:0;
-    [AudioPlayerViewController notif_setLoop];
-    [self.audioPlayer play];
-    
-    [self setNowPlayingFile:newFile];
     [AudioPlayerViewController notif_setControlsHidden:(playingError != nil)];
     [AudioPlayerViewController notif_setShouldUpdateTime:(playingError == nil)];
 }

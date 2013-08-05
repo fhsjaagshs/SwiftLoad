@@ -117,17 +117,19 @@
     
     [kAppDelegate playFile:[kAppDelegate openFile]];
     
-    NSString *loopContents = [NSString stringWithContentsOfFile:[kLibDir stringByAppendingPathComponent:@"loop.txt"] encoding:NSUTF8StringEncoding error:nil];
-    [self setLoopOn:[loopContents isEqualToString:@"loop"]];
+    [self refreshLoopState];
 }
 
 - (void)saveLoopState {
-    self.isLooped = (_loopControl.currentMode == ToggleControlModeOn);
-    [[kAppDelegate audioPlayer]setNumberOfLoops:self.isLooped?-1:0];
-    [self.isLooped?@"loop":@"dloop" writeToFile:[kLibDir stringByAppendingPathComponent:@"loop.txt"] atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    [[NSUserDefaults standardUserDefaults]setBool:(_loopControl.currentMode == ToggleControlModeOn) forKey:@"loop"];
 }
 
-- (void)setLoopOn:(BOOL)on {
+- (void)setLoopState:(BOOL)on {
+    [[NSUserDefaults standardUserDefaults]setBool:on forKey:@"loop"];
+}
+
+- (void)refreshLoopState {
+    BOOL on = [[NSUserDefaults standardUserDefaults]boolForKey:@"loop"];
     [kAppDelegate audioPlayer].numberOfLoops = on?-1:0;
     self.isLooped = on;
     [_loopControl setCurrentMode:on?ToggleControlModeOn:ToggleControlModeOff];
@@ -142,11 +144,6 @@
     [self.stopButton setHidden:hide];
     [self.infoField setHidden:hide];
     [self.errorLabel setHidden:!hide];
-}
-
-- (void)setLoops {
-    [[kAppDelegate audioPlayer]setNumberOfLoops:self.isLooped?-1:0];
-    [self.isLooped?@"loop":@"dloop" writeToFile:[kLibDir stringByAppendingPathComponent:@"loop.txt"] atomically:YES encoding:NSUTF8StringEncoding error:nil];
 }
 
 - (void)close {
@@ -271,8 +268,7 @@
 }
 
 - (void)setLoopNotif {
-    NSString *loopContents = [NSString stringWithContentsOfFile:[kLibDir stringByAppendingPathComponent:@"loop.txt"] encoding:NSUTF8StringEncoding error:nil];
-    [self setLoopOn:[loopContents isEqualToString:@"loop"]];
+    [self refreshLoopState];
 }
 
 - (void)hideControlsString:(NSNotification *)notif {
