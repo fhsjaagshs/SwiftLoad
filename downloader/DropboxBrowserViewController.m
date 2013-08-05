@@ -239,7 +239,6 @@ static NSString *CellIdentifier = @"dbcell";
 }
 
 - (void)updateFileListing {
-    [[NetworkActivityController sharedController]show];
     [DroppinBadassBlocks loadDelta:_cursor withCompletionHandler:^(NSArray *entries, NSString *cursor, BOOL hasMore, BOOL shouldReset, NSError *error) {
         if (error) {
             [[NetworkActivityController sharedController]hideIfPossible];

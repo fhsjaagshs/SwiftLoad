@@ -11,7 +11,7 @@
 @implementation TransparentAlert
 
 + (void)showAlertWithTitle:(NSString *)title andMessage:(NSString *)message {
-    [[[TransparentAlert alloc]initWithTitle:title message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil]show];
+    [[[TransparentAlert alloc]initWithTitle:title message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil]performSelectorOnMainThread:@selector(showSuccess) withObject:nil waitUntilDone:NO];
 }
 
 - (id)init {

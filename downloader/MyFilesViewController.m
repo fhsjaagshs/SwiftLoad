@@ -709,9 +709,10 @@ static NSString *CellIdentifier = @"Cell";
                 [_filelist removeObjectAtIndex:indexPath.row];
                 [[NSFileManager defaultManager]removeItemAtPath:file error:nil];
                 
-                [_theTableView beginUpdates];
                 [self removeSideSwipeView:NO];
-                [_theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                
+                [_theTableView beginUpdates];
+                [_theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
                 [_theTableView endUpdates];
             }
             

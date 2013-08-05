@@ -211,8 +211,9 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 1)
+    if (indexPath.section == 1) {
         return nil;
+    }
     
     return indexPath;
 }
