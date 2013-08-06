@@ -29,12 +29,12 @@
     
     self.theImageView = [[UIImageView alloc]initWithFrame:CGRectZero];
     _theImageView.backgroundColor = [UIColor clearColor];
-    _theImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     [self addSubview:_theImageView];
 }
 
 - (void)loadImage:(UIImage *)image {
     
+    _theImageView.frame = self.bounds;
     self.contentSize = CGSizeZero;
     
     _theImageView.image = image;
@@ -46,7 +46,31 @@
     _theImageView.frame = photoImageViewFrame;
     self.contentSize = photoImageViewFrame.size;
     
-    [self setMaxMinZoomScalesForCurrentBounds];
+    [self setNeedsLayout];
+    
+    // Reset - Absolutely crucial
+    self.maximumZoomScale = 1;
+	self.minimumZoomScale = 1;
+	self.zoomScale = 1;
+    
+    // Bail
+	if (!_theImageView.image) {
+        return;
+    }
+    
+	// Sizes
+    CGSize boundsSize = self.bounds.size;
+    CGSize imageSize = _theImageView.frame.size;
+    
+    // Calculate Min
+    CGFloat xScale = boundsSize.width/imageSize.width;
+    CGFloat yScale = boundsSize.height/imageSize.height;
+    CGFloat minScale = MIN(xScale, yScale);
+    
+	self.maximumZoomScale = minScale*5;
+	self.minimumZoomScale = minScale;
+	self.zoomScale = self.minimumZoomScale;
+    [self setNeedsLayout];
 }
 
 - (void)resetAfterRotate {
@@ -72,32 +96,6 @@
     return _theImageView;
 }
 
-- (void)setMaxMinZoomScalesForCurrentBounds {
-    
-	// Bail
-	if (!_theImageView.image) {
-        return;
-    }
-    
-	// Sizes
-    CGSize boundsSize = self.bounds.size;
-    CGSize imageSize = _theImageView.frame.size;
-    
-    // Calculate Min
-    CGFloat xScale = boundsSize.width/imageSize.width;
-    CGFloat yScale = boundsSize.height/imageSize.height;
-    CGFloat minScale = MIN(xScale, yScale);
-
-	self.maximumZoomScale = minScale*5;
-	self.minimumZoomScale = minScale;
-	self.zoomScale = self.minimumZoomScale;
-    
-    NSLog(@"%f",self.zoomScale);
-    
-	_theImageView.frame = CGRectMake(0, 0, _theImageView.frame.size.width, _theImageView.frame.size.height);
-	[self setNeedsLayout];
-}
-
 - (void)layoutSubviews {
 	[super layoutSubviews];
 	
@@ -119,8 +117,8 @@
         frameToCenter.origin.y = 0;
 	}
     
-	// Center
-	_theImageView.frame = frameToCenter;
+    // Center
+    _theImageView.frame = frameToCenter;
 }
 
 @end
