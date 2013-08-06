@@ -205,7 +205,7 @@
         [self.nextImg setEnabled:NO];
     }
     
-    self.zoomingImageView.zoomScale = self.zoomingImageView.minimumZoomScale;
+  //  self.zoomingImageView.zoomScale = self.zoomingImageView.minimumZoomScale;
     [self.zoomingImageView loadImage:[UIImage imageWithContentsOfFile:newImagePath]];
 
     [kAppDelegate setOpenFile:newImagePath];
@@ -238,7 +238,7 @@
         [self.prevImg setEnabled:NO];
     }
     
-    self.zoomingImageView.zoomScale = self.zoomingImageView.minimumZoomScale;
+   // self.zoomingImageView.zoomScale = self.zoomingImageView.minimumZoomScale;
     [self.zoomingImageView loadImage:[UIImage imageWithContentsOfFile:newImagePath]];
 
     [kAppDelegate setOpenFile:newImagePath];
