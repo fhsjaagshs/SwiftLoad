@@ -34,6 +34,9 @@
 }
 
 - (void)loadImage:(UIImage *)image {
+    
+    self.contentSize = CGSizeZero;
+    
     _theImageView.image = image;
     
     CGRect photoImageViewFrame;
@@ -88,6 +91,8 @@
 	self.maximumZoomScale = minScale*5;
 	self.minimumZoomScale = minScale;
 	self.zoomScale = self.minimumZoomScale;
+    
+    NSLog(@"%f",self.zoomScale);
     
 	_theImageView.frame = CGRectMake(0, 0, _theImageView.frame.size.width, _theImageView.frame.size.height);
 	[self setNeedsLayout];
