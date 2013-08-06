@@ -291,7 +291,7 @@ static xmlNodePtr _XMLChildWithName(xmlNodePtr child, const xmlChar* name) {
 		  }
 	  }
       if ([scope isEqualToString:@"exclusive"] && [type isEqualToString:@"write"] && [depth isEqualToString:@"0"] &&
-        ([[NSFileManager defaultManager] fileExistsAtPath:path] || [[NSData data] writeToFile:path atomically:YES])) {
+        ([[NSFileManager defaultManager] fileExistsAtPath:path] || [[NSData data]writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:nil])) {
         NSString* timeout = [headers objectForKey:@"Timeout"];
 		if (!token) {
           CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
