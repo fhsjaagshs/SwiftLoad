@@ -38,6 +38,10 @@ float const kClearOutDelayTask = 0.6f;
     return @"";
 }
 
+- (BOOL)shouldClearAutomatically {
+    return YES;
+}
+
 - (void)cancelBackgroundTask {
     [[BGProcFactory sharedFactory]endProcForKey:_bgTaskIdentifer];
 }
@@ -55,8 +59,10 @@ float const kClearOutDelayTask = 0.6f;
     
     self.delegate = nil;
     
-    [[TaskController sharedController]removeTask:self];
-    [[NSNotificationCenter defaultCenter]postNotificationName:kHamburgerTaskUpdateNotification object:nil];
+    if ([self shouldClearAutomatically]) {
+        [[TaskController sharedController]removeTask:self];
+        [[NSNotificationCenter defaultCenter]postNotificationName:kHamburgerTaskUpdateNotification object:nil];
+    }
 }
 
 - (void)stop {

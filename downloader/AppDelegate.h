@@ -62,18 +62,4 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (void)downloadFileUsingSFTP:(NSURL *)url withUsername:(NSString *)username andPassword:(NSString *)password;
 - (void)downloadFile:(NSString *)stouPrelim;
 
-// HUD management
-- (void)setVisibleHudCustomView:(UIView *)view;
-- (void)setSecondaryTitleOfVisibleHUD:(NSString *)newTitle;
-- (void)setVisibleHudMode:(MBProgressHUDMode)mode;
-- (void)setProgressOfVisibleHUD:(float)progress;
-- (void)showHUDWithTitle:(NSString *)title;
-- (void)hideHUD;
-- (void)setTitleOfVisibleHUD:(NSString *)newTitle;
-- (void)showSelfHidingHudWithTitle:(NSString *)title;
-- (void)hideVisibleHudAfterDelay:(float)delay;
-- (MBProgressHUD *)getVisibleHUD;
-- (int)getTagOfVisibleHUD;
-- (void)setTagOfVisibleHUD:(int)tag;
-
 @end

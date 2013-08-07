@@ -460,16 +460,17 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         return;
     }
     
-    [self showHUDWithTitle:@"Preparing"];
-    [self setVisibleHudMode:MBProgressHUDModeIndeterminate];
-    
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:[kAppDelegate window] animated:YES];
+    hud.mode = MBProgressHUDModeIndeterminate;
+    hud.labelText = @"Preparing...";
+
     [[NetworkActivityController sharedController]show];
     
     [DroppinBadassBlocks loadMetadata:@"/" withCompletionBlock:^(DBMetadata *metadata, NSError *error) {
         
         if (error) {
             [[NetworkActivityController sharedController]hideIfPossible];
-            [self hideHUD];
+            [hud hide:YES];
             [TransparentAlert showAlertWithTitle:@"Failure Uploading" andMessage:@"Swift could not connect to Dropbox."];
         } else {
             NSString *rev = nil;
@@ -487,33 +488,22 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
                     }
                 }
                 
-                [self setVisibleHudMode:MBProgressHUDModeDeterminate];
-                [self setTitleOfVisibleHUD:@"Uploading..."];
+                hud.mode = MBProgressHUDModeDeterminate;
+                hud.labelText = @"Uploading...";
+                
                 [DroppinBadassBlocks uploadFile:[self.openFile lastPathComponent] toPath:@"/" withParentRev:rev fromPath:localPath withBlock:^(NSString *destPath, NSString *srcPath, DBMetadata *metadata, NSError *error) {
                     
                     if (error) {
                         [[NetworkActivityController sharedController]hideIfPossible];
-                        [self hideHUD];
+                        [hud hide:YES];
                         [TransparentAlert showAlertWithTitle:@"Failure Uploading" andMessage:[NSString stringWithFormat:@"The file you tried to upload failed because: %@",error.localizedDescription]];
                     } else {
-                        [DroppinBadassBlocks loadSharableLinkForFile:metadata.path andCompletionBlock:^(NSString *link, NSString *path, NSError *error) {
-                            [[NetworkActivityController sharedController]hideIfPossible];
-                            [self hideHUD];
-                            
-                            if (error) {
-                                [TransparentAlert showAlertWithTitle:[NSString stringWithFormat:@"Error %d",error.code] andMessage:@"Upload succeeded, but there was a problem generating a sharable link."];
-                            } else {
-                                [[[TransparentAlert alloc]initWithTitle:[NSString stringWithFormat:@"Link For:\n%@",[path lastPathComponent]] message:link completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
-                                    if (buttonIndex == 1) {
-                                        [[UIPasteboard generalPasteboard]setString:alertView.message];
-                                    }
-                                } cancelButtonTitle:@"OK" otherButtonTitles:@"Copy", nil]show];
-                            }
-                        }];
+                        DropboxLinkTask *task = [DropboxLinkTask taskWithFilepath:metadata.path];
+                        [[TaskController sharedController]addTask:task];
                     }
                     
                 } andProgressBlock:^(CGFloat progress, NSString *destPath, NSString *scrPath) {
-                    [self setProgressOfVisibleHUD:progress];
+                    hud.progress = progress;
                 }];
             }
         }
@@ -642,75 +632,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     }
 
     return YES;
-}
-
-//
-// MBProgressHUD methods
-//
-
-- (int)getTagOfVisibleHUD {
-    return [MBProgressHUD HUDForView:self.window].tag;
-}
-
-- (void)setTagOfVisibleHUD:(int)tag {
-    [MBProgressHUD HUDForView:self.window].tag = tag;
-}
-
-- (MBProgressHUD *)getVisibleHUD {
-    return [MBProgressHUD HUDForView:self.window];
-}
-
-- (void)hideVisibleHudAfterDelay:(float)delay {
-    [[MBProgressHUD HUDForView:self.window]hide:YES afterDelay:delay];
-}
-
-- (void)setVisibleHudCustomView:(UIView *)view {
-    [[MBProgressHUD HUDForView:self.window]setMode:MBProgressHUDModeCustomView];
-    [[MBProgressHUD HUDForView:self.window]setCustomView:view];
-}
-
-- (void)setVisibleHudMode:(MBProgressHUDMode)mode {
-    [[MBProgressHUD HUDForView:self.window]setMode:mode];
-}
-
-- (void)showHUDWithTitle:(NSString *)title {
-    [self hideHUD];
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.window animated:YES];
-    hud.mode = MBProgressHUDModeIndeterminate;
-    hud.labelText = title;
-}
-
-- (void)hideHUD {
-    for (UIView *view in self.window.subviews) {
-        if ([view isKindOfClass:[MBProgressHUD class]]) {
-            [view removeFromSuperview];
-        }
-    }
-    [MBProgressHUD hideAllHUDsForView:self.window animated:YES];
-}
-
-- (void)setSecondaryTitleOfVisibleHUD:(NSString *)newTitle {
-    [[MBProgressHUD HUDForView:self.window]setDetailsLabelText:newTitle];
-}
-
-- (void)setTitleOfVisibleHUD:(NSString *)newTitle {
-    [[MBProgressHUD HUDForView:self.window]setLabelText:newTitle];
-}
-
-- (void)setProgressOfVisibleHUD:(float)progress {
-    MBProgressHUD *hud = [MBProgressHUD HUDForView:self.window];
-    
-    if (hud.mode == MBProgressHUDModeDeterminate) {
-        hud.progress = progress;
-    }
-}
-
-- (void)showSelfHidingHudWithTitle:(NSString *)title {
-    [self hideHUD];
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.window animated:YES];
-    hud.mode = MBProgressHUDModeText;
-    hud.labelText = title;
-    [hud hide:YES afterDelay:1.5];
 }
 
 @end

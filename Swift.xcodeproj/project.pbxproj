@@ -18,6 +18,7 @@
 		9BFF2A0D15387C6E007ED9B1 /* ZipWriteStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0815387C6E007ED9B1 /* ZipWriteStream.m */; };
 		F101274617920BD2000C434E /* hamburger.png in Resources */ = {isa = PBXBuildFile; fileRef = F101274417920BD2000C434E /* hamburger.png */; };
 		F101274717920BD2000C434E /* hamburger@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F101274517920BD2000C434E /* hamburger@2x.png */; };
+		F1038BB517B1ECB100AE918E /* DropboxLinkTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F1038BB417B1ECB100AE918E /* DropboxLinkTask.m */; };
 		F106A4DC178865AD002D3BC8 /* DLSFTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4C7178865AD002D3BC8 /* DLSFTPConnection.m */; };
 		F106A4DD178865AD002D3BC8 /* DLSFTPDownloadRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4C9178865AD002D3BC8 /* DLSFTPDownloadRequest.m */; };
 		F106A4DE178865AD002D3BC8 /* DLSFTPFile.m in Sources */ = {isa = PBXBuildFile; fileRef = F106A4CB178865AD002D3BC8 /* DLSFTPFile.m */; };
@@ -248,6 +249,8 @@
 		9BFF2A0815387C6E007ED9B1 /* ZipWriteStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZipWriteStream.m; sourceTree = "<group>"; };
 		F101274417920BD2000C434E /* hamburger.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hamburger.png; sourceTree = "<group>"; };
 		F101274517920BD2000C434E /* hamburger@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hamburger@2x.png"; sourceTree = "<group>"; };
+		F1038BB317B1ECB100AE918E /* DropboxLinkTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxLinkTask.h; sourceTree = "<group>"; };
+		F1038BB417B1ECB100AE918E /* DropboxLinkTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxLinkTask.m; sourceTree = "<group>"; };
 		F106A4C5178865AD002D3BC8 /* DLSFTP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLSFTP.h; sourceTree = "<group>"; };
 		F106A4C6178865AD002D3BC8 /* DLSFTPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLSFTPConnection.h; sourceTree = "<group>"; };
 		F106A4C7178865AD002D3BC8 /* DLSFTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLSFTPConnection.m; sourceTree = "<group>"; };
@@ -1144,6 +1147,8 @@
 				F1681E9117A5C28D00ACAAD0 /* CompressionTask.m */,
 				F11EE83217A6CFFC007DF21A /* BluetoothTask.h */,
 				F11EE83317A6CFFC007DF21A /* BluetoothTask.m */,
+				F1038BB317B1ECB100AE918E /* DropboxLinkTask.h */,
+				F1038BB417B1ECB100AE918E /* DropboxLinkTask.m */,
 			);
 			name = "Task Subclasses";
 			sourceTree = "<group>";
@@ -1482,6 +1487,7 @@
 				F19FD8AD17ACDB2500B60C3B /* NetworkActivityController.m in Sources */,
 				F106ABDE17ADE5120076E57F /* DropboxUpload.m in Sources */,
 				F106ABE117ADE54A0076E57F /* Upload.m in Sources */,
+				F1038BB517B1ECB100AE918E /* DropboxLinkTask.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

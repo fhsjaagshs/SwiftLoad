@@ -356,23 +356,8 @@ static NSString *CellIdentifier = @"dbcell";
                 DropboxDownload *dl = [DropboxDownload downloadWithPath:filePath];
                 [[TaskController sharedController]addTask:dl];
             } else if (buttonIndex == 1) {
-                
-                [kAppDelegate showHUDWithTitle:@"Loading Link..."];
-                [kAppDelegate setVisibleHudMode:MBProgressHUDModeIndeterminate];
-                [kAppDelegate setSecondaryTitleOfVisibleHUD:filename];
-                
-                [DroppinBadassBlocks loadSharableLinkForFile:filePath andCompletionBlock:^(NSString *link, NSString *path, NSError *error) {
-                    [kAppDelegate hideHUD];
-                    if (error) {
-                        //[kAppDelegate showFailedAlertForFilename:path.lastPathComponent];
-                    } else {
-                        [[[TransparentAlert alloc]initWithTitle:[NSString stringWithFormat:@"Link For:\n%@",[path lastPathComponent]] message:link completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
-                            if (buttonIndex == 1) {
-                                [[UIPasteboard generalPasteboard]setString:alertView.message];
-                            }
-                        } cancelButtonTitle:@"OK" otherButtonTitles:@"Copy", nil]show];
-                    }
-                }];
+                DropboxLinkTask *task = [DropboxLinkTask taskWithFilepath:filePath];
+                [[TaskController sharedController]addTask:task];
             }
         } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download", @"Get Link", nil];
         actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;

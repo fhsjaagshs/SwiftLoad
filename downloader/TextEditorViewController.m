@@ -182,7 +182,11 @@
 - (void)loadText {
     [self.theTextView setHidden:YES];
     [self.view setBackgroundColor:[UIColor clearColor]];
-    [kAppDelegate showHUDWithTitle:@"Loading..."];
+    
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:[kAppDelegate window] animated:YES];
+    hud.mode = MBProgressHUDModeText;
+    hud.labelText = @"Loading...";
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @autoreleasepool {
         
@@ -193,7 +197,7 @@
                     [self.theTextView setText:fileContents];
                     [self.theTextView setHidden:NO];
                     [self.view setBackgroundColor:[UIColor whiteColor]];
-                    [kAppDelegate hideHUD];
+                    [hud hide:YES];
                 }
             });
         

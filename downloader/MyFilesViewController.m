@@ -161,18 +161,12 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)pasteInLocation:(NSString *)location {
-    
-    AppDelegate *ad = kAppDelegate;
-    
-    [ad showHUDWithTitle:_isCut?@"Moving Files...":@"Copying Files..."];
-    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @autoreleasepool {
         
             NSFileManager *fm = [[NSFileManager alloc]init];
             
             for (NSString *oldPath in _copiedList) {
-                [ad setSecondaryTitleOfVisibleHUD:[oldPath lastPathComponent]];
                 NSString *newPath = getNonConflictingFilePathForPath([location stringByAppendingPathComponent:[oldPath lastPathComponent]]);
                 
                 if (_isCut) {
@@ -189,7 +183,6 @@ static NSString *CellIdentifier = @"Cell";
 
             dispatch_sync(dispatch_get_main_queue(), ^{
                 @autoreleasepool {
-                    [kAppDelegate hideHUD];
                     [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
                     [self updateCopyButtonState];
                 }

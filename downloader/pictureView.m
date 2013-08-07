@@ -92,34 +92,31 @@
 
 - (void)addToTheRoll {
     
-    [kAppDelegate showHUDWithTitle:@"Working..."];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:[kAppDelegate window] animated:YES];
+    hud.mode = MBProgressHUDModeText;
+    hud.labelText = @"Working...";
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @autoreleasepool {
-
-            NSString *file = [kAppDelegate openFile];
-            UIImage *image = [[UIImage alloc]initWithContentsOfFile:file];
+            UIImage *image = [UIImage imageWithContentsOfFile:[kAppDelegate openFile]];
             UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
             
             [NSThread sleepForTimeInterval:0.5f];
 
             dispatch_sync(dispatch_get_main_queue(), ^{
                 @autoreleasepool {
-
-                    NSString *fileName = [file lastPathComponent];
+                    NSString *fileName = [[kAppDelegate openFile]lastPathComponent];
                     
                     if (fileName.length > 14) {
                         fileName = [[fileName substringToIndex:11]stringByAppendingString:@"..."];
                     }
-                    [kAppDelegate hideHUD];
                     
-                    [kAppDelegate showHUDWithTitle:@"Imported"];
-                    [kAppDelegate setSecondaryTitleOfVisibleHUD:fileName];
-                    [kAppDelegate setVisibleHudMode:MBProgressHUDModeCustomView];
-                    [kAppDelegate hideVisibleHudAfterDelay:1.0f];
+                    hud.labelText = @"Imported";
+                    hud.detailsLabelText = fileName;
+                    
+                    [hud hide:YES afterDelay:1.0f];
                 }
             });
-        
         }
     });
 }
