@@ -111,17 +111,12 @@
                     if (fileName.length > 14) {
                         fileName = [[fileName substringToIndex:11]stringByAppendingString:@"..."];
                     }
-                    
-              //  UIImageView *checkmark = [[UIImageView alloc]initWithImage:getCheckmarkImage()];
-                    
                     [kAppDelegate hideHUD];
                     
                     [kAppDelegate showHUDWithTitle:@"Imported"];
                     [kAppDelegate setSecondaryTitleOfVisibleHUD:fileName];
                     [kAppDelegate setVisibleHudMode:MBProgressHUDModeCustomView];
-              //  [kAppDelegate setVisibleHudCustomView:checkmark];
                     [kAppDelegate hideVisibleHudAfterDelay:1.0f];
-               // [checkmark release];
                 }
             });
         
@@ -237,8 +232,7 @@
     if (newImageNumber == 0) {
         [self.prevImg setEnabled:NO];
     }
-    
-   // self.zoomingImageView.zoomScale = self.zoomingImageView.minimumZoomScale;
+
     [self.zoomingImageView loadImage:[UIImage imageWithContentsOfFile:newImagePath]];
 
     [kAppDelegate setOpenFile:newImagePath];
@@ -263,7 +257,7 @@
         self.view.frame = [[UIScreen mainScreen]applicationFrame];
         self.zoomingImageView.frame = CGRectMake(0, 44, self.view.bounds.size.width, self.view.bounds.size.height-88);
     }
-    [self.zoomingImageView resetAfterRotate];
+    [_zoomingImageView resetImage];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
@@ -275,7 +269,7 @@
         self.view.frame = [[UIScreen mainScreen]bounds];
         self.zoomingImageView.frame = self.view.frame;
     }
-    [self.zoomingImageView resetAfterRotate];
+    [_zoomingImageView resetImage];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {

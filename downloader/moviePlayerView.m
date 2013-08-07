@@ -11,10 +11,17 @@
 @interface moviePlayerView ()
 
 @property (nonatomic, assign) BOOL shouldUnpauseAudioPlayer;
+@property (nonatomic, strong) NSURL *streamingUrl;
 
 @end
 
 @implementation moviePlayerView
+
++ (void)showMoviePlayerWithURL:(NSURL *)url {
+    moviePlayerView *vc = [moviePlayerView viewController];
+    vc.streamingUrl = url;
+    [vc presentModalViewController:vc animated:YES];
+}
 
 - (void)loadView {
     [super loadView];
@@ -37,7 +44,7 @@
         self.shouldUnpauseAudioPlayer = YES;
     }
 
-    self.moviePlayer = [[MPMoviePlayerController alloc]initWithContentURL:[NSURL fileURLWithPath:[kAppDelegate openFile]]];
+    self.moviePlayer = [[MPMoviePlayerController alloc]initWithContentURL:(_streamingUrl)?_streamingUrl:[NSURL fileURLWithPath:[kAppDelegate openFile]]];
     _moviePlayer.scalingMode = MPMovieScalingModeAspectFit;
     _moviePlayer.repeatMode = MPMovieRepeatModeNone;
     [_moviePlayer.backgroundView removeFromSuperview];
@@ -52,15 +59,15 @@
 }
 
 - (void)close {
-    if (self.moviePlayer.view.superview) {
-        [self.moviePlayer.view removeFromSuperview];
+    if (_moviePlayer.view.superview) {
+        [_moviePlayer.view removeFromSuperview];
     }
     
-    [self.moviePlayer stop];
+    [_moviePlayer stop];
     
     AppDelegate *ad = kAppDelegate;
     
-    if (self.shouldUnpauseAudioPlayer) {
+    if (_shouldUnpauseAudioPlayer) {
         [ad.audioPlayer prepareToPlay];
         [ad.audioPlayer play];
     }

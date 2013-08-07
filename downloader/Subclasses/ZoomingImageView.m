@@ -8,10 +8,6 @@
 
 #import "ZoomingImageView.h"
 
-@interface ZoomingImageView ()
-
-@end
-
 @implementation ZoomingImageView
 
 - (void)zoomOut {
@@ -73,20 +69,22 @@
     [self setNeedsLayout];
 }
 
-- (void)resetAfterRotate {
-    [self loadImage:_theImageView.image]; // a bit of a hack
+- (void)resetImage {
+    [self loadImage:_theImageView.image];
     self.zoomScale = self.minimumZoomScale;
 }
 
-- (id)init {
-    if (self = [super init]) {
+- (instancetype)init {
+    self = [super init];
+    if (self) {
         [self setup];
     }
     return self;
 }
 
-- (id)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
         [self setup];
     }
     return self;

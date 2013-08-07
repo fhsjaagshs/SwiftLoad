@@ -29,7 +29,7 @@ float sanitizeMesurement(float measurement);
 NSString * getNonConflictingFilePathForPath(NSString *path);
 void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID inPropertyID, UInt32 inPropertyValueSize, const void *inPropertyValue);
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate, GKSessionDelegate, DBSessionDelegate, DBRestClientDelegate, MBProgressHUDDelegate, GKPeerPickerControllerDelegate, AVAudioPlayerDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate, GKSessionDelegate, DBSessionDelegate, DBRestClientDelegate, GKPeerPickerControllerDelegate, AVAudioPlayerDelegate>
 
 @property (nonatomic, strong) UIWindow *window;
 @property (nonatomic, strong) MyFilesViewController *viewController;
@@ -75,9 +75,5 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (MBProgressHUD *)getVisibleHUD;
 - (int)getTagOfVisibleHUD;
 - (void)setTagOfVisibleHUD:(int)tag;
-
-// Downloading-specific HUDs
-//- (void)showFailedAlertForFilename:(NSString *)fileName;
-//- (void)showFinishedAlertForFilename:(NSString *)fileName;
 
 @end
