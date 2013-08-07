@@ -42,7 +42,7 @@ static NSString * const cellId = @"TaskCell";
         [task stop];
     }
     
-    if (![_taskObjs containsObject:task]) {
+    if ([_taskObjs containsObject:task]) {
         [_taskObjs removeObject:task];
     }
 }

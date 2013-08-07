@@ -177,6 +177,8 @@
 		F19FD8AD17ACDB2500B60C3B /* NetworkActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = F19FD8AC17ACDB2500B60C3B /* NetworkActivityController.m */; };
 		F1A72948149876040049DBB6 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A72947149876040049DBB6 /* GameKit.framework */; };
 		F1A923FE140D4DDD003ACDAB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A923FD140D4DDD003ACDAB /* QuartzCore.framework */; };
+		F1B1C1E017B292CB00B6164C /* toolbar_icon_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = F1B1C1DE17B292CB00B6164C /* toolbar_icon_pressed.png */; };
+		F1B1C1E117B292CB00B6164C /* toolbar_icon_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1B1C1DF17B292CB00B6164C /* toolbar_icon_pressed@2x.png */; };
 		F1B2489014E333E300C44E11 /* webDAVHelp.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B2488E14E333E200C44E11 /* webDAVHelp.m */; };
 		F1B2C0FC17961A0E00AD5A04 /* PeerPickerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B2C0FB17961A0E00AD5A04 /* PeerPickerCell.m */; };
 		F1BA8C7E17728500007AAF85 /* BGProcFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BA8C7D17728500007AAF85 /* BGProcFactory.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -519,6 +521,8 @@
 		F19FD8AC17ACDB2500B60C3B /* NetworkActivityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkActivityController.m; sourceTree = "<group>"; };
 		F1A72947149876040049DBB6 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		F1A923FD140D4DDD003ACDAB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		F1B1C1DE17B292CB00B6164C /* toolbar_icon_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = toolbar_icon_pressed.png; sourceTree = "<group>"; };
+		F1B1C1DF17B292CB00B6164C /* toolbar_icon_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toolbar_icon_pressed@2x.png"; sourceTree = "<group>"; };
 		F1B2488D14E333E200C44E11 /* webDAVHelp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = webDAVHelp.h; sourceTree = "<group>"; };
 		F1B2488E14E333E200C44E11 /* webDAVHelp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = webDAVHelp.m; sourceTree = "<group>"; };
 		F1B2C0FA17961A0E00AD5A04 /* PeerPickerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeerPickerCell.h; sourceTree = "<group>"; };
@@ -1188,6 +1192,8 @@
 				F1E9F76E1773F48500EC345C /* statusbar@2x.png */,
 				F1E9F77B1773F6BA00EC345C /* toolbar_icon.png */,
 				F1E9F77C1773F6BA00EC345C /* toolbar_icon@2x.png */,
+				F1B1C1DE17B292CB00B6164C /* toolbar_icon_pressed.png */,
+				F1B1C1DF17B292CB00B6164C /* toolbar_icon_pressed@2x.png */,
 				F16187A317760311005D4568 /* button_icon.png */,
 				F16187A417760311005D4568 /* button_icon@2x.png */,
 				F14B81911788C37500ADEF99 /* button_icon_pressed.png */,
@@ -1353,6 +1359,8 @@
 				F101274717920BD2000C434E /* hamburger@2x.png in Resources */,
 				F172BCC61794EC4500AC1483 /* About.txt in Resources */,
 				F172BCD01794EC4500AC1483 /* README.txt in Resources */,
+				F1B1C1E017B292CB00B6164C /* toolbar_icon_pressed.png in Resources */,
+				F1B1C1E117B292CB00B6164C /* toolbar_icon_pressed@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

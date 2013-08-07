@@ -539,6 +539,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [BGProcFactory sharedFactory];
     [TaskController sharedController];
     [BluetoothManager sharedManager];
+    [NetworkActivityController sharedController];
     
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryPlayback error:nil];
     [[UIApplication sharedApplication]beginReceivingRemoteControlEvents];
@@ -557,13 +558,17 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [_window makeKeyAndVisible];
 
     UIImage *bbiImage = [[UIImage imageNamed:@"toolbar_icon"]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 4, 0, 4)];
+    UIImage *bbiImagePressed = [[UIImage imageNamed:@"toolbar_icon_pressed"]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 4, 0, 4)];
     [[UIBarButtonItem appearance]setBackgroundImage:bbiImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    [[UIBarButtonItem appearance]setBackgroundImage:bbiImagePressed forState:UIControlStateHighlighted barMetrics:UIBarMetricsDefault];
 
     UIImage *navBarImage = [[UIImage imageNamed:@"statusbar"]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 150, 0, 150)];
     [[UINavigationBar appearance]setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
     [[UIToolbar appearance]setBackgroundImage:navBarImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+    
     [[UINavigationBar appearance]setTitleTextAttributes:@{ UITextAttributeTextColor: [UIColor whiteColor] }];
     [[UIBarButtonItem appearance]setTitleTextAttributes:@{ UITextAttributeTextColor: [UIColor whiteColor], UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(0, 0)] } forState:UIControlStateNormal];
+    [[UIBarButtonItem appearance]setTitleTextAttributes:@{ UITextAttributeTextColor: [UIColor blackColor], UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(0, 0)] } forState:UIControlStateHighlighted];
     
     [Appirater setAppId:@"469762999"];
     [Appirater setDaysUntilPrompt:5];
