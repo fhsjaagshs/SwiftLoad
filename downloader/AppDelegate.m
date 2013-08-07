@@ -186,23 +186,24 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         }
     });
     
-    NSArray *iA = [metadataRetriever getMetadataForFile:file];
+  //  [AudioPlayerViewController notif_setSongTitleText:file.lastPathComponent];
     
+    NSArray *iA = [metadataRetriever getMetadataForFile:file];
     NSString *artist = [iA objectAtIndex:0];
     NSString *title = [iA objectAtIndex:1];
     NSString *album = [iA objectAtIndex:2];
-    
     NSString *metadata = [NSString stringWithFormat:@"%@\n%@\n%@",artist,title,album];
+    [AudioPlayerViewController notif_setInfoFieldText:metadata];
     
     if ([artist isEqualToString:@"---"] && [title isEqualToString:@"---"] && [album isEqualToString:@"---"]) {
-        [self showMetadataInLockscreenWithArtist:@"" title:[file lastPathComponent] album:@""];
+        [self showMetadataInLockscreenWithArtist:@"" title:file.lastPathComponent album:@""];
     } else {
         [self showMetadataInLockscreenWithArtist:artist title:title album:album];
     }
     
-    [AudioPlayerViewController notif_setInfoFieldText:metadata];
-
     [self showArtworkForFile:file];
+    
+    [AudioPlayerViewController notif_setLoop];
     
     [AudioPlayerViewController notif_setControlsHidden:(playingError != nil)];
     [AudioPlayerViewController notif_setShouldUpdateTime:(playingError == nil)];

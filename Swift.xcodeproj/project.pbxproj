@@ -179,6 +179,8 @@
 		F1A923FE140D4DDD003ACDAB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A923FD140D4DDD003ACDAB /* QuartzCore.framework */; };
 		F1B1C1E017B292CB00B6164C /* toolbar_icon_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = F1B1C1DE17B292CB00B6164C /* toolbar_icon_pressed.png */; };
 		F1B1C1E117B292CB00B6164C /* toolbar_icon_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1B1C1DF17B292CB00B6164C /* toolbar_icon_pressed@2x.png */; };
+		F1B1C1E417B29C1800B6164C /* MarqueeLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B1C1E317B29C1800B6164C /* MarqueeLabel.m */; };
+		F1B1C1EA17B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B1C1E917B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.m */; };
 		F1B2489014E333E300C44E11 /* webDAVHelp.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B2488E14E333E200C44E11 /* webDAVHelp.m */; };
 		F1B2C0FC17961A0E00AD5A04 /* PeerPickerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B2C0FB17961A0E00AD5A04 /* PeerPickerCell.m */; };
 		F1BA8C7E17728500007AAF85 /* BGProcFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BA8C7D17728500007AAF85 /* BGProcFactory.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -523,6 +525,10 @@
 		F1A923FD140D4DDD003ACDAB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F1B1C1DE17B292CB00B6164C /* toolbar_icon_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = toolbar_icon_pressed.png; sourceTree = "<group>"; };
 		F1B1C1DF17B292CB00B6164C /* toolbar_icon_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toolbar_icon_pressed@2x.png"; sourceTree = "<group>"; };
+		F1B1C1E217B29C1800B6164C /* MarqueeLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarqueeLabel.h; sourceTree = "<group>"; };
+		F1B1C1E317B29C1800B6164C /* MarqueeLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarqueeLabel.m; sourceTree = "<group>"; };
+		F1B1C1E817B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MarqueeLabel+LabelizeIfNecessary.h"; sourceTree = "<group>"; };
+		F1B1C1E917B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MarqueeLabel+LabelizeIfNecessary.m"; sourceTree = "<group>"; };
 		F1B2488D14E333E200C44E11 /* webDAVHelp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = webDAVHelp.h; sourceTree = "<group>"; };
 		F1B2488E14E333E200C44E11 /* webDAVHelp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = webDAVHelp.m; sourceTree = "<group>"; };
 		F1B2C0FA17961A0E00AD5A04 /* PeerPickerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeerPickerCell.h; sourceTree = "<group>"; };
@@ -804,6 +810,8 @@
 				F1564AEB17765B4300E53B42 /* ToggleControl.m */,
 				F1693C6016DFAC59006E3739 /* MBProgressHUD.h */,
 				F1693C6116DFAC59006E3739 /* MBProgressHUD.m */,
+				F1B1C1E217B29C1800B6164C /* MarqueeLabel.h */,
+				F1B1C1E317B29C1800B6164C /* MarqueeLabel.m */,
 				F118C74317713DAA00ED7384 /* ContentOffsetWatchdog.h */,
 				F118C74417713DAA00ED7384 /* ContentOffsetWatchdog.m */,
 				F118C7461771425F00ED7384 /* PullToRefreshView.h */,
@@ -921,6 +929,8 @@
 				F168EDAE1790C61000C21D6F /* UIImage+Additions.m */,
 				F1434B3C179B21C1001A672C /* UITableView+CoolRefresh.h */,
 				F1434B3D179B21C1001A672C /* UITableView+CoolRefresh.m */,
+				F1B1C1E817B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.h */,
+				F1B1C1E917B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -1496,6 +1506,8 @@
 				F106ABDE17ADE5120076E57F /* DropboxUpload.m in Sources */,
 				F106ABE117ADE54A0076E57F /* Upload.m in Sources */,
 				F1038BB517B1ECB100AE918E /* DropboxLinkTask.m in Sources */,
+				F1B1C1E417B29C1800B6164C /* MarqueeLabel.m in Sources */,
+				F1B1C1EA17B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

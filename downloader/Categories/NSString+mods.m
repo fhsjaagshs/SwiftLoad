@@ -10,6 +10,10 @@
 
 @implementation NSString (mods)
 
+- (CGFloat)widthForHeight:(float)height font:(UIFont *)font {
+    return [self sizeWithFont:font constrainedToSize:CGSizeMake(MAXFLOAT, height) lineBreakMode:UILineBreakModeClip].width;
+}
+
 - (NSString *)percentSanitize {
     return [self stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 }

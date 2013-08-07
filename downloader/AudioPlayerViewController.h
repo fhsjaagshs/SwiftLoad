@@ -10,22 +10,6 @@
 
 @interface AudioPlayerViewController : UIViewController
 
-@property (nonatomic, strong) UILabel *secondsDisplay;
-@property (nonatomic, strong) UILabel *errorLabel;
-@property (nonatomic, strong) UILabel *secondsRemaining;
-
-@property (nonatomic, strong) UIButton *pausePlay;
-@property (nonatomic, strong) UIButton *stopButton;
-@property (nonatomic, strong) UIButton *nxtTrack;
-@property (nonatomic, strong) UIButton *prevTrack;
-@property (nonatomic, strong) UITextView *infoField;
-@property (nonatomic, strong) UISlider *time;
-@property (nonatomic, strong) ShadowedNavBar *navBar;
-
-@property (nonatomic, strong) ToggleControl *loopControl;
-
-@property (nonatomic, strong) UIActionSheet *popupQuery;
-
 @property (nonatomic, assign) BOOL shouldStopCounter;
 @property (nonatomic, assign) BOOL notInPlayerView;
 @property (nonatomic, assign) BOOL isGoing;

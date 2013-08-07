@@ -8,10 +8,42 @@
 
 #import "AudioPlayerViewController.h"
 
+@interface AudioPlayerViewController ()
+
+@property (nonatomic, strong) UILabel *secondsDisplay;
+@property (nonatomic, strong) UILabel *errorLabel;
+@property (nonatomic, strong) UILabel *secondsRemaining;
+
+@property (nonatomic, strong) UIButton *pausePlay;
+@property (nonatomic, strong) UIButton *stopButton;
+@property (nonatomic, strong) UIButton *nxtTrack;
+@property (nonatomic, strong) UIButton *prevTrack;
+
+@property (nonatomic, strong) MarqueeLabel *artistLabel;
+@property (nonatomic, strong) MarqueeLabel *titleLabel;
+@property (nonatomic, strong) MarqueeLabel *albumLabel;
+
+@property (nonatomic, strong) UISlider *time;
+@property (nonatomic, strong) ShadowedNavBar *navBar;
+
+@property (nonatomic, strong) ToggleControl *loopControl;
+
+@property (nonatomic, strong) UIActionSheet *popupQuery;
+
+@end
+
 @implementation AudioPlayerViewController
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [MarqueeLabel controllerViewAppearing:self];
+}
 
 - (void)loadView {
     [super loadView];
+    
+    [self setupNotifs];
+    
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     
     self.navBar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
@@ -52,13 +84,38 @@
     [self.pausePlay addTarget:kAppDelegate action:@selector(togglePlayPause) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.pausePlay];
     
-    self.infoField = [[UITextView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, sanitizeMesurement(73))];
-    self.infoField.textAlignment = UITextAlignmentCenter;
-    self.infoField.textColor = [UIColor blackColor];
-    self.infoField.font = [UIFont systemFontOfSize:15];
-    self.infoField.editable = NO;
-    self.infoField.backgroundColor = [UIColor clearColor];
-    [self.view addSubview:self.infoField];
+    self.artistLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, sanitizeMesurement(44), screenBounds.size.width, 20) duration:5.0 andFadeLength:10.0f];
+    _artistLabel.animationDelay = 0.5f;
+    _artistLabel.marqueeType = MLContinuous;
+    _artistLabel.animationCurve = UIViewAnimationCurveLinear;
+    _artistLabel.numberOfLines = 1;
+    _artistLabel.textAlignment = UITextAlignmentCenter;
+    _artistLabel.backgroundColor = [UIColor clearColor];
+    _artistLabel.textColor = [UIColor darkGrayColor];
+    _artistLabel.font = [UIFont systemFontOfSize:15];
+    [self.view addSubview:_artistLabel];
+    
+    self.titleLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, sanitizeMesurement(44+20), screenBounds.size.width, 20) rate:50.0f andFadeLength:10.0f];
+    _titleLabel.animationDelay = 0.5f;
+    _titleLabel.marqueeType = MLContinuous;
+    _titleLabel.numberOfLines = 1;
+    _titleLabel.textAlignment = UITextAlignmentCenter;
+    _titleLabel.backgroundColor = [UIColor clearColor];
+    _titleLabel.textColor = [UIColor darkGrayColor];
+    _titleLabel.font = [UIFont systemFontOfSize:15];
+    _titleLabel.opaque = NO;
+    _titleLabel.enabled = YES;
+    [self.view addSubview:_titleLabel];
+    
+    self.albumLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, sanitizeMesurement(44+(20*2)), screenBounds.size.width, 20) duration:5.0 andFadeLength:10.0f];
+    _albumLabel.animationDelay = 0.5f;
+    _albumLabel.marqueeType = MLContinuous;
+    _albumLabel.numberOfLines = 1;
+    _albumLabel.textAlignment = UITextAlignmentCenter;
+    _albumLabel.backgroundColor = [UIColor clearColor];
+    _albumLabel.textColor = [UIColor darkGrayColor];
+    _albumLabel.font = [UIFont systemFontOfSize:15];
+    [self.view addSubview:_albumLabel];
     
     self.loopControl = [[ToggleControl alloc]initWithFrame:CGRectMake(self.view.bounds.size.width-50, self.view.bounds.size.height-50-44, 40, 40)];
     [_loopControl addTarget:self action:@selector(saveLoopState) forControlEvents:UIControlEventTouchUpInside];
@@ -113,8 +170,6 @@
     [self.view addSubview:toolBar];
     [self.view bringSubviewToFront:toolBar];
     
-    [self setupNotifs];
-    
     [kAppDelegate playFile:[kAppDelegate openFile]];
     
     [self refreshLoopState];
@@ -142,7 +197,9 @@
     [self.secondsDisplay setHidden:hide];
     [self.loopControl setHidden:hide];
     [self.stopButton setHidden:hide];
-    [self.infoField setHidden:hide];
+    [_artistLabel setHidden:hide];
+    [_titleLabel setHidden:hide];
+    [_albumLabel setHidden:hide];
     [self.errorLabel setHidden:!hide];
 }
 
@@ -288,7 +345,20 @@
 }
 
 - (void)setInfoFieldText:(NSNotification *)notif {
-    [self.infoField setText:(NSString *)notif.object];
+    
+    NSArray *components = [(NSString *)notif.object componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    
+    NSLog(@"%@",components);
+    
+    if (components.count > 0) {
+        _artistLabel.text = (NSString *)[components objectAtIndex:0];
+        _titleLabel.text = (NSString *)[components objectAtIndex:1];
+        _albumLabel.text = (NSString *)[components objectAtIndex:2];
+    } else {
+        NSLog(@"InfoField text parsing was bullshit");
+    }
+    
+    NSLog(@"Title label paused: %d",_titleLabel.isPaused);
 }
 
 - (void)setSongTitleText:(NSNotification *)notif {

@@ -10,6 +10,7 @@
 
 @interface NSString (mods)
 
+- (CGFloat)widthForHeight:(float)height font:(UIFont *)font;
 - (NSString *)percentSanitize;
 - (NSString *)stringByRemovingHTMLEntities;
 - (NSString *)stringByCapitalizingFirstLetter;
