@@ -15,7 +15,7 @@
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.textLabel.backgroundColor = bgcolor;
+        self.textLabel.backgroundColor = [UIColor whiteColor];
         self.textLabel.highlightedTextColor = [UIColor blackColor];
         self.textLabel.textAlignment = UITextAlignmentCenter;
         self.selectedBackgroundView = [[UIView alloc]init];

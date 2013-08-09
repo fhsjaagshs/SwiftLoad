@@ -186,8 +186,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         }
     });
     
-  //  [AudioPlayerViewController notif_setSongTitleText:file.lastPathComponent];
-    
     NSArray *iA = [metadataRetriever getMetadataForFile:file];
     NSString *artist = [iA objectAtIndex:0];
     NSString *title = [iA objectAtIndex:1];
@@ -555,13 +553,11 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     self.window.opaque = YES;
     self.viewController = [MyFilesViewController viewController];
     _window.rootViewController = self.viewController;
-    _window.backgroundColor = [UIColor colorWithWhite:9.0f/10.0f alpha:1.0f];
+    //_window.backgroundColor = [UIColor colorWithWhite:9.0f/10.0f alpha:1.0f];
+    self.window.backgroundColor = [UIColor whiteColor];
     [_window makeKeyAndVisible];
-
-    UIImage *bbiImage = [[UIImage imageNamed:@"toolbar_icon"]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 4, 0, 4)];
-    UIImage *bbiImagePressed = [[UIImage imageNamed:@"toolbar_icon_pressed"]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 4, 0, 4)];
-    [[UIBarButtonItem appearance]setBackgroundImage:bbiImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    [[UIBarButtonItem appearance]setBackgroundImage:bbiImagePressed forState:UIControlStateHighlighted barMetrics:UIBarMetricsDefault];
+    
+    [[UIBarButtonItem appearance]setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
 
     UIImage *navBarImage = [[UIImage imageNamed:@"statusbar"]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 150, 0, 150)];
     [[UINavigationBar appearance]setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
@@ -569,7 +565,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     
     [[UINavigationBar appearance]setTitleTextAttributes:@{ UITextAttributeTextColor: [UIColor whiteColor] }];
     [[UIBarButtonItem appearance]setTitleTextAttributes:@{ UITextAttributeTextColor: [UIColor whiteColor], UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(0, 0)] } forState:UIControlStateNormal];
-    [[UIBarButtonItem appearance]setTitleTextAttributes:@{ UITextAttributeTextColor: [UIColor blackColor], UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(0, 0)] } forState:UIControlStateHighlighted];
+    [[UIBarButtonItem appearance]setTitleTextAttributes:@{ UITextAttributeTextColor: [UIColor lightGrayColor], UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(0, 0)] } forState:UIControlStateHighlighted];
     
     [Appirater setAppId:@"469762999"];
     [Appirater setDaysUntilPrompt:5];

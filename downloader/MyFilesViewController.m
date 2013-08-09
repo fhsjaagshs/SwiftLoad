@@ -41,7 +41,7 @@ static NSString *CellIdentifier = @"Cell";
     [self.view addSubview:_navBar];
     [self.view bringSubviewToFront:_navBar];
     
-    self.theTableView = [[ShadowedTableView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44) style:UITableViewStylePlain];
+    self.theTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44) style:UITableViewStylePlain];
     _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     _theTableView.backgroundColor = [UIColor clearColor];

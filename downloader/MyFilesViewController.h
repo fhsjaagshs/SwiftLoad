@@ -20,7 +20,7 @@
 @property (nonatomic, strong) NSMutableArray *dirs;
 
 @property (nonatomic, strong) UIBarButtonItem *editButton;
-@property (nonatomic, strong) ShadowedTableView *theTableView;
+@property (nonatomic, strong) UITableView *theTableView;
 @property (nonatomic, strong) ShadowedNavBar *navBar;
 @property (nonatomic, strong) UIButton *theCopyAndPasteButton;
 

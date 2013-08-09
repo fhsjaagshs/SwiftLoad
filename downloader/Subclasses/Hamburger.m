@@ -29,7 +29,6 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 @property (nonatomic, strong) HamburgerView *hamburgerView;
 @property (nonatomic, strong) UIButton *hideButton;
 @property (nonatomic, weak) UIView *viewToMove;
-@property (nonatomic, weak) UIColor *originalBackgroundColor;
 @property (nonatomic, assign) BOOL originalOpacity;
 
 @end
@@ -72,7 +71,6 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
     } completion:^(BOOL finished) {
         [_hamburgerView removeFromSuperview];
         [_hideButton removeFromSuperview];
-        [_viewToMove setBackgroundColor:_originalBackgroundColor];
         _viewToMove.layer.shadowOffset = CGSizeZero;
         _viewToMove.layer.shouldRasterize = NO;
     }];
@@ -82,11 +80,9 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
     UIWindow *mainWindow = [kAppDelegate window];
     [mainWindow insertSubview:_hamburgerView belowSubview:_viewToMove];
     [_viewToMove addSubview:_hideButton];
-    self.originalBackgroundColor = _viewToMove.backgroundColor;
-    [_viewToMove setBackgroundColor:mainWindow.backgroundColor];
     _viewToMove.layer.shadowOffset = CGSizeMake(-3, 0);
-    _viewToMove.layer.shouldRasterize = YES;
     _viewToMove.layer.rasterizationScale = [UIScreen mainScreen].scale;
+    _viewToMove.layer.shouldRasterize = YES;
     [UIView animateWithDuration:0.3f animations:^{
         _viewToMove.layer.shadowOpacity = 0.25f;
         _hamburgerView.alpha = 1.0f;
@@ -119,13 +115,13 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
     if (self) {
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(tasksChanged) name:kHamburgerTaskUpdateNotification object:nil];
         self.userInteractionEnabled = YES;
-        self.backgroundColor = bgcolor;
+        self.backgroundColor = [UIColor whiteColor];
         self.frame = CGRectMake(0, 20, 250, [[UIScreen mainScreen]applicationFrame].size.height);
         self.opaque = YES;
         self.theTableView = [[UITableView alloc]initWithFrame:self.bounds style:UITableViewStylePlain];
         _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        _theTableView.backgroundColor = bgcolor;
+        _theTableView.backgroundColor = [UIColor whiteColor];
         _theTableView.rowHeight = 44;
         _theTableView.dataSource = self;
         _theTableView.delegate = self;

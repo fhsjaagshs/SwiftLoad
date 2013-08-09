@@ -95,7 +95,7 @@
     _artistLabel.font = [UIFont systemFontOfSize:15];
     [self.view addSubview:_artistLabel];
     
-    self.titleLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, sanitizeMesurement(44+20), screenBounds.size.width, 20) rate:50.0f andFadeLength:10.0f];
+    self.titleLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, sanitizeMesurement(44)+20, screenBounds.size.width, 20) rate:50.0f andFadeLength:10.0f];
     _titleLabel.animationDelay = 0.5f;
     _titleLabel.marqueeType = MLContinuous;
     _titleLabel.animationCurve = UIViewAnimationCurveLinear;
@@ -108,7 +108,7 @@
     _titleLabel.enabled = YES;
     [self.view addSubview:_titleLabel];
     
-    self.albumLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, sanitizeMesurement(44+(20*2)), screenBounds.size.width, 20) duration:5.0 andFadeLength:10.0f];
+    self.albumLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, sanitizeMesurement(44)+(20*2), screenBounds.size.width, 20) duration:5.0 andFadeLength:10.0f];
     _albumLabel.animationDelay = 0.5f;
     _albumLabel.marqueeType = MLContinuous;
     _albumLabel.animationCurve = UIViewAnimationCurveLinear;
