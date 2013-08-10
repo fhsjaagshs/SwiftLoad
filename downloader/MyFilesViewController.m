@@ -15,9 +15,28 @@
 
 static NSString *CellIdentifier = @"Cell";
 
-@interface MyFilesViewController () <HamburgerViewDelegate>
+@interface MyFilesViewController () <UITableViewDelegate, UITableViewDataSource, HamburgerViewDelegate, ContentOffsetWatchdogDelegate>
+
+// Content Offset Watchdog
 @property (nonatomic, assign) BOOL watchdogCanGo;
 @property (nonatomic, strong) ContentOffsetWatchdog *watchdog;
+
+// Copy/Cut/Paste
+@property (nonatomic, strong) NSMutableArray *copiedList;
+@property (nonatomic, assign) BOOL isCut;
+
+@property (nonatomic, strong) NSMutableArray *filelist;
+
+@property (nonatomic, strong) UIBarButtonItem *editButton;
+@property (nonatomic, strong) UITableView *theTableView;
+@property (nonatomic, strong) ShadowedNavBar *navBar;
+@property (nonatomic, strong) UIButton *theCopyAndPasteButton;
+
+@property (nonatomic, strong) UIView *sideSwipeView;
+@property (nonatomic, weak) UITableViewCell *sideSwipeCell;
+@property (nonatomic, assign) UISwipeGestureRecognizerDirection sideSwipeDirection;
+@property (nonatomic, assign) BOOL animatingSideSwipe;
+
 @end
 
 @implementation MyFilesViewController
@@ -270,42 +289,15 @@ static NSString *CellIdentifier = @"Cell";
     }]show];
 }
 
-- (void)recalculateDirs {
-    
-    if (_dirs == nil) {
-        self.dirs = [NSMutableArray array];
-    } else {
-        [_dirs removeAllObjects];
-    }
-    
-    NSString *dirdisp = _navBar.topItem.title;
-    
-    NSArray *addPathComponents = [dirdisp pathComponents];
-    int count = addPathComponents.count;
-
-    NSString *previousPath = [kDocsDir stringByAppendingPathComponent:[dirdisp stringByDeletingLastPathComponent]];
-    for (int i = 0; i < count; i++) {
-        
-        NSString *stringy = previousPath;
-        for (int removalTimes = i-count+1; removalTimes < 0; removalTimes++) {
-            stringy = [stringy stringByDeletingLastPathComponent];
-        }
-        [_dirs addObject:stringy];
-    }
-}
-
 - (void)goBackDir {
     [self removeSideSwipeView:NO];
 
-    [self recalculateDirs];
-
-    NSString *prevDir = [_dirs lastObject];
-    
-    [kAppDelegate setManagerCurrentDir:prevDir];
-    [self.dirs removeObject:[_dirs lastObject]];
-
     _navBar.topItem.title = [_navBar.topItem.title stringByDeletingLastPathComponent];
 
+    [kAppDelegate setManagerCurrentDir:[kDocsDir stringByAppendingPathComponent:_navBar.topItem.title]];
+    
+    [[FilesystemMonitor sharedMonitor]startMonitoringDirectory:[kAppDelegate managerCurrentDir]];
+    
     [self refreshTableViewWithAnimation:UITableViewRowAnimationBottom];
 }
 
@@ -470,7 +462,7 @@ static NSString *CellIdentifier = @"Cell";
         
         [ad setManagerCurrentDir:file];
         
-        [self recalculateDirs];
+        [[FilesystemMonitor sharedMonitor]startMonitoringDirectory:ad.managerCurrentDir];
         
         [_filelist removeAllObjects];
         [_theTableView reloadDataWithCoolAnimationType:CoolRefreshAnimationStyleForward];

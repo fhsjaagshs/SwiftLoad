@@ -10,24 +10,7 @@
 #import "ShadowedTableView.h"
 #import "ShadowedNavBar.h"
 
-@interface MyFilesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIDocumentInteractionControllerDelegate, ContentOffsetWatchdogDelegate>
-
-// Copy/Cut/Paste
-@property (nonatomic, strong) NSMutableArray *copiedList;
-@property (nonatomic, assign) BOOL isCut;
-
-@property (nonatomic, strong) NSMutableArray *filelist;
-@property (nonatomic, strong) NSMutableArray *dirs;
-
-@property (nonatomic, strong) UIBarButtonItem *editButton;
-@property (nonatomic, strong) UITableView *theTableView;
-@property (nonatomic, strong) ShadowedNavBar *navBar;
-@property (nonatomic, strong) UIButton *theCopyAndPasteButton;
-
-@property (nonatomic, strong) UIView *sideSwipeView;
-@property (nonatomic, weak) UITableViewCell *sideSwipeCell;
-@property (nonatomic, assign) UISwipeGestureRecognizerDirection sideSwipeDirection;
-@property (nonatomic, assign) BOOL animatingSideSwipe;
+@interface MyFilesViewController : UIViewController 
 
 - (void)setWatchdogCanGoYES;
 

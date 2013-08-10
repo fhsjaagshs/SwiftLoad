@@ -26,8 +26,11 @@
 @end
 
 static void KQCallback(CFFileDescriptorRef kqRef, CFOptionFlags callBackTypes, void *info) {
-    if ([(__bridge id)info isKindOfClass:[FilesystemMonitor class]] && callBackTypes == kCFFileDescriptorReadCallBack) {
-        [[FilesystemMonitor sharedMonitor]kqueueFired];
+    
+    id infoid = (__bridge id)info;
+    
+    if ([infoid isKindOfClass:[FilesystemMonitor class]] && callBackTypes == kCFFileDescriptorReadCallBack) {
+        [(FilesystemMonitor *)infoid kqueueFired];
     }
 }
 
@@ -70,10 +73,17 @@ static void KQCallback(CFFileDescriptorRef kqRef, CFOptionFlags callBackTypes, v
 }
 
 - (BOOL)startMonitoringDirectory:(NSString *)dirPath {
+    
+    BOOL isMonitoring = (dirKQRef == nil) && (dirFD == -1) && (kq == -1);
+    
+    if (isMonitoring) {
+        [self invalidate];
+    }
+    
     // Double initializing is not going to work...
     if ((dirKQRef == nil) && (dirFD == -1) && (kq == -1)) {
         // Open the directory we're going to watch
-        dirFD = open([dirPath fileSystemRepresentation], O_EVTONLY);
+        dirFD = open(dirPath.fileSystemRepresentation, O_EVTONLY);
         if (dirFD >= 0) {
             // Create a kqueue for our event messages...
             kq = kqueue();
