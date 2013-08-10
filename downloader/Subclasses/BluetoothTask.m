@@ -38,8 +38,24 @@
     return self;
 }
 
+- (void)removeBTManagerCallbacks {
+    [[BluetoothManager sharedManager]setProgressBlock:nil];
+    [[BluetoothManager sharedManager]setCompletionBlock:nil];
+}
+
+- (void)showFailure {
+    [super showFailure];
+    [self removeBTManagerCallbacks];
+}
+
+- (void)showSuccess {
+    [super showSuccess];
+    [self removeBTManagerCallbacks];
+}
+
 - (void)stop {
     [super stop];
+    [self removeBTManagerCallbacks];
     [[BluetoothManager sharedManager]cancel];
 }
 
@@ -55,10 +71,6 @@
     
     self.name = [[BluetoothManager sharedManager]getFilename];
     
-    [[BluetoothManager sharedManager]setStartedBlock:^{
-        [[TaskController sharedController]addTask:self];
-    }];
-    
     [[BluetoothManager sharedManager]setProgressBlock:^(float progress) {
         [weakself.delegate setProgress:progress];
     }];
@@ -70,6 +82,9 @@
             } else {
                 [weakself showFailure];
             }
+        } else {
+            NSLog(@"LOL");
+            [self stop];
         }
     }];
 }

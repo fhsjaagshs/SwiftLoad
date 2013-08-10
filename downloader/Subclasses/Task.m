@@ -84,7 +84,7 @@ float const kClearOutDelayTask = 0.6f;
     self.complete = YES;
     self.succeeded = NO;
     
-    if (_delegate && [_delegate respondsToSelector:@selector(drawRed)]) {
+    if (_delegate) {
         [_delegate drawRed];
     }
     
@@ -96,7 +96,7 @@ float const kClearOutDelayTask = 0.6f;
     self.complete = YES;
     self.succeeded = YES;
     
-    if (_delegate && [_delegate respondsToSelector:@selector(drawGreen)]) {
+    if (_delegate) {
         [_delegate drawGreen];
     }
     

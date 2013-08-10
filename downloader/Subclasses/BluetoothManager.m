@@ -127,7 +127,7 @@ static NSString *kFilesizeKey = @"s";
     }];
     
     [picker setCancelledBlock:^{
-        [weakManager reset];
+        [weakManager cancel];
     }];
     [picker show];
 }
