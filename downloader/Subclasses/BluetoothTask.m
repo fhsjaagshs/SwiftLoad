@@ -83,7 +83,6 @@
                 [weakself showFailure];
             }
         } else {
-            NSLog(@"LOL");
             [self stop];
         }
     }];
