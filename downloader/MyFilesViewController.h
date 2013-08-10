@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ShadowedTableView.h"
 #import "ShadowedNavBar.h"
 
 @interface MyFilesViewController : UIViewController 

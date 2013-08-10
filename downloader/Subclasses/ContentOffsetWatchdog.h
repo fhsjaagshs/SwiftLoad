@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Nathaniel Symer. All rights reserved.
 //
 
-#import "ShadowedTableView.h"
+#import <UIKit/UIKit.h>
 
 typedef enum {
     WatchdogModeNormal,

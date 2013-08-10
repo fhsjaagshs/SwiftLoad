@@ -10,7 +10,7 @@
 
 @interface SFTPBrowserViewController () <PullToRefreshViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, strong) ShadowedTableView *theTableView;
+@property (nonatomic, strong) UITableView *theTableView;
 @property (nonatomic, strong) UIButton *backButton;
 @property (nonatomic, strong) ShadowedNavBar *navBar;
 @property (nonatomic, strong) PullToRefreshView *pull;
@@ -56,10 +56,9 @@
     [_backButton addTarget:self action:@selector(goBackDir) forControlEvents:UIControlEventTouchUpInside];
     [bbv addSubview:_backButton];
 
-    self.theTableView = [[ShadowedTableView alloc]initWithFrame:CGRectMake(0, 88, screenBounds.size.width, screenBounds.size.height-88) style:UITableViewStylePlain];
+    self.theTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 88, screenBounds.size.width, screenBounds.size.height-88) style:UITableViewStylePlain];
     self.theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    self.theTableView.backgroundColor = [UIColor clearColor];
     self.theTableView.rowHeight = iPad?60:44;
     self.theTableView.dataSource = self;
     self.theTableView.delegate = self;

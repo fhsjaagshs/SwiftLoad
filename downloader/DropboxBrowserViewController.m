@@ -29,7 +29,7 @@ static NSString *CellIdentifier = @"dbcell";
 
 @interface DropboxBrowserViewController () <UITableViewDataSource, UITableViewDelegate, PullToRefreshViewDelegate>
 
-@property (nonatomic, strong) ShadowedTableView *theTableView;
+@property (nonatomic, strong) UITableView *theTableView;
 @property (nonatomic, strong) UIButton *backButton;
 @property (nonatomic, strong) UIButton *homeButton;
 @property (nonatomic, strong) ShadowedNavBar *navBar;
@@ -83,10 +83,9 @@ static NSString *CellIdentifier = @"dbcell";
     [bbv addSubview:_backButton];
     [_backButton setHidden:YES];
     
-    self.theTableView = [[ShadowedTableView alloc]initWithFrame:CGRectMake(0, 88, screenBounds.size.width, screenBounds.size.height-88) style:UITableViewStylePlain];
+    self.theTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 88, screenBounds.size.width, screenBounds.size.height-88) style:UITableViewStylePlain];
     _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    _theTableView.backgroundColor = [UIColor clearColor];
     _theTableView.rowHeight = iPad?60:44;
     _theTableView.dataSource = self;
     _theTableView.delegate = self;
