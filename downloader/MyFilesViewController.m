@@ -284,7 +284,7 @@ static NSString *CellIdentifier = @"Cell";
         } else if (fileType == FileCreationDialogueFileTypeDirectory) {
             [[NSFileManager defaultManager]createDirectoryAtPath:thingToBeCreated withIntermediateDirectories:NO attributes:nil error:nil];
         }
-        [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
+       // [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
     }]show];
 }
 

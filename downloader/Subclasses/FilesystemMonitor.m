@@ -74,7 +74,7 @@ static void KQCallback(CFFileDescriptorRef kqRef, CFOptionFlags callBackTypes, v
 
 - (BOOL)startMonitoringDirectory:(NSString *)dirPath {
     
-    BOOL isMonitoring = (dirKQRef == nil) && (dirFD == -1) && (kq == -1);
+    BOOL isMonitoring = !((dirKQRef == nil) && (dirFD == -1) && (kq == -1));
     
     if (isMonitoring) {
         [self invalidate];
@@ -82,6 +82,7 @@ static void KQCallback(CFFileDescriptorRef kqRef, CFOptionFlags callBackTypes, v
     
     // Double initializing is not going to work...
     if ((dirKQRef == nil) && (dirFD == -1) && (kq == -1)) {
+        
         // Open the directory we're going to watch
         dirFD = open(dirPath.fileSystemRepresentation, O_EVTONLY);
         if (dirFD >= 0) {
