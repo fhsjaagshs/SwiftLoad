@@ -97,7 +97,8 @@ static NSString *CellIdentifier = @"Cell";
     __weak MyFilesViewController *weakself = self;
     
     [[FilesystemMonitor sharedMonitor]setChangedHandler:^{
-        [weakself refreshTableViewWithAnimation:UITableViewRowAnimationFade];
+        [weakself.filelist removeAllObjects];
+        [weakself.theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     }];
     
     [[FilesystemMonitor sharedMonitor]startMonitoringDirectory:kDocsDir];
@@ -268,11 +269,6 @@ static NSString *CellIdentifier = @"Cell";
         self.filelist = [NSMutableArray array];
         [_filelist addObjectsFromArray:[[[NSFileManager defaultManager]contentsOfDirectoryAtPath:[kAppDelegate managerCurrentDir] error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)]];
     }
-}
-
-- (void)refreshTableViewWithAnimation:(UITableViewRowAnimation)rowAnim {
-    [_filelist removeAllObjects];
-    [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:rowAnim];
 }
 
 - (void)showFileCreationDialogue {
