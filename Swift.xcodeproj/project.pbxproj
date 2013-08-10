@@ -121,7 +121,6 @@
 		F1681E9217A5C28D00ACAAD0 /* CompressionTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F1681E9117A5C28D00ACAAD0 /* CompressionTask.m */; };
 		F168EDAF1790C61000C21D6F /* UIImage+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F168EDAE1790C61000C21D6F /* UIImage+Additions.m */; };
 		F1693C3D16DFAB6E006E3739 /* SwiftLoadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C2916DFAB6E006E3739 /* SwiftLoadCell.m */; };
-		F1693C4416DFAB6E006E3739 /* ShadowedTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C3716DFAB6E006E3739 /* ShadowedTableView.m */; };
 		F1693C4E16DFABA6006E3739 /* UIActionSheet+BlockExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C4716DFABA6006E3739 /* UIActionSheet+BlockExtensions.m */; };
 		F1693C4F16DFABA6006E3739 /* UIAlertView+BlockExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C4916DFABA6006E3739 /* UIAlertView+BlockExtensions.m */; };
 		F1693C5016DFABA6006E3739 /* UIScrollView+UIScrollView_ZoomToPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C4B16DFABA6006E3739 /* UIScrollView+UIScrollView_ZoomToPoint.m */; };
@@ -410,8 +409,6 @@
 		F168EDAE1790C61000C21D6F /* UIImage+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Additions.m"; sourceTree = "<group>"; };
 		F1693C2816DFAB6E006E3739 /* SwiftLoadCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwiftLoadCell.h; path = ../CustomGraphics/SwiftLoadCell.h; sourceTree = "<group>"; };
 		F1693C2916DFAB6E006E3739 /* SwiftLoadCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwiftLoadCell.m; path = ../CustomGraphics/SwiftLoadCell.m; sourceTree = "<group>"; };
-		F1693C3616DFAB6E006E3739 /* ShadowedTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShadowedTableView.h; path = ../CustomGraphics/ShadowedTableView.h; sourceTree = "<group>"; };
-		F1693C3716DFAB6E006E3739 /* ShadowedTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ShadowedTableView.m; path = ../CustomGraphics/ShadowedTableView.m; sourceTree = "<group>"; };
 		F1693C4616DFABA6006E3739 /* UIActionSheet+BlockExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActionSheet+BlockExtensions.h"; sourceTree = "<group>"; };
 		F1693C4716DFABA6006E3739 /* UIActionSheet+BlockExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIActionSheet+BlockExtensions.m"; sourceTree = "<group>"; };
 		F1693C4816DFABA6006E3739 /* UIAlertView+BlockExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+BlockExtensions.h"; sourceTree = "<group>"; };
@@ -822,8 +819,6 @@
 				F1798EAE1774177400310C37 /* ShadowedNavBar.m */,
 				F1798EB0177417CF00310C37 /* ShadowedToolbar.h */,
 				F1798EB1177417CF00310C37 /* ShadowedToolbar.m */,
-				F1693C3616DFAB6E006E3739 /* ShadowedTableView.h */,
-				F1693C3716DFAB6E006E3739 /* ShadowedTableView.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -1386,7 +1381,6 @@
 				9BFF2A0D15387C6E007ED9B1 /* ZipWriteStream.m in Sources */,
 				F128A1DD157FDBFE001BC156 /* SettingsView.m in Sources */,
 				F1693C3D16DFAB6E006E3739 /* SwiftLoadCell.m in Sources */,
-				F1693C4416DFAB6E006E3739 /* ShadowedTableView.m in Sources */,
 				F1693C4E16DFABA6006E3739 /* UIActionSheet+BlockExtensions.m in Sources */,
 				F1693C4F16DFABA6006E3739 /* UIAlertView+BlockExtensions.m in Sources */,
 				F1693C5016DFABA6006E3739 /* UIScrollView+UIScrollView_ZoomToPoint.m in Sources */,

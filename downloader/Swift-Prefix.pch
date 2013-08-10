@@ -50,7 +50,6 @@
     #import "DisclosureButton.h"
     #import "ShadowedNavBar.h"
     #import "ShadowedToolBar.h"
-    #import "ShadowedTableView.h"
     #import "SwiftLoadCell.h"
     #import "DashedLineView.h"
 
