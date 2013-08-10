@@ -201,7 +201,6 @@ static NSString *CellIdentifier = @"Cell";
 
             dispatch_sync(dispatch_get_main_queue(), ^{
                 @autoreleasepool {
-                    [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
                     [self updateCopyButtonState];
                 }
             });
@@ -284,7 +283,6 @@ static NSString *CellIdentifier = @"Cell";
         } else if (fileType == FileCreationDialogueFileTypeDirectory) {
             [[NSFileManager defaultManager]createDirectoryAtPath:thingToBeCreated withIntermediateDirectories:NO attributes:nil error:nil];
         }
-       // [self refreshTableViewWithAnimation:UITableViewRowAnimationFade];
     }]show];
 }
 
@@ -292,12 +290,9 @@ static NSString *CellIdentifier = @"Cell";
     [self removeSideSwipeView:NO];
 
     _navBar.topItem.title = [_navBar.topItem.title stringByDeletingLastPathComponent];
-
     [kAppDelegate setManagerCurrentDir:[kDocsDir stringByAppendingPathComponent:_navBar.topItem.title]];
     
     [[FilesystemMonitor sharedMonitor]startMonitoringDirectory:[kAppDelegate managerCurrentDir]];
-    
-    [self refreshTableViewWithAnimation:UITableViewRowAnimationBottom];
 }
 
 - (void)showOptionsSheet:(id)sender {
