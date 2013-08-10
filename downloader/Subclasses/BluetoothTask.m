@@ -31,6 +31,7 @@
 - (id)initWithFile:(NSString *)file {
     self = [super init];
     if (self) {
+        self.name = file.lastPathComponent;
         self.file = file;
         [self setup];
     }
@@ -53,9 +54,15 @@
     __weak BluetoothTask *weakself = self;
     
     self.name = [[BluetoothManager sharedManager]getFilename];
+    
+    [[BluetoothManager sharedManager]setStartedBlock:^{
+        [[TaskController sharedController]addTask:self];
+    }];
+    
     [[BluetoothManager sharedManager]setProgressBlock:^(float progress) {
         [weakself.delegate setProgress:progress];
     }];
+    
     [[BluetoothManager sharedManager]setCompletionBlock:^(NSError *error, BOOL cancelled) {
         if (!cancelled) {
             if (!error) {

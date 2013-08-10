@@ -30,5 +30,6 @@ typedef void (^finishBlock)(BOOL succeeded,BOOLcancelled);*/
 @property (nonatomic, copy) void(^startedBlock)(void);
 
 @property (nonatomic, assign) BOOL isSender;
+@property (nonatomic, assign) BOOL isTransferring;
 
 @end

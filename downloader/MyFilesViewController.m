@@ -754,6 +754,10 @@ static NSString *CellIdentifier = @"Cell";
         [buttonData removeObject:buttonData.lastObject];
     }
     
+    if ([[BluetoothManager sharedManager]isTransferring]) {
+        [buttonData removeObjectAtIndex:2];
+    }
+    
     for (NSDictionary *buttonInfo in buttonData) {
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.frame = CGRectMake([buttonData indexOfObject:buttonInfo]*((_sideSwipeView.bounds.size.width)/buttonData.count), 0, ((_sideSwipeView.bounds.size.width)/buttonData.count), _sideSwipeView.bounds.size.height);

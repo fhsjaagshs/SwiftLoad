@@ -28,8 +28,6 @@ static NSString *kFilesizeKey = @"s";
 @property (nonatomic, assign) float readBytes;
 @property (nonatomic, strong) NSString *originFilePath;
 
-@property (nonatomic, assign) BOOL isTransferring;
-
 @property (nonatomic, assign) float chunkSize;
 
 @end
@@ -122,6 +120,10 @@ static NSString *kFilesizeKey = @"s";
     [picker setPeerPickedBlock:^(NSString *peerID) {
         weakManager.isSender = YES;
         [weakManager.session connectToPeer:peerID withTimeout:30];
+        
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:[kAppDelegate window] animated:YES];
+        hud.labelText = @"Connecting";
+        hud.mode = MBProgressHUDModeIndeterminate;
     }];
     
     [picker setCancelledBlock:^{
@@ -131,12 +133,16 @@ static NSString *kFilesizeKey = @"s";
 }
 
 - (void)session:(GKSession *)session peer:(NSString *)peerID didChangeState:(GKPeerConnectionState)state {
+    
+    if (!_isTransferring) {
+        [MBProgressHUD hideHUDForView:[kAppDelegate window] animated:YES];
+    }
+    
     switch (state) {
         case GKPeerStateDisconnected: {
             _session.available = YES;
             if (_isTransferring) {
                 [self failWithError:[NSError errorWithDomain:@"You have been disconnected from the other iPhone" code:-1 userInfo:nil]];
-                
                 if (_targetPath.length) {
                     [[NSFileManager defaultManager]removeItemAtPath:_targetPath error:nil];
                 }
