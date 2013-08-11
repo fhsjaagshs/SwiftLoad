@@ -39,6 +39,7 @@
 		F108927617B4993C00CF317F /* button_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F108927217B4993C00CF317F /* button_icon@2x.png */; };
 		F10CBC5A1707D6E700C82AFB /* DroppinBadassBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */; };
 		F10CBC5D17080C6600C82AFB /* DropboxBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */; };
+		F111903B17B838B400FE48F2 /* myriad-regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F111903A17B838B400FE48F2 /* myriad-regular.ttf */; };
 		F1122A76142E4E8B00A04CC6 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */; };
 		F115302B177FDB4F000513E1 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = F115302A177FDB4E000513E1 /* FMDatabasePool.m */; };
 		F1178B6F1775245400337813 /* TransparentAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = F1178B6E1775245400337813 /* TransparentAlert.m */; };
@@ -285,6 +286,7 @@
 		F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DroppinBadassBlocks.m; path = ../Categories/DroppinBadassBlocks.m; sourceTree = "<group>"; };
 		F10CBC5B17080C6600C82AFB /* DropboxBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxBrowserViewController.h; sourceTree = "<group>"; };
 		F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxBrowserViewController.m; sourceTree = "<group>"; };
+		F111903A17B838B400FE48F2 /* myriad-regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "myriad-regular.ttf"; sourceTree = "<group>"; };
 		F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		F1153029177FDB4E000513E1 /* FMDatabasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabasePool.h; sourceTree = "<group>"; };
 		F115302A177FDB4E000513E1 /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePool.m; sourceTree = "<group>"; };
@@ -1148,6 +1150,7 @@
 		F19BB51816E006680081C95B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				F111903A17B838B400FE48F2 /* myriad-regular.ttf */,
 				F19BB51916E006CA0081C95B /* main.m */,
 				F19BB51A16E006CA0081C95B /* Swift-Info.plist */,
 				F19BB51B16E006CA0081C95B /* Swift-Prefix.pch */,
@@ -1337,6 +1340,7 @@
 				F108927417B4993C00CF317F /* button_icon_pressed.png in Resources */,
 				F108927517B4993C00CF317F /* button_icon_pressed@2x.png in Resources */,
 				F108927617B4993C00CF317F /* button_icon@2x.png in Resources */,
+				F111903B17B838B400FE48F2 /* myriad-regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

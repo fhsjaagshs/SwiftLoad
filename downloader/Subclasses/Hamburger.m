@@ -43,8 +43,6 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
     item.hamburgerView.item = item;
     item.hamburgerView.alpha = 0.0f;
     item.viewToMove = viewToMove;
-    item.viewToMove.layer.shadowPath = [UIBezierPath bezierPathWithRect:item.viewToMove.bounds].CGPath;
-    item.viewToMove.layer.shadowColor = [UIColor blackColor].CGColor;
     item.hideButton = [UIButton buttonWithType:UIButtonTypeCustom];
     item.hideButton.frame = item.viewToMove.bounds;
     [item.hideButton addTarget:item action:@selector(hide) forControlEvents:UIControlEventTouchDown];
@@ -55,14 +53,6 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
     [_hamburgerView setDelegate:delegate];
 }
 
-- (void)showShadow {
-    _viewToMove.layer.shadowOffset = CGSizeMake(-3, 0);
-}
-
-- (void)clearShadow {
-    _viewToMove.layer.shadowOffset = CGSizeZero;
-}
-
 - (void)hide {
     [UIView animateWithDuration:0.3f animations:^{
         _viewToMove.layer.shadowOpacity = 0.0f;
@@ -71,8 +61,6 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
     } completion:^(BOOL finished) {
         [_hamburgerView removeFromSuperview];
         [_hideButton removeFromSuperview];
-        _viewToMove.layer.shadowOffset = CGSizeZero;
-        _viewToMove.layer.shouldRasterize = NO;
     }];
 }
 
@@ -80,13 +68,11 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
     UIWindow *mainWindow = [kAppDelegate window];
     [mainWindow insertSubview:_hamburgerView belowSubview:_viewToMove];
     [_viewToMove addSubview:_hideButton];
-    _viewToMove.layer.shadowOffset = CGSizeMake(-3, 0);
-    _viewToMove.layer.rasterizationScale = [UIScreen mainScreen].scale;
-    _viewToMove.layer.shouldRasterize = YES;
     [UIView animateWithDuration:0.3f animations:^{
-        _viewToMove.layer.shadowOpacity = 0.25f;
         _hamburgerView.alpha = 1.0f;
         _viewToMove.frame = CGRectMake(250, _viewToMove.frame.origin.y, _viewToMove.frame.size.width, _viewToMove.frame.size.height);
+    } completion:^(BOOL finished) {
+        [_hamburgerView setNeedsDisplay];
     }];
 }
 
@@ -121,11 +107,10 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
         self.theTableView = [[UITableView alloc]initWithFrame:self.bounds style:UITableViewStylePlain];
         _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        _theTableView.backgroundColor = [UIColor whiteColor];
+        _theTableView.backgroundColor = [UIColor clearColor];
         _theTableView.rowHeight = 44;
         _theTableView.dataSource = self;
         _theTableView.delegate = self;
-        _theTableView.opaque = YES;
         [self addSubview:_theTableView];
     }
     return self;
@@ -249,6 +234,24 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 - (void)layoutSubviews {
     [super layoutSubviews];
     _theTableView.frame = self.bounds;
+}
+
+- (void)drawRect:(CGRect)rect {
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(context);
+    
+    CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
+    CGContextFillRect(context, self.bounds);
+    
+    CGContextSetStrokeColorWithColor(context, [UIColor darkGrayColor].CGColor);
+    CGContextSetLineWidth(context, 1);
+    
+    CGContextMoveToPoint(context, self.bounds.size.width, self.bounds.size.height);
+    CGContextAddLineToPoint(context, self.bounds.size.width, 0);
+    
+    CGContextStrokePath(context);
+    
+    CGContextRestoreGState(context);
 }
 
 - (void)dealloc {

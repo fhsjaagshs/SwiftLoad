@@ -18,9 +18,9 @@
         self.textLabel.backgroundColor = [UIColor whiteColor];
         self.textLabel.highlightedTextColor = [UIColor blackColor];
         self.textLabel.textAlignment = UITextAlignmentCenter;
+        self.textLabel.font = [UIFont fontWithName:@"myriad-regular" size:27];
         self.selectedBackgroundView = [[UIView alloc]init];
         self.selectedBackgroundView.backgroundColor = [UIColor lightGrayColor];
-        self.opaque = YES;
     }
     return self;
 }

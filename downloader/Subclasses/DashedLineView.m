@@ -34,7 +34,6 @@
     CGContextSetLineWidth(context, self.bounds.size.height/4);
     CGContextSetLineDash(context, 0.0f, dashes, 2);
     
-    
     CGContextMoveToPoint(context, 20, self.bounds.size.height/2);
     CGContextAddLineToPoint(context, self.bounds.size.width-20, self.bounds.size.height/2);
     
