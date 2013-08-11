@@ -11,23 +11,22 @@
 @implementation DashedLineView
 
 
-- (instancetype)init {
-    self = [super init];
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
     if (self) {
         self.layer.rasterizationScale = [[UIScreen mainScreen]scale];
         self.layer.shouldRasterize = YES;
+        self.opaque = NO;
     }
     return self;
 }
 
 - (void)drawRect:(CGRect)rect {
     CGContextRef context = UIGraphicsGetCurrentContext();
+    
     CGContextSaveGState(context);
     
     CGFloat dashes[] = {5,5};
-    
-    CGContextSetFillColorWithColor(context, [[kAppDelegate window]backgroundColor].CGColor);
-    CGContextFillRect(context, self.bounds);
     
     CGContextSetStrokeColorWithColor(context, [UIColor darkGrayColor].CGColor);
     

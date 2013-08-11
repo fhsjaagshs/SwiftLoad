@@ -67,7 +67,7 @@
     
     // Draw background
     
-    CGContextSetStrokeColorWithColor(context, [UIColor darkGrayColor].CGColor);
+    CGContextSetStrokeColorWithColor(context, drawColor.CGColor);
     CGContextSetFillColorWithColor(context, [drawColor colorWithAlphaComponent:0.1f].CGColor);
     
     CGContextSetLineWidth(context, 2.0f);

@@ -187,7 +187,6 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
         DashedLineView *dashedLineView = [[DashedLineView alloc]initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 5)];
         return dashedLineView;
     }
-    
     return nil;
 }
 
