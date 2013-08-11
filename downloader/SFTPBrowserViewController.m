@@ -124,7 +124,7 @@
 - (void)loadCurrentDirectoryFromCache {
     self.filedicts = [NSMutableArray array];
     
-    FMResultSet *set = [_memCache executeQuery:@"SELECT filename,type,size FROM sftp_cache WHERE parentpath=\"?\"",[self fixURL:_currentURL]];
+    FMResultSet *set = [_memCache executeQuery:@"SELECT filename,type,size FROM sftp_cache WHERE parentpath=?",[self fixURL:_currentURL]];
     
     while ([set next]) {
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
@@ -168,8 +168,8 @@
                 [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
                 [_pull finishedLoading];
                 [[NetworkActivityController sharedController]hideIfPossible];
+                [TransparentAlert showAlertWithTitle:@"SFTP Error" andMessage:@"There was an error loading the current directory via SFTP."]; // Improve this later
             }
-            [TransparentAlert showAlertWithTitle:@"SFTP Error" andMessage:@"There was an error loading the current directory via SFTP."]; // Improve this later
         });
     }];
     [_connection submitRequest:req];
@@ -326,13 +326,13 @@
     
     NSString *filetype = (NSString *)[fileDict objectForKey:NSFileType];
     
-    if ([filetype isEqualToString:(NSString *)NSFileTypeDirectory]) {
+    if ([filetype isEqualToString:NSFileTypeDirectory]) {
         [self addComponentToPath:filename];
         [self loadCurrentDirectoryFromSFTP];
         if (_currentPath.length > 1) {
             [_backButton setHidden:NO];
         }
-    } else if ([filetype isEqualToString:(NSString *)NSFileTypeRegular]) {
+    } else if ([filetype isEqualToString:NSFileTypeRegular]) {
         NSString *message = [NSString stringWithFormat:@"Do you wish to download \"%@\"?",filename];
         UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             if (buttonIndex == 0) {

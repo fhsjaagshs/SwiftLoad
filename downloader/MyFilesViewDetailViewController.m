@@ -22,8 +22,7 @@
     [self.view addSubview:bar];
     [self.view bringSubviewToFront:bar];
     
-    CGRect frame = CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44);
-    self.webView = [[UIWebView alloc]initWithFrame:frame];
+    self.webView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44)];
     _webView.delegate = self;
     _webView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _webView.backgroundColor = [UIColor clearColor];
@@ -46,8 +45,11 @@
 }
 
 - (void)showActionSheet:(id)sender {
-    if (self.popupQuery && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [self.popupQuery dismissWithClickedButtonIndex:self.popupQuery.cancelButtonIndex animated:YES];
+    
+    BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
+    
+    if (_popupQuery && iPad) {
+        [_popupQuery dismissWithClickedButtonIndex:_popupQuery.cancelButtonIndex animated:YES];
         self.popupQuery = nil;
         return;
     }
@@ -70,12 +72,12 @@
         
     } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Print", @"Email File", @"Send Via Bluetooth", @"Upload to Dropbox", nil];
     
-    self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+    _popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [self.popupQuery showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];
+    if (iPad) {
+        [_popupQuery showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];
     } else {
-        [self.popupQuery showInView:self.view];
+        [_popupQuery showInView:self.view];
     }
 }
 
