@@ -38,7 +38,6 @@
 
     #import "FilesystemMonitor.h"
 
-    #import "StyleFactory.h"
     #import "BGProcFactory.h"
     #import "NetworkActivityController.h"
 

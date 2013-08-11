@@ -194,7 +194,6 @@
 		F1E9F7861773FDF300EC345C /* DisclosureButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F1E9F7851773FDF300EC345C /* DisclosureButton.m */; };
 		F1E9F7891773FECB00EC345C /* arrow_disclosure_highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F7871773FECB00EC345C /* arrow_disclosure_highlighted.png */; };
 		F1E9F78A1773FECB00EC345C /* arrow_disclosure_highlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F7881773FECB00EC345C /* arrow_disclosure_highlighted@2x.png */; };
-		F1E9F78D177402B600EC345C /* StyleFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = F1E9F78C177402B600EC345C /* StyleFactory.m */; };
 		F1E9F7901774052D00EC345C /* buttonbarBG.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F78E1774052D00EC345C /* buttonbarBG.png */; };
 		F1E9F7911774052D00EC345C /* buttonbarBG@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F78F1774052D00EC345C /* buttonbarBG@2x.png */; };
 		F1E9F7C51774114D00EC345C /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F7BA1774114A00EC345C /* Default.png */; };
@@ -544,8 +543,6 @@
 		F1E9F7851773FDF300EC345C /* DisclosureButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisclosureButton.m; sourceTree = "<group>"; };
 		F1E9F7871773FECB00EC345C /* arrow_disclosure_highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_disclosure_highlighted.png; sourceTree = "<group>"; };
 		F1E9F7881773FECB00EC345C /* arrow_disclosure_highlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow_disclosure_highlighted@2x.png"; sourceTree = "<group>"; };
-		F1E9F78B177402B600EC345C /* StyleFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StyleFactory.h; path = ../StyleFactory.h; sourceTree = "<group>"; };
-		F1E9F78C177402B600EC345C /* StyleFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StyleFactory.m; path = ../StyleFactory.m; sourceTree = "<group>"; };
 		F1E9F78E1774052D00EC345C /* buttonbarBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = buttonbarBG.png; sourceTree = "<group>"; };
 		F1E9F78F1774052D00EC345C /* buttonbarBG@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "buttonbarBG@2x.png"; sourceTree = "<group>"; };
 		F1E9F7BA1774114A00EC345C /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../Packaging/Default.png; sourceTree = "<group>"; };
@@ -949,8 +946,6 @@
 				F1BA8C7D17728500007AAF85 /* BGProcFactory.m */,
 				F19FD8AB17ACDB2400B60C3B /* NetworkActivityController.h */,
 				F19FD8AC17ACDB2500B60C3B /* NetworkActivityController.m */,
-				F1E9F78B177402B600EC345C /* StyleFactory.h */,
-				F1E9F78C177402B600EC345C /* StyleFactory.m */,
 				F106A7CD178876B1002D3BC8 /* SFTPCreds.h */,
 				F106A7CE178876B1002D3BC8 /* SFTPCreds.m */,
 				F14B819B1788E2D300ADEF99 /* SimpleKeychain.h */,
@@ -1404,7 +1399,6 @@
 				F1BC30CA17715DF300DAFA0A /* Hack.m in Sources */,
 				F1BA8C7E17728500007AAF85 /* BGProcFactory.m in Sources */,
 				F1E9F7861773FDF300EC345C /* DisclosureButton.m in Sources */,
-				F1E9F78D177402B600EC345C /* StyleFactory.m in Sources */,
 				F1798EAF1774177400310C37 /* ShadowedNavBar.m in Sources */,
 				F1798EB2177417CF00310C37 /* ShadowedToolbar.m in Sources */,
 				F1178B6F1775245400337813 /* TransparentAlert.m in Sources */,
