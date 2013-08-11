@@ -17,8 +17,8 @@
 #define NSUserDefaultsOFK(key) [[NSUserDefaults standardUserDefaults]objectForKey:key]
 #define NSUserDefaultsOFKKill(key) [[NSUserDefaults standardUserDefaults]removeObjectForKey:key]
 #define KILL_TIMER(q) if (q) {[q invalidate]; q=nil;}
-#define myCyan [UIColor colorWithRed:46.0f/255.0f green:1.0f blue:1.0f alpha:1.0f]
-#define bgcolor [UIColor colorWithWhite:9.0f/10.0f alpha:1.0f]
+//#define myCyan [UIColor colorWithRed:46.0f/255.0f green:1.0f blue:1.0f alpha:1.0f]
+//#define bgcolor [UIColor colorWithWhite:9.0f/10.0f alpha:1.0f]
 
 extern NSString * const NSFileName;
 extern NSString * const kCopyListChangedNotification;

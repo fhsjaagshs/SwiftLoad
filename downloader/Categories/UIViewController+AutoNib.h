@@ -10,8 +10,9 @@
 
 @interface UIViewController (AutoNib)
 
-- (id)initWithAutoNib;
-+ (id)viewController;
-+ (id)viewControllerNib;
+- (instancetype)initWithAutoNib;
++ (instancetype)viewController;
++ (instancetype)viewControllerNib;
++ (instancetype)viewControllerWhite;
 
 @end

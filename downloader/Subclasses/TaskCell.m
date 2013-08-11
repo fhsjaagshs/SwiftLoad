@@ -51,7 +51,7 @@
         self.progressView = [[CircularProgressView alloc]initWithFrame:CGRectMake(5, 5, 37, 37)];
         self.accessoryView = _progressView;
         
-        self.textLabel.backgroundColor = bgcolor;
+        self.textLabel.backgroundColor = [UIColor whiteColor];
         self.textLabel.highlightedTextColor = [UIColor blackColor];
         self.textLabel.textAlignment = UITextAlignmentCenter;
         self.selectedBackgroundView = [[UIView alloc]init];

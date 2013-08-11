@@ -110,16 +110,16 @@ static NSString *CellIdentifier = @"Cell";
             [kAppDelegate downloadFile:url];
         }]show];
     } else if (index == 1) {
-        webDAVViewController *advc = [webDAVViewController viewController];
+        webDAVViewController *advc = [webDAVViewController viewControllerWhite];
         [self presentModalViewController:advc animated:YES];
     } else if (index == 2) {
-        DropboxBrowserViewController *d = [DropboxBrowserViewController viewController];
+        DropboxBrowserViewController *d = [DropboxBrowserViewController viewControllerWhite];
         [self presentModalViewController:d animated:YES];
     } else if (index == 3) {
-        SFTPBrowserViewController *s = [SFTPBrowserViewController viewController];
+        SFTPBrowserViewController *s = [SFTPBrowserViewController viewControllerWhite];
         [self presentModalViewController:s animated:YES];
     } else if (index == 4) {
-        SettingsView *d = [SettingsView viewController];
+        SettingsView *d = [SettingsView viewControllerWhite];
         [self presentModalViewController:d animated:YES];
     }
 }

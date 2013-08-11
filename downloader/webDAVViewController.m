@@ -39,7 +39,6 @@
     [super loadView];
     BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
-    self.view = [StyleFactory backgroundView];
     
     UINavigationBar *navBar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -56,8 +55,6 @@
     _onLabel.textColor = [UIColor blackColor];
     _onLabel.text = @"WebDAV server is ON";
     _onLabel.font = [UIFont boldSystemFontOfSize:iPad?28:23];
-    _onLabel.shadowColor = [UIColor darkGrayColor];
-    _onLabel.shadowOffset = CGSizeMake(-1, -1);
     [self.view addSubview:_onLabel];
     
     UITextView *tf = [[UITextView alloc]initWithFrame:iPad?CGRectMake(158, 235, 453, 83):CGRectMake(40, sanitizeMesurement(160), 240, 83)];
@@ -103,6 +100,10 @@
         _urlLabel.text = @"You are not connected to WiFi";
         [self killServer];
     }
+    
+    if (_httpServer) {
+        return;
+    }
 
     self.httpServer = [[HTTPServer alloc]init];
     [_httpServer setType:@"_http._tcp."];
@@ -137,7 +138,7 @@
 }
 
 - (void)showHelp {
-    [self presentModalViewController:[webDAVHelp viewController] animated:YES];
+    [self presentModalViewController:[webDAVHelp viewControllerWhite] animated:YES];
 }
 
 - (NSUInteger)supportedInterfaceOrientations {

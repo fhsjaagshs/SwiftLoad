@@ -8,28 +8,6 @@
 
 #import "SwiftLoadCell.h"
 
-@interface DepthView : UIView
-
-@end
-
-@implementation DepthView
-
-- (void)drawRect:(CGRect)rect {
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    CGContextSaveGState(context);
-    
-    CGContextSetFillColorWithColor(context, [UIColor darkGrayColor].CGColor);
-    CGContextFillRect(context, self.bounds);
-    
-    UIImage *shadows = [[UIImage imageNamed:@"inner-shadow"]stretchableImageWithLeftCapWidth:10 topCapHeight:10];
-    [shadows drawInRect:self.bounds];
-    
-    CGContextRestoreGState(context);
-}
-
-@end
-
 @interface SwiftLoadCell ()
 
 @end
@@ -49,14 +27,19 @@
         self.accessoryView.backgroundColor = [UIColor clearColor];
         self.multipleSelectionBackgroundView = [[UIView alloc]init];
         self.multipleSelectionBackgroundView.backgroundColor = [UIColor clearColor];
-        self.opaque = YES;
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            self.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:27];
+            //self.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:27];
+            self.textLabel.font = [UIFont fontWithName:@"Avenir-Medium" size:24];
             self.detailTextLabel.font = [UIFont systemFontOfSize:20.0];
         } else {
-            self.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:20];
+            //self.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:20];
+            self.textLabel.font = [UIFont fontWithName:@"Avenir-Medium" size:17];
         }
+        
+        self.textLabel.lineBreakMode = UILineBreakModeTailTruncation;
+        self.detailTextLabel.textColor = [UIColor colorWithWhite:0.5f alpha:1.0f];
+        
         self.isFirstCell = NO;
     }
     return self;

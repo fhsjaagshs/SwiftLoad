@@ -54,8 +54,6 @@ static NSString *CellIdentifier = @"dbcell";
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
     
-    self.view = [StyleFactory backgroundView];
-    
     self.navBar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"/"];

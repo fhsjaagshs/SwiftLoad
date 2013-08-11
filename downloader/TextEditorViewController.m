@@ -181,7 +181,6 @@
 
 - (void)loadText {
     [self.theTextView setHidden:YES];
-    [self.view setBackgroundColor:[UIColor clearColor]];
     
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:[kAppDelegate window] animated:YES];
     hud.mode = MBProgressHUDModeText;

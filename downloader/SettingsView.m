@@ -16,8 +16,6 @@ static NSString * const kJavaScriptBookmarklet = @"JavaScript:window.open(docume
     [super loadView];
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     
-    self.view = [StyleFactory backgroundView];
-    
     UINavigationBar *bar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"Settings"];
