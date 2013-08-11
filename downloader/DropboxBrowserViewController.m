@@ -50,6 +50,11 @@ static NSString *CellIdentifier = @"dbcell";
 - (void)loadView {
     [super loadView];
     
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(dropboxAuthenticationSucceeded) name:@"db_auth_success" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(dropboxAuthenticationFailed) name:@"db_auth_failure" object:nil];
+    
+    self.shouldPromptForLinkage = YES;
+    
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
     
@@ -88,19 +93,25 @@ static NSString *CellIdentifier = @"dbcell";
     }
 }
 
+- (void)dropboxAuthenticationFailed {
+    [TransparentAlert showAlertWithTitle:@"Dropbox Authentication Failed." andMessage:@"Swift failed to authenticate you with Dropbox. Please try again later."];
+}
+
+- (void)dropboxAuthenticationSucceeded {
+    if ([[DBSession sharedSession]isLinked]) {
+        [_pull setState:PullToRefreshViewStateLoading];
+        [self loadUserID];
+    }
+}
+
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    if (!_shouldPromptForLinkage) {
+    if (_shouldPromptForLinkage) {
         self.shouldPromptForLinkage = NO;
         if (![[DBSession sharedSession]isLinked]) {
             [[DBSession sharedSession]linkFromController:self];
         }
     }
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
 }
 
 + (void)clearDatabase {
@@ -205,6 +216,7 @@ static NSString *CellIdentifier = @"dbcell";
     if (_userID.length == 0) {
         [[NetworkActivityController sharedController]show];
         [DroppinBadassBlocks loadAccountInfoWithCompletionBlock:^(DBAccountInfo *info, NSError *error) {
+            [[NetworkActivityController sharedController]hideIfPossible];
             if (error) {
                 [TransparentAlert showAlertWithTitle:[NSString stringWithFormat:@"Dropbox Error %d",error.code] andMessage:[error localizedDescription]];
             } else {
@@ -231,14 +243,11 @@ static NSString *CellIdentifier = @"dbcell";
 }
 
 - (void)updateFileListing {
-    
-    if (_cursor.length == 0) {
-        _pull.statusLabel.text = @"Initial Load. Be patient...";
-    }
+    [[NetworkActivityController sharedController]show];
     
     [DroppinBadassBlocks loadDelta:_cursor withCompletionHandler:^(NSArray *entries, NSString *cursor, BOOL hasMore, BOOL shouldReset, NSError *error) {
+        [[NetworkActivityController sharedController]hideIfPossible];
         if (error) {
-            [[NetworkActivityController sharedController]hideIfPossible];
             self.shouldMassInsert = NO;
         } else {
             if (shouldReset) {
@@ -246,8 +255,9 @@ static NSString *CellIdentifier = @"dbcell";
                 self.cursor = nil;
                 [_currentPathItems removeAllObjects];
                 self.shouldMassInsert = YES;
+                _pull.statusLabel.text = @"Initial Load. Be patient...";
                 [self removeAllEntriesForCurrentUser];
-            } 
+            }
 
             self.cursor = cursor;
             
@@ -280,7 +290,6 @@ static NSString *CellIdentifier = @"dbcell";
                 [self saveCursor];
                 self.shouldMassInsert = NO;
                 [self refreshStateWithAnimationStyle:UITableViewRowAnimationFade];
-                [[NetworkActivityController sharedController]hideIfPossible];
             }
         }
     }];
@@ -368,12 +377,6 @@ static NSString *CellIdentifier = @"dbcell";
     return NO;
 }
 
-- (void)goHome {
-    _navBar.topItem.title = @"/";
-    [self loadContentsOfDirectory:@"/"];
-    [self refreshStateWithAnimationStyle:UITableViewRowAnimationRight];
-}
-
 - (void)goBackDir {
     _navBar.topItem.title = [_navBar.topItem.title stringByDeletingLastPathComponent];
     [self loadContentsOfDirectory:[_navBar.topItem.title fhs_normalize]];
@@ -390,8 +393,8 @@ static NSString *CellIdentifier = @"dbcell";
 }
 
 - (void)close {
-    [[NetworkActivityController sharedController]hideIfPossible];
     [DroppinBadassBlocks cancel];
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
     [self dismissModalViewControllerAnimated:YES];
 }
 
