@@ -15,6 +15,8 @@ typedef enum {
 @property (nonatomic, weak) id<PullToRefreshViewDelegate> delegate;
 @property (nonatomic, assign, setter=setState:) PullToRefreshViewState state;
 
+@property (nonatomic, strong) UILabel *statusLabel;
+
 - (void)finishedLoading;
 - (id)initWithScrollView:(UIScrollView *)scrollView;
 

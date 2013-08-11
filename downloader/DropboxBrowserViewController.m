@@ -30,13 +30,12 @@ static NSString *CellIdentifier = @"dbcell";
 @interface DropboxBrowserViewController () <UITableViewDataSource, UITableViewDelegate, PullToRefreshViewDelegate>
 
 @property (nonatomic, strong) UITableView *theTableView;
-@property (nonatomic, strong) UIButton *backButton;
-@property (nonatomic, strong) UIButton *homeButton;
 @property (nonatomic, strong) ShadowedNavBar *navBar;
 @property (nonatomic, strong) PullToRefreshView *pull;
 
 @property (nonatomic, strong) NSMutableArray *currentPathItems;
 
+@property (nonatomic, assign) BOOL shouldPromptForLinkage;
 @property (nonatomic, strong) NSString *cursor;
 
 @property (nonatomic, assign) BOOL shouldMassInsert;
@@ -57,31 +56,12 @@ static NSString *CellIdentifier = @"dbcell";
     self.navBar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"/"];
-    topItem.rightBarButtonItem = nil;
-    topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
+    topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"ArrowLeft"] style:UIBarButtonItemStyleBordered target:self action:@selector(goBackDir)];
+    topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
     [_navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:_navBar];
     
-    UIImageView *bbv = [StyleFactory buttonBarImageView];
-    bbv.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    bbv.frame = CGRectMake(0, 44, screenBounds.size.width, 44);
-    [self.view addSubview:bbv];
-    
-    self.homeButton = [UIButton customizedButton];
-    _homeButton.frame = CGRectMake(iPad?354:131, 6, 68, 31);
-    [_homeButton setTitle:@"Home" forState:UIControlStateNormal];
-    [_homeButton addTarget:self action:@selector(goHome) forControlEvents:UIControlEventTouchUpInside];
-    [bbv addSubview:_homeButton];
-    [_homeButton setHidden:YES];
-    
-    self.backButton = [UIButton customizedButton];
-    _backButton.frame = CGRectMake(iPad?113:49, 6, 62, 31);
-    [_backButton setTitle:@"Back" forState:UIControlStateNormal];
-    [_backButton addTarget:self action:@selector(goBackDir) forControlEvents:UIControlEventTouchUpInside];
-    [bbv addSubview:_backButton];
-    [_backButton setHidden:YES];
-    
-    self.theTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 88, screenBounds.size.width, screenBounds.size.height-88) style:UITableViewStylePlain];
+    self.theTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44) style:UITableViewStylePlain];
     _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     _theTableView.rowHeight = iPad?60:44;
@@ -100,12 +80,27 @@ static NSString *CellIdentifier = @"dbcell";
     [_database executeUpdate:@"CREATE TABLE IF NOT EXISTS dropbox_data (id INTEGER PRIMARY KEY AUTOINCREMENT, lowercasepath VARCHAR(255) DEFAULT NULL, filename VARCHAR(255) DEFAULT NULL, date INTEGER, size INTEGER, type INTEGER)"];
     [_database close];
     
-    if (![[DBSession sharedSession]isLinked]) {
-        [[DBSession sharedSession]linkFromController:self];
-    } else {
+    _navBar.topItem.leftBarButtonItem.enabled = NO;
+    
+    if ([[DBSession sharedSession]isLinked]) {
         [_pull setState:PullToRefreshViewStateLoading];
         [self loadUserID];
     }
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    if (!_shouldPromptForLinkage) {
+        self.shouldPromptForLinkage = NO;
+        if (![[DBSession sharedSession]isLinked]) {
+            [[DBSession sharedSession]linkFromController:self];
+        }
+    }
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
 }
 
 + (void)clearDatabase {
@@ -236,6 +231,11 @@ static NSString *CellIdentifier = @"dbcell";
 }
 
 - (void)updateFileListing {
+    
+    if (_cursor.length == 0) {
+        _pull.statusLabel.text = @"Initial Load. Be patient...";
+    }
+    
     [DroppinBadassBlocks loadDelta:_cursor withCompletionHandler:^(NSArray *entries, NSString *cursor, BOOL hasMore, BOOL shouldReset, NSError *error) {
         if (error) {
             [[NetworkActivityController sharedController]hideIfPossible];
@@ -368,11 +368,6 @@ static NSString *CellIdentifier = @"dbcell";
     return NO;
 }
 
-- (void)setButtonsHidden:(BOOL)shouldHide {
-    [_backButton setHidden:shouldHide];
-    [_homeButton setHidden:shouldHide];
-}
-
 - (void)goHome {
     _navBar.topItem.title = @"/";
     [self loadContentsOfDirectory:@"/"];
@@ -389,11 +384,7 @@ static NSString *CellIdentifier = @"dbcell";
     [self loadContentsOfDirectory:[_navBar.topItem.title fhs_normalize]];
     [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:animation];
 
-    if (_navBar.topItem.title.length > 1) {
-        [self setButtonsHidden:NO];
-    } else {
-        [self setButtonsHidden:YES];
-    }
+    _navBar.topItem.leftBarButtonItem.enabled = (_navBar.topItem.title.length > 1);
     
     [_pull finishedLoading];
 }

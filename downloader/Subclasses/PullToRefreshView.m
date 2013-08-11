@@ -12,7 +12,6 @@
 
 @interface PullToRefreshView ()
 
-@property (nonatomic, strong) UILabel *statusLabel;
 @property (nonatomic, strong) CALayer *arrowImage;
 @property (nonatomic, strong) UIActivityIndicatorView *activityView;
 @property (nonatomic, strong) UIScrollView *scrollView;
@@ -63,7 +62,7 @@
 		self.arrowImage = [[CALayer alloc]init];
         self.arrowImage.frame = CGRectMake(25.0f, frame.size.height - 60.0f, 30.7f, 52.0f); // 30.7f was 24.0f
 		self.arrowImage.contentsGravity = kCAGravityCenter;
-        self.arrowImage.contentsScale = 2; // scale down the image regardless of retina. The image is by default the retina size.
+        self.arrowImage.contentsScale = [[UIScreen mainScreen]scale];
         self.arrowImage.contents = (id)[UIImage imageNamed:@"arrow"].CGImage;
 		[self.layer addSublayer:self.arrowImage];
 

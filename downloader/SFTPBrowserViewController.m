@@ -11,7 +11,6 @@
 @interface SFTPBrowserViewController () <PullToRefreshViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *theTableView;
-@property (nonatomic, strong) UIButton *backButton;
 @property (nonatomic, strong) ShadowedNavBar *navBar;
 @property (nonatomic, strong) PullToRefreshView *pull;
 @property (nonatomic, strong) NSString *currentURL;
@@ -38,23 +37,12 @@
     self.navBar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     self.navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"/"];
-    topItem.rightBarButtonItem = nil;
-    topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
+    topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"ArrowLeft"] style:UIBarButtonItemStyleBordered target:self action:@selector(goBackDir)];
+    topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
     [self.navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:self.navBar];
-    
-    UIImageView *bbv = [StyleFactory buttonBarImageView];
-    bbv.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    bbv.frame = CGRectMake(0, 44, screenBounds.size.width, 44);
-    [self.view addSubview:bbv];
-    
-    self.backButton = [UIButton customizedButton];
-    _backButton.frame = CGRectMake(10, 6, 62, 31);
-    [_backButton setTitle:@"Back" forState:UIControlStateNormal];
-    [_backButton addTarget:self action:@selector(goBackDir) forControlEvents:UIControlEventTouchUpInside];
-    [bbv addSubview:_backButton];
 
-    self.theTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 88, screenBounds.size.width, screenBounds.size.height-88) style:UITableViewStylePlain];
+    self.theTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44) style:UITableViewStylePlain];
     self.theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.theTableView.rowHeight = iPad?60:44;
@@ -84,9 +72,7 @@
     [self deleteLastPathComponent];
     [self loadCurrentDirectoryFromCache];
     
-    if (_currentPath.length <= 1) {
-        [_backButton setHidden:YES];
-    }
+    _navBar.topItem.leftBarButtonItem.enabled = (_currentPath.length > 1);
 }
 
 - (NSString *)fixURL:(NSString *)url {
@@ -104,7 +90,7 @@
 
 - (void)cacheCurrentDir {
     
-    NSString *parentpath = [self fixURL:_currentURL];
+    NSString *parentpath = [self fixURL:_currentPath];
     
     [_memCache executeUpdate:@"DELETE * FROM sftp_cache WHERE parentpath=?",parentpath];
     NSMutableString *query = [NSMutableString stringWithFormat:@"INSERT INTO sftp_cache (parentpath,filename,type,size) VALUES "];
@@ -124,7 +110,7 @@
 - (void)loadCurrentDirectoryFromCache {
     self.filedicts = [NSMutableArray array];
     
-    FMResultSet *set = [_memCache executeQuery:@"SELECT filename,type,size FROM sftp_cache WHERE parentpath=?",[self fixURL:_currentURL]];
+    FMResultSet *set = [_memCache executeQuery:@"SELECT filename,type,size FROM sftp_cache WHERE parentpath=?",[self fixURL:_currentPath]];
     
     while ([set next]) {
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
@@ -133,7 +119,7 @@
         [dict setObject:[set stringForColumn:@"type"] forKey:NSFileType];
         [_filedicts addObject:dict];
     }
-    
+
     if (_filedicts.count == 0) {
         [self loadCurrentDirectoryFromSFTP];
     } else {
@@ -204,12 +190,16 @@
             [_connection connectWithSuccessBlock:^{
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     @autoreleasepool {
+                        [[NetworkActivityController sharedController]hideIfPossible];
+                        _navBar.topItem.leftBarButtonItem.enabled = (_currentPath.length > 1);
                         [self loadCurrentDirectoryFromSFTP];
                     }
                 });
             } failureBlock:^(NSError *error) {
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     @autoreleasepool {
+                        [[NetworkActivityController sharedController]hideIfPossible];
+                        _navBar.topItem.leftBarButtonItem.enabled = (_currentPath.length > 1);
                         [TransparentAlert showAlertWithTitle:@"SFTP Login Error" andMessage:@"There was an issue logging in via SFTP."]; // improve this later
                     }
                 });
@@ -321,7 +311,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSDictionary *fileDict = [self.filedicts objectAtIndex:indexPath.row];
+    NSDictionary *fileDict = [_filedicts objectAtIndex:indexPath.row];
     NSString *filename = [fileDict objectForKey:NSFileName];
     
     NSString *filetype = (NSString *)[fileDict objectForKey:NSFileType];
@@ -329,9 +319,8 @@
     if ([filetype isEqualToString:NSFileTypeDirectory]) {
         [self addComponentToPath:filename];
         [self loadCurrentDirectoryFromSFTP];
-        if (_currentPath.length > 1) {
-            [_backButton setHidden:NO];
-        }
+        
+        _navBar.topItem.leftBarButtonItem.enabled = (_currentPath.length > 1);
     } else if ([filetype isEqualToString:NSFileTypeRegular]) {
         NSString *message = [NSString stringWithFormat:@"Do you wish to download \"%@\"?",filename];
         UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
