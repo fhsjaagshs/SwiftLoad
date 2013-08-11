@@ -33,4 +33,14 @@
     return [[[self class]alloc]initWithAutoNib];
 }
 
++ (instancetype)topViewController {
+    UIViewController *topController = [[UIApplication sharedApplication]keyWindow].rootViewController;
+    
+    while (topController.presentedViewController) {
+        topController = topController.presentedViewController;
+    }
+    
+    return topController;
+}
+
 @end

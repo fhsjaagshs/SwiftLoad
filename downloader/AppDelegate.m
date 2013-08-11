@@ -618,8 +618,32 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     
         [[NSFileManager defaultManager]removeItemAtPath:inboxDir error:nil];
         
-        [[NetworkActivityController sharedController]hideIfPossible];
-        fireNotification(url.absoluteString.lastPathComponent);
+        if (filesInIndexDir.count > 0) {
+            NSString *file = [kDocsDir stringByAppendingPathComponent:[filesInIndexDir objectAtIndex:0]];
+            self.openFile = file;
+            
+            UIViewController *controller = [UIViewController topViewController];
+            
+            BOOL isHTML = [MIMEUtils isHTMLFile:file];
+            
+            if ([MIMEUtils isAudioFile:file]) {
+                AudioPlayerViewController *audio = [AudioPlayerViewController viewController];
+                [controller presentModalViewController:audio animated:YES];
+            } else if ([MIMEUtils isImageFile:file]) {
+                pictureView *pView = [pictureView viewController];
+                [controller presentModalViewController:pView animated:YES];
+            } else if ([MIMEUtils isTextFile:file] && !isHTML) {
+                TextEditorViewController *textEditor = [TextEditorViewController viewController];
+                [controller presentModalViewController:textEditor animated:YES];
+            } else if ([MIMEUtils isVideoFile:file]) {
+                moviePlayerView *mpv = [moviePlayerView viewController];
+                [controller presentModalViewController:mpv animated:YES];
+            } else if ([MIMEUtils isDocumentFile:file] || isHTML) {
+                MyFilesViewDetailViewController *detail = [MyFilesViewDetailViewController viewController];
+                [controller presentModalViewController:detail animated:YES];
+            }
+        }
+
     } else {
         NSString *URLString = nil;
         if ([url.absoluteString hasPrefix:@"swiftload://"]) {

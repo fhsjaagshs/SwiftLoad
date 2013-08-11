@@ -15,4 +15,6 @@
 + (instancetype)viewControllerNib;
 + (instancetype)viewControllerWhite;
 
++ (instancetype)topViewController;
+
 @end
