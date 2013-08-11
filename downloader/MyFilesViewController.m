@@ -672,7 +672,7 @@ static NSString *CellIdentifier = @"Cell";
         popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            [popupQuery showFromRect:[self.sideSwipeView convertRect:button.frame toView:self.view] inView:self.view animated:YES];
+            [popupQuery showFromRect:[_sideSwipeView convertRect:button.frame toView:self.view] inView:self.view animated:YES];
         } else {
             [popupQuery showInView:self.view];
             [self removeSideSwipeView:YES];

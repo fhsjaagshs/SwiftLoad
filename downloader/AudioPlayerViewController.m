@@ -47,42 +47,41 @@
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     
     self.navBar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
-    self.navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]];
     topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
-    [self.navBar pushNavigationItem:topItem animated:YES];
-    [self.view addSubview:self.navBar];
-    [self.view bringSubviewToFront:self.navBar];
+    [_navBar pushNavigationItem:topItem animated:YES];
+    [self.view addSubview:_navBar];
     
     BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
     
     self.time = [[UISlider alloc]initWithFrame:CGRectMake(5, iPad?357:sanitizeMesurement(219), screenBounds.size.width-10, 23)];
     [_time setMinimumTrackTintColor:[UIColor colorWithRed:21.0f/255.0f green:92.0f/255.0f blue:136.0f/255.0f alpha:1.0f]];
-    [_time setMaximumTrackTintColor:[UIColor colorWithRed:105.0f/255.0f green:179.0f/255.0f blue:216.0f/255.0f alpha:1.0]];
-    [self.time addTarget:self action:@selector(sliderChanged) forControlEvents:UIControlEventValueChanged];
-    [self.view addSubview:self.time];
+    [_time setMaximumTrackTintColor:[UIColor colorWithRed:105.0f/255.0f green:179.0f/255.0f blue:216.0f/255.0f alpha:1.0f]];
+    [_time addTarget:self action:@selector(sliderChanged) forControlEvents:UIControlEventValueChanged];
+    [self.view addSubview:_time];
     
     self.prevTrack = [[UIButton alloc]initWithFrame:iPad?CGRectMake(20, 533, 142, 51):CGRectMake(20, sanitizeMesurement(270), 72, 45)];
-    self.prevTrack.backgroundColor = [UIColor clearColor];
-    [self.prevTrack setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
-    [self.prevTrack setImage:[UIImage imageNamed:@"back_button_pressed"] forState:UIControlStateHighlighted];
-    [self.prevTrack addTarget:kAppDelegate action:@selector(skipToPreviousTrack) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.prevTrack];
+    _prevTrack.backgroundColor = [UIColor clearColor];
+    [_prevTrack setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
+    [_prevTrack setImage:[UIImage imageNamed:@"back_button_pressed"] forState:UIControlStateHighlighted];
+    [_prevTrack addTarget:kAppDelegate action:@selector(skipToPreviousTrack) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_prevTrack];
     
     self.nxtTrack = [[UIButton alloc]initWithFrame:iPad?CGRectMake(599, 533, 142, 51):CGRectMake(228, sanitizeMesurement(270), 72, 45)];
-    self.nxtTrack.backgroundColor = [UIColor clearColor];
-    [self.nxtTrack setImage:[UIImage imageNamed:@"next_button"] forState:UIControlStateNormal];
-    [self.nxtTrack setImage:[UIImage imageNamed:@"next_button_pressed"] forState:UIControlStateHighlighted];
-    [self.nxtTrack addTarget:kAppDelegate action:@selector(skipToNextTrack) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.nxtTrack];
+    _nxtTrack.backgroundColor = [UIColor clearColor];
+    [_nxtTrack setImage:[UIImage imageNamed:@"next_button"] forState:UIControlStateNormal];
+    [_nxtTrack setImage:[UIImage imageNamed:@"next_button_pressed"] forState:UIControlStateHighlighted];
+    [_nxtTrack addTarget:kAppDelegate action:@selector(skipToNextTrack) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_nxtTrack];
     
     self.pausePlay = [[UIButton alloc]initWithFrame:iPad?CGRectMake(323, 533, 142, 51):CGRectMake(124, sanitizeMesurement(270), 72, 45)];
-    self.pausePlay.backgroundColor = [UIColor clearColor];
-    [self.pausePlay setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
-    [self.pausePlay setImage:[UIImage imageNamed:@"pause_selected"] forState:UIControlStateHighlighted];
-    [self.pausePlay addTarget:kAppDelegate action:@selector(togglePlayPause) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.pausePlay];
+    _pausePlay.backgroundColor = [UIColor clearColor];
+    [_pausePlay setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
+    [_pausePlay setImage:[UIImage imageNamed:@"pause_selected"] forState:UIControlStateHighlighted];
+    [_pausePlay addTarget:kAppDelegate action:@selector(togglePlayPause) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_pausePlay];
     
     self.artistLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, sanitizeMesurement(44), screenBounds.size.width, 20) duration:5.0 andFadeLength:10.0f];
     _artistLabel.animationDelay = 0.5f;
@@ -121,33 +120,33 @@
     
     self.loopControl = [[ToggleControl alloc]initWithFrame:CGRectMake(self.view.bounds.size.width-50, self.view.bounds.size.height-50-44, 40, 40)];
     [_loopControl addTarget:self action:@selector(saveLoopState) forControlEvents:UIControlEventTouchUpInside];
-    self.loopControl.backgroundColor = [UIColor clearColor];
+    _loopControl.backgroundColor = [UIColor clearColor];
     [_loopControl setImage:[UIImage imageNamed:@"loop_on"] forState:ToggleControlModeOn];
     [_loopControl setImage:[UIImage imageNamed:@"loop_off"] forState:ToggleControlModeOff];
     [_loopControl setImage:[UIImage imageNamed:@"loop_pressed"] forState:ToggleControlModeIntermediate];
     [self.view addSubview:_loopControl];
     
     self.secondsRemaining = [[UILabel alloc]initWithFrame:iPad?CGRectMake(315, 220, 139, 35):CGRectMake(51, sanitizeMesurement(187), 112, 21)];
-    self.secondsRemaining.text = @"Time Elapsed:";
-    self.secondsRemaining.backgroundColor = [UIColor clearColor];
-    self.secondsRemaining.textColor = [UIColor blackColor];
-    self.secondsRemaining.font = iPad?[UIFont boldSystemFontOfSize:20]:[UIFont systemFontOfSize:17];
-    [self.view addSubview:self.secondsRemaining];
+    _secondsRemaining.text = @"Time Elapsed:";
+    _secondsRemaining.backgroundColor = [UIColor clearColor];
+    _secondsRemaining.textColor = [UIColor blackColor];
+    _secondsRemaining.font = iPad?[UIFont boldSystemFontOfSize:20]:[UIFont systemFontOfSize:17];
+    [self.view addSubview:_secondsRemaining];
     
     self.secondsDisplay = [[UILabel alloc]initWithFrame:iPad?CGRectMake(0, 263, 768, 55):CGRectMake(164, sanitizeMesurement(185), 136, 27)];
-    self.secondsDisplay.font = [UIFont boldSystemFontOfSize:iPad?39:24];
-    self.secondsDisplay.textColor = [UIColor blackColor];
-    self.secondsDisplay.backgroundColor = [UIColor clearColor];
-    self.secondsDisplay.textAlignment = iPad?UITextAlignmentCenter:UITextAlignmentLeft;
-    self.secondsDisplay.text = @"0:00";
-    [self.view addSubview:self.secondsDisplay];
+    _secondsDisplay.font = [UIFont boldSystemFontOfSize:iPad?39:24];
+    _secondsDisplay.textColor = [UIColor blackColor];
+    _secondsDisplay.backgroundColor = [UIColor clearColor];
+    _secondsDisplay.textAlignment = iPad?UITextAlignmentCenter:UITextAlignmentLeft;
+    _secondsDisplay.text = @"0:00";
+    [self.view addSubview:_secondsDisplay];
     
     self.errorLabel = [[UILabel alloc]initWithFrame:iPad?CGRectMake(14, 311, 727, 113):CGRectMake(4, sanitizeMesurement(149), 313, 57)];
-    self.errorLabel.text = @"Error Playing Audio";
-    self.errorLabel.backgroundColor = [UIColor clearColor];
-    self.errorLabel.textColor = [UIColor blackColor];
-    self.errorLabel.font = [UIFont boldSystemFontOfSize:iPad?72:33];
-    [self.view addSubview:self.errorLabel];
+    _errorLabel.text = @"Error Playing Audio";
+    _errorLabel.backgroundColor = [UIColor clearColor];
+    _errorLabel.textColor = [UIColor blackColor];
+    _errorLabel.font = [UIFont boldSystemFontOfSize:iPad?72:33];
+    [self.view addSubview:_errorLabel];
     
     UIToolbar *toolBar = [[ShadowedToolbar alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-44, screenBounds.size.width, 44)];
     toolBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
@@ -194,16 +193,16 @@
 }
 
 - (void)hideControls:(BOOL)hide {
-    [self.time setHidden:hide];
-    [self.pausePlay setHidden:hide];
-    [self.secondsRemaining setHidden:hide];
-    [self.secondsDisplay setHidden:hide];
-    [self.loopControl setHidden:hide];
-    [self.stopButton setHidden:hide];
+    [_time setHidden:hide];
+    [_pausePlay setHidden:hide];
+    [_secondsRemaining setHidden:hide];
+    [_secondsDisplay setHidden:hide];
+    [_loopControl setHidden:hide];
+    [_stopButton setHidden:hide];
     [_artistLabel setHidden:hide];
     [_titleLabel setHidden:hide];
     [_albumLabel setHidden:hide];
-    [self.errorLabel setHidden:!hide];
+    [_errorLabel setHidden:!hide];
 }
 
 - (void)close {
@@ -222,24 +221,17 @@
     [self dismissModalViewControllerAnimated:YES];
 }
 
-- (NSString *)theTimeDisplay {
-    int theTime = [[kAppDelegate audioPlayer]currentTime];
-    int divBy60 = floor((theTime/60)+0.5);
-    int timeWithoutMinutes = abs(theTime-(divBy60*60));
-    return (timeWithoutMinutes < 10)?[NSString stringWithFormat:@"%d:0%d",divBy60,timeWithoutMinutes]:[NSString stringWithFormat:@"%d:%d",divBy60,timeWithoutMinutes];
-}
-
 - (void)startUpdatingTime {
     
     self.shouldStopCounter = NO;
     
-    if (self.isGoing) {
+    if (_isGoing) {
         return;
     }
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @autoreleasepool {
-            while (!self.shouldStopCounter) {
+            while (!_shouldStopCounter) {
                 [NSThread sleepForTimeInterval:0.1f];
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     @autoreleasepool {
@@ -258,10 +250,17 @@
 }
 
 - (void)updateTime {
-    [self.pausePlay setImage:[UIImage imageNamed:[[kAppDelegate audioPlayer]isPlaying]?@"pause":@"play"] forState:UIControlStateNormal];
-    [self.pausePlay setImage:[UIImage imageNamed:[[kAppDelegate audioPlayer]isPlaying]?@"pause_pressed":@"play_pressed"] forState:UIControlStateHighlighted];
-    self.time.value = [[kAppDelegate audioPlayer]currentTime]/[[kAppDelegate audioPlayer]duration];
-    [self.secondsDisplay setText:[self theTimeDisplay]];
+    
+    AppDelegate *ad = kAppDelegate;
+    
+    float currentTime = ad.audioPlayer.currentTime;
+
+    _time.value = currentTime/ad.audioPlayer.duration;
+
+    int minutes = floor(currentTime/60);
+    int seconds = abs(currentTime-(minutes*60));
+    
+    _secondsDisplay.text = [NSString stringWithFormat:@"%d:%@%d",minutes,((seconds < 10)?@"0":@""),seconds];
 }
 
 - (void)showActionSheet:(id)sender {
@@ -295,21 +294,31 @@
 }
 
 - (void)sliderChanged {
-    [self.secondsDisplay setText:[self theTimeDisplay]];
-    [[kAppDelegate audioPlayer]setCurrentTime:self.time.value*[[kAppDelegate audioPlayer]duration]];
+    AppDelegate *ad = kAppDelegate;
+    
+    float currentTime = ad.audioPlayer.currentTime;
+    
+    int minutes = floor(currentTime/60);
+    int seconds = abs(currentTime-(minutes*60));
+    
+    _secondsDisplay.text = [NSString stringWithFormat:@"%d:%@%d",minutes,((seconds < 10)?@"0":@""),seconds];
+    ad.audioPlayer.currentTime = _time.value*ad.audioPlayer.duration;
 }
 
 - (void)togglePaused {
     [self startUpdatingTime];
-    if ([[kAppDelegate audioPlayer]isPlaying]) {
-        [[kAppDelegate audioPlayer]pause];
-        [self.pausePlay setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
-        [self.pausePlay setImage:[UIImage imageNamed:@"play_pressed"] forState:UIControlStateHighlighted];
+    
+    AppDelegate *ad = kAppDelegate;
+    
+    if (ad.audioPlayer.isPlaying) {
+        [ad.audioPlayer pause];
+        [_pausePlay setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+        [_pausePlay setImage:[UIImage imageNamed:@"play_pressed"] forState:UIControlStateHighlighted];
     } else {
-        [[kAppDelegate audioPlayer]play];
-        [self.pausePlay setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
-        [self.pausePlay setImage:[UIImage imageNamed:@"pause_pressed"] forState:UIControlStateHighlighted];
-        [kAppDelegate setNowPlayingFile:[kAppDelegate openFile]];
+        [ad.audioPlayer play];
+        [_pausePlay setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
+        [_pausePlay setImage:[UIImage imageNamed:@"pause_pressed"] forState:UIControlStateHighlighted];
+        [ad setNowPlayingFile:ad.openFile];
     }
 }
 
@@ -318,13 +327,13 @@
 //
 
 - (void)setPausePlayTitlePlay {
-    [self.pausePlay setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
-    [self.pausePlay setImage:[UIImage imageNamed:@"play_pressed"] forState:UIControlStateHighlighted];
+    [_pausePlay setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+    [_pausePlay setImage:[UIImage imageNamed:@"play_pressed"] forState:UIControlStateHighlighted];
 }
 
 - (void)setPausePlayTitlePause {
-    [self.pausePlay setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
-    [self.pausePlay setImage:[UIImage imageNamed:@"pause_pressed"] forState:UIControlStateHighlighted];
+    [_pausePlay setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
+    [_pausePlay setImage:[UIImage imageNamed:@"pause_pressed"] forState:UIControlStateHighlighted];
 }
 
 - (void)setLoopNotif {
@@ -340,11 +349,11 @@
 }
 
 - (void)setNxtTrackHidden:(NSNotification *)notif {
-    [self.nxtTrack setHidden:[notif.object isEqualToString:@"YES"]];
+    _nxtTrack.hidden = [notif.object isEqualToString:@"YES"];
 }
 
 - (void)setPrevTrackHidden:(NSNotification *)notif {
-    [self.prevTrack setHidden:[notif.object isEqualToString:@"YES"]];
+    _prevTrack.hidden = [notif.object isEqualToString:@"YES"];
 }
 
 - (void)setInfoFieldText:(NSNotification *)notif {
@@ -359,7 +368,7 @@
 }
 
 - (void)setSongTitleText:(NSNotification *)notif {
-    self.navBar.topItem.title = notif.object;
+    _navBar.topItem.title = notif.object;
 }
 
 - (void)setupNotifs {
