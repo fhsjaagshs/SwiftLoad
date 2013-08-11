@@ -237,21 +237,23 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 }
 
 - (void)drawRect:(CGRect)rect {
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSaveGState(context);
-    
-    CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
-    CGContextFillRect(context, self.bounds);
-    
-    CGContextSetStrokeColorWithColor(context, [UIColor darkGrayColor].CGColor);
-    CGContextSetLineWidth(context, 1);
-    
-    CGContextMoveToPoint(context, self.bounds.size.width, self.bounds.size.height);
-    CGContextAddLineToPoint(context, self.bounds.size.width, 0);
-    
-    CGContextStrokePath(context);
-    
-    CGContextRestoreGState(context);
+    if (self.alpha == 1.0f) {
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextSaveGState(context);
+        
+        CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
+        CGContextFillRect(context, self.bounds);
+        
+        CGContextSetStrokeColorWithColor(context, [UIColor darkGrayColor].CGColor);
+        CGContextSetLineWidth(context, 1);
+        
+        CGContextMoveToPoint(context, self.bounds.size.width, self.bounds.size.height);
+        CGContextAddLineToPoint(context, self.bounds.size.width, 0);
+        
+        CGContextStrokePath(context);
+        
+        CGContextRestoreGState(context);
+    }
 }
 
 - (void)dealloc {
