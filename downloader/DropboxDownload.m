@@ -43,11 +43,10 @@
             [self showSuccess];
         }
     } andProgressBlock:^(CGFloat progress) {
-        if (self.delegate && [self.delegate respondsToSelector:@selector(delegate)]) {
+        if (self.delegate) {
             [self.delegate setProgress:progress];
         }
     }];
 }
-
 
 @end
