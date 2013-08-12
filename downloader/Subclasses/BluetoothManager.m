@@ -124,6 +124,7 @@ static NSString *kFilesizeKey = @"s";
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:[kAppDelegate window] animated:YES];
         hud.labelText = @"Connecting";
         hud.mode = MBProgressHUDModeIndeterminate;
+        hud.tag = 1336;
     }];
     
     [picker setCancelledBlock:^{
@@ -132,16 +133,20 @@ static NSString *kFilesizeKey = @"s";
     [picker show];
 }
 
+- (void)hideHUD {
+    MBProgressHUD *HUD = (MBProgressHUD *)[[kAppDelegate window]viewWithTag:1336];
+    [HUD hide:YES];
+}
+
 - (void)session:(GKSession *)session peer:(NSString *)peerID didChangeState:(GKPeerConnectionState)state {
     
     switch (state) {
         case GKPeerStateUnavailable: {
-            NSLog(@"Unavailable");
-            [MBProgressHUD hideHUDForView:[kAppDelegate window] animated:YES];
+            [self hideHUD];
         } break;
         case GKPeerStateDisconnected: {
-            NSLog(@"Disconnected");
-            [MBProgressHUD hideHUDForView:[kAppDelegate window] animated:YES];
+            
+            [self hideHUD];
             
             _session.available = YES;
             if (_isTransferring) {
@@ -152,18 +157,18 @@ static NSString *kFilesizeKey = @"s";
             }
         } break;
         case GKPeerStateConnected: {
-            NSLog(@"Connected");
-            [MBProgressHUD hideHUDForView:[kAppDelegate window] animated:YES];
+            [self hideHUD];
             
             self.isTransferring = YES;
             
             _session.available = NO;
             
-            if (_startedBlock) {
-                _startedBlock();
-            }
-            
             if (_isSender) {
+                
+                if (_startedBlock) {
+                    _startedBlock();
+                }
+                
                 [self sendData:[self info]];
             }
         } break;
