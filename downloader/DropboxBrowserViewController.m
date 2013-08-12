@@ -393,7 +393,13 @@ static NSString *CellIdentifier = @"dbcell";
 }
 
 - (void)close {
-    [DroppinBadassBlocks cancel];
+    float numRequests = [DroppinBadassBlocks cancel];
+    
+    while (numRequests > 0) {
+        [[NetworkActivityController sharedController]hideIfPossible];
+        numRequests -= 1;
+    }
+    
     [[NSNotificationCenter defaultCenter]removeObserver:self];
     [self dismissModalViewControllerAnimated:YES];
 }

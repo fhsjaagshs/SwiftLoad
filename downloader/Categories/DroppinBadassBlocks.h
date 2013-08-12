@@ -17,6 +17,6 @@
 + (void)loadDelta:(NSString *)cursor withCompletionHandler:(void(^)(NSArray *entries, NSString *cursor, BOOL hasMore, BOOL shouldReset, NSError *error))block;
 + (void)loadAccountInfoWithCompletionBlock:(void(^)(DBAccountInfo *info, NSError *error))block;
 
-+ (void)cancel;
++ (float)cancel;
 
 @end

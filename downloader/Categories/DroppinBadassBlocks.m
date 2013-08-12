@@ -32,7 +32,6 @@ static NSString * const DeltaBlockStringKey = @"dbsk";
 static NSString * const UploadBlockStringKey = @"ubsk";
 static NSString * const UploadProgressBlockStringKey = @"ubsk-1";
 static NSString * const loadAccountInfoBlockStringKey = @"laicsk";
-static NSString * const instanceString = @"instance";
 
 static char const * const MetadataBlockKey = "mbk";
 static char const * const DownloadProgressBlockKey = "dbsk-1";
@@ -42,11 +41,10 @@ static char const * const DeltaBlockKey = "dbk";
 static char const * const UploadBlockKey = "ubk";
 static char const * const UploadProgressBlockKey = "ubk-1";
 static char const * const loadAccountInfoBlockKey = "laick";
-static char const * const instance = "instance";
 
 
 @interface DroppinBadassBlocks () <DBRestClientDelegate>
-+ (id)getInstance;
++ (instancetype)sharedInstance;
 + (id)uploadBlock;
 + (void)setUploadBlock:(id)newblock;
 + (id)uploadProgressBlock;
@@ -67,15 +65,15 @@ static char const * const instance = "instance";
 
 @implementation DroppinBadassBlocks
 
-+ (id)getInstance {
-    DroppinBadassBlocks *restClient = objc_getAssociatedObject(instanceString, instance);
++ (instancetype)sharedInstance {
+    static DroppinBadassBlocks *shared = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        shared = [[DroppinBadassBlocks alloc]initWithSession:[DBSession sharedSession]];
+        shared.delegate = shared;
+    });
     
-    if (!restClient) {
-        restClient = [[DroppinBadassBlocks alloc]initWithSession:[DBSession sharedSession]];
-        objc_setAssociatedObject(instanceString, instance, restClient, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }
-    restClient.delegate = restClient;
-    return restClient;
+    return shared;
 }
 
 + (id)uploadBlock {
@@ -149,7 +147,7 @@ static char const * const instance = "instance";
 + (void)uploadFile:(NSString *)filename toPath:(NSString *)path withParentRev:(NSString *)parentRev fromPath:(NSString *)sourcePath withBlock:(void(^)(NSString *destPath, NSString *srcPath, DBMetadata *metadata, NSError *error))block andProgressBlock:(void(^)(CGFloat progress, NSString *destPath, NSString *scrPath))pBlock {
     [DroppinBadassBlocks setUploadBlock:block];
     [DroppinBadassBlocks setUploadProgressBlock:pBlock];
-    [[DroppinBadassBlocks getInstance]uploadFile:filename toPath:path withParentRev:parentRev fromPath:sourcePath];
+    [[DroppinBadassBlocks sharedInstance]uploadFile:filename toPath:path withParentRev:parentRev fromPath:sourcePath];
 }
 
 - (void)restClient:(DBRestClient *)client uploadedFile:(NSString *)destPath from:(NSString *)srcPath metadata:(DBMetadata *)metadata {
@@ -175,7 +173,7 @@ static char const * const instance = "instance";
 
 + (void)loadDelta:(NSString *)cursor withCompletionHandler:(void(^)(NSArray *entries, NSString *cursor, BOOL hasMore, BOOL shouldReset, NSError *error))block {
     [DroppinBadassBlocks setDeltaBlock:block];
-    [[DroppinBadassBlocks getInstance]loadDelta:cursor];
+    [[DroppinBadassBlocks sharedInstance]loadDelta:cursor];
 }
 
 - (void)restClient:(DBRestClient *)client loadedDeltaEntries:(NSArray *)entries reset:(BOOL)shouldReset cursor:(NSString *)cursor hasMore:(BOOL)hasMore {
@@ -194,7 +192,7 @@ static char const * const instance = "instance";
 
 + (void)loadSharableLinkForFile:(NSString *)path andCompletionBlock:(void(^)(NSString *link, NSString *path, NSError *error))block {
     [DroppinBadassBlocks setLinkBlock:block];
-    [[DroppinBadassBlocks getInstance]loadSharableLinkForFile:path shortUrl:YES];
+    [[DroppinBadassBlocks sharedInstance]loadSharableLinkForFile:path shortUrl:YES];
 }
 
 - (void)restClient:(DBRestClient *)restClient loadedSharableLink:(NSString *)link forFile:(NSString *)path {
@@ -214,7 +212,7 @@ static char const * const instance = "instance";
 + (void)loadFile:(NSString *)path intoPath:(NSString *)destinationPath withCompletionBlock:(void(^)(DBMetadata *metadata, NSError *error))block andProgressBlock:(void(^)(float progress))progBlock {
     [DroppinBadassBlocks setDownloadBlock:block];
     [DroppinBadassBlocks setDownloadProgressBlock:progBlock];
-    [[DroppinBadassBlocks getInstance]loadFile:path intoPath:destinationPath];
+    [[DroppinBadassBlocks sharedInstance]loadFile:path intoPath:destinationPath];
 }
 
 - (void)restClient:(DBRestClient *)client loadedFile:(NSString *)destPath contentType:(NSString *)contentType metadata:(DBMetadata *)metadata {
@@ -239,12 +237,12 @@ static char const * const instance = "instance";
 
 + (void)loadMetadata:(NSString *)path withCompletionBlock:(void(^)(DBMetadata *metadata, NSError *error))block {
     [DroppinBadassBlocks setMetadataBlock:block];
-    [[DroppinBadassBlocks getInstance]loadMetadata:path];
+    [[DroppinBadassBlocks sharedInstance]loadMetadata:path];
 }
 
 - (void)loadMetadata:(NSString *)path atRev:(NSString *)rev withCompletionBlock:(void(^)(DBMetadata *metadata, NSError *error))block {
     [DroppinBadassBlocks setMetadataBlock:block];
-    [[DroppinBadassBlocks getInstance]loadMetadata:path atRev:rev];
+    [[DroppinBadassBlocks sharedInstance]loadMetadata:path atRev:rev];
 }
 
 - (void)restClient:(DBRestClient *)client loadedMetadata:(DBMetadata *)metadata {
@@ -263,7 +261,7 @@ static char const * const instance = "instance";
 
 + (void)loadAccountInfoWithCompletionBlock:(void(^)(DBAccountInfo *info, NSError *error))block {
     [DroppinBadassBlocks setAccountInfoBlock:block];
-    [[DroppinBadassBlocks getInstance]loadAccountInfo];
+    [[DroppinBadassBlocks sharedInstance]loadAccountInfo];
 }
 
 - (void)restClient:(DBRestClient *)client loadedAccountInfo:(DBAccountInfo *)info {
@@ -280,8 +278,9 @@ static char const * const instance = "instance";
 // Cancellation
 //
 
-+ (void)cancel {
-    [[DroppinBadassBlocks getInstance]cancelAllRequests];
++ (float)cancel {
+    [[DroppinBadassBlocks sharedInstance]cancelAllRequests];
+    return [[DroppinBadassBlocks sharedInstance]requestCount];
 }
             
 @end

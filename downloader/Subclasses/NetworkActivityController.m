@@ -33,6 +33,10 @@
 - (void)hideIfPossible {
     self.numberOfUses -= 1;
     
+    if (_numberOfUses < 0) {
+        self.numberOfUses = 0;
+    }
+    
     if (_numberOfUses == 0) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     }
