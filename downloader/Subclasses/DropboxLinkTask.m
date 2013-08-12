@@ -52,7 +52,7 @@
     [[NetworkActivityController sharedController]show];
     [super start];
     
-    [DroppinBadassBlocks loadSharableLinkForFile:nil andCompletionBlock:^(NSString *link, NSString *path, NSError *error) {
+    [DroppinBadassBlocks loadSharableLinkForFile:_filePath andCompletionBlock:^(NSString *link, NSString *path, NSError *error) {
         if (error) {
             [self showFailure];
         } else {
