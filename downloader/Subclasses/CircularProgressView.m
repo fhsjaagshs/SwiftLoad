@@ -70,7 +70,7 @@
     CGContextSetStrokeColorWithColor(context, drawColor.CGColor);
     CGContextSetFillColorWithColor(context, [drawColor colorWithAlphaComponent:0.1f].CGColor);
     
-    CGContextSetLineWidth(context, 2.0f);
+    CGContextSetLineWidth(context, 1.0f);
     CGContextFillEllipseInRect(context, circleRect);
     CGContextStrokeEllipseInRect(context, circleRect);
     

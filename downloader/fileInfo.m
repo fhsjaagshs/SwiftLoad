@@ -58,7 +58,8 @@
     BOOL exists = [[NSFileManager defaultManager]fileExistsAtPath:[kAppDelegate openFile] isDirectory:&isDir];
     
     if (!isDir && exists) {
-        UILabel *staticMD5Label = [[UILabel alloc]initWithFrame:iPad?CGRectMake(0, 163, 768, 31):CGRectMake(0, sanitizeMesurement(219), 320, 21)];
+        UILabel *staticMD5Label = [[UILabel alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-(iPad?281:231), screenBounds.size.width, iPad?31:21)];
+        
         staticMD5Label.textColor = [UIColor blackColor];
         staticMD5Label.backgroundColor = [UIColor clearColor];
         staticMD5Label.textAlignment = UITextAlignmentCenter;
@@ -67,9 +68,9 @@
         staticMD5Label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
         [self.view addSubview:staticMD5Label];
         
-        self.md5Field = [[UILabel alloc]initWithFrame:iPad?CGRectMake(139, 303, 491, 41):CGRectMake(0, sanitizeMesurement(251), 320, 31)];
+        self.md5Field = [[UILabel alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-(iPad?241:201), screenBounds.size.width, iPad?41:31)];
         _md5Field.text = @"Loading...";
-        _md5Field.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+        _md5Field.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         _md5Field.textAlignment = UITextAlignmentCenter;
         _md5Field.backgroundColor = [UIColor clearColor];
         _md5Field.font = [UIFont systemFontOfSize:iPad?23:17];
@@ -82,7 +83,7 @@
         [formatter setLocale:[NSLocale currentLocale]];
         
         UILabel *moddateLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-(iPad?62:31), screenBounds.size.width, iPad?62:31)];
-        moddateLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+        moddateLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         moddateLabel.font = [UIFont systemFontOfSize:iPad?26:17];
         moddateLabel.textAlignment = UITextAlignmentCenter;
         moddateLabel.backgroundColor = [UIColor clearColor];

@@ -43,6 +43,8 @@ static NSString *CellIdentifier = @"dbcell";
 @property (nonatomic, strong) FMDatabase *database;
 @property (nonatomic, strong) NSString *userID;
 
+@property (nonatomic, assign) BOOL shouldStopLoading;
+
 @end
 
 @implementation DropboxBrowserViewController
@@ -250,6 +252,11 @@ static NSString *CellIdentifier = @"dbcell";
         if (error) {
             self.shouldMassInsert = NO;
         } else {
+            
+            if (_shouldStopLoading) {
+                return;
+            }
+            
             if (shouldReset) {
                 NSLog(@"Resetting");
                 self.cursor = nil;
@@ -258,7 +265,7 @@ static NSString *CellIdentifier = @"dbcell";
                 _pull.statusLabel.text = @"Initial Load. Be patient...";
                 [self removeAllEntriesForCurrentUser];
             }
-
+            
             self.cursor = cursor;
             
             NSMutableArray *array = [NSMutableArray array];
@@ -393,12 +400,7 @@ static NSString *CellIdentifier = @"dbcell";
 }
 
 - (void)close {
-    float numRequests = [DroppinBadassBlocks cancel];
-    
-    while (numRequests > 0) {
-        [[NetworkActivityController sharedController]hideIfPossible];
-        numRequests -= 1;
-    }
+    self.shouldStopLoading = YES;
     
     [[NSNotificationCenter defaultCenter]removeObserver:self];
     [self dismissModalViewControllerAnimated:YES];

@@ -213,21 +213,25 @@ static char const * const loadAccountInfoBlockKey = "laick";
     [DroppinBadassBlocks setDownloadBlock:block];
     [DroppinBadassBlocks setDownloadProgressBlock:progBlock];
     [[DroppinBadassBlocks sharedInstance]loadFile:path intoPath:destinationPath];
+    NSLog(@"started");
 }
 
 - (void)restClient:(DBRestClient *)client loadedFile:(NSString *)destPath contentType:(NSString *)contentType metadata:(DBMetadata *)metadata {
     void(^block)(DBMetadata *metadata, NSError *error) = [DroppinBadassBlocks downloadBlock];
     block(metadata, nil);
+    NSLog(@"dbab: completed");
 }
 
 - (void)restClient:(DBRestClient *)client loadProgress:(CGFloat)progress forFile:(NSString *)destPath {
     void(^block)(float progress) = [DroppinBadassBlocks downloadProgressBlock];
     block(progress);
+    NSLog(@"dbab: progress");
 }
 
 - (void)restClient:(DBRestClient *)client loadFileFailedWithError:(NSError *)error {
     void(^block)(DBMetadata *metadata, NSError *error) = [DroppinBadassBlocks downloadBlock];
     block(nil, error);
+    NSLog(@"dbab: errored out");
 }
 
 
@@ -279,8 +283,10 @@ static char const * const loadAccountInfoBlockKey = "laick";
 //
 
 + (float)cancel {
+    NSLog(@"asdfasdfasdfasdf");
+    float requestCount = [[DroppinBadassBlocks sharedInstance]requestCount];
     [[DroppinBadassBlocks sharedInstance]cancelAllRequests];
-    return [[DroppinBadassBlocks sharedInstance]requestCount];
+    return requestCount;
 }
             
 @end
