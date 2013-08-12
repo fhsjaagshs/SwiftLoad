@@ -11,5 +11,8 @@
 @interface BluetoothTask : Task
 
 + (BluetoothTask *)taskWithFile:(NSString *)file;
++ (BluetoothTask *)receiverTaskWithFilename:(NSString *)filename;
+
+@property (nonatomic, assign) BOOL isReceiver;
 
 @end

@@ -64,9 +64,10 @@
     
     UIImage *buttonImage = [[self drawButtonImage]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
     UIImage *buttonImagePressed = [[self drawButtonImagePressed]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
+    
     for (UIView *subview in [self.subviews mutableCopy]) {
         
-        if ([subview isKindOfClass:NSClassFromString(@"UIAlertButton")]) {
+        if ([subview isKindOfClass:NSClassFromString(@"UIAlertButton")] && self.numberOfButtons < 3) {
             CGRect frame = subview.frame;
             frame.origin.y += 5;
             subview.frame = frame;

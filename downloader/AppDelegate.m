@@ -540,6 +540,13 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [BluetoothManager sharedManager];
     [NetworkActivityController sharedController];
     
+    [[BluetoothManager sharedManager]setStartedBlock:^{
+        if (![[BluetoothManager sharedManager]isSender]) {
+            BluetoothTask *task = [BluetoothTask receiverTaskWithFilename:[[BluetoothManager sharedManager]getFilename]];
+            [[TaskController sharedController]addTask:task];
+        }
+    }];
+    
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryPlayback error:nil];
     [[UIApplication sharedApplication]beginReceivingRemoteControlEvents];
     [self becomeFirstResponder];
@@ -553,7 +560,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     self.window.opaque = YES;
     self.viewController = [MyFilesViewController viewController];
     _window.rootViewController = self.viewController;
-    //_window.backgroundColor = [UIColor colorWithWhite:9.0f/10.0f alpha:1.0f];
     self.window.backgroundColor = [UIColor whiteColor];
     [_window makeKeyAndVisible];
     

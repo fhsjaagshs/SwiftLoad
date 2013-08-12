@@ -27,6 +27,11 @@ static NSString * const cellId = @"TaskCell";
 }
 
 - (int)indexOfTask:(Task *)task {
+    
+    if (![_taskObjs containsObject:task]) {
+        return -1;
+    }
+    
     return [_taskObjs indexOfObject:task];
 }
 

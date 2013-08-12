@@ -21,6 +21,8 @@ static NSString * const kShortMessage = @"\n\n\n";
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) NSMutableArray *peers;
 
+@property (nonatomic, assign) BOOL didPickPeer;
+
 @end
 
 @implementation PeerPicker
@@ -70,13 +72,16 @@ static NSString * const kShortMessage = @"\n\n\n";
 }
 
 - (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex {
-    [_peers removeAllObjects];
-    [self setSession:nil];
     
-    if (_cancelledBlock) {
-        _cancelledBlock();
+    if (!_didPickPeer) {
+        
+        if (_cancelledBlock) {
+            _cancelledBlock();
+        }
     }
     
+    [_peers removeAllObjects];
+    [self setSession:nil];
 }
 
 - (void)layoutSubviews {
@@ -126,6 +131,9 @@ static NSString * const kShortMessage = @"\n\n\n";
     if (_peerPickedBlock) {
         _peerPickedBlock([_peers objectAtIndex:indexPath.row]);
     }
+    
+    self.didPickPeer = YES;
+    
     [self dismissWithClickedButtonIndex:0 animated:YES];
     [_theTableView deselectRowAtIndexPath:indexPath animated:NO];
 }

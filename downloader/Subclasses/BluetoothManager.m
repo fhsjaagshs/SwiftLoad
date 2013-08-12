@@ -134,12 +134,15 @@ static NSString *kFilesizeKey = @"s";
 
 - (void)session:(GKSession *)session peer:(NSString *)peerID didChangeState:(GKPeerConnectionState)state {
     
-    if (!_isTransferring) {
-        [MBProgressHUD hideHUDForView:[kAppDelegate window] animated:YES];
-    }
-    
     switch (state) {
+        case GKPeerStateUnavailable: {
+            NSLog(@"Unavailable");
+            [MBProgressHUD hideHUDForView:[kAppDelegate window] animated:YES];
+        } break;
         case GKPeerStateDisconnected: {
+            NSLog(@"Disconnected");
+            [MBProgressHUD hideHUDForView:[kAppDelegate window] animated:YES];
+            
             _session.available = YES;
             if (_isTransferring) {
                 [self failWithError:[NSError errorWithDomain:@"You have been disconnected from the other iPhone" code:-1 userInfo:nil]];
@@ -149,6 +152,8 @@ static NSString *kFilesizeKey = @"s";
             }
         } break;
         case GKPeerStateConnected: {
+            NSLog(@"Connected");
+            [MBProgressHUD hideHUDForView:[kAppDelegate window] animated:YES];
             
             self.isTransferring = YES;
             
@@ -177,8 +182,10 @@ static NSString *kFilesizeKey = @"s";
     self.isSender = NO;
     [[[TransparentAlert alloc]initWithTitle:@"Connect?" message:[NSString stringWithFormat:@"Would you like to connect to %@",[_session displayNameForPeer:peerID]] completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
         if (buttonIndex == 1) {
+            NSLog(@"Accept connection");
             [_session acceptConnectionFromPeer:peerID error:nil];
         } else {
+            NSLog(@"Deny connection");
             [_session denyConnectionFromPeer:peerID];
         }
     } cancelButtonTitle:@"No" otherButtonTitles:@"YES", nil]show];

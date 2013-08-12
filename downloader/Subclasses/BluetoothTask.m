@@ -16,6 +16,12 @@
 
 @implementation BluetoothTask
 
++ (BluetoothTask *)receiverTaskWithFilename:(NSString *)filename {
+    BluetoothTask *task = [[[self class]alloc]initWithFilename:filename];
+    task.isReceiver = YES;
+    return task;
+}
+
 + (BluetoothTask *)taskWithFile:(NSString *)file {
     return [[[self class]alloc]initWithFile:file];
 }
@@ -28,7 +34,16 @@
     return [[BluetoothManager sharedManager]isSender]?@"Sending":@"Receiving";
 }
 
-- (id)initWithFile:(NSString *)file {
+- (instancetype)initWithFilename:(NSString *)filename {
+    self = [super init];
+    if (self) {
+        self.name = filename;
+        [self setup];
+    }
+    return self;
+}
+
+- (instancetype)initWithFile:(NSString *)file {
     self = [super init];
     if (self) {
         self.name = file.lastPathComponent;
@@ -61,15 +76,15 @@
 
 - (void)start {
     [super start];
-    [[BluetoothManager sharedManager]loadFile:_file];
-    [[BluetoothManager sharedManager]searchForPeers];
+    
+    if (!_isReceiver) {
+        [[BluetoothManager sharedManager]loadFile:_file];
+        [[BluetoothManager sharedManager]searchForPeers];
+    }
 }
 
 - (void)setup {
-    
     __weak BluetoothTask *weakself = self;
-    
-    self.name = [[BluetoothManager sharedManager]getFilename];
     
     [[BluetoothManager sharedManager]setProgressBlock:^(float progress) {
         [weakself.delegate setProgress:progress];
