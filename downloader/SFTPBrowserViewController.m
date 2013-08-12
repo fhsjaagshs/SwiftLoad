@@ -201,6 +201,8 @@
                         [[NetworkActivityController sharedController]hideIfPossible];
                         _navBar.topItem.leftBarButtonItem.enabled = (_currentPath.length > 1);
                         [TransparentAlert showAlertWithTitle:@"SFTP Login Error" andMessage:@"There was an issue logging in via SFTP."]; // improve this later
+                        [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationRight];
+                        [_pull finishedLoading];
                     }
                 });
             }];
