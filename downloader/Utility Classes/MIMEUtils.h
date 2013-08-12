@@ -13,7 +13,6 @@
 + (NSString *)fileMIMEType:(NSString *)file;
 + (BOOL)isVideoFile:(NSString *)file;
 + (BOOL)isTextFile:(NSString *)file;
-+ (BOOL)isTextFile_WebSafe:(NSString *)file;
 + (BOOL)isDocumentFile:(NSString *)file;
 + (BOOL)isImageFile:(NSString *)file;
 + (BOOL)isAudioFile:(NSString *)file;

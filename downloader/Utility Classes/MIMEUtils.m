@@ -11,51 +11,75 @@
 @implementation MIMEUtils
 
 + (NSString *)fileMIMEType:(NSString *)file {
-    CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge  CFStringRef)[[file pathExtension]lowercaseString], nil);
+    CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)file.pathExtension.lowercaseString, nil);
     CFStringRef MIMEType = UTTypeCopyPreferredTagWithClass(UTI, kUTTagClassMIMEType);
     CFRelease(UTI);
     return (__bridge NSString *)MIMEType;
 }
 
 + (BOOL)isVideoFile:(NSString *)file {
-    NSString *ext = [[file pathExtension]lowercaseString];
-    NSArray *fileTypes = [NSArray arrayWithObjects:@"mov", @"mp4", @"mpv", @"3gp", nil];
+    NSString *ext = file.pathExtension.lowercaseString;
+    NSArray *fileTypes = @[@"mov", @"mp4", @"mpv", @"3gp" ];
     return [fileTypes containsObject:ext];
 }
 
 + (BOOL)isTextFile:(NSString *)file {
-    NSString *ext = [[file pathExtension]lowercaseString];
-    NSArray *fileTypes = [NSArray arrayWithObjects:@"c", @"cfg", @"conf", @"cpp", @"cs", @"java", @"rb", @"py", @"h", @"j", @"java", @"js", @"list", @"log", @"m", @"mm", @"nib", @"php", @"plist", @"script", @"sh", @"strings", @"txt", @"xib", @"html", @"htm", @"xhtml", @"shtml", @"shtm", @"xhtm", @"md", @"markdown", @"bat", @"pl", @"", nil];
-    return [fileTypes containsObject:ext];
-}
-
-+ (BOOL)isTextFile_WebSafe:(NSString *)file {
-    NSString *ext = [[file pathExtension]lowercaseString];
-    NSArray *fileTypes = [NSArray arrayWithObjects:@"c", @"cfg", @"conf", @"cpp", @"cs", @"java", @"h", @"j", @"java", @"list", @"log", @"m", @"mm", @"nib", @"plist", @"strings", @"txt", @"xib", @"md", @"markdown", @"bat", nil];
-    return [fileTypes containsObject:ext];
+    NSString *ext = file.pathExtension.lowercaseString;
+    NSArray *fileTypes = @[@"cfg", @"conf", @"cs", @"h", @"j", @"list", @"log", @"nib", @"plist", @"script", @"strings", @"txt", @"xib", @"md", @"markdown", @"bat", @"xml", @"erb", @""];
+    
+    if ([fileTypes containsObject:ext]) {
+        return YES;
+    } else {
+        
+        if ([ext containsString:@"htm"]) {
+            return YES;
+        }
+        
+        if ([ext containsString:@"ml"]) {
+            return YES;
+        }
+        
+        if ([ext containsString:@"json"]) {
+            return YES;
+        }
+        
+        CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)file.pathExtension.lowercaseString, nil);
+        NSString *uti = (__bridge NSString *)UTI;
+        CFRelease(UTI);
+        
+        if ([uti containsString:@"source"]) {
+            return YES;
+        }
+        
+        if ([uti containsString:@"script"]) {
+            return YES;
+        }
+    }
+    
+    return NO;
 }
 
 + (BOOL)isDocumentFile:(NSString *)file {
-    NSString *ext = [[file pathExtension]lowercaseString];
-    NSArray *fileTypes = [NSArray arrayWithObjects:@"rtf", @"pdf", @"doc", @"docx", @"xls", @"xlsx", @"ppt", @"pptx", @"pps", @"pages", @"key", @"numbers", nil];
+    NSString *ext = file.pathExtension.lowercaseString;
+    NSArray *fileTypes = @[@"rtf", @"pdf", @"doc", @"docx", @"xls", @"xlsx", @"ppt", @"pptx", @"pps", @"pages", @"key", @"numbers"];
     return [fileTypes containsObject:ext];
 }
 
 + (BOOL)isImageFile:(NSString *)file {
-    NSString *ext = [[file pathExtension]lowercaseString];
-    NSArray *fileTypes = [NSArray arrayWithObjects:@"png", @"gif", @"jpg", @"jpeg", @"tiff", @"svg", nil];
+    NSString *ext = file.pathExtension.lowercaseString;
+    NSArray *fileTypes = @[@"png", @"gif", @"jpg", @"jpeg", @"tiff", @"svg"];
     return [fileTypes containsObject:ext];
 }
 
 + (BOOL)isAudioFile:(NSString *)file {
-    NSString *ext = [[file pathExtension]lowercaseString];
-    NSArray *fileTypes = [NSArray arrayWithObjects:@"mp3", @"wav", @"m4a", @"aac", @"pcm", nil];
+    NSString *ext = file.pathExtension.lowercaseString;
+    NSArray *fileTypes = @[@"mp3", @"wav", @"m4a", @"aac", @"pcm"];
     return [fileTypes containsObject:ext];
 }
 
 + (BOOL)isHTMLFile:(NSString *)file {
-    NSString *ext = [[file pathExtension]lowercaseString];
-    NSArray *fileTypes = [NSArray arrayWithObjects:@"html", @"htm", @"xhtml", @"shtml", @"shtm", @"xhtm", @"webarchive", nil];
+    NSString *ext = file.pathExtension.lowercaseString;
+    NSArray *fileTypes = @[@"html", @"htm", @"xhtml", @"shtml", @"shtm", @"xhtm", @"webarchive"];
     return [fileTypes containsObject:ext];
 }
 
