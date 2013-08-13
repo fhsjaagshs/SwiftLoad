@@ -109,8 +109,8 @@
     for (NSString *key in _tag.allKeys) {
         NSString *value = _tag[key];
         
-        if ([value isEqualToString:@"-"]) {
-            value = @"";
+        if ([value isEqualToString:@""]) {
+            value = @"-";
         }
         
         _tag[key] = value;

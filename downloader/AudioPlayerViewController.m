@@ -251,6 +251,10 @@
     AppDelegate *ad = kAppDelegate;
     
     float currentTime = ad.audioPlayer.currentTime;
+    
+    if (currentTime < 0) {
+        return;
+    }
 
     _time.value = currentTime/ad.audioPlayer.duration;
 
@@ -291,6 +295,8 @@
     } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send via Bluetooth", @"Upload to Dropbox", nil];
     
     self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+    
+    NSLog(@"%@",file.pathExtension.lowercaseString);
     
     if (_errorLabel.hidden && [file.pathExtension.lowercaseString isEqualToString:@"mp3"]) {
         [_popupQuery addButtonWithTitle:@"Edit Metadata"];
