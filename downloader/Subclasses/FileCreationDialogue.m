@@ -46,7 +46,6 @@
         _tv.adjustsFontSizeToFitWidth = YES;
         _tv.layer.borderWidth = 1.5;
         _tv.layer.borderColor = [UIColor whiteColor].CGColor;
-        _tv.opaque = YES;
         [_tv addTarget:_tv action:@selector(resignFirstResponder) forControlEvents:UIControlEventEditingDidEndOnExit];
         
         [self addSubview:_createFile];

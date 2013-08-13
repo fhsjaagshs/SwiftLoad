@@ -10,10 +10,10 @@
 
 @implementation TransparentTextField
 
-- (id)initWithFrame:(CGRect)frame
-{
+- (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
+        self.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         self.borderStyle = UITextBorderStyleNone;
         self.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.85];
         self.layer.borderColor = [UIColor colorWithWhite:0.2 alpha:0.85].CGColor;

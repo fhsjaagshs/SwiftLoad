@@ -16,6 +16,8 @@
 
 @property (nonatomic, strong) ShadowedNavBar *navBar;
 
+@property (nonatomic, strong) NSMutableDictionary *tag;
+
 @end
 
 @implementation EditID3ViewController
@@ -33,14 +35,14 @@
     [_navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:_navBar];
     
-    self.artistLabel = [[TransparentTextField alloc]initWithFrame:CGRectMake(0, sanitizeMesurement(44), screenBounds.size.width, 20)];
+    self.artistLabel = [[TransparentTextField alloc]initWithFrame:CGRectMake(10, sanitizeMesurement(44), screenBounds.size.width-20, 30)];
     _artistLabel.textAlignment = UITextAlignmentCenter;
     _artistLabel.backgroundColor = [UIColor clearColor];
     _artistLabel.textColor = [UIColor blackColor];
     _artistLabel.font = [UIFont systemFontOfSize:15];
     [self.view addSubview:_artistLabel];
     
-    self.titleLabel = [[TransparentTextField alloc]initWithFrame:CGRectMake(0, sanitizeMesurement(44)+20, screenBounds.size.width, 20)];
+    self.titleLabel = [[TransparentTextField alloc]initWithFrame:CGRectMake(10, sanitizeMesurement(44)+40, screenBounds.size.width-20, 30)];
     _titleLabel.textAlignment = UITextAlignmentCenter;
     _titleLabel.backgroundColor = [UIColor clearColor];
     _titleLabel.textColor = [UIColor blackColor];
@@ -49,7 +51,7 @@
     _titleLabel.enabled = YES;
     [self.view addSubview:_titleLabel];
     
-    self.albumLabel = [[TransparentTextField alloc]initWithFrame:CGRectMake(0, sanitizeMesurement(44)+(20*2), screenBounds.size.width, 20)];
+    self.albumLabel = [[TransparentTextField alloc]initWithFrame:CGRectMake(10, sanitizeMesurement(44)+(40*2), screenBounds.size.width-20, 30)];
     _albumLabel.textAlignment = UITextAlignmentCenter;
     _albumLabel.backgroundColor = [UIColor clearColor];
     _albumLabel.textColor = [UIColor blackColor];
@@ -60,11 +62,24 @@
 }
 
 - (void)loadTags {
+    
+    self.tag = [NSMutableDictionary dictionary];
+    
     NSDictionary *id3 = [ID3Editor loadTagFromFile:[kAppDelegate openFile]];
     
-    _artistLabel.text = id3[@"artist"];
-    _titleLabel.text = id3[@"title"];
-    _albumLabel.text = id3[@"album"];
+    for (NSString *key in id3.allKeys) {
+        NSString *value = [id3 objectForKey:key];
+        
+        if ([value isEqualToString:@"-"]) {
+            value = @"";
+        }
+        
+        [_tag setObject:value forKey:key];
+    }
+    
+    _artistLabel.text = _tag[@"artist"];
+    _titleLabel.text = _tag[@"title"];
+    _albumLabel.text = _tag[@"album"];
 }
 
 - (void)close {
@@ -88,6 +103,7 @@
     if (![_albumLabel.text isEqualToString:id3[@"album"]]) {
         [ID3Editor setAlbum:_albumLabel.text forMP3AtPath:file];
     }
+    
     [self close];
 }
 

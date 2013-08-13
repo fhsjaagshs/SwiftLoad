@@ -294,7 +294,7 @@
     
     self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     
-    if (!_errorLabel.hidden && [file.pathExtension.lowercaseString isEqualToString:@"mp3"]) {
+    if (_errorLabel.hidden && [file.pathExtension.lowercaseString isEqualToString:@"mp3"]) {
         [_popupQuery addButtonWithTitle:@"Edit Metadata"];
     }
     
