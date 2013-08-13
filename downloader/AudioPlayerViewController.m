@@ -102,8 +102,6 @@
     _titleLabel.backgroundColor = [UIColor clearColor];
     _titleLabel.textColor = [UIColor blackColor];
     _titleLabel.font = [UIFont systemFontOfSize:15];
-    _titleLabel.opaque = NO;
-    _titleLabel.enabled = YES;
     [self.view addSubview:_titleLabel];
     
     self.albumLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, sanitizeMesurement(44)+(20*2), screenBounds.size.width, 20) duration:5.0 andFadeLength:10.0f];

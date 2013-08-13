@@ -15,9 +15,9 @@
     if (self) {
         self.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         self.borderStyle = UITextBorderStyleNone;
-        self.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.85];
+        self.backgroundColor = [UIColor colorWithWhite:0.8 alpha:0.85];
         self.layer.borderColor = [UIColor colorWithWhite:0.2 alpha:0.85].CGColor;
-        self.layer.borderWidth = 2.5;
+        //self.layer.borderWidth = 1.5f;
         self.layer.cornerRadius = 5;
         self.opaque = NO;
     }
