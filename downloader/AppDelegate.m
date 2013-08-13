@@ -180,6 +180,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
             dispatch_sync(dispatch_get_main_queue(), ^{
                 @autoreleasepool {
                     [_audioPlayer play];
+                    [AudioPlayerViewController notif_setPausePlayTitlePause];
                     self.nowPlayingFile = file;
                 }
             });
@@ -248,6 +249,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
             dispatch_sync(dispatch_get_main_queue(), ^{
                 @autoreleasepool {
                     [_audioPlayer play];
+                    [AudioPlayerViewController notif_setPausePlayTitlePause];
                     self.nowPlayingFile = newFile;
                 }
             });
@@ -316,6 +318,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
             dispatch_sync(dispatch_get_main_queue(), ^{
                 @autoreleasepool {
                     [_audioPlayer play];
+                    [AudioPlayerViewController notif_setPausePlayTitlePause];
                     self.nowPlayingFile = newFile;
                 }
             });
@@ -347,12 +350,14 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (void)audioPlayerBeginInterruption:(AVAudioPlayer *)player {
     if (self.audioPlayer.isPlaying) {
         [self.audioPlayer pause];
+        [AudioPlayerViewController notif_setPausePlayTitlePlay];
     }
 }
 
 - (void)audioPlayerEndInterruption:(AVAudioPlayer *)player {
     if (!self.audioPlayer.isPlaying) {
         [self.audioPlayer play];
+        [AudioPlayerViewController notif_setPausePlayTitlePause];
     }
 }
 
@@ -362,6 +367,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     } else {
         self.audioPlayer.currentTime = 0;
         [self.audioPlayer play];
+        [AudioPlayerViewController notif_setPausePlayTitlePause];
     }
 }
 
