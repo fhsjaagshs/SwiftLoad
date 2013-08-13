@@ -188,6 +188,8 @@
 		F1C7A6B716E8178F0082D4D3 /* ZoomingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1C7A6B616E8178F0082D4D3 /* ZoomingImageView.m */; };
 		F1CB7DAE16FFE99A002693B5 /* FTPLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CB7DAD16FFE99A002693B5 /* FTPLoginController.m */; };
 		F1D3A573157A8F9E00A2D141 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1D3A572157A8F9E00A2D141 /* Security.framework */; };
+		F1E397E917B9F896002BBD6F /* TagLibAmalgam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1E397E717B9F896002BBD6F /* TagLibAmalgam.cpp */; };
+		F1E397EC17B9F8A8002BBD6F /* ID3Editor.mm in Sources */ = {isa = PBXBuildFile; fileRef = F1E397EB17B9F8A8002BBD6F /* ID3Editor.mm */; };
 		F1E9F76F1773F48500EC345C /* statusbar.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F76D1773F48500EC345C /* statusbar.png */; };
 		F1E9F7701773F48500EC345C /* statusbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F76E1773F48500EC345C /* statusbar@2x.png */; };
 		F1E9F7821773FDC900EC345C /* arrow_disclosure.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F7801773FDC900EC345C /* arrow_disclosure.png */; };
@@ -535,6 +537,10 @@
 		F1CB7DAC16FFE99A002693B5 /* FTPLoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTPLoginController.h; sourceTree = "<group>"; };
 		F1CB7DAD16FFE99A002693B5 /* FTPLoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTPLoginController.m; sourceTree = "<group>"; };
 		F1D3A572157A8F9E00A2D141 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		F1E397E717B9F896002BBD6F /* TagLibAmalgam.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TagLibAmalgam.cpp; sourceTree = "<group>"; };
+		F1E397E817B9F896002BBD6F /* TagLibAmalgam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagLibAmalgam.h; sourceTree = "<group>"; };
+		F1E397EA17B9F8A8002BBD6F /* ID3Editor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ID3Editor.h; sourceTree = "<group>"; };
+		F1E397EB17B9F8A8002BBD6F /* ID3Editor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ID3Editor.mm; sourceTree = "<group>"; };
 		F1E9F76D1773F48500EC345C /* statusbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = statusbar.png; sourceTree = "<group>"; };
 		F1E9F76E1773F48500EC345C /* statusbar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "statusbar@2x.png"; sourceTree = "<group>"; };
 		F1E9F7801773FDC900EC345C /* arrow_disclosure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_disclosure.png; sourceTree = "<group>"; };
@@ -1161,6 +1167,7 @@
 		F1DA5247176E8181009A43CD /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				F1E397E617B9F85F002BBD6F /* taglib */,
 				F130452B179C594300D7DB4D /* Appirater */,
 				F172BC7E1794EC4500AC1483 /* CocoaHTTPServer */,
 				F106A4C4178865AD002D3BC8 /* DLSFTP */,
@@ -1168,6 +1175,17 @@
 				9BFF29FE15387C6E007ED9B1 /* Objective-Zip */,
 			);
 			name = Libraries;
+			sourceTree = "<group>";
+		};
+		F1E397E617B9F85F002BBD6F /* taglib */ = {
+			isa = PBXGroup;
+			children = (
+				F1E397EA17B9F8A8002BBD6F /* ID3Editor.h */,
+				F1E397EB17B9F8A8002BBD6F /* ID3Editor.mm */,
+				F1E397E717B9F896002BBD6F /* TagLibAmalgam.cpp */,
+				F1E397E817B9F896002BBD6F /* TagLibAmalgam.h */,
+			);
+			name = taglib;
 			sourceTree = "<group>";
 		};
 		F1E9F76C1773F46E00EC345C /* Assets */ = {
@@ -1476,6 +1494,8 @@
 				F1038BB517B1ECB100AE918E /* DropboxLinkTask.m in Sources */,
 				F1B1C1E417B29C1800B6164C /* MarqueeLabel.m in Sources */,
 				F1B1C1EA17B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.m in Sources */,
+				F1E397E917B9F896002BBD6F /* TagLibAmalgam.cpp in Sources */,
+				F1E397EC17B9F8A8002BBD6F /* ID3Editor.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

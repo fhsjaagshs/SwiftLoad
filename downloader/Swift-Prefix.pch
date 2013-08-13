@@ -65,6 +65,7 @@
     #import "metadataRetriever.h"
     #import "MIMEUtils.h"
     #import "NetworkUtils.h"
+    #import "ID3Editor.h"
 
     #import "Task.h"
     #import "TaskController.h"
