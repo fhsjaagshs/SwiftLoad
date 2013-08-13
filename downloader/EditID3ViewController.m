@@ -31,11 +31,12 @@
     _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"Edit Metadata"];
     topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Save" style:UIBarButtonItemStyleBordered target:self action:@selector(writeTags)];
-    topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
+    topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
     [_navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:_navBar];
     
     self.artistLabel = [[TransparentTextField alloc]initWithFrame:CGRectMake(10, sanitizeMesurement(44), screenBounds.size.width-20, 30)];
+    _artistLabel.placeholder = @"Artist";
     _artistLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _artistLabel.textAlignment = UITextAlignmentCenter;
     _artistLabel.textColor = [UIColor blackColor];
@@ -43,6 +44,7 @@
     [self.view addSubview:_artistLabel];
     
     self.titleLabel = [[TransparentTextField alloc]initWithFrame:CGRectMake(10, sanitizeMesurement(44)+40, screenBounds.size.width-20, 30)];
+    _titleLabel.placeholder = @"Title";
     _titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _titleLabel.textAlignment = UITextAlignmentCenter;
     _titleLabel.textColor = [UIColor blackColor];
@@ -50,6 +52,7 @@
     [self.view addSubview:_titleLabel];
     
     self.albumLabel = [[TransparentTextField alloc]initWithFrame:CGRectMake(10, sanitizeMesurement(44)+(40*2), screenBounds.size.width-20, 30)];
+    _albumLabel.placeholder = @"Album";
     _albumLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _albumLabel.textAlignment = UITextAlignmentCenter;
     _albumLabel.textColor = [UIColor blackColor];
