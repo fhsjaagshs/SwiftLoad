@@ -159,7 +159,7 @@
     
     UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",file.lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         if (buttonIndex == 0) {
-            [kAppDelegate sendFileInEmail:file fromViewController:self];
+            [kAppDelegate sendFileInEmail:file];
         } else if (buttonIndex == 1) {
             BluetoothTask *task = [BluetoothTask taskWithFile:[kAppDelegate openFile]];
             [[TaskController sharedController]addTask:task];

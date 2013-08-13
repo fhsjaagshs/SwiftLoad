@@ -687,7 +687,7 @@ static NSString *CellIdentifier = @"Cell";
         [[TaskController sharedController]addTask:task];
         [self removeSideSwipeView:YES];
     } else if (number == 3) {
-        [kAppDelegate sendFileInEmail:file fromViewController:self];
+        [kAppDelegate sendFileInEmail:file];
         [self removeSideSwipeView:YES];
         
     } else if (number == 4) {

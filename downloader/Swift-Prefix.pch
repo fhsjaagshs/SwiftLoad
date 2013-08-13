@@ -45,6 +45,7 @@
     #import "ContentOffsetWatchdog.h"
     #import "CircularProgressView.h"
     #import "TransparentAlert.h"
+    #import "TransparentTextField.h"
     #import "ToggleControl.h"
     #import "DisclosureButton.h"
     #import "ShadowedNavBar.h"
@@ -101,6 +102,7 @@
     #import "SettingsView.h"
     #import "DropboxBrowserViewController.h"
     #import "SFTPBrowserViewController.h"
+    #import "EditID3ViewController.h"
 
     #import "ZipFile.h"
     #import "ZipException.h"

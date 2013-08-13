@@ -186,14 +186,15 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         }
     });
     
-    NSArray *iA = [metadataRetriever getMetadataForFile:file];
-    NSString *artist = [iA objectAtIndex:0];
-    NSString *title = [iA objectAtIndex:1];
-    NSString *album = [iA objectAtIndex:2];
+    NSDictionary *id3 = [ID3Editor loadTagFromFile:file];
+    
+    NSString *artist = id3[@"artist"];
+    NSString *title = id3[@"title"];
+    NSString *album = id3[@"album"];
     NSString *metadata = [NSString stringWithFormat:@"%@\n%@\n%@",artist,title,album];
     [AudioPlayerViewController notif_setInfoFieldText:metadata];
     
-    if ([artist isEqualToString:@"---"] && [title isEqualToString:@"---"] && [album isEqualToString:@"---"]) {
+    if ([artist isEqualToString:@"-"] && [title isEqualToString:@"-"] && [album isEqualToString:@"-"]) {
         [self showMetadataInLockscreenWithArtist:@"" title:file.lastPathComponent album:@""];
     } else {
         [self showMetadataInLockscreenWithArtist:artist title:title album:album];
@@ -254,16 +255,17 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     });
     
     [AudioPlayerViewController notif_setSongTitleText:[newFile lastPathComponent]];
+
+    NSDictionary *id3 = [ID3Editor loadTagFromFile:newFile];
     
-    NSArray *iA = [metadataRetriever getMetadataForFile:newFile];
-    NSString *artist = [iA objectAtIndex:0];
-    NSString *title = [iA objectAtIndex:1];
-    NSString *album = [iA objectAtIndex:2];
+    NSString *artist = id3[@"artist"];
+    NSString *title = id3[@"title"];
+    NSString *album = id3[@"album"];
     NSString *metadata = [NSString stringWithFormat:@"%@\n%@\n%@",artist,title,album];
     [AudioPlayerViewController notif_setInfoFieldText:metadata];
     
-    if ([artist isEqualToString:@"---"] && [title isEqualToString:@"---"] && [album isEqualToString:@"---"]) {
-        [self showMetadataInLockscreenWithArtist:@"" title:[newFile lastPathComponent] album:@""];
+    if ([artist isEqualToString:@"-"] && [title isEqualToString:@"-"] && [album isEqualToString:@"-"]) {
+        [self showMetadataInLockscreenWithArtist:@"" title:newFile.lastPathComponent album:@""];
     } else {
         [self showMetadataInLockscreenWithArtist:artist title:title album:album];
     }
@@ -322,16 +324,16 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     
     [AudioPlayerViewController notif_setSongTitleText:[newFile lastPathComponent]];
     
-    NSArray *iA = [metadataRetriever getMetadataForFile:newFile];
-    NSString *artist = [iA objectAtIndex:0];
-    NSString *title = [iA objectAtIndex:1];
-    NSString *album = [iA objectAtIndex:2];
-    NSString *metadata = [NSString stringWithFormat:@"%@\n%@\n%@",artist,title,album];
+    NSDictionary *id3 = [ID3Editor loadTagFromFile:newFile];
     
+    NSString *artist = id3[@"artist"];
+    NSString *title = id3[@"title"];
+    NSString *album = id3[@"album"];
+    NSString *metadata = [NSString stringWithFormat:@"%@\n%@\n%@",artist,title,album];
     [AudioPlayerViewController notif_setInfoFieldText:metadata];
     
-    if ([artist isEqualToString:@"---"] && [title isEqualToString:@"---"] && [album isEqualToString:@"---"]) {
-        [self showMetadataInLockscreenWithArtist:@"" title:[newFile lastPathComponent] album:@""];
+    if ([artist isEqualToString:@"-"] && [title isEqualToString:@"-"] && [album isEqualToString:@"-"]) {
+        [self showMetadataInLockscreenWithArtist:@"" title:newFile.lastPathComponent album:@""];
     } else {
         [self showMetadataInLockscreenWithArtist:artist title:title album:album];
     }
@@ -363,7 +365,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     }
 }
 
-- (void)sendFileInEmail:(NSString *)file fromViewController:(UIViewController *)vc {
+- (void)sendFileInEmail:(NSString *)file {
     if ([MFMailComposeViewController canSendMail]) {
         MFMailComposeViewController *controller = [[MFMailComposeViewController alloc]initWithCompletionHandler:^(MFMailComposeViewController *controller, MFMailComposeResult result, NSError *error) {
             [controller dismissModalViewControllerAnimated:YES];
@@ -371,7 +373,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         [controller setSubject:@"Your file"];
         [controller addAttachmentData:[NSData dataWithContentsOfFile:file] mimeType:[MIMEUtils fileMIMEType:file] fileName:[file lastPathComponent]];
         [controller setMessageBody:@"" isHTML:NO];
-        [vc presentModalViewController:controller animated:YES];
+        [[UIViewController topViewController]presentModalViewController:controller animated:YES];
     } else {
         [TransparentAlert showAlertWithTitle:@"Mail Unavailable" andMessage:@"In order to email files, you must set up an mail account in Settings."];
     }

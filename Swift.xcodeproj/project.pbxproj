@@ -187,8 +187,10 @@
 		F1C0CEFC1661AEC6001B1B42 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F1C0CEFB1661AEC6001B1B42 /* libz.1.2.5.dylib */; };
 		F1C7A6B716E8178F0082D4D3 /* ZoomingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1C7A6B616E8178F0082D4D3 /* ZoomingImageView.m */; };
 		F1CB7DAE16FFE99A002693B5 /* FTPLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CB7DAD16FFE99A002693B5 /* FTPLoginController.m */; };
+		F1CBF07917BA7667003563FD /* EditID3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CBF07717BA7667003563FD /* EditID3ViewController.m */; };
+		F1CBF07D17BA7710003563FD /* TransparentTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CBF07C17BA7710003563FD /* TransparentTextField.m */; };
 		F1D3A573157A8F9E00A2D141 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1D3A572157A8F9E00A2D141 /* Security.framework */; };
-		F1E397E917B9F896002BBD6F /* TagLibAmalgam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1E397E717B9F896002BBD6F /* TagLibAmalgam.cpp */; };
+		F1E397E917B9F896002BBD6F /* TagLibAmalgam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1E397E717B9F896002BBD6F /* TagLibAmalgam.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 		F1E397EC17B9F8A8002BBD6F /* ID3Editor.mm in Sources */ = {isa = PBXBuildFile; fileRef = F1E397EB17B9F8A8002BBD6F /* ID3Editor.mm */; };
 		F1E9F76F1773F48500EC345C /* statusbar.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F76D1773F48500EC345C /* statusbar.png */; };
 		F1E9F7701773F48500EC345C /* statusbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F76E1773F48500EC345C /* statusbar@2x.png */; };
@@ -536,6 +538,10 @@
 		F1C7A6B616E8178F0082D4D3 /* ZoomingImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoomingImageView.m; sourceTree = "<group>"; };
 		F1CB7DAC16FFE99A002693B5 /* FTPLoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTPLoginController.h; sourceTree = "<group>"; };
 		F1CB7DAD16FFE99A002693B5 /* FTPLoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTPLoginController.m; sourceTree = "<group>"; };
+		F1CBF07617BA7667003563FD /* EditID3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditID3ViewController.h; sourceTree = "<group>"; };
+		F1CBF07717BA7667003563FD /* EditID3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditID3ViewController.m; sourceTree = "<group>"; };
+		F1CBF07B17BA7710003563FD /* TransparentTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransparentTextField.h; sourceTree = "<group>"; };
+		F1CBF07C17BA7710003563FD /* TransparentTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransparentTextField.m; sourceTree = "<group>"; };
 		F1D3A572157A8F9E00A2D141 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		F1E397E717B9F896002BBD6F /* TagLibAmalgam.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TagLibAmalgam.cpp; sourceTree = "<group>"; };
 		F1E397E817B9F896002BBD6F /* TagLibAmalgam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagLibAmalgam.h; sourceTree = "<group>"; };
@@ -780,6 +786,8 @@
 				F1679AC51787B368001369B1 /* SFTPBrowserViewController.m */,
 				F10CBC5B17080C6600C82AFB /* DropboxBrowserViewController.h */,
 				F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */,
+				F1CBF07617BA7667003563FD /* EditID3ViewController.h */,
+				F1CBF07717BA7667003563FD /* EditID3ViewController.m */,
 				9B9DA4CE15561D0100C260AD /* Custom Classes */,
 				F19BB51816E006680081C95B /* Supporting Files */,
 			);
@@ -794,6 +802,8 @@
 				F1693C2916DFAB6E006E3739 /* SwiftLoadCell.m */,
 				F1178B6D1775245400337813 /* TransparentAlert.h */,
 				F1178B6E1775245400337813 /* TransparentAlert.m */,
+				F1CBF07B17BA7710003563FD /* TransparentTextField.h */,
+				F1CBF07C17BA7710003563FD /* TransparentTextField.m */,
 				F1E9F7841773FDF300EC345C /* DisclosureButton.h */,
 				F1E9F7851773FDF300EC345C /* DisclosureButton.m */,
 				F1564AEA17765B4300E53B42 /* ToggleControl.h */,
@@ -1496,6 +1506,8 @@
 				F1B1C1EA17B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.m in Sources */,
 				F1E397E917B9F896002BBD6F /* TagLibAmalgam.cpp in Sources */,
 				F1E397EC17B9F8A8002BBD6F /* ID3Editor.mm in Sources */,
+				F1CBF07917BA7667003563FD /* EditID3ViewController.m in Sources */,
+				F1CBF07D17BA7710003563FD /* TransparentTextField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

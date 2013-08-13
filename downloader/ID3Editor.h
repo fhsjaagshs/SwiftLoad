@@ -10,6 +10,8 @@
 
 @interface ID3Editor : NSObject
 
++ (NSDictionary *)loadTagFromFile:(NSString *)file;
+
 + (BOOL)setTitle:(NSString *)title forMP3AtPath:(NSString *)path;
 + (BOOL)setAlbum:(NSString *)album forMP3AtPath:(NSString *)path;
 + (BOOL)setArtist:(NSString *)artist forMP3AtPath:(NSString *)path;

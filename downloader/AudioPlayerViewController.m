@@ -45,6 +45,7 @@
     [self setupNotifs];
     
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
+    BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
     
     self.navBar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -53,8 +54,6 @@
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
     [_navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:_navBar];
-    
-    BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
     
     self.time = [[UISlider alloc]initWithFrame:CGRectMake(5, iPad?357:sanitizeMesurement(219), screenBounds.size.width-10, 23)];
     [_time setMinimumTrackTintColor:[UIColor colorWithRed:21.0f/255.0f green:92.0f/255.0f blue:136.0f/255.0f alpha:1.0f]];
@@ -274,18 +273,34 @@
     NSString *file = [kAppDelegate openFile];
         
     self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",[file lastPathComponent]] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+
+        if (buttonIndex == _popupQuery.cancelButtonIndex) {
+            return;
+        }
+        
         if (buttonIndex == 0) {
-            [kAppDelegate sendFileInEmail:file fromViewController:self];
+            [kAppDelegate sendFileInEmail:file];
         } else if (buttonIndex == 1) {
             BluetoothTask *task = [BluetoothTask taskWithFile:[kAppDelegate openFile]];
             [[TaskController sharedController]addTask:task];
         } else if (buttonIndex == 2) {
             DropboxUpload *task = [DropboxUpload uploadWithFile:[kAppDelegate openFile]];
             [[TaskController sharedController]addTask:task];
+        } else if (buttonIndex == 3) {
+            EditID3ViewController *controller = [EditID3ViewController viewControllerWhite];
+            [self presentModalViewController:controller animated:YES];
         }
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send via Bluetooth", @"Upload to Dropbox", nil];
+    } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send via Bluetooth", @"Upload to Dropbox", nil];
     
     self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+    
+    if (!_errorLabel.hidden && [file.pathExtension.lowercaseString isEqualToString:@"mp3"]) {
+        [_popupQuery addButtonWithTitle:@"Edit Metadata"];
+    }
+    
+    [_popupQuery addButtonWithTitle:@"Cancel"];
+    
+    [_popupQuery setCancelButtonIndex:_popupQuery.numberOfButtons-1];
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         [self.popupQuery showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];

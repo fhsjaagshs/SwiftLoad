@@ -52,8 +52,8 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (void)printFile:(NSString *)file fromView:(UIView *)view;
 
 // Emailing
-- (void)sendFileInEmail:(NSString *)file fromViewController:(UIViewController *)vc;
-- (void)sendStringAsSMS:(NSString *)string fromViewController:(UIViewController *)vc;
+- (void)sendFileInEmail:(NSString *)file;
+//- (void)sendStringAsSMS:(NSString *)string fromViewController:(UIViewController *)vc;
 
 // Downloading
 - (void)downloadFileUsingSFTP:(NSURL *)url withUsername:(NSString *)username andPassword:(NSString *)password;
