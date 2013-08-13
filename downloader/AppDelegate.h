@@ -55,9 +55,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (void)sendFileInEmail:(NSString *)file fromViewController:(UIViewController *)vc;
 - (void)sendStringAsSMS:(NSString *)string fromViewController:(UIViewController *)vc;
 
-// Dropbox Uploading
-- (void)uploadLocalFile:(NSString *)localPath fromViewController:(UIViewController *)controller;
-
 // Downloading
 - (void)downloadFileUsingSFTP:(NSURL *)url withUsername:(NSString *)username andPassword:(NSString *)password;
 - (void)downloadFile:(NSString *)stouPrelim;

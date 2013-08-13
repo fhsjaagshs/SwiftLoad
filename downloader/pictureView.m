@@ -150,7 +150,8 @@
             BluetoothTask *task = [BluetoothTask taskWithFile:[kAppDelegate openFile]];
             [[TaskController sharedController]addTask:task];
         } else if (buttonIndex == 3) {
-            [kAppDelegate uploadLocalFile:[kAppDelegate openFile] fromViewController:self];
+            DropboxUpload *task = [DropboxUpload uploadWithFile:[kAppDelegate openFile]];
+            [[TaskController sharedController]addTask:task];
         } else if (buttonIndex == 4) {
             if ([MIMEUtils isImageFile:file]) {
                 [self addToTheRoll];

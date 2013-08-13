@@ -449,64 +449,9 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 // Dropbox Upload
-- (void)uploadLocalFile:(NSString *)localPath fromViewController:(UIViewController *)controller {
-    
+- (void)uploadLocalFileToDropbox:(NSString *)localPath {
     DropboxUpload *task = [DropboxUpload uploadWithFile:localPath];
     [[TaskController sharedController]addTask:task];
-    
-    if (![[DBSession sharedSession]isLinked]) {
-        [[DBSession sharedSession]linkFromController:controller];
-        return;
-    }
-    
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:[kAppDelegate window] animated:YES];
-    hud.mode = MBProgressHUDModeIndeterminate;
-    hud.labelText = @"Preparing...";
-
-    [[NetworkActivityController sharedController]show];
-    
-    [DroppinBadassBlocks loadMetadata:@"/" withCompletionBlock:^(DBMetadata *metadata, NSError *error) {
-        
-        if (error) {
-            [[NetworkActivityController sharedController]hideIfPossible];
-            [hud hide:YES];
-            [TransparentAlert showAlertWithTitle:@"Failure Uploading" andMessage:@"Swift could not connect to Dropbox."];
-        } else {
-            NSString *rev = nil;
-            
-            if (metadata.isDirectory) {
-                for (DBMetadata *file in metadata.contents) {
-                    if (file.isDirectory) {
-                        continue;
-                    }
-                    
-                    if ([file.filename isEqualToString:[self.openFile lastPathComponent]]) {
-                        [[NetworkActivityController sharedController]show];
-                        rev = file.rev;
-                        break;
-                    }
-                }
-                
-                hud.mode = MBProgressHUDModeDeterminate;
-                hud.labelText = @"Uploading...";
-                
-                [DroppinBadassBlocks uploadFile:[self.openFile lastPathComponent] toPath:@"/" withParentRev:rev fromPath:localPath withBlock:^(NSString *destPath, NSString *srcPath, DBMetadata *metadata, NSError *error) {
-                    
-                    if (error) {
-                        [[NetworkActivityController sharedController]hideIfPossible];
-                        [hud hide:YES];
-                        [TransparentAlert showAlertWithTitle:@"Failure Uploading" andMessage:[NSString stringWithFormat:@"The file you tried to upload failed because: %@",error.localizedDescription]];
-                    } else {
-                        DropboxLinkTask *task = [DropboxLinkTask taskWithFilepath:metadata.path];
-                        [[TaskController sharedController]addTask:task];
-                    }
-                    
-                } andProgressBlock:^(CGFloat progress, NSString *destPath, NSString *scrPath) {
-                    hud.progress = progress;
-                }];
-            }
-        }
-    }];
 }
 
 - (void)sessionDidReceiveAuthorizationFailure:(DBSession *)session userId:(NSString *)userId {

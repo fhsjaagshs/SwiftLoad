@@ -24,6 +24,8 @@
     self = [super init];
     if (self) {
         self.localPath = file;
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(dropboxAuthenticationSucceeded) name:@"db_auth_success" object:nil];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(dropboxAuthenticationFailed) name:@"db_auth_failure" object:nil];
     }
     return self;
 }
@@ -35,8 +37,23 @@
 
 - (void)start {
     [super start];
+    if ([[DBSession sharedSession]isLinked]) {
+        [self carryOutUpload];
+    } else {
+        [[DBSession sharedSession]linkFromController:[UIViewController topViewController]];
+    }
+}
+
+- (void)dropboxAuthenticationSucceeded {
+    [self carryOutUpload];
+}
+
+- (void)dropboxAuthenticationFailed {
+    [self showFailure];
+}
+
+- (void)carryOutUpload {
     [DroppinBadassBlocks loadMetadata:@"/" withCompletionBlock:^(DBMetadata *metadata, NSError *error) {
-        
         if (error) {
             [self showFailure];
         } else {
@@ -54,14 +71,14 @@
                         break;
                     }
                 }
-
+                
                 [DroppinBadassBlocks uploadFile:_localPath.lastPathComponent toPath:@"/" withParentRev:rev fromPath:_localPath withBlock:^(NSString *destPath, NSString *srcPath, DBMetadata *metadata, NSError *error) {
                     
                     if (error) {
                         [self showFailure];
                     } else {
                         [DroppinBadassBlocks loadSharableLinkForFile:metadata.path andCompletionBlock:^(NSString *link, NSString *path, NSError *error) {
-
+                            
                             if (error) {
                                 [self showFailure];
                             } else {
@@ -81,6 +98,10 @@
             }
         }
     }];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
 
 @end

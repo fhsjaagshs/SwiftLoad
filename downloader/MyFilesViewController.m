@@ -679,10 +679,11 @@ static NSString *CellIdentifier = @"Cell";
         }
         
     } else if (number == 1) {
-        [kAppDelegate uploadLocalFile:file fromViewController:self];
+        DropboxUpload *task = [DropboxUpload uploadWithFile:file];
+        [[TaskController sharedController]addTask:task];
         [self removeSideSwipeView:YES];
     } else if (number == 2) {
-        BluetoothTask *task = [BluetoothTask taskWithFile:[kAppDelegate openFile]];
+        BluetoothTask *task = [BluetoothTask taskWithFile:file];
         [[TaskController sharedController]addTask:task];
         [self removeSideSwipeView:YES];
     } else if (number == 3) {
