@@ -10,4 +10,6 @@
 
 @interface Hack : UIApplication
 
+@property (nonatomic, assign) BOOL shouldWatchTouches;
+
 @end

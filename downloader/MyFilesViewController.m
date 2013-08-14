@@ -11,14 +11,13 @@
 #import "SwiftLoadCell.h"
 #import "TransparentAlert.h"
 
-#define BOUNCE_PIXELS 5.0
+//#define BOUNCE_PIXELS 5.0
 
 static NSString *CellIdentifier = @"Cell";
 
 @interface MyFilesViewController () <UITableViewDelegate, UITableViewDataSource, HamburgerViewDelegate, ContentOffsetWatchdogDelegate>
 
 // Content Offset Watchdog
-@property (nonatomic, assign) BOOL watchdogCanGo;
 @property (nonatomic, strong) ContentOffsetWatchdog *watchdog;
 
 // Copy/Cut/Paste
@@ -122,10 +121,6 @@ static NSString *CellIdentifier = @"Cell";
         SettingsView *d = [SettingsView viewControllerWhite];
         [self presentModalViewController:d animated:YES];
     }
-}
-
-- (void)setWatchdogCanGoYES {
-    self.watchdogCanGo = YES;
 }
 
 - (void)copiedListChanged:(NSNotification *)notif {
@@ -847,24 +842,13 @@ static NSString *CellIdentifier = @"Cell";
     
     if (animated) {
         
+        self.animatingSideSwipe = YES;
+        
         [UIView animateWithDuration:0.2 animations:^{
-            float bouncepixels = (_sideSwipeDirection == UISwipeGestureRecognizerDirectionRight)?BOUNCE_PIXELS:-BOUNCE_PIXELS;
-            _sideSwipeCell.frame = CGRectMake(bouncepixels, _sideSwipeCell.frame.origin.y, _sideSwipeCell.frame.size.width, _sideSwipeCell.frame.size.height);
-            self.animatingSideSwipe = YES;
+            _sideSwipeCell.frame = CGRectMake(0, _sideSwipeCell.frame.origin.y, _sideSwipeCell.frame.size.width, _sideSwipeCell.frame.size.height);
         } completion:^(BOOL finished) {
-            [UIView animateWithDuration:0.2 animations:^{
-                float bouncepixels = ((_sideSwipeDirection == UISwipeGestureRecognizerDirectionRight)?BOUNCE_PIXELS:-BOUNCE_PIXELS)*2;
-                _sideSwipeCell.frame = CGRectMake(bouncepixels, _sideSwipeCell.frame.origin.y, _sideSwipeCell.frame.size.width, _sideSwipeCell.frame.size.height);
-            } completion:^(BOOL finished) {
-                [UIView animateWithDuration:0.2 animations:^{
-                    _sideSwipeCell.frame = CGRectMake(0, _sideSwipeCell.frame.origin.y, _sideSwipeCell.frame.size.width, _sideSwipeCell.frame.size.height);
-                } completion:^(BOOL finished) {
-                    [UIView animateWithDuration:0.2 animations:^{
-                        self.animatingSideSwipe = NO;
-                        [self removeSideSwipeView:NO];
-                    } completion:nil];
-                }];
-            }];
+            self.animatingSideSwipe = NO;
+            [self removeSideSwipeView:NO];
         }];
     } else {
         self.animatingSideSwipe = NO;
@@ -885,6 +869,12 @@ static NSString *CellIdentifier = @"Cell";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     [_theTableView flashScrollIndicators];
+    [(Hack *)[UIApplication sharedApplication]setShouldWatchTouches:YES];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [(Hack *)[UIApplication sharedApplication]setShouldWatchTouches:NO];
 }
 
 - (NSUInteger)supportedInterfaceOrientations {

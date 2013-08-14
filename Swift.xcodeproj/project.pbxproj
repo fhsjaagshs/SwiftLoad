@@ -126,7 +126,6 @@
 		F1693C4F16DFABA6006E3739 /* UIAlertView+BlockExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C4916DFABA6006E3739 /* UIAlertView+BlockExtensions.m */; };
 		F1693C5016DFABA6006E3739 /* UIScrollView+UIScrollView_ZoomToPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C4B16DFABA6006E3739 /* UIScrollView+UIScrollView_ZoomToPoint.m */; };
 		F1693C5116DFABA6006E3739 /* UIViewController+AutoNib.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C4D16DFABA6006E3739 /* UIViewController+AutoNib.m */; };
-		F1693C5C16DFAC0E006E3739 /* metadataRetriever.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C5616DFAC0E006E3739 /* metadataRetriever.m */; };
 		F1693C5D16DFAC0E006E3739 /* MIMEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C5816DFAC0E006E3739 /* MIMEUtils.m */; };
 		F1693C5E16DFAC0E006E3739 /* NetworkUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C5A16DFAC0E006E3739 /* NetworkUtils.m */; };
 		F1693C6816DFAC59006E3739 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C6116DFAC59006E3739 /* MBProgressHUD.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -190,6 +189,7 @@
 		F1CBF07917BA7667003563FD /* EditID3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CBF07717BA7667003563FD /* EditID3ViewController.m */; };
 		F1CBF07D17BA7710003563FD /* TransparentTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CBF07C17BA7710003563FD /* TransparentTextField.m */; };
 		F1D3A573157A8F9E00A2D141 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1D3A572157A8F9E00A2D141 /* Security.framework */; };
+		F1E2133D17BB154A0073FA82 /* WatchdogWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = F1E2133C17BB154A0073FA82 /* WatchdogWindow.m */; };
 		F1E397E917B9F896002BBD6F /* TagLibAmalgam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1E397E717B9F896002BBD6F /* TagLibAmalgam.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 		F1E397EC17B9F8A8002BBD6F /* ID3Editor.mm in Sources */ = {isa = PBXBuildFile; fileRef = F1E397EB17B9F8A8002BBD6F /* ID3Editor.mm */; };
 		F1E9F76F1773F48500EC345C /* statusbar.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F76D1773F48500EC345C /* statusbar.png */; };
@@ -420,8 +420,6 @@
 		F1693C4B16DFABA6006E3739 /* UIScrollView+UIScrollView_ZoomToPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+UIScrollView_ZoomToPoint.m"; sourceTree = "<group>"; };
 		F1693C4C16DFABA6006E3739 /* UIViewController+AutoNib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+AutoNib.h"; sourceTree = "<group>"; };
 		F1693C4D16DFABA6006E3739 /* UIViewController+AutoNib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+AutoNib.m"; sourceTree = "<group>"; };
-		F1693C5516DFAC0E006E3739 /* metadataRetriever.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = metadataRetriever.h; sourceTree = "<group>"; };
-		F1693C5616DFAC0E006E3739 /* metadataRetriever.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = metadataRetriever.m; sourceTree = "<group>"; };
 		F1693C5716DFAC0E006E3739 /* MIMEUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MIMEUtils.h; sourceTree = "<group>"; };
 		F1693C5816DFAC0E006E3739 /* MIMEUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MIMEUtils.m; sourceTree = "<group>"; };
 		F1693C5916DFAC0E006E3739 /* NetworkUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkUtils.h; sourceTree = "<group>"; };
@@ -543,6 +541,8 @@
 		F1CBF07B17BA7710003563FD /* TransparentTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransparentTextField.h; sourceTree = "<group>"; };
 		F1CBF07C17BA7710003563FD /* TransparentTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransparentTextField.m; sourceTree = "<group>"; };
 		F1D3A572157A8F9E00A2D141 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		F1E2133B17BB154A0073FA82 /* WatchdogWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WatchdogWindow.h; sourceTree = "<group>"; };
+		F1E2133C17BB154A0073FA82 /* WatchdogWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WatchdogWindow.m; sourceTree = "<group>"; };
 		F1E397E717B9F896002BBD6F /* TagLibAmalgam.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TagLibAmalgam.cpp; sourceTree = "<group>"; };
 		F1E397E817B9F896002BBD6F /* TagLibAmalgam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagLibAmalgam.h; sourceTree = "<group>"; };
 		F1E397EA17B9F8A8002BBD6F /* ID3Editor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ID3Editor.h; sourceTree = "<group>"; };
@@ -830,6 +830,8 @@
 				F1798EAE1774177400310C37 /* ShadowedNavBar.m */,
 				F1798EB0177417CF00310C37 /* ShadowedToolbar.h */,
 				F1798EB1177417CF00310C37 /* ShadowedToolbar.m */,
+				F1E2133B17BB154A0073FA82 /* WatchdogWindow.h */,
+				F1E2133C17BB154A0073FA82 /* WatchdogWindow.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -936,8 +938,6 @@
 		F1693C5216DFAC0E006E3739 /* Utility Classes */ = {
 			isa = PBXGroup;
 			children = (
-				F1693C5516DFAC0E006E3739 /* metadataRetriever.h */,
-				F1693C5616DFAC0E006E3739 /* metadataRetriever.m */,
 				F1693C5716DFAC0E006E3739 /* MIMEUtils.h */,
 				F1693C5816DFAC0E006E3739 /* MIMEUtils.m */,
 				F1693C5916DFAC0E006E3739 /* NetworkUtils.h */,
@@ -1404,7 +1404,6 @@
 				F1693C4F16DFABA6006E3739 /* UIAlertView+BlockExtensions.m in Sources */,
 				F1693C5016DFABA6006E3739 /* UIScrollView+UIScrollView_ZoomToPoint.m in Sources */,
 				F1693C5116DFABA6006E3739 /* UIViewController+AutoNib.m in Sources */,
-				F1693C5C16DFAC0E006E3739 /* metadataRetriever.m in Sources */,
 				F1693C5D16DFAC0E006E3739 /* MIMEUtils.m in Sources */,
 				F1693C5E16DFAC0E006E3739 /* NetworkUtils.m in Sources */,
 				F1693C6816DFAC59006E3739 /* MBProgressHUD.m in Sources */,
@@ -1508,6 +1507,7 @@
 				F1E397EC17B9F8A8002BBD6F /* ID3Editor.mm in Sources */,
 				F1CBF07917BA7667003563FD /* EditID3ViewController.m in Sources */,
 				F1CBF07D17BA7710003563FD /* TransparentTextField.m in Sources */,
+				F1E2133D17BB154A0073FA82 /* WatchdogWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

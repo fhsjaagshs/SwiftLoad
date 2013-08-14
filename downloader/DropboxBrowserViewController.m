@@ -401,9 +401,19 @@ static NSString *CellIdentifier = @"dbcell";
 
 - (void)close {
     self.shouldStopLoading = YES;
-    
-    [[NSNotificationCenter defaultCenter]removeObserver:self];
     [self dismissModalViewControllerAnimated:YES];
+}
+
+- (NSUInteger)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
+    return (toInterfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
 
 @end

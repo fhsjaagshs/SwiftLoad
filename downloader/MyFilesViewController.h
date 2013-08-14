@@ -11,6 +11,6 @@
 
 @interface MyFilesViewController : UIViewController 
 
-- (void)setWatchdogCanGoYES;
+@property (nonatomic, assign) BOOL watchdogCanGo;
 
 @end
