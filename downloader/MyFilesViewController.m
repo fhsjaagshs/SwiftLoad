@@ -11,8 +11,6 @@
 #import "SwiftLoadCell.h"
 #import "TransparentAlert.h"
 
-//#define BOUNCE_PIXELS 5.0
-
 static NSString *CellIdentifier = @"Cell";
 
 @interface MyFilesViewController () <UITableViewDelegate, UITableViewDataSource, HamburgerViewDelegate, ContentOffsetWatchdogDelegate>
