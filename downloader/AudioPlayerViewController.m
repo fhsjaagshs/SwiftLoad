@@ -56,7 +56,7 @@
     [_navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:_navBar];
     
-    self.artistLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, 20) duration:5.0 andFadeLength:10.0f];
+    self.artistLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, 44+10, screenBounds.size.width, 20) duration:5.0 andFadeLength:10.0f];
     _artistLabel.animationDelay = 0.5f;
     _artistLabel.marqueeType = MLContinuous;
     _artistLabel.animationCurve = UIViewAnimationCurveLinear;
@@ -67,7 +67,7 @@
     _artistLabel.font = [UIFont systemFontOfSize:15];
     [self.view addSubview:_artistLabel];
     
-    self.titleLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, 44+20, screenBounds.size.width, 20) rate:50.0f andFadeLength:10.0f];
+    self.titleLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, 44+20+10, screenBounds.size.width, 20) rate:50.0f andFadeLength:10.0f];
     _titleLabel.animationDelay = 0.5f;
     _titleLabel.marqueeType = MLContinuous;
     _titleLabel.animationCurve = UIViewAnimationCurveLinear;
@@ -78,7 +78,7 @@
     _titleLabel.font = [UIFont boldSystemFontOfSize:15];
     [self.view addSubview:_titleLabel];
     
-    self.albumLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, 44+(20*2), screenBounds.size.width, 20) duration:5.0 andFadeLength:10.0f];
+    self.albumLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, 44+(20*2)+10, screenBounds.size.width, 20) duration:5.0 andFadeLength:10.0f];
     _albumLabel.animationDelay = 0.5f;
     _albumLabel.marqueeType = MLContinuous;
     _albumLabel.animationCurve = UIViewAnimationCurveLinear;
@@ -254,11 +254,12 @@
     AppDelegate *ad = kAppDelegate;
     
     float currentTime = ad.audioPlayer.currentTime;
-    float duration = ad.audioPlayer.duration;
     
     if (currentTime < 0) {
         return;
     }
+    
+    float duration = ad.audioPlayer.duration;
 
     _time.value = currentTime/duration;
 
@@ -267,9 +268,10 @@
     
     _secondsElapsed.text = [NSString stringWithFormat:@"%d:%@%d",minutes,((seconds < 10)?@"0":@""),seconds];
     
-    minutes = floor((duration-currentTime)/60);
-    seconds = abs((duration-currentTime)-(minutes*60));
-    _secondsRemaining = [NSString stringWithFormat:@"-%d:%@%d",minutes,((seconds < 10)?@"0":@""),seconds];
+    int remainingTime = duration-((minutes*60)+seconds);
+    int remainingMinutes = floor(remainingTime/60);
+    int remainingSeconds = abs(remainingTime-(remainingMinutes*60));
+    _secondsRemaining.text = [NSString stringWithFormat:@"-%d:%@%d",remainingMinutes,((remainingSeconds < 10)?@"0":@""),remainingSeconds];
     
 }
 
@@ -326,11 +328,18 @@
     AppDelegate *ad = kAppDelegate;
     
     float currentTime = ad.audioPlayer.currentTime;
+    float duration = ad.audioPlayer.duration;
     
     int minutes = floor(currentTime/60);
     int seconds = abs(currentTime-(minutes*60));
+
+    _secondsElapsed.text = [NSString stringWithFormat:@"%d:%@%d",minutes,((seconds < 10)?@"0":@""),seconds];
     
-    _secondsDisplay.text = [NSString stringWithFormat:@"%d:%@%d",minutes,((seconds < 10)?@"0":@""),seconds];
+    int totalMinutes = floor((duration-seconds)/60);
+    int remainingMinutes = totalMinutes-minutes;
+    int remainingSeconds = (duration-(remainingMinutes*60))-seconds;
+    _secondsRemaining.text = [NSString stringWithFormat:@"-%d:%@%d",remainingMinutes,((remainingSeconds < 10)?@"0":@""),remainingSeconds];
+    
     ad.audioPlayer.currentTime = _time.value*ad.audioPlayer.duration;
 }
 
