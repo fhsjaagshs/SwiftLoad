@@ -89,7 +89,7 @@
     _albumLabel.font = [UIFont systemFontOfSize:15];
     [self.view addSubview:_albumLabel];
     
-    self.secondsElapsed = [[UILabel alloc]initWithFrame:CGRectMake(0, 114, 44, 23)];//iPad?CGRectMake(0, 263, 768, 55):CGRectMake(164, sanitizeMesurement(185), 136, 27)];
+    self.secondsElapsed = [[UILabel alloc]initWithFrame:CGRectMake(0, 114, 44, 23)];
     _secondsElapsed.font = [UIFont boldSystemFontOfSize:15];
     _secondsElapsed.textColor = [UIColor blackColor];
     _secondsElapsed.backgroundColor = [UIColor clearColor];
@@ -111,33 +111,34 @@
     _secondsRemaining.text = @"-0:00";
     [self.view addSubview:_secondsRemaining];
     
-    self.prevTrack = [[UIButton alloc]initWithFrame:CGRectMake(20, screenBounds.size.height-44-45, 62, 46)];
+    self.prevTrack = [[UIButton alloc]initWithFrame:CGRectMake(20, screenBounds.size.height-44-46, 62, 46)];
     _prevTrack.backgroundColor = [UIColor clearColor];
     [_prevTrack setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
     [_prevTrack setImage:[UIImage imageNamed:@"back_button_pressed"] forState:UIControlStateHighlighted];
     [_prevTrack addTarget:kAppDelegate action:@selector(skipToPreviousTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_prevTrack];
     
-    self.nxtTrack = [[UIButton alloc]initWithFrame:CGRectMake(screenBounds.size.width-62-20, screenBounds.size.height-44-45, 62, 46)];
+    self.nxtTrack = [[UIButton alloc]initWithFrame:CGRectMake(screenBounds.size.width-62-20, screenBounds.size.height-44-46, 62, 46)];
     _nxtTrack.backgroundColor = [UIColor clearColor];
     [_nxtTrack setImage:[UIImage imageNamed:@"next_button"] forState:UIControlStateNormal];
     [_nxtTrack setImage:[UIImage imageNamed:@"next_button_pressed"] forState:UIControlStateHighlighted];
     [_nxtTrack addTarget:kAppDelegate action:@selector(skipToNextTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_nxtTrack];
     
-    self.pausePlay = [[UIButton alloc]initWithFrame:iPad?CGRectMake(323, 533, 142, 51):CGRectMake(124, sanitizeMesurement(270), 72, 45)];
+    self.pausePlay = [[UIButton alloc]initWithFrame:CGRectMake((screenBounds.size.width/2)-26, screenBounds.size.height-44-46, 52, 46)];
     _pausePlay.backgroundColor = [UIColor clearColor];
     [_pausePlay setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
     [_pausePlay setImage:[UIImage imageNamed:@"pause_selected"] forState:UIControlStateHighlighted];
     [_pausePlay addTarget:kAppDelegate action:@selector(togglePlayPause) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_pausePlay];
     
-    self.errorLabel = [[UILabel alloc]initWithFrame:iPad?CGRectMake(14, 311, 727, 113):CGRectMake(4, sanitizeMesurement(149), 313, 57)];
+    self.errorLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-88)];
     _errorLabel.text = @"Error Playing Audio";
     _errorLabel.backgroundColor = [UIColor clearColor];
     _errorLabel.textColor = [UIColor blackColor];
     _errorLabel.font = [UIFont boldSystemFontOfSize:iPad?72:33];
     [self.view addSubview:_errorLabel];
+    [_errorLabel setHidden:YES];
     
     UIToolbar *toolBar = [[ShadowedToolbar alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-44, screenBounds.size.width, 44)];
     toolBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
