@@ -111,21 +111,21 @@
     _secondsRemaining.text = @"-0:00";
     [self.view addSubview:_secondsRemaining];
     
-    self.prevTrack = [[UIButton alloc]initWithFrame:CGRectMake(20, screenBounds.size.height-44-46-10, 62, 46)];
+    self.prevTrack = [[UIButton alloc]initWithFrame:CGRectMake(20, screenBounds.size.height-44-46-10, iPad?62:48.5, iPad?46:36)];
     _prevTrack.backgroundColor = [UIColor clearColor];
     [_prevTrack setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
     [_prevTrack setImage:[UIImage imageNamed:@"back_button_pressed"] forState:UIControlStateHighlighted];
     [_prevTrack addTarget:kAppDelegate action:@selector(skipToPreviousTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_prevTrack];
     
-    self.nxtTrack = [[UIButton alloc]initWithFrame:CGRectMake(screenBounds.size.width-62-20, screenBounds.size.height-44-46-10, 62, 46)];
+    self.nxtTrack = [[UIButton alloc]initWithFrame:CGRectMake(screenBounds.size.width-(iPad?62:48.5)-20, screenBounds.size.height-44-46-10, iPad?62:48.5, iPad?46:36)];
     _nxtTrack.backgroundColor = [UIColor clearColor];
     [_nxtTrack setImage:[UIImage imageNamed:@"next_button"] forState:UIControlStateNormal];
     [_nxtTrack setImage:[UIImage imageNamed:@"next_button_pressed"] forState:UIControlStateHighlighted];
     [_nxtTrack addTarget:kAppDelegate action:@selector(skipToNextTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_nxtTrack];
     
-    self.pausePlay = [[UIButton alloc]initWithFrame:CGRectMake((screenBounds.size.width/2)-26, screenBounds.size.height-44-46-10, 52, 46)];
+    self.pausePlay = [[UIButton alloc]initWithFrame:CGRectMake((screenBounds.size.width/2)-((iPad?52:41)/2), screenBounds.size.height-44-46-10, iPad?52:41, iPad?46:36)];
     _pausePlay.backgroundColor = [UIColor clearColor];
     [_pausePlay setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
     [_pausePlay setImage:[UIImage imageNamed:@"pause_selected"] forState:UIControlStateHighlighted];
