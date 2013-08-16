@@ -118,19 +118,19 @@
     [_prevTrack addTarget:kAppDelegate action:@selector(skipToPreviousTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_prevTrack];
     
-    self.nxtTrack = [[UIButton alloc]initWithFrame:CGRectMake(screenBounds.size.width-(iPad?62:48.5)-20, screenBounds.size.height-44-46-10, iPad?62:48.5, iPad?46:36)];
-    _nxtTrack.backgroundColor = [UIColor clearColor];
-    [_nxtTrack setImage:[UIImage imageNamed:@"next_button"] forState:UIControlStateNormal];
-    [_nxtTrack setImage:[UIImage imageNamed:@"next_button_pressed"] forState:UIControlStateHighlighted];
-    [_nxtTrack addTarget:kAppDelegate action:@selector(skipToNextTrack) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:_nxtTrack];
-    
     self.pausePlay = [[UIButton alloc]initWithFrame:CGRectMake((screenBounds.size.width/2)-((iPad?52:41)/2), screenBounds.size.height-44-46-10, iPad?52:41, iPad?46:36)];
     _pausePlay.backgroundColor = [UIColor clearColor];
     [_pausePlay setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
     [_pausePlay setImage:[UIImage imageNamed:@"pause_selected"] forState:UIControlStateHighlighted];
     [_pausePlay addTarget:kAppDelegate action:@selector(togglePlayPause) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_pausePlay];
+    
+    self.nxtTrack = [[UIButton alloc]initWithFrame:CGRectMake(screenBounds.size.width-(iPad?62:48.5)-20, screenBounds.size.height-44-46-10, iPad?62:48.5, iPad?46:36)];
+    _nxtTrack.backgroundColor = [UIColor clearColor];
+    [_nxtTrack setImage:[UIImage imageNamed:@"next_button"] forState:UIControlStateNormal];
+    [_nxtTrack setImage:[UIImage imageNamed:@"next_button_pressed"] forState:UIControlStateHighlighted];
+    [_nxtTrack addTarget:kAppDelegate action:@selector(skipToNextTrack) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_nxtTrack];
     
     self.errorLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-88)];
     _errorLabel.text = @"Error Playing Audio";

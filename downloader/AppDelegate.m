@@ -66,6 +66,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
             AVAudioPlayer *audioPlayer = [kAppDelegate audioPlayer];
             if (audioPlayer.isPlaying) {
                 [audioPlayer pause];
+                [AudioPlayerViewController notif_setPausePlayTitlePlay];
             }
         }
     }
