@@ -89,7 +89,7 @@
     _albumLabel.font = [UIFont systemFontOfSize:15];
     [self.view addSubview:_albumLabel];
     
-    self.secondsElapsed = [[UILabel alloc]initWithFrame:CGRectMake(0, 114, 44, 23)];
+    self.secondsElapsed = [[UILabel alloc]initWithFrame:CGRectMake(0, 114+10, 44, 23)];
     _secondsElapsed.font = [UIFont boldSystemFontOfSize:15];
     _secondsElapsed.textColor = [UIColor blackColor];
     _secondsElapsed.backgroundColor = [UIColor clearColor];
@@ -97,13 +97,13 @@
     _secondsElapsed.text = @"0:00";
     [self.view addSubview:_secondsElapsed];
     
-    self.time = [[UISlider alloc]initWithFrame:CGRectMake(44, 114, screenBounds.size.width-88, 23)];
+    self.time = [[UISlider alloc]initWithFrame:CGRectMake(44, 114+10, screenBounds.size.width-88, 23)];
     [_time setMinimumTrackTintColor:[UIColor colorWithRed:21.0f/255.0f green:92.0f/255.0f blue:136.0f/255.0f alpha:1.0f]];
     [_time setMaximumTrackTintColor:[UIColor colorWithRed:105.0f/255.0f green:179.0f/255.0f blue:216.0f/255.0f alpha:1.0f]];
     [_time addTarget:self action:@selector(sliderChanged) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:_time];
     
-    self.secondsRemaining = [[UILabel alloc]initWithFrame:CGRectMake(screenBounds.size.width-44, 114, 44, 23)];
+    self.secondsRemaining = [[UILabel alloc]initWithFrame:CGRectMake(screenBounds.size.width-44, 114+10, 44, 23)];
     _secondsRemaining.font = [UIFont boldSystemFontOfSize:15];
     _secondsRemaining.textColor = [UIColor blackColor];
     _secondsRemaining.backgroundColor = [UIColor clearColor];
@@ -111,21 +111,21 @@
     _secondsRemaining.text = @"-0:00";
     [self.view addSubview:_secondsRemaining];
     
-    self.prevTrack = [[UIButton alloc]initWithFrame:CGRectMake(20, screenBounds.size.height-44-46, 62, 46)];
+    self.prevTrack = [[UIButton alloc]initWithFrame:CGRectMake(20, screenBounds.size.height-44-46-10, 62, 46)];
     _prevTrack.backgroundColor = [UIColor clearColor];
     [_prevTrack setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
     [_prevTrack setImage:[UIImage imageNamed:@"back_button_pressed"] forState:UIControlStateHighlighted];
     [_prevTrack addTarget:kAppDelegate action:@selector(skipToPreviousTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_prevTrack];
     
-    self.nxtTrack = [[UIButton alloc]initWithFrame:CGRectMake(screenBounds.size.width-62-20, screenBounds.size.height-44-46, 62, 46)];
+    self.nxtTrack = [[UIButton alloc]initWithFrame:CGRectMake(screenBounds.size.width-62-20, screenBounds.size.height-44-46-10, 62, 46)];
     _nxtTrack.backgroundColor = [UIColor clearColor];
     [_nxtTrack setImage:[UIImage imageNamed:@"next_button"] forState:UIControlStateNormal];
     [_nxtTrack setImage:[UIImage imageNamed:@"next_button_pressed"] forState:UIControlStateHighlighted];
     [_nxtTrack addTarget:kAppDelegate action:@selector(skipToNextTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_nxtTrack];
     
-    self.pausePlay = [[UIButton alloc]initWithFrame:CGRectMake((screenBounds.size.width/2)-26, screenBounds.size.height-44-46, 52, 46)];
+    self.pausePlay = [[UIButton alloc]initWithFrame:CGRectMake((screenBounds.size.width/2)-26, screenBounds.size.height-44-46-10, 52, 46)];
     _pausePlay.backgroundColor = [UIColor clearColor];
     [_pausePlay setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
     [_pausePlay setImage:[UIImage imageNamed:@"pause_selected"] forState:UIControlStateHighlighted];
@@ -157,16 +157,17 @@
         }
     }
     
-    UIBarButtonItem *volume = [[UIBarButtonItem alloc]initWithCustomView:volView];
-    UIBarButtonItem *loopControl = [[UIBarButtonItem alloc]initWithCustomView:_loopControl];
-    
     self.loopControl = [[ToggleControl alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
+    _loopControl.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     [_loopControl addTarget:self action:@selector(saveLoopState) forControlEvents:UIControlEventTouchUpInside];
     _loopControl.backgroundColor = [UIColor clearColor];
     [_loopControl setImage:[UIImage imageNamed:@"loop_on"] forState:ToggleControlModeOn];
     [_loopControl setImage:[UIImage imageNamed:@"loop_off"] forState:ToggleControlModeOff];
     [_loopControl setImage:[UIImage imageNamed:@"loop_pressed"] forState:ToggleControlModeIntermediate];
     
+    UIBarButtonItem *volume = [[UIBarButtonItem alloc]initWithCustomView:volView];
+    UIBarButtonItem *loopControl = [[UIBarButtonItem alloc]initWithCustomView:_loopControl];
+
     toolBar.items = @[loopControl, volume];
     [self.view addSubview:toolBar];
     [self.view bringSubviewToFront:toolBar];
@@ -335,9 +336,9 @@
 
     _secondsElapsed.text = [NSString stringWithFormat:@"%d:%@%d",minutes,((seconds < 10)?@"0":@""),seconds];
     
-    int totalMinutes = floor((duration-seconds)/60);
-    int remainingMinutes = totalMinutes-minutes;
-    int remainingSeconds = (duration-(remainingMinutes*60))-seconds;
+    int remainingTime = duration-((minutes*60)+seconds);
+    int remainingMinutes = floor(remainingTime/60);
+    int remainingSeconds = abs(remainingTime-(remainingMinutes*60));
     _secondsRemaining.text = [NSString stringWithFormat:@"-%d:%@%d",remainingMinutes,((remainingSeconds < 10)?@"0":@""),remainingSeconds];
     
     ad.audioPlayer.currentTime = _time.value*ad.audioPlayer.duration;
