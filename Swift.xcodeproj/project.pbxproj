@@ -185,7 +185,7 @@
 		F1BE07E4176F7A1100C4F038 /* Download.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BE07E3176F7A1100C4F038 /* Download.m */; };
 		F1C0CEFC1661AEC6001B1B42 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F1C0CEFB1661AEC6001B1B42 /* libz.1.2.5.dylib */; };
 		F1C7A6B716E8178F0082D4D3 /* ZoomingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1C7A6B616E8178F0082D4D3 /* ZoomingImageView.m */; };
-		F1CB7DAE16FFE99A002693B5 /* FTPLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CB7DAD16FFE99A002693B5 /* FTPLoginController.m */; };
+		F1CB7DAE16FFE99A002693B5 /* SFTPLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CB7DAD16FFE99A002693B5 /* SFTPLoginController.m */; };
 		F1CBF07917BA7667003563FD /* EditID3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CBF07717BA7667003563FD /* EditID3ViewController.m */; };
 		F1CBF07D17BA7710003563FD /* TransparentTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CBF07C17BA7710003563FD /* TransparentTextField.m */; };
 		F1D3A573157A8F9E00A2D141 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1D3A572157A8F9E00A2D141 /* Security.framework */; };
@@ -534,8 +534,8 @@
 		F1C0CEFB1661AEC6001B1B42 /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
 		F1C7A6B516E8178F0082D4D3 /* ZoomingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoomingImageView.h; sourceTree = "<group>"; };
 		F1C7A6B616E8178F0082D4D3 /* ZoomingImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoomingImageView.m; sourceTree = "<group>"; };
-		F1CB7DAC16FFE99A002693B5 /* FTPLoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTPLoginController.h; sourceTree = "<group>"; };
-		F1CB7DAD16FFE99A002693B5 /* FTPLoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTPLoginController.m; sourceTree = "<group>"; };
+		F1CB7DAC16FFE99A002693B5 /* SFTPLoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFTPLoginController.h; sourceTree = "<group>"; };
+		F1CB7DAD16FFE99A002693B5 /* SFTPLoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFTPLoginController.m; sourceTree = "<group>"; };
 		F1CBF07617BA7667003563FD /* EditID3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditID3ViewController.h; sourceTree = "<group>"; };
 		F1CBF07717BA7667003563FD /* EditID3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditID3ViewController.m; sourceTree = "<group>"; };
 		F1CBF07B17BA7710003563FD /* TransparentTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransparentTextField.h; sourceTree = "<group>"; };
@@ -822,8 +822,8 @@
 				F1FCF12917710BAA004A42B8 /* URLInputController.m */,
 				F17CEDDF16FE724C00E7E47B /* FileCreationDialogue.h */,
 				F17CEDE016FE724C00E7E47B /* FileCreationDialogue.m */,
-				F1CB7DAC16FFE99A002693B5 /* FTPLoginController.h */,
-				F1CB7DAD16FFE99A002693B5 /* FTPLoginController.m */,
+				F1CB7DAC16FFE99A002693B5 /* SFTPLoginController.h */,
+				F1CB7DAD16FFE99A002693B5 /* SFTPLoginController.m */,
 				F13B08B7178CEE05005201F7 /* WebDAVCredsPrompt.h */,
 				F13B08B8178CEE05005201F7 /* WebDAVCredsPrompt.m */,
 				F1798EAD1774177400310C37 /* ShadowedNavBar.h */,
@@ -1427,7 +1427,7 @@
 				F1847BBB16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m in Sources */,
 				F1C7A6B716E8178F0082D4D3 /* ZoomingImageView.m in Sources */,
 				F17CEDE116FE724C00E7E47B /* FileCreationDialogue.m in Sources */,
-				F1CB7DAE16FFE99A002693B5 /* FTPLoginController.m in Sources */,
+				F1CB7DAE16FFE99A002693B5 /* SFTPLoginController.m in Sources */,
 				F1ED4B12170352D10056D55F /* NSString+mods.m in Sources */,
 				F10CBC5A1707D6E700C82AFB /* DroppinBadassBlocks.m in Sources */,
 				F10CBC5D17080C6600C82AFB /* DropboxBrowserViewController.m in Sources */,

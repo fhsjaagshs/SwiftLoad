@@ -25,7 +25,7 @@
         _tv.returnKeyType = UIReturnKeyDone;
         _tv.autocapitalizationType = UITextAutocapitalizationTypeNone;
         _tv.autocorrectionType = UITextAutocorrectionTypeNo;
-        _tv.placeholder = @"Enter URL to download here...";
+        _tv.placeholder = @"Paste URL here...";
         _tv.font = [UIFont systemFontOfSize:13];
         _tv.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         _tv.adjustsFontSizeToFitWidth = YES;

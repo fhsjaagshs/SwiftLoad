@@ -58,7 +58,7 @@
 
     #import "URLInputController.h"
     #import "FileCreationDialogue.h"
-    #import "FTPLoginController.h"
+    #import "SFTPLoginController.h"
     #import "WebDAVCredsPrompt.h"
 
     #import "MBProgressHUD.h"

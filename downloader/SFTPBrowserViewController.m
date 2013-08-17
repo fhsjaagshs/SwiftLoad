@@ -173,7 +173,7 @@
 
 - (void)showInitialLoginController {
     
-    FTPLoginController *controller = [[FTPLoginController alloc]initWithType:FTPLoginControllerTypeLogin andCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
+    SFTPLoginController *controller = [[SFTPLoginController alloc]initWithType:SFTPLoginControllerTypeLogin andCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
         if ([username isEqualToString:@"cancel"]) {
             [self dismissModalViewControllerAnimated:YES];
         } else {
@@ -208,14 +208,13 @@
             }];
         }
     }];
-    controller.isSFTP = YES;
     controller.textFieldDelegate = self;
     controller.didMoveOnSelector = @selector(didMoveOn);
     
     [controller show];
 }
 
-- (void)didMoveOn:(FTPLoginController *)controller {
+- (void)didMoveOn:(SFTPLoginController *)controller {
     NSString *url = nil;
     for (UIView *view in controller.subviews) {
         if ([view isKindOfClass:[UITextField class]]) {

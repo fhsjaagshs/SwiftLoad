@@ -6,10 +6,10 @@
 //  Copyright (c) 2013 Nathaniel Symer. All rights reserved.
 //
 
-#import "FTPLoginController.h"
+#import "SFTPLoginController.h"
 #import <objc/runtime.h>
 
-@interface FTPLoginController () <UIAlertViewDelegate, UITextFieldDelegate>
+@interface SFTPLoginController () <UIAlertViewDelegate, UITextFieldDelegate>
 
 @property (nonatomic, strong) UITextField *serverField;
 @property (nonatomic, strong) UITextField *usernameField;
@@ -18,34 +18,28 @@
 
 @end
 
-@implementation FTPLoginController
-
-- (void)setSFTP:(BOOL)isSFTP {
-    _isSFTP = isSFTP;
-    self.title = _isSFTP?@"SFTP Login Required":@"FTP Login Required";
-    self.serverField.text = [[NSUserDefaults standardUserDefaults]objectForKey:_isSFTP?@"sftp.server_name":@"ftp.server_name"];
-    self.usernameField.text = [[NSUserDefaults standardUserDefaults]objectForKey:_isSFTP?@"sftp.user_name":@"ftp.user_name"];
-    [self.serverField setPlaceholder:_isSFTP?@"sftp://example.com/home/me/":@"ftp://example.com/from/webroot/"];
-}
+@implementation SFTPLoginController
 
 - (void)setupTextViews {
     self.serverField = [[UITextField alloc]init];
     [self.serverField setKeyboardAppearance:UIKeyboardAppearanceAlert];
-    [self.serverField setBorderStyle:UITextBorderStyleBezel];
+    [self.serverField setBorderStyle:UITextBorderStyleNone];
     [self.serverField setBackgroundColor:[UIColor whiteColor]];
     [self.serverField setReturnKeyType:UIReturnKeyNext];
     [self.serverField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     [self.serverField setAutocorrectionType:UITextAutocorrectionTypeNo];
-    [self.serverField setPlaceholder:_isSFTP?@"sftp://example.com/home/me/":@"ftp://example.com/from/webroot/"];
+    [self.serverField setPlaceholder:@"sftp://example.com/home/me/"];
     [self.serverField setFont:[UIFont boldSystemFontOfSize:18]];
     [self.serverField setAdjustsFontSizeToFitWidth:YES];
     [self.serverField setDelegate:self];
     [self.serverField setClearButtonMode:UITextFieldViewModeWhileEditing];
+    [_serverField.layer setBorderWidth:1.5f];
+    [_serverField.layer setBackgroundColor:[UIColor whiteColor].CGColor];
     self.serverField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     
     self.usernameField = [[UITextField alloc]init];
     [self.usernameField setKeyboardAppearance:UIKeyboardAppearanceAlert];
-    [self.usernameField setBorderStyle:UITextBorderStyleBezel];
+    [self.usernameField setBorderStyle:UITextBorderStyleNone];
     [self.usernameField setBackgroundColor:[UIColor whiteColor]];
     [self.usernameField setReturnKeyType:UIReturnKeyNext];
     [self.usernameField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
@@ -56,10 +50,12 @@
     self.usernameField.delegate = self;
     self.usernameField.clearButtonMode = UITextFieldViewModeWhileEditing;
     self.usernameField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    [_usernameField.layer setBorderWidth:1.5f];
+    [_usernameField.layer setBackgroundColor:[UIColor whiteColor].CGColor];
     
     self.passwordField = [[UITextField alloc]init];
     [self.passwordField setKeyboardAppearance:UIKeyboardAppearanceAlert];
-    [self.passwordField setBorderStyle:UITextBorderStyleBezel];
+    [self.passwordField setBorderStyle:UITextBorderStyleNone];
     [self.passwordField setBackgroundColor:[UIColor whiteColor]];
     [self.passwordField setReturnKeyType:UIReturnKeyNext];
     [self.passwordField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
@@ -71,9 +67,11 @@
     self.passwordField.delegate = self;
     self.passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
     self.passwordField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    [_passwordField.layer setBorderWidth:1.5f];
+    [_passwordField.layer setBackgroundColor:[UIColor whiteColor].CGColor];
     
-    self.serverField.text = [[NSUserDefaults standardUserDefaults]objectForKey:_isSFTP?@"sftp.server_name":@"ftp.server_name"];
-    self.usernameField.text = [[NSUserDefaults standardUserDefaults]objectForKey:_isSFTP?@"sftp.user_name":@"ftp.user_name"];
+    self.serverField.text = [[NSUserDefaults standardUserDefaults]objectForKey:@"sftp.server_name"];
+    self.usernameField.text = [[NSUserDefaults standardUserDefaults]objectForKey:@"sftp.user_name"];
     
     [self.serverField addTarget:self action:@selector(moveOnServerField) forControlEvents:UIControlEventEditingDidEndOnExit];
     [self.usernameField addTarget:self action:@selector(moveOnUsernameField) forControlEvents:UIControlEventEditingDidEndOnExit];
@@ -84,15 +82,15 @@
     [self addSubview:self.passwordField];
 }
 
-- (id)initWithType:(FTPLoginControllerType)type andCompletionHandler:(void (^)(NSString *username, NSString *password, NSString *url))block {
+- (id)initWithType:(SFTPLoginControllerType)type andCompletionHandler:(void (^)(NSString *username, NSString *password, NSString *url))block {
     switch (type) {
-        case FTPLoginControllerTypeDownload:
+        case SFTPLoginControllerTypeDownload:
             self = [super initWithTitle:@"FTP Login Required" message:@"\n\n\n\n\n" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Download", nil];
             break;
-        case FTPLoginControllerTypeUpload:
+        case SFTPLoginControllerTypeUpload:
             self = [super initWithTitle:@"FTP Login Required" message:@"\n\n\n\n\n" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Upload", nil];
             break;
-        case FTPLoginControllerTypeLogin:
+        case SFTPLoginControllerTypeLogin:
             self = [super initWithTitle:@"FTP Login Required" message:@"\n\n\n\n\n" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Login", nil];
             break;
         default:
@@ -108,8 +106,8 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == alertView.firstOtherButtonIndex) {
-        [[NSUserDefaults standardUserDefaults]setObject:self.serverField.text forKey:_isSFTP?@"sftp.server_name":@"ftp.server_name"];
-        [[NSUserDefaults standardUserDefaults]setObject:self.usernameField.text forKey:_isSFTP?@"sftp.user_name":@"ftp.user_name"];
+        [[NSUserDefaults standardUserDefaults]setObject:self.serverField.text forKey:@"sftp.server_name"];
+        [[NSUserDefaults standardUserDefaults]setObject:self.usernameField.text forKey:@"sftp.user_name"];
         void (^block)(NSString *username, NSString *password, NSString *url) = objc_getAssociatedObject(self, "blockCallback");
         block(self.usernameField.text, self.passwordField.text, self.serverField.text);
         //Block_release(block);
@@ -127,15 +125,15 @@
     self.message = isPredef?@"\n\n\n":self.message;
 }
 
-- (void)setType:(FTPLoginControllerType)type {
+- (void)setType:(SFTPLoginControllerType)type {
     switch (type) {
-        case FTPLoginControllerTypeDownload:
+        case SFTPLoginControllerTypeDownload:
             [self addButtonWithTitle:@"Download"];
             break;
-        case FTPLoginControllerTypeUpload:
+        case SFTPLoginControllerTypeUpload:
             [self addButtonWithTitle:@"Upload"];
             break;
-        case FTPLoginControllerTypeLogin:
+        case SFTPLoginControllerTypeLogin:
             [self addButtonWithTitle:@"Login"];
             break;
         default:
