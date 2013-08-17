@@ -78,51 +78,47 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 // Audio Player
 //
 
-- (void)artworksForFileAtPath:(NSString *)path block:(void(^)(NSArray *artworkImages))block {
-    
-    if (!block) {
-        return;
-    }
+- (NSArray *)artworksForFileAtPath:(NSString *)path {
     
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:[NSURL fileURLWithPath:path] options:nil];
-    NSArray *keys = [NSArray arrayWithObjects:@"commonMetadata", nil];
-    [asset loadValuesAsynchronouslyForKeys:keys completionHandler:^{
-        NSArray *artworks = [AVMetadataItem metadataItemsFromArray:asset.commonMetadata withKey:AVMetadataCommonKeyArtwork keySpace:AVMetadataKeySpaceCommon];
+
+    NSArray *artworks = [AVMetadataItem metadataItemsFromArray:asset.commonMetadata withKey:AVMetadataCommonKeyArtwork keySpace:AVMetadataKeySpaceCommon];
+    
+    NSMutableArray *artworkImages = [NSMutableArray array];
+    for (AVMetadataItem *item in artworks) {
+        NSString *keySpace = item.keySpace;
         
-        NSMutableArray *artworkImages = [NSMutableArray array];
-        for (AVMetadataItem *item in artworks) {
-            NSString *keySpace = item.keySpace;
-            
-            UIImage *image = nil;
-            
-            if ([keySpace isEqualToString:AVMetadataKeySpaceID3]) {
-                image = [UIImage imageWithData:[(NSDictionary *)item.value objectForKey:@"data"]];
-            } else if ([keySpace isEqualToString:AVMetadataKeySpaceiTunes]) {
-                image = [UIImage imageWithData:(NSData *)item.value];
-            }
-            
-            if (image != nil) {
-                [artworkImages addObject:image];
-            }
+        UIImage *image = nil;
+        
+        if ([keySpace isEqualToString:AVMetadataKeySpaceID3]) {
+            image = [UIImage imageWithData:[(NSDictionary *)item.value objectForKey:@"data"]];
+        } else if ([keySpace isEqualToString:AVMetadataKeySpaceiTunes]) {
+            image = [UIImage imageWithData:(NSData *)item.value];
         }
         
-        block(artworkImages);
-    }];
+        if (image != nil) {
+            [artworkImages addObject:image];
+        }
+    }
+    
+    return artworkImages;
 }
 
 - (void)showArtworkForFile:(NSString *)file {
-    [self artworksForFileAtPath:file block:^(NSArray *artworkImages) {
-        if (artworkImages.count > 0) {
-            UIImage *image = [artworkImages firstObjectCommonWithArray:artworkImages];
-            if (image != nil) {
-                MPNowPlayingInfoCenter *center = [MPNowPlayingInfoCenter defaultCenter];
-                MPMediaItemArtwork *artwork = [[MPMediaItemArtwork alloc]initWithImage:image];
-                NSMutableDictionary *dict = [center.nowPlayingInfo mutableCopy];
-                [dict setObject:artwork forKey:MPMediaItemPropertyArtwork];
-                center.nowPlayingInfo = dict;
-            }
+    
+    NSArray *artworkImages = [self artworksForFileAtPath:file];
+    
+    if (artworkImages.count > 0) {
+        UIImage *image = [artworkImages objectAtIndex:0];
+        if (image != nil) {
+            [AudioPlayerViewController notif_setAlbumArt:image];
+            MPNowPlayingInfoCenter *center = [MPNowPlayingInfoCenter defaultCenter];
+            MPMediaItemArtwork *artwork = [[MPMediaItemArtwork alloc]initWithImage:image];
+            NSMutableDictionary *dict = [center.nowPlayingInfo mutableCopy];
+            [dict setObject:artwork forKey:MPMediaItemPropertyArtwork];
+            center.nowPlayingInfo = dict;
         }
-    }];
+    }
 }
 
 - (void)showMetadataInLockscreenWithArtist:(NSString *)artist title:(NSString *)title album:(NSString *)album {

@@ -22,6 +22,7 @@
 + (void)notif_setInfoFieldText:(NSString *)string;
 + (void)notif_setSongTitleText:(NSString *)string;
 + (void)notif_setShouldUpdateTime:(BOOL)flag;
++ (void)notif_setAlbumArt:(UIImage *)art;
 
 @end
 

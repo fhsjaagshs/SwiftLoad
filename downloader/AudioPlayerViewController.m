@@ -10,10 +10,11 @@
 
 @interface AudioPlayerViewController ()
 
-//@property (nonatomic, strong) UILabel *secondsDisplay;
 @property (nonatomic, strong) UILabel *errorLabel;
 @property (nonatomic, strong) UILabel *secondsRemaining;
 @property (nonatomic, strong) UILabel *secondsElapsed;
+
+@property (nonatomic, strong) UIImageView *albumArtwork;
 
 @property (nonatomic, strong) UIButton *pausePlay;
 @property (nonatomic, strong) UIButton *stopButton;
@@ -142,10 +143,8 @@
     [self.view addSubview:_errorLabel];
     [_errorLabel setHidden:YES];
     
-    CustomVolumeView *volumeView = [[CustomVolumeView alloc]initWithFrame:CGRectMake(30, screenBounds.size.height-56-15-22, screenBounds.size.width-60, 22)];
+    CustomVolumeView *volumeView = [[CustomVolumeView alloc]initWithFrame:CGRectMake(30, screenBounds.size.height-56-15-25, screenBounds.size.width-60, 25)];
     [self.view addSubview:volumeView];
-    
-    NSLog(@"%@",NSStringFromCGSize([volumeView sizeThatFits:self.view.bounds.size]));
     
     self.loopControl = [[ToggleControl alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
     _loopControl.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
@@ -393,6 +392,10 @@
     _navBar.topItem.title = notif.object;
 }
 
+- (void)setArtwork:(NSNotification *)notif {
+    _albumArtwork.image = notif.object;
+}
+
 - (void)setupNotifs {
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setPausePlayTitlePlay) name:@"setPausePlayTitlePlay" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setPausePlayTitlePause) name:@"setPausePlayTitlePause" object:nil];
@@ -402,6 +405,7 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setSongTitleText:) name:@"setSongTitleText:" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(startUpdatingTime) name:@"updTime1" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(stopUpdatingTime) name:@"updTime2" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setArtwork:) name:@"setArtwork:" object:nil];
 }
 
 + (void)notif_setPausePlayTitlePlay {
@@ -438,6 +442,10 @@
     } else {
         [[NSNotificationCenter defaultCenter]postNotificationName:@"updTime2" object:nil];
     }
+}
+
++ (void)notif_setAlbumArt:(UIImage *)art {
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"setArtwork:" object:art];
 }
 
 - (NSUInteger)supportedInterfaceOrientations {
