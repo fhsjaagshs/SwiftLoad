@@ -188,6 +188,13 @@
 		F1CB7DAE16FFE99A002693B5 /* SFTPLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CB7DAD16FFE99A002693B5 /* SFTPLoginController.m */; };
 		F1CBF07917BA7667003563FD /* EditID3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CBF07717BA7667003563FD /* EditID3ViewController.m */; };
 		F1CBF07D17BA7710003563FD /* TransparentTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CBF07C17BA7710003563FD /* TransparentTextField.m */; };
+		F1D083A517BEFE00003E6700 /* CustomVolumeView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1D083A417BEFE00003E6700 /* CustomVolumeView.m */; };
+		F1D083A817BF081F003E6700 /* scrubber.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D083A617BF081F003E6700 /* scrubber.png */; };
+		F1D083A917BF081F003E6700 /* scrubber@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D083A717BF081F003E6700 /* scrubber@2x.png */; };
+		F1D083AC17BF09B1003E6700 /* trackImage.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D083AA17BF09B1003E6700 /* trackImage.png */; };
+		F1D083AD17BF09B1003E6700 /* trackImage@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D083AB17BF09B1003E6700 /* trackImage@2x.png */; };
+		F1D083B017BF0EBF003E6700 /* scrubber_volume.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D083AE17BF0EBF003E6700 /* scrubber_volume.png */; };
+		F1D083B117BF0EBF003E6700 /* scrubber_volume@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D083AF17BF0EBF003E6700 /* scrubber_volume@2x.png */; };
 		F1D3A573157A8F9E00A2D141 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1D3A572157A8F9E00A2D141 /* Security.framework */; };
 		F1E2133D17BB154A0073FA82 /* WatchdogWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = F1E2133C17BB154A0073FA82 /* WatchdogWindow.m */; };
 		F1E397E917B9F896002BBD6F /* TagLibAmalgam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1E397E717B9F896002BBD6F /* TagLibAmalgam.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
@@ -540,6 +547,14 @@
 		F1CBF07717BA7667003563FD /* EditID3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditID3ViewController.m; sourceTree = "<group>"; };
 		F1CBF07B17BA7710003563FD /* TransparentTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransparentTextField.h; sourceTree = "<group>"; };
 		F1CBF07C17BA7710003563FD /* TransparentTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransparentTextField.m; sourceTree = "<group>"; };
+		F1D083A317BEFE00003E6700 /* CustomVolumeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomVolumeView.h; sourceTree = "<group>"; };
+		F1D083A417BEFE00003E6700 /* CustomVolumeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomVolumeView.m; sourceTree = "<group>"; };
+		F1D083A617BF081F003E6700 /* scrubber.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = scrubber.png; path = "Images/Audio Player/scrubber.png"; sourceTree = "<group>"; };
+		F1D083A717BF081F003E6700 /* scrubber@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "scrubber@2x.png"; path = "Images/Audio Player/scrubber@2x.png"; sourceTree = "<group>"; };
+		F1D083AA17BF09B1003E6700 /* trackImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = trackImage.png; path = "Images/Audio Player/trackImage.png"; sourceTree = "<group>"; };
+		F1D083AB17BF09B1003E6700 /* trackImage@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "trackImage@2x.png"; path = "Images/Audio Player/trackImage@2x.png"; sourceTree = "<group>"; };
+		F1D083AE17BF0EBF003E6700 /* scrubber_volume.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = scrubber_volume.png; path = "Images/Audio Player/scrubber_volume.png"; sourceTree = "<group>"; };
+		F1D083AF17BF0EBF003E6700 /* scrubber_volume@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "scrubber_volume@2x.png"; path = "Images/Audio Player/scrubber_volume@2x.png"; sourceTree = "<group>"; };
 		F1D3A572157A8F9E00A2D141 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		F1E2133B17BB154A0073FA82 /* WatchdogWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WatchdogWindow.h; sourceTree = "<group>"; };
 		F1E2133C17BB154A0073FA82 /* WatchdogWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WatchdogWindow.m; sourceTree = "<group>"; };
@@ -808,6 +823,8 @@
 				F1E9F7851773FDF300EC345C /* DisclosureButton.m */,
 				F1564AEA17765B4300E53B42 /* ToggleControl.h */,
 				F1564AEB17765B4300E53B42 /* ToggleControl.m */,
+				F1D083A317BEFE00003E6700 /* CustomVolumeView.h */,
+				F1D083A417BEFE00003E6700 /* CustomVolumeView.m */,
 				F1693C6016DFAC59006E3739 /* MBProgressHUD.h */,
 				F1693C6116DFAC59006E3739 /* MBProgressHUD.m */,
 				F1B1C1E217B29C1800B6164C /* MarqueeLabel.h */,
@@ -1227,6 +1244,12 @@
 				F1AE31A417BDBC1E005D3EE6 /* play@2x.png */,
 				F1AE31B917BDC3BF005D3EE6 /* play_pressed.png */,
 				F1AE31BA17BDC3C0005D3EE6 /* play_pressed@2x.png */,
+				F1D083A617BF081F003E6700 /* scrubber.png */,
+				F1D083A717BF081F003E6700 /* scrubber@2x.png */,
+				F1D083AA17BF09B1003E6700 /* trackImage.png */,
+				F1D083AB17BF09B1003E6700 /* trackImage@2x.png */,
+				F1D083AE17BF0EBF003E6700 /* scrubber_volume.png */,
+				F1D083AF17BF0EBF003E6700 /* scrubber_volume@2x.png */,
 			);
 			name = "Audio Player";
 			sourceTree = "<group>";
@@ -1385,6 +1408,12 @@
 				F1AE31B817BDBC1E005D3EE6 /* play@2x.png in Resources */,
 				F1AE31BB17BDC3C0005D3EE6 /* play_pressed.png in Resources */,
 				F1AE31BC17BDC3C0005D3EE6 /* play_pressed@2x.png in Resources */,
+				F1D083A817BF081F003E6700 /* scrubber.png in Resources */,
+				F1D083A917BF081F003E6700 /* scrubber@2x.png in Resources */,
+				F1D083AC17BF09B1003E6700 /* trackImage.png in Resources */,
+				F1D083AD17BF09B1003E6700 /* trackImage@2x.png in Resources */,
+				F1D083B017BF0EBF003E6700 /* scrubber_volume.png in Resources */,
+				F1D083B117BF0EBF003E6700 /* scrubber_volume@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1524,6 +1553,7 @@
 				F1CBF07917BA7667003563FD /* EditID3ViewController.m in Sources */,
 				F1CBF07D17BA7710003563FD /* TransparentTextField.m in Sources */,
 				F1E2133D17BB154A0073FA82 /* WatchdogWindow.m in Sources */,
+				F1D083A517BEFE00003E6700 /* CustomVolumeView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

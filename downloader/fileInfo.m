@@ -10,7 +10,7 @@
 
 @interface fileInfo ()
 
-@property (nonatomic, strong) UITextField *fileName;
+@property (nonatomic, strong) TransparentTextField *fileName;
 @property (nonatomic, strong) UILabel *md5Field;
 @property (nonatomic, strong) UIBarButtonItem *revertButton;
 @property (nonatomic, strong) ShadowedNavBar *navBar;
@@ -36,9 +36,8 @@
     [self.view addSubview:_navBar];
     [self.view bringSubviewToFront:_navBar];
     
-    self.fileName = [[UITextField alloc]initWithFrame:iPad?CGRectMake(20, 163, 728, 31):CGRectMake(8, 54, 305, 31)];
+    self.fileName = [[TransparentTextField alloc]initWithFrame:iPad?CGRectMake(20, 163, 728, 31):CGRectMake(8, 54, 305, 31)];
     _fileName.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
-    _fileName.borderStyle = UITextBorderStyleRoundedRect;
     _fileName.placeholder = @"Enter a New Filename...";
     _fileName.autocorrectionType = UITextAutocorrectionTypeNo;
     _fileName.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -46,7 +45,6 @@
     _fileName.clearButtonMode = UITextFieldViewModeWhileEditing;
     _fileName.adjustsFontSizeToFitWidth = YES;
     _fileName.font = [UIFont systemFontOfSize:14];
-    _fileName.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     _fileName.textAlignment = UITextAlignmentCenter;
     _fileName.text = [[kAppDelegate openFile]lastPathComponent];
     [_fileName addTarget:self action:@selector(textFieldDidEndOnExit) forControlEvents:UIControlEventEditingDidEndOnExit];

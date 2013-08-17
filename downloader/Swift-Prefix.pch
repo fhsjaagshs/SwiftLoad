@@ -55,6 +55,7 @@
     #import "ShadowedToolBar.h"
     #import "SwiftLoadCell.h"
     #import "DashedLineView.h"
+    #import "CustomVolumeView.h"
 
     #import "URLInputController.h"
     #import "FileCreationDialogue.h"

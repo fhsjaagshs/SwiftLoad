@@ -98,8 +98,10 @@
     [self.view addSubview:_secondsElapsed];
     
     self.time = [[UISlider alloc]initWithFrame:CGRectMake(44, 114+10, screenBounds.size.width-88, 23)];
-    [_time setMinimumTrackTintColor:[UIColor colorWithRed:21.0f/255.0f green:92.0f/255.0f blue:136.0f/255.0f alpha:1.0f]];
-    [_time setMaximumTrackTintColor:[UIColor colorWithRed:105.0f/255.0f green:179.0f/255.0f blue:216.0f/255.0f alpha:1.0f]];
+    [_time setMinimumTrackImage:[UIImage imageNamed:@"trackImage"] forState:UIControlStateNormal];
+    [_time setMaximumTrackImage:[UIImage imageNamed:@"trackImage"] forState:UIControlStateNormal];
+    [_time setThumbImage:[UIImage imageNamed:@"scrubber"] forState:UIControlStateHighlighted];
+    [_time setThumbImage:[UIImage imageNamed:@"scrubber"] forState:UIControlStateNormal];
     [_time addTarget:self action:@selector(sliderChanged) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:_time];
     
@@ -111,21 +113,21 @@
     _secondsRemaining.text = @"-0:00";
     [self.view addSubview:_secondsRemaining];
     
-    self.prevTrack = [[UIButton alloc]initWithFrame:CGRectMake(20, screenBounds.size.height-44-46-10, iPad?62:48.5, iPad?46:36)];
+    self.prevTrack = [[UIButton alloc]initWithFrame:CGRectMake(20, screenBounds.size.height-46-10, iPad?62:48.5, iPad?46:36)];
     _prevTrack.backgroundColor = [UIColor clearColor];
     [_prevTrack setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
     [_prevTrack setImage:[UIImage imageNamed:@"back_button_pressed"] forState:UIControlStateHighlighted];
     [_prevTrack addTarget:kAppDelegate action:@selector(skipToPreviousTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_prevTrack];
     
-    self.pausePlay = [[UIButton alloc]initWithFrame:CGRectMake((screenBounds.size.width/2)-((iPad?52:41)/2), screenBounds.size.height-44-46-10, iPad?52:41, iPad?46:36)];
+    self.pausePlay = [[UIButton alloc]initWithFrame:CGRectMake((screenBounds.size.width/2)-((iPad?52:41)/2), screenBounds.size.height-46-10, iPad?52:41, iPad?46:36)];
     _pausePlay.backgroundColor = [UIColor clearColor];
     [_pausePlay setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
     [_pausePlay setImage:[UIImage imageNamed:@"pause_selected"] forState:UIControlStateHighlighted];
     [_pausePlay addTarget:kAppDelegate action:@selector(togglePlayPause) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_pausePlay];
     
-    self.nxtTrack = [[UIButton alloc]initWithFrame:CGRectMake(screenBounds.size.width-(iPad?62:48.5)-20, screenBounds.size.height-44-46-10, iPad?62:48.5, iPad?46:36)];
+    self.nxtTrack = [[UIButton alloc]initWithFrame:CGRectMake(screenBounds.size.width-(iPad?62:48.5)-20, screenBounds.size.height-46-10, iPad?62:48.5, iPad?46:36)];
     _nxtTrack.backgroundColor = [UIColor clearColor];
     [_nxtTrack setImage:[UIImage imageNamed:@"next_button"] forState:UIControlStateNormal];
     [_nxtTrack setImage:[UIImage imageNamed:@"next_button_pressed"] forState:UIControlStateHighlighted];
@@ -140,22 +142,10 @@
     [self.view addSubview:_errorLabel];
     [_errorLabel setHidden:YES];
     
-    UIToolbar *toolBar = [[ShadowedToolbar alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-44, screenBounds.size.width, 44)];
-    toolBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+    CustomVolumeView *volumeView = [[CustomVolumeView alloc]initWithFrame:CGRectMake(30, screenBounds.size.height-56-15-22, screenBounds.size.width-60, 22)];
+    [self.view addSubview:volumeView];
     
-    MPVolumeView *volView = [[MPVolumeView alloc]initWithFrame:CGRectMake(0, 12, screenBounds.size.width-70, 20)];
-    volView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
-    
-    for (UIView *view in volView.subviews) {
-        if ([[[view class]description]isEqualToString:@"MPVolumeSlider"]) {
-            UIView *a = view;
-            [(UISlider *)a setThumbTintColor:self.time.thumbTintColor];
-            [(UISlider *)a setMinimumTrackTintColor:self.time.minimumTrackTintColor];
-            [(UISlider *)a setMaximumTrackTintColor:[UIColor lightGrayColor]];
-            [(UISlider *)a setBackgroundColor:[UIColor clearColor]];
-            [(UISlider *)a setThumbImage:nil forState:UIControlStateNormal];
-        }
-    }
+    NSLog(@"%@",NSStringFromCGSize([volumeView sizeThatFits:self.view.bounds.size]));
     
     self.loopControl = [[ToggleControl alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
     _loopControl.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
@@ -164,13 +154,6 @@
     [_loopControl setImage:[UIImage imageNamed:@"loop_on"] forState:ToggleControlModeOn];
     [_loopControl setImage:[UIImage imageNamed:@"loop_off"] forState:ToggleControlModeOff];
     [_loopControl setImage:[UIImage imageNamed:@"loop_pressed"] forState:ToggleControlModeIntermediate];
-    
-    UIBarButtonItem *volume = [[UIBarButtonItem alloc]initWithCustomView:volView];
-    UIBarButtonItem *loopControl = [[UIBarButtonItem alloc]initWithCustomView:_loopControl];
-
-    toolBar.items = @[loopControl, volume];
-    [self.view addSubview:toolBar];
-    [self.view bringSubviewToFront:toolBar];
     
     [kAppDelegate playFile:[kAppDelegate openFile]];
     
