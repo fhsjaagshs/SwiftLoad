@@ -41,8 +41,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (void)skipToPreviousTrack;
 - (void)skipToNextTrack;
 - (void)togglePlayPause;
-- (void)showArtworkForFile:(NSString *)file;
-- (void)showMetadataInLockscreenWithArtist:(NSString *)artist title:(NSString *)title album:(NSString *)album;
 
 // File tracking
 @property (nonatomic, strong) NSString *openFile;
@@ -53,7 +51,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 
 // Emailing
 - (void)sendFileInEmail:(NSString *)file;
-//- (void)sendStringAsSMS:(NSString *)string fromViewController:(UIViewController *)vc;
 
 // Downloading
 - (void)downloadFileUsingSFTP:(NSURL *)url withUsername:(NSString *)username andPassword:(NSString *)password;

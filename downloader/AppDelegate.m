@@ -104,44 +104,51 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     return artworkImages;
 }
 
-- (void)showArtworkForFile:(NSString *)file {
+- (void)loadMetadataForFile:(NSString *)file {
+    NSDictionary *id3 = [ID3Editor loadTagFromFile:file];
+    NSString *artist = id3[@"artist"];
+    NSString *title = id3[@"title"];
+    NSString *album = id3[@"album"];
+    NSString *metadata = [NSString stringWithFormat:@"%@\n%@\n%@",artist,title,album];
+    [AudioPlayerViewController notif_setInfoFieldText:metadata];
+    
+    if ([artist isEqualToString:@"-"]) {
+        artist = nil;
+    }
+    
+    if ([title isEqualToString:@"-"]) {
+        title = nil;
+    }
+    
+    if ([album isEqualToString:@"-"]) {
+        album = nil;
+    }
+    
+    if (!artist && !title && !album) {
+        artist = @"";
+        title = file.lastPathComponent;
+        album = @"";
+    }
+    
+    NSDictionary *songInfo = [@{ MPMediaItemPropertyArtist:artist, MPMediaItemPropertyTitle:title, MPMediaItemPropertyAlbumTitle:album } mutableCopy];
     
     NSArray *artworkImages = [self artworksForFileAtPath:file];
-    
+
     if (artworkImages.count > 0) {
         UIImage *image = [artworkImages objectAtIndex:0];
         if (image != nil) {
             [AudioPlayerViewController notif_setAlbumArt:image];
-            MPNowPlayingInfoCenter *center = [MPNowPlayingInfoCenter defaultCenter];
-            MPMediaItemArtwork *artwork = [[MPMediaItemArtwork alloc]initWithImage:image];
-            NSMutableDictionary *dict = [center.nowPlayingInfo mutableCopy];
-            [dict setObject:artwork forKey:MPMediaItemPropertyArtwork];
-            center.nowPlayingInfo = dict;
+            [songInfo setValue:[[MPMediaItemArtwork alloc]initWithImage:image] forKey:MPMediaItemPropertyArtwork];
         }
     }
-}
-
-- (void)showMetadataInLockscreenWithArtist:(NSString *)artist title:(NSString *)title album:(NSString *)album {
-    if ([artist isEqualToString:@"---"]) {
-        artist = nil;
-    }
     
-    if ([title isEqualToString:@"---"]) {
-        title = nil;
-    }
-    
-    if ([album isEqualToString:@"---"]) {
-        album = nil;
-    }
-    
-    NSDictionary *songInfo = [NSDictionary dictionaryWithObjectsAndKeys:artist, MPMediaItemPropertyArtist, title, MPMediaItemPropertyTitle, album, MPMediaItemPropertyAlbumTitle, nil];
     [[MPNowPlayingInfoCenter defaultCenter]setNowPlayingInfo:songInfo];
 }
 
 - (void)togglePlayPause {
     if (!self.audioPlayer.isPlaying) {
         [self.audioPlayer play];
-        self.nowPlayingFile = [self.openFile copy];
+        self.nowPlayingFile = [_openFile copy];
         [AudioPlayerViewController notif_setPausePlayTitlePause];
         [AudioPlayerViewController notif_setShouldUpdateTime:YES];
     } else {
@@ -184,21 +191,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         }
     });
     
-    NSDictionary *id3 = [ID3Editor loadTagFromFile:file];
-    
-    NSString *artist = id3[@"artist"];
-    NSString *title = id3[@"title"];
-    NSString *album = id3[@"album"];
-    NSString *metadata = [NSString stringWithFormat:@"%@\n%@\n%@",artist,title,album];
-    [AudioPlayerViewController notif_setInfoFieldText:metadata];
-    
-    if ([artist isEqualToString:@"-"] && [title isEqualToString:@"-"] && [album isEqualToString:@"-"]) {
-        [self showMetadataInLockscreenWithArtist:@"" title:file.lastPathComponent album:@""];
-    } else {
-        [self showMetadataInLockscreenWithArtist:artist title:title album:album];
-    }
-    
-    [self showArtworkForFile:file];
+    [self loadMetadataForFile:file];
     
     [AudioPlayerViewController notif_setLoop];
     
@@ -213,7 +206,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         return;
     }
     
-    NSString *currentDir = [self.nowPlayingFile stringByDeletingLastPathComponent];
+    NSString *currentDir = [_nowPlayingFile stringByDeletingLastPathComponent];
     NSArray *filesOfDir = [[[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
     NSMutableArray *audioFiles = [NSMutableArray array];
     
@@ -253,33 +246,14 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         }
     });
     
-    [AudioPlayerViewController notif_setSongTitleText:[newFile lastPathComponent]];
-
-    NSDictionary *id3 = [ID3Editor loadTagFromFile:newFile];
-    
-    NSString *artist = id3[@"artist"];
-    NSString *title = id3[@"title"];
-    NSString *album = id3[@"album"];
-    NSString *metadata = [NSString stringWithFormat:@"%@\n%@\n%@",artist,title,album];
-    [AudioPlayerViewController notif_setInfoFieldText:metadata];
-    
-    if ([artist isEqualToString:@"-"] && [title isEqualToString:@"-"] && [album isEqualToString:@"-"]) {
-        [self showMetadataInLockscreenWithArtist:@"" title:newFile.lastPathComponent album:@""];
-    } else {
-        [self showMetadataInLockscreenWithArtist:artist title:title album:album];
-    }
-    
-    [self showArtworkForFile:newFile];
-    
-    [AudioPlayerViewController notif_setLoop];
-    
+    [AudioPlayerViewController notif_setSongTitleText:newFile.lastPathComponent];
     [AudioPlayerViewController notif_setControlsHidden:(playingError != nil)];
     [AudioPlayerViewController notif_setShouldUpdateTime:(playingError == nil)];
 }
 
 - (void)skipToNextTrack {
 
-    NSString *currentDir = [self.nowPlayingFile stringByDeletingLastPathComponent];
+    NSString *currentDir = [_nowPlayingFile stringByDeletingLastPathComponent];
     
     NSArray *filesOfDir = [[[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
     NSMutableArray *audioFiles = [NSMutableArray array];
@@ -322,24 +296,9 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         }
     });
     
+    [self loadMetadataForFile:newFile];
+    
     [AudioPlayerViewController notif_setSongTitleText:[newFile lastPathComponent]];
-    
-    NSDictionary *id3 = [ID3Editor loadTagFromFile:newFile];
-    
-    NSString *artist = id3[@"artist"];
-    NSString *title = id3[@"title"];
-    NSString *album = id3[@"album"];
-    NSString *metadata = [NSString stringWithFormat:@"%@\n%@\n%@",artist,title,album];
-    [AudioPlayerViewController notif_setInfoFieldText:metadata];
-    
-    if ([artist isEqualToString:@"-"] && [title isEqualToString:@"-"] && [album isEqualToString:@"-"]) {
-        [self showMetadataInLockscreenWithArtist:@"" title:newFile.lastPathComponent album:@""];
-    } else {
-        [self showMetadataInLockscreenWithArtist:artist title:title album:album];
-    }
-    
-    [self showArtworkForFile:newFile];
-    
     [AudioPlayerViewController notif_setControlsHidden:(playingError != nil)];
     [AudioPlayerViewController notif_setShouldUpdateTime:(playingError == nil)];
 }
