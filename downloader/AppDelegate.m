@@ -81,7 +81,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (NSArray *)artworksForFileAtPath:(NSString *)path {
     
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:[NSURL fileURLWithPath:path] options:nil];
-
+    
     NSArray *artworks = [AVMetadataItem metadataItemsFromArray:asset.commonMetadata withKey:AVMetadataCommonKeyArtwork keySpace:AVMetadataKeySpaceCommon];
     
     NSMutableArray *artworkImages = [NSMutableArray array];
@@ -146,13 +146,13 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 - (void)togglePlayPause {
-    if (!self.audioPlayer.isPlaying) {
-        [self.audioPlayer play];
+    if (!_audioPlayer.isPlaying) {
+        [_audioPlayer play];
         self.nowPlayingFile = [_openFile copy];
         [AudioPlayerViewController notif_setPausePlayTitlePause];
         [AudioPlayerViewController notif_setShouldUpdateTime:YES];
     } else {
-        [self.audioPlayer pause];
+        [_audioPlayer pause];
         [AudioPlayerViewController notif_setPausePlayTitlePlay];
         [AudioPlayerViewController notif_setShouldUpdateTime:NO];
     }
@@ -222,7 +222,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         nextIndex = audioFiles.count-1;
     }
     
-    NSString *newFile = [audioFiles objectAtIndex:nextIndex];
+    NSString *newFile = audioFiles[nextIndex];
     [self setOpenFile:newFile];
     
     NSError *playingError = nil;
@@ -304,15 +304,19 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 - (void)audioPlayerBeginInterruption:(AVAudioPlayer *)player {
-    if (self.audioPlayer.isPlaying) {
-        [self.audioPlayer pause];
+    if (_audioPlayer.isPlaying) {
+        [_audioPlayer pause];
         [AudioPlayerViewController notif_setPausePlayTitlePlay];
     }
 }
 
+- (void)audioPlayerEndInterruption:(AVAudioPlayer *)player withOptions:(NSUInteger)flags {
+    [self audioPlayerEndInterruption:player];
+}
+
 - (void)audioPlayerEndInterruption:(AVAudioPlayer *)player {
-    if (!self.audioPlayer.isPlaying) {
-        [self.audioPlayer play];
+    if (!_audioPlayer.isPlaying) {
+        [_audioPlayer play];
         [AudioPlayerViewController notif_setPausePlayTitlePause];
     }
 }
