@@ -23,28 +23,30 @@ UIColor * RGB(float red, float green, float blue) {
         return self;
     }
     
-    CGRect rect = CGRectMake(0, 0, self.size.width, self.size.height);
-    
-    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:radius];
+    CGImageRef cgimage = self.CGImage;
+    CGRect imageRect = CGRectMake(0, 0, CGImageGetWidth(cgimage), CGImageGetHeight(cgimage));
+    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:imageRect cornerRadius:radius];
     
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     
-    CGContextRef context = CGBitmapContextCreate(nil, self.size.width, self.size.height, 8, 0, colorSpace, kCGImageAlphaPremultipliedLast);
+    CGContextRef context = CGBitmapContextCreate(nil, imageRect.size.width, imageRect.size.height, 8, 0, colorSpace, kCGImageAlphaPremultipliedLast);
     UIGraphicsPushContext(context);
     CGContextSaveGState(context);
     
     CGContextAddPath(context, path.CGPath);
     CGContextClip(context);
-    [self drawInRect:rect];
     
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    CGContextDrawImage(context, imageRect, cgimage);
+    
+    CGImageRef newCGImage = CGBitmapContextCreateImage(context);
+    UIImage *newImage = [UIImage imageWithCGImage:newCGImage scale:self.scale orientation:self.imageOrientation];
     
     CGContextRestoreGState(context);
     UIGraphicsPopContext();
     
     CGColorSpaceRelease(colorSpace);
     
-    return image;
+    return newImage;
 }
 
 - (UIImage *)imageFilledWith:(UIColor *)color {

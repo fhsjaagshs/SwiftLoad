@@ -134,6 +134,8 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     
     NSArray *artworkImages = [self artworksForFileAtPath:file];
 
+    [AudioPlayerViewController notif_setAlbumArt:nil];
+    
     if (artworkImages.count > 0) {
         UIImage *image = [artworkImages objectAtIndex:0];
         if (image != nil) {
@@ -402,14 +404,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         return;
     }
     
-    if ([url.scheme isEqualToString:@"ftp"]) {
-        FTPDownload *download = [FTPDownload downloadWithURL:url];
-        [[TaskController sharedController]addTask:download];
-        return;
-    }
-    
-    HTTPDownload *download = [HTTPDownload downloadWithURL:url];
-    [[TaskController sharedController]addTask:download];
+    [[TaskController sharedController]addTask:[url.scheme isEqualToString:@"ftp"]?[FTPDownload downloadWithURL:url]:[HTTPDownload downloadWithURL:url]];
 }
 
 - (BOOL)isInForground {
