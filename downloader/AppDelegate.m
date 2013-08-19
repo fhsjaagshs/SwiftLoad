@@ -113,18 +113,18 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [AudioPlayerViewController notif_setInfoFieldText:metadata];
     
     if ([artist isEqualToString:@"-"]) {
-        artist = nil;
+        artist = @"";
     }
     
     if ([title isEqualToString:@"-"]) {
-        title = nil;
+        title = @"";
     }
     
     if ([album isEqualToString:@"-"]) {
-        album = nil;
+        album = @"";
     }
     
-    if (!artist && !title && !album) {
+    if (artist.length == 0 && title.length == 0 && album.length == 0) {
         artist = @"";
         title = file.lastPathComponent;
         album = @"";
@@ -246,6 +246,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         }
     });
     
+    [self loadMetadataForFile:newFile];
     [AudioPlayerViewController notif_setSongTitleText:newFile.lastPathComponent];
     [AudioPlayerViewController notif_setControlsHidden:(playingError != nil)];
     [AudioPlayerViewController notif_setShouldUpdateTime:(playingError == nil)];
@@ -275,7 +276,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [self setOpenFile:newFile];
     
     NSError *playingError = nil;
-    
     
     [self.audioPlayer stop];
     self.audioPlayer = [[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:newFile] error:&playingError];

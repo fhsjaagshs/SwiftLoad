@@ -114,6 +114,10 @@
     _secondsRemaining.text = @"-0:00";
     [self.view addSubview:_secondsRemaining];
     
+    self.albumArtwork = [[UIImageView alloc]initWithFrame:CGRectMake(0, 186, screenBounds.size.width, screenBounds.size.height-(186+116))];
+    self.albumArtwork.contentMode = UIViewContentModeScaleAspectFit;
+    [self.view addSubview:_albumArtwork];
+    
     self.prevTrack = [[UIButton alloc]initWithFrame:CGRectMake(20, screenBounds.size.height-46-10, iPad?62:48.5, iPad?46:36)];
     _prevTrack.backgroundColor = [UIColor clearColor];
     [_prevTrack setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
@@ -393,7 +397,7 @@
 }
 
 - (void)setArtwork:(NSNotification *)notif {
-    _albumArtwork.image = notif.object;
+    _albumArtwork.image = [(UIImage *)notif.object imageByRoundingCornersWithRadius:5.0f];
 }
 
 - (void)setupNotifs {

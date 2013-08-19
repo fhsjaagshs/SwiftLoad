@@ -18,6 +18,35 @@ UIColor * RGB(float red, float green, float blue) {
     return RGBA(red, green, blue, 1.0f);
 }
 
+- (UIImage *)imageByRoundingCornersWithRadius:(float)radius {
+    if (radius == 0.0f) {
+        return self;
+    }
+    
+    CGRect rect = CGRectMake(0, 0, self.size.width, self.size.height);
+    
+    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:radius];
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    
+    CGContextRef context = CGBitmapContextCreate(nil, self.size.width, self.size.height, 8, 0, colorSpace, kCGImageAlphaPremultipliedLast);
+    UIGraphicsPushContext(context);
+    CGContextSaveGState(context);
+    
+    CGContextAddPath(context, path.CGPath);
+    CGContextClip(context);
+    [self drawInRect:rect];
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    
+    CGContextRestoreGState(context);
+    UIGraphicsPopContext();
+    
+    CGColorSpaceRelease(colorSpace);
+    
+    return image;
+}
+
 - (UIImage *)imageFilledWith:(UIColor *)color {
     CGImageRef cgimage = self.CGImage;
     CGRect imageRect = CGRectMake(0, 0, CGImageGetWidth(cgimage), CGImageGetHeight(cgimage));
