@@ -196,6 +196,10 @@
 		F1D083B017BF0EBF003E6700 /* scrubber_volume.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D083AE17BF0EBF003E6700 /* scrubber_volume.png */; };
 		F1D083B117BF0EBF003E6700 /* scrubber_volume@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D083AF17BF0EBF003E6700 /* scrubber_volume@2x.png */; };
 		F1D3A573157A8F9E00A2D141 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1D3A572157A8F9E00A2D141 /* Security.framework */; };
+		F1D6257717C45D3700CA002A /* file_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D6257317C45D3700CA002A /* file_icon.png */; };
+		F1D6257817C45D3700CA002A /* file_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D6257417C45D3700CA002A /* file_icon@2x.png */; };
+		F1D6257917C45D3700CA002A /* folder_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D6257517C45D3700CA002A /* folder_icon.png */; };
+		F1D6257A17C45D3700CA002A /* folder_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D6257617C45D3700CA002A /* folder_icon@2x.png */; };
 		F1E2133D17BB154A0073FA82 /* WatchdogWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = F1E2133C17BB154A0073FA82 /* WatchdogWindow.m */; };
 		F1E397E917B9F896002BBD6F /* TagLibAmalgam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1E397E717B9F896002BBD6F /* TagLibAmalgam.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 		F1E397EC17B9F8A8002BBD6F /* ID3Editor.mm in Sources */ = {isa = PBXBuildFile; fileRef = F1E397EB17B9F8A8002BBD6F /* ID3Editor.mm */; };
@@ -556,6 +560,10 @@
 		F1D083AE17BF0EBF003E6700 /* scrubber_volume.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = scrubber_volume.png; path = "Images/Audio Player/scrubber_volume.png"; sourceTree = "<group>"; };
 		F1D083AF17BF0EBF003E6700 /* scrubber_volume@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "scrubber_volume@2x.png"; path = "Images/Audio Player/scrubber_volume@2x.png"; sourceTree = "<group>"; };
 		F1D3A572157A8F9E00A2D141 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		F1D6257317C45D3700CA002A /* file_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = file_icon.png; path = Images/file_icon.png; sourceTree = "<group>"; };
+		F1D6257417C45D3700CA002A /* file_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "file_icon@2x.png"; path = "Images/file_icon@2x.png"; sourceTree = "<group>"; };
+		F1D6257517C45D3700CA002A /* folder_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = folder_icon.png; path = Images/folder_icon.png; sourceTree = "<group>"; };
+		F1D6257617C45D3700CA002A /* folder_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "folder_icon@2x.png"; path = "Images/folder_icon@2x.png"; sourceTree = "<group>"; };
 		F1E2133B17BB154A0073FA82 /* WatchdogWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WatchdogWindow.h; sourceTree = "<group>"; };
 		F1E2133C17BB154A0073FA82 /* WatchdogWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WatchdogWindow.m; sourceTree = "<group>"; };
 		F1E397E717B9F896002BBD6F /* TagLibAmalgam.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TagLibAmalgam.cpp; sourceTree = "<group>"; };
@@ -1215,6 +1223,10 @@
 				F108927017B4993C00CF317F /* button_icon_pressed.png */,
 				F108927117B4993C00CF317F /* button_icon_pressed@2x.png */,
 				F108927217B4993C00CF317F /* button_icon@2x.png */,
+				F1D6257317C45D3700CA002A /* file_icon.png */,
+				F1D6257417C45D3700CA002A /* file_icon@2x.png */,
+				F1D6257517C45D3700CA002A /* folder_icon.png */,
+				F1D6257617C45D3700CA002A /* folder_icon@2x.png */,
 			);
 			name = General;
 			sourceTree = "<group>";
@@ -1414,6 +1426,10 @@
 				F1D083AD17BF09B1003E6700 /* trackImage@2x.png in Resources */,
 				F1D083B017BF0EBF003E6700 /* scrubber_volume.png in Resources */,
 				F1D083B117BF0EBF003E6700 /* scrubber_volume@2x.png in Resources */,
+				F1D6257717C45D3700CA002A /* file_icon.png in Resources */,
+				F1D6257817C45D3700CA002A /* file_icon@2x.png in Resources */,
+				F1D6257917C45D3700CA002A /* folder_icon.png in Resources */,
+				F1D6257A17C45D3700CA002A /* folder_icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

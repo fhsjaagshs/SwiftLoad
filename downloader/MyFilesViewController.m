@@ -399,10 +399,14 @@ static NSString *CellIdentifier = @"Cell";
     
     if ([[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir] && isDir) {
         cell.detailTextLabel.text = @"Directory";
+        cell.imageView.image = [UIImage imageNamed:@"folder_icon"];
         for (UIGestureRecognizer *rec in cell.gestureRecognizers) {
             rec.enabled = NO;
         }
     } else {
+        
+        cell.imageView.image = [UIImage imageNamed:@"file_icon"];
+        
         for (UIGestureRecognizer *rec in cell.gestureRecognizers) {
             rec.enabled = YES;
         }
