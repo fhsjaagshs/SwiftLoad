@@ -12,4 +12,6 @@
 
 @property (nonatomic, assign) BOOL isFirstCell;
 
+- (void)hideImageView:(BOOL)shouldHide;
+
 @end

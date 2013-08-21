@@ -14,6 +14,27 @@
 
 @implementation SwiftLoadCell
 
+- (void)hideImageView:(BOOL)shouldHide {
+    [UIView animateWithDuration:0.5f animations:^{
+        self.imageView.hidden = shouldHide;
+    }];
+}
+
+- (void)layoutSubviews {
+    
+    if (self.imageView.hidden) {
+        UIImage *image = self.imageView.image;
+        self.imageView.image = nil;
+        
+        [super layoutSubviews];
+        
+        self.imageView.image = image;
+        return;
+    }
+    
+    [super layoutSubviews];
+}
+
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {

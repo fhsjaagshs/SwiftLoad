@@ -427,6 +427,8 @@ static NSString *CellIdentifier = @"Cell";
         cell.detailTextLabel.text = detailText;
     }
     
+    cell.imageView.hidden = _theTableView.editing;
+    
     cell.isFirstCell = (indexPath.row == 0);
     
     [cell setNeedsDisplay];
@@ -562,6 +564,8 @@ static NSString *CellIdentifier = @"Cell";
 - (void)editTable {
     [self removeSideSwipeView:NO];
     [self reindexFilelist];
+    
+    [_theTableView.visibleCells makeObjectsPerformSelector:@selector(hideImageView:) withObject:_theTableView.editing?(id)0:((id)kCFBooleanTrue)];
     
     _watchdog.mode = _theTableView.editing?WatchdogModeNormal:WatchdogModePullToRefresh;
     _theTableView.allowsMultipleSelectionDuringEditing = !_theTableView.editing;
