@@ -107,7 +107,7 @@ static NSString *CellIdentifier = @"Cell";
             [kAppDelegate downloadFile:url];
         }]show];
     } else if (index == 1) {
-        webDAVViewController *advc = [webDAVViewController viewControllerWhite];
+        WebDAVViewController *advc = [WebDAVViewController viewControllerWhite];
         [self presentModalViewController:advc animated:YES];
     } else if (index == 2) {
         DropboxBrowserViewController *d = [DropboxBrowserViewController viewControllerWhite];
@@ -124,7 +124,7 @@ static NSString *CellIdentifier = @"Cell";
 - (void)copiedListChanged:(NSNotification *)notif {
     if (_copiedList.count > 0) {
         NSDictionary *changeDict = [NSDictionary dictionaryWithDictionary:(NSDictionary *)(notif.object)];
-        [_copiedList replaceObjectAtIndex:[_copiedList indexOfObject:[changeDict objectForKey:@"old"]] withObject:[changeDict objectForKey:@"new"]];
+        _copiedList[[_copiedList indexOfObject:changeDict[@"old"]]] = changeDict[@"new"];
     }
 }
 
@@ -139,7 +139,7 @@ static NSString *CellIdentifier = @"Cell";
     
     for (NSIndexPath *indexPath in _theTableView.indexPathsForSelectedRows) {
         [_theTableView cellForRowAtIndexPath:indexPath].selected = NO;
-        NSString *filename = [_filelist objectAtIndex:indexPath.row];
+        NSString *filename = _filelist[indexPath.row];
         NSString *currentPath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:filename];
         [_copiedList addObject:currentPath];
     }
@@ -155,7 +155,7 @@ static NSString *CellIdentifier = @"Cell";
     NSMutableArray *itemsToRemove = [NSMutableArray arrayWithCapacity:selectedRows.count];
     
     for (NSIndexPath *indexPath in _theTableView.indexPathsForSelectedRows) {
-        NSString *filename = [_filelist objectAtIndex:indexPath.row];
+        NSString *filename = _filelist[indexPath.row];
         [itemsToRemove addObject:filename];
         NSString *currentPath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:filename];
         [[NSFileManager defaultManager]removeItemAtPath:currentPath error:nil];
@@ -291,7 +291,7 @@ static NSString *CellIdentifier = @"Cell";
                 [kAppDelegate downloadFile:url];
             }]show];
         } else if (buttonIndex == 1) {
-            webDAVViewController *advc = [webDAVViewController viewController];
+            WebDAVViewController *advc = [WebDAVViewController viewController];
             [self presentModalViewController:advc animated:YES];
         } else if (buttonIndex == 2) {
             DropboxBrowserViewController *d = [DropboxBrowserViewController viewController];
@@ -390,7 +390,7 @@ static NSString *CellIdentifier = @"Cell";
         }
     }
     
-    NSString *filesObjectAtIndex = [_filelist objectAtIndex:indexPath.row];
+    NSString *filesObjectAtIndex = _filelist[indexPath.row];
     NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:filesObjectAtIndex];
     
     cell.textLabel.text = filesObjectAtIndex;
@@ -498,7 +498,7 @@ static NSString *CellIdentifier = @"Cell";
             audio.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
             [self presentModalViewController:audio animated:YES];
         } else if ([MIMEUtils isImageFile:file]) {
-            pictureView *pView = [pictureView viewController];
+            PictureViewController *pView = [PictureViewController viewController];
             pView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
             [self presentModalViewController:pView animated:YES];
         } else if ([MIMEUtils isTextFile:file] && !isHTML) {
@@ -555,7 +555,7 @@ static NSString *CellIdentifier = @"Cell";
         return YES;
     } else {
         [self reindexFilelist];
-        NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:[_filelist objectAtIndex:indexPath.row]];
+        NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:_filelist[indexPath.row]];
         BOOL isDir;
         return ([[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir] && isDir);
     }
@@ -586,7 +586,7 @@ static NSString *CellIdentifier = @"Cell";
     } else {
         [self reindexFilelist];
         
-        NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:[_filelist objectAtIndex:indexPath.row]];
+        NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:_filelist[indexPath.row]];
         
         BOOL isDir;
         [[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir];
@@ -628,9 +628,10 @@ static NSString *CellIdentifier = @"Cell";
         textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
         [self presentModalViewController:textEditor animated:YES];
     } else if (buttonIndex == 2) {
-        pictureView *textEditor = [pictureView viewController];
-        textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-        [self presentModalViewController:textEditor animated:YES];
+        [self presentModalViewController:[PictureViewController viewController] animated:YES];
+        PictureViewController *pView = [PictureViewController viewController];
+        pView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+        [self presentModalViewController:pView animated:YES];
     } else if (buttonIndex == 3) {
         AudioPlayerViewController *textEditor = [AudioPlayerViewController viewController];
         textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
@@ -765,7 +766,7 @@ static NSString *CellIdentifier = @"Cell";
         button.frame = CGRectMake([buttonData indexOfObject:buttonInfo]*((_sideSwipeView.bounds.size.width)/buttonData.count), 0, ((_sideSwipeView.bounds.size.width)/buttonData.count), _sideSwipeView.bounds.size.height);
         button.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
         
-        UIImage *grayImage = [[UIImage imageNamed:[buttonInfo objectForKey:@"image"]]imageFilledWith:[UIColor colorWithWhite:0.9 alpha:1.0]];
+        UIImage *grayImage = [[UIImage imageNamed:buttonInfo[@"image"]]imageFilledWith:[UIColor colorWithWhite:0.9 alpha:1.0]];
         [button setImage:grayImage forState:UIControlStateNormal];
         [button setTag:[buttonData indexOfObject:buttonInfo]+1];
         [button addTarget:self action:@selector(touchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];

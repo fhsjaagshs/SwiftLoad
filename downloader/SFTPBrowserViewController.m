@@ -96,9 +96,9 @@
     NSMutableString *query = [NSMutableString stringWithFormat:@"INSERT INTO sftp_cache (parentpath,filename,type,size) VALUES "];
     
     for (NSDictionary *dict in _filedicts) {
-        NSString *filename = [dict objectForKey:NSFileName];
-        NSString *type = [dict objectForKey:NSFileType];
-        int size = [[dict objectForKey:NSFileSize]intValue];
+        NSString *filename = dict[NSFileName];
+        NSString *type = dict[NSFileType];
+        int size = [dict[NSFileSize]intValue];
         [query appendFormat:@"(\"%@\",\"%@\",\"%@\",%d),",parentpath,filename,type,size];
     }
     
@@ -114,9 +114,9 @@
     
     while ([set next]) {
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-        [dict setObject:[set stringForColumn:@"filename"] forKey:NSFileName];
-        [dict setObject:[NSNumber numberWithLongLong:[set intForColumn:@"size"]] forKey:NSFileSize];
-        [dict setObject:[set stringForColumn:@"type"] forKey:NSFileType];
+        dict[NSFileName] = [set stringForColumn:@"filename"];
+        dict[NSFileSize] = [NSNumber numberWithInt:[set intForColumn:@"size"]];
+        dict[NSFileType] = [set stringForColumn:@"type"];
         [_filedicts addObject:dict];
     }
 
@@ -137,7 +137,7 @@
         dispatch_sync(dispatch_get_main_queue(), ^{
             @autoreleasepool {
                 for (DLSFTPFile *sftpFile in array) {
-                    NSDictionary *dict = @{@"NSFileName": sftpFile.filename, NSFileType:[sftpFile.attributes objectForKey:NSFileType], NSFileSize: [sftpFile.attributes objectForKey:NSFileSize], @"NSFilePath": sftpFile.path};
+                    NSDictionary *dict = @{@"NSFileName": sftpFile.filename, NSFileType:(sftpFile.attributes)[NSFileType], NSFileSize: (sftpFile.attributes)[NSFileSize], @"NSFilePath": sftpFile.path};
                     [_filedicts addObject:dict];
                 }
         
@@ -229,8 +229,8 @@
         NSDictionary *creds = [SFTPCreds getCredsForURL:[NSURL URLWithString:url]];
         
         if (creds) {
-            NSString *username = [creds objectForKey:@"username"];
-            NSString *password = [creds objectForKey:@"password"];
+            NSString *username = creds[@"username"];
+            NSString *password = creds[@"password"];
             
             for (UIView *view in controller.subviews) {
                 if ([view isKindOfClass:[UITextField class]]) {
@@ -278,12 +278,12 @@
         cell = [[SwiftLoadCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
-    NSDictionary *fileDict = [_filedicts objectAtIndex:indexPath.row];
+    NSDictionary *fileDict = _filedicts[indexPath.row];
 
-    cell.textLabel.text = [fileDict objectForKey:NSFileName];
+    cell.textLabel.text = fileDict[NSFileName];
     
-    if ([(NSString *)[fileDict objectForKey:NSFileType] isEqualToString:(NSString *)NSFileTypeRegular]) {
-        float fileSize = [[fileDict objectForKey:NSFileSize]intValue];
+    if ([(NSString *)fileDict[NSFileType] isEqualToString:(NSString *)NSFileTypeRegular]) {
+        float fileSize = [fileDict[NSFileSize]intValue];
         
         cell.detailTextLabel.text = @"File, ";
         
@@ -312,10 +312,10 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSDictionary *fileDict = [_filedicts objectAtIndex:indexPath.row];
-    NSString *filename = [fileDict objectForKey:NSFileName];
+    NSDictionary *fileDict = _filedicts[indexPath.row];
+    NSString *filename = fileDict[NSFileName];
     
-    NSString *filetype = (NSString *)[fileDict objectForKey:NSFileType];
+    NSString *filetype = (NSString *)fileDict[NSFileType];
     
     if ([filetype isEqualToString:NSFileTypeDirectory]) {
         [self addComponentToPath:filename];
@@ -327,7 +327,7 @@
         UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             if (buttonIndex == 0) {
                 NSDictionary *creds = [SFTPCreds getCredsForURL:[NSURL URLWithString:_currentURL]];
-                [kAppDelegate downloadFileUsingSFTP:[self constructURLForFile:filename] withUsername:[creds objectForKey:@"username"] andPassword:[creds objectForKey:@"password"]];
+                [kAppDelegate downloadFileUsingSFTP:[self constructURLForFile:filename] withUsername:creds[@"username"] andPassword:creds[@"password"]];
             }
         } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download", nil];
         actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;

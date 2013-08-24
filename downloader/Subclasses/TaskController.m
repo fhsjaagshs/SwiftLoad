@@ -23,7 +23,7 @@ static NSString * const cellId = @"TaskCell";
 }
 
 - (Task *)taskAtIndex:(int)index {
-    return [_taskObjs objectAtIndex:index];
+    return _taskObjs[index];
 }
 
 - (int)indexOfTask:(Task *)task {
@@ -58,7 +58,7 @@ static NSString * const cellId = @"TaskCell";
 }
 
 - (void)removeTaskAtIndex:(int)index {
-    [self removeTask:[_taskObjs objectAtIndex:index]];
+    [self removeTask:_taskObjs[index]];
 }
 
 - (int)tagForTask:(Task *)task {

@@ -52,8 +52,8 @@
     
     NSDictionary *prevcreds = [SimpleKeychain load:@"webdav_creds"];
     
-    _usernameField.text = [prevcreds objectForKey:@"username"];
-    _passwordField.text = [prevcreds objectForKey:@"password"];
+    _usernameField.text = prevcreds[@"username"];
+    _passwordField.text = prevcreds[@"password"];
     
     [_usernameField addTarget:self action:@selector(moveOnUsernameField) forControlEvents:UIControlEventEditingDidEndOnExit];
     [_passwordField addTarget:_passwordField action:@selector(resignFirstResponder) forControlEvents:UIControlEventEditingDidEndOnExit];

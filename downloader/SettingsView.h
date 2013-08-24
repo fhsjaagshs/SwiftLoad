@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SettingsView : UIViewController <DBSessionDelegate, DBRestClientDelegate>
-
-@property (nonatomic, strong) UIButton *linkButton;
+@interface SettingsView : UIViewController 
 
 @end

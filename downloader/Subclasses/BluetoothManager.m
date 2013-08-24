@@ -238,7 +238,7 @@ static NSString *kFilesizeKey = @"s";
 }
 
 - (NSData *)info {
-    return [NSKeyedArchiver archivedDataWithRootObject:@{ kFlagKey: @"info", kFilenameKey: _filename, kFilesizeKey: [NSNumber numberWithDouble:_filesize] }];
+    return [NSKeyedArchiver archivedDataWithRootObject:@{ kFlagKey: @"info", kFilenameKey: _filename, kFilesizeKey: [NSNumber numberWithFloat:_filesize] }];
 }
 
 - (NSData *)data:(NSData *)data {
@@ -252,12 +252,12 @@ static NSString *kFilesizeKey = @"s";
 - (void)handleData:(NSData *)data {
     
     NSDictionary *dict = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-    NSString *flag = [dict objectForKey:kFlagKey];
+    NSString *flag = dict[kFlagKey];
     
     if ([flag isEqualToString:@"info"]) {
         self.isTransferring = YES;
-        self.filesize = [[dict objectForKey:kFilesizeKey]floatValue];
-        self.filename = [dict objectForKey:kFilenameKey];
+        self.filesize = [dict[kFilesizeKey]floatValue];
+        self.filename = dict[kFilenameKey];
         self.targetPath = getNonConflictingFilePathForPath([NSTemporaryDirectory() stringByAppendingPathComponent:_filename]);
         [[NSFileManager defaultManager]createFileAtPath:_targetPath contents:nil attributes:nil];
         self.handle = [NSFileHandle fileHandleForWritingAtPath:_targetPath];
@@ -269,7 +269,7 @@ static NSString *kFilesizeKey = @"s";
         [self sendData:[self response]];
     } else if ([flag isEqualToString:@"data"]) {
         if (!_isSender) {
-            NSData *fileData = [dict objectForKey:kDataKey];
+            NSData *fileData = dict[kDataKey];
             
             self.receivedBytes += fileData.length;
             

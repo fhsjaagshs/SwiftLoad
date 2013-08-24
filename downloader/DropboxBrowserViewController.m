@@ -82,7 +82,7 @@ static NSString *CellIdentifier = @"dbcell";
 
     self.currentPathItems = [NSMutableArray array];
     
-    self.database = [FMDatabase databaseWithPath:[[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:@"database.db"]];
+    self.database = [FMDatabase databaseWithPath:[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0]stringByAppendingPathComponent:@"database.db"]];
     [_database open];
     [_database executeUpdate:@"CREATE TABLE IF NOT EXISTS dropbox_data (id INTEGER PRIMARY KEY AUTOINCREMENT, lowercasepath VARCHAR(255) DEFAULT NULL, filename VARCHAR(255) DEFAULT NULL, date INTEGER, size INTEGER, type INTEGER)"];
     [_database close];
@@ -117,7 +117,7 @@ static NSString *CellIdentifier = @"dbcell";
 }
 
 + (void)clearDatabase {
-    FMDatabase *database = [FMDatabase databaseWithPath:[[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)objectAtIndex:0]stringByAppendingPathComponent:@"database.db"]];
+    FMDatabase *database = [FMDatabase databaseWithPath:[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0]stringByAppendingPathComponent:@"database.db"]];
     [database open];
     [database beginTransaction];
     [database executeUpdate:@"DROP TABLE dropbox_data"];
@@ -167,10 +167,10 @@ static NSString *CellIdentifier = @"dbcell";
     FMResultSet *s = [_database executeQuery:@"SELECT * FROM dropbox_data where lowercasepath=? ORDER BY filename",[string lowercaseString]];
     while ([s next]) {
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-        [dict setObject:[s stringForColumn:@"filename"] forKey:NSFileName];
-        [dict setObject:[NSNumber numberWithLongLong:[s intForColumn:@"size"]] forKey:NSFileSize];
-        [dict setObject:[NSDate dateWithTimeIntervalSince1970:[s intForColumn:@"date"]] forKey:NSFileCreationDate];
-        [dict setObject:([s intForColumn:@"type"] == 1)?NSFileTypeRegular:NSFileTypeDirectory forKey:NSFileType];
+        dict[NSFileName] = [s stringForColumn:@"filename"];
+        dict[NSFileSize] = [NSNumber numberWithLongLong:[s intForColumn:@"size"]];
+        dict[NSFileCreationDate] = [NSDate dateWithTimeIntervalSince1970:[s intForColumn:@"date"]];
+        dict[NSFileType] = ([s intForColumn:@"type"] == 1)?NSFileTypeRegular:NSFileTypeDirectory;
         [_currentPathItems addObject:dict];
     }
     [s close];
@@ -194,7 +194,7 @@ static NSString *CellIdentifier = @"dbcell";
 
 - (void)addObjectToDatabase:(DBMetadata *)item withLowercasePath:(NSString *)lowercasePath {
     NSString *filename = item.filename;
-    NSNumber *type = [NSNumber numberWithInt:item.isDirectory?2:1];
+    NSNumber *type = @(item.isDirectory?2:1);
     NSNumber *date = [NSNumber numberWithInt:item.lastModifiedDate.timeIntervalSince1970];
     NSNumber *size = [NSNumber numberWithInt:item.totalBytes];
     
@@ -230,7 +230,7 @@ static NSString *CellIdentifier = @"dbcell";
         NSString *filePath = [kCachesDir stringByAppendingPathComponent:@"cursors.json"];
         NSData *json = [NSData dataWithContentsOfFile:filePath];
         NSMutableDictionary *dict = [[NSFileManager defaultManager]fileExistsAtPath:filePath]?[NSJSONSerialization JSONObjectWithData:json options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
-        self.cursor = [dict objectForKey:_userID];
+        self.cursor = dict[_userID];
         [self updateFileListing];
     }
 }
@@ -239,7 +239,7 @@ static NSString *CellIdentifier = @"dbcell";
     NSString *filePath = [kCachesDir stringByAppendingPathComponent:@"cursors.json"];
     NSData *jsonread = [NSData dataWithContentsOfFile:filePath];
     NSMutableDictionary *dict = [[NSFileManager defaultManager]fileExistsAtPath:filePath]?[NSJSONSerialization JSONObjectWithData:jsonread options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
-    [dict setObject:_cursor forKey:_userID];
+    dict[_userID] = _cursor;
     NSData *json = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONReadingMutableContainers error:nil];
     [json writeToFile:filePath atomically:YES];
 }
@@ -322,13 +322,13 @@ static NSString *CellIdentifier = @"dbcell";
         cell = [[SwiftLoadCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
-    NSDictionary *fileDict = [_currentPathItems objectAtIndex:indexPath.row];
-    NSString *filename = [fileDict objectForKey:NSFileName];
+    NSDictionary *fileDict = _currentPathItems[indexPath.row];
+    NSString *filename = fileDict[NSFileName];
     
     cell.textLabel.text = filename;
     
-    if ([(NSString *)[fileDict objectForKey:NSFileType] isEqualToString:(NSString *)NSFileTypeRegular]) {
-        float fileSize = [[fileDict objectForKey:NSFileSize]intValue];
+    if ([(NSString *)fileDict[NSFileType] isEqualToString:(NSString *)NSFileTypeRegular]) {
+        float fileSize = [fileDict[NSFileSize]intValue];
         
         cell.detailTextLabel.text = @"File, ";
         
@@ -350,20 +350,20 @@ static NSString *CellIdentifier = @"dbcell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    NSDictionary *fileDict = [_currentPathItems objectAtIndex:indexPath.row];
-    NSString *filename = [fileDict objectForKey:NSFileName];
+    NSDictionary *fileDict = _currentPathItems[indexPath.row];
+    NSString *filename = fileDict[NSFileName];
     
-    NSString *filetype = (NSString *)[fileDict objectForKey:NSFileType];
+    NSString *filetype = (NSString *)fileDict[NSFileType];
     
     if ([filetype isEqualToString:(NSString *)NSFileTypeDirectory]) {
-        _navBar.topItem.title = [_navBar.topItem.title stringByAppendingPathComponent:[fileDict objectForKey:NSFileName]];
+        _navBar.topItem.title = [_navBar.topItem.title stringByAppendingPathComponent:fileDict[NSFileName]];
         [self loadContentsOfDirectory:[_navBar.topItem.title fhs_normalize]];
         [self refreshStateWithAnimationStyle:UITableViewRowAnimationLeft];
     } else {
         NSString *message = [NSString stringWithFormat:@"Do you wish to download \"%@\"?",filename];
         UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             
-            NSString *filePath = [_navBar.topItem.title stringByAppendingPathComponent:[fileDict objectForKey:NSFileName]];
+            NSString *filePath = [_navBar.topItem.title stringByAppendingPathComponent:fileDict[NSFileName]];
             
             if (buttonIndex == 0) {
                 DropboxDownload *dl = [DropboxDownload downloadWithPath:filePath];

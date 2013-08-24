@@ -6,7 +6,7 @@
 //  Copyright 2012 Nathaniel Symer. All rights reserved.
 //
 
-#import "webDAVViewController.h"
+#import "WebDAVViewController.h"
 
 @interface PasswdWebDAVConnection : DAVConnection
 
@@ -25,15 +25,23 @@
 - (NSString *)passwordForUser:(NSString *)username {
     NSDictionary *creds = [SimpleKeychain load:@"webdav_creds"];
     
-    if ([[creds objectForKey:@"username"]isEqualToString:username]) {
-        return [creds objectForKey:@"password"];
+    if ([creds[@"username"]isEqualToString:username]) {
+        return creds[@"password"];
     }
 	return nil;
 }
 
 @end
 
-@implementation webDAVViewController
+@interface WebDAVViewController ()
+
+@property (nonatomic, strong) HTTPServer *httpServer;
+@property (nonatomic, strong) UILabel *urlLabel;
+@property (nonatomic, strong) UILabel *onLabel;
+
+@end
+
+@implementation WebDAVViewController
 
 - (void)loadView {
     [super loadView];

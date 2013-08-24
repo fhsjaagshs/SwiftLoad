@@ -91,7 +91,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         UIImage *image = nil;
         
         if ([keySpace isEqualToString:AVMetadataKeySpaceID3]) {
-            image = [UIImage imageWithData:[(NSDictionary *)item.value objectForKey:@"data"]];
+            image = [UIImage imageWithData:((NSDictionary *)item.value)[@"data"]];
         } else if ([keySpace isEqualToString:AVMetadataKeySpaceiTunes]) {
             image = [UIImage imageWithData:(NSData *)item.value];
         }
@@ -137,7 +137,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [AudioPlayerViewController notif_setAlbumArt:nil];
     
     if (artworkImages.count > 0) {
-        UIImage *image = [artworkImages objectAtIndex:0];
+        UIImage *image = artworkImages[0];
         if (image != nil) {
             [AudioPlayerViewController notif_setAlbumArt:image];
             [songInfo setValue:[[MPMediaItemArtwork alloc]initWithImage:image] forKey:MPMediaItemPropertyArtwork];
@@ -274,7 +274,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         nextIndex = 0;
     }
 
-    NSString *newFile = [audioFiles objectAtIndex:nextIndex];
+    NSString *newFile = audioFiles[nextIndex];
     [self setOpenFile:newFile];
     
     NSError *playingError = nil;
@@ -533,7 +533,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         [[NSFileManager defaultManager]removeItemAtPath:inboxDir error:nil];
         
         if (filesInIndexDir.count > 0) {
-            NSString *file = [kDocsDir stringByAppendingPathComponent:[filesInIndexDir objectAtIndex:0]];
+            NSString *file = [kDocsDir stringByAppendingPathComponent:filesInIndexDir[0]];
             self.openFile = file;
             
             UIViewController *controller = [UIViewController topViewController];
@@ -544,8 +544,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
                 AudioPlayerViewController *audio = [AudioPlayerViewController viewController];
                 [controller presentModalViewController:audio animated:YES];
             } else if ([MIMEUtils isImageFile:file]) {
-                pictureView *pView = [pictureView viewController];
-                [controller presentModalViewController:pView animated:YES];
+                [controller presentModalViewController:[PictureViewController viewController] animated:YES];
             } else if ([MIMEUtils isTextFile:file] && !isHTML) {
                 TextEditorViewController *textEditor = [TextEditorViewController viewController];
                 [controller presentModalViewController:textEditor animated:YES];

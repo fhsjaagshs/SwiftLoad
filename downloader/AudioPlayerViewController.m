@@ -386,9 +386,9 @@
     NSArray *components = [(NSString *)notif.object componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
 
     if (components.count > 0) {
-        _artistLabel.text = (NSString *)[components objectAtIndex:0];
-        _titleLabel.text = (NSString *)[components objectAtIndex:1];
-        _albumLabel.text = (NSString *)[components objectAtIndex:2];
+        _artistLabel.text = (NSString *)components[0];
+        _titleLabel.text = (NSString *)components[1];
+        _albumLabel.text = (NSString *)components[2];
     }
 }
 

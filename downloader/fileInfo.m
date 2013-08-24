@@ -8,7 +8,7 @@
 
 #import "fileInfo.h"
 
-@interface fileInfo ()
+@interface fileInfo () <UITextFieldDelegate>
 
 @property (nonatomic, strong) TransparentTextField *fileName;
 @property (nonatomic, strong) UILabel *md5Field;

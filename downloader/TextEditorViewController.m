@@ -130,7 +130,7 @@
 
 - (void)keyboardWasShown:(NSNotification*)aNotification {
     BOOL isLandscape = UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication]statusBarOrientation]);
-    CGSize kbSize = [[[aNotification userInfo]objectForKey:UIKeyboardFrameBeginUserInfoKey]CGRectValue].size;
+    CGSize kbSize = [[aNotification userInfo][UIKeyboardFrameBeginUserInfoKey]CGRectValue].size;
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(0, 0, isLandscape?kbSize.width:kbSize.height, 0);
     
     self.theTextView.contentInset = contentInsets;

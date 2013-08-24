@@ -21,22 +21,22 @@ static BGProcFactory *sharedInstance = nil;
 - (void)startProcForKey:(NSString *)key andExpirationHandler:(void(^)())block {
     __block UIBackgroundTaskIdentifier identifier = [[UIApplication sharedApplication]beginBackgroundTaskWithExpirationHandler:^{
         block();
-        if ([_core objectForKey:key]) {
+        if (_core[key]) {
             [_core removeObjectForKey:key];
         }
         [[UIApplication sharedApplication]endBackgroundTask:identifier];
         identifier = UIBackgroundTaskInvalid;
     }];
     
-    [_core setObject:[NSString stringWithFormat:@"%u",identifier] forKey:key];
+    _core[key] = [NSString stringWithFormat:@"%u",identifier];
 }
 
 - (void)endProcForKey:(NSString *)key {
-    UIBackgroundTaskIdentifier identifier = [[_core objectForKey:key]unsignedIntValue];
+    UIBackgroundTaskIdentifier identifier = [_core[key]unsignedIntValue];
     if (identifier != UIBackgroundTaskInvalid) {
         [[UIApplication sharedApplication]endBackgroundTask:identifier];
         identifier = UIBackgroundTaskInvalid;
-        if ([_core objectForKey:key]) {
+        if (_core[key]) {
             [_core removeObjectForKey:key];
         }
     }

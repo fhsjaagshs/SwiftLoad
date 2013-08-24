@@ -96,7 +96,7 @@
     #import "webDAVHelp.h"
     #import "MyFilesViewDetailViewController.h"
     #import "AudioPlayerViewController.h"
-    #import "pictureView.h"
+    #import "PictureViewController.h"
     #import "TextEditorViewController.h"
     #import "moviePlayerView.h"
     #import "fileInfo.h"

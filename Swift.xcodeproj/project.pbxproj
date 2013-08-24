@@ -65,7 +65,7 @@
 		F13B08B9178CEE05005201F7 /* WebDAVCredsPrompt.m in Sources */ = {isa = PBXBuildFile; fileRef = F13B08B8178CEE05005201F7 /* WebDAVCredsPrompt.m */; };
 		F13BECF4179604380012E4B4 /* PeerPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = F13BECF3179604380012E4B4 /* PeerPicker.m */; };
 		F1434B3E179B21C1001A672C /* UITableView+CoolRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = F1434B3D179B21C1001A672C /* UITableView+CoolRefresh.m */; };
-		F1444581145A04A30026CDB7 /* pictureView.m in Sources */ = {isa = PBXBuildFile; fileRef = F144457F145A04A30026CDB7 /* pictureView.m */; };
+		F1444581145A04A30026CDB7 /* PictureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F144457F145A04A30026CDB7 /* PictureViewController.m */; };
 		F145023B1781181700096202 /* DropboxDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = F145023A1781181700096202 /* DropboxDownload.m */; };
 		F145023E1781243000096202 /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = F145023C1781243000096202 /* arrow.png */; };
 		F145023F1781243000096202 /* arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F145023D1781243000096202 /* arrow@2x.png */; };
@@ -90,7 +90,7 @@
 		F163C4E917AB59B1007AB612 /* CircularProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = F163C4E817AB59B1007AB612 /* CircularProgressView.m */; };
 		F165C3E816E44244004B81F1 /* clipboard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F165C3E716E44244004B81F1 /* clipboard@2x.png */; };
 		F165C3EC16E445E5004B81F1 /* clipboard.png in Resources */ = {isa = PBXBuildFile; fileRef = F165C3EB16E445E5004B81F1 /* clipboard.png */; };
-		F166BBC414E2171A003E5A07 /* webDAVViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F166BBC214E2171A003E5A07 /* webDAVViewController.m */; };
+		F166BBC414E2171A003E5A07 /* WebDAVViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F166BBC214E2171A003E5A07 /* WebDAVViewController.m */; };
 		F166BC1914E21973003E5A07 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F166BC1814E21973003E5A07 /* libxml2.dylib */; };
 		F1679AC61787B368001369B1 /* SFTPBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1679AC51787B368001369B1 /* SFTPBrowserViewController.m */; };
 		F1679ACA1787B3C1001369B1 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1679AC71787B3C1001369B1 /* libcrypto.a */; };
@@ -345,8 +345,8 @@
 		F13BECF3179604380012E4B4 /* PeerPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeerPicker.m; sourceTree = "<group>"; };
 		F1434B3C179B21C1001A672C /* UITableView+CoolRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+CoolRefresh.h"; sourceTree = "<group>"; };
 		F1434B3D179B21C1001A672C /* UITableView+CoolRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+CoolRefresh.m"; sourceTree = "<group>"; };
-		F144457E145A04A30026CDB7 /* pictureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pictureView.h; sourceTree = "<group>"; };
-		F144457F145A04A30026CDB7 /* pictureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pictureView.m; sourceTree = "<group>"; };
+		F144457E145A04A30026CDB7 /* PictureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PictureViewController.h; sourceTree = "<group>"; };
+		F144457F145A04A30026CDB7 /* PictureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PictureViewController.m; sourceTree = "<group>"; };
 		F14502391781181700096202 /* DropboxDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DropboxDownload.h; path = ../DropboxDownload.h; sourceTree = "<group>"; };
 		F145023A1781181700096202 /* DropboxDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DropboxDownload.m; path = ../DropboxDownload.m; sourceTree = "<group>"; };
 		F145023C1781243000096202 /* arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow.png; sourceTree = "<group>"; };
@@ -384,8 +384,8 @@
 		F163C4E817AB59B1007AB612 /* CircularProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircularProgressView.m; sourceTree = "<group>"; };
 		F165C3E716E44244004B81F1 /* clipboard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clipboard@2x.png"; sourceTree = "<group>"; };
 		F165C3EB16E445E5004B81F1 /* clipboard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clipboard.png; sourceTree = "<group>"; };
-		F166BBC114E2171A003E5A07 /* webDAVViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = webDAVViewController.h; sourceTree = "<group>"; };
-		F166BBC214E2171A003E5A07 /* webDAVViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = webDAVViewController.m; sourceTree = "<group>"; };
+		F166BBC114E2171A003E5A07 /* WebDAVViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebDAVViewController.h; sourceTree = "<group>"; };
+		F166BBC214E2171A003E5A07 /* WebDAVViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebDAVViewController.m; sourceTree = "<group>"; };
 		F166BC1814E21973003E5A07 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		F1679AC41787B368001369B1 /* SFTPBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFTPBrowserViewController.h; sourceTree = "<group>"; };
 		F1679AC51787B368001369B1 /* SFTPBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFTPBrowserViewController.m; sourceTree = "<group>"; };
@@ -789,8 +789,8 @@
 				F17DC65E140C45690015F613 /* AudioPlayerViewController.m */,
 				F11FE414145F8218008ECC7E /* TextEditorViewController.h */,
 				F11FE415145F8218008ECC7E /* TextEditorViewController.m */,
-				F144457E145A04A30026CDB7 /* pictureView.h */,
-				F144457F145A04A30026CDB7 /* pictureView.m */,
+				F144457E145A04A30026CDB7 /* PictureViewController.h */,
+				F144457F145A04A30026CDB7 /* PictureViewController.m */,
 				F149A682149176E60038F1FC /* moviePlayerView.h */,
 				F149A683149176E60038F1FC /* moviePlayerView.m */,
 				F15277CE13F4B08800338673 /* MyFilesViewDetailViewController.h */,
@@ -801,8 +801,8 @@
 				F128A1DB157FDBFE001BC156 /* SettingsView.m */,
 				F17F11201420017100CE45D7 /* fileInfo.h */,
 				F17F11211420017100CE45D7 /* fileInfo.m */,
-				F166BBC114E2171A003E5A07 /* webDAVViewController.h */,
-				F166BBC214E2171A003E5A07 /* webDAVViewController.m */,
+				F166BBC114E2171A003E5A07 /* WebDAVViewController.h */,
+				F166BBC214E2171A003E5A07 /* WebDAVViewController.m */,
 				F1B2488D14E333E200C44E11 /* webDAVHelp.h */,
 				F1B2488E14E333E200C44E11 /* webDAVHelp.m */,
 				F1679AC41787B368001369B1 /* SFTPBrowserViewController.h */,
@@ -1445,10 +1445,10 @@
 				F1EDE3F613F8708600C17B2A /* MyFilesViewController.m in Sources */,
 				F17DC65F140C45690015F613 /* AudioPlayerViewController.m in Sources */,
 				F17F11231420017100CE45D7 /* fileInfo.m in Sources */,
-				F1444581145A04A30026CDB7 /* pictureView.m in Sources */,
+				F1444581145A04A30026CDB7 /* PictureViewController.m in Sources */,
 				F11FE417145F8218008ECC7E /* TextEditorViewController.m in Sources */,
 				F149A685149176E60038F1FC /* moviePlayerView.m in Sources */,
-				F166BBC414E2171A003E5A07 /* webDAVViewController.m in Sources */,
+				F166BBC414E2171A003E5A07 /* WebDAVViewController.m in Sources */,
 				F1B2489014E333E300C44E11 /* webDAVHelp.m in Sources */,
 				9BFF29FA15387C67007ED9B1 /* ioapi.c in Sources */,
 				9BFF29FB15387C67007ED9B1 /* mztools.c in Sources */,
@@ -1582,7 +1582,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Corinna Wiedmer-Symer (RT2G2Q9WRP)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1601,7 +1601,7 @@
 				INFOPLIST_PREFIX_HEADER = "/Users/nathaniel/Documents/Code/SwiftLoad/downloader/SupportingFiles/SwiftLoad-Prefix.pch";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_LDFLAGS = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "2663914D-76EA-4853-BD81-C333A5D499B6";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -1615,7 +1615,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Corinna Wiedmer-Symer (RT2G2Q9WRP)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 3;
@@ -1629,7 +1629,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "2663914D-76EA-4853-BD81-C333A5D499B6";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -1642,7 +1642,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Corinna Wiedmer-Symer (RT2G2Q9WRP)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
@@ -1666,7 +1666,7 @@
 					"\"$(SRCROOT)/Libs/libssh2-for-iOS/lib\"",
 				);
 				PRODUCT_NAME = Swift;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "2663914D-76EA-4853-BD81-C333A5D499B6";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -1679,7 +1679,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Corinna Wiedmer-Symer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
@@ -1703,7 +1703,7 @@
 					"\"$(SRCROOT)/Libs/libssh2-for-iOS/lib\"",
 				);
 				PRODUCT_NAME = Swift;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "17D6A015-AD18-489E-8202-79CBE9BD2D30";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";

@@ -20,12 +20,12 @@ static NSString * const kCredentialsKeychainIdentifier = @"com.swiftload.sftp_cr
 
 + (void)saveUsername:(NSString *)username andPassword:(NSString *)password forURL:(NSURL *)ftpurl {
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:[SimpleKeychain load:kCredentialsKeychainIdentifier]];
-    [dict setObject:@{ @"username": username, @"password": password } forKey:ftpurl.host];
+    dict[ftpurl.host] = @{ @"username": username, @"password": password };
     [SimpleKeychain save:kCredentialsKeychainIdentifier data:dict];
 }
 
 + (NSDictionary *)getCredsForURL:(NSURL *)ftpurl {
-    return [[NSMutableDictionary dictionaryWithDictionary:[SimpleKeychain load:kCredentialsKeychainIdentifier]]objectForKey:ftpurl.host];
+    return [NSMutableDictionary dictionaryWithDictionary:[SimpleKeychain load:kCredentialsKeychainIdentifier]][ftpurl.host];
 }
 
 @end

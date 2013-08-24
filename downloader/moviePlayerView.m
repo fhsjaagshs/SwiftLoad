@@ -13,6 +13,9 @@
 @property (nonatomic, assign) BOOL shouldUnpauseAudioPlayer;
 @property (nonatomic, strong) NSURL *streamingUrl;
 
+@property (nonatomic, strong) UIActionSheet *popupQuery;
+@property (nonatomic, strong) MPMoviePlayerController *moviePlayer;
+
 @end
 
 @implementation moviePlayerView

@@ -15,9 +15,9 @@
 + (NSDictionary *)loadTagFromFile:(NSString *)file {
     TagLib::FileRef f([file UTF8String]);
     
-    NSString *artist = [NSString stringWithCString:f.tag()->artist().toCString() encoding:NSUTF8StringEncoding];
-    NSString *title = [NSString stringWithCString:f.tag()->title().toCString() encoding:NSUTF8StringEncoding];
-    NSString *album = [NSString stringWithCString:f.tag()->album().toCString() encoding:NSUTF8StringEncoding];
+    NSString *artist = @(f.tag()->artist().toCString());
+    NSString *title = @(f.tag()->title().toCString());
+    NSString *album = @(f.tag()->album().toCString());
     
     if (artist.length == 0) {
         artist = @"-";

@@ -10,6 +10,12 @@
 
 static NSString * const kJavaScriptBookmarklet = @"JavaScript:window.open(document.URL.replace('http://','swift://'));";
 
+@interface SettingsView () <DBSessionDelegate, DBRestClientDelegate>
+
+@property (nonatomic, strong) UIButton *linkButton;
+
+@end
+
 @implementation SettingsView
 
 - (void)loadView {
@@ -75,7 +81,7 @@ static NSString * const kJavaScriptBookmarklet = @"JavaScript:window.open(docume
 
 - (void)linkOrUnlink {
     if ([[DBSession sharedSession]isLinked]) {
-        [[DBSession sharedSession]unlinkUserId:[[[DBSession sharedSession]userIds]objectAtIndex:0]];
+        [[DBSession sharedSession]unlinkUserId:[[DBSession sharedSession]userIds][0]];
         [_linkButton setTitle:@"Link Dropbox" forState:UIControlStateNormal];
         [_linkButton resizeForTitle];
         [DropboxBrowserViewController clearDatabase];

@@ -8,9 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MyFilesViewDetailViewController : UIViewController <UIWebViewDelegate>
-
-@property (nonatomic, strong) UIActionSheet *popupQuery;
-@property (nonatomic, strong) UIWebView *webView;
+@interface MyFilesViewDetailViewController : UIViewController 
 
 @end

@@ -120,7 +120,7 @@ static NSString * const kShortMessage = @"\n\n\n";
     }
 
     cell.isFirstCell = (indexPath.row == 0);
-    cell.textLabel.text = [_session displayNameForPeer:[_peers objectAtIndex:indexPath.row]];
+    cell.textLabel.text = [_session displayNameForPeer:_peers[indexPath.row]];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     [cell setNeedsDisplay];
     
@@ -129,7 +129,7 @@ static NSString * const kShortMessage = @"\n\n\n";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (_peerPickedBlock) {
-        _peerPickedBlock([_peers objectAtIndex:indexPath.row]);
+        _peerPickedBlock(_peers[indexPath.row]);
     }
     
     self.didPickPeer = YES;

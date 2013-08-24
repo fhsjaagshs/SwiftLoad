@@ -455,8 +455,8 @@ typedef void (^animationCompletionBlock)(void);
         [gradientMask setColors:self.gradientColors];
         [gradientMask setLocations: [NSArray arrayWithObjects:
                                      [NSNumber numberWithDouble: 0.0],
-                                     [NSNumber numberWithDouble: fadePoint],
-                                     [NSNumber numberWithDouble: 1 - fadePoint],
+                                     [NSNumber numberWithFloat: fadePoint],
+                                     [NSNumber numberWithFloat: 1 - fadePoint],
                                      [NSNumber numberWithDouble: 1.0],
                                      nil]];
     }

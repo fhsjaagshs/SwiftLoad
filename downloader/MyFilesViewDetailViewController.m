@@ -8,6 +8,13 @@
 
 #import "MyFilesViewDetailViewController.h"
 
+@interface MyFilesViewDetailViewController () <UIWebViewDelegate>
+
+@property (nonatomic, strong) UIActionSheet *popupQuery;
+@property (nonatomic, strong) UIWebView *webView;
+
+@end
+
 @implementation MyFilesViewDetailViewController
 
 - (void)loadView {

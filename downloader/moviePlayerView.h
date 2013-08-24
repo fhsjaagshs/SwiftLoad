@@ -8,11 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface moviePlayerView : UIViewController {
-    
-}
-
-@property (nonatomic, strong) UIActionSheet *popupQuery;
-@property (nonatomic, strong) MPMoviePlayerController *moviePlayer;
+@interface moviePlayerView : UIViewController
 
 @end

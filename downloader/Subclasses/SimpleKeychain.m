@@ -17,15 +17,15 @@
 + (void)save:(NSString *)service data:(id)data {
     NSMutableDictionary *keychainQuery = [self getKeychainQuery:service];
     SecItemDelete((__bridge CFDictionaryRef)keychainQuery);
-    [keychainQuery setObject:[NSKeyedArchiver archivedDataWithRootObject:data] forKey:(__bridge id)kSecValueData];
+    keychainQuery[(__bridge id)kSecValueData] = [NSKeyedArchiver archivedDataWithRootObject:data];
     SecItemAdd((__bridge CFDictionaryRef)keychainQuery, NULL);
 }
 
 + (id)load:(NSString *)service {
     id ret = nil;
     NSMutableDictionary *keychainQuery = [self getKeychainQuery:service];
-    [keychainQuery setObject:(id)kCFBooleanTrue forKey:(__bridge id)kSecReturnData];
-    [keychainQuery setObject:(__bridge id)kSecMatchLimitOne forKey:(__bridge id)kSecMatchLimit];
+    keychainQuery[(__bridge id)kSecReturnData] = (id)kCFBooleanTrue;
+    keychainQuery[(__bridge id)kSecMatchLimit] = (__bridge id)kSecMatchLimitOne;
     
     CFDataRef keyData = NULL;
     if (SecItemCopyMatching((__bridge  CFDictionaryRef)keychainQuery, (CFTypeRef *)&keyData) == noErr) {
