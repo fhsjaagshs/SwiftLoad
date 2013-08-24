@@ -71,7 +71,6 @@
 
 - (void)resetImage {
     [self loadImage:_theImageView.image];
-    self.zoomScale = self.minimumZoomScale;
 }
 
 - (instancetype)init {

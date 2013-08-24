@@ -204,7 +204,7 @@
 }
 
 - (void)previousImage {
-    [self.nextImg setEnabled:YES];
+    [_nextImg setEnabled:YES];
     
     NSArray *imageFiles = [self imageFiles];
     
@@ -219,7 +219,7 @@
     [_zoomingImageView loadImage:[UIImage imageWithContentsOfFile:newImagePath]];
 
     [kAppDelegate setOpenFile:newImagePath];
-    self.navBar.topItem.title = newImagePath.lastPathComponent;
+    _navBar.topItem.title = newImagePath.lastPathComponent;
 }
 
 - (void)imageViewWasDoubleTapped:(UIGestureRecognizer *)rec {
@@ -230,21 +230,27 @@
     }
 }
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-    // To Portrait
-    if (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication]statusBarOrientation])) {
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation)) {
         [_toolBar setHidden:NO];
         [_navBar setHidden:NO];
+    } else {
+        [_toolBar setHidden:YES];
+        [_navBar setHidden:YES];
+    }
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    if (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication]statusBarOrientation])) {
         [[UIApplication sharedApplication]setStatusBarHidden:NO];
         self.view.frame = [[UIScreen mainScreen]applicationFrame];
         _zoomingImageView.frame = CGRectMake(0, 44, self.view.bounds.size.width, self.view.bounds.size.height-88);
     } else {
-        [_toolBar setHidden:YES];
-        [_navBar setHidden:YES];
         [[UIApplication sharedApplication]setStatusBarHidden:YES];
         self.view.frame = [[UIScreen mainScreen]bounds];
         _zoomingImageView.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
     }
+    
     [_zoomingImageView resetImage];
 }
 
