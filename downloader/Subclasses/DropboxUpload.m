@@ -23,6 +23,7 @@
 - (instancetype)initWithFile:(NSString *)file {
     self = [super init];
     if (self) {
+        self.name = file.lastPathComponent;
         self.localPath = file;
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(dropboxAuthenticationSucceeded) name:@"db_auth_success" object:nil];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(dropboxAuthenticationFailed) name:@"db_auth_failure" object:nil];

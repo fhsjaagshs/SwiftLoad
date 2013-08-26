@@ -129,11 +129,7 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)copyFilesWithIsCut:(BOOL)isCut {
-    if (!_copiedList) {
-        self.copiedList = [NSMutableArray array];
-    } else {
-        [_copiedList removeAllObjects];
-    }
+    self.copiedList = [NSMutableArray array];
     
     self.isCut = isCut;
     
@@ -173,33 +169,23 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)pasteInLocation:(NSString *)location {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        @autoreleasepool {
+    
+    for (NSString *oldPath in _copiedList) {
+        NSString *newPath = getNonConflictingFilePathForPath([location stringByAppendingPathComponent:oldPath.lastPathComponent]);
         
-            NSFileManager *fm = [[NSFileManager alloc]init];
-            
-            for (NSString *oldPath in _copiedList) {
-                NSString *newPath = getNonConflictingFilePathForPath([location stringByAppendingPathComponent:[oldPath lastPathComponent]]);
-                
-                if (_isCut) {
-                    [fm moveItemAtPath:oldPath toPath:newPath error:nil];
-                    if ([oldPath isEqualToString:[kAppDelegate nowPlayingFile]]) {
-                        [kAppDelegate setNowPlayingFile:newPath];
-                    }
-                } else {
-                    [fm copyItemAtPath:oldPath toPath:newPath error:nil];
-                }
+        if (_isCut) {
+            [[NSFileManager defaultManager]moveItemAtPath:oldPath toPath:newPath error:nil];
+            if ([oldPath isEqualToString:[kAppDelegate nowPlayingFile]]) {
+                [kAppDelegate setNowPlayingFile:newPath];
             }
-            
-            [_copiedList removeAllObjects];
-
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                @autoreleasepool {
-                    [self updateCopyButtonState];
-                }
-            });
+        } else {
+            [[NSFileManager defaultManager]copyItemAtPath:oldPath toPath:newPath error:nil];
         }
-    });
+    }
+    
+    [_copiedList removeAllObjects];
+    
+    [self updateCopyButtonState];
 }
 
 - (void)showCopyPasteController {
@@ -284,34 +270,6 @@ static NSString *CellIdentifier = @"Cell";
     [[FilesystemMonitor sharedMonitor]startMonitoringDirectory:[kAppDelegate managerCurrentDir]];
 }
 
-- (void)showOptionsSheet:(id)sender {
-    UIActionSheet *as = [[UIActionSheet alloc]initWithTitle:nil completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-        if (buttonIndex == 0) {
-            [[[URLInputController alloc]initWithCompletionBlock:^(NSString *url) {
-                [kAppDelegate downloadFile:url];
-            }]show];
-        } else if (buttonIndex == 1) {
-            WebDAVViewController *advc = [WebDAVViewController viewController];
-            [self presentModalViewController:advc animated:YES];
-        } else if (buttonIndex == 2) {
-            DropboxBrowserViewController *d = [DropboxBrowserViewController viewController];
-            [self presentModalViewController:d animated:YES];
-        } else if (buttonIndex == 3) {
-            SFTPBrowserViewController *s = [SFTPBrowserViewController viewController];
-            [self presentModalViewController:s animated:YES];
-        } else if (buttonIndex == 4) {
-            SettingsView *d = [SettingsView viewController];
-            [self presentModalViewController:d animated:YES];
-        }
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download URL", @"WebDAV Server", @"Browse Dropbox", @"Browse SFTP", @"Settings", nil];
-    
-    as.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
-    
-    [as showFromBarButtonItem:sender animated:YES];
-    
-    [self removeSideSwipeView:NO];
-}
-
 - (BOOL)shouldTripWatchdog:(ContentOffsetWatchdog *)watchdog {
     
     if (_theTableView.editing) {
@@ -350,7 +308,7 @@ static NSString *CellIdentifier = @"Cell";
     NSIndexPath *indexPath = [_theTableView indexPathForRowAtPoint:correctedPoint];
     
     NSString *fileName = [_theTableView cellForRowAtIndexPath:indexPath].textLabel.text;
-    NSString *file = [[kAppDelegate managerCurrentDir] stringByAppendingPathComponent:fileName];
+    NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:fileName];
     
     [kAppDelegate setOpenFile:file];
 
@@ -653,7 +611,7 @@ static NSString *CellIdentifier = @"Cell";
         }
         
         if (!opened) {
-            [TransparentAlert showAlertWithTitle:@"No External Viewers" andMessage:[NSString stringWithFormat:@"No installed applications are capable of opening %@.",[file lastPathComponent]]];
+            [TransparentAlert showAlertWithTitle:@"No External Viewers" andMessage:[NSString stringWithFormat:@"No installed applications are capable of opening %@.",file.lastPathComponent]];
         }
     }
     [self removeSideSwipeView:YES];

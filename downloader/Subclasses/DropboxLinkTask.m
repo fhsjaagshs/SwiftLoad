@@ -23,6 +23,7 @@
 - (instancetype)initWithFilepath:(NSString *)filepath {
     self = [super init];
     if (self) {
+        self.name = filepath.lastPathComponent;
         self.filePath = filepath;
     }
     return self;
@@ -57,7 +58,7 @@
             [self showFailure];
         } else {
             [self showSuccess];
-            [[[TransparentAlert alloc]initWithTitle:[NSString stringWithFormat:@"Link For:\n%@",[path lastPathComponent]] message:link completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
+            [[[TransparentAlert alloc]initWithTitle:[NSString stringWithFormat:@"Link For:\n%@",path.lastPathComponent] message:link completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
                 if (buttonIndex == 1) {
                     [[UIPasteboard generalPasteboard]setString:alertView.message];
                 }

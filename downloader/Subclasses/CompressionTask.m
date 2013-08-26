@@ -142,14 +142,14 @@
                         }
                     }
                     
-                    NSMutableArray *holdingArray = [[NSMutableArray alloc]init];
+                    NSMutableArray *holdingArray = [NSMutableArray array];
                     
                     do {
                         for (NSString *dir in dirsInDir) {
                             
                             NSString *dirRelative = [dir stringByReplacingOccurrencesOfString:[currentDir stringByAppendingString:@"/"]withString:@""]; // gets current directory in zip
                             
-                            NSString *asdfasdf = [dirRelative substringFromIndex:[dirRelative length]-1];
+                            NSString *asdfasdf = [dirRelative substringFromIndex:dirRelative.length-1];
                             
                             if (![asdfasdf isEqualToString:@"/"]) {
                                 dirRelative = [dirRelative stringByAppendingString:@"/"];

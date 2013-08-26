@@ -75,45 +75,38 @@
                     [[NSFileManager defaultManager]createDirectoryAtPath:writeLocation withIntermediateDirectories:NO attributes:nil error:nil];
                 } else {
                     if (![[NSFileManager defaultManager]fileExistsAtPath:writeLocation]) {
-                        [[NSFileManager defaultManager]createFileAtPath:writeLocation contents:nil attributes:nil];
-                        
-                        NSFileHandle *file = [NSFileHandle fileHandleForWritingAtPath:writeLocation];
-                        
-                        ZipReadStream *read = [unzipFile readCurrentFileInZip];
-                        
-                        int buffSize = 1024*1024;
-                        
-                        NSMutableData *buffer = [[NSMutableData alloc]initWithLength:buffSize];
-                        do {
-                            [buffer setLength:buffSize];
-                            int bytesRead = [read readDataWithBuffer:buffer];
-                            if (bytesRead == 0) {
-                                break;
-                            } else {
-                                [buffer setLength:bytesRead];
-                                [file writeData:buffer];
-                                
-                                unachivedBytes = unachivedBytes+bytesRead;
-                                
-                                dispatch_sync(dispatch_get_main_queue(), ^{
-                                    @autoreleasepool {
-                                        [self.delegate setProgress:(unachivedBytes/filesize)];
-                                    }
-                                });
-                            }
-                        } while (YES);
-                        
-                        [file closeFile];
-                        [read finishedReading];
-                    } else {
-                        unachivedBytes = unachivedBytes+info.length;
-                        
-                        dispatch_sync(dispatch_get_main_queue(), ^{
-                            @autoreleasepool {
-                                [self.delegate setProgress:(unachivedBytes/filesize)];
-                            }
-                        });
+                        writeLocation = getNonConflictingFilePathForPath(writeLocation);
                     }
+                    
+                    [[NSFileManager defaultManager]createFileAtPath:writeLocation contents:nil attributes:nil];
+                    
+                    NSFileHandle *file = [NSFileHandle fileHandleForWritingAtPath:writeLocation];
+                    
+                    ZipReadStream *read = [unzipFile readCurrentFileInZip];
+                    
+                    NSMutableData *buffer = [NSMutableData data];
+                    do {
+                        [buffer setLength:1024*1024];
+                        
+                        int bytesRead = [read readDataWithBuffer:buffer];
+                        if (bytesRead == 0) {
+                            break;
+                        } else {
+                            [buffer setLength:bytesRead];
+                            [file writeData:buffer];
+                            
+                            unachivedBytes = unachivedBytes+bytesRead;
+                            
+                            dispatch_sync(dispatch_get_main_queue(), ^{
+                                @autoreleasepool {
+                                    [self.delegate setProgress:(unachivedBytes/filesize)];
+                                }
+                            });
+                        }
+                    } while (YES);
+                    
+                    [file closeFile];
+                    [read finishedReading];
                 }
             }
             [unzipFile close];
