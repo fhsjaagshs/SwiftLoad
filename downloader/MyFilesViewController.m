@@ -246,7 +246,32 @@ static NSString *CellIdentifier = @"Cell";
 - (void)reindexFilelist {
     if (_filelist.count == 0) {
         self.filelist = [NSMutableArray array];
-        [_filelist addObjectsFromArray:[[[NSFileManager defaultManager]contentsOfDirectoryAtPath:[kAppDelegate managerCurrentDir] error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)]];
+        
+        NSArray *all = [[NSFileManager defaultManager]contentsOfDirectoryAtPath:[kAppDelegate managerCurrentDir] error:nil];
+        
+        NSMutableArray *dirs = [NSMutableArray array];
+        NSMutableArray *files = [NSMutableArray array];
+        
+        NSString *currentDirectory = [kAppDelegate managerCurrentDir];
+        
+        for (NSString *filename in all) {
+            NSString *full = [currentDirectory stringByAppendingPathComponent:filename];
+            
+            BOOL isDir = NO;
+            [[NSFileManager defaultManager]fileExistsAtPath:full isDirectory:&isDir];
+            
+            if (isDir) {
+                [dirs addObject:filename];
+            } else {
+                [files addObject:filename];
+            }
+        }
+        
+        [_filelist addObjectsFromArray:dirs];
+        [_filelist addObjectsFromArray:files];
+        [_filelist sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+        
+        //[_filelist addObjectsFromArray:[[[NSFileManager defaultManager]contentsOfDirectoryAtPath:[kAppDelegate managerCurrentDir] error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)]];
     }
 }
 
