@@ -36,6 +36,7 @@
     _serverField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     _serverField.layer.borderWidth = 1.5;
     _serverField.layer.borderColor = [UIColor whiteColor].CGColor;
+    _serverField.layer.cornerRadius = 2;
     
     self.usernameField = [[UITextField alloc]init];
     _usernameField.keyboardAppearance = UIKeyboardAppearanceAlert;
@@ -52,6 +53,7 @@
     _usernameField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     _usernameField.layer.borderWidth = 1.5;
     _usernameField.layer.borderColor = [UIColor whiteColor].CGColor;
+    _usernameField.layer.cornerRadius = 2;
     
     self.passwordField = [[UITextField alloc]init];
     _passwordField.keyboardAppearance = UIKeyboardAppearanceAlert;
@@ -69,6 +71,7 @@
     _passwordField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     _passwordField.layer.borderWidth = 1.5;
     _passwordField.layer.borderColor = [UIColor whiteColor].CGColor;
+    _passwordField.layer.cornerRadius = 2;
     
     _serverField.text = [[NSUserDefaults standardUserDefaults]objectForKey:@"sftp.server_name"];
     _usernameField.text = [[NSUserDefaults standardUserDefaults]objectForKey:@"sftp.user_name"];

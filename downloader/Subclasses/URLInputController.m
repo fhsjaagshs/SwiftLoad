@@ -34,6 +34,7 @@
         _tv.layer.borderWidth = 1.5;
         _tv.layer.borderColor = [UIColor whiteColor].CGColor;
         _tv.opaque = YES;
+        _tv.layer.cornerRadius = 2;
         [_tv addTarget:self action:@selector(donePressed) forControlEvents:UIControlEventEditingDidEndOnExit];
 
         [self addSubview:_tv];
