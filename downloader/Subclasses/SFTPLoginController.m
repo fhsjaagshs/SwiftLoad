@@ -22,64 +22,64 @@
 
 - (void)setupTextViews {
     self.serverField = [[UITextField alloc]init];
-    [self.serverField setKeyboardAppearance:UIKeyboardAppearanceAlert];
-    [self.serverField setBorderStyle:UITextBorderStyleNone];
-    [self.serverField setBackgroundColor:[UIColor whiteColor]];
-    [self.serverField setReturnKeyType:UIReturnKeyNext];
-    [self.serverField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
-    [self.serverField setAutocorrectionType:UITextAutocorrectionTypeNo];
-    [self.serverField setPlaceholder:@"sftp://example.com/home/me/"];
-    [self.serverField setFont:[UIFont boldSystemFontOfSize:18]];
-    [self.serverField setAdjustsFontSizeToFitWidth:YES];
-    [self.serverField setDelegate:self];
-    [self.serverField setClearButtonMode:UITextFieldViewModeWhileEditing];
-    [_serverField.layer setBorderWidth:1.5f];
-    [_serverField.layer setBackgroundColor:[UIColor whiteColor].CGColor];
-    self.serverField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    _serverField.keyboardAppearance = UIKeyboardAppearanceAlert;
+    _serverField.borderStyle = UITextBorderStyleLine;
+    _serverField.backgroundColor = [UIColor whiteColor];
+    _serverField.returnKeyType = UIReturnKeyNext;
+    _serverField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    _serverField.autocorrectionType = UITextAutocorrectionTypeNo;
+    _serverField.placeholder = @"sftp://example.com/home/me/";
+    _serverField.font = [UIFont boldSystemFontOfSize:18];
+    _serverField.adjustsFontSizeToFitWidth = YES;
+    _serverField.delegate = self;
+    _serverField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    _serverField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    _serverField.layer.borderWidth = 1.5;
+    _serverField.layer.borderColor = [UIColor whiteColor].CGColor;
     
     self.usernameField = [[UITextField alloc]init];
-    [self.usernameField setKeyboardAppearance:UIKeyboardAppearanceAlert];
-    [self.usernameField setBorderStyle:UITextBorderStyleNone];
-    [self.usernameField setBackgroundColor:[UIColor whiteColor]];
-    [self.usernameField setReturnKeyType:UIReturnKeyNext];
-    [self.usernameField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
-    [self.usernameField setAutocorrectionType:UITextAutocorrectionTypeNo];
-    [self.usernameField setPlaceholder:@"Username"];
-    [self.usernameField setFont:[UIFont boldSystemFontOfSize:18]];
-    [self.usernameField setAdjustsFontSizeToFitWidth:YES];
-    self.usernameField.delegate = self;
-    self.usernameField.clearButtonMode = UITextFieldViewModeWhileEditing;
-    self.usernameField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    [_usernameField.layer setBorderWidth:1.5f];
-    [_usernameField.layer setBackgroundColor:[UIColor whiteColor].CGColor];
+    _usernameField.keyboardAppearance = UIKeyboardAppearanceAlert;
+    _usernameField.borderStyle = UITextBorderStyleLine;
+    _usernameField.backgroundColor = [UIColor whiteColor];
+    _usernameField.returnKeyType = UIReturnKeyNext;
+    _usernameField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    _usernameField.autocorrectionType = UITextAutocorrectionTypeNo;
+    _usernameField.placeholder = @"Username";
+    _usernameField.font = [UIFont boldSystemFontOfSize:18];
+    _usernameField.adjustsFontSizeToFitWidth = YES;
+    _usernameField.delegate = self;
+    _usernameField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    _usernameField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    _usernameField.layer.borderWidth = 1.5;
+    _usernameField.layer.borderColor = [UIColor whiteColor].CGColor;
     
     self.passwordField = [[UITextField alloc]init];
-    [self.passwordField setKeyboardAppearance:UIKeyboardAppearanceAlert];
-    [self.passwordField setBorderStyle:UITextBorderStyleNone];
-    [self.passwordField setBackgroundColor:[UIColor whiteColor]];
-    [self.passwordField setReturnKeyType:UIReturnKeyNext];
-    [self.passwordField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
-    [self.passwordField setAutocorrectionType:UITextAutocorrectionTypeNo];
-    [self.passwordField setPlaceholder:@"Password"];
-    [self.passwordField setFont:[UIFont boldSystemFontOfSize:18]];
-    [self.passwordField setAdjustsFontSizeToFitWidth:YES];
-    self.passwordField.secureTextEntry = YES;
-    self.passwordField.delegate = self;
-    self.passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
-    self.passwordField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    [_passwordField.layer setBorderWidth:1.5f];
-    [_passwordField.layer setBackgroundColor:[UIColor whiteColor].CGColor];
+    _passwordField.keyboardAppearance = UIKeyboardAppearanceAlert;
+    _passwordField.borderStyle = UITextBorderStyleLine;
+    _passwordField.backgroundColor = [UIColor whiteColor];
+    _passwordField.returnKeyType = UIReturnKeyDone;
+    _passwordField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    _passwordField.autocapitalizationType = UITextAutocorrectionTypeNo;
+    _passwordField.placeholder = @"Password";
+    _passwordField.font = [UIFont boldSystemFontOfSize:18];
+    _passwordField.adjustsFontSizeToFitWidth = YES;
+    _passwordField.secureTextEntry = YES;
+    _passwordField.delegate = self;
+    _passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    _passwordField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    _passwordField.layer.borderWidth = 1.5;
+    _passwordField.layer.borderColor = [UIColor whiteColor].CGColor;
     
-    self.serverField.text = [[NSUserDefaults standardUserDefaults]objectForKey:@"sftp.server_name"];
-    self.usernameField.text = [[NSUserDefaults standardUserDefaults]objectForKey:@"sftp.user_name"];
+    _serverField.text = [[NSUserDefaults standardUserDefaults]objectForKey:@"sftp.server_name"];
+    _usernameField.text = [[NSUserDefaults standardUserDefaults]objectForKey:@"sftp.user_name"];
     
-    [self.serverField addTarget:self action:@selector(moveOnServerField) forControlEvents:UIControlEventEditingDidEndOnExit];
-    [self.usernameField addTarget:self action:@selector(moveOnUsernameField) forControlEvents:UIControlEventEditingDidEndOnExit];
-    [self.passwordField addTarget:self.passwordField action:@selector(resignFirstResponder) forControlEvents:UIControlEventEditingDidEndOnExit];
+    [_serverField addTarget:self action:@selector(moveOnServerField) forControlEvents:UIControlEventEditingDidEndOnExit];
+    [_usernameField addTarget:self action:@selector(moveOnUsernameField) forControlEvents:UIControlEventEditingDidEndOnExit];
+    [_passwordField addTarget:self.passwordField action:@selector(resignFirstResponder) forControlEvents:UIControlEventEditingDidEndOnExit];
     
-    [self addSubview:self.serverField];
-    [self addSubview:self.usernameField];
-    [self addSubview:self.passwordField];
+    [self addSubview:_serverField];
+    [self addSubview:_usernameField];
+    [self addSubview:_passwordField];
 }
 
 - (id)initWithType:(SFTPLoginControllerType)type andCompletionHandler:(void (^)(NSString *username, NSString *password, NSString *url))block {
@@ -106,21 +106,19 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == alertView.firstOtherButtonIndex) {
-        [[NSUserDefaults standardUserDefaults]setObject:self.serverField.text forKey:@"sftp.server_name"];
-        [[NSUserDefaults standardUserDefaults]setObject:self.usernameField.text forKey:@"sftp.user_name"];
+        [[NSUserDefaults standardUserDefaults]setObject:_serverField.text forKey:@"sftp.server_name"];
+        [[NSUserDefaults standardUserDefaults]setObject:_usernameField.text forKey:@"sftp.user_name"];
         void (^block)(NSString *username, NSString *password, NSString *url) = objc_getAssociatedObject(self, "blockCallback");
-        block(self.usernameField.text, self.passwordField.text, self.serverField.text);
-        //Block_release(block);
+        block(_usernameField.text, _passwordField.text, _serverField.text);
     } else {
         void (^block)(NSString *username, NSString *password, NSString *url) = objc_getAssociatedObject(self, "blockCallback");
-        block(@"cancel", nil, self.serverField.text);
-      //  Block_release(block);
+        block(@"cancel", nil, _serverField.text);
     }
 }
 
 - (void)setUrl:(NSString *)url isPredefined:(BOOL)isPredef {
-    self.serverField.text = url;
-    [self.serverField setHidden:isPredef];
+    _serverField.text = url;
+    _serverField.hidden = isPredef;
     self.urlPredefined = isPredef;
     self.message = isPredef?@"\n\n\n":self.message;
 }
@@ -144,23 +142,20 @@
 - (void)show {
     [super show];
     
-    if (self.urlPredefined) {
+    if (_urlPredefined) {
+        [_usernameField becomeFirstResponder];
         
-        [self.usernameField becomeFirstResponder];
-        
-        if (self.usernameField.text.length > 0) {
+        if (_usernameField.text.length > 0) {
             [self moveOnUsernameField];
         }
-        
     } else {
+        [_serverField becomeFirstResponder];
         
-        [self.serverField becomeFirstResponder];
-        
-        if (self.serverField.text.length > 0) {
+        if (_serverField.text.length > 0) {
             [self moveOnServerField];
         }
         
-        if (self.usernameField.text.length > 0) {
+        if (_usernameField.text.length > 0) {
             [self moveOnUsernameField];
         }
     }
@@ -170,28 +165,28 @@
     [super layoutSubviews];
     
     if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication]statusBarOrientation])) {
-        if (self.urlPredefined) {
-            [self.serverField setHidden:YES];
-            self.usernameField.frame = CGRectMake(13, 35, 257, 30);
-            self.passwordField.frame = CGRectMake(13, 70, 257, 30);
+        if (_urlPredefined) {
+            _serverField.hidden = YES;
+            _usernameField.frame = CGRectMake(13, 35, 257, 30);
+            _passwordField.frame = CGRectMake(13, 70, 257, 30);
         } else {
-            [self.serverField setHidden:NO];
-            self.serverField.frame = CGRectMake(13, 30, 257, 25);
-            self.usernameField.frame = CGRectMake(13, 57, 257, 25);
-            self.passwordField.frame = CGRectMake(13, 84, 257, 25);
+            _serverField.hidden = NO;
+            _serverField.frame = CGRectMake(13, 30, 257, 25);
+            _usernameField.frame = CGRectMake(13, 57, 257, 25);
+            _passwordField.frame = CGRectMake(13, 84, 257, 25);
         }
     } else {
-        if (self.urlPredefined) {
-            [self.serverField setHidden:YES];
+        if (_urlPredefined) {
+            _serverField.hidden = YES;
+            _usernameField.frame = CGRectMake(13, 48, 257, 30);
+            _passwordField.frame = CGRectMake(13, 85, 257, 30);
             self.message = @"\n\n\n";
-            self.usernameField.frame = CGRectMake(13, 48, 257, 30);
-            self.passwordField.frame = CGRectMake(13, 85, 257, 30);
         } else {
-            [self.serverField setHidden:NO];
+            _serverField.hidden = NO;
+            _serverField.frame = CGRectMake(13, 48, 257, 30);
+            _usernameField.frame = CGRectMake(13, 85, 257, 30);
+            _passwordField.frame = CGRectMake(13, 122, 257, 30);
             self.message = @"\n\n\n\n\n";
-            self.serverField.frame = CGRectMake(13, 48, 257, 30);
-            self.usernameField.frame = CGRectMake(13, 85, 257, 30);
-            self.passwordField.frame = CGRectMake(13, 122, 257, 30);
         }
     }
     
@@ -204,7 +199,7 @@
         
         if ([view isKindOfClass:[UIControl class]] && ![view isKindOfClass:[UITextField class]]) {
             if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication]statusBarOrientation])) {
-                view.frame = CGRectMake(view.frame.origin.x+2.5, view.frame.origin.y+(self.urlPredefined?10:15), view.frame.size.width-5, 31);
+                view.frame = CGRectMake(view.frame.origin.x+2.5, view.frame.origin.y+(_urlPredefined?10:15), view.frame.size.width-5, 31);
             } else {
                 view.frame = CGRectMake(view.frame.origin.x+2.5, view.frame.origin.y, view.frame.size.width-5, 37);
             }
@@ -213,24 +208,24 @@
 }
 
 - (void)moveOnServerField {
-    if ([self.serverField isFirstResponder]) {
-        [self.serverField resignFirstResponder];
+    if ([_serverField isFirstResponder]) {
+        [_serverField resignFirstResponder];
     }
-    [self.usernameField becomeFirstResponder];
+    [_usernameField becomeFirstResponder];
     
-    if (self.textFieldDelegate && [self.textFieldDelegate respondsToSelector:self.didMoveOnSelector]) {
+    if (_textFieldDelegate && [_textFieldDelegate respondsToSelector:_didMoveOnSelector]) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        [self.textFieldDelegate performSelector:self.didMoveOnSelector withObject:self];
+        [_textFieldDelegate performSelector:_didMoveOnSelector withObject:self];
 #pragma clang diagnostic pop
     }
 }
 
 - (void)moveOnUsernameField {
-    if ([self.usernameField isFirstResponder]) {
-        [self.usernameField resignFirstResponder];
+    if ([_usernameField isFirstResponder]) {
+        [_usernameField resignFirstResponder];
     }
-    [self.passwordField becomeFirstResponder];
+    [_passwordField becomeFirstResponder];
 }
 
 - (void)dealloc {
