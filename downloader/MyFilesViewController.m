@@ -267,9 +267,11 @@ static NSString *CellIdentifier = @"Cell";
             }
         }
         
+        [dirs sortUsingSelector:@selector(caseInsensitiveCompare:)];
+        [files sortUsingSelector:@selector(caseInsensitiveCompare:)];
+        
         [_filelist addObjectsFromArray:dirs];
         [_filelist addObjectsFromArray:files];
-        [_filelist sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
         
         //[_filelist addObjectsFromArray:[[[NSFileManager defaultManager]contentsOfDirectoryAtPath:[kAppDelegate managerCurrentDir] error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)]];
     }
