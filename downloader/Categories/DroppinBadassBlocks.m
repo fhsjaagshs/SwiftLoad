@@ -48,7 +48,6 @@ static char const * const loadAccountInfoBlockKey = "laick";
 
 
 @interface DroppinBadassBlocks () <DBRestClientDelegate>
-+ (instancetype)sharedInstance;
 + (id)uploadBlock;
 + (void)setUploadBlock:(id)newblock;
 + (id)uploadProgressBlock;
@@ -294,7 +293,27 @@ static char const * const loadAccountInfoBlockKey = "laick";
 // Cancellation
 //
 
-+ (float)cancel {
++ (BOOL)cancelShareableLinkLoadWithDropboxPath:(NSString *)dbPath {
+    return [[DroppinBadassBlocks sharedInstance]cancelSharableLinkLoadWithDropboxPath:dbPath];
+}
+
++ (BOOL)cancelDownloadWithDropboxPath:(NSString *)dbPath {
+    return [[DroppinBadassBlocks sharedInstance]cancelDownloadWithDropboxPath:dbPath];
+}
+
++ (BOOL)cancelUploadWithDropboxPath:(NSString *)dbPath {
+    return [[DroppinBadassBlocks sharedInstance]cancelUploadWithDropboxPath:dbPath];
+}
+
++ (int)cancelAllDownloads {
+    return [[DroppinBadassBlocks sharedInstance]cancelAllDownloads];
+}
+
++ (int)cancelAllMiscRequests {
+    return [[DroppinBadassBlocks sharedInstance]cancelAllMiscRequests];
+}
+
++ (int)cancel {
     float requestCount = [[DroppinBadassBlocks sharedInstance]requestCount];
     [[DroppinBadassBlocks sharedInstance]cancelAllRequests];
     return requestCount;

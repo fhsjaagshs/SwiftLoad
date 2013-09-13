@@ -31,6 +31,7 @@
 
 - (void)stop {
     [[NetworkActivityController sharedController]hideIfPossible];
+    [DroppinBadassBlocks cancelShareableLinkLoadWithDropboxPath:_filePath];
     [super stop];
 }
 

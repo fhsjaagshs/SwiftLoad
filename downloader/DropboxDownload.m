@@ -30,14 +30,13 @@
 }
 
 - (void)stop {
-    [DroppinBadassBlocks cancel];
+    [DroppinBadassBlocks cancelDownloadWithDropboxPath:_path];
     [super stop];
 }
 
 - (void)start {
     [super start];
     self.temporaryPath = getNonConflictingFilePathForPath([NSTemporaryDirectory() stringByAppendingPathComponent:self.name]);
-    NSLog(@"%@",_path);
     [DroppinBadassBlocks loadFile:_path intoPath:self.temporaryPath withCompletionBlock:^(DBMetadata *metadata, NSError *error) {
         NSLog(@"It finished");
         if (error) {

@@ -32,7 +32,7 @@
 }
 
 - (void)stop {
-    [DroppinBadassBlocks cancel];
+    [DroppinBadassBlocks cancelUploadWithDropboxPath:[@"/" stringByAppendingPathComponent:_localPath.lastPathComponent]];
     [super stop];
 }
 
