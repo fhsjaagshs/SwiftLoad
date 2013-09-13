@@ -10,6 +10,12 @@
 
 @implementation CustomVolumeView
 
+- (UIImage *)routeButtonImageForState:(UIControlState)state {
+    NSLog(@"Done it");
+    UIImage *image = [super routeButtonImageForState:state];
+    return [image imageFilledWith:[UIColor colorWithRed:124.0f/255.0f green:54.0f/255.0f blue:153.0f/255.0f alpha:0.0f]];
+}
+
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {

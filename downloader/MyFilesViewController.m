@@ -134,9 +134,8 @@ static NSString *CellIdentifier = @"Cell";
     self.isCut = isCut;
     
     for (NSIndexPath *indexPath in _theTableView.indexPathsForSelectedRows) {
-        [_theTableView cellForRowAtIndexPath:indexPath].selected = NO;
-        NSString *filename = _filelist[indexPath.row];
-        NSString *currentPath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:filename];
+        [_theTableView deselectRowAtIndexPath:indexPath animated:YES];
+        NSString *currentPath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:_filelist[indexPath.row]];
         [_copiedList addObject:currentPath];
     }
 }
@@ -243,7 +242,7 @@ static NSString *CellIdentifier = @"Cell";
     _theCopyAndPasteButton.hidden = !shouldUnhide;
 }
 
-- (void)reindexFilelist {
+- (void)reindexFilelistIfNecessary {
     if (_filelist.count == 0) {
         self.filelist = [NSMutableArray array];
         
@@ -325,7 +324,7 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    [self reindexFilelist];
+    [self reindexFilelistIfNecessary];
     return _filelist.count;
 }
 
@@ -333,9 +332,7 @@ static NSString *CellIdentifier = @"Cell";
     UIButton *button = (UIButton *)sender;
     CGPoint correctedPoint = [button convertPoint:button.bounds.origin toView:_theTableView];
     NSIndexPath *indexPath = [_theTableView indexPathForRowAtPoint:correctedPoint];
-    
-    NSString *fileName = [_theTableView cellForRowAtIndexPath:indexPath].textLabel.text;
-    NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:fileName];
+    NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:_filelist[indexPath.row]];
     
     [kAppDelegate setOpenFile:file];
 
@@ -346,7 +343,7 @@ static NSString *CellIdentifier = @"Cell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    [self reindexFilelist];
+    [self reindexFilelistIfNecessary];
     
     SwiftLoadCell *cell = (SwiftLoadCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
@@ -423,9 +420,10 @@ static NSString *CellIdentifier = @"Cell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     AppDelegate *ad = kAppDelegate;
-    UITableViewCell *cell = [_theTableView cellForRowAtIndexPath:indexPath];
-
-    NSString *file = [ad.managerCurrentDir stringByAppendingPathComponent:cell.textLabel.text];
+    
+    NSString *cellName = _filelist[indexPath.row];
+    
+    NSString *file = [ad.managerCurrentDir stringByAppendingPathComponent:cellName];
     ad.openFile = file;
 
     BOOL isDir;
@@ -444,7 +442,7 @@ static NSString *CellIdentifier = @"Cell";
         
     } else if ([[[file pathExtension]lowercaseString]isEqualToString:@"zip"]) {
         
-        UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@",cell.textLabel.text] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+        UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",cellName] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             
             NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
             
@@ -491,9 +489,9 @@ static NSString *CellIdentifier = @"Cell";
             textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
             [self presentModalViewController:textEditor animated:YES];
         } else if ([MIMEUtils isVideoFile:file]) {
-            moviePlayerView *mpv = [moviePlayerView viewController];
-            mpv.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-            [self presentModalViewController:mpv animated:YES];
+            MoviePlayerViewController *moviePlayer = [MoviePlayerViewController viewController];
+            moviePlayer.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+            [self presentModalViewController:moviePlayer animated:YES];
         } else if ([MIMEUtils isDocumentFile:file] || isHTML) {
             MyFilesViewDetailViewController *detail = [MyFilesViewDetailViewController viewController];
             detail.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
@@ -539,7 +537,7 @@ static NSString *CellIdentifier = @"Cell";
     if (_theTableView.editing) {
         return YES;
     } else {
-        [self reindexFilelist];
+        [self reindexFilelistIfNecessary];
         NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:_filelist[indexPath.row]];
         BOOL isDir;
         return ([[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir] && isDir);
@@ -548,7 +546,7 @@ static NSString *CellIdentifier = @"Cell";
 
 - (void)editTable {
     [self removeSideSwipeView:NO];
-    [self reindexFilelist];
+    [self reindexFilelistIfNecessary];
     
     [_theTableView.visibleCells makeObjectsPerformSelector:@selector(hideImageView:) withObject:_theTableView.editing?(id)0:((id)kCFBooleanTrue)];
     
@@ -568,26 +566,25 @@ static NSString *CellIdentifier = @"Cell";
     
     if (_theTableView.editing) {
         return UITableViewCellEditingStyleNone;
-    } else {
-        [self reindexFilelist];
-        
-        NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:_filelist[indexPath.row]];
-        
-        BOOL isDir;
-        [[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir];
-        
-        if (isDir) {
-            [self removeSideSwipeView:YES];
-            return UITableViewCellEditingStyleDelete;
-        }
-        return UITableViewCellEditingStyleNone;
     }
+
+    [self reindexFilelistIfNecessary];
+    
+    NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:_filelist[indexPath.row]];
+    
+    BOOL isDir;
+    [[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir];
+    
+    if (isDir) {
+        [self removeSideSwipeView:YES];
+        return UITableViewCellEditingStyleDelete;
+    }
+    return UITableViewCellEditingStyleNone;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        NSString *cellName = [_theTableView cellForRowAtIndexPath:indexPath].textLabel.text;
-        NSString *removePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:cellName];
+        NSString *removePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:_filelist[indexPath.row]];
         
         [_theTableView beginUpdates];
         [_theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
@@ -609,11 +606,10 @@ static NSString *CellIdentifier = @"Cell";
         textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
         [self presentModalViewController:textEditor animated:YES];
     } else if (buttonIndex == 1) {
-        moviePlayerView *textEditor = [moviePlayerView viewController];
-        textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-        [self presentModalViewController:textEditor animated:YES];
+        MoviePlayerViewController *moviePlayer = [MoviePlayerViewController viewController];
+        moviePlayer.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+        [self presentModalViewController:moviePlayer animated:YES];
     } else if (buttonIndex == 2) {
-        [self presentModalViewController:[PictureViewController viewController] animated:YES];
         PictureViewController *pView = [PictureViewController viewController];
         pView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
         [self presentModalViewController:pView animated:YES];
@@ -811,6 +807,11 @@ static NSString *CellIdentifier = @"Cell";
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     [self removeSideSwipeView:YES];
+    [(Hack *)[UIApplication sharedApplication]setShouldWatchTouches:YES];
+}
+
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
+    [(Hack *)[UIApplication sharedApplication]setShouldWatchTouches:NO];
 }
 
 - (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView {
@@ -861,12 +862,6 @@ static NSString *CellIdentifier = @"Cell";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     [_theTableView flashScrollIndicators];
-    [(Hack *)[UIApplication sharedApplication]setShouldWatchTouches:YES];
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    [(Hack *)[UIApplication sharedApplication]setShouldWatchTouches:NO];
 }
 
 - (NSUInteger)supportedInterfaceOrientations {

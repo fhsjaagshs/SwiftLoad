@@ -99,7 +99,7 @@
     #import "AudioPlayerViewController.h"
     #import "PictureViewController.h"
     #import "TextEditorViewController.h"
-    #import "moviePlayerView.h"
+    #import "MoviePlayerViewController.h"
     #import "fileInfo.h"
     #import "webDAVViewController.h"
     #import "MyFilesViewController.h"

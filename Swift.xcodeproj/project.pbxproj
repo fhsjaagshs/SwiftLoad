@@ -70,7 +70,7 @@
 		F145023E1781243000096202 /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = F145023C1781243000096202 /* arrow.png */; };
 		F145023F1781243000096202 /* arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F145023D1781243000096202 /* arrow@2x.png */; };
 		F149A6781491686D0038F1FC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F149A6771491686D0038F1FC /* AudioToolbox.framework */; };
-		F149A685149176E60038F1FC /* moviePlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F149A683149176E60038F1FC /* moviePlayerView.m */; };
+		F149A685149176E60038F1FC /* MoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F149A683149176E60038F1FC /* MoviePlayerViewController.m */; };
 		F14B81971788C39E00ADEF99 /* UIButton+SwiftLoad.m in Sources */ = {isa = PBXBuildFile; fileRef = F14B81961788C39E00ADEF99 /* UIButton+SwiftLoad.m */; };
 		F14B819A1788D26500ADEF99 /* SFTPDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = F14B81991788D26500ADEF99 /* SFTPDownload.m */; };
 		F14B819D1788E2D300ADEF99 /* SimpleKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = F14B819C1788E2D300ADEF99 /* SimpleKeychain.m */; };
@@ -353,8 +353,8 @@
 		F145023C1781243000096202 /* arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow.png; sourceTree = "<group>"; };
 		F145023D1781243000096202 /* arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow@2x.png"; sourceTree = "<group>"; };
 		F149A6771491686D0038F1FC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		F149A682149176E60038F1FC /* moviePlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = moviePlayerView.h; sourceTree = "<group>"; };
-		F149A683149176E60038F1FC /* moviePlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = moviePlayerView.m; sourceTree = "<group>"; };
+		F149A682149176E60038F1FC /* MoviePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoviePlayerViewController.h; sourceTree = "<group>"; };
+		F149A683149176E60038F1FC /* MoviePlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoviePlayerViewController.m; sourceTree = "<group>"; };
 		F14B81951788C39E00ADEF99 /* UIButton+SwiftLoad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+SwiftLoad.h"; sourceTree = "<group>"; };
 		F14B81961788C39E00ADEF99 /* UIButton+SwiftLoad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+SwiftLoad.m"; sourceTree = "<group>"; };
 		F14B81981788D26500ADEF99 /* SFTPDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SFTPDownload.h; path = ../SFTPDownload.h; sourceTree = "<group>"; };
@@ -794,8 +794,8 @@
 				F11FE415145F8218008ECC7E /* TextEditorViewController.m */,
 				F144457E145A04A30026CDB7 /* PictureViewController.h */,
 				F144457F145A04A30026CDB7 /* PictureViewController.m */,
-				F149A682149176E60038F1FC /* moviePlayerView.h */,
-				F149A683149176E60038F1FC /* moviePlayerView.m */,
+				F149A682149176E60038F1FC /* MoviePlayerViewController.h */,
+				F149A683149176E60038F1FC /* MoviePlayerViewController.m */,
 				F15277CE13F4B08800338673 /* MyFilesViewDetailViewController.h */,
 				F15277CF13F4B08800338673 /* MyFilesViewDetailViewController.m */,
 				F119CF0613F46DA6007D67E4 /* AppDelegate.h */,
@@ -1452,7 +1452,7 @@
 				F17F11231420017100CE45D7 /* fileInfo.m in Sources */,
 				F1444581145A04A30026CDB7 /* PictureViewController.m in Sources */,
 				F11FE417145F8218008ECC7E /* TextEditorViewController.m in Sources */,
-				F149A685149176E60038F1FC /* moviePlayerView.m in Sources */,
+				F149A685149176E60038F1FC /* MoviePlayerViewController.m in Sources */,
 				F166BBC414E2171A003E5A07 /* WebDAVViewController.m in Sources */,
 				F1B2489014E333E300C44E11 /* webDAVHelp.m in Sources */,
 				9BFF29FA15387C67007ED9B1 /* ioapi.c in Sources */,

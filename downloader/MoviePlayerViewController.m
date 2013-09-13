@@ -6,9 +6,9 @@
 //  Copyright 2011 Nathaniel Symer. All rights reserved.
 // 
 
-#import "moviePlayerView.h"
+#import "MoviePlayerViewController.h"
 
-@interface moviePlayerView ()
+@interface MoviePlayerViewController ()
 
 @property (nonatomic, assign) BOOL shouldUnpauseAudioPlayer;
 @property (nonatomic, strong) NSURL *streamingUrl;
@@ -18,10 +18,10 @@
 
 @end
 
-@implementation moviePlayerView
+@implementation MoviePlayerViewController
 
 + (void)showMoviePlayerWithURL:(NSURL *)url {
-    moviePlayerView *vc = [moviePlayerView viewController];
+    MoviePlayerViewController *vc = [MoviePlayerViewController viewController];
     vc.streamingUrl = url;
     [vc presentModalViewController:vc animated:YES];
 }

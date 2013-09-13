@@ -549,8 +549,8 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
                 TextEditorViewController *textEditor = [TextEditorViewController viewController];
                 [controller presentModalViewController:textEditor animated:YES];
             } else if ([MIMEUtils isVideoFile:file]) {
-                moviePlayerView *mpv = [moviePlayerView viewController];
-                [controller presentModalViewController:mpv animated:YES];
+                MoviePlayerViewController *moviePlayer = [MoviePlayerViewController viewController];
+                [controller presentModalViewController:moviePlayer animated:YES];
             } else if ([MIMEUtils isDocumentFile:file] || isHTML) {
                 MyFilesViewDetailViewController *detail = [MyFilesViewDetailViewController viewController];
                 [controller presentModalViewController:detail animated:YES];
