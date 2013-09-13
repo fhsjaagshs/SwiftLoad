@@ -24,6 +24,8 @@ assert(6 == [Foo count:4]);*/
 #import <DropboxSDK/DBRestClient.h>
 #import <objc/runtime.h>
 
+static NSString * const RequestIdentifiersStringKey = @"risk";
+
 static NSString * const MetadataBlockStringKey = @"mbsk";
 static NSString * const DownloadProgressBlockStringKey = @"dbsk-1";
 static NSString * const DownloadBlockStringKey = @"dbsk";
@@ -32,6 +34,8 @@ static NSString * const DeltaBlockStringKey = @"dbsk";
 static NSString * const UploadBlockStringKey = @"ubsk";
 static NSString * const UploadProgressBlockStringKey = @"ubsk-1";
 static NSString * const loadAccountInfoBlockStringKey = @"laicsk";
+
+static char const * const RequestIdentifiersKey = "rik";
 
 static char const * const MetadataBlockKey = "mbk";
 static char const * const DownloadProgressBlockKey = "dbsk-1";
@@ -65,7 +69,7 @@ static char const * const loadAccountInfoBlockKey = "laick";
 
 @implementation DroppinBadassBlocks
 
-+ (instancetype)sharedInstance {
++ (DroppinBadassBlocks *)sharedInstance {
     static DroppinBadassBlocks *shared = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -74,6 +78,14 @@ static char const * const loadAccountInfoBlockKey = "laick";
     });
     
     return shared;
+}
+
++ (id)requestIdentifiers {
+    return objc_getAssociatedObject(RequestIdentifiersStringKey, RequestIdentifiersKey);
+}
+
++ (void)setRequestIdentifiers:(id)newObject {
+    objc_setAssociatedObject(RequestIdentifiersStringKey, RequestIdentifiersKey, newObject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 + (id)uploadBlock {
@@ -283,7 +295,6 @@ static char const * const loadAccountInfoBlockKey = "laick";
 //
 
 + (float)cancel {
-    NSLog(@"asdfasdfasdfasdf");
     float requestCount = [[DroppinBadassBlocks sharedInstance]requestCount];
     [[DroppinBadassBlocks sharedInstance]cancelAllRequests];
     return requestCount;

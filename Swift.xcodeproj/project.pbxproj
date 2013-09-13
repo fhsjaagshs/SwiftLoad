@@ -184,6 +184,7 @@
 		F1BC30CA17715DF300DAFA0A /* Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BC30C917715DF300DAFA0A /* Hack.m */; };
 		F1BE07E4176F7A1100C4F038 /* Download.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BE07E3176F7A1100C4F038 /* Download.m */; };
 		F1C0CEFC1661AEC6001B1B42 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F1C0CEFB1661AEC6001B1B42 /* libz.1.2.5.dylib */; };
+		F1C4463017E3510C004725FC /* DBRestClient+SpecificCancellation.m in Sources */ = {isa = PBXBuildFile; fileRef = F1C4462F17E3510C004725FC /* DBRestClient+SpecificCancellation.m */; };
 		F1C7A6B716E8178F0082D4D3 /* ZoomingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1C7A6B616E8178F0082D4D3 /* ZoomingImageView.m */; };
 		F1CB7DAE16FFE99A002693B5 /* SFTPLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CB7DAD16FFE99A002693B5 /* SFTPLoginController.m */; };
 		F1CBF07917BA7667003563FD /* EditID3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CBF07717BA7667003563FD /* EditID3ViewController.m */; };
@@ -543,6 +544,8 @@
 		F1BE07E2176F7A1100C4F038 /* Download.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Download.h; path = ../Download.h; sourceTree = "<group>"; };
 		F1BE07E3176F7A1100C4F038 /* Download.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Download.m; path = ../Download.m; sourceTree = "<group>"; };
 		F1C0CEFB1661AEC6001B1B42 /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
+		F1C4462E17E3510C004725FC /* DBRestClient+SpecificCancellation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBRestClient+SpecificCancellation.h"; sourceTree = "<group>"; };
+		F1C4462F17E3510C004725FC /* DBRestClient+SpecificCancellation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DBRestClient+SpecificCancellation.m"; sourceTree = "<group>"; };
 		F1C7A6B516E8178F0082D4D3 /* ZoomingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoomingImageView.h; sourceTree = "<group>"; };
 		F1C7A6B616E8178F0082D4D3 /* ZoomingImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoomingImageView.m; sourceTree = "<group>"; };
 		F1CB7DAC16FFE99A002693B5 /* SFTPLoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFTPLoginController.h; sourceTree = "<group>"; };
@@ -956,6 +959,8 @@
 				F1434B3D179B21C1001A672C /* UITableView+CoolRefresh.m */,
 				F1B1C1E817B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.h */,
 				F1B1C1E917B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.m */,
+				F1C4462E17E3510C004725FC /* DBRestClient+SpecificCancellation.h */,
+				F1C4462F17E3510C004725FC /* DBRestClient+SpecificCancellation.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -1570,6 +1575,7 @@
 				F1CBF07D17BA7710003563FD /* TransparentTextField.m in Sources */,
 				F1E2133D17BB154A0073FA82 /* WatchdogWindow.m in Sources */,
 				F1D083A517BEFE00003E6700 /* CustomVolumeView.m in Sources */,
+				F1C4463017E3510C004725FC /* DBRestClient+SpecificCancellation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

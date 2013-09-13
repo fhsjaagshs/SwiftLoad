@@ -404,6 +404,7 @@ static NSString *CellIdentifier = @"dbcell";
 
 - (void)close {
     self.shouldStopLoading = YES;
+    [[DroppinBadassBlocks sharedInstance]cancelAllMiscRequests];
     [self dismissModalViewControllerAnimated:YES];
 }
 

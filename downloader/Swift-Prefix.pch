@@ -29,6 +29,7 @@
     #import "UIImage+Additions.h"
     #import "UITableView+CoolRefresh.h"
     #import "MarqueeLabel+LabelizeIfNecessary.h"
+    #import "DBRestClient+SpecificCancellation.h"
 
     #import "Hamburger.h"
 

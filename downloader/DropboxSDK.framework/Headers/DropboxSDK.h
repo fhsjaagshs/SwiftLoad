@@ -9,6 +9,7 @@
 
 /* Import this file to get the most important header files imported */
 #import "DBAccountInfo.h"
+#import "DBDeltaEntry.h"
 #import "DBSession.h"
 #import "DBRestClient.h"
 #import "DBRequest.h"
@@ -16,6 +17,5 @@
 #import "DBQuota.h"
 #import "DBError.h"
 #import "NSString+Dropbox.h"
-#import "DBDeltaEntry.h"
 
 #import "DBSession+iOS.h"
