@@ -74,6 +74,7 @@
 		F14B81971788C39E00ADEF99 /* UIButton+SwiftLoad.m in Sources */ = {isa = PBXBuildFile; fileRef = F14B81961788C39E00ADEF99 /* UIButton+SwiftLoad.m */; };
 		F14B819A1788D26500ADEF99 /* SFTPDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = F14B81991788D26500ADEF99 /* SFTPDownload.m */; };
 		F14B819D1788E2D300ADEF99 /* SimpleKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = F14B819C1788E2D300ADEF99 /* SimpleKeychain.m */; };
+		F14FE92517E3FC07005A1AB6 /* TextToggleControl.m in Sources */ = {isa = PBXBuildFile; fileRef = F14FE92417E3FC07005A1AB6 /* TextToggleControl.m */; };
 		F150D6B2177F5B9400E4C094 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F150D6B1177F5B9400E4C094 /* libsqlite3.dylib */; };
 		F150D6BF177F783E00E4C094 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = F150D6B5177F783E00E4C094 /* FMDatabase.m */; };
 		F150D6C0177F783E00E4C094 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F150D6B7177F783E00E4C094 /* FMDatabaseAdditions.m */; };
@@ -85,7 +86,6 @@
 		F15507D9176EB04D0024FF03 /* delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F15507D8176EB04D0024FF03 /* delete@2x.png */; };
 		F15507DC176EB0A90024FF03 /* dropbox@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F15507DA176EB0A90024FF03 /* dropbox@2x.png */; };
 		F15507DD176EB0A90024FF03 /* paperclip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F15507DB176EB0A90024FF03 /* paperclip@2x.png */; };
-		F1564AEC17765B4300E53B42 /* ToggleControl.m in Sources */ = {isa = PBXBuildFile; fileRef = F1564AEB17765B4300E53B42 /* ToggleControl.m */; };
 		F163C4E617AB508D007AB612 /* DashedLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = F163C4E517AB508D007AB612 /* DashedLineView.m */; };
 		F163C4E917AB59B1007AB612 /* CircularProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = F163C4E817AB59B1007AB612 /* CircularProgressView.m */; };
 		F165C3E816E44244004B81F1 /* clipboard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F165C3E716E44244004B81F1 /* clipboard@2x.png */; };
@@ -361,6 +361,8 @@
 		F14B81991788D26500ADEF99 /* SFTPDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SFTPDownload.m; path = ../SFTPDownload.m; sourceTree = "<group>"; };
 		F14B819B1788E2D300ADEF99 /* SimpleKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleKeychain.h; sourceTree = "<group>"; };
 		F14B819C1788E2D300ADEF99 /* SimpleKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleKeychain.m; sourceTree = "<group>"; };
+		F14FE92317E3FC07005A1AB6 /* TextToggleControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextToggleControl.h; sourceTree = "<group>"; };
+		F14FE92417E3FC07005A1AB6 /* TextToggleControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextToggleControl.m; sourceTree = "<group>"; };
 		F150D6B1177F5B9400E4C094 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		F150D6B4177F783E00E4C094 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
 		F150D6B5177F783E00E4C094 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
@@ -377,8 +379,6 @@
 		F15507D8176EB04D0024FF03 /* delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "delete@2x.png"; path = "Images/delete@2x.png"; sourceTree = "<group>"; };
 		F15507DA176EB0A90024FF03 /* dropbox@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "dropbox@2x.png"; path = "Images/dropbox@2x.png"; sourceTree = "<group>"; };
 		F15507DB176EB0A90024FF03 /* paperclip@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "paperclip@2x.png"; path = "Images/paperclip@2x.png"; sourceTree = "<group>"; };
-		F1564AEA17765B4300E53B42 /* ToggleControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToggleControl.h; sourceTree = "<group>"; };
-		F1564AEB17765B4300E53B42 /* ToggleControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToggleControl.m; sourceTree = "<group>"; };
 		F163C4E417AB508D007AB612 /* DashedLineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashedLineView.h; sourceTree = "<group>"; };
 		F163C4E517AB508D007AB612 /* DashedLineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DashedLineView.m; sourceTree = "<group>"; };
 		F163C4E717AB59B1007AB612 /* CircularProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircularProgressView.h; sourceTree = "<group>"; };
@@ -832,8 +832,8 @@
 				F1CBF07C17BA7710003563FD /* TransparentTextField.m */,
 				F1E9F7841773FDF300EC345C /* DisclosureButton.h */,
 				F1E9F7851773FDF300EC345C /* DisclosureButton.m */,
-				F1564AEA17765B4300E53B42 /* ToggleControl.h */,
-				F1564AEB17765B4300E53B42 /* ToggleControl.m */,
+				F14FE92317E3FC07005A1AB6 /* TextToggleControl.h */,
+				F14FE92417E3FC07005A1AB6 /* TextToggleControl.m */,
 				F1D083A317BEFE00003E6700 /* CustomVolumeView.h */,
 				F1D083A417BEFE00003E6700 /* CustomVolumeView.m */,
 				F1693C6016DFAC59006E3739 /* MBProgressHUD.h */,
@@ -1491,7 +1491,6 @@
 				F1798EAF1774177400310C37 /* ShadowedNavBar.m in Sources */,
 				F1798EB2177417CF00310C37 /* ShadowedToolbar.m in Sources */,
 				F1178B6F1775245400337813 /* TransparentAlert.m in Sources */,
-				F1564AEC17765B4300E53B42 /* ToggleControl.m in Sources */,
 				F150D6BF177F783E00E4C094 /* FMDatabase.m in Sources */,
 				F150D6C0177F783E00E4C094 /* FMDatabaseAdditions.m in Sources */,
 				F150D6C2177F783E00E4C094 /* FMDatabaseQueue.m in Sources */,
@@ -1576,6 +1575,7 @@
 				F1E2133D17BB154A0073FA82 /* WatchdogWindow.m in Sources */,
 				F1D083A517BEFE00003E6700 /* CustomVolumeView.m in Sources */,
 				F1C4463017E3510C004725FC /* DBRestClient+SpecificCancellation.m in Sources */,
+				F14FE92517E3FC07005A1AB6 /* TextToggleControl.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -50,7 +50,7 @@
     #import "CircularProgressView.h"
     #import "TransparentAlert.h"
     #import "TransparentTextField.h"
-    #import "ToggleControl.h"
+    #import "TextToggleControl.h"
     #import "DisclosureButton.h"
     #import "ShadowedNavBar.h"
     #import "ShadowedToolBar.h"

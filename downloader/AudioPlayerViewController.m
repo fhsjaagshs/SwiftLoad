@@ -28,7 +28,7 @@
 @property (nonatomic, strong) UISlider *time;
 @property (nonatomic, strong) ShadowedNavBar *navBar;
 
-@property (nonatomic, strong) ToggleControl *loopControl;
+@property (nonatomic, strong) TextToggleControl *loopControl;
 
 @property (nonatomic, strong) UIActionSheet *popupQuery;
 
@@ -90,7 +90,7 @@
     _albumLabel.font = [UIFont systemFontOfSize:15];
     [self.view addSubview:_albumLabel];
     
-    self.secondsElapsed = [[UILabel alloc]initWithFrame:CGRectMake(0, 114+10, 44, 23)];
+    self.secondsElapsed = [[UILabel alloc]initWithFrame:CGRectMake(0, 114+5, 44, 23)];
     _secondsElapsed.font = [UIFont boldSystemFontOfSize:15];
     _secondsElapsed.textColor = [UIColor blackColor];
     _secondsElapsed.backgroundColor = [UIColor clearColor];
@@ -98,7 +98,7 @@
     _secondsElapsed.text = @"0:00";
     [self.view addSubview:_secondsElapsed];
     
-    self.time = [[UISlider alloc]initWithFrame:CGRectMake(44, 114+10, screenBounds.size.width-88, 23)];
+    self.time = [[UISlider alloc]initWithFrame:CGRectMake(44, 114+5, screenBounds.size.width-88, 23)];
     [_time setMinimumTrackImage:[UIImage imageNamed:@"trackImage"] forState:UIControlStateNormal];
     [_time setMaximumTrackImage:[UIImage imageNamed:@"trackImage"] forState:UIControlStateNormal];
     [_time setThumbImage:[UIImage imageNamed:@"scrubber"] forState:UIControlStateHighlighted];
@@ -106,7 +106,7 @@
     [_time addTarget:self action:@selector(sliderChanged) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:_time];
     
-    self.secondsRemaining = [[UILabel alloc]initWithFrame:CGRectMake(screenBounds.size.width-44, 114+10, 44, 23)];
+    self.secondsRemaining = [[UILabel alloc]initWithFrame:CGRectMake(screenBounds.size.width-44, 114+5, 44, 23)];
     _secondsRemaining.font = [UIFont boldSystemFontOfSize:15];
     _secondsRemaining.textColor = [UIColor blackColor];
     _secondsRemaining.backgroundColor = [UIColor clearColor];
@@ -114,7 +114,7 @@
     _secondsRemaining.text = @"-0:00";
     [self.view addSubview:_secondsRemaining];
     
-    self.albumArtwork = [[UIImageView alloc]initWithFrame:CGRectMake(0, 186, screenBounds.size.width, screenBounds.size.height-(186+116))];
+    self.albumArtwork = [[UIImageView alloc]initWithFrame:CGRectMake(0, 180, screenBounds.size.width, screenBounds.size.height-(186+116))];
     self.albumArtwork.contentMode = UIViewContentModeScaleAspectFit;
     [self.view addSubview:_albumArtwork];
     
@@ -150,13 +150,15 @@
     CustomVolumeView *volumeView = [[CustomVolumeView alloc]initWithFrame:CGRectMake(30, screenBounds.size.height-56-15-25, screenBounds.size.width-60, 25)];
     [self.view addSubview:volumeView];
     
-    self.loopControl = [[ToggleControl alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
+    self.loopControl = [[TextToggleControl alloc]initWithFrame:CGRectMake((screenBounds.size.width/2)-28.5, 145, 57, 30)];
     _loopControl.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     [_loopControl addTarget:self action:@selector(saveLoopState) forControlEvents:UIControlEventTouchUpInside];
     _loopControl.backgroundColor = [UIColor clearColor];
-    [_loopControl setImage:[UIImage imageNamed:@"loop_on"] forState:ToggleControlModeOn];
-    [_loopControl setImage:[UIImage imageNamed:@"loop_off"] forState:ToggleControlModeOff];
-    [_loopControl setImage:[UIImage imageNamed:@"loop_pressed"] forState:ToggleControlModeIntermediate];
+    [_loopControl setColor:[UIColor colorWithRed:105.0f/255.0f green:54.0f/255.0f blue:153.0f/255.0f alpha:1.0f] forState:ToggleControlModeOn];
+    [_loopControl setColor:[UIColor lightGrayColor] forState:ToggleControlModeOff];
+    [_loopControl setColor:[UIColor whiteColor] forState:ToggleControlModeIntermediate];
+    _loopControl.text = @"Loop";
+    [self.view addSubview:_loopControl];
     
     [kAppDelegate playFile:[kAppDelegate openFile]];
     
