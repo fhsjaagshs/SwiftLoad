@@ -152,8 +152,8 @@
     
     self.loopControl = [[TextToggleControl alloc]initWithFrame:CGRectMake((screenBounds.size.width/2)-28.5, 145, 57, 30)];
     _loopControl.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-    [_loopControl addTarget:self action:@selector(saveLoopState) forControlEvents:UIControlEventTouchUpInside];
     _loopControl.backgroundColor = [UIColor clearColor];
+    [_loopControl addTarget:self action:@selector(saveLoopState) forControlEvents:UIControlEventTouchUpInside];
     [_loopControl setColor:[UIColor colorWithRed:105.0f/255.0f green:54.0f/255.0f blue:153.0f/255.0f alpha:1.0f] forState:ToggleControlModeOn];
     [_loopControl setColor:[UIColor lightGrayColor] forState:ToggleControlModeOff];
     [_loopControl setColor:[UIColor whiteColor] forState:ToggleControlModeIntermediate];
@@ -167,7 +167,10 @@
 }
 
 - (void)saveLoopState {
-    [[NSUserDefaults standardUserDefaults]setBool:(_loopControl.currentMode == ToggleControlModeOn) forKey:@"loop"];
+    BOOL on = (_loopControl.currentMode == ToggleControlModeOn);
+    [[NSUserDefaults standardUserDefaults]setBool:on forKey:@"loop"];
+    [kAppDelegate audioPlayer].numberOfLoops = on?-1:0;
+    self.isLooped = on;
 }
 
 - (void)setLoopState:(BOOL)on {
