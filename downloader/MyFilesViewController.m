@@ -440,7 +440,7 @@ static NSString *CellIdentifier = @"Cell";
         [_theTableView reloadDataWithCoolAnimationType:CoolRefreshAnimationStyleForward];
         [_theTableView flashScrollIndicators];
         
-    } else if ([[[file pathExtension]lowercaseString]isEqualToString:@"zip"]) {
+    } else if ([file.pathExtension.lowercaseString isEqualToString:@"zip"]) {
         
         UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",cellName] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             
@@ -525,7 +525,6 @@ static NSString *CellIdentifier = @"Cell";
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (_theTableView.editing) {
-        [_theTableView deselectRowAtIndexPath:indexPath animated:YES];
         [self updateCopyButtonState];
         return nil;
     }
@@ -548,7 +547,7 @@ static NSString *CellIdentifier = @"Cell";
     [self removeSideSwipeView:NO];
     [self reindexFilelistIfNecessary];
     
-    [_theTableView.visibleCells makeObjectsPerformSelector:@selector(hideImageView:) withObject:_theTableView.editing?(id)0:((id)kCFBooleanTrue)];
+    [_theTableView.visibleCells makeObjectsPerformSelector:@selector(hideImageView:) withObject:_theTableView.editing?(id)0:((id)kCFBooleanTrue)]; // (id)0 is equal to 
     
     _watchdog.mode = _theTableView.editing?WatchdogModeNormal:WatchdogModePullToRefresh;
     _theTableView.allowsMultipleSelectionDuringEditing = !_theTableView.editing;
@@ -747,7 +746,7 @@ static NSString *CellIdentifier = @"Cell";
         button.frame = CGRectMake([buttonData indexOfObject:buttonInfo]*((_sideSwipeView.bounds.size.width)/buttonData.count), 0, ((_sideSwipeView.bounds.size.width)/buttonData.count), _sideSwipeView.bounds.size.height);
         button.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
         
-        UIImage *grayImage = [[UIImage imageNamed:buttonInfo[@"image"]]imageFilledWith:[UIColor colorWithWhite:0.9 alpha:1.0]];
+        UIImage *grayImage = [UIImage imageNamed:buttonInfo[@"image"]];
         [button setImage:grayImage forState:UIControlStateNormal];
         [button setTag:[buttonData indexOfObject:buttonInfo]+1];
         [button addTarget:self action:@selector(touchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -770,8 +769,7 @@ static NSString *CellIdentifier = @"Cell";
     }
     
     if (recognizer && recognizer.state == UIGestureRecognizerStateEnded) {
-        CGPoint location = [recognizer locationInView:_theTableView];
-        NSIndexPath *indexPath = [_theTableView indexPathForRowAtPoint:location];
+        NSIndexPath *indexPath = [_theTableView indexPathForRowAtPoint:[recognizer locationInView:_theTableView]];
         UITableViewCell *cell = [_theTableView cellForRowAtIndexPath:indexPath];
         
         if (cell.frame.origin.x != 0) {
@@ -834,7 +832,6 @@ static NSString *CellIdentifier = @"Cell";
     }
     
     if (animated) {
-        
         self.animatingSideSwipe = YES;
         
         [UIView animateWithDuration:0.2 animations:^{

@@ -21,7 +21,6 @@
 }
 
 - (void)layoutSubviews {
-    
     if (self.imageView.hidden) {
         UIImage *image = self.imageView.image;
         self.imageView.image = nil;
@@ -29,10 +28,9 @@
         [super layoutSubviews];
         
         self.imageView.image = image;
-        return;
+    } else {
+        [super layoutSubviews];
     }
-    
-    [super layoutSubviews];
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
