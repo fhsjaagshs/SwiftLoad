@@ -23,7 +23,7 @@
 + (void)showMoviePlayerWithURL:(NSURL *)url {
     MoviePlayerViewController *vc = [MoviePlayerViewController viewController];
     vc.streamingUrl = url;
-    [vc presentModalViewController:vc animated:YES];
+    [vc presentViewController:vc animated:YES completion:nil];
 }
 
 - (void)loadView {
@@ -77,7 +77,7 @@
         [ad.audioPlayer play];
     }
 
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
     [ad setOpenFile:nil];
 }
 
@@ -111,7 +111,7 @@
 }
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)moviePlayerDidFinish:(NSNotification *)notification {

@@ -29,6 +29,8 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
 #import "DLSFTPDownloadRequest.h"
 #import "DLSFTPConnection.h"
@@ -407,3 +409,5 @@ static const size_t cBufferSize = 8192;
 }
 
 @end
+
+#pragma clang diagnostic pop

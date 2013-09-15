@@ -56,7 +56,7 @@
             self.textLabel.font = [UIFont fontWithName:@"Avenir-Medium" size:17];
         }
         
-        self.textLabel.lineBreakMode = UILineBreakModeTailTruncation;
+        self.textLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         self.detailTextLabel.textColor = [UIColor colorWithWhite:0.5f alpha:1.0f];
         
         self.isFirstCell = NO;

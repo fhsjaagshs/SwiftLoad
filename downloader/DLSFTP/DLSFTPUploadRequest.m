@@ -29,6 +29,9 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 #import "DLSFTPUploadRequest.h"
 #import "DLSFTPConnection.h"
 #import "DLSFTPFile.h"
@@ -147,7 +150,7 @@ static const size_t cBufferSize = 8192;
                                                              , [weakSelf.localPath UTF8String]
                                                              , O_RDONLY
                                                              , 0
-                                                             , dispatch_get_current_queue()
+                                                             , dispatch_get_main_queue()
                                                              , cleanup_handler
                                                              );
         dispatch_source_t progressSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_DATA_ADD, 0, 0, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
@@ -333,3 +336,5 @@ static const size_t cBufferSize = 8192;
 }
 
 @end
+
+#pragma clang diagnostic pop

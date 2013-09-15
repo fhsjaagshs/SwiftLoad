@@ -36,7 +36,7 @@
 		_statusLabel.textColor = [UIColor darkGrayColor];
 		_statusLabel.shadowOffset = CGSizeZero;
 		_statusLabel.backgroundColor = [UIColor clearColor];
-		_statusLabel.textAlignment = UITextAlignmentCenter;
+		_statusLabel.textAlignment = NSTextAlignmentCenter;
 		[self addSubview:_statusLabel];
         
         [self setScrollView:scroll];

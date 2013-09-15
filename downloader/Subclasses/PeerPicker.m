@@ -45,7 +45,7 @@ static NSString * const kShortMessage = @"\n\n\n";
         [self addSubview:_activityIndicator];
         
         self.searchingLabel = [[UILabel alloc]init];
-        _searchingLabel.textAlignment = UITextAlignmentLeft;
+        _searchingLabel.textAlignment = NSTextAlignmentLeft;
         _searchingLabel.textColor = [UIColor blackColor];
         _searchingLabel.backgroundColor = [UIColor clearColor];
         _searchingLabel.text = @"Searching...";

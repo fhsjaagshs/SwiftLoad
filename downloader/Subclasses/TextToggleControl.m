@@ -92,7 +92,7 @@
     [currentColor set];
     
     UIFont *font = [UIFont boldSystemFontOfSize:15];
-    CGSize size = [_text sizeWithFont:font constrainedToSize:self.bounds.size lineBreakMode:UILineBreakModeWordWrap];
+    CGSize size = [_text sizeWithFont:font constrainedToSize:self.bounds.size lineBreakMode:NSLineBreakByWordWrapping];
     float x_pos = (self.bounds.size.width-size.width)/2;
     float y_pos = (self.bounds.size.height-size.height)/2;
     [_text drawAtPoint:CGPointMake(self.bounds.origin.x+x_pos, self.bounds.origin.y+y_pos)withFont:font];

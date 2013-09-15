@@ -21,6 +21,8 @@
 extern NSString * const NSFileName;
 extern NSString * const kCopyListChangedNotification;
 
+float systemVersion(void);
+
 void fireNotification(NSString *filename);
 NSString * getResource(NSString *raw);
 float sanitizeMesurement(float measurement);

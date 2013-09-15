@@ -29,6 +29,9 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 #include <fcntl.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
@@ -857,3 +860,5 @@ LIBSSH2_DISCONNECT_FUNC(disconnected) {
         [connection disconnectedWithReason:reason message:[NSString stringWithUTF8String:message]];
     });
 }
+
+#pragma clang diagnostic pop

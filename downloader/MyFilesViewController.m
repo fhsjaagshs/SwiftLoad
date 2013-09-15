@@ -41,13 +41,13 @@ static NSString *CellIdentifier = @"Cell";
 - (void)loadView {
     [super loadView];
     
-    CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
+    CGRect screenBounds = [[UIScreen mainScreen]bounds];
     BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
     
     HamburgerButtonItem *hamburger = [HamburgerButtonItem itemWithView:self.view];
     [hamburger setDelegate:self];
-    
-    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
+
+    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 20+44)];
     _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"/"];
     _editButton = [[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(editTable)];
@@ -55,20 +55,20 @@ static NSString *CellIdentifier = @"Cell";
     topItem.leftBarButtonItem = hamburger;
     [_navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:_navBar];
-    [self.view bringSubviewToFront:_navBar];
-    _navBar.translucent = NO;
     
-    self.theTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44) style:UITableViewStylePlain];
+    self.theTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, screenBounds.size.height) style:UITableViewStylePlain];
     _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     _theTableView.rowHeight = iPad?60:44;
     _theTableView.dataSource = self;
     _theTableView.delegate = self;
-    _theTableView.canCancelContentTouches = NO;
+    _theTableView.contentInset = UIEdgeInsetsMake(20+44, 0, 0, 0);
     [self.view addSubview:_theTableView];
     
+    [self.view bringSubviewToFront:_navBar];
+    
     self.theCopyAndPasteButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _theCopyAndPasteButton.frame = CGRectMake(screenBounds.size.width-41, 49, 36, 36);
+    _theCopyAndPasteButton.frame = CGRectMake(screenBounds.size.width-41, 20+49, 36, 36);
     _theCopyAndPasteButton.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.6f];
     _theCopyAndPasteButton.layer.cornerRadius = 7;
     _theCopyAndPasteButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin;
@@ -100,7 +100,6 @@ static NSString *CellIdentifier = @"Cell";
     }];
     
     [[FilesystemMonitor sharedMonitor]startMonitoringDirectory:kDocsDir];
-    [self adjustViewsForiOS7];
 }
 
 - (void)hamburgerCellWasSelectedAtIndex:(int)index {
@@ -354,11 +353,13 @@ static NSString *CellIdentifier = @"Cell";
         [button addTarget:self action:@selector(accessoryButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         cell.accessoryView = button;
         cell.accessoryView.backgroundColor = [UIColor whiteColor];
-            
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            cell.accessoryView.center = CGPointMake(735, (cell.bounds.size.height)/2);
-        } else {
-            cell.accessoryView.center = CGPointMake(297.5, (cell.bounds.size.height)/2);
+        
+        if ([UIDevice currentDevice].systemVersion.intValue < 7.0f) {
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+                cell.accessoryView.center = CGPointMake(735, (cell.bounds.size.height)/2);
+            } else {
+                cell.accessoryView.center = CGPointMake(297.5, (cell.bounds.size.height)/2);
+            }
         }
         
         if (cell.gestureRecognizers.count == 0) {
@@ -515,7 +516,7 @@ static NSString *CellIdentifier = @"Cell";
     [self removeSideSwipeView:NO];
     
     if (_theTableView.editing) {
-        [_theTableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+        [_theTableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
         [self updateCopyButtonState];
         return nil;
     }
@@ -525,6 +526,7 @@ static NSString *CellIdentifier = @"Cell";
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (_theTableView.editing) {
+        [_theTableView deselectRowAtIndexPath:indexPath animated:YES];
         [self updateCopyButtonState];
         return nil;
     }

@@ -135,7 +135,7 @@
 }
 
 - (void)close {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
     [[UIApplication sharedApplication]setStatusBarHidden:NO];
     self.view.frame = [[UIScreen mainScreen]applicationFrame];
     [kAppDelegate setOpenFile:nil];

@@ -58,6 +58,8 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
         _viewToMove.layer.shadowOpacity = 0.0f;
         _hamburgerView.alpha = 0.0f;
         _viewToMove.frame = CGRectMake(0, _viewToMove.frame.origin.y, _viewToMove.frame.size.width, _viewToMove.frame.size.height);
+        UIView *statusBar = [[UIApplication sharedApplication]valueForKey:@"statusBar"]; // [@[@"status", @"Bar"] componentsJoinedByString:@""]
+        statusBar.transform = CGAffineTransformIdentity;
     } completion:^(BOOL finished) {
         [_hamburgerView removeFromSuperview];
         [_hideButton removeFromSuperview];
@@ -71,6 +73,8 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
     [UIView animateWithDuration:0.3f animations:^{
         _hamburgerView.alpha = 1.0f;
         _viewToMove.frame = CGRectMake(250, _viewToMove.frame.origin.y, _viewToMove.frame.size.width, _viewToMove.frame.size.height);
+        UIView *statusBar = [[UIApplication sharedApplication]valueForKey:@"statusBar"];
+        statusBar.transform = CGAffineTransformMakeTranslation(250, 0);
     } completion:^(BOOL finished) {
         [_hamburgerView setNeedsDisplay];
     }];
@@ -102,7 +106,7 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(tasksChanged) name:kHamburgerTaskUpdateNotification object:nil];
         self.userInteractionEnabled = YES;
         self.backgroundColor = [UIColor whiteColor];
-        self.frame = CGRectMake(0, 20, 250, [[UIScreen mainScreen]applicationFrame].size.height);
+        self.frame = CGRectMake(0, 0, 250, [[UIScreen mainScreen]bounds].size.height);
         self.opaque = YES;
         self.theTableView = [[UITableView alloc]initWithFrame:self.bounds style:UITableViewStylePlain];
         _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -244,7 +248,7 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
         CGContextFillRect(context, self.bounds);
         
         CGContextSetStrokeColorWithColor(context, [UIColor darkGrayColor].CGColor);
-        CGContextSetLineWidth(context, 1);
+        CGContextSetLineWidth(context, 0.5);
         
         CGContextMoveToPoint(context, self.bounds.size.width, self.bounds.size.height);
         CGContextAddLineToPoint(context, self.bounds.size.width, 0);

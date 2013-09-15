@@ -56,7 +56,7 @@
 		self.statusLabel.textColor = [UIColor blackColor];
 		self.statusLabel.shadowOffset = CGSizeZero;
 		self.statusLabel.backgroundColor = [UIColor clearColor];
-		self.statusLabel.textAlignment = UITextAlignmentCenter;
+		self.statusLabel.textAlignment = NSTextAlignmentCenter;
 		[self addSubview:self.statusLabel];
         
 		self.arrowImage = [[CALayer alloc]init];

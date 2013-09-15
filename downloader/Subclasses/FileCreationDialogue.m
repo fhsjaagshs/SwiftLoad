@@ -41,7 +41,7 @@
         _tv.autocapitalizationType = UITextAutocapitalizationTypeNone;
         _tv.autocorrectionType = UITextAutocorrectionTypeNo;
         _tv.placeholder = @"file or directory name";
-        _tv.textAlignment = UITextAlignmentCenter;
+        _tv.textAlignment = NSTextAlignmentCenter;
         _tv.font = [UIFont systemFontOfSize:17];
         _tv.adjustsFontSizeToFitWidth = YES;
         _tv.layer.borderWidth = 1.5;

@@ -11,6 +11,15 @@
 NSString * const NSFileName = @"NSFileName";
 NSString * const kCopyListChangedNotification = @"copiedlistchanged";
 
+float systemVersion(void) {
+    static float systemVersion = -1;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        systemVersion = [UIDevice currentDevice].systemVersion.floatValue;
+    });
+    return systemVersion;
+}
+
 void fireNotification(NSString *filename) {
     [[NetworkActivityController sharedController]hideIfPossible];
     
@@ -469,14 +478,20 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     
     [[UIBarButtonItem appearance]setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
 
-    UIImage *navBarImage = [[UIImage imageNamed:@"statusbar"]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 150, 0, 150)];\
-    [[UINavigationBar appearance]setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
-    [[UIToolbar appearance]setBackgroundImage:navBarImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+    if (systemVersion() >= 7.0f) {
+       // UIColor *tintColor = [UIColor colorWithRed:105.0f/255.0f green:54.0f/255.0f blue:153.0f/255.0f alpha:1.0f];
+        //[[UINavigationBar appearance]setBackgroundColor:tintColor];
+        //[[UIToolbar appearance]setTintColor:tintColor];
+    } else {
+        UIImage *navBarImage = [[UIImage imageNamed:@"statusbar"]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 150, 0, 150)];\
+        [[UINavigationBar appearance]setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
+        [[UIToolbar appearance]setBackgroundImage:navBarImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+    }
     
-    [[UINavigationBar appearance]setTitleTextAttributes:@{ UITextAttributeTextColor: [UIColor whiteColor] }];
-    [[UIBarButtonItem appearance]setTitleTextAttributes:@{ UITextAttributeTextColor: [UIColor whiteColor], UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(0, 0)] } forState:UIControlStateNormal];
-    [[UIBarButtonItem appearance]setTitleTextAttributes:@{ UITextAttributeTextColor: [UIColor lightGrayColor], UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(0, 0)] } forState:UIControlStateHighlighted];
-    [[UIBarButtonItem appearance]setTintColor:[UIColor whiteColor]];
+  //  [[UINavigationBar appearance]setTitleTextAttributes:@{ UITextAttributeTextColor: [UIColor whiteColor] }];
+   // [[UIBarButtonItem appearance]setTitleTextAttributes:@{ UITextAttributeTextColor: [UIColor whiteColor], UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(0, 0)] } forState:UIControlStateNormal];
+    //[[UIBarButtonItem appearance]setTitleTextAttributes:@{ UITextAttributeTextColor: [UIColor lightGrayColor], UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(0, 0)] } forState:UIControlStateHighlighted];
+//    [[UIBarButtonItem appearance]setTintColor:[UIColor whiteColor]];
     
     [Appirater setAppId:@"469762999"];
     [Appirater setDaysUntilPrompt:5];
@@ -532,25 +547,19 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         if (filesInIndexDir.count > 0) {
             NSString *file = [kDocsDir stringByAppendingPathComponent:filesInIndexDir[0]];
             self.openFile = file;
-            
-            UIViewController *controller = [UIViewController topViewController];
-            
+
             BOOL isHTML = [MIMEUtils isHTMLFile:file];
             
             if ([MIMEUtils isAudioFile:file]) {
-                AudioPlayerViewController *audio = [AudioPlayerViewController viewController];
-                [controller presentModalViewController:audio animated:YES];
+                [[UIViewController topViewController]presentViewController:[AudioPlayerViewController viewController] animated:YES completion:nil];
             } else if ([MIMEUtils isImageFile:file]) {
-                [controller presentModalViewController:[PictureViewController viewController] animated:YES];
+                [[UIViewController topViewController]presentViewController:[PictureViewController viewController] animated:YES completion:nil];
             } else if ([MIMEUtils isTextFile:file] && !isHTML) {
-                TextEditorViewController *textEditor = [TextEditorViewController viewController];
-                [controller presentModalViewController:textEditor animated:YES];
+                [[UIViewController topViewController]presentViewController:[TextEditorViewController viewController] animated:YES completion:nil];
             } else if ([MIMEUtils isVideoFile:file]) {
-                MoviePlayerViewController *moviePlayer = [MoviePlayerViewController viewController];
-                [controller presentModalViewController:moviePlayer animated:YES];
+                [[UIViewController topViewController]presentViewController:[MoviePlayerViewController viewController] animated:YES completion:nil];
             } else if ([MIMEUtils isDocumentFile:file] || isHTML) {
-                MyFilesViewDetailViewController *detail = [MyFilesViewDetailViewController viewController];
-                [controller presentModalViewController:detail animated:YES];
+                [[UIViewController topViewController]presentViewController:[MyFilesViewDetailViewController viewController] animated:YES completion:nil];
             }
         }
 
