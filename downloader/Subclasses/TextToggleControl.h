@@ -14,12 +14,12 @@ typedef enum {
     ToggleControlModeIntermediate
 } ToggleControlMode;
 
-@interface TextToggleControl : UIControl
+@interface TextToggleControl : UIButton
 
-@property (nonatomic, assign) ToggleControlMode currentMode;
-@property (nonatomic, strong) NSString *text;
+@property (nonatomic, assign) BOOL on;
 
 - (void)setColor:(UIColor *)color forState:(ToggleControlMode)state;
-- (void)setMode:(ToggleControlMode)mode;
+
++ (TextToggleControl *)control;
 
 @end

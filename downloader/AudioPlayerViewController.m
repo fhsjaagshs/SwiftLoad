@@ -146,14 +146,15 @@
     self.volumeView = [[CustomVolumeView alloc]initWithFrame:CGRectMake(30, screenBounds.size.height-80, screenBounds.size.width-60, 25)];
     [self.view addSubview:_volumeView];
     
-    self.loopControl = [[TextToggleControl alloc]initWithFrame:CGRectMake((screenBounds.size.width/2)-25, 114+23+20, 57, 30)];
+    self.loopControl = [TextToggleControl control];
+    _loopControl.frame = CGRectMake((screenBounds.size.width/2)-25, 114+23+20, 57, 30);
     _loopControl.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     _loopControl.backgroundColor = [UIColor clearColor];
-    [_loopControl addTarget:self action:@selector(saveLoopState) forControlEvents:UIControlEventTouchUpInside];
+    [_loopControl addTarget:self action:@selector(loopControlPressed) forControlEvents:UIControlEventTouchUpInside];
     [_loopControl setColor:[UIColor colorWithRed:105.0f/255.0f green:54.0f/255.0f blue:153.0f/255.0f alpha:1.0f] forState:ToggleControlModeOn];
     [_loopControl setColor:[UIColor lightGrayColor] forState:ToggleControlModeOff];
     [_loopControl setColor:[UIColor whiteColor] forState:ToggleControlModeIntermediate];
-    _loopControl.text = @"Loop";
+    [_loopControl setTitle:@"Loop" forState:UIControlStateNormal];
     [self.view addSubview:_loopControl];
     
     self.errorLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 44+20, screenBounds.size.width, screenBounds.size.height-88)];
@@ -171,22 +172,21 @@
     [MarqueeLabel controllerLabelsShouldAnimate:self];
 }
 
-- (void)saveLoopState {
-    BOOL on = (_loopControl.currentMode == ToggleControlModeOn);
-    [[NSUserDefaults standardUserDefaults]setBool:on forKey:@"loop"];
-    [kAppDelegate audioPlayer].numberOfLoops = on?-1:0;
-    self.isLooped = on;
+- (void)loopControlPressed {
+    self.isLooped = _loopControl.on;
+    [[NSUserDefaults standardUserDefaults]setBool:_isLooped forKey:@"loop"];
+    [kAppDelegate audioPlayer].numberOfLoops = _isLooped?-1:0;
 }
 
 - (void)setLoopState:(BOOL)on {
-    [[NSUserDefaults standardUserDefaults]setBool:on forKey:@"loop"];
+    self.isLooped = on;
+    [[NSUserDefaults standardUserDefaults]setBool:_isLooped forKey:@"loop"];
 }
 
 - (void)refreshLoopState {
-    BOOL on = [[NSUserDefaults standardUserDefaults]boolForKey:@"loop"];
-    [kAppDelegate audioPlayer].numberOfLoops = on?-1:0;
-    self.isLooped = on;
-    [_loopControl setCurrentMode:on?ToggleControlModeOn:ToggleControlModeOff];
+    self.isLooped = [[NSUserDefaults standardUserDefaults]boolForKey:@"loop"];
+    [kAppDelegate audioPlayer].numberOfLoops = _isLooped?-1:0;
+    [_loopControl setOn:_isLooped];
 }
 
 - (void)hideControls:(BOOL)hide {
