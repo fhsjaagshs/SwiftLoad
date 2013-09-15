@@ -120,28 +120,30 @@
     _albumArtwork.contentMode = UIViewContentModeScaleAspectFit;
     [self.view addSubview:_albumArtwork];
     
-    self.prevTrack = [[UIButton alloc]initWithFrame:CGRectMake(20, screenBounds.size.height-46-15+20, iPad?62:48.5, iPad?46:36)];
+    float controlsWidth = screenBounds.size.width/3;
+    
+    self.prevTrack = [[UIButton alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-51, controlsWidth, iPad?46:36)];
     _prevTrack.backgroundColor = [UIColor clearColor];
     [_prevTrack setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
     [_prevTrack setImage:[UIImage imageNamed:@"back_button_pressed"] forState:UIControlStateHighlighted];
     [_prevTrack addTarget:kAppDelegate action:@selector(skipToPreviousTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_prevTrack];
     
-    self.pausePlay = [[UIButton alloc]initWithFrame:CGRectMake((screenBounds.size.width/2)-((iPad?52:41)/2), screenBounds.size.height-46-15+20, iPad?52:41, iPad?46:36)];
+    self.pausePlay = [[UIButton alloc]initWithFrame:CGRectMake(controlsWidth, screenBounds.size.height-51, controlsWidth, iPad?46:36)];
     _pausePlay.backgroundColor = [UIColor clearColor];
     [_pausePlay setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
     [_pausePlay setImage:[UIImage imageNamed:@"pause_selected"] forState:UIControlStateHighlighted];
     [_pausePlay addTarget:kAppDelegate action:@selector(togglePlayPause) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_pausePlay];
     
-    self.nxtTrack = [[UIButton alloc]initWithFrame:CGRectMake(screenBounds.size.width-(iPad?62:48.5)-20, screenBounds.size.height-46-15+20, iPad?62:48.5, iPad?46:36)];
+    self.nxtTrack = [[UIButton alloc]initWithFrame:CGRectMake(controlsWidth*2, screenBounds.size.height-51, controlsWidth, iPad?46:36)];
     _nxtTrack.backgroundColor = [UIColor clearColor];
     [_nxtTrack setImage:[UIImage imageNamed:@"next_button"] forState:UIControlStateNormal];
     [_nxtTrack setImage:[UIImage imageNamed:@"next_button_pressed"] forState:UIControlStateHighlighted];
     [_nxtTrack addTarget:kAppDelegate action:@selector(skipToNextTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_nxtTrack];
     
-    self.volumeView = [[CustomVolumeView alloc]initWithFrame:CGRectMake(30, screenBounds.size.height-56-15-25+20, screenBounds.size.width-60, 25)];
+    self.volumeView = [[CustomVolumeView alloc]initWithFrame:CGRectMake(30, screenBounds.size.height-80, screenBounds.size.width-60, 25)];
     [self.view addSubview:_volumeView];
     
     self.loopControl = [[TextToggleControl alloc]initWithFrame:CGRectMake((screenBounds.size.width/2)-25, 114+23+20, 57, 30)];
@@ -400,7 +402,7 @@
 }
 
 - (void)setArtwork:(NSNotification *)notif {
-    _albumArtwork.image = [(UIImage *)notif.object imageByRoundingCornersWithRadius:5.0f];
+    _albumArtwork.image = [(UIImage *)notif.object imageByRoundingCornersWithRadius:10.0f];
 }
 
 - (void)setupNotifs {

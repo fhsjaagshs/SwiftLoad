@@ -244,9 +244,21 @@ typedef void (^animationCompletionBlock)(void);
         if (CGSizeEqualToSize(maxSize, CGSizeZero)) {
             maxSize = CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX);
         }
-        CGSize minimumLabelSize = [self.subLabel.text sizeWithFont:self.subLabel.font
-                                                   constrainedToSize:maxSize
-                                                       lineBreakMode:NSLineBreakByClipping];
+        
+        CGSize minimumLabelSize = CGSizeZero;
+        
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
+        minimumLabelSize = [(NSString *)self.subLabel.text boundingRectWithSize:maxSize
+                                                                         options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingTruncatesLastVisibleLine
+                                                                      attributes:@{NSFontAttributeName:self.subLabel.font}
+                                                                         context:nil].size;
+#else
+        minimumLabelSize = [self.subLabel.text sizeWithFont:self.subLabel.font
+                                                 constrainedToSize:maxSize
+                                                     lineBreakMode:NSLineBreakByClipping];
+#endif
+        
+        
         // Adjust for fade length
         CGSize minimumSize = CGSizeMake(minimumLabelSize.width + (self.fadeLength * 2), minimumLabelSize.height);
         
@@ -281,9 +293,19 @@ typedef void (^animationCompletionBlock)(void);
                                                                        context:nil].size;
     } else {
         // Calculate on base string
-        expectedLabelSize = [self.subLabel.text sizeWithFont:self.font
-                                           constrainedToSize:maximumLabelSize
-                                               lineBreakMode:NSLineBreakByClipping];
+        
+        CGSize expectedLabelSize = CGSizeZero;
+        
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
+        expectedLabelSize = [(NSString *)self.subLabel.text boundingRectWithSize:maximumLabelSize
+                                                                         options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingTruncatesLastVisibleLine
+                                                                      attributes:@{NSFontAttributeName:self.font}
+                                                                         context:nil].size;
+#else
+        expectedLabelSize = [(NSString *)self.subLabel.text sizeWithFont:self.font
+                                                       constrainedToSize:maximumLabelSize
+                                                           lineBreakMode:NSLineBreakByClipping];
+#endif
     }
     
     expectedLabelSize.height = self.bounds.size.height;
@@ -474,9 +496,18 @@ typedef void (^animationCompletionBlock)(void);
 - (CGSize)subLabelSize {
     // Calculate label size
     CGSize maximumLabelSize = CGSizeMake(CGFLOAT_MAX, self.frame.size.height);
-    CGSize expectedLabelSize = [(NSString *)self.subLabel.text sizeWithFont:self.font
+    CGSize expectedLabelSize = CGSizeZero;
+    
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
+    expectedLabelSize = [(NSString *)self.subLabel.text boundingRectWithSize:maximumLabelSize
+                                            options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingTruncatesLastVisibleLine
+                                         attributes:@{NSFontAttributeName:self.font}
+                                            context:nil].size;
+#else
+    expectedLabelSize = [(NSString *)self.subLabel.text sizeWithFont:self.font
                                                           constrainedToSize:maximumLabelSize
                                                               lineBreakMode:NSLineBreakByClipping];
+#endif
     return expectedLabelSize;
 }
 

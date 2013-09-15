@@ -20,7 +20,7 @@ float systemVersion(void) {
     return systemVersion;
 }
 
-void fireNotification(NSString *filename) {
+void fireFinishDLNotification(NSString *filename) {
     [[NetworkActivityController sharedController]hideIfPossible];
     
     if (filename.length > 14) {
@@ -62,23 +62,6 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     } while (YES);
     
     return path;
-}
-
-void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID inPropertyID, UInt32 inPropertyValueSize, const void *inPropertyValue) {
-    if (inPropertyID == kAudioSessionProperty_AudioRouteChange) {
-        CFNumberRef routeChangeReasonRef = CFDictionaryGetValue((CFDictionaryRef)inPropertyValue, CFSTR("OutputDeviceDidChange_Reason"));
-        
-        SInt32 routeChangeReason;
-        CFNumberGetValue(routeChangeReasonRef, kCFNumberSInt32Type, &routeChangeReason);
-        
-        if (routeChangeReason == 2) { // 2 = kAudioSessionRouteChangeReason_OldDeviceUnavailable
-            AVAudioPlayer *audioPlayer = [kAppDelegate audioPlayer];
-            if (audioPlayer.isPlaying) {
-                [audioPlayer pause];
-                [AudioPlayerViewController notif_setPausePlayTitlePlay];
-            }
-        }
-    }
 }
 
 @implementation AppDelegate
@@ -316,6 +299,17 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [AudioPlayerViewController notif_setShouldUpdateTime:(playingError == nil)];
 }
 
+- (void)handleRouteChange:(NSNotification *)notif {
+    
+    if ([notif.userInfo[AVAudioSessionRouteChangeReasonKey]intValue] == AVAudioSessionRouteChangeReasonOldDeviceUnavailable) {
+        AVAudioPlayer *audioPlayer = [kAppDelegate audioPlayer];
+        if (audioPlayer.isPlaying) {
+            [audioPlayer pause];
+            [AudioPlayerViewController notif_setPausePlayTitlePlay];
+        }
+    }
+}
+
 - (void)audioPlayerBeginInterruption:(AVAudioPlayer *)player {
     if (_audioPlayer.isPlaying) {
         [_audioPlayer pause];
@@ -324,6 +318,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 - (void)audioPlayerEndInterruption:(AVAudioPlayer *)player withOptions:(NSUInteger)flags {
+    NSLog(@"LOL");
     if (!_audioPlayer.isPlaying) {
         [_audioPlayer play];
         [AudioPlayerViewController notif_setPausePlayTitlePause];
@@ -331,12 +326,16 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
-    if (self.audioPlayer.numberOfLoops == 0) {
-        [self skipToNextTrack];
+    if (!flag) {
+        [AudioPlayerViewController notif_setControlsHidden:YES];
     } else {
-        self.audioPlayer.currentTime = 0;
-        [self.audioPlayer play];
-        [AudioPlayerViewController notif_setPausePlayTitlePause];
+        if (self.audioPlayer.numberOfLoops == 0) {
+            [self skipToNextTrack];
+        } else {
+            self.audioPlayer.currentTime = 0;
+            [self.audioPlayer play];
+            [AudioPlayerViewController notif_setPausePlayTitlePause];
+        }
     }
 }
 
@@ -465,7 +464,9 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryPlayback error:nil];
     [[UIApplication sharedApplication]beginReceivingRemoteControlEvents];
     [self becomeFirstResponder];
-    AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, nil);
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleRouteChange:) name:AVAudioSessionRouteChangeNotification object:[AVAudioSession sharedInstance]];
+    //AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, audioRouteChangeListenerCallback, nil);
     
     DBSession *session = [[DBSession alloc]initWithAppKey:@"ybpwmfq2z1jmaxi" appSecret:@"ua6hjow7hxx0y3a" root:kDBRootDropbox];
 	session.delegate = self;

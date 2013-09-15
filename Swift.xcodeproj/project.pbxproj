@@ -1271,8 +1271,8 @@
 			children = (
 				F1E397EA17B9F8A8002BBD6F /* ID3Editor.h */,
 				F1E397EB17B9F8A8002BBD6F /* ID3Editor.mm */,
-				F1E397E717B9F896002BBD6F /* TagLibAmalgam.cpp */,
 				F1E397E817B9F896002BBD6F /* TagLibAmalgam.h */,
+				F1E397E717B9F896002BBD6F /* TagLibAmalgam.cpp */,
 			);
 			name = taglib;
 			sourceTree = "<group>";
@@ -1656,7 +1656,7 @@
 				);
 				INFOPLIST_FILE = "downloader/Swift-Info.plist";
 				INFOPLIST_PREFIX_HEADER = "/Users/nathaniel/Documents/Code/SwiftLoad/downloader/SwiftLoad-Prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -1696,7 +1696,7 @@
 				);
 				INFOPLIST_FILE = "downloader/Swift-Info.plist";
 				INFOPLIST_PREFIX_HEADER = "/Users/nathaniel/Documents/Code/SwiftLoad/downloader/SwiftLoad-Prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",

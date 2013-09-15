@@ -42,7 +42,7 @@
 
 - (void)showSuccess {
     [[NetworkActivityController sharedController]hideIfPossible];
-    fireNotification(self.name);
+    fireFinishDLNotification(self.name);
     [super showSuccess];
 }
 

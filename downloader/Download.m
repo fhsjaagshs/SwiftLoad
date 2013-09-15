@@ -43,7 +43,7 @@
     NSString *targetPath = getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:[self.name percentSanitize]]);
     [[NSFileManager defaultManager]moveItemAtPath:_temporaryPath toPath:targetPath error:nil];
     
-    fireNotification(self.name);
+    fireFinishDLNotification(self.name);
     [super showSuccess];
 }
 

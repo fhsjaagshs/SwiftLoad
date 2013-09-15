@@ -10,8 +10,13 @@
 
 @implementation NSString (mods)
 
+- (CGFloat)withWithFont:(UIFont *)font {
+    return [self widthForHeight:[self sizeWithAttributes:@{NSFontAttributeName:font}].height font:font];
+}
+
 - (CGFloat)widthForHeight:(float)height font:(UIFont *)font {
-    return [self sizeWithFont:font constrainedToSize:CGSizeMake(MAXFLOAT, height) lineBreakMode:NSLineBreakByClipping].width;
+    return [self boundingRectWithSize:CGSizeMake(MAXFLOAT, height) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:font} context:nil].size.width;
+    //return [self sizeWithFont:font constrainedToSize:CGSizeMake(MAXFLOAT, height) lineBreakMode:NSLineBreakByClipping].width;
 }
 
 - (NSString *)percentSanitize {
