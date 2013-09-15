@@ -8,6 +8,8 @@
 
 #import "SwiftLoadCell.h"
 
+static NSString * const kFontName = @"Avenir-Medium";
+
 @interface SwiftLoadCell ()
 
 @end
@@ -48,12 +50,10 @@
         self.multipleSelectionBackgroundView.backgroundColor = [UIColor clearColor];
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            //self.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:27];
-            self.textLabel.font = [UIFont fontWithName:@"Avenir-Medium" size:24];
+            self.textLabel.font = [UIFont fontWithName:kFontName size:24];
             self.detailTextLabel.font = [UIFont systemFontOfSize:20.0];
         } else {
-            //self.textLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:20];
-            self.textLabel.font = [UIFont fontWithName:@"Avenir-Medium" size:17];
+            self.textLabel.font = [UIFont fontWithName:kFontName size:17];
         }
         
         self.textLabel.lineBreakMode = NSLineBreakByTruncatingTail;
@@ -62,26 +62,6 @@
         self.isFirstCell = NO;
     }
     return self;
-}
-
-- (void)drawRect:(CGRect)rect {
-    CGContextRef context = UIGraphicsGetCurrentContext();
-
-    CGContextSaveGState(context);
-    
-    CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
-    CGContextFillRect(context, self.bounds);
-    
-    if (!_isFirstCell) {
-        CGContextSetStrokeColorWithColor(context, [UIColor colorWithWhite:208.0/255.0 alpha:1.0].CGColor);
-        CGContextSetLineWidth(context, 2.0);
-        CGContextSetLineCap(context, kCGLineCapRound);
-        
-        CGPoint points[] = { CGPointMake(50, self.bounds.origin.y-0.5), CGPointMake(self.bounds.size.width-50, self.bounds.origin.y-0.5) };
-        CGContextStrokeLineSegments(context, points, 2);
-    }
-    
-    CGContextRestoreGState(context);
 }
 
 @end

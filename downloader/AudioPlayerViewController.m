@@ -21,6 +21,8 @@
 @property (nonatomic, strong) UIButton *nxtTrack;
 @property (nonatomic, strong) UIButton *prevTrack;
 
+@property (nonatomic, strong) CustomVolumeView *volumeView;
+
 @property (nonatomic, strong) MarqueeLabel *artistLabel;
 @property (nonatomic, strong) MarqueeLabel *titleLabel;
 @property (nonatomic, strong) MarqueeLabel *albumLabel;
@@ -46,10 +48,10 @@
     
     [self setupNotifs];
     
-    CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
+    CGRect screenBounds = [[UIScreen mainScreen]bounds];
     BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
     
-    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
+    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 20+44)];
     _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]];
     topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
@@ -57,7 +59,7 @@
     [_navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:_navBar];
     
-    self.artistLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, 44+10, screenBounds.size.width, 20) duration:5.0 andFadeLength:10.0f];
+    self.artistLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, 44+10+20, screenBounds.size.width, 20) duration:5.0 andFadeLength:10.0f];
     _artistLabel.animationDelay = 0.5f;
     _artistLabel.marqueeType = MLContinuous;
     _artistLabel.animationCurve = UIViewAnimationCurveLinear;
@@ -68,7 +70,7 @@
     _artistLabel.font = [UIFont systemFontOfSize:15];
     [self.view addSubview:_artistLabel];
     
-    self.titleLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, 44+20+10, screenBounds.size.width, 20) rate:50.0f andFadeLength:10.0f];
+    self.titleLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, 44+20+10+20, screenBounds.size.width, 20) rate:50.0f andFadeLength:10.0f];
     _titleLabel.animationDelay = 0.5f;
     _titleLabel.marqueeType = MLContinuous;
     _titleLabel.animationCurve = UIViewAnimationCurveLinear;
@@ -79,7 +81,7 @@
     _titleLabel.font = [UIFont boldSystemFontOfSize:15];
     [self.view addSubview:_titleLabel];
     
-    self.albumLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, 44+(20*2)+10, screenBounds.size.width, 20) duration:5.0 andFadeLength:10.0f];
+    self.albumLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, 44+(20*2)+10+20, screenBounds.size.width, 20) duration:5.0 andFadeLength:10.0f];
     _albumLabel.animationDelay = 0.5f;
     _albumLabel.marqueeType = MLContinuous;
     _albumLabel.animationCurve = UIViewAnimationCurveLinear;
@@ -90,7 +92,7 @@
     _albumLabel.font = [UIFont systemFontOfSize:15];
     [self.view addSubview:_albumLabel];
     
-    self.secondsElapsed = [[UILabel alloc]initWithFrame:CGRectMake(0, 114+5, 44, 23)];
+    self.secondsElapsed = [[UILabel alloc]initWithFrame:CGRectMake(0, 114+5+20, 44, 23)];
     _secondsElapsed.font = [UIFont boldSystemFontOfSize:15];
     _secondsElapsed.textColor = [UIColor blackColor];
     _secondsElapsed.backgroundColor = [UIColor clearColor];
@@ -98,7 +100,7 @@
     _secondsElapsed.text = @"0:00";
     [self.view addSubview:_secondsElapsed];
     
-    self.time = [[UISlider alloc]initWithFrame:CGRectMake(44, 114+5, screenBounds.size.width-88, 23)];
+    self.time = [[UISlider alloc]initWithFrame:CGRectMake(44, 114+20, screenBounds.size.width-88, 23)];
     [_time setMinimumTrackImage:[UIImage imageNamed:@"trackImage"] forState:UIControlStateNormal];
     [_time setMaximumTrackImage:[UIImage imageNamed:@"trackImage"] forState:UIControlStateNormal];
     [_time setThumbImage:[UIImage imageNamed:@"scrubber"] forState:UIControlStateHighlighted];
@@ -106,7 +108,7 @@
     [_time addTarget:self action:@selector(sliderChanged) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:_time];
     
-    self.secondsRemaining = [[UILabel alloc]initWithFrame:CGRectMake(screenBounds.size.width-44, 114+5, 44, 23)];
+    self.secondsRemaining = [[UILabel alloc]initWithFrame:CGRectMake(screenBounds.size.width-44, 114+5+20, 44, 23)];
     _secondsRemaining.font = [UIFont boldSystemFontOfSize:15];
     _secondsRemaining.textColor = [UIColor blackColor];
     _secondsRemaining.backgroundColor = [UIColor clearColor];
@@ -114,43 +116,35 @@
     _secondsRemaining.text = @"-0:00";
     [self.view addSubview:_secondsRemaining];
     
-    self.albumArtwork = [[UIImageView alloc]initWithFrame:CGRectMake(0, 180, screenBounds.size.width, screenBounds.size.height-(186+116))];
-    self.albumArtwork.contentMode = UIViewContentModeScaleAspectFit;
+    self.albumArtwork = [[UIImageView alloc]initWithFrame:CGRectMake(0, 180+20, screenBounds.size.width, screenBounds.size.height-(186+116))];
+    _albumArtwork.contentMode = UIViewContentModeScaleAspectFit;
     [self.view addSubview:_albumArtwork];
     
-    self.prevTrack = [[UIButton alloc]initWithFrame:CGRectMake(20, screenBounds.size.height-46-10, iPad?62:48.5, iPad?46:36)];
+    self.prevTrack = [[UIButton alloc]initWithFrame:CGRectMake(20, screenBounds.size.height-46-15+20, iPad?62:48.5, iPad?46:36)];
     _prevTrack.backgroundColor = [UIColor clearColor];
     [_prevTrack setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
     [_prevTrack setImage:[UIImage imageNamed:@"back_button_pressed"] forState:UIControlStateHighlighted];
     [_prevTrack addTarget:kAppDelegate action:@selector(skipToPreviousTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_prevTrack];
     
-    self.pausePlay = [[UIButton alloc]initWithFrame:CGRectMake((screenBounds.size.width/2)-((iPad?52:41)/2), screenBounds.size.height-46-10, iPad?52:41, iPad?46:36)];
+    self.pausePlay = [[UIButton alloc]initWithFrame:CGRectMake((screenBounds.size.width/2)-((iPad?52:41)/2), screenBounds.size.height-46-15+20, iPad?52:41, iPad?46:36)];
     _pausePlay.backgroundColor = [UIColor clearColor];
     [_pausePlay setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
     [_pausePlay setImage:[UIImage imageNamed:@"pause_selected"] forState:UIControlStateHighlighted];
     [_pausePlay addTarget:kAppDelegate action:@selector(togglePlayPause) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_pausePlay];
     
-    self.nxtTrack = [[UIButton alloc]initWithFrame:CGRectMake(screenBounds.size.width-(iPad?62:48.5)-20, screenBounds.size.height-46-10, iPad?62:48.5, iPad?46:36)];
+    self.nxtTrack = [[UIButton alloc]initWithFrame:CGRectMake(screenBounds.size.width-(iPad?62:48.5)-20, screenBounds.size.height-46-15+20, iPad?62:48.5, iPad?46:36)];
     _nxtTrack.backgroundColor = [UIColor clearColor];
     [_nxtTrack setImage:[UIImage imageNamed:@"next_button"] forState:UIControlStateNormal];
     [_nxtTrack setImage:[UIImage imageNamed:@"next_button_pressed"] forState:UIControlStateHighlighted];
     [_nxtTrack addTarget:kAppDelegate action:@selector(skipToNextTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_nxtTrack];
     
-    self.errorLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-88)];
-    _errorLabel.text = @"Error Playing Audio";
-    _errorLabel.backgroundColor = [UIColor clearColor];
-    _errorLabel.textColor = [UIColor blackColor];
-    _errorLabel.font = [UIFont boldSystemFontOfSize:iPad?72:33];
-    [self.view addSubview:_errorLabel];
-    [_errorLabel setHidden:YES];
+    self.volumeView = [[CustomVolumeView alloc]initWithFrame:CGRectMake(30, screenBounds.size.height-56-15-25+20, screenBounds.size.width-60, 25)];
+    [self.view addSubview:_volumeView];
     
-    CustomVolumeView *volumeView = [[CustomVolumeView alloc]initWithFrame:CGRectMake(30, screenBounds.size.height-56-15-25, screenBounds.size.width-60, 25)];
-    [self.view addSubview:volumeView];
-    
-    self.loopControl = [[TextToggleControl alloc]initWithFrame:CGRectMake((screenBounds.size.width/2)-28.5, 145, 57, 30)];
+    self.loopControl = [[TextToggleControl alloc]initWithFrame:CGRectMake((screenBounds.size.width/2)-25, 114+23+20, 57, 30)];
     _loopControl.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     _loopControl.backgroundColor = [UIColor clearColor];
     [_loopControl addTarget:self action:@selector(saveLoopState) forControlEvents:UIControlEventTouchUpInside];
@@ -160,12 +154,19 @@
     _loopControl.text = @"Loop";
     [self.view addSubview:_loopControl];
     
+    self.errorLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 44+20, screenBounds.size.width, screenBounds.size.height-88)];
+    _errorLabel.text = @"Error Playing Audio";
+    _errorLabel.backgroundColor = [UIColor clearColor];
+    _errorLabel.textColor = [UIColor blackColor];
+    _errorLabel.font = [UIFont boldSystemFontOfSize:iPad?72:33];
+    _errorLabel.hidden = YES;
+    _errorLabel.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:_errorLabel];
+
     [kAppDelegate playFile:[kAppDelegate openFile]];
     
     [self refreshLoopState];
     [MarqueeLabel controllerLabelsShouldAnimate:self];
-    
-    [self adjustViewsForiOS7];
 }
 
 - (void)saveLoopState {
@@ -196,6 +197,9 @@
     [_artistLabel setHidden:hide];
     [_titleLabel setHidden:hide];
     [_albumLabel setHidden:hide];
+    [_prevTrack setHidden:hide];
+    [_nxtTrack setHidden:hide];
+    [_volumeView setHidden:hide];
     [_errorLabel setHidden:!hide];
 }
 
@@ -301,8 +305,6 @@
     
     self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     
-    NSLog(@"%@",file.pathExtension.lowercaseString);
-    
     if (_errorLabel.hidden && [file.pathExtension.lowercaseString isEqualToString:@"mp3"]) {
         [_popupQuery addButtonWithTitle:@"Edit Metadata"];
     }
@@ -354,9 +356,7 @@
     }
 }
 
-//
-// NSNotifications
-//
+#pragma mark Inter-ViewController controls
 
 - (void)setPausePlayTitlePlay {
     [_pausePlay setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
@@ -373,11 +373,7 @@
 }
 
 - (void)hideControlsString:(NSNotification *)notif {
-    if ([notif.object isEqualToString:@"YES"]) {
-        [self hideControls:YES];
-    } else {
-        [self hideControls:NO];
-    }
+    [self hideControls:[notif.object isEqualToString:@"YES"]];
 }
 
 - (void)setNxtTrackHidden:(NSNotification *)notif {

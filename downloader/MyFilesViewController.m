@@ -57,12 +57,14 @@ static NSString *CellIdentifier = @"Cell";
     [self.view addSubview:_navBar];
     
     self.theTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, screenBounds.size.height) style:UITableViewStylePlain];
-    _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     _theTableView.rowHeight = iPad?60:44;
     _theTableView.dataSource = self;
     _theTableView.delegate = self;
     _theTableView.contentInset = UIEdgeInsetsMake(20+44, 0, 0, 0);
+    _theTableView.scrollIndicatorInsets = _theTableView.contentInset;
+    _theTableView.separatorInset = UIEdgeInsetsMake(0, 50, 0, 50);
     [self.view addSubview:_theTableView];
     
     [self.view bringSubviewToFront:_navBar];

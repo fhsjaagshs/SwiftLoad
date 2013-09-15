@@ -44,7 +44,6 @@
     #import "BGProcFactory.h"
     #import "NetworkActivityController.h"
 
-    #import "WatchdogWindow.h"
     #import "ZoomingImageView.h"
     #import "ContentOffsetWatchdog.h"
     #import "CircularProgressView.h"

@@ -7,7 +7,6 @@
 //
 
 #import "Hamburger.h"
-#import "HamburgerCell.h"
 
 NSString * const kHamburgerTaskUpdateNotification = @"kHamburgerTaskUpdateNotification";
 static NSString *kCellIdentifierHamburger = @"hamburgertext";
@@ -105,16 +104,18 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
     if (self) {
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(tasksChanged) name:kHamburgerTaskUpdateNotification object:nil];
         self.userInteractionEnabled = YES;
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor clearColor];
         self.frame = CGRectMake(0, 0, 250, [[UIScreen mainScreen]bounds].size.height);
         self.opaque = YES;
         self.theTableView = [[UITableView alloc]initWithFrame:self.bounds style:UITableViewStylePlain];
-        _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         _theTableView.backgroundColor = [UIColor clearColor];
         _theTableView.rowHeight = 44;
         _theTableView.dataSource = self;
         _theTableView.delegate = self;
+        _theTableView.separatorInset = UIEdgeInsetsMake(0, 50, 0, 50);
+        _theTableView.tableFooterView = [UIView new];
         [self addSubview:_theTableView];
     }
     return self;
@@ -132,19 +133,31 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
     return ([[TaskController sharedController]numberOfTasks] > 0)?2:1;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 0.01f;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    return [UIView new];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     int row = indexPath.row;
     
     if (indexPath.section == 0) {
-        HamburgerCell *cell = (HamburgerCell *)[tableView dequeueReusableCellWithIdentifier:kCellIdentifierHamburger];
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifierHamburger];
         
         if (cell == nil) {
-            cell = [[HamburgerCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifierHamburger];
-            cell.backgroundColor = self.backgroundColor;
+            cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifierHamburger];
+            cell.textLabel.backgroundColor = [UIColor whiteColor];
+            cell.textLabel.highlightedTextColor = [UIColor blackColor];
+            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+            cell.textLabel.font = [UIFont fontWithName:@"myriad-regular" size:27];
+            cell.selectedBackgroundView = [[UIView alloc]init];
+            cell.selectedBackgroundView.backgroundColor = [UIColor lightGrayColor];
+            cell.backgroundColor = [UIColor clearColor];
         }
-        
-        cell.isFirstCell = (indexPath.row == 0);
         
         if (row == 0) {
             cell.textLabel.text = @"Download URL";
@@ -157,8 +170,6 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
         } else if (row == 4) {
             cell.textLabel.text = @"Settings";
         }
-        
-        [cell setNeedsDisplay];
         
         return cell;
     } else if (indexPath.section == 1) {

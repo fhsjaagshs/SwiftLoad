@@ -56,7 +56,6 @@
 		F130452F179C594F00D7DB4D /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = F130452D179C594F00D7DB4D /* Appirater.m */; };
 		F1304534179C5E6A00D7DB4D /* FilesystemMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = F1304533179C5E6A00D7DB4D /* FilesystemMonitor.m */; };
 		F137F3481791FC5A008FCFD7 /* Hamburger.m in Sources */ = {isa = PBXBuildFile; fileRef = F137F3471791FC5A008FCFD7 /* Hamburger.m */; };
-		F137F34B1791FD14008FCFD7 /* HamburgerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F137F34A1791FD14008FCFD7 /* HamburgerCell.m */; };
 		F13979A516E78F4E00F8B61B /* ArrowLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A116E78F4E00F8B61B /* ArrowLeft.png */; };
 		F13979A616E78F4E00F8B61B /* ArrowLeft@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A216E78F4E00F8B61B /* ArrowLeft@2x.png */; };
 		F13979A716E78F4E00F8B61B /* ArrowRight.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A316E78F4E00F8B61B /* ArrowRight.png */; };
@@ -199,7 +198,6 @@
 		F1D6257817C45D3700CA002A /* file_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D6257417C45D3700CA002A /* file_icon@2x.png */; };
 		F1D6257917C45D3700CA002A /* folder_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D6257517C45D3700CA002A /* folder_icon.png */; };
 		F1D6257A17C45D3700CA002A /* folder_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D6257617C45D3700CA002A /* folder_icon@2x.png */; };
-		F1E2133D17BB154A0073FA82 /* WatchdogWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = F1E2133C17BB154A0073FA82 /* WatchdogWindow.m */; };
 		F1E397E917B9F896002BBD6F /* TagLibAmalgam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1E397E717B9F896002BBD6F /* TagLibAmalgam.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 		F1E397EC17B9F8A8002BBD6F /* ID3Editor.mm in Sources */ = {isa = PBXBuildFile; fileRef = F1E397EB17B9F8A8002BBD6F /* ID3Editor.mm */; };
 		F1E9F76F1773F48500EC345C /* statusbar.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F76D1773F48500EC345C /* statusbar.png */; };
@@ -331,8 +329,6 @@
 		F1304533179C5E6A00D7DB4D /* FilesystemMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilesystemMonitor.m; sourceTree = "<group>"; };
 		F137F3461791FC5A008FCFD7 /* Hamburger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hamburger.h; sourceTree = "<group>"; };
 		F137F3471791FC5A008FCFD7 /* Hamburger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Hamburger.m; sourceTree = "<group>"; };
-		F137F3491791FD13008FCFD7 /* HamburgerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HamburgerCell.h; sourceTree = "<group>"; };
-		F137F34A1791FD14008FCFD7 /* HamburgerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HamburgerCell.m; sourceTree = "<group>"; };
 		F13979A116E78F4E00F8B61B /* ArrowLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ArrowLeft.png; path = Images/ArrowLeft.png; sourceTree = "<group>"; };
 		F13979A216E78F4E00F8B61B /* ArrowLeft@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ArrowLeft@2x.png"; path = "Images/ArrowLeft@2x.png"; sourceTree = "<group>"; };
 		F13979A316E78F4E00F8B61B /* ArrowRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ArrowRight.png; path = Images/ArrowRight.png; sourceTree = "<group>"; };
@@ -562,8 +558,6 @@
 		F1D6257417C45D3700CA002A /* file_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "file_icon@2x.png"; path = "Images/file_icon@2x.png"; sourceTree = "<group>"; };
 		F1D6257517C45D3700CA002A /* folder_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = folder_icon.png; path = Images/folder_icon.png; sourceTree = "<group>"; };
 		F1D6257617C45D3700CA002A /* folder_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "folder_icon@2x.png"; path = "Images/folder_icon@2x.png"; sourceTree = "<group>"; };
-		F1E2133B17BB154A0073FA82 /* WatchdogWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WatchdogWindow.h; sourceTree = "<group>"; };
-		F1E2133C17BB154A0073FA82 /* WatchdogWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WatchdogWindow.m; sourceTree = "<group>"; };
 		F1E397E717B9F896002BBD6F /* TagLibAmalgam.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TagLibAmalgam.cpp; sourceTree = "<group>"; };
 		F1E397E817B9F896002BBD6F /* TagLibAmalgam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagLibAmalgam.h; sourceTree = "<group>"; };
 		F1E397EA17B9F8A8002BBD6F /* ID3Editor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ID3Editor.h; sourceTree = "<group>"; };
@@ -849,8 +843,6 @@
 				F1CB7DAD16FFE99A002693B5 /* SFTPLoginController.m */,
 				F13B08B7178CEE05005201F7 /* WebDAVCredsPrompt.h */,
 				F13B08B8178CEE05005201F7 /* WebDAVCredsPrompt.m */,
-				F1E2133B17BB154A0073FA82 /* WatchdogWindow.h */,
-				F1E2133C17BB154A0073FA82 /* WatchdogWindow.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -870,8 +862,6 @@
 			children = (
 				F137F3461791FC5A008FCFD7 /* Hamburger.h */,
 				F137F3471791FC5A008FCFD7 /* Hamburger.m */,
-				F137F3491791FD13008FCFD7 /* HamburgerCell.h */,
-				F137F34A1791FD14008FCFD7 /* HamburgerCell.m */,
 				F163C4E417AB508D007AB612 /* DashedLineView.h */,
 				F163C4E517AB508D007AB612 /* DashedLineView.m */,
 			);
@@ -1521,7 +1511,6 @@
 				F13B08B9178CEE05005201F7 /* WebDAVCredsPrompt.m in Sources */,
 				F168EDAF1790C61000C21D6F /* UIImage+Additions.m in Sources */,
 				F137F3481791FC5A008FCFD7 /* Hamburger.m in Sources */,
-				F137F34B1791FD14008FCFD7 /* HamburgerCell.m in Sources */,
 				F172BC7D1794B59300AC1483 /* BluetoothManager.m in Sources */,
 				F172BCC31794EC4500AC1483 /* DDData.m in Sources */,
 				F172BCC41794EC4500AC1483 /* DDNumber.m in Sources */,
@@ -1575,7 +1564,6 @@
 				F1E397EC17B9F8A8002BBD6F /* ID3Editor.mm in Sources */,
 				F1CBF07917BA7667003563FD /* EditID3ViewController.m in Sources */,
 				F1CBF07D17BA7710003563FD /* TransparentTextField.m in Sources */,
-				F1E2133D17BB154A0073FA82 /* WatchdogWindow.m in Sources */,
 				F1D083A517BEFE00003E6700 /* CustomVolumeView.m in Sources */,
 				F1C4463017E3510C004725FC /* DBRestClient+SpecificCancellation.m in Sources */,
 				F14FE92517E3FC07005A1AB6 /* TextToggleControl.m in Sources */,

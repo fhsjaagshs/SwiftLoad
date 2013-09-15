@@ -13,29 +13,24 @@ CoolRefreshAnimationStyle animationStyle;
 
 @implementation UITableView (CoolRefresh)
 
-- (void)animationDidStart:(CAAnimation *)anim {
-    if (animationStyle == CoolRefreshAnimationStyleForward) {
-        self.contentOffset = CGPointZero;
-    }
-}
-
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
     if (animationStyle == CoolRefreshAnimationStyleBackward) {
         [UIView animateWithDuration:0.1 animations:^{
-            self.contentOffset = CGPointZero;
+            self.contentOffset = CGPointMake(0, -1*self.contentInset.top);
         }];
     }
 }
 
 - (void)reloadDataWithCoolAnimationType:(CoolRefreshAnimationStyle)style {
-    
     [self reloadData];
-    
-    animationStyle = style;
     
     if (style == CoolRefreshAnimationStyleNone) {
         return;
+    } else if (style == CoolRefreshAnimationStyleForward) {
+        self.contentOffset = CGPointMake(0, -1*self.contentInset.top);
     }
+    
+    animationStyle = style;
     
     CATransition *animation = [CATransition animation];
     [animation setDelegate:self];
@@ -50,6 +45,7 @@ CoolRefreshAnimationStyle animationStyle;
     } else if (style == CoolRefreshAnimationStyleForward) {
         [animation setSubtype:kCATransitionFromTop];
     }
+    
     
     [self.layer addAnimation:animation forKey:@"UITableViewReloadDataAnimationKey"];
 }

@@ -52,7 +52,7 @@
 }
 
 - (void)resetOffset {
-    _scrollView.contentOffset = CGPointZero;
+    _scrollView.contentOffset = CGPointMake(0, 0);
 }
 
 - (void)setInitialText:(NSString *)text {
@@ -68,7 +68,7 @@
     if ([keyPath isEqualToString:@"contentOffset"]) {
         if ((_scrollView.isDecelerating || _scrollView.isDragging) || (_scrollView.isDragging && _scrollView.isDecelerating)) {
             if (_mode == WatchdogModeNormal) {
-                if (_scrollView.contentOffset.y < -30) {
+                if (_scrollView.contentOffset.y < -30-_scrollView.contentInset.top) {
                     if ([_delegate respondsToSelector:@selector(shouldTripWatchdog:)]) {
                         if ([_delegate shouldTripWatchdog:self] && [_delegate respondsToSelector:@selector(watchdogWasTripped:)]) {
                             [_delegate watchdogWasTripped:self];

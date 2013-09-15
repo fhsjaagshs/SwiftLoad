@@ -202,7 +202,9 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
         }
     });
     
-    [self loadMetadataForFile:file];
+    if (!playingError) {
+        [self loadMetadataForFile:file];
+    }
     
     [AudioPlayerViewController notif_setLoop];
     
@@ -475,23 +477,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     _window.rootViewController = self.viewController;
     _window.backgroundColor = [UIColor whiteColor];
     [_window makeKeyAndVisible];
-    
-    [[UIBarButtonItem appearance]setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-
-    if (systemVersion() >= 7.0f) {
-       // UIColor *tintColor = [UIColor colorWithRed:105.0f/255.0f green:54.0f/255.0f blue:153.0f/255.0f alpha:1.0f];
-        //[[UINavigationBar appearance]setBackgroundColor:tintColor];
-        //[[UIToolbar appearance]setTintColor:tintColor];
-    } else {
-        UIImage *navBarImage = [[UIImage imageNamed:@"statusbar"]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 150, 0, 150)];\
-        [[UINavigationBar appearance]setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
-        [[UIToolbar appearance]setBackgroundImage:navBarImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
-    }
-    
-  //  [[UINavigationBar appearance]setTitleTextAttributes:@{ UITextAttributeTextColor: [UIColor whiteColor] }];
-   // [[UIBarButtonItem appearance]setTitleTextAttributes:@{ UITextAttributeTextColor: [UIColor whiteColor], UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(0, 0)] } forState:UIControlStateNormal];
-    //[[UIBarButtonItem appearance]setTitleTextAttributes:@{ UITextAttributeTextColor: [UIColor lightGrayColor], UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(0, 0)] } forState:UIControlStateHighlighted];
-//    [[UIBarButtonItem appearance]setTintColor:[UIColor whiteColor]];
     
     [Appirater setAppId:@"469762999"];
     [Appirater setDaysUntilPrompt:5];
