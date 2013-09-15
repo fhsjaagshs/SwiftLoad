@@ -7,9 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ShadowedNavBar.h"
 
-@interface MyFilesViewController : UIViewController 
+@interface MyFilesViewController : UIViewController
 
 @property (nonatomic, assign) BOOL watchdogCanGo;
 

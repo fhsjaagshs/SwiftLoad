@@ -54,7 +54,6 @@
 		F11FE417145F8218008ECC7E /* TextEditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F11FE415145F8218008ECC7E /* TextEditorViewController.m */; };
 		F128A1DD157FDBFE001BC156 /* SettingsView.m in Sources */ = {isa = PBXBuildFile; fileRef = F128A1DB157FDBFE001BC156 /* SettingsView.m */; };
 		F130452F179C594F00D7DB4D /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = F130452D179C594F00D7DB4D /* Appirater.m */; };
-		F1304531179C5A4100D7DB4D /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1304530179C5A4100D7DB4D /* StoreKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		F1304534179C5E6A00D7DB4D /* FilesystemMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = F1304533179C5E6A00D7DB4D /* FilesystemMonitor.m */; };
 		F137F3481791FC5A008FCFD7 /* Hamburger.m in Sources */ = {isa = PBXBuildFile; fileRef = F137F3471791FC5A008FCFD7 /* Hamburger.m */; };
 		F137F34B1791FD14008FCFD7 /* HamburgerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F137F34A1791FD14008FCFD7 /* HamburgerCell.m */; };
@@ -81,6 +80,7 @@
 		F150D6C2177F783E00E4C094 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = F150D6BB177F783E00E4C094 /* FMDatabaseQueue.m */; };
 		F150D6C4177F783E00E4C094 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = F150D6BE177F783E00E4C094 /* FMResultSet.m */; };
 		F15277D113F4B08800338673 /* MyFilesViewDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F15277CF13F4B08800338673 /* MyFilesViewDetailViewController.m */; };
+		F153EAA417E50EA100896BB0 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F153EAA317E50EA100896BB0 /* StoreKit.framework */; };
 		F15507D5176EAFE50024FF03 /* action@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F15507D4176EAFE50024FF03 /* action@2x.png */; };
 		F15507D7176EB0290024FF03 /* bluetooth@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F15507D6176EB0290024FF03 /* bluetooth@2x.png */; };
 		F15507D9176EB04D0024FF03 /* delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F15507D8176EB04D0024FF03 /* delete@2x.png */; };
@@ -140,12 +140,10 @@
 		F172BCE01794EC4500AC1483 /* PUTResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BCC01794EC4500AC1483 /* PUTResponse.m */; };
 		F172BCE11794EC4500AC1483 /* WebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BCC21794EC4500AC1483 /* WebSocket.m */; };
 		F172BCE41794EC6700AC1483 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BCE31794EC6700AC1483 /* HTTPConnection.m */; };
-		F1798EAF1774177400310C37 /* ShadowedNavBar.m in Sources */ = {isa = PBXBuildFile; fileRef = F1798EAE1774177400310C37 /* ShadowedNavBar.m */; };
-		F1798EB2177417CF00310C37 /* ShadowedToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = F1798EB1177417CF00310C37 /* ShadowedToolbar.m */; };
 		F17CEDE116FE724C00E7E47B /* FileCreationDialogue.m in Sources */ = {isa = PBXBuildFile; fileRef = F17CEDE016FE724C00E7E47B /* FileCreationDialogue.m */; };
 		F17DC65F140C45690015F613 /* AudioPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F17DC65E140C45690015F613 /* AudioPlayerViewController.m */; };
 		F17DC662140C489B0015F613 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F17DC661140C489B0015F613 /* AVFoundation.framework */; };
-		F17F11231420017100CE45D7 /* fileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F17F11211420017100CE45D7 /* fileInfo.m */; };
+		F17F11231420017100CE45D7 /* FileInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F17F11211420017100CE45D7 /* FileInfoViewController.m */; };
 		F1847BBB16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F1847BBA16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m */; };
 		F18D19C317A5A479009A8D07 /* Task.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D19C217A5A479009A8D07 /* Task.m */; };
 		F18D19C617A5A7B1009A8D07 /* TaskController.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D19C517A5A7B1009A8D07 /* TaskController.m */; };
@@ -178,7 +176,7 @@
 		F1AE31BC17BDC3C0005D3EE6 /* play_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1AE31BA17BDC3C0005D3EE6 /* play_pressed@2x.png */; };
 		F1B1C1E417B29C1800B6164C /* MarqueeLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B1C1E317B29C1800B6164C /* MarqueeLabel.m */; };
 		F1B1C1EA17B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B1C1E917B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.m */; };
-		F1B2489014E333E300C44E11 /* webDAVHelp.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B2488E14E333E200C44E11 /* webDAVHelp.m */; };
+		F1B2489014E333E300C44E11 /* WebDAVHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B2488E14E333E200C44E11 /* WebDAVHelpViewController.m */; };
 		F1B2C0FC17961A0E00AD5A04 /* PeerPickerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B2C0FB17961A0E00AD5A04 /* PeerPickerCell.m */; };
 		F1BA8C7E17728500007AAF85 /* BGProcFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BA8C7D17728500007AAF85 /* BGProcFactory.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F1BC30CA17715DF300DAFA0A /* Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BC30C917715DF300DAFA0A /* Hack.m */; };
@@ -329,7 +327,6 @@
 		F130452C179C594F00D7DB4D /* Appirater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Appirater.h; sourceTree = "<group>"; };
 		F130452D179C594F00D7DB4D /* Appirater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Appirater.m; sourceTree = "<group>"; };
 		F130452E179C594F00D7DB4D /* AppiraterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppiraterDelegate.h; sourceTree = "<group>"; };
-		F1304530179C5A4100D7DB4D /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		F1304532179C5E6A00D7DB4D /* FilesystemMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilesystemMonitor.h; sourceTree = "<group>"; };
 		F1304533179C5E6A00D7DB4D /* FilesystemMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilesystemMonitor.m; sourceTree = "<group>"; };
 		F137F3461791FC5A008FCFD7 /* Hamburger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hamburger.h; sourceTree = "<group>"; };
@@ -374,6 +371,8 @@
 		F150D6BE177F783E00E4C094 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
 		F15277CE13F4B08800338673 /* MyFilesViewDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyFilesViewDetailViewController.h; sourceTree = "<group>"; };
 		F15277CF13F4B08800338673 /* MyFilesViewDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFilesViewDetailViewController.m; sourceTree = "<group>"; };
+		F153EAA217E50D8900896BB0 /* Swift.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = Swift.entitlements; path = ../Swift.entitlements; sourceTree = "<group>"; };
+		F153EAA317E50EA100896BB0 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		F15507D4176EAFE50024FF03 /* action@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "action@2x.png"; path = "Images/action@2x.png"; sourceTree = "<group>"; };
 		F15507D6176EB0290024FF03 /* bluetooth@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bluetooth@2x.png"; path = "Images/bluetooth@2x.png"; sourceTree = "<group>"; };
 		F15507D8176EB04D0024FF03 /* delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "delete@2x.png"; path = "Images/delete@2x.png"; sourceTree = "<group>"; };
@@ -481,17 +480,13 @@
 		F172BCC21794EC4500AC1483 /* WebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSocket.m; sourceTree = "<group>"; };
 		F172BCE21794EC6700AC1483 /* HTTPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPConnection.h; sourceTree = "<group>"; };
 		F172BCE31794EC6700AC1483 /* HTTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPConnection.m; sourceTree = "<group>"; };
-		F1798EAD1774177400310C37 /* ShadowedNavBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShadowedNavBar.h; sourceTree = "<group>"; };
-		F1798EAE1774177400310C37 /* ShadowedNavBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShadowedNavBar.m; sourceTree = "<group>"; };
-		F1798EB0177417CF00310C37 /* ShadowedToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShadowedToolbar.h; sourceTree = "<group>"; };
-		F1798EB1177417CF00310C37 /* ShadowedToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShadowedToolbar.m; sourceTree = "<group>"; };
 		F17CEDDF16FE724C00E7E47B /* FileCreationDialogue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileCreationDialogue.h; sourceTree = "<group>"; };
 		F17CEDE016FE724C00E7E47B /* FileCreationDialogue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileCreationDialogue.m; sourceTree = "<group>"; };
 		F17DC65E140C45690015F613 /* AudioPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioPlayerViewController.m; sourceTree = "<group>"; };
 		F17DC660140C456E0015F613 /* AudioPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPlayerViewController.h; sourceTree = "<group>"; };
 		F17DC661140C489B0015F613 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		F17F11201420017100CE45D7 /* fileInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fileInfo.h; sourceTree = "<group>"; };
-		F17F11211420017100CE45D7 /* fileInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = fileInfo.m; sourceTree = "<group>"; };
+		F17F11201420017100CE45D7 /* FileInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileInfoViewController.h; sourceTree = "<group>"; };
+		F17F11211420017100CE45D7 /* FileInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileInfoViewController.m; sourceTree = "<group>"; };
 		F1847BB916E538C600006C25 /* MFMailComposeViewController+BlockExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MFMailComposeViewController+BlockExtensions.h"; sourceTree = "<group>"; };
 		F1847BBA16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MFMailComposeViewController+BlockExtensions.m"; sourceTree = "<group>"; };
 		F18D19C117A5A479009A8D07 /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
@@ -533,8 +528,8 @@
 		F1B1C1E317B29C1800B6164C /* MarqueeLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarqueeLabel.m; sourceTree = "<group>"; };
 		F1B1C1E817B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MarqueeLabel+LabelizeIfNecessary.h"; sourceTree = "<group>"; };
 		F1B1C1E917B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MarqueeLabel+LabelizeIfNecessary.m"; sourceTree = "<group>"; };
-		F1B2488D14E333E200C44E11 /* webDAVHelp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = webDAVHelp.h; sourceTree = "<group>"; };
-		F1B2488E14E333E200C44E11 /* webDAVHelp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = webDAVHelp.m; sourceTree = "<group>"; };
+		F1B2488D14E333E200C44E11 /* WebDAVHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebDAVHelpViewController.h; sourceTree = "<group>"; };
+		F1B2488E14E333E200C44E11 /* WebDAVHelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebDAVHelpViewController.m; sourceTree = "<group>"; };
 		F1B2C0FA17961A0E00AD5A04 /* PeerPickerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeerPickerCell.h; sourceTree = "<group>"; };
 		F1B2C0FB17961A0E00AD5A04 /* PeerPickerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeerPickerCell.m; sourceTree = "<group>"; };
 		F1BA8C7C17728500007AAF85 /* BGProcFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BGProcFactory.h; sourceTree = "<group>"; };
@@ -619,6 +614,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F153EAA417E50EA100896BB0 /* StoreKit.framework in Frameworks */,
 				F1679ACA1787B3C1001369B1 /* libcrypto.a in Frameworks */,
 				F1679ACB1787B3C1001369B1 /* libssh2.a in Frameworks */,
 				F1679ACC1787B3C1001369B1 /* libssl.a in Frameworks */,
@@ -638,7 +634,6 @@
 				F11C403713F830780077F5D1 /* UIKit.framework in Frameworks */,
 				F11C403613F830720077F5D1 /* Foundation.framework in Frameworks */,
 				F11C402E13F82F9D0077F5D1 /* MessageUI.framework in Frameworks */,
-				F1304531179C5A4100D7DB4D /* StoreKit.framework in Frameworks */,
 				F1693C7316DFB9B5006E3739 /* DropboxSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -755,6 +750,7 @@
 		F119CEF613F46DA6007D67E4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F153EAA317E50EA100896BB0 /* StoreKit.framework */,
 				F1679AC71787B3C1001369B1 /* libcrypto.a */,
 				F1679AC81787B3C1001369B1 /* libssh2.a */,
 				F1679AC91787B3C1001369B1 /* libssl.a */,
@@ -762,7 +758,6 @@
 				F150D6B1177F5B9400E4C094 /* libsqlite3.dylib */,
 				F166BC1814E21973003E5A07 /* libxml2.dylib */,
 				F1C0CEFB1661AEC6001B1B42 /* libz.1.2.5.dylib */,
-				F1304530179C5A4100D7DB4D /* StoreKit.framework */,
 				9B50F4E51613C4CD0040F394 /* CoreMedia.framework */,
 				F1D3A572157A8F9E00A2D141 /* Security.framework */,
 				F1A72947149876040049DBB6 /* GameKit.framework */,
@@ -802,12 +797,12 @@
 				F119CF0713F46DA6007D67E4 /* AppDelegate.m */,
 				F128A1DA157FDBFD001BC156 /* SettingsView.h */,
 				F128A1DB157FDBFE001BC156 /* SettingsView.m */,
-				F17F11201420017100CE45D7 /* fileInfo.h */,
-				F17F11211420017100CE45D7 /* fileInfo.m */,
+				F17F11201420017100CE45D7 /* FileInfoViewController.h */,
+				F17F11211420017100CE45D7 /* FileInfoViewController.m */,
 				F166BBC114E2171A003E5A07 /* WebDAVViewController.h */,
 				F166BBC214E2171A003E5A07 /* WebDAVViewController.m */,
-				F1B2488D14E333E200C44E11 /* webDAVHelp.h */,
-				F1B2488E14E333E200C44E11 /* webDAVHelp.m */,
+				F1B2488D14E333E200C44E11 /* WebDAVHelpViewController.h */,
+				F1B2488E14E333E200C44E11 /* WebDAVHelpViewController.m */,
 				F1679AC41787B368001369B1 /* SFTPBrowserViewController.h */,
 				F1679AC51787B368001369B1 /* SFTPBrowserViewController.m */,
 				F10CBC5B17080C6600C82AFB /* DropboxBrowserViewController.h */,
@@ -854,10 +849,6 @@
 				F1CB7DAD16FFE99A002693B5 /* SFTPLoginController.m */,
 				F13B08B7178CEE05005201F7 /* WebDAVCredsPrompt.h */,
 				F13B08B8178CEE05005201F7 /* WebDAVCredsPrompt.m */,
-				F1798EAD1774177400310C37 /* ShadowedNavBar.h */,
-				F1798EAE1774177400310C37 /* ShadowedNavBar.m */,
-				F1798EB0177417CF00310C37 /* ShadowedToolbar.h */,
-				F1798EB1177417CF00310C37 /* ShadowedToolbar.m */,
 				F1E2133B17BB154A0073FA82 /* WatchdogWindow.h */,
 				F1E2133C17BB154A0073FA82 /* WatchdogWindow.m */,
 			);
@@ -1196,6 +1187,7 @@
 		F19BB51816E006680081C95B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				F153EAA217E50D8900896BB0 /* Swift.entitlements */,
 				F111903A17B838B400FE48F2 /* myriad-regular.ttf */,
 				F19BB51916E006CA0081C95B /* main.m */,
 				F19BB51A16E006CA0081C95B /* Swift-Info.plist */,
@@ -1332,8 +1324,21 @@
 		F119CEEA13F46DA6007D67E4 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Nathaniel Symer";
+				TargetAttributes = {
+					F119CEF213F46DA6007D67E4 = {
+						DevelopmentTeam = GWB3VGVLKR;
+						SystemCapabilities = {
+							com.apple.InAppPurchase = {
+								enabled = 0;
+							};
+							com.apple.InterAppAudio = {
+								enabled = 1;
+							};
+						};
+					};
+				};
 			};
 			buildConfigurationList = F119CEED13F46DA6007D67E4 /* Build configuration list for PBXProject "Swift" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1449,12 +1454,12 @@
 				F15277D113F4B08800338673 /* MyFilesViewDetailViewController.m in Sources */,
 				F1EDE3F613F8708600C17B2A /* MyFilesViewController.m in Sources */,
 				F17DC65F140C45690015F613 /* AudioPlayerViewController.m in Sources */,
-				F17F11231420017100CE45D7 /* fileInfo.m in Sources */,
+				F17F11231420017100CE45D7 /* FileInfoViewController.m in Sources */,
 				F1444581145A04A30026CDB7 /* PictureViewController.m in Sources */,
 				F11FE417145F8218008ECC7E /* TextEditorViewController.m in Sources */,
 				F149A685149176E60038F1FC /* MoviePlayerViewController.m in Sources */,
 				F166BBC414E2171A003E5A07 /* WebDAVViewController.m in Sources */,
-				F1B2489014E333E300C44E11 /* webDAVHelp.m in Sources */,
+				F1B2489014E333E300C44E11 /* WebDAVHelpViewController.m in Sources */,
 				9BFF29FA15387C67007ED9B1 /* ioapi.c in Sources */,
 				9BFF29FB15387C67007ED9B1 /* mztools.c in Sources */,
 				9BFF29FC15387C67007ED9B1 /* unzip.c in Sources */,
@@ -1488,8 +1493,6 @@
 				F1BC30CA17715DF300DAFA0A /* Hack.m in Sources */,
 				F1BA8C7E17728500007AAF85 /* BGProcFactory.m in Sources */,
 				F1E9F7861773FDF300EC345C /* DisclosureButton.m in Sources */,
-				F1798EAF1774177400310C37 /* ShadowedNavBar.m in Sources */,
-				F1798EB2177417CF00310C37 /* ShadowedToolbar.m in Sources */,
 				F1178B6F1775245400337813 /* TransparentAlert.m in Sources */,
 				F150D6BF177F783E00E4C094 /* FMDatabase.m in Sources */,
 				F150D6C0177F783E00E4C094 /* FMDatabaseAdditions.m in Sources */,
@@ -1586,7 +1589,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
@@ -1598,7 +1600,7 @@
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_VERSION = "";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -1606,12 +1608,13 @@
 				INFOPLIST_FILE = "/Users/nathaniel/Documents/Code/SwiftLoad/downloader/SupportingFiles/SwiftLoad-Info.plist";
 				INFOPLIST_PREFIX_HEADER = "/Users/nathaniel/Documents/Code/SwiftLoad/downloader/SupportingFiles/SwiftLoad-Prefix.pch";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
-				VALID_ARCHS = armv7;
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Debug;
 		};
@@ -1619,13 +1622,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_VERSION = "";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -1640,7 +1642,7 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = armv7;
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Release;
 		};
@@ -1648,6 +1650,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = Swift.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1664,7 +1668,7 @@
 				);
 				INFOPLIST_FILE = "downloader/Swift-Info.plist";
 				INFOPLIST_PREFIX_HEADER = "/Users/nathaniel/Documents/Code/SwiftLoad/downloader/SwiftLoad-Prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -1672,11 +1676,12 @@
 					"\"$(SRCROOT)/Libs/libssh2-for-iOS/lib\"",
 				);
 				PRODUCT_NAME = Swift;
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
-				VALID_ARCHS = armv7;
+				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1685,6 +1690,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = Swift.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1701,7 +1708,7 @@
 				);
 				INFOPLIST_FILE = "downloader/Swift-Info.plist";
 				INFOPLIST_PREFIX_HEADER = "/Users/nathaniel/Documents/Code/SwiftLoad/downloader/SwiftLoad-Prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -1709,11 +1716,12 @@
 					"\"$(SRCROOT)/Libs/libssh2-for-iOS/lib\"",
 				);
 				PRODUCT_NAME = Swift;
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
-				VALID_ARCHS = armv7;
+				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

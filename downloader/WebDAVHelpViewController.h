@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface webDAVHelp : UIViewController
+@interface WebDAVHelpViewController : UIViewController
 
 @end

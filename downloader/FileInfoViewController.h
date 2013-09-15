@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface fileInfo : UIViewController
+@interface FileInfoViewController : UIViewController
 
 @end

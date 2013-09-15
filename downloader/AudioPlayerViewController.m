@@ -26,7 +26,7 @@
 @property (nonatomic, strong) MarqueeLabel *albumLabel;
 
 @property (nonatomic, strong) UISlider *time;
-@property (nonatomic, strong) ShadowedNavBar *navBar;
+@property (nonatomic, strong) UINavigationBar *navBar;
 
 @property (nonatomic, strong) TextToggleControl *loopControl;
 
@@ -49,7 +49,7 @@
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
     
-    self.navBar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
+    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]];
     topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
@@ -62,7 +62,7 @@
     _artistLabel.marqueeType = MLContinuous;
     _artistLabel.animationCurve = UIViewAnimationCurveLinear;
     _artistLabel.numberOfLines = 1;
-    _artistLabel.textAlignment = UITextAlignmentCenter;
+    _artistLabel.textAlignment = NSTextAlignmentCenter;
     _artistLabel.backgroundColor = [UIColor clearColor];
     _artistLabel.textColor = [UIColor blackColor];
     _artistLabel.font = [UIFont systemFontOfSize:15];
@@ -73,7 +73,7 @@
     _titleLabel.marqueeType = MLContinuous;
     _titleLabel.animationCurve = UIViewAnimationCurveLinear;
     _titleLabel.numberOfLines = 1;
-    _titleLabel.textAlignment = UITextAlignmentCenter;
+    _titleLabel.textAlignment = NSTextAlignmentCenter;
     _titleLabel.backgroundColor = [UIColor clearColor];
     _titleLabel.textColor = [UIColor blackColor];
     _titleLabel.font = [UIFont boldSystemFontOfSize:15];
@@ -84,7 +84,7 @@
     _albumLabel.marqueeType = MLContinuous;
     _albumLabel.animationCurve = UIViewAnimationCurveLinear;
     _albumLabel.numberOfLines = 1;
-    _albumLabel.textAlignment = UITextAlignmentCenter;
+    _albumLabel.textAlignment = NSTextAlignmentCenter;
     _albumLabel.backgroundColor = [UIColor clearColor];
     _albumLabel.textColor = [UIColor blackColor];
     _albumLabel.font = [UIFont systemFontOfSize:15];
@@ -94,7 +94,7 @@
     _secondsElapsed.font = [UIFont boldSystemFontOfSize:15];
     _secondsElapsed.textColor = [UIColor blackColor];
     _secondsElapsed.backgroundColor = [UIColor clearColor];
-    _secondsElapsed.textAlignment = UITextAlignmentRight;
+    _secondsElapsed.textAlignment = NSTextAlignmentRight;
     _secondsElapsed.text = @"0:00";
     [self.view addSubview:_secondsElapsed];
     
@@ -110,7 +110,7 @@
     _secondsRemaining.font = [UIFont boldSystemFontOfSize:15];
     _secondsRemaining.textColor = [UIColor blackColor];
     _secondsRemaining.backgroundColor = [UIColor clearColor];
-    _secondsRemaining.textAlignment = UITextAlignmentLeft;
+    _secondsRemaining.textAlignment = NSTextAlignmentLeft;
     _secondsRemaining.text = @"-0:00";
     [self.view addSubview:_secondsRemaining];
     
@@ -164,6 +164,8 @@
     
     [self refreshLoopState];
     [MarqueeLabel controllerLabelsShouldAnimate:self];
+    
+    [self adjustViewsForiOS7];
 }
 
 - (void)saveLoopState {
@@ -210,7 +212,7 @@
     [self stopUpdatingTime];
     
     [ad setOpenFile:nil];
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)startUpdatingTime {
@@ -293,7 +295,7 @@
             [[TaskController sharedController]addTask:task];
         } else if (buttonIndex == 3) {
             EditID3ViewController *controller = [EditID3ViewController viewControllerWhite];
-            [self presentModalViewController:controller animated:YES];
+            [self presentViewController:controller animated:YES completion:nil];
         }
     } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send via Bluetooth", @"Upload to Dropbox", nil];
     

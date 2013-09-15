@@ -14,8 +14,8 @@
 @property (nonatomic, strong) ZoomingImageView *zoomingImageView;
 @property (nonatomic, strong) UIBarButtonItem *prevImg;
 @property (nonatomic, strong) UIBarButtonItem *nextImg;
-@property (nonatomic, strong) ShadowedNavBar *navBar;
-@property (nonatomic, strong) ShadowedToolbar *toolBar;
+@property (nonatomic, strong) UINavigationBar *navBar;
+@property (nonatomic, strong) UIToolbar *toolBar;
 
 @property (nonatomic, assign) int imageNumber;
 
@@ -27,7 +27,7 @@
     [super loadView];
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     
-    self.navBar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
+    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]];
     topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
@@ -36,14 +36,12 @@
     [self.view addSubview:_navBar];
     [self.view bringSubviewToFront:_navBar];
     
-    self.toolBar = [[ShadowedToolbar alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-44, screenBounds.size.width, 44)];
+    self.toolBar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-44, screenBounds.size.width, 44)];
     _toolBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     
     UIBarButtonItem *space = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     self.nextImg = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"ArrowRight"] style:UIBarButtonItemStylePlain target:self action:@selector(nextImage)];
-    //[_nextImg setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     self.prevImg = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"ArrowLeft"] style:UIBarButtonItemStylePlain target:self action:@selector(previousImage)];
-    //[_prevImg setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     
     self.toolBar.items = @[space,_prevImg,space,_nextImg,space];
     [self.view addSubview:_toolBar];
@@ -87,6 +85,8 @@
     }
 
     [_zoomingImageView loadImage:[UIImage imageWithContentsOfFile:[kAppDelegate openFile]]];
+    
+    [self adjustViewsForiOS7];
 }
 
 - (NSArray *)imageFiles {

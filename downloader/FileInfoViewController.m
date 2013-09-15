@@ -6,18 +6,18 @@
 //  Copyright 2011 Nathaniel Symer. All rights reserved.
 //
 
-#import "fileInfo.h"
+#import "FileInfoViewController.h"
 
-@interface fileInfo () <UITextFieldDelegate>
+@interface FileInfoViewController () <UITextFieldDelegate>
 
 @property (nonatomic, strong) TransparentTextField *fileName;
 @property (nonatomic, strong) UILabel *md5Field;
 @property (nonatomic, strong) UIBarButtonItem *revertButton;
-@property (nonatomic, strong) ShadowedNavBar *navBar;
+@property (nonatomic, strong) UINavigationBar *navBar;
 
 @end
 
-@implementation fileInfo
+@implementation FileInfoViewController
 
 - (void)loadView {
     [super loadView];
@@ -28,7 +28,7 @@
     
     self.revertButton = [[UIBarButtonItem alloc]initWithTitle:@"Revert" style:UIBarButtonItemStyleBordered target:self action:@selector(revertAction)];
     
-    self.navBar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
+    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"File Details"];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
@@ -45,7 +45,7 @@
     _fileName.clearButtonMode = UITextFieldViewModeWhileEditing;
     _fileName.adjustsFontSizeToFitWidth = YES;
     _fileName.font = [UIFont systemFontOfSize:14];
-    _fileName.textAlignment = UITextAlignmentCenter;
+    _fileName.textAlignment = NSTextAlignmentCenter;
     _fileName.text = [[kAppDelegate openFile]lastPathComponent];
     [_fileName addTarget:self action:@selector(textFieldDidEndOnExit) forControlEvents:UIControlEventEditingDidEndOnExit];
     [_fileName addTarget:self action:@selector(textFieldDidChange) forControlEvents:UIControlEventEditingChanged];
@@ -60,7 +60,7 @@
         
         staticMD5Label.textColor = [UIColor blackColor];
         staticMD5Label.backgroundColor = [UIColor clearColor];
-        staticMD5Label.textAlignment = UITextAlignmentCenter;
+        staticMD5Label.textAlignment = NSTextAlignmentCenter;
         staticMD5Label.font = [UIFont boldSystemFontOfSize:iPad?23:17];
         staticMD5Label.text = @"MD5 Checksum";
         staticMD5Label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
@@ -69,7 +69,7 @@
         self.md5Field = [[UILabel alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-(iPad?241:201), screenBounds.size.width, iPad?41:31)];
         _md5Field.text = @"Loading...";
         _md5Field.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        _md5Field.textAlignment = UITextAlignmentCenter;
+        _md5Field.textAlignment = NSTextAlignmentCenter;
         _md5Field.backgroundColor = [UIColor clearColor];
         _md5Field.font = [UIFont systemFontOfSize:iPad?23:17];
         _md5Field.textColor = [UIColor blackColor];
@@ -83,13 +83,15 @@
         UILabel *moddateLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-(iPad?62:31), screenBounds.size.width, iPad?62:31)];
         moddateLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         moddateLabel.font = [UIFont systemFontOfSize:iPad?26:17];
-        moddateLabel.textAlignment = UITextAlignmentCenter;
+        moddateLabel.textAlignment = NSTextAlignmentCenter;
         moddateLabel.backgroundColor = [UIColor clearColor];
         moddateLabel.textColor = [UIColor blackColor];
         moddateLabel.text = [NSString stringWithFormat:@"Last Modified: %@",[formatter stringFromDate:fileDate([kAppDelegate openFile])]];
         [self.view addSubview:moddateLabel];
         [self doMD5];
     }
+    
+    [self adjustViewsForiOS7];
 }
 
 - (void)rename {

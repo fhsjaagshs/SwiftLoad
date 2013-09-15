@@ -17,10 +17,11 @@
     if (self) {
         self.textLabel.backgroundColor = [UIColor whiteColor];
         self.textLabel.highlightedTextColor = [UIColor blackColor];
-        self.textLabel.textAlignment = UITextAlignmentCenter;
+        self.textLabel.textAlignment = NSTextAlignmentCenter;
         self.textLabel.font = [UIFont fontWithName:@"myriad-regular" size:27];
         self.selectedBackgroundView = [[UIView alloc]init];
         self.selectedBackgroundView.backgroundColor = [UIColor lightGrayColor];
+        self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
@@ -39,6 +40,8 @@
         CGContextStrokeLineSegments(context, points, 2);
         
         CGContextRestoreGState(context);
+    } else {
+        [super drawRect:rect];
     }
 }
 

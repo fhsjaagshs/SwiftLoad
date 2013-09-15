@@ -48,7 +48,7 @@
     BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     
-    UINavigationBar *navBar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
+    UINavigationBar *navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"WebDAV Server"];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
@@ -58,7 +58,7 @@
     [self.view bringSubviewToFront:navBar];
     
     self.onLabel = [[UILabel alloc]initWithFrame:iPad?CGRectMake(234, 100, 300, 83):CGRectMake(0, sanitizeMesurement(44), screenBounds.size.width, 91)];
-    _onLabel.textAlignment = UITextAlignmentCenter;
+    _onLabel.textAlignment = NSTextAlignmentCenter;
     _onLabel.backgroundColor = [UIColor clearColor];
     _onLabel.textColor = [UIColor blackColor];
     _onLabel.text = @"WebDAV server is ON";
@@ -71,7 +71,7 @@
     tf.backgroundColor = [UIColor clearColor];
     tf.font = [UIFont systemFontOfSize:iPad?17:15];
     tf.editable = NO;
-    tf.textAlignment = UITextAlignmentCenter;
+    tf.textAlignment = NSTextAlignmentCenter;
     tf.scrollEnabled = NO;
     [self.view addSubview:tf];
     
@@ -79,13 +79,13 @@
     _urlLabel.textColor = [UIColor darkGrayColor];
     _urlLabel.backgroundColor = [UIColor clearColor];
     _urlLabel.font = [UIFont boldSystemFontOfSize:iPad?31:18];
-    _urlLabel.textAlignment = UITextAlignmentCenter;
+    _urlLabel.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:_urlLabel];
     
     UITextView *btf = [[UITextView alloc]initWithFrame:iPad?CGRectMake(158, 512, 453, 61):CGRectMake(40, sanitizeMesurement(326), 240, 50)];
     btf.backgroundColor = [UIColor clearColor];
     btf.editable = NO;
-    btf.textAlignment = UITextAlignmentCenter;
+    btf.textAlignment = NSTextAlignmentCenter;
     btf.textColor = [UIColor blackColor];
     btf.font = [UIFont systemFontOfSize:iPad?19:14];
     btf.scrollEnabled = NO;
@@ -93,6 +93,8 @@
     [self.view addSubview:btf];
     
     [self createServer];
+    
+    [self adjustViewsForiOS7];
 }
 
 - (void)killServer {
@@ -142,11 +144,11 @@
 - (void)close {
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     [self killServer];
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)showHelp {
-    [self presentModalViewController:[webDAVHelp viewControllerWhite] animated:YES];
+    [self presentViewController:[WebDAVHelpViewController viewControllerWhite] animated:YES completion:nil];
 }
 
 - (NSUInteger)supportedInterfaceOrientations {

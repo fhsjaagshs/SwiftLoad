@@ -6,16 +6,16 @@
 //  Copyright 2012 Nathaniel Symer. All rights reserved.
 //
 
-#import "webDAVHelp.h"
+#import "WebDAVHelpViewController.h"
 
-@implementation webDAVHelp
+@implementation WebDAVHelpViewController
 
 - (void)loadView {
     [super loadView];
     BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     
-    UINavigationBar *navBar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
+    UINavigationBar *navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"WebDAV Setup"];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
@@ -28,17 +28,19 @@
     textView.backgroundColor = [UIColor clearColor];
     textView.textColor = [UIColor blackColor];
     textView.font = [UIFont boldSystemFontOfSize:18];
-    textView.textAlignment = UITextAlignmentCenter;
+    textView.textAlignment = NSTextAlignmentCenter;
     textView.editable = NO;
     [self.view addSubview:textView];
     
     UIImageView *imageView = [[UIImageView alloc]initWithFrame:iPad?CGRectMake(110, 131, 549, 287):CGRectMake(18, sanitizeMesurement(81), 285, 150)];
     imageView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle]pathForResource:@"config" ofType:@"png"]];
     [self.view addSubview:imageView];
+    
+    [self adjustViewsForiOS7];
 }
 
 - (void)close {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (NSUInteger)supportedInterfaceOrientations {

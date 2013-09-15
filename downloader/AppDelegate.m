@@ -313,10 +313,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 }
 
 - (void)audioPlayerEndInterruption:(AVAudioPlayer *)player withOptions:(NSUInteger)flags {
-    [self audioPlayerEndInterruption:player];
-}
-
-- (void)audioPlayerEndInterruption:(AVAudioPlayer *)player {
     if (!_audioPlayer.isPlaying) {
         [_audioPlayer play];
         [AudioPlayerViewController notif_setPausePlayTitlePause];
@@ -336,12 +332,12 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (void)sendFileInEmail:(NSString *)file {
     if ([MFMailComposeViewController canSendMail]) {
         MFMailComposeViewController *controller = [[MFMailComposeViewController alloc]initWithCompletionHandler:^(MFMailComposeViewController *controller, MFMailComposeResult result, NSError *error) {
-            [controller dismissModalViewControllerAnimated:YES];
+            [controller dismissViewControllerAnimated:YES completion:nil];
         }];
         [controller setSubject:@"Your file"];
         [controller addAttachmentData:[NSData dataWithContentsOfFile:file] mimeType:[MIMEUtils fileMIMEType:file] fileName:[file lastPathComponent]];
         [controller setMessageBody:@"" isHTML:NO];
-        [[UIViewController topViewController]presentModalViewController:controller animated:YES];
+        [[UIViewController topViewController]presentViewController:controller animated:YES completion:nil];
     } else {
         [TransparentAlert showAlertWithTitle:@"Mail Unavailable" andMessage:@"In order to email files, you must set up an mail account in Settings."];
     }
@@ -350,10 +346,10 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (void)sendStringAsSMS:(NSString *)string fromViewController:(UIViewController *)vc {
     if ([MFMessageComposeViewController canSendText]) {
         MFMessageComposeViewController *controller = [[MFMessageComposeViewController alloc]initWithCompletionHandler:^(MFMessageComposeViewController *controller, MessageComposeResult result) {
-            [controller dismissModalViewControllerAnimated:YES];
+            [controller dismissViewControllerAnimated:YES completion:nil];
         }];
         [controller setBody:string];
-        [vc presentModalViewController:controller animated:YES];
+        [vc presentViewController:controller animated:YES completion:nil];
     } else {
         [TransparentAlert showAlertWithTitle:@"SMS unavailable" andMessage:@"Please double check if you can send SMS messsages or iMessages."];
     }
@@ -468,18 +464,19 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     self.window.opaque = YES;
     self.viewController = [MyFilesViewController viewController];
     _window.rootViewController = self.viewController;
-    self.window.backgroundColor = [UIColor whiteColor];
+    _window.backgroundColor = [UIColor whiteColor];
     [_window makeKeyAndVisible];
     
     [[UIBarButtonItem appearance]setBackgroundImage:[UIImage new] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
 
-    UIImage *navBarImage = [[UIImage imageNamed:@"statusbar"]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 150, 0, 150)];
+    UIImage *navBarImage = [[UIImage imageNamed:@"statusbar"]resizableImageWithCapInsets:UIEdgeInsetsMake(0, 150, 0, 150)];\
     [[UINavigationBar appearance]setBackgroundImage:navBarImage forBarMetrics:UIBarMetricsDefault];
     [[UIToolbar appearance]setBackgroundImage:navBarImage forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
     
     [[UINavigationBar appearance]setTitleTextAttributes:@{ UITextAttributeTextColor: [UIColor whiteColor] }];
     [[UIBarButtonItem appearance]setTitleTextAttributes:@{ UITextAttributeTextColor: [UIColor whiteColor], UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(0, 0)] } forState:UIControlStateNormal];
     [[UIBarButtonItem appearance]setTitleTextAttributes:@{ UITextAttributeTextColor: [UIColor lightGrayColor], UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetMake(0, 0)] } forState:UIControlStateHighlighted];
+    [[UIBarButtonItem appearance]setTintColor:[UIColor whiteColor]];
     
     [Appirater setAppId:@"469762999"];
     [Appirater setDaysUntilPrompt:5];
@@ -487,7 +484,7 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
     [Appirater setSignificantEventsUntilPrompt:-1];
     [Appirater setTimeBeforeReminding:2];
     [Appirater appLaunched:YES];
-
+    
     return YES;
 }
 

@@ -20,7 +20,7 @@
 - (void)loadView {
     [super loadView];
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
-    UINavigationBar *bar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
+    UINavigationBar *bar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
@@ -44,11 +44,14 @@
 
     NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:[kAppDelegate openFile]] cachePolicy:NSURLCacheStorageAllowed timeoutInterval:60.0];
     [_webView loadRequest:req];
+    
+    [self adjustViewsForiOS7];
 }
 
 - (void)close {
-    [self dismissModalViewControllerAnimated:YES];
-    [kAppDelegate setOpenFile:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        [kAppDelegate setOpenFile:nil];
+    }];
 }
 
 - (void)showActionSheet:(id)sender {

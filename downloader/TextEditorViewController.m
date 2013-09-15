@@ -12,8 +12,8 @@
 
 @property (nonatomic, strong) UIActionSheet *popupQuery;
 @property (nonatomic, strong) UITextView *theTextView;
-@property (nonatomic, strong) ShadowedNavBar *navBar;
-@property (nonatomic, strong) ShadowedToolbar *toolBar;
+@property (nonatomic, strong) UINavigationBar *navBar;
+@property (nonatomic, strong) UIToolbar *toolBar;
 
 @property (nonatomic, assign) NSStringEncoding theEncoding;
 @property (nonatomic, assign) BOOL hasEdited;
@@ -26,7 +26,7 @@
     [super loadView];
     
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
-    self.navBar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
+    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     self.navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
@@ -35,22 +35,24 @@
     [self.view addSubview:self.navBar];
     [self.view bringSubviewToFront:self.navBar];
 
-    self.theTextView = [[UITextView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44)];
-    self.theTextView.delegate = self;
-    self.theTextView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    
-    self.toolBar = [[ShadowedToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
+    self.toolBar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
     UIBarButtonItem *space = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     UIBarButtonItem *hideKeyboard = [[UIBarButtonItem alloc]initWithTitle:@"Hide" style:UIBarButtonItemStyleBordered target:self action:@selector(dismissKeyboard)];
-    self.toolBar.items = @[space, hideKeyboard];
+    _toolBar.items = @[space, hideKeyboard];
     
-    [self.theTextView setInputAccessoryView:self.toolBar];
+    self.theTextView = [[UITextView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44)];
+    _theTextView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    _theTextView.delegate = self;
+    _theTextView.inputAccessoryView = _toolBar;
+    _theTextView.tintColor = [UIColor blueColor];
     
-    [self.view addSubview:self.theTextView];
-    [self.view bringSubviewToFront:self.theTextView];
+    [self.view addSubview:_theTextView];
+    [self.view bringSubviewToFront:_theTextView];
     
     [self registerForKeyboardNotifications];
     [self loadText];
+    
+    [self adjustViewsForiOS7];
 }
 
 - (void)saveText {
@@ -108,7 +110,7 @@
 }
 
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)dismissKeyboard {
@@ -119,7 +121,7 @@
 
 - (void)close {
     [self dismissKeyboard];
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
     [kAppDelegate setOpenFile:nil];
 }
 

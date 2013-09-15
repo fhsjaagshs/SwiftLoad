@@ -11,7 +11,7 @@
 @interface SFTPBrowserViewController () <PullToRefreshViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *theTableView;
-@property (nonatomic, strong) ShadowedNavBar *navBar;
+@property (nonatomic, strong) UINavigationBar *navBar;
 @property (nonatomic, strong) PullToRefreshView *pull;
 @property (nonatomic, strong) NSString *currentURL;
 @property (nonatomic, strong) NSMutableArray *filedicts;
@@ -34,7 +34,7 @@
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
     
-    self.navBar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
+    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     self.navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"/"];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"ArrowLeft"] style:UIBarButtonItemStyleBordered target:self action:@selector(goBackDir)];
@@ -61,6 +61,8 @@
     self.memCache = [FMDatabase databaseWithPath:nil]; // nil path means that the database will be created in memory: lighting fuckin fast
     [_memCache open];
     [_memCache executeUpdate:@"CREATE TABLE sftp_cache (id INTEGER PRIMARY KEY AUTOINCREMENT, parentpath VARCHAR(255) DEFAULT NULL, filename VARCHAR(255) DEFAULT NULL, type VARCHAR(255) DEFAULT NULL, size INTEGER)"];
+    
+    [self adjustViewsForiOS7];
 }
 
 - (void)goBackDir {
@@ -175,7 +177,7 @@
     
     SFTPLoginController *controller = [[SFTPLoginController alloc]initWithType:SFTPLoginControllerTypeLogin andCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
         if ([username isEqualToString:@"cancel"]) {
-            [self dismissModalViewControllerAnimated:YES];
+            [self dismissViewControllerAnimated:YES completion:nil];
         } else {
             self.currentURL = url;
             NSURL *URL = [NSURL URLWithString:_currentURL];
@@ -253,7 +255,7 @@
             [_connection disconnect];
         }
     });
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {

@@ -26,7 +26,7 @@ static NSString *CellIdentifier = @"Cell";
 
 @property (nonatomic, strong) UIBarButtonItem *editButton;
 @property (nonatomic, strong) UITableView *theTableView;
-@property (nonatomic, strong) ShadowedNavBar *navBar;
+@property (nonatomic, strong) UINavigationBar *navBar;
 @property (nonatomic, strong) UIButton *theCopyAndPasteButton;
 
 @property (nonatomic, strong) UIView *sideSwipeView;
@@ -47,7 +47,7 @@ static NSString *CellIdentifier = @"Cell";
     HamburgerButtonItem *hamburger = [HamburgerButtonItem itemWithView:self.view];
     [hamburger setDelegate:self];
     
-    self.navBar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
+    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"/"];
     _editButton = [[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(editTable)];
@@ -56,6 +56,7 @@ static NSString *CellIdentifier = @"Cell";
     [_navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:_navBar];
     [self.view bringSubviewToFront:_navBar];
+    _navBar.translucent = NO;
     
     self.theTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44) style:UITableViewStylePlain];
     _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -99,6 +100,7 @@ static NSString *CellIdentifier = @"Cell";
     }];
     
     [[FilesystemMonitor sharedMonitor]startMonitoringDirectory:kDocsDir];
+    [self adjustViewsForiOS7];
 }
 
 - (void)hamburgerCellWasSelectedAtIndex:(int)index {
@@ -108,16 +110,16 @@ static NSString *CellIdentifier = @"Cell";
         }]show];
     } else if (index == 1) {
         WebDAVViewController *advc = [WebDAVViewController viewControllerWhite];
-        [self presentModalViewController:advc animated:YES];
+        [self presentViewController:advc animated:YES completion:nil];
     } else if (index == 2) {
         DropboxBrowserViewController *d = [DropboxBrowserViewController viewControllerWhite];
-        [self presentModalViewController:d animated:YES];
+        [self presentViewController:d animated:YES completion:nil];
     } else if (index == 3) {
         SFTPBrowserViewController *s = [SFTPBrowserViewController viewControllerWhite];
-        [self presentModalViewController:s animated:YES];
+        [self presentViewController:s animated:YES completion:nil];
     } else if (index == 4) {
         SettingsView *d = [SettingsView viewControllerWhite];
-        [self presentModalViewController:d animated:YES];
+        [self presentViewController:d animated:YES completion:nil];
     }
 }
 
@@ -271,8 +273,6 @@ static NSString *CellIdentifier = @"Cell";
         
         [_filelist addObjectsFromArray:dirs];
         [_filelist addObjectsFromArray:files];
-        
-        //[_filelist addObjectsFromArray:[[[NSFileManager defaultManager]contentsOfDirectoryAtPath:[kAppDelegate managerCurrentDir] error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)]];
     }
 }
 
@@ -336,9 +336,9 @@ static NSString *CellIdentifier = @"Cell";
     
     [kAppDelegate setOpenFile:file];
 
-    fileInfo *info = [fileInfo viewController];
+    FileInfoViewController *info = [FileInfoViewController viewController];
     info.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-    [self presentModalViewController:info animated:YES];
+    [self presentViewController:info animated:YES completion:nil];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -479,23 +479,23 @@ static NSString *CellIdentifier = @"Cell";
         if ([MIMEUtils isAudioFile:file]) {
             AudioPlayerViewController *audio = [AudioPlayerViewController viewController];
             audio.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-            [self presentModalViewController:audio animated:YES];
+            [self presentViewController:audio animated:YES completion:nil];
         } else if ([MIMEUtils isImageFile:file]) {
             PictureViewController *pView = [PictureViewController viewController];
             pView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-            [self presentModalViewController:pView animated:YES];
+            [self presentViewController:pView animated:YES completion:nil];
         } else if ([MIMEUtils isTextFile:file] && !isHTML) {
             TextEditorViewController *textEditor = [TextEditorViewController viewController];
             textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-            [self presentModalViewController:textEditor animated:YES];
+            [self presentViewController:textEditor animated:YES completion:nil];
         } else if ([MIMEUtils isVideoFile:file]) {
             MoviePlayerViewController *moviePlayer = [MoviePlayerViewController viewController];
             moviePlayer.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-            [self presentModalViewController:moviePlayer animated:YES];
+            [self presentViewController:moviePlayer animated:YES completion:nil];
         } else if ([MIMEUtils isDocumentFile:file] || isHTML) {
             MyFilesViewDetailViewController *detail = [MyFilesViewDetailViewController viewController];
             detail.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-            [self presentModalViewController:detail animated:YES];
+            [self presentViewController:detail animated:YES completion:nil];
         } else {
             NSString *message = [NSString stringWithFormat:@"Swift cannot determine which editor to open \"%@\" in. Please select which viewer to open it in.",file.lastPathComponent];
             
@@ -603,23 +603,23 @@ static NSString *CellIdentifier = @"Cell";
     if (buttonIndex == 0) {
         TextEditorViewController *textEditor = [TextEditorViewController viewController];
         textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-        [self presentModalViewController:textEditor animated:YES];
+        [self presentViewController:textEditor animated:YES completion:nil];
     } else if (buttonIndex == 1) {
         MoviePlayerViewController *moviePlayer = [MoviePlayerViewController viewController];
         moviePlayer.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-        [self presentModalViewController:moviePlayer animated:YES];
+        [self presentViewController:moviePlayer animated:YES completion:nil];
     } else if (buttonIndex == 2) {
         PictureViewController *pView = [PictureViewController viewController];
         pView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-        [self presentModalViewController:pView animated:YES];
+        [self presentViewController:pView animated:YES completion:nil];
     } else if (buttonIndex == 3) {
         AudioPlayerViewController *textEditor = [AudioPlayerViewController viewController];
         textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-        [self presentModalViewController:textEditor animated:YES];
+        [self presentViewController:textEditor animated:YES completion:nil];
     } else if (buttonIndex == 4) {
         MyFilesViewDetailViewController *textEditor = [MyFilesViewDetailViewController viewController];
         textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-        [self presentModalViewController:textEditor animated:YES];
+        [self presentViewController:textEditor animated:YES completion:nil];
     } else if (buttonIndex == 5) {
         NSString *file = [kAppDelegate openFile];
         UIDocumentInteractionController *controller = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:file]];

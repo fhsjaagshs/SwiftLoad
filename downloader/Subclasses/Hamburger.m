@@ -36,7 +36,7 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 @implementation HamburgerButtonItem
 
 + (HamburgerButtonItem *)itemWithView:(UIView *)viewToMove {
-    HamburgerButtonItem *item = [[HamburgerButtonItem alloc]initWithImage:[UIImage imageNamed:@"hamburger"] style:UIBarButtonItemStyleBordered target:nil action:nil];
+    HamburgerButtonItem *item = [[HamburgerButtonItem alloc]initWithImage:[UIImage imageNamed:@"hamburger"] style:UIBarButtonItemStylePlain target:nil action:nil];
     [item setTarget:item];
     item.action = @selector(toggleState);
     item.hamburgerView = [HamburgerView view];

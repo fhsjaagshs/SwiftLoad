@@ -14,7 +14,7 @@
 @property (nonatomic, strong) TransparentTextField *titleLabel;
 @property (nonatomic, strong) TransparentTextField *albumLabel;
 
-@property (nonatomic, strong) ShadowedNavBar *navBar;
+@property (nonatomic, strong) UINavigationBar *navBar;
 
 @property (nonatomic, strong) NSMutableDictionary *tag;
 
@@ -27,7 +27,7 @@
     
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
 
-    self.navBar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
+    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"Edit Metadata"];
     topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Save" style:UIBarButtonItemStyleBordered target:self action:@selector(writeTags)];
@@ -38,7 +38,7 @@
     self.artistLabel = [[TransparentTextField alloc]initWithFrame:CGRectMake(10, sanitizeMesurement(44), screenBounds.size.width-20, 30)];
     _artistLabel.placeholder = @"Artist";
     _artistLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _artistLabel.textAlignment = UITextAlignmentCenter;
+    _artistLabel.textAlignment = NSTextAlignmentCenter;
     _artistLabel.textColor = [UIColor blackColor];
     _artistLabel.font = [UIFont systemFontOfSize:15];
     [self.view addSubview:_artistLabel];
@@ -46,7 +46,7 @@
     self.titleLabel = [[TransparentTextField alloc]initWithFrame:CGRectMake(10, sanitizeMesurement(44)+40, screenBounds.size.width-20, 30)];
     _titleLabel.placeholder = @"Title";
     _titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _titleLabel.textAlignment = UITextAlignmentCenter;
+    _titleLabel.textAlignment = NSTextAlignmentCenter;
     _titleLabel.textColor = [UIColor blackColor];
     _titleLabel.font = [UIFont systemFontOfSize:15];
     [self.view addSubview:_titleLabel];
@@ -54,12 +54,14 @@
     self.albumLabel = [[TransparentTextField alloc]initWithFrame:CGRectMake(10, sanitizeMesurement(44)+(40*2), screenBounds.size.width-20, 30)];
     _albumLabel.placeholder = @"Album";
     _albumLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _albumLabel.textAlignment = UITextAlignmentCenter;
+    _albumLabel.textAlignment = NSTextAlignmentCenter;
     _albumLabel.textColor = [UIColor blackColor];
     _albumLabel.font = [UIFont systemFontOfSize:15];
     [self.view addSubview:_albumLabel];
     
     [self loadTags];
+    
+    [self adjustViewsForiOS7];
 }
 
 - (void)loadTags {
@@ -84,7 +86,7 @@
 }
 
 - (void)close {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)writeTags {

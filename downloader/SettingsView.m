@@ -22,7 +22,7 @@ static NSString * const kJavaScriptBookmarklet = @"JavaScript:window.open(docume
     [super loadView];
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
     
-    UINavigationBar *bar = [[ShadowedNavBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
+    UINavigationBar *bar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
     bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"Settings"];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
@@ -52,6 +52,8 @@ static NSString * const kJavaScriptBookmarklet = @"JavaScript:window.open(docume
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(dropboxAuthenticationSucceeded) name:@"db_auth_success" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(dropboxAuthenticationFailed) name:@"db_auth_failure" object:nil];
+    
+    [self adjustViewsForiOS7];
 }
 
 - (void)showCredsController {
@@ -59,7 +61,7 @@ static NSString * const kJavaScriptBookmarklet = @"JavaScript:window.open(docume
 }
 
 - (void)close {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)showBookmarkletInstallationAV {
