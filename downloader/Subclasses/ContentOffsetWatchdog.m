@@ -66,7 +66,7 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([keyPath isEqualToString:@"contentOffset"]) {
-        if ((_scrollView.isDecelerating || _scrollView.isDragging) || (_scrollView.isDragging && _scrollView.isDecelerating)) {
+        if (_scrollView.isDragging) {
             if (_mode == WatchdogModeNormal) {
                 if (_scrollView.contentOffset.y < -30-_scrollView.contentInset.top) {
                     if ([_delegate respondsToSelector:@selector(shouldTripWatchdog:)]) {
@@ -77,7 +77,7 @@
                 }
             } else if (_mode == WatchdogModePullToRefresh) {
                 if (_scrollView.isDragging) {
-                    if (_scrollView.contentOffset.y < -60) {
+                    if (_scrollView.contentOffset.y < -60-_scrollView.contentInset.top) {
                         _statusLabel.text = _trippedTextInternal;
                         self.shouldReturnToNormal = YES;
                     } else {

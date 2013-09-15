@@ -303,11 +303,10 @@ static NSString *CellIdentifier = @"Cell";
         return YES;
     }
     
-    return (![[kAppDelegate managerCurrentDir]isEqualToString:kDocsDir] && _watchdogCanGo && !_theTableView.isDecelerating);
+    return (![[kAppDelegate managerCurrentDir]isEqualToString:kDocsDir] && _watchdogCanGo);
 }
 
 - (void)watchdogWasTripped:(ContentOffsetWatchdog *)watchdog {
-    
     [_watchdog resetOffset];
     
     if (_watchdog.mode == WatchdogModeNormal) {
@@ -354,7 +353,7 @@ static NSString *CellIdentifier = @"Cell";
         DisclosureButton *button = [DisclosureButton button];
         [button addTarget:self action:@selector(accessoryButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         cell.accessoryView = button;
-        cell.accessoryView.backgroundColor = [UIColor whiteColor];
+        cell.accessoryView.backgroundColor = [UIColor clearColor];
         
         if ([UIDevice currentDevice].systemVersion.intValue < 7.0f) {
             if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
@@ -776,12 +775,12 @@ static NSString *CellIdentifier = @"Cell";
         NSIndexPath *indexPath = [_theTableView indexPathForRowAtPoint:[recognizer locationInView:_theTableView]];
         UITableViewCell *cell = [_theTableView cellForRowAtIndexPath:indexPath];
         
-        if (cell.frame.origin.x != 0) {
+        /*if (cell.frame.origin.x != 0) {
             [self removeSideSwipeView:YES];
             return;
-        }
+        }*/
         
-        [self removeSideSwipeView:NO];
+        [self removeSideSwipeView:YES];
         
         if (cell != _sideSwipeCell && !_animatingSideSwipe) {
             [self setupSideSwipeView];
@@ -791,17 +790,19 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)addSwipeViewTo:(UITableViewCell *)cell direction:(UISwipeGestureRecognizerDirection)direction {
-    CGRect cellFrame = cell.frame;
+    self.animatingSideSwipe = YES;
     
-    [self setSideSwipeCell:cell];
-    _sideSwipeView.frame = CGRectMake(0, cellFrame.origin.y, cellFrame.size.width, cellFrame.size.height);
+    self.sideSwipeCell = cell;
+    
+    _sideSwipeView.frame = CGRectMake(0, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height);
     [_theTableView insertSubview:_sideSwipeView belowSubview:cell];
     self.sideSwipeDirection = direction;
     
-    self.animatingSideSwipe = YES;
+    CGRect frame = cell.frame;
+    frame.origin.x = (direction == UISwipeGestureRecognizerDirectionRight)?cell.frame.size.width:-cell.frame.size.width;
     
-    [UIView animateWithDuration:0.2 animations:^{
-        cell.frame = CGRectMake(direction == UISwipeGestureRecognizerDirectionRight?cellFrame.size.width:-cellFrame.size.width, cellFrame.origin.y, cellFrame.size.width, cellFrame.size.height);
+    [UIView animateWithDuration:0.2f animations:^{
+        cell.frame = frame;
     } completion:^(BOOL finished) {
         self.animatingSideSwipe = NO;
     }];
@@ -822,7 +823,6 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)removeSideSwipeView:(BOOL)animated {
-    
     if (_animatingSideSwipe) {
         return;
     }
@@ -838,7 +838,7 @@ static NSString *CellIdentifier = @"Cell";
     if (animated) {
         self.animatingSideSwipe = YES;
         
-        [UIView animateWithDuration:0.2 animations:^{
+        [UIView animateWithDuration:0.2f animations:^{
             _sideSwipeCell.frame = CGRectMake(0, _sideSwipeCell.frame.origin.y, _sideSwipeCell.frame.size.width, _sideSwipeCell.frame.size.height);
         } completion:^(BOOL finished) {
             self.animatingSideSwipe = NO;
@@ -850,9 +850,9 @@ static NSString *CellIdentifier = @"Cell";
         if (_sideSwipeView.superview != nil) {
             [_sideSwipeView removeFromSuperview];
         }
-        
-        [self setSideSwipeView:nil];
-        
+
+        self.sideSwipeView = nil;
+
         if (_sideSwipeCell != nil) {
             _sideSwipeCell.frame = CGRectMake(0, _sideSwipeCell.frame.origin.y, _sideSwipeCell.frame.size.width, _sideSwipeCell.frame.size.height);
             self.sideSwipeCell = nil;
