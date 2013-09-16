@@ -108,7 +108,7 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
         self.frame = CGRectMake(0, 0, 250, [[UIScreen mainScreen]bounds].size.height);
         self.opaque = YES;
         self.theTableView = [[UITableView alloc]initWithFrame:self.bounds style:UITableViewStylePlain];
-        _theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         _theTableView.backgroundColor = [UIColor clearColor];
         _theTableView.rowHeight = 44;
@@ -131,14 +131,6 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return ([[TaskController sharedController]numberOfTasks] > 0)?2:1;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return 0.01f;
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    return [UIView new];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

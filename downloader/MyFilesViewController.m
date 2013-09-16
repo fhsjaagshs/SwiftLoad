@@ -719,12 +719,6 @@ static NSString *CellIdentifier = @"Cell";
         _sideSwipeView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
         _sideSwipeView.backgroundColor = [UIColor darkGrayColor];
         
-        UIImageView *shadowImageView = [[UIImageView alloc]initWithFrame:_sideSwipeView.bounds];
-        shadowImageView.alpha = 0.7;
-        shadowImageView.image = [[UIImage imageNamed:@"inner-shadow"]stretchableImageWithLeftCapWidth:10 topCapHeight:10];
-        shadowImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        [_sideSwipeView addSubview:shadowImageView];
-        
         UISwipeGestureRecognizer *rightSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeRight:)];
         rightSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
         [_sideSwipeView addGestureRecognizer:rightSwipeGestureRecognizer];

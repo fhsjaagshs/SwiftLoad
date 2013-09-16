@@ -79,6 +79,7 @@
 		F150D6C2177F783E00E4C094 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = F150D6BB177F783E00E4C094 /* FMDatabaseQueue.m */; };
 		F150D6C4177F783E00E4C094 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = F150D6BE177F783E00E4C094 /* FMResultSet.m */; };
 		F15277D113F4B08800338673 /* DocumentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F15277CF13F4B08800338673 /* DocumentViewController.m */; };
+		F1538E2417E68D3300A0F158 /* UIAlertView+QuickDisplay.m in Sources */ = {isa = PBXBuildFile; fileRef = F1538E2317E68D3300A0F158 /* UIAlertView+QuickDisplay.m */; };
 		F153EAA417E50EA100896BB0 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F153EAA317E50EA100896BB0 /* StoreKit.framework */; };
 		F15507D5176EAFE50024FF03 /* action@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F15507D4176EAFE50024FF03 /* action@2x.png */; };
 		F15507D7176EB0290024FF03 /* bluetooth@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F15507D6176EB0290024FF03 /* bluetooth@2x.png */; };
@@ -200,8 +201,6 @@
 		F1D6257A17C45D3700CA002A /* folder_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D6257617C45D3700CA002A /* folder_icon@2x.png */; };
 		F1E397E917B9F896002BBD6F /* TagLibAmalgam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1E397E717B9F896002BBD6F /* TagLibAmalgam.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 		F1E397EC17B9F8A8002BBD6F /* ID3Editor.mm in Sources */ = {isa = PBXBuildFile; fileRef = F1E397EB17B9F8A8002BBD6F /* ID3Editor.mm */; };
-		F1E9F76F1773F48500EC345C /* statusbar.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F76D1773F48500EC345C /* statusbar.png */; };
-		F1E9F7701773F48500EC345C /* statusbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F76E1773F48500EC345C /* statusbar@2x.png */; };
 		F1E9F7821773FDC900EC345C /* arrow_disclosure.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F7801773FDC900EC345C /* arrow_disclosure.png */; };
 		F1E9F7831773FDC900EC345C /* arrow_disclosure@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F7811773FDC900EC345C /* arrow_disclosure@2x.png */; };
 		F1E9F7861773FDF300EC345C /* DisclosureButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F1E9F7851773FDF300EC345C /* DisclosureButton.m */; };
@@ -223,7 +222,6 @@
 		F1EB833E16D808AA009D7D2D /* config.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833316D808AA009D7D2D /* config.png */; };
 		F1EB833F16D808AA009D7D2D /* delete.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833416D808AA009D7D2D /* delete.png */; };
 		F1EB834116D808AA009D7D2D /* dropbox.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833616D808AA009D7D2D /* dropbox.png */; };
-		F1EB834316D808AA009D7D2D /* inner-shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833816D808AA009D7D2D /* inner-shadow.png */; };
 		F1EB834516D808AA009D7D2D /* paperclip.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833A16D808AA009D7D2D /* paperclip.png */; };
 		F1ED4B12170352D10056D55F /* NSString+mods.m in Sources */ = {isa = PBXBuildFile; fileRef = F1ED4B11170352D10056D55F /* NSString+mods.m */; };
 		F1EDE3F613F8708600C17B2A /* MyFilesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1EDE3F513F8708600C17B2A /* MyFilesViewController.m */; };
@@ -366,6 +364,8 @@
 		F150D6BE177F783E00E4C094 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
 		F15277CE13F4B08800338673 /* DocumentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentViewController.h; sourceTree = "<group>"; };
 		F15277CF13F4B08800338673 /* DocumentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentViewController.m; sourceTree = "<group>"; };
+		F1538E2217E68D3300A0F158 /* UIAlertView+QuickDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+QuickDisplay.h"; sourceTree = "<group>"; };
+		F1538E2317E68D3300A0F158 /* UIAlertView+QuickDisplay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+QuickDisplay.m"; sourceTree = "<group>"; };
 		F153EAA217E50D8900896BB0 /* Swift.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = Swift.entitlements; path = ../Swift.entitlements; sourceTree = "<group>"; };
 		F153EAA317E50EA100896BB0 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		F15507D4176EAFE50024FF03 /* action@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "action@2x.png"; path = "Images/action@2x.png"; sourceTree = "<group>"; };
@@ -561,8 +561,6 @@
 		F1E397E817B9F896002BBD6F /* TagLibAmalgam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagLibAmalgam.h; sourceTree = "<group>"; };
 		F1E397EA17B9F8A8002BBD6F /* ID3Editor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ID3Editor.h; sourceTree = "<group>"; };
 		F1E397EB17B9F8A8002BBD6F /* ID3Editor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ID3Editor.mm; sourceTree = "<group>"; };
-		F1E9F76D1773F48500EC345C /* statusbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = statusbar.png; sourceTree = "<group>"; };
-		F1E9F76E1773F48500EC345C /* statusbar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "statusbar@2x.png"; sourceTree = "<group>"; };
 		F1E9F7801773FDC900EC345C /* arrow_disclosure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_disclosure.png; sourceTree = "<group>"; };
 		F1E9F7811773FDC900EC345C /* arrow_disclosure@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow_disclosure@2x.png"; sourceTree = "<group>"; };
 		F1E9F7841773FDF300EC345C /* DisclosureButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisclosureButton.h; sourceTree = "<group>"; };
@@ -585,7 +583,6 @@
 		F1EB833316D808AA009D7D2D /* config.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = config.png; path = Images/config.png; sourceTree = "<group>"; };
 		F1EB833416D808AA009D7D2D /* delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = delete.png; path = Images/delete.png; sourceTree = "<group>"; };
 		F1EB833616D808AA009D7D2D /* dropbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dropbox.png; path = Images/dropbox.png; sourceTree = "<group>"; };
-		F1EB833816D808AA009D7D2D /* inner-shadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "inner-shadow.png"; path = "Images/inner-shadow.png"; sourceTree = "<group>"; };
 		F1EB833A16D808AA009D7D2D /* paperclip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = paperclip.png; path = Images/paperclip.png; sourceTree = "<group>"; };
 		F1ED4B10170352D10056D55F /* NSString+mods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+mods.h"; sourceTree = "<group>"; };
 		F1ED4B11170352D10056D55F /* NSString+mods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+mods.m"; sourceTree = "<group>"; };
@@ -889,7 +886,6 @@
 				F15507DA176EB0A90024FF03 /* dropbox@2x.png */,
 				F1EB833A16D808AA009D7D2D /* paperclip.png */,
 				F15507DB176EB0A90024FF03 /* paperclip@2x.png */,
-				F1EB833816D808AA009D7D2D /* inner-shadow.png */,
 			);
 			name = SwipeToReveal;
 			sourceTree = "<group>";
@@ -937,6 +933,8 @@
 				F1B1C1E917B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.m */,
 				F1C4462E17E3510C004725FC /* DBRestClient+SpecificCancellation.h */,
 				F1C4462F17E3510C004725FC /* DBRestClient+SpecificCancellation.m */,
+				F1538E2217E68D3300A0F158 /* UIAlertView+QuickDisplay.h */,
+				F1538E2317E68D3300A0F158 /* UIAlertView+QuickDisplay.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -1188,8 +1186,6 @@
 				F1E9F7811773FDC900EC345C /* arrow_disclosure@2x.png */,
 				F1E9F7871773FECB00EC345C /* arrow_disclosure_highlighted.png */,
 				F1E9F7881773FECB00EC345C /* arrow_disclosure_highlighted@2x.png */,
-				F1E9F76D1773F48500EC345C /* statusbar.png */,
-				F1E9F76E1773F48500EC345C /* statusbar@2x.png */,
 				F1EB833316D808AA009D7D2D /* config.png */,
 				F165C3EB16E445E5004B81F1 /* clipboard.png */,
 				F165C3E716E44244004B81F1 /* clipboard@2x.png */,
@@ -1352,7 +1348,6 @@
 				F1EB833E16D808AA009D7D2D /* config.png in Resources */,
 				F1EB833F16D808AA009D7D2D /* delete.png in Resources */,
 				F1EB834116D808AA009D7D2D /* dropbox.png in Resources */,
-				F1EB834316D808AA009D7D2D /* inner-shadow.png in Resources */,
 				F1EB834516D808AA009D7D2D /* paperclip.png in Resources */,
 				F165C3E816E44244004B81F1 /* clipboard@2x.png in Resources */,
 				F165C3EC16E445E5004B81F1 /* clipboard.png in Resources */,
@@ -1365,8 +1360,6 @@
 				F15507D9176EB04D0024FF03 /* delete@2x.png in Resources */,
 				F15507DC176EB0A90024FF03 /* dropbox@2x.png in Resources */,
 				F15507DD176EB0A90024FF03 /* paperclip@2x.png in Resources */,
-				F1E9F76F1773F48500EC345C /* statusbar.png in Resources */,
-				F1E9F7701773F48500EC345C /* statusbar@2x.png in Resources */,
 				F1E9F7821773FDC900EC345C /* arrow_disclosure.png in Resources */,
 				F1E9F7831773FDC900EC345C /* arrow_disclosure@2x.png in Resources */,
 				F1E9F7891773FECB00EC345C /* arrow_disclosure_highlighted.png in Resources */,
@@ -1437,6 +1430,7 @@
 			files = (
 				F119CF0813F46DA6007D67E4 /* AppDelegate.m in Sources */,
 				F15277D113F4B08800338673 /* DocumentViewController.m in Sources */,
+				F1538E2417E68D3300A0F158 /* UIAlertView+QuickDisplay.m in Sources */,
 				F1EDE3F613F8708600C17B2A /* MyFilesViewController.m in Sources */,
 				F17DC65F140C45690015F613 /* AudioPlayerViewController.m in Sources */,
 				F17F11231420017100CE45D7 /* FileInfoViewController.m in Sources */,
