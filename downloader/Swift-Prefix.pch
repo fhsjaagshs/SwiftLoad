@@ -56,7 +56,6 @@
     #import "DashedLineView.h"
     #import "CustomVolumeView.h"
 
-    #import "FileCreationDialogue.h"
     #import "SFTPLoginController.h"
     #import "WebDAVCredsPrompt.h"
 

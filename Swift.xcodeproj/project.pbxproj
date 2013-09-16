@@ -140,7 +140,6 @@
 		F172BCE01794EC4500AC1483 /* PUTResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BCC01794EC4500AC1483 /* PUTResponse.m */; };
 		F172BCE11794EC4500AC1483 /* WebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BCC21794EC4500AC1483 /* WebSocket.m */; };
 		F172BCE41794EC6700AC1483 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BCE31794EC6700AC1483 /* HTTPConnection.m */; };
-		F17CEDE116FE724C00E7E47B /* FileCreationDialogue.m in Sources */ = {isa = PBXBuildFile; fileRef = F17CEDE016FE724C00E7E47B /* FileCreationDialogue.m */; };
 		F17DC65F140C45690015F613 /* AudioPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F17DC65E140C45690015F613 /* AudioPlayerViewController.m */; };
 		F17DC662140C489B0015F613 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F17DC661140C489B0015F613 /* AVFoundation.framework */; };
 		F17F11231420017100CE45D7 /* FileInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F17F11211420017100CE45D7 /* FileInfoViewController.m */; };
@@ -475,8 +474,6 @@
 		F172BCC21794EC4500AC1483 /* WebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSocket.m; sourceTree = "<group>"; };
 		F172BCE21794EC6700AC1483 /* HTTPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPConnection.h; sourceTree = "<group>"; };
 		F172BCE31794EC6700AC1483 /* HTTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPConnection.m; sourceTree = "<group>"; };
-		F17CEDDF16FE724C00E7E47B /* FileCreationDialogue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileCreationDialogue.h; sourceTree = "<group>"; };
-		F17CEDE016FE724C00E7E47B /* FileCreationDialogue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileCreationDialogue.m; sourceTree = "<group>"; };
 		F17DC65E140C45690015F613 /* AudioPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioPlayerViewController.m; sourceTree = "<group>"; };
 		F17DC660140C456E0015F613 /* AudioPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPlayerViewController.h; sourceTree = "<group>"; };
 		F17DC661140C489B0015F613 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -829,8 +826,6 @@
 				F118C7471771425F00ED7384 /* PullToRefreshView.m */,
 				F1C7A6B516E8178F0082D4D3 /* ZoomingImageView.h */,
 				F1C7A6B616E8178F0082D4D3 /* ZoomingImageView.m */,
-				F17CEDDF16FE724C00E7E47B /* FileCreationDialogue.h */,
-				F17CEDE016FE724C00E7E47B /* FileCreationDialogue.m */,
 				F1CB7DAC16FFE99A002693B5 /* SFTPLoginController.h */,
 				F1CB7DAD16FFE99A002693B5 /* SFTPLoginController.m */,
 				F13B08B7178CEE05005201F7 /* WebDAVCredsPrompt.h */,
@@ -1460,7 +1455,6 @@
 				F19BB51C16E006CA0081C95B /* main.m in Sources */,
 				F1847BBB16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m in Sources */,
 				F1C7A6B716E8178F0082D4D3 /* ZoomingImageView.m in Sources */,
-				F17CEDE116FE724C00E7E47B /* FileCreationDialogue.m in Sources */,
 				F1CB7DAE16FFE99A002693B5 /* SFTPLoginController.m in Sources */,
 				F1ED4B12170352D10056D55F /* NSString+mods.m in Sources */,
 				F10CBC5A1707D6E700C82AFB /* DroppinBadassBlocks.m in Sources */,

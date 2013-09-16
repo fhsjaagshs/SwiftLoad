@@ -27,7 +27,7 @@
 }
 
 - (id)initWithScrollView:(UIScrollView *)scroll {
-    CGRect frame = CGRectMake(0, -1*(60+scroll.contentInset.top), scroll.bounds.size.width, 60+scroll.contentInset.top);
+    CGRect frame = CGRectMake(0, -1*scroll.bounds.size.height, scroll.bounds.size.width, scroll.bounds.size.height);
     self = [super initWithFrame:frame];
     if (self) {
         self.statusLabel = [[UILabel alloc]initWithFrame:CGRectMake(0.0f, frame.size.height-38.0f, self.frame.size.width, 20.0f)];
@@ -66,8 +66,8 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([keyPath isEqualToString:@"contentOffset"]) {
-        if (_scrollView.isDragging) {
-            if (_mode == WatchdogModeNormal) {
+        if (_mode == WatchdogModeNormal) {
+            if (_scrollView.isDragging) {
                 if (_scrollView.contentOffset.y < -30-_scrollView.contentInset.top) {
                     if ([_delegate respondsToSelector:@selector(shouldTripWatchdog:)]) {
                         if ([_delegate shouldTripWatchdog:self] && [_delegate respondsToSelector:@selector(watchdogWasTripped:)]) {
@@ -75,23 +75,25 @@
                         }
                     }
                 }
-            } else if (_mode == WatchdogModePullToRefresh) {
-                if (_scrollView.isDragging) {
-                    if (_scrollView.contentOffset.y < -60-_scrollView.contentInset.top) {
-                        _statusLabel.text = _trippedTextInternal;
-                        self.shouldReturnToNormal = YES;
-                    } else {
-                        self.shouldReturnToNormal = NO;
-                        _statusLabel.text = _initialTextInternal;
-                    }
+            }
+            
+        } else if (_mode == WatchdogModePullToRefresh) {
+            NSLog(@"asdfasdf");
+            if (_scrollView.isDragging) {
+                if (_scrollView.contentOffset.y < -60-_scrollView.contentInset.top) {
+                    _statusLabel.text = _trippedTextInternal;
+                    self.shouldReturnToNormal = YES;
                 } else {
-                    if (_shouldReturnToNormal) {
-                        self.shouldReturnToNormal = NO;
-                        _statusLabel.text = _initialTextInternal;
-                        if ([_delegate respondsToSelector:@selector(shouldTripWatchdog:)]) {
-                            if ([_delegate shouldTripWatchdog:self] && [_delegate respondsToSelector:@selector(watchdogWasTripped:)]) {
-                                [_delegate watchdogWasTripped:self];
-                            }
+                    self.shouldReturnToNormal = NO;
+                    _statusLabel.text = _initialTextInternal;
+                }
+            } else {
+                if (_shouldReturnToNormal) {
+                    self.shouldReturnToNormal = NO;
+                    _statusLabel.text = _initialTextInternal;
+                    if ([_delegate respondsToSelector:@selector(shouldTripWatchdog:)]) {
+                        if ([_delegate shouldTripWatchdog:self] && [_delegate respondsToSelector:@selector(watchdogWasTripped:)]) {
+                            [_delegate watchdogWasTripped:self];
                         }
                     }
                 }

@@ -292,14 +292,25 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)showFileCreationDialogue {
-    [[[FileCreationDialogue alloc]initWithCompletionBlock:^(FileCreationDialogueFileType fileType, NSString *fileName) {
-        NSString *thingToBeCreated = getNonConflictingFilePathForPath([[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:fileName]);
-        if (fileType == FileCreationDialogueFileTypeFile) {
+    UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Create File or Directory" message:@"" completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
+        NSString *thingToBeCreated = getNonConflictingFilePathForPath([[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:[alertView textFieldAtIndex:0].text]);
+        
+        if (buttonIndex == 1) {
             [[NSFileManager defaultManager]createFileAtPath:thingToBeCreated contents:nil attributes:nil];
-        } else if (fileType == FileCreationDialogueFileTypeDirectory) {
+        } else if (buttonIndex == 2) {
             [[NSFileManager defaultManager]createDirectoryAtPath:thingToBeCreated withIntermediateDirectories:NO attributes:nil error:nil];
         }
-    }]show];
+    } cancelButtonTitle:@"Cancel" otherButtonTitles:@"Create File", @"Create Folder", nil];
+    av.alertViewStyle = UIAlertViewStylePlainTextInput;
+    
+    UITextField *tv = [av textFieldAtIndex:0];
+    tv.returnKeyType = UIReturnKeyDone;
+    tv.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    tv.autocorrectionType = UITextAutocorrectionTypeNo;
+    tv.placeholder = @"Type a filename here...";
+    tv.clearButtonMode = UITextFieldViewModeWhileEditing;
+
+    [av show];
 }
 
 - (void)goBackDir {
@@ -321,8 +332,9 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)watchdogWasTripped:(ContentOffsetWatchdog *)watchdog {
+    NSLog(@"asdfahsdjkflahsdjfklsdf");
     [_watchdog resetOffset];
-    
+
     if (_watchdog.mode == WatchdogModeNormal) {
         [self goBackDir];
         [_filelist removeAllObjects];
