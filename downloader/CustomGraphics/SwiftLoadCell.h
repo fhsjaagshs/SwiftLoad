@@ -10,8 +10,7 @@
 
 @interface SwiftLoadCell : UITableViewCell
 
-@property (nonatomic, assign) BOOL isFirstCell;
-
-- (void)hideImageView:(BOOL)shouldHide;
+- (void)enterEditMode;
+- (void)exitEditMode;
 
 @end

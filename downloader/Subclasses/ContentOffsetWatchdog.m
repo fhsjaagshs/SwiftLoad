@@ -27,7 +27,7 @@
 }
 
 - (id)initWithScrollView:(UIScrollView *)scroll {
-    CGRect frame = CGRectMake(0, -1*scroll.bounds.size.height, scroll.bounds.size.width, scroll.bounds.size.height);
+    CGRect frame = CGRectMake(0, -1*(60+scroll.contentInset.top), scroll.bounds.size.width, 60+scroll.contentInset.top);
     self = [super initWithFrame:frame];
     if (self) {
         self.statusLabel = [[UILabel alloc]initWithFrame:CGRectMake(0.0f, frame.size.height-38.0f, self.frame.size.width, 20.0f)];

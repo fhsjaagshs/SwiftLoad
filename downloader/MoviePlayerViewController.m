@@ -28,15 +28,17 @@
 
 - (void)loadView {
     [super loadView];
-    CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
-    UINavigationBar *bar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
+    
+    CGRect screenBounds = [[UIScreen mainScreen]bounds];
+    
+    UINavigationBar *bar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
     bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    bar.tintColor = [UIColor blackColor];
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
     topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
     [bar pushNavigationItem:topItem animated:NO];
     [self.view addSubview:bar];
-    [self.view bringSubviewToFront:bar];
     
     self.shouldUnpauseAudioPlayer = NO;
     
@@ -51,7 +53,7 @@
     _moviePlayer.scalingMode = MPMovieScalingModeAspectFit;
     _moviePlayer.repeatMode = MPMovieRepeatModeNone;
     [_moviePlayer.backgroundView removeFromSuperview];
-    _moviePlayer.view.frame = CGRectMake(0, 44, self.view.bounds.size.width, self.view.bounds.size.height-44);
+    _moviePlayer.view.frame = CGRectMake(0, 64, self.view.bounds.size.width, self.view.bounds.size.height-64);
     _moviePlayer.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view addSubview:_moviePlayer.view];
     
@@ -59,8 +61,6 @@
     [_moviePlayer play];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(moviePlayerDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
-    
-    [self adjustViewsForiOS7];
 }
 
 - (void)close {

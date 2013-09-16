@@ -16,23 +16,12 @@ static NSString * const kFontName = @"Avenir-Medium";
 
 @implementation SwiftLoadCell
 
-- (void)hideImageView:(BOOL)shouldHide {
-    [UIView animateWithDuration:0.5f animations:^{
-        self.imageView.hidden = shouldHide;
-    }];
+- (void)enterEditMode {
+    [self setEditing:YES animated:YES];
 }
 
-- (void)layoutSubviews {
-    if (self.imageView.hidden) {
-        UIImage *image = self.imageView.image;
-        self.imageView.image = nil;
-        
-        [super layoutSubviews];
-        
-        self.imageView.image = image;
-    } else {
-        [super layoutSubviews];
-    }
+- (void)exitEditMode {
+    [self setEditing:NO animated:YES];
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
@@ -58,8 +47,6 @@ static NSString * const kFontName = @"Avenir-Medium";
         
         self.textLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         self.detailTextLabel.textColor = [UIColor colorWithWhite:0.5f alpha:1.0f];
-        
-        self.isFirstCell = NO;
     }
     return self;
 }

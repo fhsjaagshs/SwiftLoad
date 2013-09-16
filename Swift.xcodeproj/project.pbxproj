@@ -78,7 +78,7 @@
 		F150D6C0177F783E00E4C094 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F150D6B7177F783E00E4C094 /* FMDatabaseAdditions.m */; };
 		F150D6C2177F783E00E4C094 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = F150D6BB177F783E00E4C094 /* FMDatabaseQueue.m */; };
 		F150D6C4177F783E00E4C094 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = F150D6BE177F783E00E4C094 /* FMResultSet.m */; };
-		F15277D113F4B08800338673 /* MyFilesViewDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F15277CF13F4B08800338673 /* MyFilesViewDetailViewController.m */; };
+		F15277D113F4B08800338673 /* DocumentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F15277CF13F4B08800338673 /* DocumentViewController.m */; };
 		F153EAA417E50EA100896BB0 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F153EAA317E50EA100896BB0 /* StoreKit.framework */; };
 		F15507D5176EAFE50024FF03 /* action@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F15507D4176EAFE50024FF03 /* action@2x.png */; };
 		F15507D7176EB0290024FF03 /* bluetooth@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F15507D6176EB0290024FF03 /* bluetooth@2x.png */; };
@@ -232,7 +232,6 @@
 		F1F114C5142AA29F00199C3C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F114C4142AA29F00199C3C /* SystemConfiguration.framework */; };
 		F1F114C7142AA3F400199C3C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F114C6142AA3F400199C3C /* CFNetwork.framework */; };
 		F1F114E3142AA73F00199C3C /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F114E2142AA73F00199C3C /* MobileCoreServices.framework */; };
-		F1FCF12A17710BAA004A42B8 /* URLInputController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1FCF12917710BAA004A42B8 /* URLInputController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -365,8 +364,8 @@
 		F150D6BB177F783E00E4C094 /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseQueue.m; sourceTree = "<group>"; };
 		F150D6BD177F783E00E4C094 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
 		F150D6BE177F783E00E4C094 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
-		F15277CE13F4B08800338673 /* MyFilesViewDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyFilesViewDetailViewController.h; sourceTree = "<group>"; };
-		F15277CF13F4B08800338673 /* MyFilesViewDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFilesViewDetailViewController.m; sourceTree = "<group>"; };
+		F15277CE13F4B08800338673 /* DocumentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentViewController.h; sourceTree = "<group>"; };
+		F15277CF13F4B08800338673 /* DocumentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentViewController.m; sourceTree = "<group>"; };
 		F153EAA217E50D8900896BB0 /* Swift.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = Swift.entitlements; path = ../Swift.entitlements; sourceTree = "<group>"; };
 		F153EAA317E50EA100896BB0 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		F15507D4176EAFE50024FF03 /* action@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "action@2x.png"; path = "Images/action@2x.png"; sourceTree = "<group>"; };
@@ -599,8 +598,6 @@
 		F1F114C6142AA3F400199C3C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		F1F114E2142AA73F00199C3C /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		F1F114E4142AA74F00199C3C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		F1FCF12817710BAA004A42B8 /* URLInputController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URLInputController.h; sourceTree = "<group>"; };
-		F1FCF12917710BAA004A42B8 /* URLInputController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URLInputController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -785,8 +782,8 @@
 				F144457F145A04A30026CDB7 /* PictureViewController.m */,
 				F149A682149176E60038F1FC /* MoviePlayerViewController.h */,
 				F149A683149176E60038F1FC /* MoviePlayerViewController.m */,
-				F15277CE13F4B08800338673 /* MyFilesViewDetailViewController.h */,
-				F15277CF13F4B08800338673 /* MyFilesViewDetailViewController.m */,
+				F15277CE13F4B08800338673 /* DocumentViewController.h */,
+				F15277CF13F4B08800338673 /* DocumentViewController.m */,
 				F119CF0613F46DA6007D67E4 /* AppDelegate.h */,
 				F119CF0713F46DA6007D67E4 /* AppDelegate.m */,
 				F128A1DA157FDBFD001BC156 /* SettingsView.h */,
@@ -835,8 +832,6 @@
 				F118C7471771425F00ED7384 /* PullToRefreshView.m */,
 				F1C7A6B516E8178F0082D4D3 /* ZoomingImageView.h */,
 				F1C7A6B616E8178F0082D4D3 /* ZoomingImageView.m */,
-				F1FCF12817710BAA004A42B8 /* URLInputController.h */,
-				F1FCF12917710BAA004A42B8 /* URLInputController.m */,
 				F17CEDDF16FE724C00E7E47B /* FileCreationDialogue.h */,
 				F17CEDE016FE724C00E7E47B /* FileCreationDialogue.m */,
 				F1CB7DAC16FFE99A002693B5 /* SFTPLoginController.h */,
@@ -1441,7 +1436,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F119CF0813F46DA6007D67E4 /* AppDelegate.m in Sources */,
-				F15277D113F4B08800338673 /* MyFilesViewDetailViewController.m in Sources */,
+				F15277D113F4B08800338673 /* DocumentViewController.m in Sources */,
 				F1EDE3F613F8708600C17B2A /* MyFilesViewController.m in Sources */,
 				F17DC65F140C45690015F613 /* AudioPlayerViewController.m in Sources */,
 				F17F11231420017100CE45D7 /* FileInfoViewController.m in Sources */,
@@ -1477,7 +1472,6 @@
 				F10CBC5A1707D6E700C82AFB /* DroppinBadassBlocks.m in Sources */,
 				F10CBC5D17080C6600C82AFB /* DropboxBrowserViewController.m in Sources */,
 				F1BE07E4176F7A1100C4F038 /* Download.m in Sources */,
-				F1FCF12A17710BAA004A42B8 /* URLInputController.m in Sources */,
 				F118C74517713DAA00ED7384 /* ContentOffsetWatchdog.m in Sources */,
 				F118C7481771425F00ED7384 /* PullToRefreshView.m in Sources */,
 				F1BC30CA17715DF300DAFA0A /* Hack.m in Sources */,

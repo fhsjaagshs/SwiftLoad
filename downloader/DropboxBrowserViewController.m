@@ -346,8 +346,6 @@ static NSString *CellIdentifier = @"dbcell";
     } else {
         cell.detailTextLabel.text = @"Directory";
     }
-    
-    cell.isFirstCell = (indexPath.row == 0);
     [cell setNeedsDisplay];
     
     return cell;

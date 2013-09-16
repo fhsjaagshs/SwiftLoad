@@ -11,7 +11,6 @@
 @implementation CustomVolumeView
 
 - (UIImage *)routeButtonImageForState:(UIControlState)state {
-    NSLog(@"Done it");
     UIImage *image = [super routeButtonImageForState:state];
     return [image imageFilledWith:[UIColor colorWithRed:124.0f/255.0f green:54.0f/255.0f blue:153.0f/255.0f alpha:0.0f]];
 }
@@ -19,29 +18,11 @@
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
-        
-        if ([[[UIDevice currentDevice]systemVersion]floatValue] < 6.0f) {
-            Class volSlider = NSClassFromString(@"MPVolumeSlider");
-            
-            for (UIView *view in self.subviews) {
-                view.hidden = NO;
-                if ([view isKindOfClass:volSlider]) {
-                    UISlider *slider = (UISlider *)view;
-                    [slider setBackgroundColor:[UIColor clearColor]];
-                    [slider setMinimumTrackImage:[UIImage imageNamed:@"trackImage"] forState:UIControlStateNormal];
-                    [slider setMaximumTrackImage:[UIImage imageNamed:@"trackImage"] forState:UIControlStateNormal];
-                    [slider setThumbImage:[UIImage imageNamed:@"scrubber_volume"] forState:UIControlStateNormal];
-                    [slider setThumbImage:[UIImage imageNamed:@"scrubber_volume"] forState:UIControlStateHighlighted];
-                }
-            }
-        } else {
-            [self setMinimumVolumeSliderImage:[UIImage imageNamed:@"trackImage"] forState:UIControlStateNormal];
-            [self setMaximumVolumeSliderImage:[UIImage imageNamed:@"trackImage"] forState:UIControlStateNormal];
-            [self setVolumeThumbImage:[UIImage imageNamed:@"scrubber_volume"] forState:UIControlStateNormal];
-            [self setVolumeThumbImage:[UIImage imageNamed:@"scrubber_volume"] forState:UIControlStateHighlighted];
-        }
+        [self setMinimumVolumeSliderImage:[UIImage imageNamed:@"trackImage"] forState:UIControlStateNormal];
+        [self setMaximumVolumeSliderImage:[UIImage imageNamed:@"trackImage"] forState:UIControlStateNormal];
+        [self setVolumeThumbImage:[UIImage imageNamed:@"scrubber_volume"] forState:UIControlStateNormal];
+        [self setVolumeThumbImage:[UIImage imageNamed:@"scrubber_volume"] forState:UIControlStateHighlighted];
     }
     return self;
 }

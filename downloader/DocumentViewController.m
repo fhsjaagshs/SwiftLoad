@@ -6,30 +6,29 @@
 //  Copyright 2011 Nathaniel Symer. All rights reserved.
 //
 
-#import "MyFilesViewDetailViewController.h"
+#import "DocumentViewController.h"
 
-@interface MyFilesViewDetailViewController () <UIWebViewDelegate>
+@interface DocumentViewController () <UIWebViewDelegate>
 
 @property (nonatomic, strong) UIActionSheet *popupQuery;
 @property (nonatomic, strong) UIWebView *webView;
 
 @end
 
-@implementation MyFilesViewDetailViewController
+@implementation DocumentViewController
 
 - (void)loadView {
     [super loadView];
-    CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
-    UINavigationBar *bar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
+    CGRect screenBounds = [[UIScreen mainScreen]bounds];
+    UINavigationBar *bar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
     bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]];
+    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[kAppDelegate openFile].lastPathComponent];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
     topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
     [bar pushNavigationItem:topItem animated:NO];
     [self.view addSubview:bar];
-    [self.view bringSubviewToFront:bar];
     
-    self.webView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44)];
+    self.webView = [[UIWebView alloc]initWithFrame:screenBounds];
     _webView.delegate = self;
     _webView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _webView.backgroundColor = [UIColor clearColor];
@@ -38,14 +37,20 @@
     _webView.dataDetectorTypes = UIDataDetectorTypeLink;
     _webView.layer.rasterizationScale = [[UIScreen mainScreen]scale];
     _webView.layer.shouldRasterize = YES;
-    
+   
     [self.view addSubview:_webView];
-    [self.view bringSubviewToFront:_webView];
+    
+    [self.view bringSubviewToFront:bar];
 
     NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:[kAppDelegate openFile]] cachePolicy:NSURLCacheStorageAllowed timeoutInterval:60.0];
     [_webView loadRequest:req];
-    
-    [self adjustViewsForiOS7];
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView {
+    _webView.scrollView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0);
+    _webView.scrollView.scrollIndicatorInsets = _webView.scrollView.contentInset;
+    //_webView.scrollView.contentOffset = CGPointMake(0, 64);
+    [_webView.scrollView scrollRectToVisible:CGRectMake(0, 64, 1, 1) animated:YES];
 }
 
 - (void)close {
@@ -64,15 +69,11 @@
         return;
     }
     
-    NSString *file = [kAppDelegate openFile];
-    NSString *fileName = [file lastPathComponent];
-    
-    self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",fileName] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-        
+    self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",[kAppDelegate openFile].lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         if (buttonIndex == 0) {
-            [kAppDelegate printFile:file fromView:self.view];
+            [kAppDelegate printFile:[kAppDelegate openFile] fromView:self.view];
         } else if (buttonIndex == 1) {
-            [kAppDelegate sendFileInEmail:file];
+            [kAppDelegate sendFileInEmail:[kAppDelegate openFile]];
         } else if (buttonIndex == 2) {
             BluetoothTask *task = [BluetoothTask taskWithFile:[kAppDelegate openFile]];
             [[TaskController sharedController]addTask:task];
@@ -80,7 +81,6 @@
             DropboxUpload *task = [DropboxUpload uploadWithFile:[kAppDelegate openFile]];
             [[TaskController sharedController]addTask:task];
         }
-        
     } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Print", @"Email File", @"Send Via Bluetooth", @"Upload to Dropbox", nil];
     
     _popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;

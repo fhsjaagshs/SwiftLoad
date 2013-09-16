@@ -24,35 +24,35 @@
 
 - (void)loadView {
     [super loadView];
-    
-    CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
-    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
-    self.navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+
+    CGRect screenBounds = [[UIScreen mainScreen]bounds];
+    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
+    _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
     topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
-    [self.navBar pushNavigationItem:topItem animated:NO];
-    [self.view addSubview:self.navBar];
-    [self.view bringSubviewToFront:self.navBar];
+    [_navBar pushNavigationItem:topItem animated:NO];
+    [self.view addSubview:_navBar];
 
     self.toolBar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
     UIBarButtonItem *space = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     UIBarButtonItem *hideKeyboard = [[UIBarButtonItem alloc]initWithTitle:@"Hide" style:UIBarButtonItemStyleBordered target:self action:@selector(dismissKeyboard)];
     _toolBar.items = @[space, hideKeyboard];
     
-    self.theTextView = [[UITextView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44)];
+    self.theTextView = [[UITextView alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, screenBounds.size.height)];
     _theTextView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _theTextView.delegate = self;
     _theTextView.inputAccessoryView = _toolBar;
     _theTextView.tintColor = [UIColor blueColor];
-    
+    _theTextView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0);
+    _theTextView.scrollIndicatorInsets = _theTextView.contentInset;
     [self.view addSubview:_theTextView];
     [self.view bringSubviewToFront:_theTextView];
     
+    [self.view bringSubviewToFront:_navBar];
+    
     [self registerForKeyboardNotifications];
     [self loadText];
-    
-    [self adjustViewsForiOS7];
 }
 
 - (void)saveText {
@@ -133,7 +133,7 @@
 - (void)keyboardWasShown:(NSNotification*)aNotification {
     BOOL isLandscape = UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication]statusBarOrientation]);
     CGSize kbSize = [[aNotification userInfo][UIKeyboardFrameBeginUserInfoKey]CGRectValue].size;
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0, 0, isLandscape?kbSize.width:kbSize.height, 0);
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(64, 0, isLandscape?kbSize.width:kbSize.height, 0);
     
     self.theTextView.contentInset = contentInsets;
     self.theTextView.scrollIndicatorInsets = contentInsets;

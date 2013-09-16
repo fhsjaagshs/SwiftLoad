@@ -11,11 +11,7 @@
 @implementation DisclosureButton
 
 - (void)drawRect:(CGRect)rect {
-    if (self.highlighted) {
-        [[UIImage imageNamed:@"arrow_disclosure_highlighted"]drawInRect:CGRectMake(11, 11, 22, 22)];
-    } else {
-        [[UIImage imageNamed:@"arrow_disclosure"]drawInRect:CGRectMake(11, 11, 22, 22)];
-    }
+    [[UIImage imageNamed:self.highlighted?@"arrow_disclosure_highlighted":@"arrow_disclosure"]drawInRect:CGRectMake(11, 11, 22, 22)];
 }
 
 + (DisclosureButton *)button {

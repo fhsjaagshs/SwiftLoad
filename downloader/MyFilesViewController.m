@@ -56,15 +56,14 @@ static NSString *CellIdentifier = @"Cell";
     [_navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:_navBar];
     
-    self.theTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, screenBounds.size.height) style:UITableViewStylePlain];
-    _theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    self.theTableView = [[UITableView alloc]initWithFrame:screenBounds style:UITableViewStylePlain];
+    _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     _theTableView.rowHeight = iPad?60:44;
     _theTableView.dataSource = self;
     _theTableView.delegate = self;
     _theTableView.contentInset = UIEdgeInsetsMake(20+44, 0, 0, 0);
     _theTableView.scrollIndicatorInsets = _theTableView.contentInset;
-    _theTableView.separatorInset = UIEdgeInsetsMake(0, 50, 0, 50);
     [self.view addSubview:_theTableView];
     
     [self.view bringSubviewToFront:_navBar];
@@ -106,9 +105,24 @@ static NSString *CellIdentifier = @"Cell";
 
 - (void)hamburgerCellWasSelectedAtIndex:(int)index {
     if (index == 0) {
-        [[[URLInputController alloc]initWithCompletionBlock:^(NSString *url) {
-            [kAppDelegate downloadFile:url];
-        }]show];
+        UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Enter URL to Download" message:nil completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
+            if (buttonIndex == 1) {
+                NSString *urlString = [alertView textFieldAtIndex:0].text;
+                [[NSUserDefaults standardUserDefaults]setObject:urlString forKey:@"myDefaults"];
+                [kAppDelegate downloadFile:urlString];
+            }
+        } cancelButtonTitle:@"Cancel" otherButtonTitles:@"Download", nil];
+        av.alertViewStyle = UIAlertViewStylePlainTextInput;
+        
+        UITextField *tv = [av textFieldAtIndex:0];
+        tv.returnKeyType = UIReturnKeyDone;
+        tv.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        tv.autocorrectionType = UITextAutocorrectionTypeNo;
+        tv.placeholder = @"Paste URL here...";
+        tv.clearButtonMode = UITextFieldViewModeWhileEditing;
+        tv.text = [[NSUserDefaults standardUserDefaults]objectForKey:@"myDefaults"];
+        
+        [av show];
     } else if (index == 1) {
         WebDAVViewController *advc = [WebDAVViewController viewControllerWhite];
         [self presentViewController:advc animated:YES completion:nil];
@@ -411,10 +425,6 @@ static NSString *CellIdentifier = @"Cell";
         cell.detailTextLabel.text = detailText;
     }
     
-    cell.imageView.hidden = _theTableView.editing;
-    
-    cell.isFirstCell = (indexPath.row == 0);
-    
     [cell setNeedsDisplay];
     return cell;
 }
@@ -495,7 +505,7 @@ static NSString *CellIdentifier = @"Cell";
             moviePlayer.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
             [self presentViewController:moviePlayer animated:YES completion:nil];
         } else if ([MIMEUtils isDocumentFile:file] || isHTML) {
-            MyFilesViewDetailViewController *detail = [MyFilesViewDetailViewController viewController];
+            DocumentViewController *detail = [DocumentViewController viewController];
             detail.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
             [self presentViewController:detail animated:YES completion:nil];
         } else {
@@ -549,8 +559,6 @@ static NSString *CellIdentifier = @"Cell";
 - (void)editTable {
     [self removeSideSwipeView:NO];
     [self reindexFilelistIfNecessary];
-    
-    [_theTableView.visibleCells makeObjectsPerformSelector:@selector(hideImageView:) withObject:_theTableView.editing?(id)0:((id)kCFBooleanTrue)]; // (id)0 is equal to 
     
     _watchdog.mode = _theTableView.editing?WatchdogModeNormal:WatchdogModePullToRefresh;
     _theTableView.allowsMultipleSelectionDuringEditing = !_theTableView.editing;
@@ -616,13 +624,13 @@ static NSString *CellIdentifier = @"Cell";
         pView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
         [self presentViewController:pView animated:YES completion:nil];
     } else if (buttonIndex == 3) {
-        AudioPlayerViewController *textEditor = [AudioPlayerViewController viewController];
-        textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-        [self presentViewController:textEditor animated:YES completion:nil];
+        AudioPlayerViewController *acontroller = [AudioPlayerViewController viewController];
+        acontroller.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+        [self presentViewController:acontroller animated:YES completion:nil];
     } else if (buttonIndex == 4) {
-        MyFilesViewDetailViewController *textEditor = [MyFilesViewDetailViewController viewController];
-        textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-        [self presentViewController:textEditor animated:YES completion:nil];
+        DocumentViewController *vcontroller = [DocumentViewController viewController];
+        vcontroller.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+        [self presentViewController:vcontroller animated:YES completion:nil];
     } else if (buttonIndex == 5) {
         NSString *file = [kAppDelegate openFile];
         UIDocumentInteractionController *controller = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:file]];
@@ -789,6 +797,15 @@ static NSString *CellIdentifier = @"Cell";
     }
 }
 
+- (void)animateSideSwipeCellToPosition:(CGPoint)pos {
+    CABasicAnimation *slideAnim = [CABasicAnimation animationWithKeyPath:@"position"];
+    [slideAnim setFromValue:[NSValue valueWithCGPoint:_sideSwipeCell.frame.origin]];
+    [slideAnim setToValue:[NSValue valueWithCGPoint:pos]];
+    [slideAnim setDuration:0.5];
+    [_sideSwipeCell.layer setPosition:pos];
+    [_sideSwipeCell.layer addAnimation:slideAnim forKey:@"position"];
+}
+
 - (void)addSwipeViewTo:(UITableViewCell *)cell direction:(UISwipeGestureRecognizerDirection)direction {
     self.animatingSideSwipe = YES;
     
@@ -798,12 +815,22 @@ static NSString *CellIdentifier = @"Cell";
     [_theTableView insertSubview:_sideSwipeView belowSubview:cell];
     self.sideSwipeDirection = direction;
     
-    CGRect frame = cell.frame;
+    // Because iOS 7 prevents animations of UITableView subviews???
+
+    _sideSwipeCell.frame = [[[UIApplication sharedApplication]keyWindow]convertRect:_sideSwipeCell.frame fromView:_theTableView];
+    
+    CGRect frame = _sideSwipeCell.frame;
     frame.origin.x = (direction == UISwipeGestureRecognizerDirectionRight)?cell.frame.size.width:-cell.frame.size.width;
     
-    [UIView animateWithDuration:0.2f animations:^{
-        cell.frame = frame;
+    [_sideSwipeCell removeFromSuperview];
+    [[[UIApplication sharedApplication]keyWindow]addSubview:_sideSwipeCell];
+    
+    [UIView animateWithDuration:0.2f delay:0.0f options:UIViewAnimationCurveEaseOut animations:^{
+        [_sideSwipeCell setFrame:frame];
     } completion:^(BOOL finished) {
+        [_sideSwipeCell removeFromSuperview];
+        _sideSwipeCell.frame = [[[UIApplication sharedApplication]keyWindow]convertRect:_sideSwipeCell.frame toView:_theTableView];
+        [_theTableView addSubview:_sideSwipeCell];
         self.animatingSideSwipe = NO;
     }];
 }

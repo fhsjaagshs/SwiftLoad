@@ -55,7 +55,6 @@
     #import "DashedLineView.h"
     #import "CustomVolumeView.h"
 
-    #import "URLInputController.h"
     #import "FileCreationDialogue.h"
     #import "SFTPLoginController.h"
     #import "WebDAVCredsPrompt.h"
@@ -92,7 +91,7 @@
     #import "BluetoothManager.h"
 
     #import "WebDAVHelpViewController.h"
-    #import "MyFilesViewDetailViewController.h"
+    #import "DocumentViewController.h"
     #import "AudioPlayerViewController.h"
     #import "PictureViewController.h"
     #import "TextEditorViewController.h"

@@ -545,7 +545,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
             } else if ([MIMEUtils isVideoFile:file]) {
                 [[UIViewController topViewController]presentViewController:[MoviePlayerViewController viewController] animated:YES completion:nil];
             } else if ([MIMEUtils isDocumentFile:file] || isHTML) {
-                [[UIViewController topViewController]presentViewController:[MyFilesViewDetailViewController viewController] animated:YES completion:nil];
+                [[UIViewController topViewController]presentViewController:[DocumentViewController viewController] animated:YES completion:nil];
             }
         }
 
