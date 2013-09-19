@@ -27,11 +27,11 @@ static NSString *CellIdentifier = @"dbcell";
 
 @end
 
-@interface DropboxBrowserViewController () <UITableViewDataSource, UITableViewDelegate, PullToRefreshViewDelegate>
+@interface DropboxBrowserViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *theTableView;
 @property (nonatomic, strong) UINavigationBar *navBar;
-@property (nonatomic, strong) PullToRefreshView *pull;
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
 
 @property (nonatomic, strong) NSMutableArray *currentPathItems;
 
@@ -57,10 +57,10 @@ static NSString *CellIdentifier = @"dbcell";
     
     self.shouldPromptForLinkage = YES;
     
-    CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
+    CGRect screenBounds = [[UIScreen mainScreen]bounds];
     BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
     
-    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
+    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
     _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"/"];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"ArrowLeft"] style:UIBarButtonItemStyleBordered target:self action:@selector(goBackDir)];
@@ -68,17 +68,21 @@ static NSString *CellIdentifier = @"dbcell";
     [_navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:_navBar];
     
-    self.theTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44) style:UITableViewStylePlain];
+    self.theTableView = [[UITableView alloc]initWithFrame:screenBounds style:UITableViewStylePlain];
     _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     _theTableView.rowHeight = iPad?60:44;
     _theTableView.dataSource = self;
     _theTableView.delegate = self;
+    _theTableView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0);
+    _theTableView.scrollIndicatorInsets = _theTableView.contentInset;
     [self.view addSubview:_theTableView];
     
-    self.pull = [[PullToRefreshView alloc]initWithScrollView:_theTableView];
-    [_pull setDelegate:self];
-    [_theTableView addSubview:_pull];
+    [self.view bringSubviewToFront:_navBar];
+    
+    self.refreshControl = [[UIRefreshControl alloc]init];
+    [_refreshControl addTarget:self action:@selector(refreshControlShouldRefresh) forControlEvents:UIControlEventValueChanged];
+    [_theTableView addSubview:_refreshControl];
 
     self.currentPathItems = [NSMutableArray array];
     
@@ -90,11 +94,9 @@ static NSString *CellIdentifier = @"dbcell";
     _navBar.topItem.leftBarButtonItem.enabled = NO;
     
     if ([[DBSession sharedSession]isLinked]) {
-        [_pull setState:PullToRefreshViewStateLoading];
+        [_refreshControl beginRefreshing];
         [self loadUserID];
     }
-    
-    [self adjustViewsForiOS7];
 }
 
 - (void)dropboxAuthenticationFailed {
@@ -103,7 +105,7 @@ static NSString *CellIdentifier = @"dbcell";
 
 - (void)dropboxAuthenticationSucceeded {
     if ([[DBSession sharedSession]isLinked]) {
-        [_pull setState:PullToRefreshViewStateLoading];
+        [_refreshControl beginRefreshing];
         [self loadUserID];
     }
 }
@@ -211,8 +213,7 @@ static NSString *CellIdentifier = @"dbcell";
     }
 }
 
-- (void)pullToRefreshViewShouldRefresh:(PullToRefreshView *)view {
-    [_pull setState:PullToRefreshViewStateLoading];
+- (void)refreshControlShouldRefresh {
     [self loadUserID];
 }
 
@@ -222,7 +223,7 @@ static NSString *CellIdentifier = @"dbcell";
         [DroppinBadassBlocks loadAccountInfoWithCompletionBlock:^(DBAccountInfo *info, NSError *error) {
             [[NetworkActivityController sharedController]hideIfPossible];
             if (error) {
-                [TransparentAlert showAlertWithTitle:[NSString stringWithFormat:@"Dropbox Error %d",error.code] andMessage:[error localizedDescription]];
+                [UIAlertView showAlertWithTitle:[NSString stringWithFormat:@"Dropbox Error %d",error.code] andMessage:error.localizedDescription];
             } else {
                 self.userID = info.userId;
                 [self loadUserID];
@@ -264,7 +265,7 @@ static NSString *CellIdentifier = @"dbcell";
                 self.cursor = nil;
                 [_currentPathItems removeAllObjects];
                 self.shouldMassInsert = YES;
-                _pull.statusLabel.text = @"Initial Load. Be patient...";
+                _refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"Initial Load. Be patient..."];
                 [self removeAllEntriesForCurrentUser];
             }
             
@@ -399,7 +400,7 @@ static NSString *CellIdentifier = @"dbcell";
 
     _navBar.topItem.leftBarButtonItem.enabled = (_navBar.topItem.title.length > 1);
     
-    [_pull finishedLoading];
+    [_refreshControl endRefreshing];
 }
 
 - (void)close {
