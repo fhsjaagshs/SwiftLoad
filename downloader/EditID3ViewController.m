@@ -27,7 +27,7 @@
     
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
 
-    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
+    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
     _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"Edit Metadata"];
     topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Save" style:UIBarButtonItemStyleBordered target:self action:@selector(writeTags)];
@@ -35,7 +35,7 @@
     [_navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:_navBar];
     
-    self.artistLabel = [[TransparentTextField alloc]initWithFrame:CGRectMake(10, sanitizeMesurement(44), screenBounds.size.width-20, 30)];
+    self.artistLabel = [[TransparentTextField alloc]initWithFrame:CGRectMake(10, 64+10, screenBounds.size.width-20, 30)];
     _artistLabel.placeholder = @"Artist";
     _artistLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _artistLabel.textAlignment = NSTextAlignmentCenter;
@@ -43,7 +43,7 @@
     _artistLabel.font = [UIFont systemFontOfSize:15];
     [self.view addSubview:_artistLabel];
     
-    self.titleLabel = [[TransparentTextField alloc]initWithFrame:CGRectMake(10, sanitizeMesurement(44)+40, screenBounds.size.width-20, 30)];
+    self.titleLabel = [[TransparentTextField alloc]initWithFrame:CGRectMake(10, 64+40+10, screenBounds.size.width-20, 30)];
     _titleLabel.placeholder = @"Title";
     _titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -51,7 +51,7 @@
     _titleLabel.font = [UIFont systemFontOfSize:15];
     [self.view addSubview:_titleLabel];
     
-    self.albumLabel = [[TransparentTextField alloc]initWithFrame:CGRectMake(10, sanitizeMesurement(44)+(40*2), screenBounds.size.width-20, 30)];
+    self.albumLabel = [[TransparentTextField alloc]initWithFrame:CGRectMake(10, 64+(40*2)+10, screenBounds.size.width-20, 30)];
     _albumLabel.placeholder = @"Album";
     _albumLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _albumLabel.textAlignment = NSTextAlignmentCenter;
@@ -60,8 +60,6 @@
     [self.view addSubview:_albumLabel];
     
     [self loadTags];
-    
-    [self adjustViewsForiOS7];
 }
 
 - (void)loadTags {

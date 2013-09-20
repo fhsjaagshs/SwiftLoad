@@ -81,7 +81,7 @@ static NSString *CellIdentifier = @"dbcell";
     [self.view bringSubviewToFront:_navBar];
     
     self.refreshControl = [[UIRefreshControl alloc]init];
-    [_refreshControl addTarget:self action:@selector(refreshControlShouldRefresh) forControlEvents:UIControlEventValueChanged];
+    [_refreshControl addTarget:self action:@selector(refreshControlShouldRefresh:) forControlEvents:UIControlEventValueChanged];
     [_theTableView addSubview:_refreshControl];
 
     self.currentPathItems = [NSMutableArray array];
@@ -92,11 +92,6 @@ static NSString *CellIdentifier = @"dbcell";
     [_database close];
     
     _navBar.topItem.leftBarButtonItem.enabled = NO;
-    
-    if ([[DBSession sharedSession]isLinked]) {
-        [_refreshControl beginRefreshing];
-        [self loadUserID];
-    }
 }
 
 - (void)dropboxAuthenticationFailed {
@@ -112,7 +107,11 @@ static NSString *CellIdentifier = @"dbcell";
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    if (_shouldPromptForLinkage) {
+    if ([[DBSession sharedSession]isLinked]) {
+        [_refreshControl beginRefreshing];
+        [_theTableView setContentOffset:CGPointMake(0, -1*(_theTableView.contentInset.top)) animated:YES];
+        [self loadUserID];
+    } else if (_shouldPromptForLinkage) {
         self.shouldPromptForLinkage = NO;
         if (![[DBSession sharedSession]isLinked]) {
             [[DBSession sharedSession]linkFromController:self];
@@ -213,7 +212,7 @@ static NSString *CellIdentifier = @"dbcell";
     }
 }
 
-- (void)refreshControlShouldRefresh {
+- (void)refreshControlShouldRefresh:(UIRefreshControl *)control {
     [self loadUserID];
 }
 
@@ -267,6 +266,8 @@ static NSString *CellIdentifier = @"dbcell";
                 self.shouldMassInsert = YES;
                 _refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"Initial Load. Be patient..."];
                 [self removeAllEntriesForCurrentUser];
+            } else {
+                _refreshControl.attributedTitle = nil;
             }
             
             self.cursor = cursor;
@@ -314,7 +315,7 @@ static NSString *CellIdentifier = @"dbcell";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _currentPathItems.count;
+    return (_currentPathItems.count > 0)?_currentPathItems.count:1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -323,6 +324,12 @@ static NSString *CellIdentifier = @"dbcell";
     
     if (cell == nil) {
         cell = [[SwiftLoadCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+    }
+    
+    if (_currentPathItems.count == 0) {
+        cell.textLabel.text = @"Loading...";
+        cell.detailTextLabel.text = @"";
+        return cell;
     }
     
     NSDictionary *fileDict = _currentPathItems[indexPath.row];
@@ -347,7 +354,6 @@ static NSString *CellIdentifier = @"dbcell";
     } else {
         cell.detailTextLabel.text = @"Directory";
     }
-    [cell setNeedsDisplay];
     
     return cell;
 }
@@ -363,6 +369,7 @@ static NSString *CellIdentifier = @"dbcell";
         _navBar.topItem.title = [_navBar.topItem.title stringByAppendingPathComponent:fileDict[NSFileName]];
         [self loadContentsOfDirectory:[_navBar.topItem.title fhs_normalize]];
         [self refreshStateWithAnimationStyle:UITableViewRowAnimationLeft];
+        [_refreshControl beginRefreshing];
     } else {
         NSString *message = [NSString stringWithFormat:@"Do you wish to download \"%@\"?",filename];
         UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
