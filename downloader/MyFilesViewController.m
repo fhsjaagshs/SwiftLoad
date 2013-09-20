@@ -813,22 +813,17 @@ static NSString *CellIdentifier = @"Cell";
     self.sideSwipeDirection = direction;
     
     // Because iOS 7 prevents animations of UITableView subviews???
+    // It's the UITableViewWrapperView
 
-    _sideSwipeCell.frame = [[[UIApplication sharedApplication]keyWindow]convertRect:_sideSwipeCell.frame fromView:_theTableView];
-    
     CGRect frame = _sideSwipeCell.frame;
     frame.origin.x = (direction == UISwipeGestureRecognizerDirectionRight)?cell.frame.size.width:-cell.frame.size.width;
-    
+
+    [_sideSwipeCell removeFromSuperview];
     [_theTableView addSubview:_sideSwipeCell];
-    [[[UIApplication sharedApplication]keyWindow]addSubview:_sideSwipeCell];
     
     [UIView animateWithDuration:0.2f animations:^{
         _sideSwipeCell.frame = frame;
-        //_sideSwipeCell.center = CGPointMake((direction == UISwipeGestureRecognizerDirectionRight)?_sideSwipeCell.bounds.size.width:-_sideSwipeCell.bounds.size.width, _sideSwipeCell.center.y);
     } completion:^(BOOL finished) {
-            [_sideSwipeCell removeFromSuperview];
-            _sideSwipeCell.frame = [[[UIApplication sharedApplication]keyWindow]convertRect:_sideSwipeCell.frame toView:_theTableView];
-            [_theTableView addSubview:_sideSwipeCell];
         self.animatingSideSwipe = NO;
     }];
 }
@@ -866,7 +861,13 @@ static NSString *CellIdentifier = @"Cell";
             _sideSwipeCell.frame = CGRectMake(0, _sideSwipeCell.frame.origin.y, _sideSwipeCell.frame.size.width, _sideSwipeCell.frame.size.height);
         } completion:^(BOOL finished) {
             self.animatingSideSwipe = NO;
-            [self removeSideSwipeView:NO];
+
+            if (_sideSwipeView.superview != nil) {
+                [_sideSwipeView removeFromSuperview];
+            }
+            
+            self.sideSwipeView = nil;
+            
         }];
     } else {
         self.animatingSideSwipe = NO;
