@@ -30,6 +30,7 @@ static NSString *CellIdentifier = @"Cell";
 @property (nonatomic, strong) UIButton *theCopyAndPasteButton;
 
 @property (nonatomic, strong) UIView *sideSwipeView;
+@property (nonatomic, weak) UIView *sideSwipeSuperview;
 @property (nonatomic, weak) UITableViewCell *sideSwipeCell;
 @property (nonatomic, assign) UISwipeGestureRecognizerDirection sideSwipeDirection;
 @property (nonatomic, assign) BOOL animatingSideSwipe;
@@ -807,6 +808,7 @@ static NSString *CellIdentifier = @"Cell";
     self.animatingSideSwipe = YES;
     
     self.sideSwipeCell = cell;
+    self.sideSwipeSuperview = _sideSwipeCell.superview;
     
     _sideSwipeView.frame = CGRectMake(0, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height);
     [_theTableView insertSubview:_sideSwipeView belowSubview:_sideSwipeCell];
@@ -815,13 +817,12 @@ static NSString *CellIdentifier = @"Cell";
     // Because iOS 7 prevents animations of UITableView subviews???
     // It's the UITableViewWrapperView
     
-    UIView *superview = _sideSwipeCell.superview;
     UIWindow *window = [[UIApplication sharedApplication]keyWindow];
     
     [_sideSwipeCell removeFromSuperview];
-    [[[UIApplication sharedApplication]keyWindow]addSubview:_sideSwipeCell];
+    [window addSubview:_sideSwipeCell];
     
-    _sideSwipeCell.frame = [window convertRect:_sideSwipeCell.frame fromView:superview];
+    _sideSwipeCell.frame = [window convertRect:_sideSwipeCell.frame fromView:_sideSwipeSuperview];
 
     CGRect frame = _sideSwipeCell.frame;
     frame.origin.x = (direction == UISwipeGestureRecognizerDirectionRight)?cell.frame.size.width:-cell.frame.size.width;
@@ -830,8 +831,8 @@ static NSString *CellIdentifier = @"Cell";
         _sideSwipeCell.frame = frame;
     } completion:^(BOOL finished) {
         [_sideSwipeCell removeFromSuperview];
-        _sideSwipeCell.frame = [superview convertRect:_sideSwipeCell.frame fromView:window];
-        [superview addSubview:_sideSwipeCell];
+        _sideSwipeCell.frame = [_sideSwipeSuperview convertRect:_sideSwipeCell.frame fromView:window];
+        [_sideSwipeSuperview addSubview:_sideSwipeCell];
         self.animatingSideSwipe = NO;
     }];
 }
@@ -863,27 +864,24 @@ static NSString *CellIdentifier = @"Cell";
         return;
     }
     
+    if (!_sideSwipeSuperview) {
+        return;
+    }
+    
     if (animated) {
         self.animatingSideSwipe = YES;
-        
-        UIView *superview = _sideSwipeCell.superview;
+
         UIWindow *window = [[UIApplication sharedApplication]keyWindow];
         
         [_sideSwipeCell removeFromSuperview];
-        [[[UIApplication sharedApplication]keyWindow]addSubview:_sideSwipeCell];
+        [window addSubview:_sideSwipeCell];
         
-        _sideSwipeCell.frame = [window convertRect:_sideSwipeCell.frame fromView:superview];
+        _sideSwipeCell.frame = [window convertRect:_sideSwipeCell.frame fromView:_sideSwipeSuperview];
         
         [UIView animateWithDuration:0.2f animations:^{
             _sideSwipeCell.frame = CGRectMake(0, _sideSwipeCell.frame.origin.y, _sideSwipeCell.frame.size.width, _sideSwipeCell.frame.size.height);
         } completion:^(BOOL finished) {
-            
-            [_sideSwipeCell removeFromSuperview];
-            _sideSwipeCell.frame = [superview convertRect:_sideSwipeCell.frame fromView:window];
-            [superview addSubview:_sideSwipeCell];
-            
             self.animatingSideSwipe = NO;
-
             [self removeSideSwipeView:NO];
         }];
     } else {
@@ -896,7 +894,16 @@ static NSString *CellIdentifier = @"Cell";
         self.sideSwipeView = nil;
 
         if (_sideSwipeCell != nil) {
-            _sideSwipeCell.frame = CGRectMake(0, _sideSwipeCell.frame.origin.y, _sideSwipeCell.frame.size.width, _sideSwipeCell.frame.size.height);
+            
+            if ([_sideSwipeCell.superview isKindOfClass:[UIWindow class]]) {
+                [_sideSwipeCell removeFromSuperview];
+                _sideSwipeCell.frame = _sideSwipeSuperview.bounds;//[_sideSwipeSuperview convertRect:_sideSwipeCell.frame fromView:[[UIApplication sharedApplication]keyWindow]];
+                [_sideSwipeSuperview addSubview:_sideSwipeCell];
+            } else {
+                _sideSwipeCell.frame = CGRectMake(0, _sideSwipeCell.frame.origin.y, _sideSwipeCell.frame.size.width, _sideSwipeCell.frame.size.height);
+            }
+
+            self.sideSwipeSuperview = nil;
             self.sideSwipeCell = nil;
         }
     }
