@@ -64,6 +64,7 @@ static NSString *CellIdentifier = @"Cell";
     _theTableView.delegate = self;
     _theTableView.contentInset = UIEdgeInsetsMake(20+44, 0, 0, 0);
     _theTableView.scrollIndicatorInsets = _theTableView.contentInset;
+    _theTableView.separatorInset = UIEdgeInsetsZero;
     [self.view addSubview:_theTableView];
     
     [self.view bringSubviewToFront:_navBar];
@@ -332,7 +333,6 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)watchdogWasTripped:(ContentOffsetWatchdog *)watchdog {
-    NSLog(@"asdfahsdjkflahsdjfklsdf");
     [_watchdog resetOffset];
 
     if (_watchdog.mode == WatchdogModeNormal) {
@@ -598,7 +598,7 @@ static NSString *CellIdentifier = @"Cell";
     [[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir];
     
     if (isDir) {
-        [self removeSideSwipeView:YES];
+       // [self removeSideSwipeView:YES];
         return UITableViewCellEditingStyleDelete;
     }
     return UITableViewCellEditingStyleNone;
@@ -789,12 +789,12 @@ static NSString *CellIdentifier = @"Cell";
         NSIndexPath *indexPath = [_theTableView indexPathForRowAtPoint:[recognizer locationInView:_theTableView]];
         UITableViewCell *cell = [_theTableView cellForRowAtIndexPath:indexPath];
         
-        /*if (cell.frame.origin.x != 0) {
+        if (cell.frame.origin.x != 0) {
             [self removeSideSwipeView:YES];
             return;
-        }*/
+        }
         
-        [self removeSideSwipeView:YES];
+        [self removeSideSwipeView:NO];
         
         if (cell != _sideSwipeCell && !_animatingSideSwipe) {
             [self setupSideSwipeView];
@@ -803,22 +803,13 @@ static NSString *CellIdentifier = @"Cell";
     }
 }
 
-- (void)animateSideSwipeCellToPosition:(CGPoint)pos {
-    CABasicAnimation *slideAnim = [CABasicAnimation animationWithKeyPath:@"position"];
-    [slideAnim setFromValue:[NSValue valueWithCGPoint:_sideSwipeCell.frame.origin]];
-    [slideAnim setToValue:[NSValue valueWithCGPoint:pos]];
-    [slideAnim setDuration:0.5];
-    [_sideSwipeCell.layer setPosition:pos];
-    [_sideSwipeCell.layer addAnimation:slideAnim forKey:@"position"];
-}
-
 - (void)addSwipeViewTo:(UITableViewCell *)cell direction:(UISwipeGestureRecognizerDirection)direction {
     self.animatingSideSwipe = YES;
     
     self.sideSwipeCell = cell;
     
     _sideSwipeView.frame = CGRectMake(0, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height);
-    [_theTableView insertSubview:_sideSwipeView belowSubview:cell];
+    [_theTableView insertSubview:_sideSwipeView belowSubview:_sideSwipeCell];
     self.sideSwipeDirection = direction;
     
     // Because iOS 7 prevents animations of UITableView subviews???
@@ -828,15 +819,16 @@ static NSString *CellIdentifier = @"Cell";
     CGRect frame = _sideSwipeCell.frame;
     frame.origin.x = (direction == UISwipeGestureRecognizerDirectionRight)?cell.frame.size.width:-cell.frame.size.width;
     
-    [_sideSwipeCell removeFromSuperview];
+    [_theTableView addSubview:_sideSwipeCell];
     [[[UIApplication sharedApplication]keyWindow]addSubview:_sideSwipeCell];
     
-    [UIView animateWithDuration:0.2f delay:0.0f options:UIViewAnimationCurveEaseOut animations:^{
-        [_sideSwipeCell setFrame:frame];
+    [UIView animateWithDuration:0.2f animations:^{
+        _sideSwipeCell.frame = frame;
+        //_sideSwipeCell.center = CGPointMake((direction == UISwipeGestureRecognizerDirectionRight)?_sideSwipeCell.bounds.size.width:-_sideSwipeCell.bounds.size.width, _sideSwipeCell.center.y);
     } completion:^(BOOL finished) {
-        [_sideSwipeCell removeFromSuperview];
-        _sideSwipeCell.frame = [[[UIApplication sharedApplication]keyWindow]convertRect:_sideSwipeCell.frame toView:_theTableView];
-        [_theTableView addSubview:_sideSwipeCell];
+            [_sideSwipeCell removeFromSuperview];
+            _sideSwipeCell.frame = [[[UIApplication sharedApplication]keyWindow]convertRect:_sideSwipeCell.frame toView:_theTableView];
+            [_theTableView addSubview:_sideSwipeCell];
         self.animatingSideSwipe = NO;
     }];
 }
@@ -870,7 +862,6 @@ static NSString *CellIdentifier = @"Cell";
     
     if (animated) {
         self.animatingSideSwipe = YES;
-        
         [UIView animateWithDuration:0.2f animations:^{
             _sideSwipeCell.frame = CGRectMake(0, _sideSwipeCell.frame.origin.y, _sideSwipeCell.frame.size.width, _sideSwipeCell.frame.size.height);
         } completion:^(BOOL finished) {

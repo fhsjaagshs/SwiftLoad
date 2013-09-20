@@ -315,7 +315,7 @@ static NSString *CellIdentifier = @"dbcell";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return (_currentPathItems.count > 0)?_currentPathItems.count:1;
+    return _currentPathItems.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -324,12 +324,6 @@ static NSString *CellIdentifier = @"dbcell";
     
     if (cell == nil) {
         cell = [[SwiftLoadCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-    }
-    
-    if (_currentPathItems.count == 0) {
-        cell.textLabel.text = @"Loading...";
-        cell.detailTextLabel.text = @"";
-        return cell;
     }
     
     NSDictionary *fileDict = _currentPathItems[indexPath.row];
@@ -369,7 +363,6 @@ static NSString *CellIdentifier = @"dbcell";
         _navBar.topItem.title = [_navBar.topItem.title stringByAppendingPathComponent:fileDict[NSFileName]];
         [self loadContentsOfDirectory:[_navBar.topItem.title fhs_normalize]];
         [self refreshStateWithAnimationStyle:UITableViewRowAnimationLeft];
-        [_refreshControl beginRefreshing];
     } else {
         NSString *message = [NSString stringWithFormat:@"Do you wish to download \"%@\"?",filename];
         UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
