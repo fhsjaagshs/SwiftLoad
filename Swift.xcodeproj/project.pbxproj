@@ -144,6 +144,7 @@
 		F17DC662140C489B0015F613 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F17DC661140C489B0015F613 /* AVFoundation.framework */; };
 		F17F11231420017100CE45D7 /* FileInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F17F11211420017100CE45D7 /* FileInfoViewController.m */; };
 		F1847BBB16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F1847BBA16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m */; };
+		F189DF5617ECF5F3004D5F31 /* NSObject+Debug.m in Sources */ = {isa = PBXBuildFile; fileRef = F189DF5517ECF5F3004D5F31 /* NSObject+Debug.m */; };
 		F18D19C317A5A479009A8D07 /* Task.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D19C217A5A479009A8D07 /* Task.m */; };
 		F18D19C617A5A7B1009A8D07 /* TaskController.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D19C517A5A7B1009A8D07 /* TaskController.m */; };
 		F18D19CB17A5AB53009A8D07 /* TaskCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D19CA17A5AB53009A8D07 /* TaskCell.m */; };
@@ -482,6 +483,8 @@
 		F17F11211420017100CE45D7 /* FileInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileInfoViewController.m; sourceTree = "<group>"; };
 		F1847BB916E538C600006C25 /* MFMailComposeViewController+BlockExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MFMailComposeViewController+BlockExtensions.h"; sourceTree = "<group>"; };
 		F1847BBA16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MFMailComposeViewController+BlockExtensions.m"; sourceTree = "<group>"; };
+		F189DF5417ECF5F3004D5F31 /* NSObject+Debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Debug.h"; sourceTree = "<group>"; };
+		F189DF5517ECF5F3004D5F31 /* NSObject+Debug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Debug.m"; sourceTree = "<group>"; };
 		F18D19C117A5A479009A8D07 /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
 		F18D19C217A5A479009A8D07 /* Task.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Task.m; sourceTree = "<group>"; };
 		F18D19C417A5A7B1009A8D07 /* TaskController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskController.h; sourceTree = "<group>"; };
@@ -935,6 +938,8 @@
 				F1C4462F17E3510C004725FC /* DBRestClient+SpecificCancellation.m */,
 				F1538E2217E68D3300A0F158 /* UIAlertView+QuickDisplay.h */,
 				F1538E2317E68D3300A0F158 /* UIAlertView+QuickDisplay.m */,
+				F189DF5417ECF5F3004D5F31 /* NSObject+Debug.h */,
+				F189DF5517ECF5F3004D5F31 /* NSObject+Debug.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -1481,6 +1486,7 @@
 				F1F0EBC61785F75900878F7D /* FTPDownload.m in Sources */,
 				F1679AC61787B368001369B1 /* SFTPBrowserViewController.m in Sources */,
 				F106A4DC178865AD002D3BC8 /* DLSFTPConnection.m in Sources */,
+				F189DF5617ECF5F3004D5F31 /* NSObject+Debug.m in Sources */,
 				F106A4DD178865AD002D3BC8 /* DLSFTPDownloadRequest.m in Sources */,
 				F106A4DE178865AD002D3BC8 /* DLSFTPFile.m in Sources */,
 				F106A4DF178865AD002D3BC8 /* DLSFTPListFilesRequest.m in Sources */,

@@ -814,16 +814,24 @@ static NSString *CellIdentifier = @"Cell";
     
     // Because iOS 7 prevents animations of UITableView subviews???
     // It's the UITableViewWrapperView
+    
+    UIView *superview = _sideSwipeCell.superview;
+    UIWindow *window = [[UIApplication sharedApplication]keyWindow];
+    
+    [_sideSwipeCell removeFromSuperview];
+    [[[UIApplication sharedApplication]keyWindow]addSubview:_sideSwipeCell];
+    
+    _sideSwipeCell.frame = [window convertRect:_sideSwipeCell.frame fromView:superview];
 
     CGRect frame = _sideSwipeCell.frame;
     frame.origin.x = (direction == UISwipeGestureRecognizerDirectionRight)?cell.frame.size.width:-cell.frame.size.width;
-
-    [_sideSwipeCell removeFromSuperview];
-    [_theTableView addSubview:_sideSwipeCell];
     
     [UIView animateWithDuration:0.2f animations:^{
         _sideSwipeCell.frame = frame;
     } completion:^(BOOL finished) {
+        [_sideSwipeCell removeFromSuperview];
+        _sideSwipeCell.frame = [superview convertRect:_sideSwipeCell.frame fromView:window];
+        [superview addSubview:_sideSwipeCell];
         self.animatingSideSwipe = NO;
     }];
 }
@@ -857,17 +865,26 @@ static NSString *CellIdentifier = @"Cell";
     
     if (animated) {
         self.animatingSideSwipe = YES;
+        
+        UIView *superview = _sideSwipeCell.superview;
+        UIWindow *window = [[UIApplication sharedApplication]keyWindow];
+        
+        [_sideSwipeCell removeFromSuperview];
+        [[[UIApplication sharedApplication]keyWindow]addSubview:_sideSwipeCell];
+        
+        _sideSwipeCell.frame = [window convertRect:_sideSwipeCell.frame fromView:superview];
+        
         [UIView animateWithDuration:0.2f animations:^{
             _sideSwipeCell.frame = CGRectMake(0, _sideSwipeCell.frame.origin.y, _sideSwipeCell.frame.size.width, _sideSwipeCell.frame.size.height);
         } completion:^(BOOL finished) {
+            
+            [_sideSwipeCell removeFromSuperview];
+            _sideSwipeCell.frame = [superview convertRect:_sideSwipeCell.frame fromView:window];
+            [superview addSubview:_sideSwipeCell];
+            
             self.animatingSideSwipe = NO;
 
-            if (_sideSwipeView.superview != nil) {
-                [_sideSwipeView removeFromSuperview];
-            }
-            
-            self.sideSwipeView = nil;
-            
+            [self removeSideSwipeView:NO];
         }];
     } else {
         self.animatingSideSwipe = NO;
