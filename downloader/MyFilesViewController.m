@@ -575,11 +575,11 @@ static NSString *CellIdentifier = @"Cell";
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         NSString *removePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:_filelist[indexPath.row]];
         
+        [[NSFileManager defaultManager]removeItemAtPath:removePath error:nil];
+        [_filelist removeAllObjects];
+        
         [_theTableView beginUpdates];
         [_theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
-        NSFileManager *fm = [[NSFileManager alloc]init];
-        [fm removeItemAtPath:removePath error:nil];
-        [_filelist removeAllObjects];
         [_theTableView endUpdates];
     }
 }

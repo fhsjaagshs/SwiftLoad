@@ -78,7 +78,6 @@
             }
             
         } else if (_mode == WatchdogModePullToRefresh) {
-            NSLog(@"asdfasdf");
             if (_scrollView.isDragging) {
                 if (_scrollView.contentOffset.y < -60-_scrollView.contentInset.top) {
                     _statusLabel.text = _trippedTextInternal;
