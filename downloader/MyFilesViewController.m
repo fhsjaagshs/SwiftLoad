@@ -13,7 +13,7 @@
 
 static NSString *CellIdentifier = @"Cell";
 
-@interface MyFilesViewController () <UITableViewDelegate, UITableViewDataSource, HamburgerViewDelegate, ContentOffsetWatchdogDelegate>
+@interface MyFilesViewController () <UITableViewDelegate, UITableViewDataSource, HamburgerViewDelegate, ContentOffsetWatchdogDelegate, SwipeCellDelegate>
 
 // Content Offset Watchdog
 @property (nonatomic, strong) ContentOffsetWatchdog *watchdog;
@@ -29,11 +29,7 @@ static NSString *CellIdentifier = @"Cell";
 @property (nonatomic, strong) UINavigationBar *navBar;
 @property (nonatomic, strong) UIButton *theCopyAndPasteButton;
 
-@property (nonatomic, strong) UIView *sideSwipeView;
-@property (nonatomic, weak) UIView *sideSwipeSuperview;
-@property (nonatomic, weak) UITableViewCell *sideSwipeCell;
-@property (nonatomic, assign) UISwipeGestureRecognizerDirection sideSwipeDirection;
-@property (nonatomic, assign) BOOL animatingSideSwipe;
+@property (nonatomic, strong) SwipeCell *currentlySwipedCell;
 
 @end
 
@@ -88,7 +84,6 @@ static NSString *CellIdentifier = @"Cell";
     
     [kAppDelegate setManagerCurrentDir:kDocsDir];
     
-    self.animatingSideSwipe = NO;
     self.watchdogCanGo = YES;
     
     self.view.opaque = YES;
@@ -316,7 +311,7 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)goBackDir {
-    [self removeSideSwipeView:NO];
+    [_currentlySwipedCell hideWithAnimation:NO];
 
     _navBar.topItem.title = [_navBar.topItem.title stringByDeletingLastPathComponent];
     [kAppDelegate setManagerCurrentDir:[kDocsDir stringByAppendingPathComponent:_navBar.topItem.title]];
@@ -372,33 +367,14 @@ static NSString *CellIdentifier = @"Cell";
 
     [self reindexFilelistIfNecessary];
     
-    SwiftLoadCell *cell = (SwiftLoadCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    SwipeCell *cell = (SwipeCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
-        cell = [[SwiftLoadCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-
-        DisclosureButton *button = [DisclosureButton button];
+        cell = [[SwipeCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        DisclosureButton *button = [DisclosureButton buttonForCell:cell];
         [button addTarget:self action:@selector(accessoryButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        cell.accessoryView = button;
-        cell.accessoryView.backgroundColor = [UIColor clearColor];
-        
-        if ([UIDevice currentDevice].systemVersion.intValue < 7.0f) {
-            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-                cell.accessoryView.center = CGPointMake(735, (cell.bounds.size.height)/2);
-            } else {
-                cell.accessoryView.center = CGPointMake(297.5, (cell.bounds.size.height)/2);
-            }
-        }
-        
-        if (cell.gestureRecognizers.count == 0) {
-            UISwipeGestureRecognizer *rightSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeRight:)];
-            rightSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
-            [cell addGestureRecognizer:rightSwipeGestureRecognizer];
-            
-            UISwipeGestureRecognizer *leftSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeLeft:)];
-            leftSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
-            [cell addGestureRecognizer:leftSwipeGestureRecognizer];
-        }
+        [cell.contentView addSubview:button];
+        cell.delegate = self;
     }
     
     NSString *filesObjectAtIndex = _filelist[indexPath.row];
@@ -411,16 +387,10 @@ static NSString *CellIdentifier = @"Cell";
     if ([[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir] && isDir) {
         cell.detailTextLabel.text = @"Directory";
         cell.imageView.image = [UIImage imageNamed:@"folder_icon"];
-        for (UIGestureRecognizer *rec in cell.gestureRecognizers) {
-            rec.enabled = NO;
-        }
+        cell.swipeEnabled = NO;
     } else {
-        
         cell.imageView.image = [UIImage imageNamed:@"file_icon"];
-        
-        for (UIGestureRecognizer *rec in cell.gestureRecognizers) {
-            rec.enabled = YES;
-        }
+        cell.swipeEnabled = YES;
         
         NSMutableString *detailText = [NSMutableString stringWithString:[file.pathExtension.lowercaseString isEqualToString:@"zip"]?@"Archive, ":@"File, "];
         
@@ -437,8 +407,6 @@ static NSString *CellIdentifier = @"Cell";
         }
         cell.detailTextLabel.text = detailText;
     }
-    
-    [cell setNeedsDisplay];
     return cell;
 }
 
@@ -537,7 +505,7 @@ static NSString *CellIdentifier = @"Cell";
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    [self removeSideSwipeView:NO];
+    [_currentlySwipedCell hideWithAnimation:NO];
     
     if (_theTableView.editing) {
         [_theTableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
@@ -570,7 +538,7 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)editTable {
-    [self removeSideSwipeView:NO];
+    [_currentlySwipedCell hideWithAnimation:NO];
     [self reindexFilelistIfNecessary];
     
     _watchdog.mode = _theTableView.editing?WatchdogModeNormal:WatchdogModePullToRefresh;
@@ -599,7 +567,6 @@ static NSString *CellIdentifier = @"Cell";
     [[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir];
     
     if (isDir) {
-       // [self removeSideSwipeView:YES];
         return UITableViewCellEditingStyleDelete;
     }
     return UITableViewCellEditingStyleNone;
@@ -651,7 +618,7 @@ static NSString *CellIdentifier = @"Cell";
         BOOL opened = NO;
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            opened = [controller presentOpenInMenuFromRect:_sideSwipeCell.frame inView:_theTableView animated:YES];
+            opened = [controller presentOpenInMenuFromRect:_currentlySwipedCell.frame inView:_theTableView animated:YES];
         } else {
             opened = [controller presentOpenInMenuFromRect:self.view.frame inView:self.view animated:YES];
         }
@@ -660,11 +627,59 @@ static NSString *CellIdentifier = @"Cell";
             [TransparentAlert showAlertWithTitle:@"No External Viewers" andMessage:[NSString stringWithFormat:@"No installed applications are capable of opening %@.",file.lastPathComponent]];
         }
     }
-    [self removeSideSwipeView:YES];
+    [_currentlySwipedCell hideWithAnimation:YES];
+}
+
+- (void)swipeCellWillReveal:(SwipeCell *)cell {
+    
+    if (_currentlySwipedCell) {
+        [_currentlySwipedCell hideWithAnimation:YES];
+    }
+}
+
+- (void)swipeCellDidReveal:(SwipeCell *)cell {
+    self.currentlySwipedCell = cell;
+}
+
+- (void)swipeCellDidHide:(SwipeCell *)cell {
+    self.currentlySwipedCell = nil;
+}
+
+- (UIView *)backgroundViewForSwipeCell:(SwipeCell *)cell {
+    UIView *backgroundView = [[UIView alloc]initWithFrame:CGRectMake(_theTableView.frame.origin.x, _theTableView.frame.origin.y, _theTableView.frame.size.width, _theTableView.rowHeight)];
+    backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    backgroundView.backgroundColor = [UIColor darkGrayColor];
+
+    NSMutableArray *buttonData = [@[ @{@"title": @"Action", @"image": @"action"}, @{@"title": @"FTP", @"image": @"dropbox"}, @{@"title": @"Bluetooth", @"image": @"bluetooth"}, @{@"title": @"Email", @"image": @"paperclip"}, @{@"title": @"Delete", @"image": @"delete"} ]mutableCopy];
+    
+    NSString *filePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:cell.textLabel.text];
+    
+    if ([filePath isEqualToString:[kAppDelegate nowPlayingFile]]) {
+        [buttonData removeObject:buttonData.lastObject];
+    }
+    
+    if ([[BluetoothManager sharedManager]isTransferring]) {
+        [buttonData removeObjectAtIndex:2];
+    }
+    
+    for (NSDictionary *buttonInfo in buttonData) {
+        int index = [buttonData indexOfObject:buttonInfo];
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.frame = CGRectMake(index*((backgroundView.bounds.size.width)/buttonData.count), 0, ((backgroundView.bounds.size.width)/buttonData.count), backgroundView.bounds.size.height);
+        button.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
+        
+        UIImage *grayImage = [UIImage imageNamed:buttonInfo[@"image"]];
+        [button setImage:grayImage forState:UIControlStateNormal];
+        [button setTag:index+1];
+        [button addTarget:self action:@selector(touchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
+        [backgroundView addSubview:button];
+    }
+    return backgroundView;
 }
 
 - (void)touchUpInsideAction:(UIButton *)button {
-    NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:_sideSwipeCell.textLabel.text];
+
+    NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:_currentlySwipedCell.textLabel.text];
     [kAppDelegate setOpenFile:file];
     
     int number = button.tag-1;
@@ -678,26 +693,25 @@ static NSString *CellIdentifier = @"Cell";
         popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            [popupQuery showFromRect:[_sideSwipeView convertRect:button.frame toView:self.view] inView:self.view animated:YES];
+            [popupQuery showFromRect:[_currentlySwipedCell.backgroundView convertRect:button.frame toView:self.view] inView:self.view animated:YES];
         } else {
             [popupQuery showInView:self.view];
-            [self removeSideSwipeView:YES];
+            [_currentlySwipedCell hideWithAnimation:YES];
         }
         
     } else if (number == 1) {
         DropboxUpload *task = [DropboxUpload uploadWithFile:file];
         [[TaskController sharedController]addTask:task];
-        [self removeSideSwipeView:YES];
+        [_currentlySwipedCell hideWithAnimation:YES];
     } else if (number == 2) {
         BluetoothTask *task = [BluetoothTask taskWithFile:file];
         [[TaskController sharedController]addTask:task];
-        [self removeSideSwipeView:YES];
+        [_currentlySwipedCell hideWithAnimation:YES];
     } else if (number == 3) {
         [kAppDelegate sendFileInEmail:file];
-        [self removeSideSwipeView:YES];
-        
+        [_currentlySwipedCell hideWithAnimation:YES];
     } else if (number == 4) {
-        NSString *message = [NSString stringWithFormat:@"Are you sure you want to delete %@?",[file lastPathComponent]];
+        NSString *message = [NSString stringWithFormat:@"Are you sure you want to delete %@?",file.lastPathComponent];
         
         UIActionSheet *popupQuery = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             
@@ -705,9 +719,9 @@ static NSString *CellIdentifier = @"Cell";
                 
                 [[FilesystemMonitor sharedMonitor]invalidate];
                 
-                NSIndexPath *indexPath = [_theTableView indexPathForCell:_sideSwipeCell];
+                NSIndexPath *indexPath = [_theTableView indexPathForCell:_currentlySwipedCell];
 
-                [self removeSideSwipeView:NO];
+                [_currentlySwipedCell hideWithAnimation:NO];
                 
                 [_filelist removeObjectAtIndex:indexPath.row];
                 [[NSFileManager defaultManager]removeItemAtPath:file error:nil];
@@ -725,120 +739,8 @@ static NSString *CellIdentifier = @"Cell";
     }
 }
 
-- (void)setupSideSwipeView {
- 
-    if (_sideSwipeView == nil) {
-        self.sideSwipeView = [[UIView alloc]initWithFrame:CGRectMake(_theTableView.frame.origin.x, _theTableView.frame.origin.y, _theTableView.frame.size.width, _theTableView.rowHeight)];
-        _sideSwipeView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
-        _sideSwipeView.backgroundColor = [UIColor darkGrayColor];
-        
-        UISwipeGestureRecognizer *rightSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeRight:)];
-        rightSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
-        [_sideSwipeView addGestureRecognizer:rightSwipeGestureRecognizer];
-
-        UISwipeGestureRecognizer *leftSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeLeft:)];
-        leftSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
-        [_sideSwipeView addGestureRecognizer:leftSwipeGestureRecognizer];
-    } else {
-        for (UIView *view in _sideSwipeView.subviews) {
-            if ([view isKindOfClass:[UIButton class]]) {
-                [view removeFromSuperview];
-            }
-        }
-    }
-    
-    NSMutableArray *buttonData = [NSMutableArray arrayWithObjects:@{@"title": @"Action", @"image": @"action"}, @{@"title": @"FTP", @"image": @"dropbox"}, @{@"title": @"Bluetooth", @"image": @"bluetooth"}, @{@"title": @"Email", @"image": @"paperclip"}, @{@"title": @"Delete", @"image": @"delete"}, nil];
-    
-    NSString *filePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:_sideSwipeCell.textLabel.text];
-    
-    if ([filePath isEqualToString:[kAppDelegate nowPlayingFile]]) {
-        [buttonData removeObject:buttonData.lastObject];
-    }
-    
-    if ([[BluetoothManager sharedManager]isTransferring]) {
-        [buttonData removeObjectAtIndex:2];
-    }
-    
-    for (NSDictionary *buttonInfo in buttonData) {
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        button.frame = CGRectMake([buttonData indexOfObject:buttonInfo]*((_sideSwipeView.bounds.size.width)/buttonData.count), 0, ((_sideSwipeView.bounds.size.width)/buttonData.count), _sideSwipeView.bounds.size.height);
-        button.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
-        
-        UIImage *grayImage = [UIImage imageNamed:buttonInfo[@"image"]];
-        [button setImage:grayImage forState:UIControlStateNormal];
-        [button setTag:[buttonData indexOfObject:buttonInfo]+1];
-        [button addTarget:self action:@selector(touchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
-        [_sideSwipeView addSubview:button];
-    }
-}
-
-- (void)swipeLeft:(UISwipeGestureRecognizer *)recognizer {
-    [self swipe:recognizer direction:UISwipeGestureRecognizerDirectionLeft];
-}
-
-- (void)swipeRight:(UISwipeGestureRecognizer *)recognizer {
-    [self swipe:recognizer direction:UISwipeGestureRecognizerDirectionRight];
-}
-
-- (void)swipe:(UISwipeGestureRecognizer *)recognizer direction:(UISwipeGestureRecognizerDirection)direction {
-
-    if (_theTableView.editing) {
-        return;
-    }
-    
-    if (recognizer && recognizer.state == UIGestureRecognizerStateEnded) {
-        NSIndexPath *indexPath = [_theTableView indexPathForRowAtPoint:[recognizer locationInView:_theTableView]];
-        UITableViewCell *cell = [_theTableView cellForRowAtIndexPath:indexPath];
-        
-        if (cell.frame.origin.x != 0) {
-            [self removeSideSwipeView:YES];
-            return;
-        }
-        
-        [self removeSideSwipeView:NO];
-        
-        if (cell != _sideSwipeCell && !_animatingSideSwipe) {
-            [self setupSideSwipeView];
-            [self addSwipeViewTo:cell direction:recognizer.direction];
-        }
-    }
-}
-
-- (void)addSwipeViewTo:(UITableViewCell *)cell direction:(UISwipeGestureRecognizerDirection)direction {
-    self.animatingSideSwipe = YES;
-    
-    self.sideSwipeCell = cell;
-    self.sideSwipeSuperview = _sideSwipeCell.superview;
-    
-    _sideSwipeView.frame = CGRectMake(0, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height);
-    [_theTableView insertSubview:_sideSwipeView belowSubview:_sideSwipeCell];
-    self.sideSwipeDirection = direction;
-    
-    // Because iOS 7 prevents animations of UITableView subviews???
-    // It's the UITableViewWrapperView
-    
-    UIWindow *window = [[UIApplication sharedApplication]keyWindow];
-    
-    [_sideSwipeCell removeFromSuperview];
-    [window addSubview:_sideSwipeCell];
-    
-    _sideSwipeCell.frame = [window convertRect:_sideSwipeCell.frame fromView:_sideSwipeSuperview];
-
-    CGRect frame = _sideSwipeCell.frame;
-    frame.origin.x = (direction == UISwipeGestureRecognizerDirectionRight)?cell.frame.size.width:-cell.frame.size.width;
-    
-    [UIView animateWithDuration:0.2f animations:^{
-        _sideSwipeCell.frame = frame;
-    } completion:^(BOOL finished) {
-        [_sideSwipeCell removeFromSuperview];
-        _sideSwipeCell.frame = [_sideSwipeSuperview convertRect:_sideSwipeCell.frame fromView:window];
-        [_sideSwipeSuperview addSubview:_sideSwipeCell];
-        self.animatingSideSwipe = NO;
-    }];
-}
-
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    [self removeSideSwipeView:YES];
+    [_currentlySwipedCell hideWithAnimation:YES];
     [(Hack *)[UIApplication sharedApplication]setShouldWatchTouches:YES];
 }
 
@@ -847,66 +749,8 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView {
-    [self removeSideSwipeView:NO];
+    [_currentlySwipedCell hideWithAnimation:NO];
     return YES;
-}
-
-- (void)removeSideSwipeView:(BOOL)animated {
-    if (_animatingSideSwipe) {
-        return;
-    }
-    
-    if (!_sideSwipeCell) {
-        return;
-    }
-    
-    if (!_sideSwipeView) {
-        return;
-    }
-    
-    if (!_sideSwipeSuperview) {
-        return;
-    }
-    
-    if (animated) {
-        self.animatingSideSwipe = YES;
-
-        UIWindow *window = [[UIApplication sharedApplication]keyWindow];
-        
-        [_sideSwipeCell removeFromSuperview];
-        [window addSubview:_sideSwipeCell];
-        
-        _sideSwipeCell.frame = [window convertRect:_sideSwipeCell.frame fromView:_sideSwipeSuperview];
-        
-        [UIView animateWithDuration:0.2f animations:^{
-            _sideSwipeCell.frame = CGRectMake(0, _sideSwipeCell.frame.origin.y, _sideSwipeCell.frame.size.width, _sideSwipeCell.frame.size.height);
-        } completion:^(BOOL finished) {
-            self.animatingSideSwipe = NO;
-            [self removeSideSwipeView:NO];
-        }];
-    } else {
-        self.animatingSideSwipe = NO;
-        
-        if (_sideSwipeView.superview != nil) {
-            [_sideSwipeView removeFromSuperview];
-        }
-
-        self.sideSwipeView = nil;
-
-        if (_sideSwipeCell != nil) {
-            
-            if ([_sideSwipeCell.superview isKindOfClass:[UIWindow class]]) {
-                [_sideSwipeCell removeFromSuperview];
-                _sideSwipeCell.frame = _sideSwipeSuperview.bounds;//[_sideSwipeSuperview convertRect:_sideSwipeCell.frame fromView:[[UIApplication sharedApplication]keyWindow]];
-                [_sideSwipeSuperview addSubview:_sideSwipeCell];
-            } else {
-                _sideSwipeCell.frame = CGRectMake(0, _sideSwipeCell.frame.origin.y, _sideSwipeCell.frame.size.width, _sideSwipeCell.frame.size.height);
-            }
-
-            self.sideSwipeSuperview = nil;
-            self.sideSwipeCell = nil;
-        }
-    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {

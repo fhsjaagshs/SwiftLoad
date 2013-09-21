@@ -11,7 +11,15 @@
 @implementation DisclosureButton
 
 - (void)drawRect:(CGRect)rect {
-    [[UIImage imageNamed:self.highlighted?@"arrow_disclosure_highlighted":@"arrow_disclosure"]drawInRect:CGRectMake(11, 11, 22, 22)];
+    int rowHeight = self.bounds.size.height;
+    [[UIImage imageNamed:self.highlighted?@"arrow_disclosure_highlighted":@"arrow_disclosure"]drawInRect:CGRectMake(rowHeight/4, rowHeight/4, rowHeight/2, rowHeight/2)];
+}
+
++ (DisclosureButton *)buttonForCell:(UITableViewCell *)cell {
+    int rowHeight = cell.bounds.size.height;
+    DisclosureButton *ret = [[[self class]alloc]initWithFrame:CGRectMake(cell.bounds.size.width-rowHeight, 0, rowHeight, rowHeight)];
+    ret.backgroundColor = [UIColor clearColor];
+    return ret;
 }
 
 + (DisclosureButton *)button {

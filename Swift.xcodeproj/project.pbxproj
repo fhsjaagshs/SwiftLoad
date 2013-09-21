@@ -144,11 +144,10 @@
 		F17DC662140C489B0015F613 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F17DC661140C489B0015F613 /* AVFoundation.framework */; };
 		F17F11231420017100CE45D7 /* FileInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F17F11211420017100CE45D7 /* FileInfoViewController.m */; };
 		F1847BBB16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F1847BBA16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m */; };
-		F189DF5617ECF5F3004D5F31 /* NSObject+Debug.m in Sources */ = {isa = PBXBuildFile; fileRef = F189DF5517ECF5F3004D5F31 /* NSObject+Debug.m */; };
+		F189DF5917ED0695004D5F31 /* SwipeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F189DF5817ED0695004D5F31 /* SwipeCell.m */; };
 		F18D19C317A5A479009A8D07 /* Task.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D19C217A5A479009A8D07 /* Task.m */; };
 		F18D19C617A5A7B1009A8D07 /* TaskController.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D19C517A5A7B1009A8D07 /* TaskController.m */; };
 		F18D19CB17A5AB53009A8D07 /* TaskCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D19CA17A5AB53009A8D07 /* TaskCell.m */; };
-		F18E2C1B17EBCF8E00D2C69C /* SideSwipeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F18E2C1A17EBCF8E00D2C69C /* SideSwipeCell.m */; };
 		F19BB51C16E006CA0081C95B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F19BB51916E006CA0081C95B /* main.m */; };
 		F19FD8AD17ACDB2500B60C3B /* NetworkActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = F19FD8AC17ACDB2500B60C3B /* NetworkActivityController.m */; };
 		F1A72948149876040049DBB6 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A72947149876040049DBB6 /* GameKit.framework */; };
@@ -483,16 +482,14 @@
 		F17F11211420017100CE45D7 /* FileInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileInfoViewController.m; sourceTree = "<group>"; };
 		F1847BB916E538C600006C25 /* MFMailComposeViewController+BlockExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MFMailComposeViewController+BlockExtensions.h"; sourceTree = "<group>"; };
 		F1847BBA16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MFMailComposeViewController+BlockExtensions.m"; sourceTree = "<group>"; };
-		F189DF5417ECF5F3004D5F31 /* NSObject+Debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Debug.h"; sourceTree = "<group>"; };
-		F189DF5517ECF5F3004D5F31 /* NSObject+Debug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Debug.m"; sourceTree = "<group>"; };
+		F189DF5717ED0695004D5F31 /* SwipeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeCell.h; sourceTree = "<group>"; };
+		F189DF5817ED0695004D5F31 /* SwipeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwipeCell.m; sourceTree = "<group>"; };
 		F18D19C117A5A479009A8D07 /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
 		F18D19C217A5A479009A8D07 /* Task.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Task.m; sourceTree = "<group>"; };
 		F18D19C417A5A7B1009A8D07 /* TaskController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskController.h; sourceTree = "<group>"; };
 		F18D19C517A5A7B1009A8D07 /* TaskController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskController.m; sourceTree = "<group>"; };
 		F18D19C917A5AB53009A8D07 /* TaskCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskCell.h; sourceTree = "<group>"; };
 		F18D19CA17A5AB53009A8D07 /* TaskCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskCell.m; sourceTree = "<group>"; };
-		F18E2C1917EBCF8E00D2C69C /* SideSwipeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SideSwipeCell.h; sourceTree = "<group>"; };
-		F18E2C1A17EBCF8E00D2C69C /* SideSwipeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SideSwipeCell.m; sourceTree = "<group>"; };
 		F19BB51916E006CA0081C95B /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F19BB51A16E006CA0081C95B /* Swift-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Swift-Info.plist"; sourceTree = "<group>"; };
 		F19BB51B16E006CA0081C95B /* Swift-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Swift-Prefix.pch"; sourceTree = "<group>"; };
@@ -812,8 +809,8 @@
 				F137F3451791DC70008FCFD7 /* Hamburger */,
 				F1693C2816DFAB6E006E3739 /* SwiftLoadCell.h */,
 				F1693C2916DFAB6E006E3739 /* SwiftLoadCell.m */,
-				F18E2C1917EBCF8E00D2C69C /* SideSwipeCell.h */,
-				F18E2C1A17EBCF8E00D2C69C /* SideSwipeCell.m */,
+				F189DF5717ED0695004D5F31 /* SwipeCell.h */,
+				F189DF5817ED0695004D5F31 /* SwipeCell.m */,
 				F1178B6D1775245400337813 /* TransparentAlert.h */,
 				F1178B6E1775245400337813 /* TransparentAlert.m */,
 				F1CBF07B17BA7710003563FD /* TransparentTextField.h */,
@@ -938,8 +935,6 @@
 				F1C4462F17E3510C004725FC /* DBRestClient+SpecificCancellation.m */,
 				F1538E2217E68D3300A0F158 /* UIAlertView+QuickDisplay.h */,
 				F1538E2317E68D3300A0F158 /* UIAlertView+QuickDisplay.m */,
-				F189DF5417ECF5F3004D5F31 /* NSObject+Debug.h */,
-				F189DF5517ECF5F3004D5F31 /* NSObject+Debug.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -1486,11 +1481,10 @@
 				F1F0EBC61785F75900878F7D /* FTPDownload.m in Sources */,
 				F1679AC61787B368001369B1 /* SFTPBrowserViewController.m in Sources */,
 				F106A4DC178865AD002D3BC8 /* DLSFTPConnection.m in Sources */,
-				F189DF5617ECF5F3004D5F31 /* NSObject+Debug.m in Sources */,
 				F106A4DD178865AD002D3BC8 /* DLSFTPDownloadRequest.m in Sources */,
 				F106A4DE178865AD002D3BC8 /* DLSFTPFile.m in Sources */,
 				F106A4DF178865AD002D3BC8 /* DLSFTPListFilesRequest.m in Sources */,
-				F18E2C1B17EBCF8E00D2C69C /* SideSwipeCell.m in Sources */,
+				F189DF5917ED0695004D5F31 /* SwipeCell.m in Sources */,
 				F106A4E0178865AD002D3BC8 /* DLSFTPMakeDirectoryRequest.m in Sources */,
 				F106A4E1178865AD002D3BC8 /* DLSFTPMoveRenameRequest.m in Sources */,
 				F106A4E2178865AD002D3BC8 /* DLSFTPRemoveDirectoryRequest.m in Sources */,
