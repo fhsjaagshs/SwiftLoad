@@ -10,7 +10,7 @@
 
 @protocol SwipeCellDelegate;
 
-@interface SwipeCell : SwiftLoadCell
+@interface SwipeCell : SwiftDisclosureCell
 
 @property (nonatomic, assign) BOOL swipeEnabled;
 @property (nonatomic, weak) id<SwipeCellDelegate> delegate;

@@ -371,9 +371,7 @@ static NSString *CellIdentifier = @"Cell";
     
     if (cell == nil) {
         cell = [[SwipeCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-        DisclosureButton *button = [DisclosureButton buttonForCell:cell];
-        [button addTarget:self action:@selector(accessoryButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        [cell.contentView addSubview:button];
+        [cell.disclosureButton addTarget:self action:@selector(accessoryButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
     
     cell.delegate = self;
@@ -632,7 +630,6 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)swipeCellWillReveal:(SwipeCell *)cell {
-    [_currentlySwipedCell hideWithAnimation:NO];
     if (_currentlySwipedCell) {
         __weak MyFilesViewController *weakself = self;
         [_currentlySwipedCell hideWithAnimation:YES andCompletionHandler:^{

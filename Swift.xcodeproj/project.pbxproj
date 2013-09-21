@@ -183,6 +183,7 @@
 		F1BE07E4176F7A1100C4F038 /* Download.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BE07E3176F7A1100C4F038 /* Download.m */; };
 		F1C0CEFC1661AEC6001B1B42 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F1C0CEFB1661AEC6001B1B42 /* libz.1.2.5.dylib */; };
 		F1C4463017E3510C004725FC /* DBRestClient+SpecificCancellation.m in Sources */ = {isa = PBXBuildFile; fileRef = F1C4462F17E3510C004725FC /* DBRestClient+SpecificCancellation.m */; };
+		F1C7103617EE01D3008683E0 /* SwiftDisclosureCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F1C7103517EE01D3008683E0 /* SwiftDisclosureCell.m */; };
 		F1C7A6B716E8178F0082D4D3 /* ZoomingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1C7A6B616E8178F0082D4D3 /* ZoomingImageView.m */; };
 		F1CB7DAE16FFE99A002693B5 /* SFTPLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CB7DAD16FFE99A002693B5 /* SFTPLoginController.m */; };
 		F1CBF07917BA7667003563FD /* EditID3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CBF07717BA7667003563FD /* EditID3ViewController.m */; };
@@ -536,6 +537,8 @@
 		F1C0CEFB1661AEC6001B1B42 /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
 		F1C4462E17E3510C004725FC /* DBRestClient+SpecificCancellation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DBRestClient+SpecificCancellation.h"; sourceTree = "<group>"; };
 		F1C4462F17E3510C004725FC /* DBRestClient+SpecificCancellation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DBRestClient+SpecificCancellation.m"; sourceTree = "<group>"; };
+		F1C7103417EE01D3008683E0 /* SwiftDisclosureCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftDisclosureCell.h; sourceTree = "<group>"; };
+		F1C7103517EE01D3008683E0 /* SwiftDisclosureCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwiftDisclosureCell.m; sourceTree = "<group>"; };
 		F1C7A6B516E8178F0082D4D3 /* ZoomingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoomingImageView.h; sourceTree = "<group>"; };
 		F1C7A6B616E8178F0082D4D3 /* ZoomingImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoomingImageView.m; sourceTree = "<group>"; };
 		F1CB7DAC16FFE99A002693B5 /* SFTPLoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFTPLoginController.h; sourceTree = "<group>"; };
@@ -809,6 +812,8 @@
 				F137F3451791DC70008FCFD7 /* Hamburger */,
 				F1693C2816DFAB6E006E3739 /* SwiftLoadCell.h */,
 				F1693C2916DFAB6E006E3739 /* SwiftLoadCell.m */,
+				F1C7103417EE01D3008683E0 /* SwiftDisclosureCell.h */,
+				F1C7103517EE01D3008683E0 /* SwiftDisclosureCell.m */,
 				F189DF5717ED0695004D5F31 /* SwipeCell.h */,
 				F189DF5817ED0695004D5F31 /* SwipeCell.m */,
 				F1178B6D1775245400337813 /* TransparentAlert.h */,
@@ -1518,6 +1523,7 @@
 				F172BCD51794EC4500AC1483 /* MultipartMessageHeader.m in Sources */,
 				F172BCD61794EC4500AC1483 /* MultipartMessageHeaderField.m in Sources */,
 				F172BCD71794EC4500AC1483 /* HTTPAsyncFileResponse.m in Sources */,
+				F1C7103617EE01D3008683E0 /* SwiftDisclosureCell.m in Sources */,
 				F172BCD81794EC4500AC1483 /* HTTPDataResponse.m in Sources */,
 				F172BCD91794EC4500AC1483 /* HTTPDynamicFileResponse.m in Sources */,
 				F172BCDA1794EC4500AC1483 /* HTTPErrorResponse.m in Sources */,
