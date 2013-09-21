@@ -374,8 +374,9 @@ static NSString *CellIdentifier = @"Cell";
         DisclosureButton *button = [DisclosureButton buttonForCell:cell];
         [button addTarget:self action:@selector(accessoryButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         [cell.contentView addSubview:button];
-        cell.delegate = self;
     }
+    
+    cell.delegate = self;
     
     NSString *filesObjectAtIndex = _filelist[indexPath.row];
     NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:filesObjectAtIndex];
@@ -631,10 +632,7 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)swipeCellWillReveal:(SwipeCell *)cell {
-    
-    if (_currentlySwipedCell) {
-        [_currentlySwipedCell hideWithAnimation:YES];
-    }
+    [_currentlySwipedCell hideWithAnimation:YES];
 }
 
 - (void)swipeCellDidReveal:(SwipeCell *)cell {
@@ -642,7 +640,9 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)swipeCellDidHide:(SwipeCell *)cell {
-    self.currentlySwipedCell = nil;
+    if (cell == _currentlySwipedCell) {
+        self.currentlySwipedCell = nil;
+    }
 }
 
 - (UIView *)backgroundViewForSwipeCell:(SwipeCell *)cell {

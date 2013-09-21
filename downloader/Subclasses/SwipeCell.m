@@ -13,7 +13,6 @@
 @property (nonatomic, strong) UISwipeGestureRecognizer *left;
 @property (nonatomic, strong) UISwipeGestureRecognizer *right;
 
-@property (nonatomic, assign) UISwipeGestureRecognizerDirection direction;
 @property (nonatomic, assign) BOOL animating;
 
 @end
@@ -23,20 +22,32 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.right = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipe:)];
-        _right.direction = UISwipeGestureRecognizerDirectionRight;
-        [self.contentView addGestureRecognizer:_right];
         
         self.left = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipe:)];
         _left.direction = UISwipeGestureRecognizerDirectionLeft;
         [self.contentView addGestureRecognizer:_left];
         
+        self.right = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipe:)];
+        _right.direction = UISwipeGestureRecognizerDirectionRight;
+        [self.contentView addGestureRecognizer:_right];
+
         self.contentView.backgroundColor = [UIColor whiteColor];
     }
     return self;
 }
 
 - (void)hideWithAnimation:(BOOL)shouldAnimate {
+    
+    if (_animating) {
+        return;
+    }
+    
+    if (self.contentView.frame.origin.x != 0) {
+        return;
+    }
+    
+    self.animating = YES;
+    
     CGRect frame = self.contentView.frame;
     frame.origin.x = 0;
     
@@ -45,35 +56,35 @@
     }
     
     if (shouldAnimate) {
-        self.animating = YES;
-        
-        __weak SwipeCell *weakself = self;
-        
         [UIView animateWithDuration:0.2f animations:^{
-            weakself.contentView.frame = frame;
+            self.contentView.frame = frame;
         } completion:^(BOOL finished) {
-            weakself.animating = NO;
-            weakself.backgroundView = nil;
+            self.backgroundView = nil;
+            [self.contentView addGestureRecognizer:_left];
+            [self.contentView addGestureRecognizer:_right];
+            self.animating = NO;
         }];
     } else {
         self.contentView.frame = frame;
         self.backgroundView = nil;
+        [self.contentView addGestureRecognizer:_left];
+        [self.contentView addGestureRecognizer:_right];
+        self.animating = NO;
     }
 }
 
 - (void)swipe:(UISwipeGestureRecognizer *)rec {
-    self.direction = rec.direction;
+    
+    self.animating = YES;
     
     CGRect frame = self.contentView.frame;
     
     BOOL isHiding = NO;
-    
-    NSLog(@"Swipe: %@",rec);
-    
+
     if (frame.origin.x == 0) {
-        frame.origin.x = (_direction == UISwipeGestureRecognizerDirectionRight)?self.bounds.size.width:-self.bounds.size.width;
+        frame.origin.x = (rec.direction == UISwipeGestureRecognizerDirectionRight)?self.bounds.size.width:-self.bounds.size.width;
         self.backgroundView = [_delegate backgroundViewForSwipeCell:self];
-        
+
         if (_delegate && [_delegate respondsToSelector:@selector(swipeCellWillReveal:)]) {
             [_delegate swipeCellWillReveal:self];
         }
@@ -85,25 +96,21 @@
         }
         isHiding = YES;
     }
-    
-    self.animating = YES;
-    
-    __weak SwipeCell *weakself = self;
-    
+
     [UIView animateWithDuration:0.2f animations:^{
-        weakself.contentView.frame = frame;
+        self.contentView.frame = frame;
     } completion:^(BOOL finished) {
-        weakself.animating = NO;
-        
+        self.animating = NO;
         if (isHiding) {
-            weakself.backgroundView = nil;
+            self.backgroundView = nil;
+            [self.contentView addGestureRecognizer:_left];
+            [self.contentView addGestureRecognizer:_right];
         } else {
             [self.backgroundView addGestureRecognizer:_left];
             [self.backgroundView addGestureRecognizer:_right];
-        }
-
-        if (weakself.delegate && [weakself.delegate respondsToSelector:@selector(swipeCellDidReveal:)]) {
-            [weakself.delegate swipeCellDidReveal:self];
+            if (_delegate && [_delegate respondsToSelector:@selector(swipeCellDidReveal:)]) {
+                [_delegate swipeCellDidReveal:self];
+            }
         }
     }];
 }
