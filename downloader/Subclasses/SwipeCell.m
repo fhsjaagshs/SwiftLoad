@@ -13,8 +13,6 @@
 @property (nonatomic, strong) UISwipeGestureRecognizer *left;
 @property (nonatomic, strong) UISwipeGestureRecognizer *right;
 
-@property (nonatomic, assign) BOOL animating;
-
 @end
 
 @implementation SwipeCell
@@ -36,17 +34,11 @@
     return self;
 }
 
-- (void)hideWithAnimation:(BOOL)shouldAnimate {
+- (void)hideWithAnimation:(BOOL)shouldAnimate andCompletionHandler:(void(^)(void))block {
     
-    if (_animating) {
+    if (self.contentView.frame.origin.x == 0) {
         return;
     }
-    
-    if (self.contentView.frame.origin.x != 0) {
-        return;
-    }
-    
-    self.animating = YES;
     
     CGRect frame = self.contentView.frame;
     frame.origin.x = 0;
@@ -62,20 +54,32 @@
             self.backgroundView = nil;
             [self.contentView addGestureRecognizer:_left];
             [self.contentView addGestureRecognizer:_right];
-            self.animating = NO;
+            if (_delegate && [_delegate respondsToSelector:@selector(swipeCellDidHide:)]) {
+                [_delegate swipeCellDidHide:self];
+            }
+            if (block) {
+                block();
+            }
         }];
     } else {
         self.contentView.frame = frame;
         self.backgroundView = nil;
         [self.contentView addGestureRecognizer:_left];
         [self.contentView addGestureRecognizer:_right];
-        self.animating = NO;
+        if (_delegate && [_delegate respondsToSelector:@selector(swipeCellDidHide:)]) {
+            [_delegate swipeCellDidHide:self];
+        }
+        if (block) {
+            block();
+        }
     }
 }
 
+- (void)hideWithAnimation:(BOOL)shouldAnimate {
+    [self hideWithAnimation:shouldAnimate andCompletionHandler:nil];
+}
+
 - (void)swipe:(UISwipeGestureRecognizer *)rec {
-    
-    self.animating = YES;
     
     CGRect frame = self.contentView.frame;
     
@@ -100,11 +104,13 @@
     [UIView animateWithDuration:0.2f animations:^{
         self.contentView.frame = frame;
     } completion:^(BOOL finished) {
-        self.animating = NO;
         if (isHiding) {
             self.backgroundView = nil;
             [self.contentView addGestureRecognizer:_left];
             [self.contentView addGestureRecognizer:_right];
+            if (_delegate && [_delegate respondsToSelector:@selector(swipeCellDidHide:)]) {
+                [_delegate swipeCellDidHide:self];
+            }
         } else {
             [self.backgroundView addGestureRecognizer:_left];
             [self.backgroundView addGestureRecognizer:_right];

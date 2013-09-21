@@ -632,17 +632,19 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)swipeCellWillReveal:(SwipeCell *)cell {
-    [_currentlySwipedCell hideWithAnimation:YES];
-}
-
-- (void)swipeCellDidReveal:(SwipeCell *)cell {
-    self.currentlySwipedCell = cell;
+    [_currentlySwipedCell hideWithAnimation:NO];
+    if (_currentlySwipedCell) {
+        __weak MyFilesViewController *weakself = self;
+        [_currentlySwipedCell hideWithAnimation:YES andCompletionHandler:^{
+            weakself.currentlySwipedCell = cell;
+        }];
+    } else {
+        self.currentlySwipedCell = cell;
+    }
 }
 
 - (void)swipeCellDidHide:(SwipeCell *)cell {
-    if (cell == _currentlySwipedCell) {
-        self.currentlySwipedCell = nil;
-    }
+    self.currentlySwipedCell = nil;
 }
 
 - (UIView *)backgroundViewForSwipeCell:(SwipeCell *)cell {

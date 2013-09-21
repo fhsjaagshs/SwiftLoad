@@ -16,6 +16,7 @@
 @property (nonatomic, weak) id<SwipeCellDelegate> delegate;
 
 - (void)hideWithAnimation:(BOOL)shouldAnimate;
+- (void)hideWithAnimation:(BOOL)shouldAnimate andCompletionHandler:(void(^)(void))block;
 
 @end
 
@@ -28,6 +29,7 @@
 - (void)swipeCellWillReveal:(SwipeCell *)cell;
 - (void)swipeCellDidReveal:(SwipeCell *)cell;
 - (void)swipeCellWillHide:(SwipeCell *)cell;
+- (void)swipeCellDidHide:(SwipeCell *)cell;
 
 @end
 
