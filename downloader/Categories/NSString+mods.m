@@ -10,6 +10,17 @@
 
 @implementation NSString (mods)
 
++ (NSString *)fileSizePrettify:(float)fileSize {
+    if (fileSize < 1024) {
+        return [NSString stringWithFormat:@"%.0f Byte%@",fileSize,(fileSize > 1)?@"s":@""];
+    } else if (fileSize < pow(1024, 2) && fileSize > 1024) {
+        return [NSString stringWithFormat:@"%.0f KB",(fileSize/1024)];
+    } else if (fileSize < pow(1024, 3) && fileSize > pow(1024, 2)) {
+        return [NSString stringWithFormat:@"%.0f MB",(fileSize/pow(1024, 2))];
+    }
+    return [NSString stringWithFormat:@"%.0f GB",(fileSize/pow(1024, 3))];
+}
+
 - (CGFloat)withWithFont:(UIFont *)font {
     return [self widthForHeight:[self sizeWithAttributes:@{NSFontAttributeName:font}].height font:font];
 }

@@ -22,14 +22,7 @@ static NSString * const kSettingsTableViewCellID = @"settingsTableViewCellIdenti
 - (void)loadView {
     [super loadView];
     CGRect screenBounds = [[UIScreen mainScreen]bounds];
-    
-    UINavigationBar *bar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
-    bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"Settings"];
-    topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
-    [bar pushNavigationItem:topItem animated:NO];
-    [self.view addSubview:bar];
-    
+
     self.theTableView = [[UITableView alloc]initWithFrame:screenBounds style:UITableViewStyleGrouped];
     _theTableView.delegate = self;
     _theTableView.dataSource = self;
@@ -40,7 +33,12 @@ static NSString * const kSettingsTableViewCellID = @"settingsTableViewCellIdenti
     _theTableView.scrollIndicatorInsets = _theTableView.contentInset;
     [self.view addSubview:_theTableView];
     
-    [self.view bringSubviewToFront:bar];
+    UINavigationBar *bar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
+    bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"Settings"];
+    topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
+    [bar pushNavigationItem:topItem animated:NO];
+    [self.view addSubview:bar];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(dropboxAuthenticationSucceeded) name:@"db_auth_success" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(dropboxAuthenticationFailed) name:@"db_auth_failure" object:nil];
@@ -94,7 +92,29 @@ static NSString * const kSettingsTableViewCellID = @"settingsTableViewCellIdenti
         } cancelButtonTitle:@"Nah..." otherButtonTitles:@"Sure!",nil];
         [cav show];
     } else if (indexPath.row == 2) {
-        [[[WebDAVCredsPrompt alloc]initWithCredsDelegate:nil]show];
+        
+        UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"WebDAV Account" message:@"Please enter a username and password to secure Swift's WebDAV server." completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
+            if (buttonIndex == 1) {
+                [SimpleKeychain save:@"webdav_creds" data:@{@"username": [alertView textFieldAtIndex:0].text, @"password": [alertView textFieldAtIndex:1].text}];
+            }
+        } cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
+        av.alertViewStyle = UIAlertViewStyleLoginAndPasswordInput;
+        
+        UITextField *tv = [av textFieldAtIndex:0];
+        tv.returnKeyType = UIReturnKeyDone;
+        tv.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        tv.autocorrectionType = UITextAutocorrectionTypeNo;
+        tv.placeholder = @"Username";
+        tv.clearButtonMode = UITextFieldViewModeWhileEditing;
+        
+        UITextField *pass = [av textFieldAtIndex:1];
+        pass.returnKeyType = UIReturnKeyDone;
+        pass.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        pass.autocorrectionType = UITextAutocorrectionTypeNo;
+        pass.placeholder = @"Password";
+        pass.clearButtonMode = UITextFieldViewModeWhileEditing;
+        
+        [av show];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

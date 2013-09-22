@@ -6,9 +6,7 @@
 //  Copyright (c) 2013 Nathaniel Symer. All rights reserved.
 //
 
-#import "TransparentAlert.h"
-
-@interface PeerPicker : TransparentAlert
+@interface PeerPicker : UIAlertView
 
 + (PeerPicker *)peerPicker;
 

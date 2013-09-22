@@ -14,7 +14,7 @@ typedef enum {
     SFTPLoginControllerTypeLogin
 } SFTPLoginControllerType;
 
-@interface SFTPLoginController : TransparentAlert
+@interface SFTPLoginController : UIAlertView
 
 - (id)initWithType:(SFTPLoginControllerType)type andCompletionHandler:(void (^)(NSString *username, NSString *password, NSString *url))block;
 - (void)setUrl:(NSString *)url isPredefined:(BOOL)isPredef;

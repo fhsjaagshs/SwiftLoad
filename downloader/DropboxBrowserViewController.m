@@ -95,7 +95,7 @@ static NSString *CellIdentifier = @"dbcell";
 }
 
 - (void)dropboxAuthenticationFailed {
-    [TransparentAlert showAlertWithTitle:@"Dropbox Authentication Failed." andMessage:@"Swift failed to authenticate you with Dropbox. Please try again later."];
+    [UIAlertView showAlertWithTitle:@"Dropbox Authentication Failed." andMessage:@"Swift failed to authenticate you with Dropbox. Please try again later."];
 }
 
 - (void)dropboxAuthenticationSucceeded {

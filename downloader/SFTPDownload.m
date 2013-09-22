@@ -72,7 +72,7 @@
         dispatch_sync(dispatch_get_main_queue(), ^{
             @autoreleasepool {
                 [self showFailure];
-                [TransparentAlert showAlertWithTitle:@"SFTP Login Error" andMessage:error.localizedDescription.stringByCapitalizingFirstLetter];
+                [UIAlertView showAlertWithTitle:@"SFTP Login Error" andMessage:error.localizedDescription.stringByCapitalizingFirstLetter];
             }
         });
     }];

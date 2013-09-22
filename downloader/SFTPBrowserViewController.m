@@ -156,7 +156,7 @@
                 [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
                 [_pull finishedLoading];
                 [[NetworkActivityController sharedController]hideIfPossible];
-                [TransparentAlert showAlertWithTitle:@"SFTP Error" andMessage:error.localizedDescription]; // Improve this later
+                [UIAlertView showAlertWithTitle:@"SFTP Error" andMessage:error.localizedDescription]; // Improve this later
             }
         });
     }];
@@ -202,7 +202,7 @@
                     @autoreleasepool {
                         [[NetworkActivityController sharedController]hideIfPossible];
                         _navBar.topItem.leftBarButtonItem.enabled = (_currentPath.length > 1);
-                        [TransparentAlert showAlertWithTitle:@"SFTP Login Error" andMessage:error.localizedDescription]; // improve this later
+                        [UIAlertView showAlertWithTitle:@"SFTP Login Error" andMessage:error.localizedDescription]; // improve this later
                         [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationRight];
                         [_pull finishedLoading];
                     }

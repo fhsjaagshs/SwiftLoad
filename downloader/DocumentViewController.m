@@ -8,7 +8,7 @@
 
 #import "DocumentViewController.h"
 
-@interface DocumentViewController () <UIWebViewDelegate>
+@interface DocumentViewController ()
 
 @property (nonatomic, strong) UIActionSheet *popupQuery;
 @property (nonatomic, strong) UIWebView *webView;
@@ -28,29 +28,18 @@
     [bar pushNavigationItem:topItem animated:NO];
     [self.view addSubview:bar];
     
-    self.webView = [[UIWebView alloc]initWithFrame:screenBounds];
-    _webView.delegate = self;
-    _webView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    self.webView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 64, screenBounds.size.width, screenBounds.size.height-64)];
+    _webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _webView.backgroundColor = [UIColor clearColor];
     _webView.contentMode = UIViewContentModeScaleAspectFit;
     _webView.scalesPageToFit = YES;
     _webView.dataDetectorTypes = UIDataDetectorTypeLink;
     _webView.layer.rasterizationScale = [[UIScreen mainScreen]scale];
     _webView.layer.shouldRasterize = YES;
-   
     [self.view addSubview:_webView];
-    
-    [self.view bringSubviewToFront:bar];
 
-    NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:[kAppDelegate openFile]] cachePolicy:NSURLCacheStorageAllowed timeoutInterval:60.0];
+    NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:[kAppDelegate openFile]] cachePolicy:NSURLCacheStorageAllowedInMemoryOnly timeoutInterval:30.0f];
     [_webView loadRequest:req];
-}
-
-- (void)webViewDidFinishLoad:(UIWebView *)webView {
-    _webView.scrollView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0);
-    _webView.scrollView.scrollIndicatorInsets = _webView.scrollView.contentInset;
-    //_webView.scrollView.contentOffset = CGPointMake(0, 64);
-    [_webView.scrollView scrollRectToVisible:CGRectMake(0, 64, 1, 1) animated:YES];
 }
 
 - (void)close {

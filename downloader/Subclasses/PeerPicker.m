@@ -155,11 +155,11 @@ static NSString * const kShortMessage = @"\n\n\n";
 }
 
 - (void)session:(GKSession *)session didFailWithError:(NSError *)error {
-    [TransparentAlert showAlertWithTitle:@"Bluetooth Error" andMessage:error.localizedDescription];
+    [UIAlertView showAlertWithTitle:@"Bluetooth Error" andMessage:error.localizedDescription];
 }
 
 - (void)session:(GKSession *)session didReceiveConnectionRequestFromPeer:(NSString *)peerID {
-    [[[TransparentAlert alloc]initWithTitle:@"Connect?" message:[NSString stringWithFormat:@"Would you like to connect to %@",[_session displayNameForPeer:peerID]] completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
+    [[[UIAlertView alloc]initWithTitle:@"Connect?" message:[NSString stringWithFormat:@"Would you like to connect to %@",[_session displayNameForPeer:peerID]] completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
         if (buttonIndex == 1) {
             [_session acceptConnectionFromPeer:peerID error:nil];
         } else {

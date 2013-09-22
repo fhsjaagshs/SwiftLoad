@@ -8,12 +8,16 @@
 
 #import "FileInfoViewController.h"
 
-@interface FileInfoViewController () <UITextFieldDelegate>
+static NSString * const kFileInfoCellIdentifier = @"kFileInfoCellIdentifier";
 
-@property (nonatomic, strong) TransparentTextField *fileName;
-@property (nonatomic, strong) UILabel *md5Field;
-@property (nonatomic, strong) UIBarButtonItem *revertButton;
-@property (nonatomic, strong) UINavigationBar *navBar;
+@interface FileInfoViewController () <UITableViewDataSource, UITableViewDelegate>
+
+@property (nonatomic, strong) UITableView *theTableView;
+@property (nonatomic, strong) NSDateFormatter *formatter;
+
+@property (nonatomic, strong) NSString *md5Sum;
+
+@property (nonatomic, strong) UIAlertView *md5Alert;
 
 @end
 
@@ -22,149 +26,155 @@
 - (void)loadView {
     [super loadView];
     
-    BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
-    CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
-    self.view = [[UIView alloc]initWithFrame:screenBounds];
+    self.formatter = [[NSDateFormatter alloc]init];
+    [_formatter setTimeStyle:NSDateFormatterNoStyle];
+    [_formatter setDateStyle:NSDateFormatterMediumStyle];
+    [_formatter setLocale:[NSLocale currentLocale]];
     
-    self.revertButton = [[UIBarButtonItem alloc]initWithTitle:@"Revert" style:UIBarButtonItemStyleBordered target:self action:@selector(revertAction)];
+    CGRect screenBounds = [[UIScreen mainScreen]bounds];
     
-    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
-    _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    UINavigationBar *navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
+    navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"File Details"];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
-    [_navBar pushNavigationItem:topItem animated:NO];
-    [self.view addSubview:_navBar];
-    [self.view bringSubviewToFront:_navBar];
+    [navBar pushNavigationItem:topItem animated:NO];
+    [self.view addSubview:navBar];
     
-    self.fileName = [[TransparentTextField alloc]initWithFrame:iPad?CGRectMake(20, 163, 728, 31):CGRectMake(8, 54, 305, 31)];
-    _fileName.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
-    _fileName.placeholder = @"Enter a New Filename...";
-    _fileName.autocorrectionType = UITextAutocorrectionTypeNo;
-    _fileName.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    _fileName.returnKeyType = UIReturnKeyDone;
-    _fileName.clearButtonMode = UITextFieldViewModeWhileEditing;
-    _fileName.adjustsFontSizeToFitWidth = YES;
-    _fileName.font = [UIFont systemFontOfSize:14];
-    _fileName.textAlignment = NSTextAlignmentCenter;
-    _fileName.text = [[kAppDelegate openFile]lastPathComponent];
-    [_fileName addTarget:self action:@selector(textFieldDidEndOnExit) forControlEvents:UIControlEventEditingDidEndOnExit];
-    [_fileName addTarget:self action:@selector(textFieldDidChange) forControlEvents:UIControlEventEditingChanged];
-    [self.view addSubview:_fileName];
-    [self.view bringSubviewToFront:_fileName];
+    self.theTableView = [[UITableView alloc]initWithFrame:screenBounds style:UITableViewStyleGrouped];
+    _theTableView.delegate = self;
+    _theTableView.dataSource = self;
+    _theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    _theTableView.rowHeight = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)?60:44;
+    _theTableView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0);
+    _theTableView.scrollIndicatorInsets = _theTableView.contentInset;
+    [self.view addSubview:_theTableView];
     
-    BOOL isDir;
-    BOOL exists = [[NSFileManager defaultManager]fileExistsAtPath:[kAppDelegate openFile] isDirectory:&isDir];
+    [self.view bringSubviewToFront:navBar];
     
-    if (!isDir && exists) {
-        UILabel *staticMD5Label = [[UILabel alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-(iPad?281:231), screenBounds.size.width, iPad?31:21)];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSData *fileData = [NSData dataWithContentsOfFile:[kAppDelegate openFile]];
+        unsigned char digest[CC_MD5_DIGEST_LENGTH];
+        CC_MD5(fileData.bytes, (CC_LONG)fileData.length, digest);
+        self.md5Sum = [NSString stringWithFormat:@"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x", digest[0], digest[1], digest[2], digest[3], digest[4], digest[5], digest[6], digest[7], digest[8], digest[9], digest[10], digest[11], digest[12], digest[13], digest[14], digest[15]];
         
-        staticMD5Label.textColor = [UIColor blackColor];
-        staticMD5Label.backgroundColor = [UIColor clearColor];
-        staticMD5Label.textAlignment = NSTextAlignmentCenter;
-        staticMD5Label.font = [UIFont boldSystemFontOfSize:iPad?23:17];
-        staticMD5Label.text = @"MD5 Checksum";
-        staticMD5Label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-        [self.view addSubview:staticMD5Label];
-        
-        self.md5Field = [[UILabel alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-(iPad?241:201), screenBounds.size.width, iPad?41:31)];
-        _md5Field.text = @"Loading...";
-        _md5Field.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        _md5Field.textAlignment = NSTextAlignmentCenter;
-        _md5Field.backgroundColor = [UIColor clearColor];
-        _md5Field.font = [UIFont systemFontOfSize:iPad?23:17];
-        _md5Field.textColor = [UIColor blackColor];
-        [self.view addSubview:_md5Field];
-
-        NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
-        [formatter setTimeStyle:NSDateFormatterNoStyle];
-        [formatter setDateStyle:NSDateFormatterMediumStyle];
-        [formatter setLocale:[NSLocale currentLocale]];
-        
-        UILabel *moddateLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-(iPad?62:31), screenBounds.size.width, iPad?62:31)];
-        moddateLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        moddateLabel.font = [UIFont systemFontOfSize:iPad?26:17];
-        moddateLabel.textAlignment = NSTextAlignmentCenter;
-        moddateLabel.backgroundColor = [UIColor clearColor];
-        moddateLabel.textColor = [UIColor blackColor];
-        moddateLabel.text = [NSString stringWithFormat:@"Last Modified: %@",[formatter stringFromDate:fileDate([kAppDelegate openFile])]];
-        [self.view addSubview:moddateLabel];
-        [self doMD5];
-    }
-    
-    [self adjustViewsForiOS7];
-}
-
-- (void)rename {
-    NSString *file = [kAppDelegate openFile];
-    NSString *newFilename = _fileName.text;
-    NSString *newFilePath = [[file stringByDeletingLastPathComponent]stringByAppendingPathComponent:newFilename];
-    
-    if ([[NSFileManager defaultManager]fileExistsAtPath:newFilePath]) {
-        NSString *message = [NSString stringWithFormat:@"A file named %@ already exists in %@. Please try a different name.",newFilename,[file stringByDeletingLastPathComponent].lastPathComponent];
-        [TransparentAlert showAlertWithTitle:@"Filename Unavailable" andMessage:message];
-        [_fileName becomeFirstResponder];
-    } else {
-        [_fileName resignFirstResponder];
-        _navBar.topItem.rightBarButtonItem = nil;
-        if ([[NSFileManager defaultManager]isWritableFileAtPath:file] && [[NSFileManager defaultManager]isReadableFileAtPath:file]) {
-            
-            NSDictionary *copyListChange = @{ @"old": file, @"new": newFilePath };
-            
-            [[NSNotificationCenter defaultCenter]postNotificationName:kCopyListChangedNotification object:copyListChange];
-            
-            [[NSFileManager defaultManager]moveItemAtPath:file toPath:newFilePath error:nil];
-            [kAppDelegate setOpenFile:newFilePath];
-            
-            if ([[kAppDelegate nowPlayingFile]isEqualToString:file]) {
-                [kAppDelegate setNowPlayingFile:newFilePath];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            @autoreleasepool {
+                [_theTableView reloadData];
             }
-        } else {
-            NSString *message = [NSString stringWithFormat:@"You don't have the POSIX permissions to rename this file. Try chmod 777 %@ in a UNIX shell.", [[kAppDelegate openFile]lastPathComponent]];
-            [TransparentAlert showAlertWithTitle:@"Access Denied" andMessage:message];
-            [_fileName setText:[[kAppDelegate openFile]lastPathComponent]];
-        }
-    } 
-}
-
-- (void)textFieldDidEndOnExit {
-    [_fileName resignFirstResponder];
-    
-    if (![_fileName.text isEqualToString:[[kAppDelegate openFile]lastPathComponent]]) {
-        [self rename];
-    }
-}
-
-- (void)textFieldDidChange {
-    _navBar.topItem.rightBarButtonItem = [_fileName.text isEqualToString:[[kAppDelegate openFile]lastPathComponent]]?nil:_revertButton;
-}
-
-- (void)revertAction {
-    [_fileName setText:[[kAppDelegate openFile]lastPathComponent]];
-    [_fileName resignFirstResponder];
-    _navBar.topItem.rightBarButtonItem = nil;
+        });
+    });
 }
 
 - (void)close {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)doMD5 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        @autoreleasepool {
-            NSData *fileData = [NSData dataWithContentsOfFile:[kAppDelegate openFile]];
-            unsigned char digest[CC_MD5_DIGEST_LENGTH];
-            CC_MD5(fileData.bytes, (CC_LONG)fileData.length, digest);
-            NSString *md5String = [NSString stringWithFormat:@"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x", digest[0], digest[1], digest[2], digest[3], digest[4], digest[5], digest[6], digest[7], digest[8], digest[9], digest[10], digest[11], digest[12], digest[13], digest[14], digest[15]];
+- (void)showRenameController {
+    UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Rename File" message:[NSString stringWithFormat:@"Please enter a new name for \"%@\" below",[kAppDelegate openFile].lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
+        if (buttonIndex == 1) {
+            NSString *file = [kAppDelegate openFile];
+            NSString *newFilename = [av textFieldAtIndex:0].text;
+            NSString *newFilePath = [[file stringByDeletingLastPathComponent]stringByAppendingPathComponent:newFilename];
             
-            if (md5String.length > 0) {
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    @autoreleasepool {
-                        [_md5Field setText:md5String];
+            if ([[NSFileManager defaultManager]fileExistsAtPath:newFilePath]) {
+                NSString *message = [NSString stringWithFormat:@"A file named %@ already exists in %@. Please try a different name.",newFilename,[file stringByDeletingLastPathComponent].lastPathComponent];
+                [UIAlertView showAlertWithTitle:@"Filename Unavailable" andMessage:message];
+            } else {
+                if ([[NSFileManager defaultManager]isWritableFileAtPath:file] && [[NSFileManager defaultManager]isReadableFileAtPath:file]) {
+                    [[NSNotificationCenter defaultCenter]postNotificationName:kCopyListChangedNotification object:@{ @"old": file, @"new": newFilePath }];
+                    
+                    [[NSFileManager defaultManager]moveItemAtPath:file toPath:newFilePath error:nil];
+                    [kAppDelegate setOpenFile:newFilePath];
+                    
+                    if ([[kAppDelegate nowPlayingFile]isEqualToString:file]) {
+                        [kAppDelegate setNowPlayingFile:newFilePath];
                     }
-                });
+                } else {
+                    [UIAlertView showAlertWithTitle:@"Access Denied" andMessage:@"You don't have the POSIX permissions to rename this file."];
+                }
             }
+            [_theTableView reloadData];
         }
-    });
+    } cancelButtonTitle:@"Cancel" otherButtonTitles:@"Rename", nil];
+    
+    av.alertViewStyle = UIAlertViewStylePlainTextInput;
+    
+    UITextField *tv = [av textFieldAtIndex:0];
+    tv.returnKeyType = UIReturnKeyDone;
+    tv.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    tv.autocorrectionType = UITextAutocorrectionTypeNo;
+    tv.placeholder = @"Filename";
+    tv.clearButtonMode = UITextFieldViewModeWhileEditing;
+    tv.text = [kAppDelegate openFile].lastPathComponent;
+    
+    [av show];
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    BOOL isDir;
+    return ([[NSFileManager defaultManager]fileExistsAtPath:[kAppDelegate openFile] isDirectory:&isDir] && isDir)?3:4;
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (indexPath.row == 1 || indexPath.row == 2) {
+        return nil;
+    }
+    
+    if (indexPath.row == 3 && _md5Sum.length == 0) {
+        return nil;
+    }
+    
+    return indexPath;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (indexPath.row == 0) {
+        [self showRenameController];
+    } else if (indexPath.row == 3) {
+        [UIAlertView showAlertWithTitle:@"MD5 Sum" andMessage:_md5Sum];
+    }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    SwiftLoadCell *cell = (SwiftLoadCell *)[tableView dequeueReusableCellWithIdentifier:kFileInfoCellIdentifier];
+    
+    if (!cell) {
+        cell = [[SwiftLoadCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:kFileInfoCellIdentifier];
+    }
+    
+    NSDictionary *attributes = [[NSFileManager defaultManager]attributesOfItemAtPath:[kAppDelegate openFile] error:nil];
+    
+    cell.textLabel.textColor = [UIColor blackColor];
+    
+    if (indexPath.row == 0) {
+        cell.imageView.image = [UIImage imageNamed:[attributes[NSFileType] isEqualToString:NSFileTypeDirectory]?@"folder_icon":@"file_icon"];
+        cell.textLabel.text = [kAppDelegate openFile].lastPathComponent;
+    } else if (indexPath.row == 1) {
+        cell.textLabel.text = @"Size";
+        cell.detailTextLabel.text = [NSString fileSizePrettify:[attributes[NSFileSize] floatValue]];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    } else if (indexPath.row == 2) {
+        cell.textLabel.text = @"Last Modified";
+        cell.detailTextLabel.text = [_formatter stringFromDate:attributes[NSFileModificationDate]];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    } else if (indexPath.row == 3) {
+        cell.textLabel.text = @"Checksum";
+        cell.textLabel.textColor = _md5Sum.length?[UIColor blackColor]:[UIColor lightGrayColor];
+        cell.detailTextLabel.text = nil;
+        cell.selectionStyle = _md5Sum.length?UITableViewCellSelectionStyleDefault:UITableViewCellSelectionStyleNone;
+    }
+    
+    return cell;
 }
 
 - (NSUInteger)supportedInterfaceOrientations {
@@ -174,6 +184,5 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
     return (toInterfaceOrientation == UIInterfaceOrientationPortrait);
 }
-
 
 @end

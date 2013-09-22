@@ -349,7 +349,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
         [controller setMessageBody:@"" isHTML:NO];
         [[UIViewController topViewController]presentViewController:controller animated:YES completion:nil];
     } else {
-        [TransparentAlert showAlertWithTitle:@"Mail Unavailable" andMessage:@"In order to email files, you must set up an mail account in Settings."];
+        [UIAlertView showAlertWithTitle:@"Mail Unavailable" andMessage:@"In order to email files, you must set up an mail account in Settings."];
     }
 }
 
@@ -361,7 +361,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
         [controller setBody:string];
         [vc presentViewController:controller animated:YES completion:nil];
     } else {
-        [TransparentAlert showAlertWithTitle:@"SMS unavailable" andMessage:@"Please double check if you can send SMS messsages or iMessages."];
+        [UIAlertView showAlertWithTitle:@"SMS unavailable" andMessage:@"Please double check if you can send SMS messsages or iMessages."];
     }
 }
 
@@ -377,7 +377,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     
     void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) = ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
         if (error) {
-            [TransparentAlert showAlertWithTitle:[NSString stringWithFormat:@"Error %u",error.code] andMessage:error.localizedDescription];
+            [UIAlertView showAlertWithTitle:[NSString stringWithFormat:@"Error %u",error.code] andMessage:error.localizedDescription];
         }
     };
     
@@ -406,7 +406,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     }
     
     if (!url) {
-        [TransparentAlert showAlertWithTitle:@"Invalid URL" andMessage:@"The URL you have provided is somehow bogus."];
+        [UIAlertView showAlertWithTitle:@"Invalid URL" andMessage:@"The URL you have provided is somehow bogus."];
         return;
     }
     
@@ -424,7 +424,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
 }
 
 - (void)sessionDidReceiveAuthorizationFailure:(DBSession *)session userId:(NSString *)userId {
-    [TransparentAlert showAlertWithTitle:@"Dropbox Authentication Failed" andMessage:@"Please try reauthenticating in Settings"];
+    [UIAlertView showAlertWithTitle:@"Dropbox Authentication Failed" andMessage:@"Please try reauthenticating in Settings"];
 }
 
 - (void)remoteControlReceivedWithEvent:(UIEvent *)event {
@@ -527,7 +527,8 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
             NSString *oldLocation = [inboxDir stringByAppendingPathComponent:filename];
             [[NSFileManager defaultManager]moveItemAtPath:oldLocation toPath:newLocation error:nil];
         }
-    
+
+        // Attemp to remove it on the off chance that it actually works
         [[NSFileManager defaultManager]removeItemAtPath:inboxDir error:nil];
         
         if (filesInIndexDir.count > 0) {

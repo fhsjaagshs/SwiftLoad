@@ -168,7 +168,7 @@ static BOOL _modalOpen = false;
 }
 
 - (void)showRatingAlert {
-	TransparentAlert *alertView = [[TransparentAlert alloc] initWithTitle:APPIRATER_MESSAGE_TITLE
+	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:APPIRATER_MESSAGE_TITLE
 														 message:APPIRATER_MESSAGE
 														delegate:self
 											   cancelButtonTitle:APPIRATER_CANCEL_BUTTON

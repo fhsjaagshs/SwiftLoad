@@ -10,6 +10,8 @@
 
 @interface NSString (mods)
 
++ (NSString *)fileSizePrettify:(float)fileSize;
+
 - (CGFloat)withWithFont:(UIFont *)font;
 - (CGFloat)widthForHeight:(float)height font:(UIFont *)font;
 - (NSString *)percentSanitize;

@@ -170,7 +170,7 @@
                 [self addToTheRoll];
             } else {
                 NSString *message = [[NSString alloc]initWithFormat:@"Swift was unable to add \"%@\" to the camera roll.",fileName];
-                [TransparentAlert showAlertWithTitle:@"Import Failure" andMessage:message];
+                [UIAlertView showAlertWithTitle:@"Import Failure" andMessage:message];
             }
         }
     } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Print", @"Email File", @"Send Via Bluetooth", @"Upload to Dropbox", @"Add to Photo Library", nil];

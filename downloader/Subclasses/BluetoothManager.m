@@ -185,12 +185,10 @@ static NSString *kFilesizeKey = @"s";
 
 - (void)session:(GKSession *)session didReceiveConnectionRequestFromPeer:(NSString *)peerID {
     self.isSender = NO;
-    [[[TransparentAlert alloc]initWithTitle:@"Connect?" message:[NSString stringWithFormat:@"Would you like to connect to %@",[_session displayNameForPeer:peerID]] completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
+    [[[UIAlertView alloc]initWithTitle:@"Connect?" message:[NSString stringWithFormat:@"Would you like to connect to %@",[_session displayNameForPeer:peerID]] completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
         if (buttonIndex == 1) {
-            NSLog(@"Accept connection");
             [_session acceptConnectionFromPeer:peerID error:nil];
         } else {
-            NSLog(@"Deny connection");
             [_session denyConnectionFromPeer:peerID];
         }
     } cancelButtonTitle:@"No" otherButtonTitles:@"YES", nil]show];

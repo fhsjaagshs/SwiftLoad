@@ -9,7 +9,6 @@
 
 #import "MyFilesViewController.h"
 #import "SwiftLoadCell.h"
-#import "TransparentAlert.h"
 
 static NSString *CellIdentifier = @"Cell";
 
@@ -260,21 +259,28 @@ static NSString *CellIdentifier = @"Cell";
     if (_filelist.count == 0) {
         self.filelist = [NSMutableArray array];
         
-        NSArray *all = [[NSFileManager defaultManager]contentsOfDirectoryAtPath:[kAppDelegate managerCurrentDir] error:nil];
+        NSString *currentDir = [kAppDelegate managerCurrentDir];
+        NSString *docsDir = kDocsDir;
+        
+        NSArray *all = [[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil];
         
         NSMutableArray *dirs = [NSMutableArray array];
         NSMutableArray *files = [NSMutableArray array];
         
-        NSString *currentDirectory = [kAppDelegate managerCurrentDir];
-        
         for (NSString *filename in all) {
-            NSString *full = [currentDirectory stringByAppendingPathComponent:filename];
+            NSString *full = [currentDir stringByAppendingPathComponent:filename];
             
             BOOL isDir = NO;
             [[NSFileManager defaultManager]fileExistsAtPath:full isDirectory:&isDir];
             
             if (isDir) {
-                [dirs addObject:filename];
+                if ([currentDir isEqualToString:docsDir]) {
+                    if (![filename isEqualToString:@"Inbox"]) {
+                        [dirs addObject:filename];
+                    }
+                } else {
+                    [dirs addObject:filename];
+                }
             } else {
                 [files addObject:filename];
             }
@@ -387,25 +393,17 @@ static NSString *CellIdentifier = @"Cell";
         cell.detailTextLabel.text = @"Directory";
         cell.imageView.image = [UIImage imageNamed:@"folder_icon"];
         cell.swipeEnabled = NO;
+        cell.backgroundView = nil;
     } else {
         cell.imageView.image = [UIImage imageNamed:@"file_icon"];
         cell.swipeEnabled = YES;
-        
-        NSMutableString *detailText = [NSMutableString stringWithString:[file.pathExtension.lowercaseString isEqualToString:@"zip"]?@"Archive, ":@"File, "];
-        
-        float fileSize = fileSize(file);
-        
-        if (fileSize < 1024.0) {
-            [detailText appendFormat:@"%.0f Byte%@",fileSize,(fileSize > 1)?@"s":@""];
-        } else if (fileSize < (1024*1024) && fileSize > 1024.0 ) {
-            fileSize = fileSize/1014;
-            [detailText appendFormat:@"%.0f KB",fileSize];
-        } else if (fileSize < (1024*1024*1024) && fileSize > (1024*1024)) {
-            fileSize = fileSize/(1024*1024);
-            [detailText appendFormat:@"%.0f MB",fileSize];
-        }
-        cell.detailTextLabel.text = detailText;
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@, %@",[file.pathExtension.lowercaseString isEqualToString:@"zip"]?@"Archive":@"File",[NSString fileSizePrettify:fileSize(file)]];
     }
+    
+    if (_theTableView.editing) {
+        cell.swipeEnabled = NO;
+    }
+    
     return cell;
 }
 
@@ -545,6 +543,10 @@ static NSString *CellIdentifier = @"Cell";
     _editButton.title = _theTableView.editing?@"Edit":@"Done";
     [_theTableView setEditing:!_theTableView.editing animated:YES];
     
+    for (SwipeCell *cell in _theTableView.visibleCells) {
+        cell.swipeEnabled = !_theTableView.editing;
+    }
+    
     [self updateCopyButtonState];
 }
 
@@ -623,7 +625,7 @@ static NSString *CellIdentifier = @"Cell";
         }
         
         if (!opened) {
-            [TransparentAlert showAlertWithTitle:@"No External Viewers" andMessage:[NSString stringWithFormat:@"No installed applications are capable of opening %@.",file.lastPathComponent]];
+            [UIAlertView showAlertWithTitle:@"No External Viewers" andMessage:[NSString stringWithFormat:@"No installed applications are capable of opening %@.",file.lastPathComponent]];
         }
     }
     [_currentlySwipedCell hideWithAnimation:YES];
