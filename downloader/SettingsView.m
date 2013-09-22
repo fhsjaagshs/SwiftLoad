@@ -100,12 +100,15 @@ static NSString * const kSettingsTableViewCellID = @"settingsTableViewCellIdenti
         } cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
         av.alertViewStyle = UIAlertViewStyleLoginAndPasswordInput;
         
+        NSDictionary *creds = [SimpleKeychain load:@"webdav_creds"];
+        
         UITextField *tv = [av textFieldAtIndex:0];
         tv.returnKeyType = UIReturnKeyDone;
         tv.autocapitalizationType = UITextAutocapitalizationTypeNone;
         tv.autocorrectionType = UITextAutocorrectionTypeNo;
         tv.placeholder = @"Username";
         tv.clearButtonMode = UITextFieldViewModeWhileEditing;
+        tv.text = creds[@"username"];
         
         UITextField *pass = [av textFieldAtIndex:1];
         pass.returnKeyType = UIReturnKeyDone;
@@ -113,6 +116,7 @@ static NSString * const kSettingsTableViewCellID = @"settingsTableViewCellIdenti
         pass.autocorrectionType = UITextAutocorrectionTypeNo;
         pass.placeholder = @"Password";
         pass.clearButtonMode = UITextFieldViewModeWhileEditing;
+        pass.text = creds[@"password"];
         
         [av show];
     }

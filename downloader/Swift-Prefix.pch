@@ -52,7 +52,6 @@
     #import "TextToggleControl.h"
     #import "DisclosureButton.h"
     #import "SwiftLoadCell.h"
-    #import "SwiftTextFieldCell.h"
     #import "SwiftDisclosureCell.h"
     #import "SwipeCell.h"
     #import "DashedLineView.h"
