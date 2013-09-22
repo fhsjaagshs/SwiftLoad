@@ -138,7 +138,6 @@
 		F172BCE01794EC4500AC1483 /* PUTResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BCC01794EC4500AC1483 /* PUTResponse.m */; };
 		F172BCE11794EC4500AC1483 /* WebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BCC21794EC4500AC1483 /* WebSocket.m */; };
 		F172BCE41794EC6700AC1483 /* HTTPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BCE31794EC6700AC1483 /* HTTPConnection.m */; };
-		F173462317EE6E44004A9FD3 /* SwiftTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F173462217EE6E44004A9FD3 /* SwiftTextFieldCell.m */; };
 		F17DC65F140C45690015F613 /* AudioPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F17DC65E140C45690015F613 /* AudioPlayerViewController.m */; };
 		F17DC662140C489B0015F613 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F17DC661140C489B0015F613 /* AVFoundation.framework */; };
 		F17F11231420017100CE45D7 /* FileInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F17F11211420017100CE45D7 /* FileInfoViewController.m */; };
@@ -471,8 +470,6 @@
 		F172BCC21794EC4500AC1483 /* WebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSocket.m; sourceTree = "<group>"; };
 		F172BCE21794EC6700AC1483 /* HTTPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPConnection.h; sourceTree = "<group>"; };
 		F172BCE31794EC6700AC1483 /* HTTPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPConnection.m; sourceTree = "<group>"; };
-		F173462117EE6E44004A9FD3 /* SwiftTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftTextFieldCell.h; sourceTree = "<group>"; };
-		F173462217EE6E44004A9FD3 /* SwiftTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwiftTextFieldCell.m; sourceTree = "<group>"; };
 		F17DC65E140C45690015F613 /* AudioPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioPlayerViewController.m; sourceTree = "<group>"; };
 		F17DC660140C456E0015F613 /* AudioPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPlayerViewController.h; sourceTree = "<group>"; };
 		F17DC661140C489B0015F613 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -1097,8 +1094,6 @@
 			children = (
 				F1693C2816DFAB6E006E3739 /* SwiftLoadCell.h */,
 				F1693C2916DFAB6E006E3739 /* SwiftLoadCell.m */,
-				F173462117EE6E44004A9FD3 /* SwiftTextFieldCell.h */,
-				F173462217EE6E44004A9FD3 /* SwiftTextFieldCell.m */,
 				F1C7103417EE01D3008683E0 /* SwiftDisclosureCell.h */,
 				F1C7103517EE01D3008683E0 /* SwiftDisclosureCell.m */,
 				F189DF5717ED0695004D5F31 /* SwipeCell.h */,
@@ -1539,7 +1534,6 @@
 				F13BECF4179604380012E4B4 /* PeerPicker.m in Sources */,
 				F1B2C0FC17961A0E00AD5A04 /* PeerPickerCell.m in Sources */,
 				F1434B3E179B21C1001A672C /* UITableView+CoolRefresh.m in Sources */,
-				F173462317EE6E44004A9FD3 /* SwiftTextFieldCell.m in Sources */,
 				F130452F179C594F00D7DB4D /* Appirater.m in Sources */,
 				F1304534179C5E6A00D7DB4D /* FilesystemMonitor.m in Sources */,
 				F18D19C317A5A479009A8D07 /* Task.m in Sources */,
