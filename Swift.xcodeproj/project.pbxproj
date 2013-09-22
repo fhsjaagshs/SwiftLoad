@@ -943,9 +943,9 @@
 		F1693C5F16DFAC59006E3739 /* Subclasses */ = {
 			isa = PBXGroup;
 			children = (
+				F13BECF917960D790012E4B4 /* Bluetooth */,
 				F18D19C017A5A46B009A8D07 /* Tasks */,
 				F1283AFE1780A79F006D8A79 /* UI */,
-				F13BECF917960D790012E4B4 /* Bluetooth */,
 				F1BC30C817715DF300DAFA0A /* Hack.h */,
 				F1BC30C917715DF300DAFA0A /* Hack.m */,
 				F10CBC581707D6E700C82AFB /* DroppinBadassBlocks.h */,
