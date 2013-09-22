@@ -11,6 +11,5 @@
 @interface DisclosureButton : UIControl
 
 + (DisclosureButton *)button;
-+ (DisclosureButton *)buttonForCell:(UITableViewCell *)cell;
 
 @end

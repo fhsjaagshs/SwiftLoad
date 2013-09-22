@@ -41,6 +41,7 @@
 		F10CBC5D17080C6600C82AFB /* DropboxBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */; };
 		F111903B17B838B400FE48F2 /* myriad-regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F111903A17B838B400FE48F2 /* myriad-regular.ttf */; };
 		F1122A76142E4E8B00A04CC6 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */; };
+		F112AD3B17EE9BE3002DE136 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = F112AD3A17EE9BE3002DE136 /* MBProgressHUD.m */; };
 		F115302B177FDB4F000513E1 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = F115302A177FDB4E000513E1 /* FMDatabasePool.m */; };
 		F118C74517713DAA00ED7384 /* ContentOffsetWatchdog.m in Sources */ = {isa = PBXBuildFile; fileRef = F118C74417713DAA00ED7384 /* ContentOffsetWatchdog.m */; };
 		F118C7481771425F00ED7384 /* PullToRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = F118C7471771425F00ED7384 /* PullToRefreshView.m */; };
@@ -104,7 +105,6 @@
 		F1693C5116DFABA6006E3739 /* UIViewController+AutoNib.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C4D16DFABA6006E3739 /* UIViewController+AutoNib.m */; };
 		F1693C5D16DFAC0E006E3739 /* MIMEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C5816DFAC0E006E3739 /* MIMEUtils.m */; };
 		F1693C5E16DFAC0E006E3739 /* NetworkUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C5A16DFAC0E006E3739 /* NetworkUtils.m */; };
-		F1693C6816DFAC59006E3739 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C6116DFAC59006E3739 /* MBProgressHUD.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F1693C7316DFB9B5006E3739 /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1693C7216DFB9B5006E3739 /* DropboxSDK.framework */; };
 		F172BC7D1794B59300AC1483 /* BluetoothManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BC7C1794B59300AC1483 /* BluetoothManager.m */; };
 		F172BCC31794EC4500AC1483 /* DDData.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BC811794EC4500AC1483 /* DDData.m */; };
@@ -296,6 +296,8 @@
 		F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxBrowserViewController.m; sourceTree = "<group>"; };
 		F111903A17B838B400FE48F2 /* myriad-regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "myriad-regular.ttf"; sourceTree = "<group>"; };
 		F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		F112AD3917EE9BE3002DE136 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		F112AD3A17EE9BE3002DE136 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		F1153029177FDB4E000513E1 /* FMDatabasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabasePool.h; sourceTree = "<group>"; };
 		F115302A177FDB4E000513E1 /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePool.m; sourceTree = "<group>"; };
 		F118C74317713DAA00ED7384 /* ContentOffsetWatchdog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentOffsetWatchdog.h; sourceTree = "<group>"; };
@@ -403,8 +405,6 @@
 		F1693C5816DFAC0E006E3739 /* MIMEUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MIMEUtils.m; sourceTree = "<group>"; };
 		F1693C5916DFAC0E006E3739 /* NetworkUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkUtils.h; sourceTree = "<group>"; };
 		F1693C5A16DFAC0E006E3739 /* NetworkUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkUtils.m; sourceTree = "<group>"; };
-		F1693C6016DFAC59006E3739 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
-		F1693C6116DFAC59006E3739 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		F1693C7216DFB9B5006E3739 /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DropboxSDK.framework; path = downloader/DropboxSDK.framework; sourceTree = "<group>"; };
 		F172BC7B1794B59300AC1483 /* BluetoothManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BluetoothManager.h; sourceTree = "<group>"; };
 		F172BC7C1794B59300AC1483 /* BluetoothManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BluetoothManager.m; sourceTree = "<group>"; };
@@ -813,8 +813,8 @@
 				F14FE92417E3FC07005A1AB6 /* TextToggleControl.m */,
 				F1D083A317BEFE00003E6700 /* CustomVolumeView.h */,
 				F1D083A417BEFE00003E6700 /* CustomVolumeView.m */,
-				F1693C6016DFAC59006E3739 /* MBProgressHUD.h */,
-				F1693C6116DFAC59006E3739 /* MBProgressHUD.m */,
+				F112AD3917EE9BE3002DE136 /* MBProgressHUD.h */,
+				F112AD3A17EE9BE3002DE136 /* MBProgressHUD.m */,
 				F1B1C1E217B29C1800B6164C /* MarqueeLabel.h */,
 				F1B1C1E317B29C1800B6164C /* MarqueeLabel.m */,
 				F118C74317713DAA00ED7384 /* ContentOffsetWatchdog.h */,
@@ -1444,6 +1444,7 @@
 				F1B2489014E333E300C44E11 /* WebDAVHelpViewController.m in Sources */,
 				9BFF29FA15387C67007ED9B1 /* ioapi.c in Sources */,
 				9BFF29FB15387C67007ED9B1 /* mztools.c in Sources */,
+				F112AD3B17EE9BE3002DE136 /* MBProgressHUD.m in Sources */,
 				9BFF29FC15387C67007ED9B1 /* unzip.c in Sources */,
 				9BFF29FD15387C67007ED9B1 /* zip.c in Sources */,
 				9BFF2A0915387C6E007ED9B1 /* FileInZipInfo.m in Sources */,
@@ -1459,7 +1460,6 @@
 				F1693C5116DFABA6006E3739 /* UIViewController+AutoNib.m in Sources */,
 				F1693C5D16DFAC0E006E3739 /* MIMEUtils.m in Sources */,
 				F1693C5E16DFAC0E006E3739 /* NetworkUtils.m in Sources */,
-				F1693C6816DFAC59006E3739 /* MBProgressHUD.m in Sources */,
 				F19BB51C16E006CA0081C95B /* main.m in Sources */,
 				F1847BBB16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m in Sources */,
 				F1C7A6B716E8178F0082D4D3 /* ZoomingImageView.m in Sources */,
