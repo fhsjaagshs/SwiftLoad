@@ -210,11 +210,12 @@
 
 - (void)imageViewWasSingleTapped:(UIGestureRecognizer *)rec {
     [UIView animateWithDuration:0.2f animations:^{
-        _navBar.hidden = !_navBar.hidden;
-        _toolBar.hidden = !_toolBar.hidden;
+        _navBar.alpha = (_navBar.alpha == 1.0f)?0.0f:1.0f;
+        _toolBar.alpha = (_toolBar.alpha == 1.0f)?0.0f:1.0f;
         
         UIView *statusBar = [[UIApplication sharedApplication]valueForKey:@"statusBar"];
-        statusBar.hidden = !statusBar.hidden;
+        statusBar.alpha = (statusBar.alpha == 1.0f)?0.0f:1.0f;
+        
         self.view.backgroundColor = (self.view.backgroundColor == [UIColor blackColor])?[UIColor whiteColor]:[UIColor blackColor];
     }];
 }

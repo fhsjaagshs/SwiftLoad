@@ -74,7 +74,7 @@ static NSString * const kFileInfoCellIdentifier = @"kFileInfoCellIdentifier";
     UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Rename File" message:[NSString stringWithFormat:@"Please enter a new name for \"%@\" below",[kAppDelegate openFile].lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
         if (buttonIndex == 1) {
             NSString *file = [kAppDelegate openFile];
-            NSString *newFilename = [av textFieldAtIndex:0].text;
+            NSString *newFilename = [alertView textFieldAtIndex:0].text;
             NSString *newFilePath = [[file stringByDeletingLastPathComponent]stringByAppendingPathComponent:newFilename];
             
             if ([[NSFileManager defaultManager]fileExistsAtPath:newFilePath]) {

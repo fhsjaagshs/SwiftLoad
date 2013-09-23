@@ -14,6 +14,7 @@
     [self zoomToRect:self.bounds animated:YES];
     self.zoomScale = self.minimumZoomScale;
     [self setNeedsLayout];
+    [self resetImage];
 }
 
 - (void)setup {
