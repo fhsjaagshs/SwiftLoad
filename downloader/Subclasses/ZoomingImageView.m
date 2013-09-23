@@ -11,7 +11,7 @@
 @implementation ZoomingImageView
 
 - (void)zoomOut {
-    [self zoomToRect:self.frame animated:YES];
+    [self zoomToRect:self.bounds animated:YES];
     self.zoomScale = self.minimumZoomScale;
     [self setNeedsLayout];
 }
@@ -28,9 +28,18 @@
     [self addSubview:_theImageView];
 }
 
+- (CGRect)boundsWithContentInsets {
+    CGRect bounds = self.bounds;
+    bounds.origin.x += self.contentInset.left;
+    bounds.origin.y += self.contentInset.top;
+    bounds.size.width -= (self.contentInset.right+self.contentInset.left);
+    bounds.size.height -= (self.contentInset.top+self.contentInset.bottom);
+    return bounds;
+}
+
 - (void)loadImage:(UIImage *)image {
     
-    _theImageView.frame = self.bounds;
+    _theImageView.frame = [self boundsWithContentInsets];
     self.contentSize = CGSizeZero;
     
     _theImageView.image = image;
@@ -55,7 +64,7 @@
     }
     
 	// Sizes
-    CGSize boundsSize = self.bounds.size;
+    CGSize boundsSize = [self boundsWithContentInsets].size;
     CGSize imageSize = _theImageView.frame.size;
     
     // Calculate Min
@@ -97,7 +106,7 @@
 	[super layoutSubviews];
 	
     // Center the image as it becomes smaller than the size of the screen
-    CGSize boundsSize = self.bounds.size;
+    CGSize boundsSize = [self boundsWithContentInsets].size;
     CGRect frameToCenter = _theImageView.frame;
     
     // Horizontally

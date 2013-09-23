@@ -67,7 +67,7 @@
 
 + (BOOL)isImageFile:(NSString *)file {
     NSString *ext = file.pathExtension.lowercaseString;
-    NSArray *fileTypes = @[@"png", @"gif", @"jpg", @"jpeg", @"tiff", @"svg"];
+    NSArray *fileTypes = @[@"tiff", @"tif", @"jpg", @"jpeg", @"gif", @"png", @"bmp", @"BMPf", @"ico", @"cur", @"xbm"];
     return [fileTypes containsObject:ext];
 }
 

@@ -25,16 +25,23 @@
 
 - (void)loadView {
     [super loadView];
-    CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
+    CGRect screenBounds = [[UIScreen mainScreen]bounds];
     
-    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
+    self.zoomingImageView = [[ZoomingImageView alloc]initWithFrame:screenBounds];
+    _zoomingImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    //_zoomingImageView.contentInset = UIEdgeInsetsMake(64, 0, 44, 0);
+   // _zoomingImageView.scrollIndicatorInsets = _zoomingImageView.contentInset;
+    _zoomingImageView.decelerationRate = UIScrollViewDecelerationRateFast;
+    [self.view addSubview:_zoomingImageView];
+    [self.view bringSubviewToFront:_zoomingImageView];
+    
+    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
     _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]];
     topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
     [_navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:_navBar];
-    [self.view bringSubviewToFront:_navBar];
     
     self.toolBar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-44, screenBounds.size.width, 44)];
     _toolBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
@@ -47,29 +54,21 @@
     [self.view addSubview:_toolBar];
     [self.view bringSubviewToFront:_toolBar];
     
-    self.zoomingImageView = [[ZoomingImageView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-88)];
-    _zoomingImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
-    [self.view addSubview:_zoomingImageView];
-    [self.view bringSubviewToFront:_zoomingImageView];
-    
-    if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad) {
-        if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication]statusBarOrientation])) {
-            [_toolBar setHidden:YES];
-            [_navBar setHidden:YES];
-            [[UIApplication sharedApplication]setStatusBarHidden:YES];
-            self.view.frame = [[UIScreen mainScreen]bounds];
-            _zoomingImageView.frame = self.view.frame;
-        }
-    }
-    
     UITapGestureRecognizer *tt = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imageViewWasDoubleTapped:)];
     [tt setNumberOfTapsRequired:2];
     [tt setNumberOfTouchesRequired:1];
     [_zoomingImageView addGestureRecognizer:tt];
     
+    UITapGestureRecognizer *t = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imageViewWasSingleTapped:)];
+    [t setNumberOfTapsRequired:1];
+    [t setNumberOfTouchesRequired:1];
+    [_zoomingImageView addGestureRecognizer:t];
+
+    [t requireGestureRecognizerToFail:tt];
+    
     NSArray *imageFiles = [self imageFiles];
     
-    self.imageNumber = [imageFiles indexOfObject:[kAppDelegate openFile]];
+    self.imageNumber = [imageFiles indexOfObject:[kAppDelegate openFile].lastPathComponent];
     
     if (imageFiles.count == 1) {
         [_nextImg setEnabled:NO];
@@ -85,22 +84,13 @@
     }
 
     [_zoomingImageView loadImage:[UIImage imageWithContentsOfFile:[kAppDelegate openFile]]];
-    
-    [self adjustViewsForiOS7];
 }
 
 - (NSArray *)imageFiles {
     NSString *currentDir = [kAppDelegate managerCurrentDir];
-    NSArray *filesOfDir = [[[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-    NSMutableArray *imageFiles = [NSMutableArray arrayWithCapacity:filesOfDir.count];
-    
-    for (NSString *object in filesOfDir) {
-        NSString *newObject = [currentDir stringByAppendingPathComponent:object];
-        if ([MIMEUtils isImageFile:newObject]) {
-            [imageFiles addObject:newObject];
-        }
-    }
-    
+    NSArray *extensions = @[@"tiff", @"tif", @"jpg", @"jpeg", @"gif", @"png", @"bmp", @"BMPf", @"ico", @"cur", @"xbm"];
+    NSArray *dirContents = [[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil];
+    NSArray *imageFiles = [[dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension.lowercaseString IN %@", extensions]]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];;
     return imageFiles;
 }
 
@@ -137,7 +127,6 @@
 - (void)close {
     [self dismissViewControllerAnimated:YES completion:nil];
     [[UIApplication sharedApplication]setStatusBarHidden:NO];
-    self.view.frame = [[UIScreen mainScreen]applicationFrame];
     [kAppDelegate setOpenFile:nil];
 }
 
@@ -151,10 +140,9 @@
     }
     
     NSString *file = [kAppDelegate openFile];
-    NSString *fileName = [file lastPathComponent];
+    NSString *fileName = file.lastPathComponent;
 
     self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",fileName] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-        
         if (buttonIndex == 0) {
             [kAppDelegate printFile:file fromView:self.view];
         } else if (buttonIndex == 1) {
@@ -169,7 +157,7 @@
             if ([MIMEUtils isImageFile:file]) {
                 [self addToTheRoll];
             } else {
-                NSString *message = [[NSString alloc]initWithFormat:@"Swift was unable to add \"%@\" to the camera roll.",fileName];
+                NSString *message = [NSString stringWithFormat:@"Swift was unable to add \"%@\" to the camera roll.",fileName];
                 [UIAlertView showAlertWithTitle:@"Import Failure" andMessage:message];
             }
         }
@@ -186,40 +174,49 @@
 
 - (void)nextImage {
     [_prevImg setEnabled:YES];
+    self.imageNumber += 1;
     
     NSArray *imageFiles = [self imageFiles];
 
-    self.imageNumber += 1;
-
-    NSString *newImagePath = imageFiles[_imageNumber];
+    NSString *newImageName = imageFiles[_imageNumber];
+    _navBar.topItem.title = newImageName;
     
     if (imageFiles.count-1 == _imageNumber) {
         [_nextImg setEnabled:NO];
     }
     
+    NSString *newImagePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:newImageName];
     [_zoomingImageView loadImage:[UIImage imageWithContentsOfFile:newImagePath]];
-
     [kAppDelegate setOpenFile:newImagePath];
-    _navBar.topItem.title = newImagePath.lastPathComponent;
 }
 
 - (void)previousImage {
     [_nextImg setEnabled:YES];
-    
-    NSArray *imageFiles = [self imageFiles];
-    
     self.imageNumber -= 1;
     
+    NSArray *imageFiles = [self imageFiles];
+
     if (_imageNumber == 0) {
         [_prevImg setEnabled:NO];
     }
 
-    NSString *newImagePath = imageFiles[_imageNumber];
+    NSString *newImageName = imageFiles[_imageNumber];
+    _navBar.topItem.title = newImageName;
     
+    NSString *newImagePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:newImageName];
     [_zoomingImageView loadImage:[UIImage imageWithContentsOfFile:newImagePath]];
-
     [kAppDelegate setOpenFile:newImagePath];
-    _navBar.topItem.title = newImagePath.lastPathComponent;
+}
+
+- (void)imageViewWasSingleTapped:(UIGestureRecognizer *)rec {
+    [UIView animateWithDuration:0.2f animations:^{
+        _navBar.hidden = !_navBar.hidden;
+        _toolBar.hidden = !_toolBar.hidden;
+        
+        UIView *statusBar = [[UIApplication sharedApplication]valueForKey:@"statusBar"];
+        statusBar.hidden = !statusBar.hidden;
+        self.view.backgroundColor = (self.view.backgroundColor == [UIColor blackColor])?[UIColor whiteColor]:[UIColor blackColor];
+    }];
 }
 
 - (void)imageViewWasDoubleTapped:(UIGestureRecognizer *)rec {
@@ -230,27 +227,7 @@
     }
 }
 
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-    if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation)) {
-        [_toolBar setHidden:NO];
-        [_navBar setHidden:NO];
-    } else {
-        [_toolBar setHidden:YES];
-        [_navBar setHidden:YES];
-    }
-}
-
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-    if (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication]statusBarOrientation])) {
-        [[UIApplication sharedApplication]setStatusBarHidden:NO];
-        self.view.frame = [[UIScreen mainScreen]applicationFrame];
-        _zoomingImageView.frame = CGRectMake(0, 44, self.view.bounds.size.width, self.view.bounds.size.height-88);
-    } else {
-        [[UIApplication sharedApplication]setStatusBarHidden:YES];
-        self.view.frame = [[UIScreen mainScreen]bounds];
-        _zoomingImageView.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
-    }
-    
     [_zoomingImageView resetImage];
 }
 
