@@ -106,7 +106,6 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
         self.userInteractionEnabled = YES;
         self.backgroundColor = [UIColor clearColor];
         self.frame = CGRectMake(0, 0, 250, [[UIScreen mainScreen]bounds].size.height);
-        self.opaque = YES;
         self.theTableView = [[UITableView alloc]initWithFrame:self.bounds style:UITableViewStylePlain];
         _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;

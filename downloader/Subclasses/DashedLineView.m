@@ -30,7 +30,7 @@
     
     CGContextSetStrokeColorWithColor(context, [UIColor darkGrayColor].CGColor);
     
-    CGContextSetLineWidth(context, self.bounds.size.height/4);
+    CGContextSetLineWidth(context, self.bounds.size.height/8);
     CGContextSetLineDash(context, 0.0f, dashes, 2);
     
     CGContextMoveToPoint(context, 20, self.bounds.size.height/2);

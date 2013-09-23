@@ -42,21 +42,48 @@
     _progressView.progress = progress;
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    float maxWidth = self.bounds.size.width-49;
+    
+    CGRect text = self.textLabel.frame;
+    text.origin.x = 49;
+
+    if (text.size.width > maxWidth) {
+        text.size.width = maxWidth;
+    }
+    
+    self.textLabel.frame = text;
+    
+    CGRect detail = self.detailTextLabel.frame;
+    detail.origin.x = 49;
+    
+    if (detail.size.width > maxWidth) {
+        detail.size.width = maxWidth;
+    }
+    
+    self.detailTextLabel.frame = detail;
+    
+    _progressView.frame = CGRectMake(5, 5, 37, 37);
+}
+
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier];
     if (self) {
         self.textLabel.textColor = [UIColor blackColor];
         self.detailTextLabel.textColor = [UIColor darkGrayColor];
         
-        self.progressView = [[CircularProgressView alloc]initWithFrame:CGRectMake(5, 5, 37, 37)];
-        self.accessoryView = _progressView;
+        self.progressView = [[CircularProgressView alloc]initWithFrame:CGRectZero];
+        [self addSubview:_progressView];
         
-        self.textLabel.backgroundColor = [UIColor whiteColor];
+        self.contentView.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = [UIColor clearColor];
+        
         self.textLabel.highlightedTextColor = [UIColor blackColor];
-        self.textLabel.textAlignment = NSTextAlignmentCenter;
+        self.textLabel.textAlignment = NSTextAlignmentLeft;
         self.selectedBackgroundView = [[UIView alloc]init];
         self.selectedBackgroundView.backgroundColor = [UIColor lightGrayColor];
-        self.opaque = YES;
     }
     return self;
 }
