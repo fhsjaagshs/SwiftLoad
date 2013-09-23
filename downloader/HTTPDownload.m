@@ -15,6 +15,8 @@
 @property (nonatomic, assign) float fileSize;
 @property (nonatomic, strong) NSFileHandle *handle;
 
+@property (nonatomic, assign) BOOL isResuming;
+
 @end
 
 @implementation HTTPDownload
@@ -40,6 +42,27 @@
     [super stop];
 }
 
+- (void)resumeFromFailure {
+    self.isResuming = YES;
+    
+    [self startBackgroundTask];
+    
+    NSDictionary *attributes = [[NSFileManager defaultManager]attributesOfItemAtPath:self.temporaryPath error:nil];
+    self.downloadedBytes = [attributes[NSFileSize] floatValue];
+    
+    NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:_url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30.0];
+    [theRequest setHTTPMethod:@"GET"];
+    [theRequest setValue:[NSString stringWithFormat:@"bytes=%f-",_fileSize] forHTTPHeaderField:@"Range"];
+    
+    if ([NSURLConnection canHandleRequest:theRequest]) {
+        self.connection = [[NSURLConnection alloc]initWithRequest:theRequest delegate:self startImmediately:NO];
+        [_connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+        [_connection start];
+    } else {
+        [self showFailure];
+    }
+}
+
 - (void)start {
     [super start];
     
@@ -62,9 +85,12 @@
         [self.delegate setText:self.name];
     }
     
-    self.temporaryPath = getNonConflictingFilePathForPath([NSTemporaryDirectory() stringByAppendingPathComponent:[self.name percentSanitize]]);
+    if (!_isResuming) {
+        self.temporaryPath = getNonConflictingFilePathForPath([NSTemporaryDirectory() stringByAppendingPathComponent:[self.name percentSanitize]]);
+        [[NSFileManager defaultManager]createFileAtPath:self.temporaryPath contents:nil attributes:nil];
+    }
+    
     self.fileSize = [response expectedContentLength];
-    [[NSFileManager defaultManager]createFileAtPath:self.temporaryPath contents:nil attributes:nil];
     self.handle = [NSFileHandle fileHandleForWritingAtPath:self.temporaryPath];
     [_handle seekToEndOfFile];
 }
@@ -82,12 +108,18 @@
     [_handle closeFile];
     self.downloadedBytes = 0;
     self.fileSize = 0;
-    [self showFailure];
+    
+    self.complete = YES;
+    self.succeeded = NO;
+    
+    if (self.delegate) {
+        [self.delegate drawRed];
+    }
+    
+    [self cancelBackgroundTask];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-
     [_handle closeFile];
     
     if (_downloadedBytes > 0) {

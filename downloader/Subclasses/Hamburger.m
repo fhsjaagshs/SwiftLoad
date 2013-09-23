@@ -205,10 +205,23 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (indexPath.row < 5) {
+        
+    } else {
+        Task *task = [[TaskController sharedController]taskAtIndex:indexPath.row-5];
+        
+        if ([task isKindOfClass:[HTTPDownload class]]) {
+            // resume
+        }
+    }
+    
     if (_delegate && [_delegate respondsToSelector:@selector(hamburgerCellWasSelectedAtIndex:)]) {
         [_item hide];
         [_delegate hamburgerCellWasSelectedAtIndex:indexPath.row];
     }
+    
+    
     [_theTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

@@ -28,6 +28,9 @@
 
 - (void)handleBackgroundTaskExpiration;
 
+- (void)startBackgroundTask;
+- (void)cancelBackgroundTask;
+
 - (NSString *)verb;
 
 @end

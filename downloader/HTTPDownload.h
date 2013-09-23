@@ -15,4 +15,6 @@
 - (id)initWithURL:(NSURL *)aUrl;
 + (HTTPDownload *)downloadWithURL:(NSURL *)aURL;
 
+- (void)resumeFromFailure;
+
 @end
