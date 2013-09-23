@@ -36,7 +36,7 @@
 @interface WebDAVViewController ()
 
 @property (nonatomic, strong) HTTPServer *httpServer;
-@property (nonatomic, strong) UILabel *urlLabel;
+@property (nonatomic, strong) UITextView *urlLabel;
 @property (nonatomic, strong) UILabel *onLabel;
 
 @end
@@ -45,56 +45,52 @@
 
 - (void)loadView {
     [super loadView];
-    BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
-    CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
+    CGRect screenBounds = [[UIScreen mainScreen]bounds];
     
-    UINavigationBar *navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
+    UINavigationBar *navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
     navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"WebDAV Server"];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
-    topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Help" style:UIBarButtonItemStyleBordered target:self action:@selector(showHelp)];
     [navBar pushNavigationItem:topItem animated:NO];
     [self.view addSubview:navBar];
     [self.view bringSubviewToFront:navBar];
     
-    self.onLabel = [[UILabel alloc]initWithFrame:iPad?CGRectMake(234, 100, 300, 83):CGRectMake(0, sanitizeMesurement(44), screenBounds.size.width, 91)];
+    self.onLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 64, screenBounds.size.width, 100)];
     _onLabel.textAlignment = NSTextAlignmentCenter;
     _onLabel.backgroundColor = [UIColor clearColor];
     _onLabel.textColor = [UIColor blackColor];
     _onLabel.text = @"WebDAV server is ON";
-    _onLabel.font = [UIFont boldSystemFontOfSize:iPad?28:23];
+    _onLabel.font = [UIFont boldSystemFontOfSize:23];
     [self.view addSubview:_onLabel];
     
-    UITextView *tf = [[UITextView alloc]initWithFrame:iPad?CGRectMake(158, 235, 453, 83):CGRectMake(40, sanitizeMesurement(160), 240, 83)];
-    tf.text = @"Use a WebDAV client like CyberDuck or Interarchy to connect to the following URL using the non-SSL protocol:";
-    tf.textColor = [UIColor blackColor];
-    tf.backgroundColor = [UIColor clearColor];
-    tf.font = [UIFont systemFontOfSize:iPad?17:15];
-    tf.editable = NO;
-    tf.textAlignment = NSTextAlignmentCenter;
-    tf.scrollEnabled = NO;
-    [self.view addSubview:tf];
-    
-    self.urlLabel = [[UILabel alloc]initWithFrame:iPad?CGRectMake(20, 379, 728, 86):CGRectMake(0, sanitizeMesurement(283), screenBounds.size.width, 21)];
-    _urlLabel.textColor = [UIColor darkGrayColor];
-    _urlLabel.backgroundColor = [UIColor clearColor];
-    _urlLabel.font = [UIFont boldSystemFontOfSize:iPad?31:18];
-    _urlLabel.textAlignment = NSTextAlignmentCenter;
-    [self.view addSubview:_urlLabel];
-    
-    UITextView *btf = [[UITextView alloc]initWithFrame:iPad?CGRectMake(158, 512, 453, 61):CGRectMake(40, sanitizeMesurement(326), 240, 50)];
+    UITextView *btf = [[UITextView alloc]initWithFrame:CGRectMake(0, 180, screenBounds.size.width, 60)];
     btf.backgroundColor = [UIColor clearColor];
     btf.editable = NO;
     btf.textAlignment = NSTextAlignmentCenter;
     btf.textColor = [UIColor blackColor];
-    btf.font = [UIFont systemFontOfSize:iPad?19:14];
+    btf.font = [UIFont systemFontOfSize:14];
     btf.scrollEnabled = NO;
     btf.text = @"This WebDAV server is only active as long as this screen is open.";
     [self.view addSubview:btf];
     
-    [self createServer];
+    self.urlLabel = [[UITextView alloc]initWithFrame:CGRectMake(0, 250, screenBounds.size.width, 30)];
+    _urlLabel.textColor = [UIColor darkGrayColor];
+    _urlLabel.backgroundColor = [UIColor clearColor];
+    _urlLabel.font = [UIFont boldSystemFontOfSize:18];
+    _urlLabel.textAlignment = NSTextAlignmentCenter;
+    _urlLabel.editable = NO;
+    _urlLabel.scrollEnabled = NO;
+    [self.view addSubview:_urlLabel];
     
-    [self adjustViewsForiOS7];
+    NSString *htmlString = @"<center style=\"font-family: Avenir-Medium; font-size:15px;\"><strong>Server</strong> Above IP address<br /><strong>Port</strong> 8080<br /><strong>SSL</strong> NO<br /><strong>Username</strong> See In-App Settings<br /><strong>Password</strong> See In-App Settings</center>";
+    
+    UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-130, screenBounds.size.width, 130)];
+    textView.attributedText = [[NSAttributedString alloc]initWithData:[htmlString dataUsingEncoding:NSUTF8StringEncoding] options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute: [NSNumber numberWithInt:NSUTF8StringEncoding]} documentAttributes:nil error:nil];
+    textView.backgroundColor = [UIColor clearColor];
+    textView.editable = NO;
+    [self.view addSubview:textView];
+    
+    [self createServer];
 }
 
 - (void)killServer {
@@ -145,10 +141,6 @@
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     [self killServer];
     [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)showHelp {
-    [self presentViewController:[WebDAVHelpViewController viewControllerWhite] animated:YES completion:nil];
 }
 
 - (NSUInteger)supportedInterfaceOrientations {

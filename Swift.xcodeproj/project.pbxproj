@@ -174,7 +174,6 @@
 		F1AE31BC17BDC3C0005D3EE6 /* play_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1AE31BA17BDC3C0005D3EE6 /* play_pressed@2x.png */; };
 		F1B1C1E417B29C1800B6164C /* MarqueeLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B1C1E317B29C1800B6164C /* MarqueeLabel.m */; };
 		F1B1C1EA17B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B1C1E917B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.m */; };
-		F1B2489014E333E300C44E11 /* WebDAVHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B2488E14E333E200C44E11 /* WebDAVHelpViewController.m */; };
 		F1B2C0FC17961A0E00AD5A04 /* PeerPickerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B2C0FB17961A0E00AD5A04 /* PeerPickerCell.m */; };
 		F1BA8C7E17728500007AAF85 /* BGProcFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BA8C7D17728500007AAF85 /* BGProcFactory.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F1BC30CA17715DF300DAFA0A /* Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BC30C917715DF300DAFA0A /* Hack.m */; };
@@ -218,7 +217,6 @@
 		F1E9F7CF1774114D00EC345C /* icon~iPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1E9F7C41774114D00EC345C /* icon~iPad@2x.png */; };
 		F1EB833C16D808AA009D7D2D /* action.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833116D808AA009D7D2D /* action.png */; };
 		F1EB833D16D808AA009D7D2D /* bluetooth.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833216D808AA009D7D2D /* bluetooth.png */; };
-		F1EB833E16D808AA009D7D2D /* config.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833316D808AA009D7D2D /* config.png */; };
 		F1EB833F16D808AA009D7D2D /* delete.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833416D808AA009D7D2D /* delete.png */; };
 		F1EB834116D808AA009D7D2D /* dropbox.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833616D808AA009D7D2D /* dropbox.png */; };
 		F1EB834516D808AA009D7D2D /* paperclip.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833A16D808AA009D7D2D /* paperclip.png */; };
@@ -518,8 +516,6 @@
 		F1B1C1E317B29C1800B6164C /* MarqueeLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarqueeLabel.m; sourceTree = "<group>"; };
 		F1B1C1E817B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MarqueeLabel+LabelizeIfNecessary.h"; sourceTree = "<group>"; };
 		F1B1C1E917B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MarqueeLabel+LabelizeIfNecessary.m"; sourceTree = "<group>"; };
-		F1B2488D14E333E200C44E11 /* WebDAVHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebDAVHelpViewController.h; sourceTree = "<group>"; };
-		F1B2488E14E333E200C44E11 /* WebDAVHelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebDAVHelpViewController.m; sourceTree = "<group>"; };
 		F1B2C0FA17961A0E00AD5A04 /* PeerPickerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeerPickerCell.h; sourceTree = "<group>"; };
 		F1B2C0FB17961A0E00AD5A04 /* PeerPickerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeerPickerCell.m; sourceTree = "<group>"; };
 		F1BA8C7C17728500007AAF85 /* BGProcFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BGProcFactory.h; sourceTree = "<group>"; };
@@ -577,7 +573,6 @@
 		F1E9F7C41774114D00EC345C /* icon~iPad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon~iPad@2x.png"; path = "../Packaging/icon~iPad@2x.png"; sourceTree = "<group>"; };
 		F1EB833116D808AA009D7D2D /* action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = action.png; path = Images/action.png; sourceTree = "<group>"; };
 		F1EB833216D808AA009D7D2D /* bluetooth.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bluetooth.png; path = Images/bluetooth.png; sourceTree = "<group>"; };
-		F1EB833316D808AA009D7D2D /* config.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = config.png; path = Images/config.png; sourceTree = "<group>"; };
 		F1EB833416D808AA009D7D2D /* delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = delete.png; path = Images/delete.png; sourceTree = "<group>"; };
 		F1EB833616D808AA009D7D2D /* dropbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dropbox.png; path = Images/dropbox.png; sourceTree = "<group>"; };
 		F1EB833A16D808AA009D7D2D /* paperclip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = paperclip.png; path = Images/paperclip.png; sourceTree = "<group>"; };
@@ -786,8 +781,6 @@
 				F17F11211420017100CE45D7 /* FileInfoViewController.m */,
 				F166BBC114E2171A003E5A07 /* WebDAVViewController.h */,
 				F166BBC214E2171A003E5A07 /* WebDAVViewController.m */,
-				F1B2488D14E333E200C44E11 /* WebDAVHelpViewController.h */,
-				F1B2488E14E333E200C44E11 /* WebDAVHelpViewController.m */,
 				F1679AC41787B368001369B1 /* SFTPBrowserViewController.h */,
 				F1679AC51787B368001369B1 /* SFTPBrowserViewController.m */,
 				F10CBC5B17080C6600C82AFB /* DropboxBrowserViewController.h */,
@@ -1189,7 +1182,6 @@
 				F1E9F7811773FDC900EC345C /* arrow_disclosure@2x.png */,
 				F1E9F7871773FECB00EC345C /* arrow_disclosure_highlighted.png */,
 				F1E9F7881773FECB00EC345C /* arrow_disclosure_highlighted@2x.png */,
-				F1EB833316D808AA009D7D2D /* config.png */,
 				F165C3EB16E445E5004B81F1 /* clipboard.png */,
 				F165C3E716E44244004B81F1 /* clipboard@2x.png */,
 				F13979A116E78F4E00F8B61B /* ArrowLeft.png */,
@@ -1348,7 +1340,6 @@
 			files = (
 				F1EB833C16D808AA009D7D2D /* action.png in Resources */,
 				F1EB833D16D808AA009D7D2D /* bluetooth.png in Resources */,
-				F1EB833E16D808AA009D7D2D /* config.png in Resources */,
 				F1EB833F16D808AA009D7D2D /* delete.png in Resources */,
 				F1EB834116D808AA009D7D2D /* dropbox.png in Resources */,
 				F1EB834516D808AA009D7D2D /* paperclip.png in Resources */,
@@ -1441,7 +1432,6 @@
 				F11FE417145F8218008ECC7E /* TextEditorViewController.m in Sources */,
 				F149A685149176E60038F1FC /* MoviePlayerViewController.m in Sources */,
 				F166BBC414E2171A003E5A07 /* WebDAVViewController.m in Sources */,
-				F1B2489014E333E300C44E11 /* WebDAVHelpViewController.m in Sources */,
 				9BFF29FA15387C67007ED9B1 /* ioapi.c in Sources */,
 				9BFF29FB15387C67007ED9B1 /* mztools.c in Sources */,
 				F112AD3B17EE9BE3002DE136 /* MBProgressHUD.m in Sources */,

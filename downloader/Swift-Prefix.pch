@@ -90,7 +90,6 @@
     #import "DAVConnection.h"
     #import "BluetoothManager.h"
 
-    #import "WebDAVHelpViewController.h"
     #import "DocumentViewController.h"
     #import "AudioPlayerViewController.h"
     #import "PictureViewController.h"
