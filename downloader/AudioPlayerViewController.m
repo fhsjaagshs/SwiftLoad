@@ -41,6 +41,14 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [MarqueeLabel controllerViewAppearing:self];
+    
+    if ([kAppDelegate audioPlayer].isPlaying) {
+        [_pausePlay setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
+        [_pausePlay setImage:[UIImage imageNamed:@"pause_selected"] forState:UIControlStateHighlighted];
+    } else {
+        [_pausePlay setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+        [_pausePlay setImage:[UIImage imageNamed:@"play_selected"] forState:UIControlStateHighlighted];
+    }
 }
 
 - (void)loadView {
@@ -51,7 +59,7 @@
     CGRect screenBounds = [[UIScreen mainScreen]bounds];
     BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
     
-    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 20+44)];
+    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
     _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]];
     topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
@@ -122,21 +130,21 @@
     
     float controlsWidth = screenBounds.size.width/3;
     
-    self.prevTrack = [[UIButton alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-51, controlsWidth, iPad?46:36)];
+    self.prevTrack = [[UIButton alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-51, controlsWidth, 46)];
     _prevTrack.backgroundColor = [UIColor clearColor];
     [_prevTrack setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
     [_prevTrack setImage:[UIImage imageNamed:@"back_button_pressed"] forState:UIControlStateHighlighted];
     [_prevTrack addTarget:kAppDelegate action:@selector(skipToPreviousTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_prevTrack];
     
-    self.pausePlay = [[UIButton alloc]initWithFrame:CGRectMake(controlsWidth, screenBounds.size.height-51, controlsWidth, iPad?46:36)];
+    self.pausePlay = [[UIButton alloc]initWithFrame:CGRectMake(controlsWidth, screenBounds.size.height-51, controlsWidth, 46)];
     _pausePlay.backgroundColor = [UIColor clearColor];
     [_pausePlay setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
     [_pausePlay setImage:[UIImage imageNamed:@"pause_selected"] forState:UIControlStateHighlighted];
     [_pausePlay addTarget:kAppDelegate action:@selector(togglePlayPause) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_pausePlay];
     
-    self.nxtTrack = [[UIButton alloc]initWithFrame:CGRectMake(controlsWidth*2, screenBounds.size.height-51, controlsWidth, iPad?46:36)];
+    self.nxtTrack = [[UIButton alloc]initWithFrame:CGRectMake(controlsWidth*2, screenBounds.size.height-51, controlsWidth, 46)];
     _nxtTrack.backgroundColor = [UIColor clearColor];
     [_nxtTrack setImage:[UIImage imageNamed:@"next_button"] forState:UIControlStateNormal];
     [_nxtTrack setImage:[UIImage imageNamed:@"next_button_pressed"] forState:UIControlStateHighlighted];
@@ -147,7 +155,7 @@
     [self.view addSubview:_volumeView];
     
     self.loopControl = [TextToggleControl control];
-    _loopControl.frame = CGRectMake((screenBounds.size.width/2)-25, 114+23+20, 57, 30);
+    _loopControl.frame = CGRectMake((screenBounds.size.width/2)-30, 160, 60, 30);
     _loopControl.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     _loopControl.backgroundColor = [UIColor clearColor];
     [_loopControl addTarget:self action:@selector(loopControlPressed) forControlEvents:UIControlEventTouchUpInside];

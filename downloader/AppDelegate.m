@@ -318,10 +318,11 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
 }
 
 - (void)audioPlayerEndInterruption:(AVAudioPlayer *)player withOptions:(NSUInteger)flags {
-    NSLog(@"LOL");
     if (!_audioPlayer.isPlaying) {
         [_audioPlayer play];
         [AudioPlayerViewController notif_setPausePlayTitlePause];
+    } else {
+        [AudioPlayerViewController notif_setPausePlayTitlePlay];
     }
 }
 
