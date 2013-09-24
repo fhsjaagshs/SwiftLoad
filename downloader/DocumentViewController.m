@@ -36,6 +36,7 @@
     _webView.dataDetectorTypes = UIDataDetectorTypeLink;
     _webView.layer.rasterizationScale = [[UIScreen mainScreen]scale];
     _webView.layer.shouldRasterize = YES;
+    _webView.clipsToBounds = NO;
     [self.view addSubview:_webView];
 
     NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:[kAppDelegate openFile]] cachePolicy:NSURLCacheStorageAllowedInMemoryOnly timeoutInterval:30.0f];

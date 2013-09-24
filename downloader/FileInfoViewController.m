@@ -117,7 +117,7 @@ static NSString * const kFileInfoCellIdentifier = @"kFileInfoCellIdentifier";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     BOOL isDir;
-    return ([[NSFileManager defaultManager]fileExistsAtPath:[kAppDelegate openFile] isDirectory:&isDir] && isDir)?3:4;
+    return ([[NSFileManager defaultManager]fileExistsAtPath:[kAppDelegate openFile] isDirectory:&isDir] && isDir)?2:4;
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -156,24 +156,37 @@ static NSString * const kFileInfoCellIdentifier = @"kFileInfoCellIdentifier";
     
     cell.textLabel.textColor = [UIColor blackColor];
     
-    if (indexPath.row == 0) {
-        cell.imageView.image = [UIImage imageNamed:[attributes[NSFileType] isEqualToString:NSFileTypeDirectory]?@"folder_icon":@"file_icon"];
-        cell.textLabel.text = [kAppDelegate openFile].lastPathComponent;
-    } else if (indexPath.row == 1) {
-        cell.textLabel.text = @"Size";
-        cell.detailTextLabel.text = [NSString fileSizePrettify:[attributes[NSFileSize] floatValue]];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    } else if (indexPath.row == 2) {
-        cell.textLabel.text = @"Last Modified";
-        cell.detailTextLabel.text = [_formatter stringFromDate:attributes[NSFileModificationDate]];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    } else if (indexPath.row == 3) {
-        cell.textLabel.text = @"Checksum";
-        cell.textLabel.textColor = _md5Sum.length?[UIColor blackColor]:[UIColor lightGrayColor];
-        cell.detailTextLabel.text = nil;
-        cell.selectionStyle = _md5Sum.length?UITableViewCellSelectionStyleDefault:UITableViewCellSelectionStyleNone;
-    }
+    BOOL isDir = [attributes[NSFileType] isEqualToString:NSFileTypeDirectory];
     
+    if (isDir) {
+        if (indexPath.row == 0) {
+            cell.imageView.image = [UIImage imageNamed:@"folder_icon"];
+            cell.textLabel.text = [kAppDelegate openFile].lastPathComponent;
+        } else if (indexPath.row == 1) {
+            cell.textLabel.text = @"Created";
+            cell.detailTextLabel.text = [_formatter stringFromDate:attributes[NSFileCreationDate]];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+    } else {
+        if (indexPath.row == 0) {
+            cell.imageView.image = [UIImage imageNamed:@"file_icon"];
+            cell.textLabel.text = [kAppDelegate openFile].lastPathComponent;
+        } else if (indexPath.row == 1) {
+            cell.textLabel.text = @"Size";
+            cell.detailTextLabel.text = [NSString fileSizePrettify:[attributes[NSFileSize] floatValue]];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        } else if (indexPath.row == 2) {
+            cell.textLabel.text = @"Last Modified";
+            cell.detailTextLabel.text = [_formatter stringFromDate:attributes[NSFileModificationDate]];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        } else if (indexPath.row == 3) {
+            cell.textLabel.text = @"Checksum";
+            cell.textLabel.textColor = _md5Sum.length?[UIColor blackColor]:[UIColor lightGrayColor];
+            cell.detailTextLabel.text = nil;
+            cell.selectionStyle = _md5Sum.length?UITableViewCellSelectionStyleDefault:UITableViewCellSelectionStyleNone;
+        }
+    }
+
     return cell;
 }
 

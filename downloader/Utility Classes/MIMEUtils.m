@@ -45,15 +45,20 @@
         
         CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)file.pathExtension.lowercaseString, nil);
         NSString *uti = (__bridge NSString *)UTI;
-        CFRelease(UTI);
+        
+        BOOL isYES = NO;
         
         if ([uti containsString:@"source"]) {
-            return YES;
+            isYES = YES;
         }
         
         if ([uti containsString:@"script"]) {
-            return YES;
+            isYES = YES;
         }
+        
+        CFRelease(UTI);
+        
+        return isYES;
     }
     
     return NO;
