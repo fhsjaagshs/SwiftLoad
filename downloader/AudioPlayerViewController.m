@@ -67,7 +67,7 @@
     [_navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:_navBar];
     
-    self.artistLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, 44+10+20, screenBounds.size.width, 20) duration:5.0 andFadeLength:10.0f];
+    self.artistLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, 64+10, screenBounds.size.width, 20) rate:50.0f andFadeLength:10.0f];
     _artistLabel.animationDelay = 0.5f;
     _artistLabel.marqueeType = MLContinuous;
     _artistLabel.animationCurve = UIViewAnimationCurveLinear;
@@ -78,7 +78,7 @@
     _artistLabel.font = [UIFont systemFontOfSize:15];
     [self.view addSubview:_artistLabel];
     
-    self.titleLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, 44+20+10+20, screenBounds.size.width, 20) rate:50.0f andFadeLength:10.0f];
+    self.titleLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, 64+10+20, screenBounds.size.width, 20) rate:50.0f andFadeLength:10.0f];
     _titleLabel.animationDelay = 0.5f;
     _titleLabel.marqueeType = MLContinuous;
     _titleLabel.animationCurve = UIViewAnimationCurveLinear;
@@ -89,7 +89,7 @@
     _titleLabel.font = [UIFont boldSystemFontOfSize:15];
     [self.view addSubview:_titleLabel];
     
-    self.albumLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, 44+(20*2)+10+20, screenBounds.size.width, 20) duration:5.0 andFadeLength:10.0f];
+    self.albumLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, 64+10+(20*2), screenBounds.size.width, 20) rate:50.0f andFadeLength:10.0f];
     _albumLabel.animationDelay = 0.5f;
     _albumLabel.marqueeType = MLContinuous;
     _albumLabel.animationCurve = UIViewAnimationCurveLinear;
@@ -124,34 +124,34 @@
     _secondsRemaining.text = @"-0:00";
     [self.view addSubview:_secondsRemaining];
     
-    self.albumArtwork = [[UIImageView alloc]initWithFrame:CGRectMake(0, 180+20, screenBounds.size.width, screenBounds.size.height-(186+116))];
+    self.albumArtwork = [[UIImageView alloc]initWithFrame:CGRectMake(0, 180+20-5, screenBounds.size.width, screenBounds.size.height-(186+116))];
     _albumArtwork.contentMode = UIViewContentModeScaleAspectFit;
     [self.view addSubview:_albumArtwork];
     
     float controlsWidth = screenBounds.size.width/3;
     
-    self.prevTrack = [[UIButton alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-51, controlsWidth, 46)];
+    self.prevTrack = [[UIButton alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-55, controlsWidth, 46)];
     _prevTrack.backgroundColor = [UIColor clearColor];
     [_prevTrack setImage:[UIImage imageNamed:@"back_button"] forState:UIControlStateNormal];
     [_prevTrack setImage:[UIImage imageNamed:@"back_button_pressed"] forState:UIControlStateHighlighted];
     [_prevTrack addTarget:kAppDelegate action:@selector(skipToPreviousTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_prevTrack];
     
-    self.pausePlay = [[UIButton alloc]initWithFrame:CGRectMake(controlsWidth, screenBounds.size.height-51, controlsWidth, 46)];
+    self.pausePlay = [[UIButton alloc]initWithFrame:CGRectMake(controlsWidth, screenBounds.size.height-55, controlsWidth, 46)];
     _pausePlay.backgroundColor = [UIColor clearColor];
     [_pausePlay setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
     [_pausePlay setImage:[UIImage imageNamed:@"pause_selected"] forState:UIControlStateHighlighted];
     [_pausePlay addTarget:kAppDelegate action:@selector(togglePlayPause) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_pausePlay];
     
-    self.nxtTrack = [[UIButton alloc]initWithFrame:CGRectMake(controlsWidth*2, screenBounds.size.height-51, controlsWidth, 46)];
+    self.nxtTrack = [[UIButton alloc]initWithFrame:CGRectMake(controlsWidth*2, screenBounds.size.height-55, controlsWidth, 46)];
     _nxtTrack.backgroundColor = [UIColor clearColor];
     [_nxtTrack setImage:[UIImage imageNamed:@"next_button"] forState:UIControlStateNormal];
     [_nxtTrack setImage:[UIImage imageNamed:@"next_button_pressed"] forState:UIControlStateHighlighted];
     [_nxtTrack addTarget:kAppDelegate action:@selector(skipToNextTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_nxtTrack];
     
-    self.volumeView = [[CustomVolumeView alloc]initWithFrame:CGRectMake(30, screenBounds.size.height-80, screenBounds.size.width-60, 25)];
+    self.volumeView = [[CustomVolumeView alloc]initWithFrame:CGRectMake(30, screenBounds.size.height-75, screenBounds.size.width-60, 25)];
     [self.view addSubview:_volumeView];
     
     self.loopControl = [TextToggleControl control];
