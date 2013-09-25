@@ -21,7 +21,7 @@ assert(2 == [Foo count:2]);
 assert(6 == [Foo count:4]);*/
 
 #import "DroppinBadassBlocks.h"
-#import <DropboxSDK/DBRestClient.h>
+#import "DBRestClient.h"
 #import <objc/runtime.h>
 
 static NSString * const RequestIdentifiersStringKey = @"risk";

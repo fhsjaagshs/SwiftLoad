@@ -55,7 +55,6 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 - (void)sendFileInEmail:(NSString *)file;
 
 // Downloading
-- (void)downloadFileUsingSFTP:(NSURL *)url withUsername:(NSString *)username andPassword:(NSString *)password;
 - (void)downloadFile:(NSString *)stouPrelim;
 
 @end

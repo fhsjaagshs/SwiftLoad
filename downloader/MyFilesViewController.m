@@ -124,8 +124,6 @@ static NSString *CellIdentifier = @"Cell";
     } else if (index == 2) {
         [self presentViewController:[DropboxBrowserViewController viewControllerWhite] animated:YES completion:nil];
     } else if (index == 3) {
-        [self presentViewController:[SFTPBrowserViewController viewControllerWhite] animated:YES completion:nil];
-    } else if (index == 4) {
         [self presentViewController:[SettingsView viewControllerWhite] animated:YES completion:nil];
     }
 }
@@ -570,7 +568,7 @@ static NSString *CellIdentifier = @"Cell";
     }
 }
 
-- (void)actionSheetAction:(UIActionSheet *)actionSheet buttonIndex:(int)buttonIndex {
+- (void)actionSheetAction:(UIActionSheet *)actionSheet buttonIndex:(NSUInteger)buttonIndex {
     
     if (buttonIndex == actionSheet.cancelButtonIndex) {
         return;
@@ -648,7 +646,7 @@ static NSString *CellIdentifier = @"Cell";
     }
     
     for (NSDictionary *buttonInfo in buttonData) {
-        int index = [buttonData indexOfObject:buttonInfo];
+        NSUInteger index = [buttonData indexOfObject:buttonInfo];
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.frame = CGRectMake(index*((backgroundView.bounds.size.width)/buttonData.count), 0, ((backgroundView.bounds.size.width)/buttonData.count), backgroundView.bounds.size.height);
         button.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
@@ -667,7 +665,7 @@ static NSString *CellIdentifier = @"Cell";
     NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:_currentlySwipedCell.textLabel.text];
     [kAppDelegate setOpenFile:file];
     
-    int number = button.tag-1;
+    long number = button.tag-1;
     
     if (number == 0) {
         NSString *message = [NSString stringWithFormat:@"What would you like to do with %@?",file.lastPathComponent];

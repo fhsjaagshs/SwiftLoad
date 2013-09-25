@@ -53,7 +53,7 @@
 	return self;
 }
 
-- (id)initWithError:(NSInteger)error reason:(NSString *)reason {
+- (id)initWithError:(int)error reason:(NSString *)reason {
     self = [super initWithName:@"ZipException" reason:reason userInfo:nil];
 	if (self) {
 		_error = error;

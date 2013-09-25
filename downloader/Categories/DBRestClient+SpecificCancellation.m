@@ -11,7 +11,7 @@
 @implementation DBRestClient (SpecificCancellation)
 
 - (int)cancelAllDownloads {
-    int count = loadRequests.allValues.count;
+    int count = (int)loadRequests.allValues.count;
     for (DBRequest *request in loadRequests.allValues) {
         [request cancel];
     }
@@ -20,7 +20,7 @@
 }
 
 - (int)cancelAllMiscRequests {
-    int count = requests.count;
+    int count = (int)requests.count;
     for (DBRequest *request in requests) {
         
         NSString *url = request.request.URL.absoluteString;

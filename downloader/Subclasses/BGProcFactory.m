@@ -28,7 +28,7 @@ static BGProcFactory *sharedInstance = nil;
         identifier = UIBackgroundTaskInvalid;
     }];
     
-    _core[key] = [NSString stringWithFormat:@"%u",identifier];
+    _core[key] = [NSString stringWithFormat:@"%lu",(unsigned long)identifier];
 }
 
 - (void)endProcForKey:(NSString *)key {

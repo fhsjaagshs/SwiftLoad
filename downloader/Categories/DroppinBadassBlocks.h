@@ -14,7 +14,7 @@
 
 + (void)uploadFile:(NSString *)filename toPath:(NSString *)path withParentRev:(NSString *)parentRev fromPath:(NSString *)sourcePath withBlock:(void(^)(NSString *destPath, NSString *srcPath, DBMetadata *metadata, NSError *error))block andProgressBlock:(void(^)(CGFloat progress, NSString *destPath, NSString *scrPath))pBlock;
 + (void)loadSharableLinkForFile:(NSString *)path andCompletionBlock:(void(^)(NSString *link, NSString *path, NSError *error))block;
-+ (void)loadFile:(NSString *)path intoPath:(NSString *)destinationPath withCompletionBlock:(void(^)(DBMetadata *metadata, NSError *error))block andProgressBlock:(void(^)(CGFloat progress))progBlock;
++ (void)loadFile:(NSString *)path intoPath:(NSString *)destinationPath withCompletionBlock:(void(^)(DBMetadata *metadata, NSError *error))block andProgressBlock:(void(^)(float progress))progBlock;
 + (void)loadMetadata:(NSString *)path withCompletionBlock:(void(^)(DBMetadata *metadata, NSError *error))block;
 + (void)loadDelta:(NSString *)cursor withCompletionHandler:(void(^)(NSArray *entries, NSString *cursor, BOOL hasMore, BOOL shouldReset, NSError *error))block;
 + (void)loadAccountInfoWithCompletionBlock:(void(^)(DBAccountInfo *info, NSError *error))block;

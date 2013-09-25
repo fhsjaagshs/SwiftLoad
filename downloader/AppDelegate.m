@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#include <sys/stat.h>
 
 NSString * const NSFileName = @"NSFileName";
 NSString * const kCopyListChangedNotification = @"copiedlistchanged";
@@ -200,10 +201,10 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     NSArray *dirContents = [[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil];
     NSArray *audioFiles = [[dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension.lowercaseString IN %@", extensions]]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
 
-    int nextIndex = [audioFiles indexOfObject:_nowPlayingFile.lastPathComponent]-1;
+    int nextIndex = (int)[audioFiles indexOfObject:_nowPlayingFile.lastPathComponent]-1;
     
     if (nextIndex < 0) {
-        nextIndex = audioFiles.count-1;
+        nextIndex = (int)audioFiles.count-1;
     }
     
     NSString *newFile = [currentDir stringByAppendingPathComponent:audioFiles[nextIndex]];
@@ -243,8 +244,8 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     NSArray *dirContents = [[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil];
     NSArray *audioFiles = [[dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension.lowercaseString IN %@", extensions]]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
 
-    int maxIndex = audioFiles.count-1;
-    int nextIndex = [audioFiles indexOfObject:_nowPlayingFile.lastPathComponent]+1;
+    int maxIndex = (int)audioFiles.count-1;
+    int nextIndex = (int)[audioFiles indexOfObject:_nowPlayingFile.lastPathComponent]+1;
     
     if (nextIndex > maxIndex) {
         nextIndex = 0;
@@ -346,7 +347,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     
     void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) = ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
         if (error) {
-            [UIAlertView showAlertWithTitle:[NSString stringWithFormat:@"Error %u",error.code] andMessage:error.localizedDescription];
+            [UIAlertView showAlertWithTitle:[NSString stringWithFormat:@"Error %ld",(long)error.code] andMessage:error.localizedDescription];
         }
     };
     
@@ -355,11 +356,6 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     } else {
         [pic presentAnimated:YES completionHandler:completionHandler];
     }
-}
-
-- (void)downloadFileUsingSFTP:(NSURL *)url withUsername:(NSString *)username andPassword:(NSString *)password {
-    SFTPDownload *download = [SFTPDownload downloadWithURL:url username:username andPassword:password];
-    [[TaskController sharedController]addTask:download];
 }
 
 - (void)downloadFile:(NSString *)stouPrelim {

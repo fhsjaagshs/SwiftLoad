@@ -44,7 +44,7 @@
         } else {
             [self showSuccess];
         }
-    } andProgressBlock:^(CGFloat progress) {
+    } andProgressBlock:^(float progress) {
         NSLog(@"It progressed %f",progress);
         if (self.delegate) {
             [self.delegate setProgress:progress];

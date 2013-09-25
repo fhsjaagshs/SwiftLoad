@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Nathaniel Symer. All rights reserved.
 //
 
-#import <DropboxSDK/DropboxSDK.h>
+#import "DropboxSDK.h"
 
 @interface DBRestClient (SpecificCancellation)
 

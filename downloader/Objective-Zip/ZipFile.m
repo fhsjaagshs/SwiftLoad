@@ -94,12 +94,12 @@
 - (zip_fileinfo)zipFileInfoWithDate:(NSDate *)filedate {
     NSDateComponents *components = [[NSCalendar currentCalendar] components:(NSSecondCalendarUnit | NSMinuteCalendarUnit | NSHourCalendarUnit | NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit) fromDate:filedate];
     zip_fileinfo zi;
-	zi.tmz_date.tm_sec = components.second;
-	zi.tmz_date.tm_min = components.minute;
-	zi.tmz_date.tm_hour = components.hour;
-	zi.tmz_date.tm_mday = components.day;
-	zi.tmz_date.tm_mon = components.month-1;
-	zi.tmz_date.tm_year = components.year;
+	zi.tmz_date.tm_sec = (uInt)components.second;
+	zi.tmz_date.tm_min = (uInt)components.minute;
+	zi.tmz_date.tm_hour = (uInt)components.hour;
+	zi.tmz_date.tm_mday = (uInt)components.day;
+	zi.tmz_date.tm_mon = (uInt)components.month-1;
+	zi.tmz_date.tm_year = (uInt)components.year;
 	zi.internal_fa = 0;
 	zi.external_fa = 0;
 	zi.dosDate = 0;
@@ -194,7 +194,7 @@
 }
 
 - (NSArray *)listFileInZipInfos {
-	int num = [self numFilesInZip];
+	NSUInteger num = [self numFilesInZip];
 	if (num < 1) {
 		return @[];
     }

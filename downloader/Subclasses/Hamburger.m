@@ -125,7 +125,7 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return (section == 0)?5:[[TaskController sharedController]numberOfTasks];
+    return (section == 0)?4:[[TaskController sharedController]numberOfTasks];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -133,8 +133,6 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    int row = indexPath.row;
     
     if (indexPath.section == 0) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifierHamburger];
@@ -150,15 +148,13 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
             cell.backgroundColor = [UIColor clearColor];
         }
         
-        if (row == 0) {
+        if (indexPath.row == 0) {
             cell.textLabel.text = @"Download URL";
-        } else if (row == 1) {
+        } else if (indexPath.row == 1) {
             cell.textLabel.text = @"WebDAV Server";
-        } else if (row == 2) {
+        } else if (indexPath.row == 2) {
             cell.textLabel.text = @"Browse Dropbox";
-        } else if (row == 3) {
-            cell.textLabel.text = @"Browse SFTP";
-        } else if (row == 4) {
+        } else if (indexPath.row == 3) {
             cell.textLabel.text = @"Settings";
         }
         
@@ -170,7 +166,7 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
             cell = [[TaskCell alloc]initWithReuseIdentifier:kCellIdentifierHamburgerTask];
         }
         
-        Task *task = [[TaskController sharedController]taskAtIndex:row];
+        Task *task = [[TaskController sharedController]taskAtIndex:(int)indexPath.row];
         task.delegate = cell;
         [cell setText:[task.name percentSanitize]];
         [cell setDetailText:[task verb]];
@@ -209,16 +205,16 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
     if (indexPath.row < 5) {
         
     } else {
-        Task *task = [[TaskController sharedController]taskAtIndex:indexPath.row-5];
+        Task *task = [[TaskController sharedController]taskAtIndex:(int)indexPath.row-5];
         
         if ([task isKindOfClass:[HTTPDownload class]]) {
-            // resume
+            [(HTTPDownload *)task resumeFromFailure];
         }
     }
     
     if (_delegate && [_delegate respondsToSelector:@selector(hamburgerCellWasSelectedAtIndex:)]) {
         [_item hide];
-        [_delegate hamburgerCellWasSelectedAtIndex:indexPath.row];
+        [_delegate hamburgerCellWasSelectedAtIndex:(int)indexPath.row];
     }
     
     
@@ -231,14 +227,14 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 1 && indexPath.row < [[TaskController sharedController]numberOfTasks]) {
-        return [[[TaskController sharedController]taskAtIndex:indexPath.row]canStop];
+        return [[[TaskController sharedController]taskAtIndex:(int)indexPath.row]canStop];
     }
     return NO;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [[TaskController sharedController]removeTaskAtIndex:indexPath.row];
+        [[TaskController sharedController]removeTaskAtIndex:(int)indexPath.row];
         [_theTableView beginUpdates];
         [_theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         
@@ -271,6 +267,8 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
         CGContextStrokePath(context);
         
         CGContextRestoreGState(context);
+    } else {
+        [super drawRect:rect];
     }
 }
 

@@ -56,7 +56,7 @@
 }
 
 - (int)occurencesOfString:(NSString *)string {
-    return ([self componentsSeparatedByString:string].count-1);
+    return (int)([self componentsSeparatedByString:string].count-1);
 }
 
 - (BOOL)containsString:(NSString *)otherString {

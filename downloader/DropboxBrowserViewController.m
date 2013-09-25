@@ -134,12 +134,12 @@ static NSString *CellIdentifier = @"dbcell";
     [_database open];
     [_database beginTransaction];
     
-    int length = metadatas.count;
+    NSUInteger length = metadatas.count;
     
     // IMPORTANT INFO: the row constructor (multi-value insert command) has a hard limit of 1000 rows. But for some reason, Anything above 100 doesnt work... So I just do 25 to 50...
     
     for (int location = 0; location < length; location+=50) {
-        unsigned int size = length-location;
+        NSUInteger size = length-location;
         if (size > 50)  {
             size = 50;
         }
@@ -152,8 +152,8 @@ static NSString *CellIdentifier = @"dbcell";
             NSString *lowercasePath = [[item.path stringByDeletingLastPathComponent]fhs_normalize];
             int type = item.isDirectory?2:1;
             int date = item.lastModifiedDate.timeIntervalSince1970;
-            int size = item.totalBytes;
-            [query appendFormat:@"(%d,%d,%d,\"%@\",\"%@\"),",date,size,type,filename,lowercasePath];
+            long long size = item.totalBytes;
+            [query appendFormat:@"(%d,%lld,%d,\"%@\",\"%@\"),",date,size,type,filename,lowercasePath];
         }
         
         [query deleteCharactersInRange:NSMakeRange(query.length-1, 1)];
@@ -199,7 +199,7 @@ static NSString *CellIdentifier = @"dbcell";
     NSString *filename = item.filename;
     NSNumber *type = @(item.isDirectory?2:1);
     NSNumber *date = [NSNumber numberWithInt:item.lastModifiedDate.timeIntervalSince1970];
-    NSNumber *size = [NSNumber numberWithInt:item.totalBytes];
+    NSNumber *size = [NSNumber numberWithLongLong:item.totalBytes];
     
     FMResultSet *s = [_database executeQuery:@"SELECT type FROM dropbox_data WHERE filename=? and lowercasepath=? LIMIT 1",filename,lowercasePath];
     BOOL shouldUpdate = [s next];
@@ -222,7 +222,7 @@ static NSString *CellIdentifier = @"dbcell";
         [DroppinBadassBlocks loadAccountInfoWithCompletionBlock:^(DBAccountInfo *info, NSError *error) {
             [[NetworkActivityController sharedController]hideIfPossible];
             if (error) {
-                [UIAlertView showAlertWithTitle:[NSString stringWithFormat:@"Dropbox Error %d",error.code] andMessage:error.localizedDescription];
+                [UIAlertView showAlertWithTitle:[NSString stringWithFormat:@"Dropbox Error %ld",(long)error.code] andMessage:error.localizedDescription];
             } else {
                 self.userID = info.userId;
                 [self loadUserID];

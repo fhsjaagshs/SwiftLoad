@@ -19,7 +19,7 @@ static NSString * const cellId = @"TaskCell";
 @implementation TaskController
 
 - (int)numberOfTasks {
-    return _taskObjs.count;
+    return (int)_taskObjs.count;
 }
 
 - (Task *)taskAtIndex:(int)index {
@@ -32,7 +32,7 @@ static NSString * const cellId = @"TaskCell";
         return -1;
     }
     
-    return [_taskObjs indexOfObject:task];
+    return (int)[_taskObjs indexOfObject:task];
 }
 
 - (void)removeAllTasks {
@@ -62,7 +62,7 @@ static NSString * const cellId = @"TaskCell";
 }
 
 - (int)tagForTask:(Task *)task {
-    return [_taskObjs indexOfObject:task];
+    return (int)[_taskObjs indexOfObject:task];
 }
 
 - (instancetype)init {
