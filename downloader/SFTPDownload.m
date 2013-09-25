@@ -11,7 +11,7 @@
 @interface SFTPDownload ()
 
 @property (nonatomic, strong) NSURL *URL;
-@property (nonatomic, strong) DLSFTPConnection *connection;
+//@property (nonatomic, strong) DLSFTPConnection *connection;
 
 @end
 
@@ -26,14 +26,14 @@
     if (self) {
         self.URL = url;
         self.name = [_URL.path.lastPathComponent percentSanitize];
-        self.connection = [[DLSFTPConnection alloc]initWithHostname:_URL.host username:username password:password];
+       // self.connection = [[DLSFTPConnection alloc]initWithHostname:_URL.host username:username password:password];
     }
     return self;
 }
 
 - (void)stop {
-    [_connection cancelAllRequests];
-    [_connection disconnect];
+   // [_connection cancelAllRequests];
+  //  [_connection disconnect];
     [super stop];
 }
 
@@ -42,7 +42,7 @@
     
     self.temporaryPath = getNonConflictingFilePathForPath([NSTemporaryDirectory() stringByAppendingPathComponent:self.name]);
     
-    [_connection connectWithSuccessBlock:^{
+    /*[_connection connectWithSuccessBlock:^{
         dispatch_sync(dispatch_get_main_queue(), ^{
             @autoreleasepool {
                 DLSFTPDownloadRequest *req = [[DLSFTPDownloadRequest alloc]initWithRemotePath:_URL.path localPath:self.temporaryPath resume:NO successBlock:^(DLSFTPFile *file, NSDate *startTime, NSDate *finishTime) {
@@ -75,7 +75,7 @@
                 [UIAlertView showAlertWithTitle:@"SFTP Login Error" andMessage:error.localizedDescription.stringByCapitalizingFirstLetter];
             }
         });
-    }];
+    }];*/
 }
 
 

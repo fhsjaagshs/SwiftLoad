@@ -120,17 +120,13 @@ static NSString *CellIdentifier = @"Cell";
         
         [av show];
     } else if (index == 1) {
-        WebDAVViewController *advc = [WebDAVViewController viewControllerWhite];
-        [self presentViewController:advc animated:YES completion:nil];
+        [self presentViewController:[WebDAVViewController viewControllerWhite] animated:YES completion:nil];
     } else if (index == 2) {
-        DropboxBrowserViewController *d = [DropboxBrowserViewController viewControllerWhite];
-        [self presentViewController:d animated:YES completion:nil];
+        [self presentViewController:[DropboxBrowserViewController viewControllerWhite] animated:YES completion:nil];
     } else if (index == 3) {
-        SFTPBrowserViewController *s = [SFTPBrowserViewController viewControllerWhite];
-        [self presentViewController:s animated:YES completion:nil];
+        [self presentViewController:[SFTPBrowserViewController viewControllerWhite] animated:YES completion:nil];
     } else if (index == 4) {
-        SettingsView *d = [SettingsView viewControllerWhite];
-        [self presentViewController:d animated:YES completion:nil];
+        [self presentViewController:[SettingsView viewControllerWhite] animated:YES completion:nil];
     }
 }
 
@@ -158,8 +154,6 @@ static NSString *CellIdentifier = @"Cell";
     
     [[FilesystemMonitor sharedMonitor]invalidate];
     
-    [_theTableView beginUpdates];
-    
     NSMutableArray *itemsToRemove = [NSMutableArray arrayWithCapacity:selectedRows.count];
     
     for (NSIndexPath *indexPath in _theTableView.indexPathsForSelectedRows) {
@@ -172,6 +166,7 @@ static NSString *CellIdentifier = @"Cell";
     
     [_filelist removeObjectsInArray:itemsToRemove];
     
+    [_theTableView beginUpdates];
     [_theTableView deleteRowsAtIndexPaths:selectedRows withRowAnimation:UITableViewRowAnimationRight];
     [_theTableView endUpdates];
     
@@ -269,11 +264,8 @@ static NSString *CellIdentifier = @"Cell";
         
         for (NSString *filename in all) {
             NSString *full = [currentDir stringByAppendingPathComponent:filename];
-            
-            BOOL isDir = NO;
-            [[NSFileManager defaultManager]fileExistsAtPath:full isDirectory:&isDir];
-            
-            if (isDir) {
+
+            if (isDirectory(full)) {
                 if ([currentDir isEqualToString:docsDir]) {
                     if (![filename isEqualToString:@"Inbox"]) {
                         [dirs addObject:filename];
@@ -386,10 +378,8 @@ static NSString *CellIdentifier = @"Cell";
     NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:filesObjectAtIndex];
     
     cell.textLabel.text = filesObjectAtIndex;
-    
-    BOOL isDir;
-    
-    if ([[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir] && isDir) {
+
+    if (isDirectory(file)) {
         cell.detailTextLabel.text = @"Directory";
         cell.imageView.image = [UIImage imageNamed:@"folder_icon"];
         cell.swipeEnabled = NO;
@@ -416,9 +406,7 @@ static NSString *CellIdentifier = @"Cell";
     NSString *file = [ad.managerCurrentDir stringByAppendingPathComponent:cellName];
     ad.openFile = file;
 
-    BOOL isDir;
-    
-    if ([[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir] && isDir) {
+    if (isDirectory(file)) {
         
         _navBar.topItem.title = [_navBar.topItem.title stringByAppendingPathComponent:file.lastPathComponent];
         
@@ -529,8 +517,7 @@ static NSString *CellIdentifier = @"Cell";
     } else {
         [self reindexFilelistIfNecessary];
         NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:_filelist[indexPath.row]];
-        BOOL isDir;
-        return ([[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir] && isDir);
+        return isDirectory(file);
     }
 }
 
@@ -564,10 +551,7 @@ static NSString *CellIdentifier = @"Cell";
     
     NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:_filelist[indexPath.row]];
     
-    BOOL isDir;
-    [[NSFileManager defaultManager]fileExistsAtPath:file isDirectory:&isDir];
-    
-    if (isDir) {
+    if (isDirectory(file)) {
         return UITableViewCellEditingStyleDelete;
     }
     return UITableViewCellEditingStyleNone;

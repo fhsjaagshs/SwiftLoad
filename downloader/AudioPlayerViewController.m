@@ -151,7 +151,7 @@
     [_nxtTrack addTarget:kAppDelegate action:@selector(skipToNextTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_nxtTrack];
     
-    self.volumeView = [[CustomVolumeView alloc]initWithFrame:CGRectMake(30, screenBounds.size.height-75, screenBounds.size.width-60, 25)];
+    self.volumeView = [[CustomVolumeView alloc]initWithFrame:CGRectMake(30, screenBounds.size.height-85, screenBounds.size.width-60, 25)];
     [self.view addSubview:_volumeView];
     
     self.loopControl = [TextToggleControl control];
@@ -280,7 +280,6 @@
     int remainingMinutes = floor(remainingTime/60);
     int remainingSeconds = abs(remainingTime-(remainingMinutes*60));
     _secondsRemaining.text = [NSString stringWithFormat:@"-%d:%@%d",remainingMinutes,((remainingSeconds < 10)?@"0":@""),remainingSeconds];
-    
 }
 
 - (void)showActionSheet:(id)sender {

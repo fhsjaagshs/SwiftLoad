@@ -88,7 +88,7 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session)
     sock = socket(AF_INET, SOCK_STREAM, 0);
     sock_serv_addr.sin_family = AF_INET;
     sock_serv_addr.sin_port = htons(port);
-    sock_serv_addr.sin_addr.s_addr = hostaddr;
+    sock_serv_addr.sin_addr.s_addr = (unsigned int)hostaddr;
     if (connect(sock, (struct sockaddr *) (&sock_serv_addr), sizeof(sock_serv_addr)) != 0) {
         *error = [NSError errorWithDomain:@"de.felixschulze.sshwrapper" code:400 userInfo:@{NSLocalizedDescriptionKey:@"Failed to connect"}];
         return;

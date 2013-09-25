@@ -7,6 +7,7 @@
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
+    #import <NMSSH/NMSSH.h>
     #import <DropboxSDK/DropboxSDK.h>
     #import <MobileCoreServices/MobileCoreServices.h>
     #import <QuartzCore/QuartzCore.h>
@@ -34,7 +35,6 @@
 
     #import "Hamburger.h"
 
-    #import "DLSFTP-all.h"
     #import "SFTPCreds.h"
     #import "FMDatabase.h"
     #import "SimpleKeychain.h"
@@ -56,8 +56,6 @@
     #import "SwipeCell.h"
     #import "DashedLineView.h"
     #import "CustomVolumeView.h"
-
-    #import "SFTPLoginController.h"
 
     #import "MBProgressHUD.h"
     #import "MarqueeLabel.h"
@@ -100,6 +98,7 @@
     #import "MyFilesViewController.h"
     #import "SettingsView.h"
     #import "DropboxBrowserViewController.h"
+    #import "SFTPLoginViewController.h"
     #import "SFTPBrowserViewController.h"
     #import "EditID3ViewController.h"
 

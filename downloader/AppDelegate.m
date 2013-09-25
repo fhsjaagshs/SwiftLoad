@@ -11,6 +11,12 @@
 NSString * const NSFileName = @"NSFileName";
 NSString * const kCopyListChangedNotification = @"copiedlistchanged";
 
+float fileSize(NSString *filePath) {
+    struct stat statbuf;
+    stat(filePath.UTF8String, &statbuf);
+    return (float)statbuf.st_size;
+}
+
 float systemVersion(void) {
     static float systemVersion = -1;
     static dispatch_once_t onceToken;
@@ -18,6 +24,12 @@ float systemVersion(void) {
         systemVersion = [UIDevice currentDevice].systemVersion.floatValue;
     });
     return systemVersion;
+}
+
+BOOL isDirectory(NSString *filePath) {
+    struct stat statbuf;
+    stat(filePath.UTF8String, &statbuf);
+    return S_ISDIR(statbuf.st_mode);
 }
 
 void fireFinishDLNotification(NSString *filename) {
@@ -46,11 +58,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     NSString *ext = [path pathExtension];
     int appendNumber = 1;
     
-    do {
-        if (![[NSFileManager defaultManager]fileExistsAtPath:path]) {
-            break;
-        }
-        
+    while ([[NSFileManager defaultManager]fileExistsAtPath:path]) {
         path = [[oldPath stringByDeletingPathExtension]stringByAppendingString:[NSString stringWithFormat:@" - %d",appendNumber]];
         
         if (ext.length > 0) {
@@ -58,7 +66,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
         }
         
         appendNumber = appendNumber+1;
-    } while (YES);
+    }
     
     return path;
 }

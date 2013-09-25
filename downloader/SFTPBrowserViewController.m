@@ -16,13 +16,13 @@
 @property (nonatomic, strong) NSString *currentURL;
 @property (nonatomic, strong) NSMutableArray *filedicts;
 
-@property (nonatomic, strong) DLSFTPConnection *connection;
-@property (nonatomic, strong) NSString *username;
-@property (nonatomic, strong) NSString *password;
+@property (nonatomic, strong) NMSFTP *sftp;
 
 @property (nonatomic, strong) NSString *currentPath;
 
 @property (nonatomic, strong) FMDatabase *memCache;
+
+@property (nonatomic, assign) BOOL hasShownLoginController;
 
 @end
 
@@ -30,44 +30,42 @@
 
 - (void)loadView {
     [super loadView];
-    
-    CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
-    BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
-    
-    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 44)];
-    self.navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+
+    CGRect screenBounds = [[UIScreen mainScreen]bounds];
+
+    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
+    _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"/"];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"ArrowLeft"] style:UIBarButtonItemStyleBordered target:self action:@selector(goBackDir)];
     topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
-    [self.navBar pushNavigationItem:topItem animated:YES];
-    [self.view addSubview:self.navBar];
+    [_navBar pushNavigationItem:topItem animated:YES];
+    [self.view addSubview:_navBar];
 
-    self.theTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 44, screenBounds.size.width, screenBounds.size.height-44) style:UITableViewStylePlain];
-    self.theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    self.theTableView.rowHeight = iPad?60:44;
-    self.theTableView.dataSource = self;
-    self.theTableView.delegate = self;
-    [self.view addSubview:self.theTableView];
+    self.theTableView = [[UITableView alloc]initWithFrame:screenBounds];
+    _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    _theTableView.rowHeight = 44;
+    _theTableView.dataSource = self;
+    _theTableView.delegate = self;
+    _theTableView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0);
+    _theTableView.scrollIndicatorInsets = _theTableView.contentInset;
+    [self.view addSubview:_theTableView];
     
-    self.pull = [[PullToRefreshView alloc]initWithScrollView:self.theTableView];
-    [self.pull setDelegate:self];
-    [self.theTableView addSubview:self.pull];
+    self.pull = [[PullToRefreshView alloc]initWithScrollView:_theTableView];
+    [_pull setDelegate:self];
+    [_theTableView addSubview:_pull];
+    
+    [self.view bringSubviewToFront:_navBar];
     
     self.filedicts = [NSMutableArray array];
     
-    [self showInitialLoginController];
-    
     self.memCache = [FMDatabase databaseWithPath:nil]; // nil path means that the database will be created in memory: lighting fuckin fast
     [_memCache open];
-    [_memCache executeUpdate:@"CREATE TABLE sftp_cache (id INTEGER PRIMARY KEY AUTOINCREMENT, parentpath VARCHAR(255) DEFAULT NULL, filename VARCHAR(255) DEFAULT NULL, type VARCHAR(255) DEFAULT NULL, size INTEGER)"];
-    
-    [self adjustViewsForiOS7];
+    [_memCache executeUpdate:@"CREATE TABLE IF NOT EXISTS sftp_cache (id INTEGER PRIMARY KEY AUTOINCREMENT, parentpath VARCHAR(255) DEFAULT NULL, filename VARCHAR(255) DEFAULT NULL, type VARCHAR(255) DEFAULT NULL, size INTEGER)"];
 }
 
 - (void)goBackDir {
-    
-    [_connection cancelAllRequests];
+    //[_connection cancelAllRequests];
     
     [_filedicts removeAllObjects];
     
@@ -135,7 +133,15 @@
     self.filedicts = [NSMutableArray array];
     [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     
-    DLSFTPRequest *req = [[DLSFTPListFilesRequest alloc]initWithDirectoryPath:_currentPath successBlock:^(NSArray *array) {
+    NSArray *fileContents = [_sftp contentsOfDirectoryAtPath:_currentPath];
+    
+    if (fileContents.count > 0) {
+        NSLog(@"%@",fileContents);
+    } else {
+        
+    }
+    
+    /*DLSFTPRequest *req = [[DLSFTPListFilesRequest alloc]initWithDirectoryPath:_currentPath successBlock:^(NSArray *array) {
         dispatch_sync(dispatch_get_main_queue(), ^{
             @autoreleasepool {
                 for (DLSFTPFile *sftpFile in array) {
@@ -160,7 +166,7 @@
             }
         });
     }];
-    [_connection submitRequest:req];
+    [_connection submitRequest:req];*/
 }
 
 - (void)addComponentToPath:(NSString *)pathComponent {
@@ -173,50 +179,73 @@
     self.navBar.topItem.title = _currentPath;
 }
 
-- (void)showInitialLoginController {
-    
-    SFTPLoginController *controller = [[SFTPLoginController alloc]initWithType:SFTPLoginControllerTypeLogin andCompletionHandler:^(NSString *username, NSString *password, NSString *url) {
-        if ([username isEqualToString:@"cancel"]) {
-            [self dismissViewControllerAnimated:YES completion:nil];
-        } else {
-            self.currentURL = url;
-            NSURL *URL = [NSURL URLWithString:_currentURL];
-            [SFTPCreds saveUsername:username andPassword:password forURL:URL];
-            self.currentPath = URL.path;
-            self.navBar.topItem.title = _currentPath;
-            self.username = username;
-            self.password = password;
-            self.connection = [[DLSFTPConnection alloc]initWithHostname:URL.host username:_username password:_password];
-            [[NetworkActivityController sharedController]show];
-            [_pull setState:PullToRefreshViewStateLoading];
-            [_connection connectWithSuccessBlock:^{
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    @autoreleasepool {
-                        [[NetworkActivityController sharedController]hideIfPossible];
-                        _navBar.topItem.leftBarButtonItem.enabled = (_currentPath.length > 1);
-                        [self loadCurrentDirectoryFromSFTP];
-                    }
-                });
-            } failureBlock:^(NSError *error) {
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    @autoreleasepool {
-                        [[NetworkActivityController sharedController]hideIfPossible];
-                        _navBar.topItem.leftBarButtonItem.enabled = (_currentPath.length > 1);
-                        [UIAlertView showAlertWithTitle:@"SFTP Login Error" andMessage:error.localizedDescription]; // improve this later
-                        [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationRight];
-                        [_pull finishedLoading];
-                    }
-                });
-            }];
-        }
-    }];
-    controller.textFieldDelegate = self;
-    controller.didMoveOnSelector = @selector(didMoveOn);
-    
-    [controller show];
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    if (!_hasShownLoginController) {
+        [self showInitialLoginController];
+    }
 }
 
-- (void)didMoveOn:(SFTPLoginController *)controller {
+- (void)showInitialLoginController {
+    SFTPLoginViewController *loginViewController = [SFTPLoginViewController viewController];
+    [loginViewController setLoginBlock:^(NSString *url, NSString *username, NSString *password) {
+        self.hasShownLoginController = YES;
+        self.currentURL = url;
+        NSURL *URL = [NSURL URLWithString:_currentURL];
+        [SFTPCreds saveUsername:username andPassword:password forURL:URL];
+        self.currentPath = URL.path;
+        self.navBar.topItem.title = _currentPath;
+        
+        NMSSHSession *session = [NMSSHSession connectToHost:[[NSURL URLWithString:url]host] withUsername:username];
+        [session authenticateByPassword:password];
+        
+        if (session.isAuthorized) {
+            [[NetworkActivityController sharedController]show];
+            [_pull setState:PullToRefreshViewStateLoading];
+            
+            self.sftp = [NMSFTP connectWithSession:session];
+            [self loadCurrentDirectoryFromSFTP];
+        } else {
+            [[NetworkActivityController sharedController]hideIfPossible];
+            _navBar.topItem.leftBarButtonItem.enabled = (_currentPath.length > 1);
+            [UIAlertView showAlertWithTitle:@"SFTP Login Error" andMessage:@"Double check that you entered you SFTP username and password correctly"]; // improve this later
+            [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationRight];
+            [_pull finishedLoading];
+        }
+        
+        
+        
+        /*self.connection = [[DLSFTPConnection alloc]initWithHostname:URL.host username:_username password:_password];
+        [[NetworkActivityController sharedController]show];
+        [_pull setState:PullToRefreshViewStateLoading];
+        [_connection connectWithSuccessBlock:^{
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                @autoreleasepool {
+                    [[NetworkActivityController sharedController]hideIfPossible];
+                    _navBar.topItem.leftBarButtonItem.enabled = (_currentPath.length > 1);
+                    [self loadCurrentDirectoryFromSFTP];
+                }
+            });
+        } failureBlock:^(NSError *error) {
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                @autoreleasepool {
+                    [[NetworkActivityController sharedController]hideIfPossible];
+                    _navBar.topItem.leftBarButtonItem.enabled = (_currentPath.length > 1);
+                    [UIAlertView showAlertWithTitle:@"SFTP Login Error" andMessage:error.localizedDescription]; // improve this later
+                    [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationRight];
+                    [_pull finishedLoading];
+                }
+            });
+        }];*/
+    }];
+    [loginViewController setCancellationBlock:^{
+        self.hasShownLoginController = YES;
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }];
+    [self presentViewController:loginViewController animated:YES completion:nil];
+}
+
+/*- (void)didMoveOn:(SFTPLoginController *)controller {
     NSString *url = nil;
     for (UIView *view in controller.subviews) {
         if ([view isKindOfClass:[UITextField class]]) {
@@ -246,13 +275,14 @@
             }
         }
     }
-}
+}*/
 
 - (void)close {
-    [_connection cancelAllRequests];
+   // [_connection cancelAllRequests];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @autoreleasepool {
-            [_connection disconnect];
+            [_sftp disconnect];
+         //   [_connection disconnect];
         }
     });
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -341,7 +371,7 @@
 }
 
 - (void)pullToRefreshViewShouldRefresh:(PullToRefreshView *)view {
-    [_connection cancelAllRequests];
+    //[_connection cancelAllRequests];
     [self loadCurrentDirectoryFromSFTP];
 }
 

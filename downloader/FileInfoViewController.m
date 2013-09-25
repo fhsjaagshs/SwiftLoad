@@ -116,8 +116,7 @@ static NSString * const kFileInfoCellIdentifier = @"kFileInfoCellIdentifier";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    BOOL isDir;
-    return ([[NSFileManager defaultManager]fileExistsAtPath:[kAppDelegate openFile] isDirectory:&isDir] && isDir)?2:4;
+    return isDirectory([kAppDelegate openFile])?2:4;
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {

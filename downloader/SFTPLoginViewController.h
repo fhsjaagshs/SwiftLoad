@@ -10,4 +10,7 @@
 
 @interface SFTPLoginViewController : UIViewController
 
+@property (nonatomic, copy) void(^loginBlock)(NSString *url, NSString *username, NSString *password);
+@property (nonatomic, copy) void(^cancellationBlock)(void);
+
 @end
