@@ -47,7 +47,6 @@
     #import "ZoomingImageView.h"
     #import "ContentOffsetWatchdog.h"
     #import "CircularProgressView.h"
-    #import "TransparentTextField.h"
     #import "TextToggleControl.h"
     #import "DisclosureButton.h"
     #import "SwiftLoadCell.h"

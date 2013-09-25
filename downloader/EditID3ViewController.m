@@ -8,13 +8,13 @@
 
 #import "EditID3ViewController.h"
 
-@interface EditID3ViewController () <UITextFieldDelegate>
+static NSString * const kID3EditorCellID = @"kID3EditorCellID";
 
-@property (nonatomic, strong) TransparentTextField *artistLabel;
-@property (nonatomic, strong) TransparentTextField *titleLabel;
-@property (nonatomic, strong) TransparentTextField *albumLabel;
+@interface EditID3ViewController () <UITextFieldDelegate, UITableViewDataSource>
 
-@property (nonatomic, strong) UINavigationBar *navBar;
+@property (nonatomic, strong) UITextField *artistField;
+@property (nonatomic, strong) UITextField *titleField;
+@property (nonatomic, strong) UITextField *albumField;
 
 @property (nonatomic, strong) NSMutableDictionary *tag;
 
@@ -26,38 +26,75 @@
     [super loadView];
     
     CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
-
-    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
-    _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    
+    UITableView *theTableView = [[UITableView alloc]initWithFrame:screenBounds style:UITableViewStyleGrouped];
+    theTableView.dataSource = self;
+    theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    theTableView.rowHeight = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)?60:44;
+    theTableView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0);
+    theTableView.scrollIndicatorInsets = theTableView.contentInset;
+    [self.view addSubview:theTableView];
+    
+    UINavigationBar *navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
+    navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"Edit Metadata"];
     topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Save" style:UIBarButtonItemStyleBordered target:self action:@selector(writeTags)];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
-    [_navBar pushNavigationItem:topItem animated:YES];
-    [self.view addSubview:_navBar];
+    [navBar pushNavigationItem:topItem animated:YES];
+    [self.view addSubview:navBar];
     
-    self.artistLabel = [[TransparentTextField alloc]initWithFrame:CGRectMake(10, 64+10, screenBounds.size.width-20, 30)];
-    _artistLabel.placeholder = @"Artist";
-    _artistLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _artistLabel.textAlignment = NSTextAlignmentCenter;
-    _artistLabel.textColor = [UIColor blackColor];
-    _artistLabel.font = [UIFont systemFontOfSize:15];
-    [self.view addSubview:_artistLabel];
+    self.artistField = [[UITextField alloc]init];
+    _artistField.returnKeyType = UIReturnKeyDone;
+    _artistField.placeholder = @"Artist";
+    _artistField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    _artistField.textColor = [UIColor blackColor];
+    _artistField.font = [UIFont systemFontOfSize:18];
+    _artistField.borderStyle = UITextBorderStyleNone;
+    _artistField.keyboardAppearance = UIKeyboardAppearanceAlert;
+    _artistField.backgroundColor = [UIColor whiteColor];
+    _artistField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    _artistField.autocorrectionType = UITextAutocorrectionTypeNo;
+    _artistField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    _artistField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    _artistField.leftViewMode = UITextFieldViewModeAlways;
+    _artistField.leftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 10, 10)];
     
-    self.titleLabel = [[TransparentTextField alloc]initWithFrame:CGRectMake(10, 64+40+10, screenBounds.size.width-20, 30)];
-    _titleLabel.placeholder = @"Title";
-    _titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _titleLabel.textAlignment = NSTextAlignmentCenter;
-    _titleLabel.textColor = [UIColor blackColor];
-    _titleLabel.font = [UIFont systemFontOfSize:15];
-    [self.view addSubview:_titleLabel];
+    self.titleField = [[UITextField alloc]init];
+    _titleField.returnKeyType = UIReturnKeyDone;
+    _titleField.placeholder = @"Title";
+    _titleField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    _titleField.textColor = [UIColor blackColor];
+    _titleField.font = [UIFont systemFontOfSize:18];
+    _titleField.borderStyle = UITextBorderStyleNone;
+    _titleField.keyboardAppearance = UIKeyboardAppearanceAlert;
+    _titleField.backgroundColor = [UIColor whiteColor];
+    _titleField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    _titleField.autocorrectionType = UITextAutocorrectionTypeNo;
+    _titleField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    _titleField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    _titleField.leftViewMode = UITextFieldViewModeAlways;
+    _titleField.leftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 10, 10)];
     
-    self.albumLabel = [[TransparentTextField alloc]initWithFrame:CGRectMake(10, 64+(40*2)+10, screenBounds.size.width-20, 30)];
-    _albumLabel.placeholder = @"Album";
-    _albumLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _albumLabel.textAlignment = NSTextAlignmentCenter;
-    _albumLabel.textColor = [UIColor blackColor];
-    _albumLabel.font = [UIFont systemFontOfSize:15];
-    [self.view addSubview:_albumLabel];
+    self.albumField = [[UITextField alloc]init];
+    _albumField.returnKeyType = UIReturnKeyDone;
+    _albumField.placeholder = @"Album";
+    _albumField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    _albumField.textColor = [UIColor blackColor];
+    _albumField.font = [UIFont systemFontOfSize:18];
+    _albumField.borderStyle = UITextBorderStyleNone;
+    _albumField.keyboardAppearance = UIKeyboardAppearanceAlert;
+    _albumField.backgroundColor = [UIColor whiteColor];
+    _albumField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    _albumField.autocorrectionType = UITextAutocorrectionTypeNo;
+    _albumField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    _albumField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    _albumField.leftViewMode = UITextFieldViewModeAlways;
+    _albumField.leftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 10, 10)];
+    
+    [_artistField addTarget:_artistField action:@selector(resignFirstResponder) forControlEvents:UIControlEventEditingDidEndOnExit];
+    [_titleField addTarget:_titleField action:@selector(resignFirstResponder) forControlEvents:UIControlEventEditingDidEndOnExit];
+    [_albumField addTarget:_albumField action:@selector(resignFirstResponder) forControlEvents:UIControlEventEditingDidEndOnExit];
     
     [self loadTags];
 }
@@ -78,9 +115,9 @@
         _tag[key] = value;
     }
     
-    _artistLabel.text = _tag[@"artist"];
-    _titleLabel.text = _tag[@"title"];
-    _albumLabel.text = _tag[@"album"];
+    _artistField.text = _tag[@"artist"];
+    _titleField.text = _tag[@"title"];
+    _albumField.text = _tag[@"album"];
 }
 
 - (void)close {
@@ -91,19 +128,19 @@
     
     NSString *file = [kAppDelegate openFile];
     
-    if (![_artistLabel.text isEqualToString:_tag[@"artist"]]) {
-        [ID3Editor setArtist:_artistLabel.text forMP3AtPath:file];
-        _tag[@"artist"] = _artistLabel.text;
+    if (![_artistField.text isEqualToString:_tag[@"artist"]]) {
+        [ID3Editor setArtist:_artistField.text forMP3AtPath:file];
+        _tag[@"artist"] = _artistField.text;
     }
     
-    if (![_titleLabel.text isEqualToString:_tag[@"title"]]) {
-        [ID3Editor setTitle:_titleLabel.text forMP3AtPath:file];
-        _tag[@"title"] = _titleLabel.text;
+    if (![_titleField.text isEqualToString:_tag[@"title"]]) {
+        [ID3Editor setTitle:_titleField.text forMP3AtPath:file];
+        _tag[@"title"] = _titleField.text;
     }
     
-    if (![_albumLabel.text isEqualToString:_tag[@"album"]]) {
-        [ID3Editor setAlbum:_albumLabel.text forMP3AtPath:file];
-        _tag[@"album"] = _albumLabel.text;
+    if (![_albumField.text isEqualToString:_tag[@"album"]]) {
+        [ID3Editor setAlbum:_albumField.text forMP3AtPath:file];
+        _tag[@"album"] = _albumField.text;
     }
     
     for (NSString *key in _tag.allKeys) {
@@ -120,6 +157,44 @@
     [AudioPlayerViewController notif_setInfoFieldText:metadata];
     
     [self close];
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 3;
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    return nil;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kID3EditorCellID];
+    
+    if (!cell) {
+        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kID3EditorCellID];
+    }
+    
+    [cell.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    
+    if (indexPath.row == 0) {
+        [cell.contentView addSubview:_artistField];
+        _artistField.frame = cell.bounds;
+    } else if (indexPath.row == 1) {
+        [cell.contentView addSubview:_titleField];
+        _titleField.frame = cell.bounds;
+    } else if (indexPath.row == 2) {
+        [cell.contentView addSubview:_albumField];
+        _albumField.frame = cell.bounds;
+    }
+    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    return cell;
 }
 
 - (NSUInteger)supportedInterfaceOrientations {

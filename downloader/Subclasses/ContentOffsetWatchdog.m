@@ -68,7 +68,7 @@
     if ([keyPath isEqualToString:@"contentOffset"]) {
         if (_mode == WatchdogModeNormal) {
             if (_scrollView.isDragging) {
-                if (_scrollView.contentOffset.y < -40-_scrollView.contentInset.top) {
+                if (_scrollView.contentOffset.y < -35-_scrollView.contentInset.top) {
                     if ([_delegate respondsToSelector:@selector(shouldTripWatchdog:)]) {
                         if ([_delegate shouldTripWatchdog:self] && [_delegate respondsToSelector:@selector(watchdogWasTripped:)]) {
                             [_delegate watchdogWasTripped:self];

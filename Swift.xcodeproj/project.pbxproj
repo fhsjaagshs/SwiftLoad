@@ -193,7 +193,6 @@
 		F1C939CC17F326C400754D5D /* NSDictionary+Dropbox.m in Sources */ = {isa = PBXBuildFile; fileRef = F1C9399F17F326C400754D5D /* NSDictionary+Dropbox.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F1C939CD17F326C400754D5D /* NSString+Dropbox.m in Sources */ = {isa = PBXBuildFile; fileRef = F1C939A317F326C400754D5D /* NSString+Dropbox.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F1CBF07917BA7667003563FD /* EditID3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CBF07717BA7667003563FD /* EditID3ViewController.m */; };
-		F1CBF07D17BA7710003563FD /* TransparentTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CBF07C17BA7710003563FD /* TransparentTextField.m */; };
 		F1D083A517BEFE00003E6700 /* CustomVolumeView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1D083A417BEFE00003E6700 /* CustomVolumeView.m */; };
 		F1D083A817BF081F003E6700 /* scrubber.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D083A617BF081F003E6700 /* scrubber.png */; };
 		F1D083A917BF081F003E6700 /* scrubber@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D083A717BF081F003E6700 /* scrubber@2x.png */; };
@@ -584,8 +583,6 @@
 		F1C939A617F326C400754D5D /* NSURLResponse+Encoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLResponse+Encoding.h"; sourceTree = "<group>"; };
 		F1CBF07617BA7667003563FD /* EditID3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditID3ViewController.h; sourceTree = "<group>"; };
 		F1CBF07717BA7667003563FD /* EditID3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditID3ViewController.m; sourceTree = "<group>"; };
-		F1CBF07B17BA7710003563FD /* TransparentTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransparentTextField.h; sourceTree = "<group>"; };
-		F1CBF07C17BA7710003563FD /* TransparentTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransparentTextField.m; sourceTree = "<group>"; };
 		F1D083A317BEFE00003E6700 /* CustomVolumeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomVolumeView.h; sourceTree = "<group>"; };
 		F1D083A417BEFE00003E6700 /* CustomVolumeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomVolumeView.m; sourceTree = "<group>"; };
 		F1D083A617BF081F003E6700 /* scrubber.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = scrubber.png; path = "Images/Audio Player/scrubber.png"; sourceTree = "<group>"; };
@@ -806,8 +803,6 @@
 			children = (
 				F137F3451791DC70008FCFD7 /* Hamburger */,
 				F173462017EE6E26004A9FD3 /* Cells */,
-				F1CBF07B17BA7710003563FD /* TransparentTextField.h */,
-				F1CBF07C17BA7710003563FD /* TransparentTextField.m */,
 				F1E9F7841773FDF300EC345C /* DisclosureButton.h */,
 				F1E9F7851773FDF300EC345C /* DisclosureButton.m */,
 				F14FE92317E3FC07005A1AB6 /* TextToggleControl.h */,
@@ -1664,7 +1659,6 @@
 				F1C939C617F326C400754D5D /* MPOAuthURLRequest.m in Sources */,
 				F1C939AB17F326C400754D5D /* DBError.m in Sources */,
 				F1C939B517F326C400754D5D /* DBSession.m in Sources */,
-				F1CBF07D17BA7710003563FD /* TransparentTextField.m in Sources */,
 				F1D083A517BEFE00003E6700 /* CustomVolumeView.m in Sources */,
 				F1C939C217F326C400754D5D /* MPOAuthCredentiaIConcreteStore+KeychainAdditionsMac.m in Sources */,
 				F1C4463017E3510C004725FC /* DBRestClient+SpecificCancellation.m in Sources */,
