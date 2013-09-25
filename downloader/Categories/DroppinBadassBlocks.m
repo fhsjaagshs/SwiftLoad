@@ -6,36 +6,11 @@
 //  Copyright (c) 2013 Nathaniel Symer. All rights reserved.
 //
 
-/*__block int b = 0;
-void* blk = ^(id self, int a) {
-    b += a;
-    return b;
-};
-blk = Block_copy(blk);
-IMP imp = imp_implementationWithBlock(blk);
-char *type = block_copyIMPTypeEncoding_np(blk);
-assert(NULL != type);
-class_addMethod((objc_getMetaClass("Foo")), @selector(count:), imp, type);
-free(type);
-assert(2 == [Foo count:2]);
-assert(6 == [Foo count:4]);*/
-
 #import "DroppinBadassBlocks.h"
 #import "DBRestClient.h"
 #import <objc/runtime.h>
 
-static NSString * const RequestIdentifiersStringKey = @"risk";
-
-static NSString * const MetadataBlockStringKey = @"mbsk";
-static NSString * const DownloadProgressBlockStringKey = @"dbsk-1";
-static NSString * const DownloadBlockStringKey = @"dbsk";
-static NSString * const LinkBlockStringKey = @"lbsk";
-static NSString * const DeltaBlockStringKey = @"dbsk";
-static NSString * const UploadBlockStringKey = @"ubsk";
-static NSString * const UploadProgressBlockStringKey = @"ubsk-1";
-static NSString * const loadAccountInfoBlockStringKey = @"laicsk";
-
-static char const * const RequestIdentifiersKey = "rik";
+/*static char const * const ShareableURLBlockKey = "sbk";
 
 static char const * const MetadataBlockKey = "mbk";
 static char const * const DownloadProgressBlockKey = "dbsk-1";
@@ -44,26 +19,21 @@ static char const * const LinkBlockKey = "lbk";
 static char const * const DeltaBlockKey = "dbk";
 static char const * const UploadBlockKey = "ubk";
 static char const * const UploadProgressBlockKey = "ubk-1";
-static char const * const loadAccountInfoBlockKey = "laick";
+static char const * const loadAccountInfoBlockKey = "laick";*/
 
 
 @interface DroppinBadassBlocks () <DBRestClientDelegate>
-+ (id)uploadBlock;
-+ (void)setUploadBlock:(id)newblock;
-+ (id)uploadProgressBlock;
-+ (void)setUploadProgressBlock:(id)newblock;
-+ (id)deltaBlock;
-+ (void)setDeltaBlock:(id)newblock;
-+ (id)linkBlock;
-+ (void)setLinkBlock:(id)newblock;
-+ (id)downloadProgressBlock;
-+ (void)setDownloadProgressBlock:(id)newblock;
-+ (id)downloadBlock;
-+ (void)setDownloadBlock:(id)newblock;
-+ (id)metadataBlock;
-+ (void)setMetadataBlock:(id)newblock;
-+ (id)loadAccountInfoBlock;
-+ (void)setAccountInfoBlock:(id)newblock;
+
+@property (nonatomic, strong) id uploadBlock;
+@property (nonatomic, strong) id uploadProgressBlock;
+@property (nonatomic, strong) id deltaBlock;
+@property (nonatomic, strong) id linkBlock;
+@property (nonatomic, strong) id downloadBlock;
+@property (nonatomic, strong) id downloadProgressBlock;
+@property (nonatomic, strong) id metadataBlock;
+@property (nonatomic, strong) id accountInfoBlock;
+@property (nonatomic, strong) id streamableURLBlock;
+
 @end
 
 @implementation DroppinBadassBlocks
@@ -79,121 +49,120 @@ static char const * const loadAccountInfoBlockKey = "laick";
     return shared;
 }
 
-+ (id)requestIdentifiers {
-    return objc_getAssociatedObject(RequestIdentifiersStringKey, RequestIdentifiersKey);
-}
-
-+ (void)setRequestIdentifiers:(id)newObject {
-    objc_setAssociatedObject(RequestIdentifiersStringKey, RequestIdentifiersKey, newObject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-+ (id)uploadBlock {
-    return objc_getAssociatedObject(UploadBlockStringKey, UploadBlockKey);
+/*+ (id)uploadBlock {
+    return objc_getAssociatedObject([DroppinBadassBlocks sharedInstance], UploadBlockKey);
 }
 
 + (void)setUploadBlock:(id)newblock {
-    objc_setAssociatedObject(UploadBlockStringKey, UploadBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
+    objc_setAssociatedObject([DroppinBadassBlocks sharedInstance], UploadBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 + (id)uploadProgressBlock {
-    return objc_getAssociatedObject(UploadProgressBlockStringKey, UploadProgressBlockKey);
+    return objc_getAssociatedObject([DroppinBadassBlocks sharedInstance], UploadProgressBlockKey);
 }
 
 + (void)setUploadProgressBlock:(id)newblock {
-    objc_setAssociatedObject(UploadProgressBlockStringKey, UploadProgressBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
+    objc_setAssociatedObject([DroppinBadassBlocks sharedInstance], UploadProgressBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 + (id)deltaBlock {
-    return objc_getAssociatedObject(DeltaBlockStringKey, DeltaBlockKey);
+    return objc_getAssociatedObject([DroppinBadassBlocks sharedInstance], DeltaBlockKey);
 }
 
 + (void)setDeltaBlock:(id)newblock {
-    objc_setAssociatedObject(DeltaBlockStringKey, DeltaBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
+    objc_setAssociatedObject([DroppinBadassBlocks sharedInstance], DeltaBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 + (id)linkBlock {
-    return objc_getAssociatedObject(LinkBlockStringKey, LinkBlockKey);
+    return objc_getAssociatedObject([DroppinBadassBlocks sharedInstance], LinkBlockKey);
 }
 
 + (void)setLinkBlock:(id)newblock {
-    objc_setAssociatedObject(LinkBlockStringKey, LinkBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
+    objc_setAssociatedObject([DroppinBadassBlocks sharedInstance], LinkBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 + (id)downloadProgressBlock {
-    return objc_getAssociatedObject(DownloadProgressBlockStringKey, DownloadProgressBlockKey);
+    return objc_getAssociatedObject([DroppinBadassBlocks sharedInstance], DownloadProgressBlockKey);
 }
 
 + (void)setDownloadProgressBlock:(id)newblock {
-    objc_setAssociatedObject(DownloadProgressBlockStringKey, DownloadProgressBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
+    objc_setAssociatedObject([DroppinBadassBlocks sharedInstance], DownloadProgressBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 + (id)downloadBlock {
-    return objc_getAssociatedObject(DownloadBlockStringKey, DownloadBlockKey);
+    return objc_getAssociatedObject([DroppinBadassBlocks sharedInstance], DownloadBlockKey);
 }
 
 + (void)setDownloadBlock:(id)newblock {
-    objc_setAssociatedObject(DownloadBlockStringKey, DownloadBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
+    objc_setAssociatedObject([DroppinBadassBlocks sharedInstance], DownloadBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 + (id)metadataBlock {
-    return objc_getAssociatedObject(MetadataBlockStringKey, MetadataBlockKey);
+    return objc_getAssociatedObject([DroppinBadassBlocks sharedInstance], MetadataBlockKey);
 }
 
 + (void)setMetadataBlock:(id)newblock {
-    objc_setAssociatedObject(MetadataBlockStringKey, MetadataBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
+    objc_setAssociatedObject([DroppinBadassBlocks sharedInstance], MetadataBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 + (id)loadAccountInfoBlock {
-    return objc_getAssociatedObject(loadAccountInfoBlockStringKey, loadAccountInfoBlockKey);
+    return objc_getAssociatedObject([DroppinBadassBlocks sharedInstance], loadAccountInfoBlockKey);
 }
 
 + (void)setAccountInfoBlock:(id)newblock {
-    objc_setAssociatedObject(loadAccountInfoBlockStringKey, loadAccountInfoBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
+    objc_setAssociatedObject([DroppinBadassBlocks sharedInstance], loadAccountInfoBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
+
++ (instancetype)shareableLinkBlock {
+    return objc_getAssociatedObject([DroppinBadassBlocks sharedInstance], ShareableURLBlockKey);
+}
+
++ (void)setShareableLinkBlock:(id)newblock {
+    objc_setAssociatedObject([DroppinBadassBlocks sharedInstance], ShareableURLBlockKey, newblock, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
+}*/
 
 //
 // Uploading
 //
 
 + (void)uploadFile:(NSString *)filename toPath:(NSString *)path withParentRev:(NSString *)parentRev fromPath:(NSString *)sourcePath withBlock:(void(^)(NSString *destPath, NSString *srcPath, DBMetadata *metadata, NSError *error))block andProgressBlock:(void(^)(CGFloat progress, NSString *destPath, NSString *scrPath))pBlock {
-    [DroppinBadassBlocks setUploadBlock:block];
-    [DroppinBadassBlocks setUploadProgressBlock:pBlock];
+    [[DroppinBadassBlocks sharedInstance]setUploadBlock:block];
+    [[DroppinBadassBlocks sharedInstance]setUploadProgressBlock:pBlock];
     [[DroppinBadassBlocks sharedInstance]uploadFile:filename toPath:path withParentRev:parentRev fromPath:sourcePath];
 }
 
 - (void)restClient:(DBRestClient *)client uploadedFile:(NSString *)destPath from:(NSString *)srcPath metadata:(DBMetadata *)metadata {
-    void(^block)(NSString *destPath, NSString *srcPath, DBMetadata *metadata, NSError *error) = [DroppinBadassBlocks uploadBlock];
+    void(^block)(NSString *destPath, NSString *srcPath, DBMetadata *metadata, NSError *error) = [[DroppinBadassBlocks sharedInstance]uploadBlock];
     block(destPath, srcPath, metadata, nil);
 }
 
 - (void)restClient:(DBRestClient *)client uploadFileFailedWithError:(NSError *)error {
-    void(^block)(NSString *destPath, NSString *srcPath, DBMetadata *metadata, NSError *error) = [DroppinBadassBlocks uploadBlock];
+    void(^block)(NSString *destPath, NSString *srcPath, DBMetadata *metadata, NSError *error) = [[DroppinBadassBlocks sharedInstance]uploadBlock];
     block(nil, nil, nil, error);
 }
 
 - (void)restClient:(DBRestClient *)client uploadProgress:(CGFloat)progress forFile:(NSString *)destPath from:(NSString *)srcPath {
-    void(^block)(CGFloat progress, NSString *destPath, NSString *scrPath) = [DroppinBadassBlocks uploadProgressBlock];
+    void(^block)(CGFloat progress, NSString *destPath, NSString *scrPath) = [[DroppinBadassBlocks sharedInstance]uploadProgressBlock];
     block(progress, destPath, srcPath);
 }
-
-
 
 //
 // Delta
 //
 
 + (void)loadDelta:(NSString *)cursor withCompletionHandler:(void(^)(NSArray *entries, NSString *cursor, BOOL hasMore, BOOL shouldReset, NSError *error))block {
-    [DroppinBadassBlocks setDeltaBlock:block];
+    [[DroppinBadassBlocks sharedInstance]setDeltaBlock:block];
     [[DroppinBadassBlocks sharedInstance]loadDelta:cursor];
 }
 
 - (void)restClient:(DBRestClient *)client loadedDeltaEntries:(NSArray *)entries reset:(BOOL)shouldReset cursor:(NSString *)cursor hasMore:(BOOL)hasMore {
-    void(^block)(NSArray *entries, NSString *cursor, BOOL hasMore, BOOL shouldReset, NSError *error) = [DroppinBadassBlocks deltaBlock];
+    void(^block)(NSArray *entries, NSString *cursor, BOOL hasMore, BOOL shouldReset, NSError *error) = [[DroppinBadassBlocks sharedInstance]deltaBlock];
     block(entries, cursor, hasMore, shouldReset, nil);
 }
 
 - (void)restClient:(DBRestClient *)client loadDeltaFailedWithError:(NSError *)error {
-    void(^block)(NSArray *entries, NSString *cursor, NSError *error) = [DroppinBadassBlocks deltaBlock];
+    void(^block)(NSArray *entries, NSString *cursor, NSError *error) = [[DroppinBadassBlocks sharedInstance]deltaBlock];
     block(nil, nil, error);
 }
 
@@ -201,18 +170,33 @@ static char const * const loadAccountInfoBlockKey = "laick";
 // Links
 //
 
++ (void)loadStreamableURLForFile:(NSString *)path andCompletionBlock:(void(^)(NSURL *url, NSString *path, NSError *error))block {
+    [[DroppinBadassBlocks sharedInstance]setStreamableURLBlock:block];
+    [[DroppinBadassBlocks sharedInstance]loadStreamableURLForFile:path];
+}
+
 + (void)loadSharableLinkForFile:(NSString *)path andCompletionBlock:(void(^)(NSString *link, NSString *path, NSError *error))block {
-    [DroppinBadassBlocks setLinkBlock:block];
+    [[DroppinBadassBlocks sharedInstance]setLinkBlock:block];
     [[DroppinBadassBlocks sharedInstance]loadSharableLinkForFile:path shortUrl:YES];
 }
 
+- (void)restClient:(DBRestClient *)restClient loadedStreamableURL:(NSURL *)url forFile:(NSString *)path {
+    void(^block)(NSURL *url, NSString *path, NSError *error) = [[DroppinBadassBlocks sharedInstance]streamableURLBlock];
+    block(url, path, nil);
+}
+
+- (void)restClient:(DBRestClient *)restClient loadStreamableURLFailedWithError:(NSError *)error {
+    void(^block)(NSURL *url, NSString *path, NSError *error) = [[DroppinBadassBlocks sharedInstance]streamableURLBlock];
+    block(nil, nil, error);
+}
+
 - (void)restClient:(DBRestClient *)restClient loadedSharableLink:(NSString *)link forFile:(NSString *)path {
-    void(^block)(NSString *link, NSString *path, NSError *error) = [DroppinBadassBlocks linkBlock];
+    void(^block)(NSString *link, NSString *path, NSError *error) = [[DroppinBadassBlocks sharedInstance]linkBlock];
     block(link, path, nil);
 }
 
 - (void)restClient:(DBRestClient *)restClient loadSharableLinkFailedWithError:(NSError *)error {
-    void(^block)(NSString *link, NSString *path, NSError *error) = [DroppinBadassBlocks linkBlock];
+    void(^block)(NSString *link, NSString *path, NSError *error) = [[DroppinBadassBlocks sharedInstance]linkBlock];
     block(nil, nil, error);
 }
 
@@ -221,28 +205,24 @@ static char const * const loadAccountInfoBlockKey = "laick";
 //
 
 + (void)loadFile:(NSString *)path intoPath:(NSString *)destinationPath withCompletionBlock:(void(^)(DBMetadata *metadata, NSError *error))block andProgressBlock:(void(^)(float progress))progBlock {
-    [DroppinBadassBlocks setDownloadBlock:block];
-    [DroppinBadassBlocks setDownloadProgressBlock:progBlock];
+    [[DroppinBadassBlocks sharedInstance]setDownloadBlock:block];
+    [[DroppinBadassBlocks sharedInstance]setDownloadProgressBlock:progBlock];
     [[DroppinBadassBlocks sharedInstance]loadFile:path intoPath:destinationPath];
-    NSLog(@"started");
 }
 
 - (void)restClient:(DBRestClient *)client loadedFile:(NSString *)destPath contentType:(NSString *)contentType metadata:(DBMetadata *)metadata {
-    void(^block)(DBMetadata *metadata, NSError *error) = [DroppinBadassBlocks downloadBlock];
+    void(^block)(DBMetadata *metadata, NSError *error) = [[DroppinBadassBlocks sharedInstance]downloadBlock];
     block(metadata, nil);
-    NSLog(@"dbab: completed");
 }
 
 - (void)restClient:(DBRestClient *)client loadProgress:(CGFloat)progress forFile:(NSString *)destPath {
-    void(^block)(float progress) = [DroppinBadassBlocks downloadProgressBlock];
+    void(^block)(float progress) = [[DroppinBadassBlocks sharedInstance]downloadProgressBlock];
     block(progress);
-    NSLog(@"dbab: progress");
 }
 
 - (void)restClient:(DBRestClient *)client loadFileFailedWithError:(NSError *)error {
-    void(^block)(DBMetadata *metadata, NSError *error) = [DroppinBadassBlocks downloadBlock];
+    void(^block)(DBMetadata *metadata, NSError *error) = [[DroppinBadassBlocks sharedInstance]downloadBlock];
     block(nil, error);
-    NSLog(@"dbab: errored out");
 }
 
 
@@ -251,22 +231,22 @@ static char const * const loadAccountInfoBlockKey = "laick";
 //
 
 + (void)loadMetadata:(NSString *)path withCompletionBlock:(void(^)(DBMetadata *metadata, NSError *error))block {
-    [DroppinBadassBlocks setMetadataBlock:block];
+    [[DroppinBadassBlocks sharedInstance]setMetadataBlock:block];
     [[DroppinBadassBlocks sharedInstance]loadMetadata:path];
 }
 
 - (void)loadMetadata:(NSString *)path atRev:(NSString *)rev withCompletionBlock:(void(^)(DBMetadata *metadata, NSError *error))block {
-    [DroppinBadassBlocks setMetadataBlock:block];
+    [[DroppinBadassBlocks sharedInstance]setMetadataBlock:block];
     [[DroppinBadassBlocks sharedInstance]loadMetadata:path atRev:rev];
 }
 
 - (void)restClient:(DBRestClient *)client loadedMetadata:(DBMetadata *)metadata {
-    void(^metadataBlock)(DBMetadata *metadata, NSError *error) = [DroppinBadassBlocks metadataBlock];
+    void(^metadataBlock)(DBMetadata *metadata, NSError *error) = [[DroppinBadassBlocks sharedInstance]metadataBlock];
     metadataBlock(metadata, nil);
 }
 
 - (void)restClient:(DBRestClient*)client loadMetadataFailedWithError:(NSError *)error {
-    void(^metadataBlock)(DBMetadata *metadata, NSError *error) = [DroppinBadassBlocks metadataBlock];
+    void(^metadataBlock)(DBMetadata *metadata, NSError *error) = [[DroppinBadassBlocks sharedInstance]metadataBlock];
     metadataBlock(nil, error);
 }
 
@@ -275,17 +255,17 @@ static char const * const loadAccountInfoBlockKey = "laick";
 //
 
 + (void)loadAccountInfoWithCompletionBlock:(void(^)(DBAccountInfo *info, NSError *error))block {
-    [DroppinBadassBlocks setAccountInfoBlock:block];
+    [[DroppinBadassBlocks sharedInstance]setAccountInfoBlock:block];
     [[DroppinBadassBlocks sharedInstance]loadAccountInfo];
 }
 
 - (void)restClient:(DBRestClient *)client loadedAccountInfo:(DBAccountInfo *)info {
-    void(^block)(DBAccountInfo *, NSError *) = [DroppinBadassBlocks loadAccountInfoBlock];
+    void(^block)(DBAccountInfo *, NSError *) = [[DroppinBadassBlocks sharedInstance]accountInfoBlock];
     block(info, nil);
 }
 
 - (void)restClient:(DBRestClient *)client loadAccountInfoFailedWithError:(NSError *)error {
-    void(^block)(DBAccountInfo *, NSError *) = [DroppinBadassBlocks loadAccountInfoBlock];
+    void(^block)(DBAccountInfo *, NSError *) = [[DroppinBadassBlocks sharedInstance]accountInfoBlock];
     block(nil, error);
 }
 

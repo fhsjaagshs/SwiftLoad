@@ -20,10 +20,18 @@
 
 @implementation MoviePlayerViewController
 
-+ (void)showMoviePlayerWithURL:(NSURL *)url {
-    MoviePlayerViewController *vc = [MoviePlayerViewController viewController];
-    vc.streamingUrl = url;
-    [vc presentViewController:vc animated:YES completion:nil];
++ (MoviePlayerViewController *)moviePlayerWithURL:(NSURL *)url {
+    MoviePlayerViewController *vc = [[MoviePlayerViewController alloc]initWithURL:url];
+    vc.view.backgroundColor = [UIColor clearColor];
+    return vc;
+}
+
+- (instancetype)initWithURL:(NSURL *)url {
+    self = [super init];
+    if (self) {
+        self.streamingUrl = url;
+    }
+    return self;
 }
 
 - (void)loadView {
@@ -33,7 +41,6 @@
     
     UINavigationBar *bar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
     bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    bar.tintColor = [UIColor blackColor];
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
     topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
@@ -49,7 +56,7 @@
         self.shouldUnpauseAudioPlayer = YES;
     }
 
-    self.moviePlayer = [[MPMoviePlayerController alloc]initWithContentURL:(_streamingUrl)?_streamingUrl:[NSURL fileURLWithPath:[kAppDelegate openFile]]];
+    self.moviePlayer = [[MPMoviePlayerController alloc]initWithContentURL:(_streamingUrl.absoluteString.length > 0)?_streamingUrl:[NSURL fileURLWithPath:[kAppDelegate openFile]]];
     _moviePlayer.scalingMode = MPMovieScalingModeAspectFit;
     _moviePlayer.repeatMode = MPMovieRepeatModeNone;
     [_moviePlayer.backgroundView removeFromSuperview];

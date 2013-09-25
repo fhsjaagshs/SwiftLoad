@@ -10,4 +10,6 @@
 
 @interface MoviePlayerViewController : UIViewController
 
++ (MoviePlayerViewController *)moviePlayerWithURL:(NSURL *)url;
+
 @end

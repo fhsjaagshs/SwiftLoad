@@ -266,8 +266,6 @@ static NSString *CellIdentifier = @"dbcell";
                 self.shouldMassInsert = YES;
                 _refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"Initial Load. Be patient..."];
                 [self removeAllEntriesForCurrentUser];
-            } else {
-                _refreshControl.attributedTitle = nil;
             }
             
             self.cursor = cursor;
@@ -298,6 +296,7 @@ static NSString *CellIdentifier = @"dbcell";
                 [self updateFileListing];
             } else {
                 NSLog(@"done");
+                _refreshControl.attributedTitle = nil;
                 [self saveCursor];
                 self.shouldMassInsert = NO;
                 [self refreshStateWithAnimationStyle:UITableViewRowAnimationFade];
@@ -366,8 +365,7 @@ static NSString *CellIdentifier = @"dbcell";
         [self loadContentsOfDirectory:[_navBar.topItem.title fhs_normalize]];
         [self refreshStateWithAnimationStyle:UITableViewRowAnimationLeft];
     } else {
-        NSString *message = [NSString stringWithFormat:@"Do you wish to download \"%@\"?",filename];
-        UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+        UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:filename completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             
             NSString *filePath = [_navBar.topItem.title stringByAppendingPathComponent:fileDict[NSFileName]];
             
@@ -377,8 +375,25 @@ static NSString *CellIdentifier = @"dbcell";
             } else if (buttonIndex == 1) {
                 DropboxLinkTask *task = [DropboxLinkTask taskWithFilepath:filePath];
                 [[TaskController sharedController]addTask:task];
+            } else if (buttonIndex == 2 && [MIMEUtils isVideoFile:fileDict[NSFileName]]) {
+                [DroppinBadassBlocks loadStreamableURLForFile:filePath andCompletionBlock:^(NSURL *url, NSString *path, NSError *error) {
+                    if (!error) {
+                        NSLog(@"%@",url);
+                        [self presentViewController:[MoviePlayerViewController moviePlayerWithURL:url] animated:YES completion:nil];
+                    } else {
+                        [UIAlertView showAlertWithTitle:@"Failed to Stream File" andMessage:error.localizedDescription];
+                    }
+                }];
             }
-        } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Download", @"Get Link", nil];
+        } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"Download", @"Get Link", nil];
+        
+        if ([MIMEUtils isVideoFile:filename]) {
+            [actionSheet addButtonWithTitle:@"Stream"];
+        }
+        
+        [actionSheet addButtonWithTitle:@"Cancel"];
+        actionSheet.cancelButtonIndex = actionSheet.numberOfButtons-1;
+        
         actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
         [actionSheet showInView:self.view];
     }

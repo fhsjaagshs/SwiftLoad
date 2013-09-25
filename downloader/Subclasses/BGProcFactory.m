@@ -43,7 +43,7 @@ static BGProcFactory *sharedInstance = nil;
 }
 
 - (void)endAllTasks {
-    NSMutableDictionary *corecopy = [[_core mutableCopy]autorelease];
+    NSMutableDictionary *corecopy = [_core mutableCopy];
     for (NSString *key in corecopy.allKeys) {
         [self endProcForKey:key];
     }
@@ -58,44 +58,12 @@ static BGProcFactory *sharedInstance = nil;
 }
 
 + (BGProcFactory *)sharedFactory {
-    @synchronized (self) {
-        if (sharedInstance == nil) {
-            [[self alloc]init];
-        }
-    }
-    return sharedInstance;
-}
-
-// Override stuff to make sure that the singleton is never dealloc'd. Fun.
-+ (id)allocWithZone:(NSZone *)zone {
-    @synchronized(self) {
-        if (sharedInstance == nil) {
-            sharedInstance = [super allocWithZone:zone];
-            return sharedInstance;
-        }
-    }
-    return nil;
-}
-
-- (id)retain {
-    return self;
-}
-
-- (oneway void)release {
-    // Do nothing
-}
-
-- (id)autorelease {
-    return self;
-}
-
-- (NSUInteger)retainCount {
-    return NSUIntegerMax;
-}
-
-- (void)dealloc {
-    [self setCore:nil];
-    [super dealloc];
+    static BGProcFactory *shared = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        shared = [[BGProcFactory alloc]init];
+    });
+    return shared;
 }
 
 @end
