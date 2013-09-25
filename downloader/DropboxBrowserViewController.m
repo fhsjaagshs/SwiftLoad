@@ -335,6 +335,7 @@ static NSString *CellIdentifier = @"dbcell";
         float fileSize = [fileDict[NSFileSize]intValue];
         
         cell.detailTextLabel.text = @"File, ";
+        cell.imageView.image = [UIImage imageNamed:@"file_icon"];
         
         if (fileSize < 1024.0) {
             cell.detailTextLabel.text = [cell.detailTextLabel.text stringByAppendingFormat:@"%.0f Byte%@",fileSize,(fileSize > 1)?@"s":@""];
@@ -347,6 +348,7 @@ static NSString *CellIdentifier = @"dbcell";
         }
     } else {
         cell.detailTextLabel.text = @"Directory";
+        cell.imageView.image = [UIImage imageNamed:@"folder_icon"];
     }
     
     return cell;

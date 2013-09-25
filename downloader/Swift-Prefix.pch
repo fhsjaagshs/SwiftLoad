@@ -7,7 +7,6 @@
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
-    #import "DropboxSDK.h"
     #import <MobileCoreServices/MobileCoreServices.h>
     #import <QuartzCore/QuartzCore.h>
     #import <MessageUI/MessageUI.h>
@@ -16,6 +15,8 @@
     #import <GameKit/GameKit.h>
     #import <AudioToolbox/AudioToolbox.h>
     #import <CommonCrypto/CommonCrypto.h>
+
+    #import "DropboxSDK.h"
 
     #import "Hack.h"
 
@@ -57,7 +58,6 @@
 
     #import "MBProgressHUD.h"
     #import "MarqueeLabel.h"
-    #import "PullToRefreshView.h"
 
     #import "DroppinBadassBlocks.h"
     #import "MIMEUtils.h"

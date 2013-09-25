@@ -21,18 +21,12 @@
 		F1038BB517B1ECB100AE918E /* DropboxLinkTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F1038BB417B1ECB100AE918E /* DropboxLinkTask.m */; };
 		F106ABDE17ADE5120076E57F /* DropboxUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = F106ABDD17ADE5120076E57F /* DropboxUpload.m */; };
 		F106ABE117ADE54A0076E57F /* Upload.m in Sources */ = {isa = PBXBuildFile; fileRef = F106ABE017ADE54A0076E57F /* Upload.m */; };
-		F108927317B4993C00CF317F /* button_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = F108926F17B4993C00CF317F /* button_icon.png */; };
-		F108927417B4993C00CF317F /* button_icon_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = F108927017B4993C00CF317F /* button_icon_pressed.png */; };
-		F108927517B4993C00CF317F /* button_icon_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F108927117B4993C00CF317F /* button_icon_pressed@2x.png */; };
-		F108927617B4993C00CF317F /* button_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F108927217B4993C00CF317F /* button_icon@2x.png */; };
 		F10CBC5A1707D6E700C82AFB /* DroppinBadassBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */; };
 		F10CBC5D17080C6600C82AFB /* DropboxBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */; };
-		F111903B17B838B400FE48F2 /* myriad-regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F111903A17B838B400FE48F2 /* myriad-regular.ttf */; };
 		F1122A76142E4E8B00A04CC6 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */; };
 		F112AD3B17EE9BE3002DE136 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = F112AD3A17EE9BE3002DE136 /* MBProgressHUD.m */; };
 		F115302B177FDB4F000513E1 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = F115302A177FDB4E000513E1 /* FMDatabasePool.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F118C74517713DAA00ED7384 /* ContentOffsetWatchdog.m in Sources */ = {isa = PBXBuildFile; fileRef = F118C74417713DAA00ED7384 /* ContentOffsetWatchdog.m */; };
-		F118C7481771425F00ED7384 /* PullToRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = F118C7471771425F00ED7384 /* PullToRefreshView.m */; };
 		F119CF0813F46DA6007D67E4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F119CF0713F46DA6007D67E4 /* AppDelegate.m */; };
 		F11C402E13F82F9D0077F5D1 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F11C402D13F82F9D0077F5D1 /* MessageUI.framework */; };
 		F11C403513F82FE00077F5D1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F11C403413F82FE00077F5D1 /* CoreGraphics.framework */; };
@@ -52,8 +46,6 @@
 		F1434B3E179B21C1001A672C /* UITableView+CoolRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = F1434B3D179B21C1001A672C /* UITableView+CoolRefresh.m */; };
 		F1444581145A04A30026CDB7 /* PictureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F144457F145A04A30026CDB7 /* PictureViewController.m */; };
 		F145023B1781181700096202 /* DropboxDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = F145023A1781181700096202 /* DropboxDownload.m */; };
-		F145023E1781243000096202 /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = F145023C1781243000096202 /* arrow.png */; };
-		F145023F1781243000096202 /* arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F145023D1781243000096202 /* arrow@2x.png */; };
 		F149A6781491686D0038F1FC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F149A6771491686D0038F1FC /* AudioToolbox.framework */; };
 		F149A685149176E60038F1FC /* MoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F149A683149176E60038F1FC /* MoviePlayerViewController.m */; };
 		F14B81971788C39E00ADEF99 /* UIButton+SwiftLoad.m in Sources */ = {isa = PBXBuildFile; fileRef = F14B81961788C39E00ADEF99 /* UIButton+SwiftLoad.m */; };
@@ -275,15 +267,10 @@
 		F106ABDD17ADE5120076E57F /* DropboxUpload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxUpload.m; sourceTree = "<group>"; };
 		F106ABDF17ADE54A0076E57F /* Upload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Upload.h; sourceTree = "<group>"; };
 		F106ABE017ADE54A0076E57F /* Upload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Upload.m; sourceTree = "<group>"; };
-		F108926F17B4993C00CF317F /* button_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_icon.png; sourceTree = "<group>"; };
-		F108927017B4993C00CF317F /* button_icon_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_icon_pressed.png; sourceTree = "<group>"; };
-		F108927117B4993C00CF317F /* button_icon_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_icon_pressed@2x.png"; sourceTree = "<group>"; };
-		F108927217B4993C00CF317F /* button_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_icon@2x.png"; sourceTree = "<group>"; };
 		F10CBC581707D6E700C82AFB /* DroppinBadassBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DroppinBadassBlocks.h; path = ../Categories/DroppinBadassBlocks.h; sourceTree = "<group>"; };
 		F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DroppinBadassBlocks.m; path = ../Categories/DroppinBadassBlocks.m; sourceTree = "<group>"; };
 		F10CBC5B17080C6600C82AFB /* DropboxBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxBrowserViewController.h; sourceTree = "<group>"; };
 		F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxBrowserViewController.m; sourceTree = "<group>"; };
-		F111903A17B838B400FE48F2 /* myriad-regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "myriad-regular.ttf"; sourceTree = "<group>"; };
 		F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		F112AD3917EE9BE3002DE136 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		F112AD3A17EE9BE3002DE136 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
@@ -291,8 +278,6 @@
 		F115302A177FDB4E000513E1 /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePool.m; sourceTree = "<group>"; };
 		F118C74317713DAA00ED7384 /* ContentOffsetWatchdog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentOffsetWatchdog.h; sourceTree = "<group>"; };
 		F118C74417713DAA00ED7384 /* ContentOffsetWatchdog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentOffsetWatchdog.m; sourceTree = "<group>"; };
-		F118C7461771425F00ED7384 /* PullToRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullToRefreshView.h; sourceTree = "<group>"; };
-		F118C7471771425F00ED7384 /* PullToRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullToRefreshView.m; sourceTree = "<group>"; };
 		F119CEF313F46DA6007D67E4 /* Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F119CF0613F46DA6007D67E4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F119CF0713F46DA6007D67E4 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -326,8 +311,6 @@
 		F144457F145A04A30026CDB7 /* PictureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PictureViewController.m; sourceTree = "<group>"; };
 		F14502391781181700096202 /* DropboxDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DropboxDownload.h; path = ../DropboxDownload.h; sourceTree = "<group>"; };
 		F145023A1781181700096202 /* DropboxDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DropboxDownload.m; path = ../DropboxDownload.m; sourceTree = "<group>"; };
-		F145023C1781243000096202 /* arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow.png; sourceTree = "<group>"; };
-		F145023D1781243000096202 /* arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow@2x.png"; sourceTree = "<group>"; };
 		F149A6771491686D0038F1FC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		F149A682149176E60038F1FC /* MoviePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoviePlayerViewController.h; sourceTree = "<group>"; };
 		F149A683149176E60038F1FC /* MoviePlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoviePlayerViewController.m; sourceTree = "<group>"; };
@@ -837,8 +820,6 @@
 				F1B1C1E317B29C1800B6164C /* MarqueeLabel.m */,
 				F118C74317713DAA00ED7384 /* ContentOffsetWatchdog.h */,
 				F118C74417713DAA00ED7384 /* ContentOffsetWatchdog.m */,
-				F118C7461771425F00ED7384 /* PullToRefreshView.h */,
-				F118C7471771425F00ED7384 /* PullToRefreshView.m */,
 				F1C7A6B516E8178F0082D4D3 /* ZoomingImageView.h */,
 				F1C7A6B616E8178F0082D4D3 /* ZoomingImageView.m */,
 			);
@@ -1186,7 +1167,6 @@
 			isa = PBXGroup;
 			children = (
 				F153EAA217E50D8900896BB0 /* Swift.entitlements */,
-				F111903A17B838B400FE48F2 /* myriad-regular.ttf */,
 				F19BB51916E006CA0081C95B /* main.m */,
 				F19BB51A16E006CA0081C95B /* Swift-Info.plist */,
 				F19BB51B16E006CA0081C95B /* Swift-Prefix.pch */,
@@ -1207,14 +1187,8 @@
 				F13979A216E78F4E00F8B61B /* ArrowLeft@2x.png */,
 				F13979A316E78F4E00F8B61B /* ArrowRight.png */,
 				F13979A416E78F4E00F8B61B /* ArrowRight@2x.png */,
-				F145023C1781243000096202 /* arrow.png */,
-				F145023D1781243000096202 /* arrow@2x.png */,
 				F101274417920BD2000C434E /* hamburger.png */,
 				F101274517920BD2000C434E /* hamburger@2x.png */,
-				F108926F17B4993C00CF317F /* button_icon.png */,
-				F108927017B4993C00CF317F /* button_icon_pressed.png */,
-				F108927117B4993C00CF317F /* button_icon_pressed@2x.png */,
-				F108927217B4993C00CF317F /* button_icon@2x.png */,
 				F1D6257317C45D3700CA002A /* file_icon.png */,
 				F1D6257417C45D3700CA002A /* file_icon@2x.png */,
 				F1D6257517C45D3700CA002A /* folder_icon.png */,
@@ -1504,17 +1478,10 @@
 				F1E9F7CD1774114D00EC345C /* icon@2x.png in Resources */,
 				F1E9F7CE1774114D00EC345C /* icon~iPad.png in Resources */,
 				F1E9F7CF1774114D00EC345C /* icon~iPad@2x.png in Resources */,
-				F145023E1781243000096202 /* arrow.png in Resources */,
-				F145023F1781243000096202 /* arrow@2x.png in Resources */,
 				F101274617920BD2000C434E /* hamburger.png in Resources */,
 				F101274717920BD2000C434E /* hamburger@2x.png in Resources */,
 				F172BCC61794EC4500AC1483 /* About.txt in Resources */,
 				F172BCD01794EC4500AC1483 /* README.txt in Resources */,
-				F108927317B4993C00CF317F /* button_icon.png in Resources */,
-				F108927417B4993C00CF317F /* button_icon_pressed.png in Resources */,
-				F108927517B4993C00CF317F /* button_icon_pressed@2x.png in Resources */,
-				F108927617B4993C00CF317F /* button_icon@2x.png in Resources */,
-				F111903B17B838B400FE48F2 /* myriad-regular.ttf in Resources */,
 				F1AE31A517BDBC1E005D3EE6 /* back_button.png in Resources */,
 				F1AE31A617BDBC1E005D3EE6 /* back_button_pressed.png in Resources */,
 				F1AE31A717BDBC1E005D3EE6 /* back_button_pressed@2x.png in Resources */,
@@ -1606,7 +1573,6 @@
 				F1BE07E4176F7A1100C4F038 /* Download.m in Sources */,
 				F118C74517713DAA00ED7384 /* ContentOffsetWatchdog.m in Sources */,
 				F1C939CA17F326C400754D5D /* NSURL+MPURLParameterAdditions.m in Sources */,
-				F118C7481771425F00ED7384 /* PullToRefreshView.m in Sources */,
 				F1BC30CA17715DF300DAFA0A /* Hack.m in Sources */,
 				F1C939BB17F326C400754D5D /* NSString+DBJSON.m in Sources */,
 				F1BA8C7E17728500007AAF85 /* BGProcFactory.m in Sources */,
