@@ -422,7 +422,12 @@ static NSString *CellIdentifier = @"dbcell";
 
 - (void)close {
     self.shouldStopLoading = YES;
-    [[DroppinBadassBlocks sharedInstance]cancelAllMiscRequests];
+    int count = [[DroppinBadassBlocks sharedInstance]cancelAllMiscRequests];
+    
+    for (int i = 0; i < count; i++) {
+        [[NetworkActivityController sharedController]hideIfPossible];
+    }
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

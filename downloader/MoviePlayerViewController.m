@@ -15,6 +15,7 @@
 
 @property (nonatomic, strong) UIActionSheet *popupQuery;
 @property (nonatomic, strong) MPMoviePlayerController *moviePlayer;
+@property (nonatomic, strong) UINavigationBar *bar;
 
 @end
 
@@ -39,13 +40,17 @@
     
     CGRect screenBounds = [[UIScreen mainScreen]bounds];
     
-    UINavigationBar *bar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
-    bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]];
+    self.bar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
+    _bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:_streamingUrl?@"Loading...":[[kAppDelegate openFile]lastPathComponent]];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
-    topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
-    [bar pushNavigationItem:topItem animated:NO];
-    [self.view addSubview:bar];
+    
+    if (!_streamingUrl) {
+        topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
+    }
+    
+    [_bar pushNavigationItem:topItem animated:NO];
+    [self.view addSubview:_bar];
     
     self.shouldUnpauseAudioPlayer = NO;
     
@@ -68,6 +73,7 @@
     [_moviePlayer play];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(moviePlayerDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(moviePlayerDidLoadData:) name:MPMoviePlayerReadyForDisplayDidChangeNotification object:nil];
 }
 
 - (void)close {
@@ -124,6 +130,12 @@
 - (void)moviePlayerDidFinish:(NSNotification *)notification {
     [_moviePlayer stop];
     _moviePlayer.initialPlaybackTime = -1;
+}
+
+- (void)moviePlayerDidLoadData:(NSNotification *)notif {
+    if (_moviePlayer.readyForDisplay) {
+        _bar.topItem.title = [_streamingUrl.absoluteString.lastPathComponent stringByRemovingPercentEncoding];
+    }
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
