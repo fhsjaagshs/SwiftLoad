@@ -58,8 +58,7 @@ static NSString *CellIdentifier = @"dbcell";
     self.shouldPromptForLinkage = YES;
     
     CGRect screenBounds = [[UIScreen mainScreen]bounds];
-    BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
-    
+
     self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
     _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"/"];
@@ -71,7 +70,6 @@ static NSString *CellIdentifier = @"dbcell";
     self.theTableView = [[UITableView alloc]initWithFrame:screenBounds style:UITableViewStylePlain];
     _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    _theTableView.rowHeight = iPad?60:44;
     _theTableView.dataSource = self;
     _theTableView.delegate = self;
     _theTableView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0);

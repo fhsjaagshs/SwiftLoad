@@ -133,7 +133,7 @@
 }
 
 - (void)moviePlayerDidLoadData:(NSNotification *)notif {
-    if (_moviePlayer.readyForDisplay) {
+    if (_moviePlayer.readyForDisplay && _streamingUrl) {
         _bar.topItem.title = [_streamingUrl.absoluteString.lastPathComponent stringByRemovingPercentEncoding];
     }
 }

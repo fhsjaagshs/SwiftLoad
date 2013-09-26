@@ -18,6 +18,8 @@ static NSString * const kID3EditorCellID = @"kID3EditorCellID";
 
 @property (nonatomic, strong) NSMutableDictionary *tag;
 
+@property (nonatomic, assign) BOOL hasGuidedUserToEdit;
+
 @end
 
 @implementation EditID3ViewController
@@ -49,7 +51,7 @@ static NSString * const kID3EditorCellID = @"kID3EditorCellID";
     _artistField.placeholder = @"Artist";
     _artistField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _artistField.textColor = [UIColor blackColor];
-    _artistField.font = [UIFont systemFontOfSize:18];
+    _artistField.font = [UIFont fontWithName:@"Avenir-Medium" size:17];
     _artistField.borderStyle = UITextBorderStyleNone;
     _artistField.keyboardAppearance = UIKeyboardAppearanceAlert;
     _artistField.backgroundColor = [UIColor whiteColor];
@@ -65,7 +67,7 @@ static NSString * const kID3EditorCellID = @"kID3EditorCellID";
     _titleField.placeholder = @"Title";
     _titleField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _titleField.textColor = [UIColor blackColor];
-    _titleField.font = [UIFont systemFontOfSize:18];
+    _titleField.font = [UIFont fontWithName:@"Avenir-Medium" size:17];
     _titleField.borderStyle = UITextBorderStyleNone;
     _titleField.keyboardAppearance = UIKeyboardAppearanceAlert;
     _titleField.backgroundColor = [UIColor whiteColor];
@@ -81,7 +83,7 @@ static NSString * const kID3EditorCellID = @"kID3EditorCellID";
     _albumField.placeholder = @"Album";
     _albumField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _albumField.textColor = [UIColor blackColor];
-    _albumField.font = [UIFont systemFontOfSize:18];
+    _albumField.font = [UIFont fontWithName:@"Avenir-Medium" size:17];
     _albumField.borderStyle = UITextBorderStyleNone;
     _albumField.keyboardAppearance = UIKeyboardAppearanceAlert;
     _albumField.backgroundColor = [UIColor whiteColor];
@@ -97,6 +99,14 @@ static NSString * const kID3EditorCellID = @"kID3EditorCellID";
     [_albumField addTarget:_albumField action:@selector(resignFirstResponder) forControlEvents:UIControlEventEditingDidEndOnExit];
     
     [self loadTags];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    if (!_hasGuidedUserToEdit) {
+        [_artistField becomeFirstResponder];
+        self.hasGuidedUserToEdit = YES;
+    }
 }
 
 - (void)loadTags {

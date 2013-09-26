@@ -38,7 +38,6 @@ static NSString *CellIdentifier = @"Cell";
     [super loadView];
     
     CGRect screenBounds = [[UIScreen mainScreen]bounds];
-    BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
     
     HamburgerButtonItem *hamburger = [HamburgerButtonItem itemWithView:self.view];
     [hamburger setDelegate:self];
@@ -55,7 +54,6 @@ static NSString *CellIdentifier = @"Cell";
     self.theTableView = [[UITableView alloc]initWithFrame:screenBounds style:UITableViewStylePlain];
     _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    _theTableView.rowHeight = iPad?60:44;
     _theTableView.dataSource = self;
     _theTableView.delegate = self;
     _theTableView.contentInset = UIEdgeInsetsMake(20+44, 0, 0, 0);

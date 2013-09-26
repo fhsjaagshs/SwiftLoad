@@ -28,7 +28,6 @@ static NSString * const kSettingsTableViewCellID = @"settingsTableViewCellIdenti
     _theTableView.dataSource = self;
     _theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    _theTableView.rowHeight = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)?60:44;
     _theTableView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0);
     _theTableView.scrollIndicatorInsets = _theTableView.contentInset;
     [self.view addSubview:_theTableView];
@@ -58,6 +57,7 @@ static NSString * const kSettingsTableViewCellID = @"settingsTableViewCellIdenti
     
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kSettingsTableViewCellID];
+        cell.textLabel.font = [UIFont fontWithName:@"Avenir-Medium" size:17];
     }
     
     if (indexPath.row == 0) {

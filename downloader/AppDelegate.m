@@ -450,6 +450,8 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     [Appirater setTimeBeforeReminding:2];
     [Appirater appLaunched:YES];
     
+ //   [[UINavigationBar appearance]setTitleTextAttributes:@{NSFontAttributeName: [UIFont fontWithName:@"Avenir-Medium" size:19]}];
+    
     return YES;
 }
 

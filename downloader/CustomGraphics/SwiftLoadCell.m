@@ -37,16 +37,10 @@ static NSString * const kFontName = @"Avenir-Medium";
         self.accessoryView.backgroundColor = [UIColor clearColor];
         self.multipleSelectionBackgroundView = [[UIView alloc]init];
         self.multipleSelectionBackgroundView.backgroundColor = [UIColor clearColor];
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            self.textLabel.font = [UIFont fontWithName:kFontName size:24];
-            self.detailTextLabel.font = [UIFont systemFontOfSize:20.0];
-        } else {
-            self.textLabel.font = [UIFont fontWithName:kFontName size:17];
-        }
-        
+        self.textLabel.font = [UIFont fontWithName:kFontName size:17];
         self.textLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         self.detailTextLabel.textColor = [UIColor colorWithWhite:0.5f alpha:1.0f];
+        self.backgroundColor = [UIColor whiteColor];
     }
     return self;
 }
