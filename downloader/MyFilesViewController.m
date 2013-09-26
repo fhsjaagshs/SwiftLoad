@@ -30,6 +30,8 @@ static NSString *CellIdentifier = @"Cell";
 
 @property (nonatomic, strong) SwipeCell *currentlySwipedCell;
 
+@property (nonatomic, strong) UIDocumentInteractionController *docController;
+
 @end
 
 @implementation MyFilesViewController
@@ -594,14 +596,14 @@ static NSString *CellIdentifier = @"Cell";
         [self presentViewController:vcontroller animated:YES completion:nil];
     } else if (buttonIndex == 5) {
         NSString *file = [kAppDelegate openFile];
-        UIDocumentInteractionController *controller = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:file]];
-        
+        self.docController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:file]];
+
         BOOL opened = NO;
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            opened = [controller presentOpenInMenuFromRect:_currentlySwipedCell.frame inView:_theTableView animated:YES];
+            opened = [_docController presentOpenInMenuFromRect:_currentlySwipedCell.frame inView:_theTableView animated:YES];
         } else {
-            opened = [controller presentOpenInMenuFromRect:self.view.frame inView:self.view animated:YES];
+            opened = [_docController presentOpenInMenuFromRect:self.view.frame inView:self.view animated:YES];
         }
         
         if (!opened) {

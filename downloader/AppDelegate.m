@@ -504,15 +504,15 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
             BOOL isHTML = [MIMEUtils isHTMLFile:file];
             
             if ([MIMEUtils isAudioFile:file]) {
-                [[UIViewController topViewController]presentViewController:[AudioPlayerViewController viewController] animated:YES completion:nil];
+                [[UIViewController topViewController]presentViewController:[AudioPlayerViewController viewControllerWhite] animated:YES completion:nil];
             } else if ([MIMEUtils isImageFile:file]) {
-                [[UIViewController topViewController]presentViewController:[PictureViewController viewController] animated:YES completion:nil];
+                [[UIViewController topViewController]presentViewController:[PictureViewController viewControllerWhite] animated:YES completion:nil];
             } else if ([MIMEUtils isTextFile:file] && !isHTML) {
-                [[UIViewController topViewController]presentViewController:[TextEditorViewController viewController] animated:YES completion:nil];
+                [[UIViewController topViewController]presentViewController:[TextEditorViewController viewControllerWhite] animated:YES completion:nil];
             } else if ([MIMEUtils isVideoFile:file]) {
-                [[UIViewController topViewController]presentViewController:[MoviePlayerViewController viewController] animated:YES completion:nil];
+                [[UIViewController topViewController]presentViewController:[MoviePlayerViewController viewControllerWhite] animated:YES completion:nil];
             } else if ([MIMEUtils isDocumentFile:file] || isHTML) {
-                [[UIViewController topViewController]presentViewController:[DocumentViewController viewController] animated:YES completion:nil];
+                [[UIViewController topViewController]presentViewController:[DocumentViewController viewControllerWhite] animated:YES completion:nil];
             }
         }
 
