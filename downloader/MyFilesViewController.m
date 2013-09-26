@@ -148,24 +148,18 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)deleteSelectedFiles {
-    NSArray *selectedRows = [_theTableView.indexPathsForSelectedRows copy];
-    
     [[FilesystemMonitor sharedMonitor]invalidate];
-    
-    NSMutableArray *itemsToRemove = [NSMutableArray arrayWithCapacity:selectedRows.count];
-    
+
     for (NSIndexPath *indexPath in _theTableView.indexPathsForSelectedRows) {
         NSString *filename = _filelist[indexPath.row];
-        [itemsToRemove addObject:filename];
+        [_filelist removeObject:filename];
         NSString *currentPath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:filename];
         [[NSFileManager defaultManager]removeItemAtPath:currentPath error:nil];
         [_theTableView deselectRowAtIndexPath:indexPath animated:NO];
     }
-    
-    [_filelist removeObjectsInArray:itemsToRemove];
-    
+
     [_theTableView beginUpdates];
-    [_theTableView deleteRowsAtIndexPaths:selectedRows withRowAnimation:UITableViewRowAnimationRight];
+    [_theTableView deleteRowsAtIndexPaths:_theTableView.indexPathsForSelectedRows withRowAnimation:UITableViewRowAnimationRight];
     [_theTableView endUpdates];
     
     [[FilesystemMonitor sharedMonitor]startMonitoringDirectory:kDocsDir];
@@ -194,27 +188,28 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)showCopyPasteController {
+    __weak MyFilesViewController *weakself = self;
     UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:nil completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         
         NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
         
         if ([title isEqualToString:@"Copy"]) {
-            [self copyFilesWithIsCut:NO];
+            [weakself copyFilesWithIsCut:NO];
         } else if ([title isEqualToString:@"Cut"]) {
-            [self copyFilesWithIsCut:YES];
+            [weakself copyFilesWithIsCut:YES];
         } else if ([title isEqualToString:@"Paste"]) {
-            [self pasteInLocation:[kAppDelegate managerCurrentDir]];
+            [weakself pasteInLocation:[kAppDelegate managerCurrentDir]];
         } else if ([title isEqualToString:@"Delete"]) {
             UIActionSheet *deleteConfirmation = [[UIActionSheet alloc]initWithTitle:@"Are you Sure?" completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
                 if (buttonIndex == 0) {
-                    [self deleteSelectedFiles];
+                    [weakself deleteSelectedFiles];
                 }
             } cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Delete" otherButtonTitles:nil];
             deleteConfirmation.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
             [deleteConfirmation showInView:self.view];
         }
         
-        [self updateCopyButtonState];
+        [weakself updateCopyButtonState];
     } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil];
     
     actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
@@ -250,12 +245,12 @@ static NSString *CellIdentifier = @"Cell";
 
 - (void)reindexFilelistIfNecessary {
     if (_filelist.count == 0) {
-        self.filelist = [NSMutableArray array];
-        
         NSString *currentDir = [kAppDelegate managerCurrentDir];
         NSString *docsDir = kDocsDir;
         
         NSArray *all = [[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil];
+        
+        self.filelist = [NSMutableArray arrayWithCapacity:all.count];
         
         NSMutableArray *dirs = [NSMutableArray array];
         NSMutableArray *files = [NSMutableArray array];
