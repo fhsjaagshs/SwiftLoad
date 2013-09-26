@@ -30,6 +30,10 @@
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 }
 
+- (void)incrementCount {
+    _numberOfUses++;
+}
+
 - (void)hideIfPossible {
     self.numberOfUses -= 1;
     

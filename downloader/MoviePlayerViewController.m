@@ -4,7 +4,7 @@
 //
 //  Created by Nathaniel Symer on 12/8/11.
 //  Copyright 2011 Nathaniel Symer. All rights reserved.
-// 
+//
 
 #import "MoviePlayerViewController.h"
 
@@ -16,6 +16,8 @@
 @property (nonatomic, strong) UIActionSheet *popupQuery;
 @property (nonatomic, strong) MPMoviePlayerController *moviePlayer;
 @property (nonatomic, strong) UINavigationBar *bar;
+
+@property (nonatomic, assign) BOOL shouldKillNAI;
 
 @end
 
@@ -47,6 +49,8 @@
     
     if (!_streamingUrl) {
         topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
+    } else {
+        [[NetworkActivityController sharedController]incrementCount];
     }
     
     [_bar pushNavigationItem:topItem animated:NO];
@@ -77,6 +81,11 @@
 }
 
 - (void)close {
+    
+    if (_shouldKillNAI) {
+        [[NetworkActivityController sharedController]hideIfPossible];
+    }
+    
     if (_moviePlayer.view.superview) {
         [_moviePlayer.view removeFromSuperview];
     }
@@ -134,6 +143,8 @@
 
 - (void)moviePlayerDidLoadData:(NSNotification *)notif {
     if (_moviePlayer.readyForDisplay && _streamingUrl) {
+        self.shouldKillNAI = NO;
+        [[NetworkActivityController sharedController]hideIfPossible];
         _bar.topItem.title = [_streamingUrl.absoluteString.lastPathComponent stringByRemovingPercentEncoding];
     }
 }

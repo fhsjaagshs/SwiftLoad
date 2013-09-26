@@ -14,5 +14,6 @@
 
 - (void)show;
 - (void)hideIfPossible;
+- (void)incrementCount;
 
 @end
