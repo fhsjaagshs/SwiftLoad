@@ -162,7 +162,7 @@ static NSString *CellIdentifier = @"Cell";
     [_theTableView deleteRowsAtIndexPaths:_theTableView.indexPathsForSelectedRows withRowAnimation:UITableViewRowAnimationRight];
     [_theTableView endUpdates];
     
-    [[FilesystemMonitor sharedMonitor]startMonitoringDirectory:kDocsDir];
+    [[FilesystemMonitor sharedMonitor]startMonitoringDirectory:[kAppDelegate managerCurrentDir]];
     
     [self updateCopyButtonState];
 }
@@ -556,14 +556,36 @@ static NSString *CellIdentifier = @"Cell";
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        NSString *removePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:_filelist[indexPath.row]];
         
-        [[NSFileManager defaultManager]removeItemAtPath:removePath error:nil];
-        [_filelist removeAllObjects];
+        __weak MyFilesViewController *weakself = self;
         
-        [_theTableView beginUpdates];
-        [_theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
-        [_theTableView endUpdates];
+        NSString *file = _filelist[indexPath.row];
+        
+        NSString *message = [NSString stringWithFormat:@"Are you sure you want to delete %@?",file];
+        
+        UIActionSheet *popupQuery = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+            
+            if (buttonIndex == actionSheet.destructiveButtonIndex) {
+                
+                [[FilesystemMonitor sharedMonitor]invalidate];
+                
+                NSString *removePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:file];
+                
+                [[NSFileManager defaultManager]removeItemAtPath:removePath error:nil];
+                
+                [weakself.filelist removeObjectAtIndex:indexPath.row];
+                [[NSFileManager defaultManager]removeItemAtPath:file error:nil];
+                
+                [weakself.theTableView beginUpdates];
+                [weakself.theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
+                [weakself.theTableView endUpdates];
+                
+                [[FilesystemMonitor sharedMonitor]startMonitoringDirectory:[kAppDelegate managerCurrentDir]];
+            }
+            
+        } cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"I'm sure, Delete" otherButtonTitles:nil];
+        popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+        [popupQuery showInView:self.view];
     }
 }
 
@@ -693,6 +715,9 @@ static NSString *CellIdentifier = @"Cell";
         [kAppDelegate sendFileInEmail:file];
         [_currentlySwipedCell hideWithAnimation:YES];
     } else if (number == 4) {
+        
+        __weak MyFilesViewController *weakself = self;
+        
         NSString *message = [NSString stringWithFormat:@"Are you sure you want to delete %@?",file.lastPathComponent];
         
         UIActionSheet *popupQuery = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
@@ -703,16 +728,16 @@ static NSString *CellIdentifier = @"Cell";
                 
                 NSIndexPath *indexPath = [_theTableView indexPathForCell:_currentlySwipedCell];
 
-                [_currentlySwipedCell hideWithAnimation:NO];
+                [weakself.currentlySwipedCell hideWithAnimation:NO];
                 
-                [_filelist removeObjectAtIndex:indexPath.row];
+                [weakself.filelist removeObjectAtIndex:indexPath.row];
                 [[NSFileManager defaultManager]removeItemAtPath:file error:nil];
                 
-                [_theTableView beginUpdates];
-                [_theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
-                [_theTableView endUpdates];
+                [weakself.theTableView beginUpdates];
+                [weakself.theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
+                [weakself.theTableView endUpdates];
 
-                [[FilesystemMonitor sharedMonitor]startMonitoringDirectory:kDocsDir];
+                [[FilesystemMonitor sharedMonitor]startMonitoringDirectory:[kAppDelegate managerCurrentDir]];
             }
             
         } cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"I'm sure, Delete" otherButtonTitles:nil];

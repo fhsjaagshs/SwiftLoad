@@ -72,17 +72,20 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     NSArray *artworks = [AVMetadataItem metadataItemsFromArray:asset.commonMetadata withKey:AVMetadataCommonKeyArtwork keySpace:AVMetadataKeySpaceCommon];
     
     NSMutableArray *artworkImages = [NSMutableArray array];
+    
     for (AVMetadataItem *item in artworks) {
-        UIImage *image = nil;
-        
-        if ([item.keySpace isEqualToString:AVMetadataKeySpaceID3]) {
-            image = [UIImage imageWithData:((NSDictionary *)item.value)[@"data"]];
-        } else if ([item.keySpace isEqualToString:AVMetadataKeySpaceiTunes]) {
-            image = [UIImage imageWithData:(NSData *)item.value];
-        }
-        
-        if (image != nil) {
-            [artworkImages addObject:image];
+        @autoreleasepool {
+            UIImage *image = nil;
+            
+            if ([item.keySpace isEqualToString:AVMetadataKeySpaceID3]) {
+                image = [UIImage imageWithData:((NSDictionary *)item.value)[@"data"]];
+            } else if ([item.keySpace isEqualToString:AVMetadataKeySpaceiTunes]) {
+                image = [UIImage imageWithData:(NSData *)item.value];
+            }
+            
+            if (image != nil) {
+                [artworkImages addObject:image];
+            }
         }
     }
     
@@ -122,10 +125,12 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     [AudioPlayerViewController notif_setAlbumArt:nil];
     
     if (artworkImages.count > 0) {
-        UIImage *image = artworkImages[0];
-        if (image != nil) {
-            [AudioPlayerViewController notif_setAlbumArt:image];
-            [songInfo setValue:[[MPMediaItemArtwork alloc]initWithImage:image] forKey:MPMediaItemPropertyArtwork];
+        @autoreleasepool {
+            UIImage *image = artworkImages[0];
+            if (image != nil) {
+                [AudioPlayerViewController notif_setAlbumArt:image];
+                [songInfo setValue:[[MPMediaItemArtwork alloc]initWithImage:image] forKey:MPMediaItemPropertyArtwork];
+            }
         }
     }
     
@@ -229,7 +234,6 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
 }
 
 - (void)skipToNextTrack {
-
     NSString *currentDir = [_nowPlayingFile stringByDeletingLastPathComponent];
     NSArray *extensions = @[@"mp3", @"wav", @"m4a", @"aac", @"pcm"];
     NSArray *dirContents = [[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil];

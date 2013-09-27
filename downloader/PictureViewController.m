@@ -171,24 +171,27 @@
 }
 
 - (void)nextImage {
-    [_prevImg setEnabled:YES];
-    self.imageNumber += 1;
-    
-    NSArray *imageFiles = [self imageFiles];
-    
-    NSString *newImageName = imageFiles[_imageNumber];
-    _navBar.topItem.title = newImageName;
-    
-    if (imageFiles.count-1 == _imageNumber) {
-        [_nextImg setEnabled:NO];
+    @autoreleasepool {
+        _prevImg.enabled = YES;
+        self.imageNumber += 1;
+        
+        NSArray *imageFiles = [self imageFiles];
+        
+        NSString *newImageName = imageFiles[_imageNumber];
+        _navBar.topItem.title = newImageName;
+        
+        if (imageFiles.count-1 == _imageNumber) {
+            [_nextImg setEnabled:NO];
+        }
+        
+        NSString *newImagePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:newImageName];
+        [kAppDelegate setOpenFile:newImagePath];
+        _zoomingImageView.image = [UIImage imageWithContentsOfFile:newImagePath];
     }
-    
-    NSString *newImagePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:newImageName];
-    [kAppDelegate setOpenFile:newImagePath];
 }
 
 - (void)previousImage {
-    [_nextImg setEnabled:YES];
+    _nextImg.enabled = YES;
     self.imageNumber -= 1;
     
     NSArray *imageFiles = [self imageFiles];

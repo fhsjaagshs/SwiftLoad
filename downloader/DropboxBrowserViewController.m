@@ -134,25 +134,27 @@ static NSString *CellIdentifier = @"dbcell";
     // IMPORTANT INFO: the row constructor (multi-value insert command) has a hard limit of 1000 rows. But for some reason, Anything above 100 doesnt work... So I just do 25 to 50...
     
     for (int location = 0; location < length; location+=40) {
-        NSUInteger size = length-location;
-        if (size > 40) {
-            size = 40;
+        @autoreleasepool {
+            NSUInteger size = length-location;
+            if (size > 40) {
+                size = 40;
+            }
+            
+            NSArray *array = [metadatas subarrayWithRange:NSMakeRange(location, size)];
+            NSMutableString *query = [NSMutableString stringWithFormat:@"INSERT INTO dropbox_data (date,size,type,filename,lowercasepath) VALUES "];
+            
+            for (DBMetadata *item in array) {
+                NSString *filename = item.filename;
+                NSString *lowercasePath = [[item.path stringByDeletingLastPathComponent]fhs_normalize];
+                int type = item.isDirectory?2:1;
+                int date = item.lastModifiedDate.timeIntervalSince1970;
+                long long size = item.totalBytes;
+                [query appendFormat:@"(%d,%lld,%d,\"%@\",\"%@\"),",date,size,type,filename,lowercasePath];
+            }
+            
+            [query deleteCharactersInRange:NSMakeRange(query.length-1, 1)];
+            [_database executeUpdate:query];
         }
-        
-        NSArray *array = [metadatas subarrayWithRange:NSMakeRange(location, size)];
-        NSMutableString *query = [NSMutableString stringWithFormat:@"INSERT INTO dropbox_data (date,size,type,filename,lowercasepath) VALUES "];
-
-        for (DBMetadata *item in array) {
-            NSString *filename = item.filename;
-            NSString *lowercasePath = [[item.path stringByDeletingLastPathComponent]fhs_normalize];
-            int type = item.isDirectory?2:1;
-            int date = item.lastModifiedDate.timeIntervalSince1970;
-            long long size = item.totalBytes;
-            [query appendFormat:@"(%d,%lld,%d,\"%@\",\"%@\"),",date,size,type,filename,lowercasePath];
-        }
-        
-        [query deleteCharactersInRange:NSMakeRange(query.length-1, 1)];
-        [_database executeUpdate:query];
     }
 
     [_database commit];
@@ -225,21 +227,25 @@ static NSString *CellIdentifier = @"dbcell";
             }
         }];
     } else {
-        NSString *filePath = [kCachesDir stringByAppendingPathComponent:@"cursors.json"];
-        NSData *json = [NSData dataWithContentsOfFile:filePath];
-        NSMutableDictionary *dict = [[NSFileManager defaultManager]fileExistsAtPath:filePath]?[NSJSONSerialization JSONObjectWithData:json options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
-        self.cursor = dict[_userID];
-        [self updateFileListing];
+        @autoreleasepool {
+            NSString *filePath = [kCachesDir stringByAppendingPathComponent:@"cursors.json"];
+            NSData *json = [NSData dataWithContentsOfFile:filePath];
+            NSMutableDictionary *dict = [[NSFileManager defaultManager]fileExistsAtPath:filePath]?[NSJSONSerialization JSONObjectWithData:json options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
+            self.cursor = dict[_userID];
+            [self updateFileListing];
+        }
     }
 }
 
 - (void)saveCursor {
-    NSString *filePath = [kCachesDir stringByAppendingPathComponent:@"cursors.json"];
-    NSData *jsonread = [NSData dataWithContentsOfFile:filePath];
-    NSMutableDictionary *dict = [[NSFileManager defaultManager]fileExistsAtPath:filePath]?[NSJSONSerialization JSONObjectWithData:jsonread options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
-    dict[_userID] = _cursor;
-    NSData *json = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONReadingMutableContainers error:nil];
-    [json writeToFile:filePath atomically:YES];
+    @autoreleasepool {
+        NSString *filePath = [kCachesDir stringByAppendingPathComponent:@"cursors.json"];
+        NSData *jsonread = [NSData dataWithContentsOfFile:filePath];
+        NSMutableDictionary *dict = [[NSFileManager defaultManager]fileExistsAtPath:filePath]?[NSJSONSerialization JSONObjectWithData:jsonread options:NSJSONReadingMutableContainers error:nil]:[NSMutableDictionary dictionary];
+        dict[_userID] = _cursor;
+        NSData *json = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONReadingMutableContainers error:nil];
+        [json writeToFile:filePath atomically:YES];
+    }
 }
 
 - (void)updateFileListing {
