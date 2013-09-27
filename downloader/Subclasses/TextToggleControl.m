@@ -12,10 +12,8 @@
 
 @property (nonatomic, strong) UIColor *onColor;
 @property (nonatomic, strong) UIColor *offColor;
-@property (nonatomic, strong) UIColor *pressedColor;
 
 @end
-
 
 @implementation TextToggleControl
 

@@ -29,8 +29,6 @@
     
     self.zoomingImageView = [[ZoomingImageView alloc]initWithFrame:screenBounds];
     _zoomingImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    //_zoomingImageView.contentInset = UIEdgeInsetsMake(64, 0, 44, 0);
-   // _zoomingImageView.scrollIndicatorInsets = _zoomingImageView.contentInset;
     _zoomingImageView.decelerationRate = UIScrollViewDecelerationRateFast;
     [self.view addSubview:_zoomingImageView];
     [self.view bringSubviewToFront:_zoomingImageView];

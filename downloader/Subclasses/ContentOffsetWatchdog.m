@@ -30,7 +30,7 @@
     CGRect frame = CGRectMake(0, -1*scroll.bounds.size.height, scroll.bounds.size.width, scroll.bounds.size.height);
     self = [super initWithFrame:frame];
     if (self) {
-        self.statusLabel = [[UILabel alloc]initWithFrame:CGRectMake(0.0f, frame.size.height-38.0f, self.frame.size.width, 20.0f)];
+        self.statusLabel = [[UILabel alloc]initWithFrame:CGRectMake(0.0f, self.frame.size.height-38.0f, self.frame.size.width, 20.0f)];
 		_statusLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         _statusLabel.font = [UIFont boldSystemFontOfSize:(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)?18:13];
 		_statusLabel.textColor = [UIColor darkGrayColor];
@@ -39,9 +39,9 @@
 		_statusLabel.textAlignment = NSTextAlignmentCenter;
 		[self addSubview:_statusLabel];
         
-        [self setScrollView:scroll];
+        self.scrollView = scroll;
         [_scrollView addSubview:self];
-        [_scrollView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:NULL];
+        [_scrollView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:nil];
     }
     return self;
 }
