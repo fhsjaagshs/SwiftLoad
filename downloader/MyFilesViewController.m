@@ -422,6 +422,10 @@ static NSString *CellIdentifier = @"Cell";
                     CompressionTask *task = [CompressionTask taskWithItems:_copiedList andZipFile:ad.openFile];
                     [[TaskController sharedController]addTask:task];
                 }
+                
+                [_copiedList removeAllObjects];
+                [self updateCopyButtonState];
+                
             } else if ([title isEqualToString:@"Decompress"]) {
                 if (fileSize(file) > 0) {
                     UnzippingTask *task = [UnzippingTask taskWithFile:file];
