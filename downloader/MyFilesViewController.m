@@ -379,12 +379,8 @@ static NSString *CellIdentifier = @"Cell";
         cell.backgroundView = nil;
     } else {
         cell.imageView.image = [UIImage imageNamed:@"file_icon"];
-        cell.swipeEnabled = YES;
+        cell.swipeEnabled = !_theTableView.editing;
         cell.detailTextLabel.text = [NSString stringWithFormat:@"%@, %@",[file.pathExtension.lowercaseString isEqualToString:@"zip"]?@"Archive":@"File",[NSString fileSizePrettify:fileSize(file)]];
-    }
-    
-    if (_theTableView.editing) {
-        cell.swipeEnabled = NO;
     }
     
     return cell;
@@ -394,13 +390,9 @@ static NSString *CellIdentifier = @"Cell";
     
     AppDelegate *ad = kAppDelegate;
     
-    NSString *cellName = _filelist[indexPath.row];
-    
-    NSString *file = [ad.managerCurrentDir stringByAppendingPathComponent:cellName];
-    ad.openFile = file;
+    NSString *file = [ad.managerCurrentDir stringByAppendingPathComponent:_filelist[indexPath.row]];
 
     if (isDirectory(file)) {
-        
         _navBar.topItem.title = [_navBar.topItem.title stringByAppendingPathComponent:file.lastPathComponent];
         
         [ad setManagerCurrentDir:file];
@@ -410,10 +402,10 @@ static NSString *CellIdentifier = @"Cell";
         [_filelist removeAllObjects];
         [_theTableView reloadDataWithCoolAnimationType:CoolRefreshAnimationStyleForward];
         [_theTableView flashScrollIndicators];
-        
     } else if ([file.pathExtension.lowercaseString isEqualToString:@"zip"]) {
+        ad.openFile = file;
         
-        UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",cellName] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+        UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",file.lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             
             NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
             
@@ -447,8 +439,10 @@ static NSString *CellIdentifier = @"Cell";
         
         actionSheet.cancelButtonIndex = actionSheet.numberOfButtons-1;
         [actionSheet showInView:self.view];
-        
     } else {
+        
+        ad.openFile = file;
+        
         BOOL isHTML = [MIMEUtils isHTMLFile:file];
         
         if ([MIMEUtils isAudioFile:file]) {
@@ -486,15 +480,13 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    [_currentlySwipedCell hideWithAnimation:NO];
+    [_currentlySwipedCell hideWithAnimation:YES];
     
     if (_theTableView.editing) {
         [_theTableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
         [self updateCopyButtonState];
         return nil;
     }
-    
     return indexPath;
 }
 
@@ -504,7 +496,6 @@ static NSString *CellIdentifier = @"Cell";
         [self updateCopyButtonState];
         return nil;
     }
-    
     return indexPath;
 }
 
@@ -535,7 +526,6 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     if (!indexPath) {
         return UITableViewCellEditingStyleNone;
     }
@@ -548,10 +538,7 @@ static NSString *CellIdentifier = @"Cell";
     
     NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:_filelist[indexPath.row]];
     
-    if (isDirectory(file)) {
-        return UITableViewCellEditingStyleDelete;
-    }
-    return UITableViewCellEditingStyleNone;
+    return isDirectory(file)?UITableViewCellEditingStyleDelete:UITableViewCellEditingStyleNone;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -654,37 +641,41 @@ static NSString *CellIdentifier = @"Cell";
     backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     backgroundView.backgroundColor = [UIColor darkGrayColor];
 
-    NSMutableArray *buttonData = [@[ @{@"title": @"Action", @"image": @"action"}, @{@"title": @"FTP", @"image": @"dropbox"}, @{@"title": @"Bluetooth", @"image": @"bluetooth"}, @{@"title": @"Email", @"image": @"paperclip"}, @{@"title": @"Delete", @"image": @"delete"} ]mutableCopy];
+    NSArray *buttonData = @[@"action", @"dropbox", @"bluetooth", @"paperclip", @"delete"];
     
     NSString *filePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:cell.textLabel.text];
+    BOOL disableDelete = [filePath isEqualToString:[kAppDelegate nowPlayingFile]];
     
-    if ([filePath isEqualToString:[kAppDelegate nowPlayingFile]]) {
-        [buttonData removeObject:buttonData.lastObject];
-    }
+    for (int index = 0; index < buttonData.count; index++) {
+        @autoreleasepool {
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            button.frame = CGRectMake(index*((backgroundView.bounds.size.width)/buttonData.count), 0, ((backgroundView.bounds.size.width)/buttonData.count), backgroundView.bounds.size.height);
+            button.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
+            
+            NSString *imageName = buttonData[index];
+
+            if ([imageName isEqualToString:@"bluetooth"] && [[BluetoothManager sharedManager]isTransferring]) {
+                button.enabled = NO;
+            } else if (disableDelete && [imageName isEqualToString:@"delete"]) {
+                button.enabled = NO;
+            }
     
-    if ([[BluetoothManager sharedManager]isTransferring]) {
-        [buttonData removeObjectAtIndex:2];
-    }
-    
-    for (NSDictionary *buttonInfo in buttonData) {
-        NSUInteger index = [buttonData indexOfObject:buttonInfo];
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        button.frame = CGRectMake(index*((backgroundView.bounds.size.width)/buttonData.count), 0, ((backgroundView.bounds.size.width)/buttonData.count), backgroundView.bounds.size.height);
-        button.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
-        
-        UIImage *grayImage = [UIImage imageNamed:buttonInfo[@"image"]];
-        [button setImage:grayImage forState:UIControlStateNormal];
-        [button setTag:index+1];
-        [button addTarget:self action:@selector(touchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
-        [backgroundView addSubview:button];
+            UIImage *grayImage = [UIImage imageNamed:imageName];
+            [button setTag:index+1];
+            [button addTarget:self action:@selector(touchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
+            [button setImage:grayImage forState:UIControlStateNormal];
+            [backgroundView addSubview:button];
+        }
     }
     return backgroundView;
 }
 
 - (void)touchUpInsideAction:(UIButton *)button {
 
-    NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:_currentlySwipedCell.textLabel.text];
-    [kAppDelegate setOpenFile:file];
+    AppDelegate *ad = kAppDelegate;
+    
+    NSString *file = [ad.managerCurrentDir stringByAppendingPathComponent:_currentlySwipedCell.textLabel.text];
+    ad.openFile = file;
     
     long number = button.tag-1;
     
@@ -702,7 +693,6 @@ static NSString *CellIdentifier = @"Cell";
             [popupQuery showInView:self.view];
             [_currentlySwipedCell hideWithAnimation:YES];
         }
-        
     } else if (number == 1) {
         DropboxUpload *task = [DropboxUpload uploadWithFile:file];
         [[TaskController sharedController]addTask:task];
@@ -712,7 +702,7 @@ static NSString *CellIdentifier = @"Cell";
         [[TaskController sharedController]addTask:task];
         [_currentlySwipedCell hideWithAnimation:YES];
     } else if (number == 3) {
-        [kAppDelegate sendFileInEmail:file];
+        [ad sendFileInEmail:file];
         [_currentlySwipedCell hideWithAnimation:YES];
     } else if (number == 4) {
         
