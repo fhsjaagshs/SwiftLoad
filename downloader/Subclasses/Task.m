@@ -80,7 +80,6 @@ float const kClearOutDelayTask = 0.6f;
 }
 
 - (void)showFailure {
-
     self.complete = YES;
     self.succeeded = NO;
     

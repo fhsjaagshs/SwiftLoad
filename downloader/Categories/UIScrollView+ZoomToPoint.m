@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Nathaniel Symer. All rights reserved.
 //
 
-#import "UIScrollView+UIScrollView_ZoomToPoint.h"
+#import "UIScrollView+ZoomToPoint.h"
 
-@implementation UIScrollView (UIScrollView_ZoomToPoint)
+@implementation UIScrollView (ZoomToPoint)
 
 - (void)zoomToPoint:(CGPoint)zoomPoint withScale:(CGFloat)scale animated:(BOOL)animated {
     //Normalize current content size back to content scale of 1.0f

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIScrollView (UIScrollView_ZoomToPoint)
+@interface UIScrollView (ZoomToPoint)
 
 - (void)zoomToPoint:(CGPoint)zoomPoint withScale:(CGFloat)scale animated:(BOOL)animated;
 

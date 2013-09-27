@@ -11,7 +11,7 @@
 @implementation SimpleKeychain
 
 + (NSMutableDictionary *)getKeychainQuery:(NSString *)service {
-    return [@{ (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword, (__bridge id)kSecAttrService: service, (__bridge id)kSecAttrAccount: service, (__bridge id)kSecAttrAccessible: (__bridge id)kSecAttrAccessibleAfterFirstUnlock }mutableCopy];
+    return [@{(__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword, (__bridge id)kSecAttrService: service, (__bridge id)kSecAttrAccount: service, (__bridge id)kSecAttrAccessible: (__bridge id)kSecAttrAccessibleAfterFirstUnlock }mutableCopy];
 }
 
 + (void)save:(NSString *)service data:(id)data {
@@ -22,10 +22,11 @@
 }
 
 + (id)load:(NSString *)service {
-    id ret = nil;
     NSMutableDictionary *keychainQuery = [self getKeychainQuery:service];
     keychainQuery[(__bridge id)kSecReturnData] = (id)kCFBooleanTrue;
     keychainQuery[(__bridge id)kSecMatchLimit] = (__bridge id)kSecMatchLimitOne;
+    
+    id ret = nil;
     
     CFDataRef keyData = NULL;
     if (SecItemCopyMatching((__bridge  CFDictionaryRef)keychainQuery, (CFTypeRef *)&keyData) == noErr) {
@@ -42,8 +43,7 @@
 }
 
 + (void)delete:(NSString *)service {
-    NSMutableDictionary *keychainQuery = [self getKeychainQuery:service];
-    SecItemDelete((__bridge CFDictionaryRef)keychainQuery);
+    SecItemDelete((__bridge CFDictionaryRef)[self getKeychainQuery:service]);
 }
 
 @end

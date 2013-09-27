@@ -8,8 +8,6 @@
 
 #import "BGProcFactory.h"
 
-static BGProcFactory *sharedInstance = nil;
-
 @interface BGProcFactory ()
 
 @property (nonatomic, retain) NSMutableDictionary *core;
@@ -43,8 +41,7 @@ static BGProcFactory *sharedInstance = nil;
 }
 
 - (void)endAllTasks {
-    NSMutableDictionary *corecopy = [_core mutableCopy];
-    for (NSString *key in corecopy.allKeys) {
+    for (NSString *key in [[_core mutableCopy]allKeys]) {
         [self endProcForKey:key];
     }
 }

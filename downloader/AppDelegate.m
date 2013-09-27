@@ -10,21 +10,12 @@
 #include <sys/stat.h>
 
 NSString * const NSFileName = @"NSFileName";
-NSString * const kCopyListChangedNotification = @"copiedlistchanged";
+NSString * const kCopyListChangedNotification = @"kCopyListChangedNotification";
 
 float fileSize(NSString *filePath) {
     struct stat statbuf;
     stat(filePath.UTF8String, &statbuf);
     return (float)statbuf.st_size;
-}
-
-float systemVersion(void) {
-    static float systemVersion = -1;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        systemVersion = [UIDevice currentDevice].systemVersion.floatValue;
-    });
-    return systemVersion;
 }
 
 BOOL isDirectory(NSString *filePath) {
@@ -46,14 +37,6 @@ void fireFinishDLNotification(NSString *filename) {
     [[UIApplication sharedApplication]presentLocalNotificationNow:notification];
 }
 
-NSString * getResource(NSString *raw) {
-    return [[NSBundle mainBundle]pathForResource:[raw stringByDeletingPathExtension] ofType:raw.pathExtension];
-}
-
-float sanitizeMesurement(float measurement) {
-    return ((measurement/460)*[[UIScreen mainScreen]applicationFrame].size.height);
-}
-
 NSString * getNonConflictingFilePathForPath(NSString *path) {
     NSString *oldPath = path;
     NSString *ext = [path pathExtension];
@@ -71,6 +54,10 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     
     return path;
 }
+
+@interface AppDelegate () <AVAudioPlayerDelegate, DBSessionDelegate>
+
+@end
 
 @implementation AppDelegate
 
@@ -167,14 +154,16 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
         _audioPlayer.delegate = self;
     }
     
+    __weak AppDelegate *weakself = self;
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @autoreleasepool {
-            [_audioPlayer prepareToPlay];
+            [weakself.audioPlayer prepareToPlay];
             dispatch_sync(dispatch_get_main_queue(), ^{
                 @autoreleasepool {
                     [AudioPlayerViewController notif_setPausePlayTitlePause];
-                    self.nowPlayingFile = file;
-                    [_audioPlayer play];
+                    weakself.nowPlayingFile = file;
+                    [weakself.audioPlayer play];
                 }
             });
         }
@@ -218,14 +207,16 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     _audioPlayer.numberOfLoops = [[NSUserDefaults standardUserDefaults]boolForKey:@"loop"]?-1:0;
     [AudioPlayerViewController notif_setLoop];
     
+    __weak AppDelegate *weakself = self;
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @autoreleasepool {
-            [_audioPlayer prepareToPlay];
+            [weakself.audioPlayer prepareToPlay];
             dispatch_sync(dispatch_get_main_queue(), ^{
                 @autoreleasepool {
                     [AudioPlayerViewController notif_setPausePlayTitlePause];
-                    self.nowPlayingFile = newFile;
-                    [_audioPlayer play];
+                    weakself.nowPlayingFile = newFile;
+                    [weakself.audioPlayer play];
                 }
             });
         }
@@ -262,14 +253,16 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     _audioPlayer.numberOfLoops = [[NSUserDefaults standardUserDefaults]boolForKey:@"loop"]?-1:0;
     [AudioPlayerViewController notif_setLoop];
     
+    __weak AppDelegate *weakself = self;
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @autoreleasepool {
-            [_audioPlayer prepareToPlay];
+            [weakself.audioPlayer prepareToPlay];
             dispatch_sync(dispatch_get_main_queue(), ^{
                 @autoreleasepool {
-                    [_audioPlayer play];
+                    [weakself.audioPlayer play];
                     [AudioPlayerViewController notif_setPausePlayTitlePause];
-                    self.nowPlayingFile = newFile;
+                    weakself.nowPlayingFile = newFile;
                 }
             });
         }
@@ -335,7 +328,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     }
 }
 
-- (void)printFile:(NSString *)file fromView:(UIView *)view {
+- (void)printFile:(NSString *)file {
     UIPrintInteractionController *pic = [UIPrintInteractionController sharedPrintController];
     UIPrintInfo *printInfo = [UIPrintInfo printInfo];
     printInfo.outputType = UIPrintInfoOutputGeneral;
@@ -352,7 +345,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     };
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [pic presentFromRect:CGRectMake(716, 967, 44, 37) inView:view animated:YES completionHandler:completionHandler];
+        [pic presentFromRect:CGRectMake(716, 967, 44, 37) inView:[UIViewController topViewController].view animated:YES completionHandler:completionHandler];
     } else {
         [pic presentAnimated:YES completionHandler:completionHandler];
     }
@@ -378,11 +371,6 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     [[TaskController sharedController]addTask:[url.scheme isEqualToString:@"ftp"]?[FTPDownload downloadWithURL:url]:[HTTPDownload downloadWithURL:url]];
 }
 
-- (BOOL)isInForground {
-    return [[UIApplication sharedApplication]applicationState] != UIApplicationStateBackground;
-}
-
-// Dropbox Upload
 - (void)uploadLocalFileToDropbox:(NSString *)localPath {
     DropboxUpload *task = [DropboxUpload uploadWithFile:localPath];
     [[TaskController sharedController]addTask:task];
@@ -437,7 +425,6 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
 	[DBSession setSharedSession:session];
     
     self.window = [[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]];
-    _window.opaque = YES;
     self.viewController = [MyFilesViewController viewController];
     _window.rootViewController = _viewController;
     _window.backgroundColor = [UIColor whiteColor];
@@ -449,9 +436,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     [Appirater setSignificantEventsUntilPrompt:-1];
     [Appirater setTimeBeforeReminding:2];
     [Appirater appLaunched:YES];
-    
- //   [[UINavigationBar appearance]setTitleTextAttributes:@{NSFontAttributeName: [UIFont fontWithName:@"Avenir-Medium" size:19]}];
-    
+
     return YES;
 }
 
@@ -477,11 +462,6 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     
     if (url.absoluteString.length == 0) {
         return NO;
-    }
-    
-    if ([[DBSession sharedSession]handleOpenURL:url]) {
-        [[NSNotificationCenter defaultCenter]postNotificationName:[[DBSession sharedSession]isLinked]?@"db_auth_success":@"db_auth_failure" object:nil];
-        return YES;
     }
     
     if (url.isFileURL) {
@@ -517,15 +497,20 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
         }
 
     } else {
-        NSString *URLString = nil;
-        if ([url.absoluteString hasPrefix:@"swiftload://"]) {
-            URLString = [url.absoluteString stringByReplacingOccurrencesOfString:@"swiftload://" withString:@"http://"];
-        } else if ([url.absoluteString hasPrefix:@"swift://"]) {
-            URLString = [url.absoluteString stringByReplacingOccurrencesOfString:@"swift://" withString:@"http://"];
-        }
-        
-        if (URLString.length > 0) {
-            [self downloadFile:URLString];
+        if ([[DBSession sharedSession]handleOpenURL:url]) {
+            [[NSNotificationCenter defaultCenter]postNotificationName:[[DBSession sharedSession]isLinked]?@"db_auth_success":@"db_auth_failure" object:nil];
+            return YES;
+        } else {
+            NSString *URLString = nil;
+            if ([url.absoluteString hasPrefix:@"swiftload://"]) {
+                URLString = [url.absoluteString stringByReplacingOccurrencesOfString:@"swiftload://" withString:@"http://"];
+            } else if ([url.absoluteString hasPrefix:@"swift://"]) {
+                URLString = [url.absoluteString stringByReplacingOccurrencesOfString:@"swift://" withString:@"http://"];
+            }
+            
+            if (URLString.length > 0) {
+                [self downloadFile:URLString];
+            }
         }
     }
 

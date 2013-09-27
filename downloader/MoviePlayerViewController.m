@@ -81,7 +81,6 @@
 }
 
 - (void)close {
-    
     if (_shouldKillNAI) {
         [[NetworkActivityController sharedController]hideIfPossible];
     }
@@ -92,15 +91,15 @@
     
     [_moviePlayer stop];
     
-    AppDelegate *ad = kAppDelegate;
-    
-    if (_shouldUnpauseAudioPlayer) {
-        [ad.audioPlayer prepareToPlay];
-        [ad.audioPlayer play];
-    }
-
-    [self dismissViewControllerAnimated:YES completion:nil];
-    [ad setOpenFile:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        AppDelegate *ad = kAppDelegate;
+        
+        if (_shouldUnpauseAudioPlayer) {
+            [ad.audioPlayer prepareToPlay];
+            [ad.audioPlayer play];
+        }
+        ad.openFile = nil;
+    }];
 }
 
 - (void)showActionSheet:(id)sender {
@@ -130,10 +129,6 @@
     } else {
         [_popupQuery showInView:self.view];
     }
-}
-
-- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)moviePlayerDidFinish:(NSNotification *)notification {

@@ -18,28 +18,26 @@
 }
 
 + (BOOL)isVideoFile:(NSString *)file {
-    NSString *ext = file.pathExtension.lowercaseString;
-    NSArray *fileTypes = @[@"mov", @"mp4", @"mpv", @"3gp" ];
-    return [fileTypes containsObject:ext];
+    NSArray *fileTypes = @[@"mov", @"mp4", @"mpv", @"3gp"];
+    return [fileTypes containsObject:file.pathExtension.lowercaseString];
 }
 
 + (BOOL)isTextFile:(NSString *)file {
-    NSString *ext = file.pathExtension.lowercaseString;
     NSArray *fileTypes = @[@"cfg", @"conf", @"cs", @"h", @"j", @"list", @"log", @"nib", @"plist", @"script", @"strings", @"txt", @"xib", @"md", @"markdown", @"bat", @"xml", @"erb", @""];
     
-    if ([fileTypes containsObject:ext]) {
+    if ([fileTypes containsObject:file.pathExtension.lowercaseString]) {
         return YES;
     } else {
         
-        if ([ext containsString:@"htm"]) {
+        if ([file.pathExtension.lowercaseString containsString:@"htm"]) {
             return YES;
         }
         
-        if ([ext containsString:@"ml"]) {
+        if ([file.pathExtension.lowercaseString containsString:@"ml"]) {
             return YES;
         }
         
-        if ([ext containsString:@"json"]) {
+        if ([file.pathExtension.lowercaseString containsString:@"json"]) {
             return YES;
         }
         
@@ -65,27 +63,23 @@
 }
 
 + (BOOL)isDocumentFile:(NSString *)file {
-    NSString *ext = file.pathExtension.lowercaseString;
     NSArray *fileTypes = @[@"rtf", @"pdf", @"doc", @"docx", @"xls", @"xlsx", @"ppt", @"pptx", @"pps", @"pages", @"key", @"numbers"];
-    return [fileTypes containsObject:ext];
+    return [fileTypes containsObject:file.pathExtension.lowercaseString];
 }
 
 + (BOOL)isImageFile:(NSString *)file {
-    NSString *ext = file.pathExtension.lowercaseString;
     NSArray *fileTypes = @[@"tiff", @"tif", @"jpg", @"jpeg", @"gif", @"png", @"bmp", @"BMPf", @"ico", @"cur", @"xbm"];
-    return [fileTypes containsObject:ext];
+    return [fileTypes containsObject:file.pathExtension.lowercaseString];
 }
 
 + (BOOL)isAudioFile:(NSString *)file {
-    NSString *ext = file.pathExtension.lowercaseString;
     NSArray *fileTypes = @[@"mp3", @"wav", @"m4a", @"aac", @"pcm"];
-    return [fileTypes containsObject:ext];
+    return [fileTypes containsObject:file.pathExtension.lowercaseString];
 }
 
 + (BOOL)isHTMLFile:(NSString *)file {
-    NSString *ext = file.pathExtension.lowercaseString;
     NSArray *fileTypes = @[@"html", @"htm", @"xhtml", @"shtml", @"shtm", @"xhtm", @"webarchive"];
-    return [fileTypes containsObject:ext];
+    return [fileTypes containsObject:file.pathExtension.lowercaseString];
 }
 
 @end

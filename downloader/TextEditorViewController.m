@@ -8,7 +8,7 @@
 
 #import "TextEditorViewController.h"
 
-@interface TextEditorViewController () <MFMessageComposeViewControllerDelegate, UITextViewDelegate>
+@interface TextEditorViewController () <UITextViewDelegate>
 
 @property (nonatomic, strong) UIActionSheet *popupQuery;
 @property (nonatomic, strong) UITextView *theTextView;
@@ -109,20 +109,18 @@
     }
 }
 
-- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result {
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
 - (void)dismissKeyboard {
-    if ([self.theTextView isFirstResponder]) {
-        [self.theTextView resignFirstResponder];
+    if ([_theTextView isFirstResponder]) {
+        [_theTextView resignFirstResponder];
     }
 }
 
 - (void)close {
-    [self dismissKeyboard];
-    [self dismissViewControllerAnimated:YES completion:nil];
-    [kAppDelegate setOpenFile:nil];
+    __weak TextEditorViewController *weakself = self;
+    [self dismissViewControllerAnimated:YES completion:^{
+        [weakself dismissKeyboard];
+        [kAppDelegate setOpenFile:nil];
+    }];
 }
 
 - (void)registerForKeyboardNotifications {
@@ -135,13 +133,13 @@
     CGSize kbSize = [[aNotification userInfo][UIKeyboardFrameBeginUserInfoKey]CGRectValue].size;
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(64, 0, isLandscape?kbSize.width:kbSize.height, 0);
     
-    self.theTextView.contentInset = contentInsets;
-    self.theTextView.scrollIndicatorInsets = contentInsets;
+    _theTextView.contentInset = contentInsets;
+    _theTextView.scrollIndicatorInsets = contentInsets;
 }
 
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification {
-    self.theTextView.contentInset = UIEdgeInsetsZero;
-    self.theTextView.scrollIndicatorInsets = UIEdgeInsetsZero;
+    _theTextView.contentInset = UIEdgeInsetsZero;
+    _theTextView.scrollIndicatorInsets = UIEdgeInsetsZero;
 }
 
 - (void)textViewDidChange:(UITextView *)textView {
@@ -151,54 +149,54 @@
 
 - (void)showActionSheet:(id)sender {
     
-    if (self.popupQuery && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [self.popupQuery dismissWithClickedButtonIndex:self.popupQuery.cancelButtonIndex animated:YES];
+    if (_popupQuery && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        [_popupQuery dismissWithClickedButtonIndex:_popupQuery.cancelButtonIndex animated:YES];
         self.popupQuery = nil;
         return;
     }
     
     NSString *file = [kAppDelegate openFile];
     
-    UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",file.lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+    self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",file.lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         if (buttonIndex == 0) {
             [kAppDelegate sendFileInEmail:file];
         } else if (buttonIndex == 1) {
-            BluetoothTask *task = [BluetoothTask taskWithFile:[kAppDelegate openFile]];
+            BluetoothTask *task = [BluetoothTask taskWithFile:file];
             [[TaskController sharedController]addTask:task];
         } else if (buttonIndex == 2) {
-            DropboxUpload *task = [DropboxUpload uploadWithFile:[kAppDelegate openFile]];
+            DropboxUpload *task = [DropboxUpload uploadWithFile:file];
             [[TaskController sharedController]addTask:task];
         }
     } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send via Bluetooth", @"Upload to Dropbox", nil];
     
-    [self setPopupQuery:sheet];
-    
-    self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+    _popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [self.popupQuery showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];
+        [_popupQuery showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];
     } else {
-        [self.popupQuery showInView:self.view];
+        [_popupQuery showInView:self.view];
     }
 }
 
 - (void)loadText {
-    [self.theTextView setHidden:YES];
+    _theTextView.hidden = YES;
     
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:[kAppDelegate window] animated:YES];
     hud.mode = MBProgressHUDModeText;
     hud.labelText = @"Loading...";
     
+    __weak TextEditorViewController *weakself = self;
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @autoreleasepool {
         
-            NSString *fileContents = [self getStringFromFile];
+            NSString *fileContents = [weakself getStringFromFile];
             
             dispatch_sync(dispatch_get_main_queue(), ^{
                 @autoreleasepool {
-                    [self.theTextView setText:fileContents];
-                    [self.theTextView setHidden:NO];
-                    [self.view setBackgroundColor:[UIColor whiteColor]];
+                    [weakself.theTextView setText:fileContents];
+                    [weakself.theTextView setHidden:NO];
+                    [weakself.view setBackgroundColor:[UIColor whiteColor]];
                     [hud hide:YES];
                 }
             });

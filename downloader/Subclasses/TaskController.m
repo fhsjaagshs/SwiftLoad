@@ -8,7 +8,7 @@
 
 #import "TaskController.h"
 
-static NSString * const cellId = @"TaskCell";
+static NSString * const cellId = @"TaskCellID";
 
 @interface TaskController ()
 
@@ -27,7 +27,6 @@ static NSString * const cellId = @"TaskCell";
 }
 
 - (int)indexOfTask:(Task *)task {
-    
     if (![_taskObjs containsObject:task]) {
         return -1;
     }
@@ -42,7 +41,6 @@ static NSString * const cellId = @"TaskCell";
 }
 
 - (void)removeTask:(Task *)task {
-    
     if (!task.complete) {
         [task stop];
     }

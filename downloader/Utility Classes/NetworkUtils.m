@@ -90,7 +90,6 @@
                 return YES;
             }
             
-            
             if ((((flags & kSCNetworkReachabilityFlagsConnectionOnDemand ) != 0) || (flags & kSCNetworkReachabilityFlagsConnectionOnTraffic) != 0)) {
                 if ((flags & kSCNetworkReachabilityFlagsInterventionRequired) == 0) {
                     return YES;

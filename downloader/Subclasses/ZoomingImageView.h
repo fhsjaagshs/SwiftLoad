@@ -8,12 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ZoomingImageView : UIScrollView <UIScrollViewDelegate>
+@interface ZoomingImageView : UIScrollView
 
 - (void)zoomOut;
 - (void)resetImage;
-- (void)loadImage:(UIImage *)image;
 
-@property (nonatomic, strong) UIImageView *theImageView;
+@property (nonatomic, strong) UIImage *image;
 
 @end

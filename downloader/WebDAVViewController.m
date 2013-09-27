@@ -53,7 +53,6 @@
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
     [navBar pushNavigationItem:topItem animated:NO];
     [self.view addSubview:navBar];
-    [self.view bringSubviewToFront:navBar];
     
     self.onLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 64, screenBounds.size.width, 100)];
     _onLabel.textAlignment = NSTextAlignmentCenter;
@@ -82,7 +81,7 @@
     _urlLabel.scrollEnabled = NO;
     [self.view addSubview:_urlLabel];
     
-    NSString *htmlString = @"<center style=\"font-family: Avenir-Medium; font-size:15px;\"><strong>Server</strong> Above IP address<br /><strong>Port</strong> 8080<br /><strong>SSL</strong> NO<br /><strong>Username</strong> See In-App Settings<br /><strong>Password</strong> See In-App Settings</center>";
+    NSString *htmlString = @"<center style=\"font-family: Helvetica; font-size:15px;\"><strong>Server</strong> Above IP address<br /><strong>Port</strong> 8080<br /><strong>SSL</strong> NO<br /><strong>Username</strong> See In-App Settings<br /><strong>Password</strong> See In-App Settings</center>";
     
     UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-130, screenBounds.size.width, 130)];
     textView.attributedText = [[NSAttributedString alloc]initWithData:[htmlString dataUsingEncoding:NSUTF8StringEncoding] options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute: [NSNumber numberWithInt:NSUTF8StringEncoding]} documentAttributes:nil error:nil];
@@ -100,7 +99,6 @@
 }
 
 - (void)createServer {
-    
     if (![NetworkUtils isConnectedToWifi]) {
         _onLabel.text = @"WebDAV server is OFF";
         _urlLabel.text = @"You are not connected to WiFi";

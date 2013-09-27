@@ -214,7 +214,6 @@
 }
 
 - (void)close {
-    
     AppDelegate *ad = kAppDelegate;
     
     if (!ad.audioPlayer.isPlaying) {
@@ -230,25 +229,26 @@
 }
 
 - (void)startUpdatingTime {
-    
     self.shouldStopCounter = NO;
     
     if (_isGoing) {
         return;
     }
 
+    __weak AudioPlayerViewController *weakself = self;
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         @autoreleasepool {
-            while (!_shouldStopCounter) {
+            while (!weakself.shouldStopCounter) {
                 [NSThread sleepForTimeInterval:0.1f];
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     @autoreleasepool {
-                        self.isGoing = YES;
-                        [self updateTime];
+                        weakself.isGoing = YES;
+                        [weakself updateTime];
                     }
                 });
             }
-            self.isGoing = NO;
+            weakself.isGoing = NO;
         }
     });
 }
@@ -258,7 +258,6 @@
 }
 
 - (void)updateTime {
-    
     AppDelegate *ad = kAppDelegate;
     
     float currentTime = ad.audioPlayer.currentTime;
@@ -284,15 +283,17 @@
 
 - (void)showActionSheet:(id)sender {
     
-    if (self.popupQuery && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [self.popupQuery dismissWithClickedButtonIndex:self.popupQuery.cancelButtonIndex animated:YES];
+    if (_popupQuery && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        [_popupQuery dismissWithClickedButtonIndex:_popupQuery.cancelButtonIndex animated:YES];
         self.popupQuery = nil;
         return;
     }
         
     NSString *file = [kAppDelegate openFile];
+    
+    __weak AudioPlayerViewController *weakself = self;
         
-    self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",[file lastPathComponent]] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+    self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",file.lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
 
         if (buttonIndex == _popupQuery.cancelButtonIndex) {
             return;
@@ -301,18 +302,18 @@
         if (buttonIndex == 0) {
             [kAppDelegate sendFileInEmail:file];
         } else if (buttonIndex == 1) {
-            BluetoothTask *task = [BluetoothTask taskWithFile:[kAppDelegate openFile]];
+            BluetoothTask *task = [BluetoothTask taskWithFile:file];
             [[TaskController sharedController]addTask:task];
         } else if (buttonIndex == 2) {
-            DropboxUpload *task = [DropboxUpload uploadWithFile:[kAppDelegate openFile]];
+            DropboxUpload *task = [DropboxUpload uploadWithFile:file];
             [[TaskController sharedController]addTask:task];
         } else if (buttonIndex == 3) {
             EditID3ViewController *controller = [EditID3ViewController viewControllerWhite];
-            [self presentViewController:controller animated:YES completion:nil];
+            [weakself presentViewController:controller animated:YES completion:nil];
         }
     } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send via Bluetooth", @"Upload to Dropbox", nil];
     
-    self.popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+    _popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     
     if (_errorLabel.hidden && [file.pathExtension.lowercaseString isEqualToString:@"mp3"]) {
         [_popupQuery addButtonWithTitle:@"Edit Metadata"];
@@ -323,9 +324,9 @@
     [_popupQuery setCancelButtonIndex:_popupQuery.numberOfButtons-1];
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [self.popupQuery showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];
+        [_popupQuery showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];
     } else {
-        [self.popupQuery showInView:self.view];
+        [_popupQuery showInView:self.view];
     }
 }
 

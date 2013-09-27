@@ -76,7 +76,7 @@
 		F1693C3D16DFAB6E006E3739 /* SwiftLoadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C2916DFAB6E006E3739 /* SwiftLoadCell.m */; };
 		F1693C4E16DFABA6006E3739 /* UIActionSheet+BlockExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C4716DFABA6006E3739 /* UIActionSheet+BlockExtensions.m */; };
 		F1693C4F16DFABA6006E3739 /* UIAlertView+BlockExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C4916DFABA6006E3739 /* UIAlertView+BlockExtensions.m */; };
-		F1693C5016DFABA6006E3739 /* UIScrollView+UIScrollView_ZoomToPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C4B16DFABA6006E3739 /* UIScrollView+UIScrollView_ZoomToPoint.m */; };
+		F1693C5016DFABA6006E3739 /* UIScrollView+ZoomToPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C4B16DFABA6006E3739 /* UIScrollView+ZoomToPoint.m */; };
 		F1693C5116DFABA6006E3739 /* UIViewController+AutoNib.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C4D16DFABA6006E3739 /* UIViewController+AutoNib.m */; };
 		F1693C5D16DFAC0E006E3739 /* MIMEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C5816DFAC0E006E3739 /* MIMEUtils.m */; };
 		F1693C5E16DFAC0E006E3739 /* NetworkUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C5A16DFAC0E006E3739 /* NetworkUtils.m */; };
@@ -147,7 +147,6 @@
 		F1AE31BB17BDC3C0005D3EE6 /* play_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = F1AE31B917BDC3BF005D3EE6 /* play_pressed.png */; };
 		F1AE31BC17BDC3C0005D3EE6 /* play_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1AE31BA17BDC3C0005D3EE6 /* play_pressed@2x.png */; };
 		F1B1C1E417B29C1800B6164C /* MarqueeLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B1C1E317B29C1800B6164C /* MarqueeLabel.m */; };
-		F1B1C1EA17B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B1C1E917B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.m */; };
 		F1B2C0FC17961A0E00AD5A04 /* PeerPickerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B2C0FB17961A0E00AD5A04 /* PeerPickerCell.m */; };
 		F1BA8C7E17728500007AAF85 /* BGProcFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BA8C7D17728500007AAF85 /* BGProcFactory.m */; };
 		F1BC30CA17715DF300DAFA0A /* Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BC30C917715DF300DAFA0A /* Hack.m */; };
@@ -361,8 +360,8 @@
 		F1693C4716DFABA6006E3739 /* UIActionSheet+BlockExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIActionSheet+BlockExtensions.m"; sourceTree = "<group>"; };
 		F1693C4816DFABA6006E3739 /* UIAlertView+BlockExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+BlockExtensions.h"; sourceTree = "<group>"; };
 		F1693C4916DFABA6006E3739 /* UIAlertView+BlockExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+BlockExtensions.m"; sourceTree = "<group>"; };
-		F1693C4A16DFABA6006E3739 /* UIScrollView+UIScrollView_ZoomToPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+UIScrollView_ZoomToPoint.h"; sourceTree = "<group>"; };
-		F1693C4B16DFABA6006E3739 /* UIScrollView+UIScrollView_ZoomToPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+UIScrollView_ZoomToPoint.m"; sourceTree = "<group>"; };
+		F1693C4A16DFABA6006E3739 /* UIScrollView+ZoomToPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+ZoomToPoint.h"; sourceTree = "<group>"; };
+		F1693C4B16DFABA6006E3739 /* UIScrollView+ZoomToPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+ZoomToPoint.m"; sourceTree = "<group>"; };
 		F1693C4C16DFABA6006E3739 /* UIViewController+AutoNib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+AutoNib.h"; sourceTree = "<group>"; };
 		F1693C4D16DFABA6006E3739 /* UIViewController+AutoNib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+AutoNib.m"; sourceTree = "<group>"; };
 		F1693C5716DFAC0E006E3739 /* MIMEUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MIMEUtils.h; sourceTree = "<group>"; };
@@ -479,8 +478,6 @@
 		F1AE31BA17BDC3C0005D3EE6 /* play_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "play_pressed@2x.png"; path = "Images/Audio Player/play_pressed@2x.png"; sourceTree = "<group>"; };
 		F1B1C1E217B29C1800B6164C /* MarqueeLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarqueeLabel.h; sourceTree = "<group>"; };
 		F1B1C1E317B29C1800B6164C /* MarqueeLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarqueeLabel.m; sourceTree = "<group>"; };
-		F1B1C1E817B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MarqueeLabel+LabelizeIfNecessary.h"; sourceTree = "<group>"; };
-		F1B1C1E917B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MarqueeLabel+LabelizeIfNecessary.m"; sourceTree = "<group>"; };
 		F1B2C0FA17961A0E00AD5A04 /* PeerPickerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeerPickerCell.h; sourceTree = "<group>"; };
 		F1B2C0FB17961A0E00AD5A04 /* PeerPickerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeerPickerCell.m; sourceTree = "<group>"; };
 		F1BA8C7C17728500007AAF85 /* BGProcFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BGProcFactory.h; sourceTree = "<group>"; };
@@ -899,8 +896,8 @@
 				F1693C4716DFABA6006E3739 /* UIActionSheet+BlockExtensions.m */,
 				F1693C4816DFABA6006E3739 /* UIAlertView+BlockExtensions.h */,
 				F1693C4916DFABA6006E3739 /* UIAlertView+BlockExtensions.m */,
-				F1693C4A16DFABA6006E3739 /* UIScrollView+UIScrollView_ZoomToPoint.h */,
-				F1693C4B16DFABA6006E3739 /* UIScrollView+UIScrollView_ZoomToPoint.m */,
+				F1693C4A16DFABA6006E3739 /* UIScrollView+ZoomToPoint.h */,
+				F1693C4B16DFABA6006E3739 /* UIScrollView+ZoomToPoint.m */,
 				F1693C4C16DFABA6006E3739 /* UIViewController+AutoNib.h */,
 				F1693C4D16DFABA6006E3739 /* UIViewController+AutoNib.m */,
 				F1847BB916E538C600006C25 /* MFMailComposeViewController+BlockExtensions.h */,
@@ -911,8 +908,6 @@
 				F168EDAE1790C61000C21D6F /* UIImage+Additions.m */,
 				F1434B3C179B21C1001A672C /* UITableView+CoolRefresh.h */,
 				F1434B3D179B21C1001A672C /* UITableView+CoolRefresh.m */,
-				F1B1C1E817B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.h */,
-				F1B1C1E917B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.m */,
 				F1C4462E17E3510C004725FC /* DBRestClient+SpecificCancellation.h */,
 				F1C4462F17E3510C004725FC /* DBRestClient+SpecificCancellation.m */,
 				F1538E2217E68D3300A0F158 /* UIAlertView+QuickDisplay.h */,
@@ -1553,7 +1548,7 @@
 				F1693C3D16DFAB6E006E3739 /* SwiftLoadCell.m in Sources */,
 				F1693C4E16DFABA6006E3739 /* UIActionSheet+BlockExtensions.m in Sources */,
 				F1693C4F16DFABA6006E3739 /* UIAlertView+BlockExtensions.m in Sources */,
-				F1693C5016DFABA6006E3739 /* UIScrollView+UIScrollView_ZoomToPoint.m in Sources */,
+				F1693C5016DFABA6006E3739 /* UIScrollView+ZoomToPoint.m in Sources */,
 				F1693C5116DFABA6006E3739 /* UIViewController+AutoNib.m in Sources */,
 				F1C939CB17F326C400754D5D /* NSURLResponse+Encoding.m in Sources */,
 				F1693C5D16DFAC0E006E3739 /* MIMEUtils.m in Sources */,
@@ -1652,7 +1647,6 @@
 				F106ABE117ADE54A0076E57F /* Upload.m in Sources */,
 				F1038BB517B1ECB100AE918E /* DropboxLinkTask.m in Sources */,
 				F1B1C1E417B29C1800B6164C /* MarqueeLabel.m in Sources */,
-				F1B1C1EA17B2A36A00B6164C /* MarqueeLabel+LabelizeIfNecessary.m in Sources */,
 				F1E397E917B9F896002BBD6F /* TagLibAmalgam.cpp in Sources */,
 				F1E397EC17B9F8A8002BBD6F /* ID3Editor.mm in Sources */,
 				F1CBF07917BA7667003563FD /* EditID3ViewController.m in Sources */,

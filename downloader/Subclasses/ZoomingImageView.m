@@ -8,14 +8,13 @@
 
 #import "ZoomingImageView.h"
 
-@implementation ZoomingImageView
+@interface ZoomingImageView () <UIScrollViewDelegate>
 
-- (void)zoomOut {
-    [self zoomToRect:self.bounds animated:YES];
-    self.zoomScale = self.minimumZoomScale;
-    [self setNeedsLayout];
-    [self resetImage];
-}
+@property (nonatomic, strong) UIImageView *theImageView;
+
+@end
+
+@implementation ZoomingImageView
 
 - (void)setup {
     self.multipleTouchEnabled = YES;
@@ -29,6 +28,34 @@
     [self addSubview:_theImageView];
 }
 
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        [self setup];
+    }
+    return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self setup];
+    }
+    return self;
+}
+
+- (void)setImage:(UIImage *)image {
+    _image = image;
+    [self loadImage:_image];
+}
+
+- (void)zoomOut {
+    [self zoomToRect:self.bounds animated:YES];
+    self.zoomScale = self.minimumZoomScale;
+    [self setNeedsLayout];
+    [self resetImage];
+}
+
 - (CGRect)boundsWithContentInsets {
     CGRect bounds = self.bounds;
     bounds.origin.x += self.contentInset.left;
@@ -39,7 +66,6 @@
 }
 
 - (void)loadImage:(UIImage *)image {
-    
     _theImageView.frame = [self boundsWithContentInsets];
     self.contentSize = CGSizeZero;
     
@@ -81,22 +107,6 @@
 
 - (void)resetImage {
     [self loadImage:_theImageView.image];
-}
-
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        [self setup];
-    }
-    return self;
-}
-
-- (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-        [self setup];
-    }
-    return self;
 }
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {

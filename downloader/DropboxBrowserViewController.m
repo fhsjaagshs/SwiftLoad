@@ -58,14 +58,6 @@ static NSString *CellIdentifier = @"dbcell";
     self.shouldPromptForLinkage = YES;
     
     CGRect screenBounds = [[UIScreen mainScreen]bounds];
-
-    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
-    _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"/"];
-    topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"ArrowLeft"] style:UIBarButtonItemStyleBordered target:self action:@selector(goBackDir)];
-    topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
-    [_navBar pushNavigationItem:topItem animated:YES];
-    [self.view addSubview:_navBar];
     
     self.theTableView = [[UITableView alloc]initWithFrame:screenBounds style:UITableViewStylePlain];
     _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -76,11 +68,18 @@ static NSString *CellIdentifier = @"dbcell";
     _theTableView.scrollIndicatorInsets = _theTableView.contentInset;
     [self.view addSubview:_theTableView];
     
-    [self.view bringSubviewToFront:_navBar];
-    
     self.refreshControl = [[UIRefreshControl alloc]init];
     [_refreshControl addTarget:self action:@selector(refreshControlShouldRefresh:) forControlEvents:UIControlEventValueChanged];
     [_theTableView addSubview:_refreshControl];
+    
+    self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
+    _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"/"];
+    topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"ArrowLeft"] style:UIBarButtonItemStyleBordered target:self action:@selector(goBackDir)];
+    topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
+    topItem.leftBarButtonItem.enabled = NO;
+    [_navBar pushNavigationItem:topItem animated:YES];
+    [self.view addSubview:_navBar];
 
     self.currentPathItems = [NSMutableArray array];
     
@@ -88,8 +87,6 @@ static NSString *CellIdentifier = @"dbcell";
     [_database open];
     [_database executeUpdate:@"CREATE TABLE IF NOT EXISTS dropbox_data (id INTEGER PRIMARY KEY AUTOINCREMENT, lowercasepath VARCHAR(255) DEFAULT NULL, filename VARCHAR(255) DEFAULT NULL, date INTEGER, size INTEGER, type INTEGER)"];
     [_database close];
-    
-    _navBar.topItem.leftBarButtonItem.enabled = NO;
 }
 
 - (void)dropboxAuthenticationFailed {
@@ -136,10 +133,10 @@ static NSString *CellIdentifier = @"dbcell";
     
     // IMPORTANT INFO: the row constructor (multi-value insert command) has a hard limit of 1000 rows. But for some reason, Anything above 100 doesnt work... So I just do 25 to 50...
     
-    for (int location = 0; location < length; location+=50) {
+    for (int location = 0; location < length; location+=40) {
         NSUInteger size = length-location;
-        if (size > 50)  {
-            size = 50;
+        if (size > 40) {
+            size = 40;
         }
         
         NSArray *array = [metadatas subarrayWithRange:NSMakeRange(location, size)];
@@ -189,7 +186,7 @@ static NSString *CellIdentifier = @"dbcell";
 
 - (void)removeItemWithLowercasePath:(NSString *)path {
     [_database open];
-    [_database executeUpdate:@"DELETE FROM dropbox_data WHERE lowercasepath=?",[path lowercaseString]];
+    [_database executeUpdate:@"DELETE FROM dropbox_data WHERE lowercasepath=?",path.lowercaseString];
     [_database close];
 }
 
@@ -217,13 +214,14 @@ static NSString *CellIdentifier = @"dbcell";
 - (void)loadUserID {
     if (_userID.length == 0) {
         [[NetworkActivityController sharedController]show];
+        __weak DropboxBrowserViewController *weakself = self;
         [DroppinBadassBlocks loadAccountInfoWithCompletionBlock:^(DBAccountInfo *info, NSError *error) {
             [[NetworkActivityController sharedController]hideIfPossible];
             if (error) {
                 [UIAlertView showAlertWithTitle:[NSString stringWithFormat:@"Dropbox Error %ld",(long)error.code] andMessage:error.localizedDescription];
             } else {
-                self.userID = info.userId;
-                [self loadUserID];
+                weakself.userID = info.userId;
+                [weakself loadUserID];
             }
         }];
     } else {
@@ -247,26 +245,28 @@ static NSString *CellIdentifier = @"dbcell";
 - (void)updateFileListing {
     [[NetworkActivityController sharedController]show];
     
+    __weak DropboxBrowserViewController *weakself = self;
+    
     [DroppinBadassBlocks loadDelta:_cursor withCompletionHandler:^(NSArray *entries, NSString *cursor, BOOL hasMore, BOOL shouldReset, NSError *error) {
         [[NetworkActivityController sharedController]hideIfPossible];
         if (error) {
-            self.shouldMassInsert = NO;
+            weakself.shouldMassInsert = NO;
         } else {
             
-            if (_shouldStopLoading) {
+            if (weakself.shouldStopLoading) {
                 return;
             }
             
             if (shouldReset) {
                 NSLog(@"Resetting");
-                self.cursor = nil;
-                [_currentPathItems removeAllObjects];
-                self.shouldMassInsert = YES;
-                _refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"Initial Load. Be patient..."];
-                [self removeAllEntriesForCurrentUser];
+                weakself.cursor = nil;
+                [weakself.currentPathItems removeAllObjects];
+                weakself.shouldMassInsert = YES;
+                weakself.refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"Initial Load. Be patient..."];
+                [weakself removeAllEntriesForCurrentUser];
             }
             
-            self.cursor = cursor;
+            weakself.cursor = cursor;
             
             NSMutableArray *array = [NSMutableArray array];
             
@@ -274,30 +274,30 @@ static NSString *CellIdentifier = @"dbcell";
                 DBMetadata *item = entry.metadata;
                 if (item) {
                     if (item.isDeleted) {
-                        [self removeItemWithLowercasePath:entry.lowercasePath];
+                        [weakself removeItemWithLowercasePath:entry.lowercasePath];
                     } else {
                         if (_shouldMassInsert) {
                             [array addObject:item];
                         } else {
-                            [self addObjectToDatabase:item withLowercasePath:entry.lowercasePath];
+                            [weakself addObjectToDatabase:item withLowercasePath:entry.lowercasePath];
                         }
                     }  
                 }
             }
             
             if (_shouldMassInsert) {
-                [self batchInsert:array];
+                [weakself batchInsert:array];
             }
 
             if (hasMore) {
                 NSLog(@"Continuing");
-                [self updateFileListing];
+                [weakself updateFileListing];
             } else {
                 NSLog(@"done");
-                _refreshControl.attributedTitle = nil;
-                [self saveCursor];
-                self.shouldMassInsert = NO;
-                [self refreshStateWithAnimationStyle:UITableViewRowAnimationFade];
+                weakself.refreshControl.attributedTitle = nil;
+                [weakself saveCursor];
+                weakself.shouldMassInsert = NO;
+                [weakself refreshStateWithAnimationStyle:UITableViewRowAnimationFade];
             }
         }
     }];
@@ -329,20 +329,8 @@ static NSString *CellIdentifier = @"dbcell";
     cell.textLabel.text = filename;
     
     if ([(NSString *)fileDict[NSFileType] isEqualToString:(NSString *)NSFileTypeRegular]) {
-        float fileSize = [fileDict[NSFileSize]intValue];
-        
-        cell.detailTextLabel.text = @"File, ";
         cell.imageView.image = [UIImage imageNamed:@"file_icon"];
-        
-        if (fileSize < 1024.0) {
-            cell.detailTextLabel.text = [cell.detailTextLabel.text stringByAppendingFormat:@"%.0f Byte%@",fileSize,(fileSize > 1)?@"s":@""];
-        } else if (fileSize < (1024*1024) && fileSize > 1024.0 ) {
-            fileSize = fileSize/1014;
-            cell.detailTextLabel.text = [cell.detailTextLabel.text stringByAppendingFormat:@"%.0f KB",fileSize];
-        } else if (fileSize < (1024*1024*1024) && fileSize > (1024*1024)) {
-            fileSize = fileSize/(1024*1024);
-            cell.detailTextLabel.text = [cell.detailTextLabel.text stringByAppendingFormat:@"%.0f MB",fileSize];
-        }
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"File, %@",[NSString fileSizePrettify:[fileDict[NSFileSize]intValue]]];
     } else {
         cell.detailTextLabel.text = @"Directory";
         cell.imageView.image = [UIImage imageNamed:@"folder_icon"];
@@ -363,9 +351,10 @@ static NSString *CellIdentifier = @"dbcell";
         [self loadContentsOfDirectory:[_navBar.topItem.title fhs_normalize]];
         [self refreshStateWithAnimationStyle:UITableViewRowAnimationLeft];
     } else {
+        __weak DropboxBrowserViewController *weakself = self;
         UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:filename completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             
-            NSString *filePath = [_navBar.topItem.title stringByAppendingPathComponent:fileDict[NSFileName]];
+            NSString *filePath = [weakself.navBar.topItem.title stringByAppendingPathComponent:fileDict[NSFileName]];
             
             if (buttonIndex == 0) {
                 DropboxDownload *dl = [DropboxDownload downloadWithPath:filePath];
@@ -376,8 +365,7 @@ static NSString *CellIdentifier = @"dbcell";
             } else if (buttonIndex == 2 && [MIMEUtils isVideoFile:fileDict[NSFileName]]) {
                 [DroppinBadassBlocks loadStreamableURLForFile:filePath andCompletionBlock:^(NSURL *url, NSString *path, NSError *error) {
                     if (!error) {
-                        NSLog(@"%@",url);
-                        [self presentViewController:[MoviePlayerViewController moviePlayerWithURL:url] animated:YES completion:nil];
+                        [weakself presentViewController:[MoviePlayerViewController moviePlayerWithURL:url] animated:YES completion:nil];
                     } else {
                         [UIAlertView showAlertWithTitle:@"Failed to Stream File" andMessage:error.localizedDescription];
                     }
@@ -412,9 +400,7 @@ static NSString *CellIdentifier = @"dbcell";
 - (void)refreshStateWithAnimationStyle:(UITableViewRowAnimation)animation {
     [self loadContentsOfDirectory:[_navBar.topItem.title fhs_normalize]];
     [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:animation];
-
     _navBar.topItem.leftBarButtonItem.enabled = (_navBar.topItem.title.length > 1);
-    
     [_refreshControl endRefreshing];
 }
 

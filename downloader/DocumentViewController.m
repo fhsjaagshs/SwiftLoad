@@ -61,7 +61,7 @@
     
     self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",[kAppDelegate openFile].lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         if (buttonIndex == 0) {
-            [kAppDelegate printFile:[kAppDelegate openFile] fromView:self.view];
+            [kAppDelegate printFile:[kAppDelegate openFile]];
         } else if (buttonIndex == 1) {
             [kAppDelegate sendFileInEmail:[kAppDelegate openFile]];
         } else if (buttonIndex == 2) {

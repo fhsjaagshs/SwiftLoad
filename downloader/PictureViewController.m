@@ -83,7 +83,7 @@
         [_nextImg setEnabled:NO];
     }
 
-    [_zoomingImageView loadImage:[UIImage imageWithContentsOfFile:[kAppDelegate openFile]]];
+    _zoomingImageView.image = [UIImage imageWithContentsOfFile:[kAppDelegate openFile]];
 }
 
 - (NSArray *)imageFiles {
@@ -144,7 +144,7 @@
 
     self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",fileName] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         if (buttonIndex == 0) {
-            [kAppDelegate printFile:file fromView:self.view];
+            [kAppDelegate printFile:file];
         } else if (buttonIndex == 1) {
             [kAppDelegate sendFileInEmail:file];
         } else if (buttonIndex == 2) {
@@ -177,7 +177,7 @@
     self.imageNumber += 1;
     
     NSArray *imageFiles = [self imageFiles];
-
+    
     NSString *newImageName = imageFiles[_imageNumber];
     _navBar.topItem.title = newImageName;
     
@@ -186,7 +186,6 @@
     }
     
     NSString *newImagePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:newImageName];
-    [_zoomingImageView loadImage:[UIImage imageWithContentsOfFile:newImagePath]];
     [kAppDelegate setOpenFile:newImagePath];
 }
 
@@ -204,19 +203,20 @@
     _navBar.topItem.title = newImageName;
     
     NSString *newImagePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:newImageName];
-    [_zoomingImageView loadImage:[UIImage imageWithContentsOfFile:newImagePath]];
     [kAppDelegate setOpenFile:newImagePath];
+    _zoomingImageView.image = [UIImage imageWithContentsOfFile:newImagePath];
 }
 
 - (void)imageViewWasSingleTapped:(UIGestureRecognizer *)rec {
+    __weak PictureViewController *weakself = self;
     [UIView animateWithDuration:0.2f animations:^{
-        _navBar.alpha = (_navBar.alpha == 1.0f)?0.0f:1.0f;
-        _toolBar.alpha = (_toolBar.alpha == 1.0f)?0.0f:1.0f;
+        weakself.navBar.alpha = (weakself.navBar.alpha == 1.0f)?0.0f:1.0f;
+        weakself.toolBar.alpha = (weakself.toolBar.alpha == 1.0f)?0.0f:1.0f;
         
         UIView *statusBar = [[UIApplication sharedApplication]valueForKey:@"statusBar"];
         statusBar.alpha = (statusBar.alpha == 1.0f)?0.0f:1.0f;
         
-        self.view.backgroundColor = (self.view.backgroundColor == [UIColor blackColor])?[UIColor whiteColor]:[UIColor blackColor];
+        weakself.view.backgroundColor = (weakself.view.backgroundColor == [UIColor blackColor])?[UIColor whiteColor]:[UIColor blackColor];
     }];
 }
 

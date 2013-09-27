@@ -46,7 +46,6 @@ CoolRefreshAnimationStyle animationStyle;
         [animation setSubtype:kCATransitionFromTop];
     }
     
-    
     [self.layer addAnimation:animation forKey:@"UITableViewReloadDataAnimationKey"];
 }
 

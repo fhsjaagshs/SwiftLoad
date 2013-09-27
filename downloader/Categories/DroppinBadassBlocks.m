@@ -8,19 +8,6 @@
 
 #import "DroppinBadassBlocks.h"
 #import "DBRestClient.h"
-#import <objc/runtime.h>
-
-/*static char const * const ShareableURLBlockKey = "sbk";
-
-static char const * const MetadataBlockKey = "mbk";
-static char const * const DownloadProgressBlockKey = "dbsk-1";
-static char const * const DownloadBlockKey = "dbk";
-static char const * const LinkBlockKey = "lbk";
-static char const * const DeltaBlockKey = "dbk";
-static char const * const UploadBlockKey = "ubk";
-static char const * const UploadProgressBlockKey = "ubk-1";
-static char const * const loadAccountInfoBlockKey = "laick";*/
-
 
 @interface DroppinBadassBlocks () <DBRestClientDelegate>
 
@@ -48,79 +35,6 @@ static char const * const loadAccountInfoBlockKey = "laick";*/
     
     return shared;
 }
-
-/*+ (id)uploadBlock {
-    return objc_getAssociatedObject([DroppinBadassBlocks sharedInstance], UploadBlockKey);
-}
-
-+ (void)setUploadBlock:(id)newblock {
-    objc_setAssociatedObject([DroppinBadassBlocks sharedInstance], UploadBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
-}
-
-+ (id)uploadProgressBlock {
-    return objc_getAssociatedObject([DroppinBadassBlocks sharedInstance], UploadProgressBlockKey);
-}
-
-+ (void)setUploadProgressBlock:(id)newblock {
-    objc_setAssociatedObject([DroppinBadassBlocks sharedInstance], UploadProgressBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
-}
-
-+ (id)deltaBlock {
-    return objc_getAssociatedObject([DroppinBadassBlocks sharedInstance], DeltaBlockKey);
-}
-
-+ (void)setDeltaBlock:(id)newblock {
-    objc_setAssociatedObject([DroppinBadassBlocks sharedInstance], DeltaBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
-}
-
-+ (id)linkBlock {
-    return objc_getAssociatedObject([DroppinBadassBlocks sharedInstance], LinkBlockKey);
-}
-
-+ (void)setLinkBlock:(id)newblock {
-    objc_setAssociatedObject([DroppinBadassBlocks sharedInstance], LinkBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
-}
-
-+ (id)downloadProgressBlock {
-    return objc_getAssociatedObject([DroppinBadassBlocks sharedInstance], DownloadProgressBlockKey);
-}
-
-+ (void)setDownloadProgressBlock:(id)newblock {
-    objc_setAssociatedObject([DroppinBadassBlocks sharedInstance], DownloadProgressBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
-}
-
-+ (id)downloadBlock {
-    return objc_getAssociatedObject([DroppinBadassBlocks sharedInstance], DownloadBlockKey);
-}
-
-+ (void)setDownloadBlock:(id)newblock {
-    objc_setAssociatedObject([DroppinBadassBlocks sharedInstance], DownloadBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
-}
-
-+ (id)metadataBlock {
-    return objc_getAssociatedObject([DroppinBadassBlocks sharedInstance], MetadataBlockKey);
-}
-
-+ (void)setMetadataBlock:(id)newblock {
-    objc_setAssociatedObject([DroppinBadassBlocks sharedInstance], MetadataBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
-}
-
-+ (id)loadAccountInfoBlock {
-    return objc_getAssociatedObject([DroppinBadassBlocks sharedInstance], loadAccountInfoBlockKey);
-}
-
-+ (void)setAccountInfoBlock:(id)newblock {
-    objc_setAssociatedObject([DroppinBadassBlocks sharedInstance], loadAccountInfoBlockKey, newblock, OBJC_ASSOCIATION_COPY_NONATOMIC);
-}
-
-+ (instancetype)shareableLinkBlock {
-    return objc_getAssociatedObject([DroppinBadassBlocks sharedInstance], ShareableURLBlockKey);
-}
-
-+ (void)setShareableLinkBlock:(id)newblock {
-    objc_setAssociatedObject([DroppinBadassBlocks sharedInstance], ShareableURLBlockKey, newblock, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    
-}*/
 
 //
 // Uploading
@@ -224,7 +138,6 @@ static char const * const loadAccountInfoBlockKey = "laick";*/
     void(^block)(DBMetadata *metadata, NSError *error) = [[DroppinBadassBlocks sharedInstance]downloadBlock];
     block(nil, error);
 }
-
 
 //
 // Metadata

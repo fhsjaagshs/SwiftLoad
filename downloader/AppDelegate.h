@@ -20,18 +20,13 @@
 extern NSString * const NSFileName;
 extern NSString * const kCopyListChangedNotification;
 
-float systemVersion(void);
-
 BOOL isDirectory(NSString *filePath);
 float fileSize(NSString *filePath);
 
 void fireFinishDLNotification(NSString *filename);
-NSString * getResource(NSString *raw);
-float sanitizeMesurement(float measurement);
 NSString * getNonConflictingFilePathForPath(NSString *path);
-void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID inPropertyID, UInt32 inPropertyValueSize, const void *inPropertyValue);
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate, GKSessionDelegate, DBSessionDelegate, DBRestClientDelegate, GKPeerPickerControllerDelegate, AVAudioPlayerDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (nonatomic, strong) UIWindow *window;
 @property (nonatomic, strong) MyFilesViewController *viewController;
@@ -48,13 +43,9 @@ void audioRouteChangeListenerCallback(void *inUserData, AudioSessionPropertyID i
 @property (nonatomic, strong) NSString *openFile;
 @property (nonatomic, strong) NSString *managerCurrentDir;
 
-// Printing
-- (void)printFile:(NSString *)file fromView:(UIView *)view;
-
-// Emailing
+// Printing, emailing, downloading
+- (void)printFile:(NSString *)file;
 - (void)sendFileInEmail:(NSString *)file;
-
-// Downloading
 - (void)downloadFile:(NSString *)stouPrelim;
 
 @end
