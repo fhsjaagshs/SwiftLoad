@@ -19,6 +19,16 @@
     return self;
 }
 
+- (void)setHighlighted:(BOOL)highlighted {
+    [super setHighlighted:highlighted];
+    _disclosureButton.highlighted = NO;
+}
+
+- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
+    [super setHighlighted:highlighted animated:animated];
+    _disclosureButton.highlighted = NO;
+}
+
 - (void)layoutSubviews {
     [super layoutSubviews];
     
