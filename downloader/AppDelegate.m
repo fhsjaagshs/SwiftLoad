@@ -424,6 +424,9 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleRouteChange:) name:AVAudioSessionRouteChangeNotification object:[AVAudioSession sharedInstance]];
     
+    // ybpwmfq2z1jmaxi
+    // ua6hjow7hxx0y3a
+    
     DBSession *session = [[DBSession alloc]initWithAppKey:@"ybpwmfq2z1jmaxi" appSecret:@"ua6hjow7hxx0y3a" root:kDBRootDropbox];
 	session.delegate = self;
 	[DBSession setSharedSession:session];
