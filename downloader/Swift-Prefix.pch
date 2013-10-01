@@ -82,6 +82,7 @@
     #import "HTTPServer.h"
     #import "DAVConnection.h"
     #import "BluetoothManager.h"
+    #import "BTManager.h"
 
     #import "DocumentViewController.h"
     #import "AudioPlayerViewController.h"
