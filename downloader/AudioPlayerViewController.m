@@ -14,7 +14,7 @@
 @property (nonatomic, strong) UILabel *secondsRemaining;
 @property (nonatomic, strong) UILabel *secondsElapsed;
 
-@property (nonatomic, strong) UIImageView *albumArtwork;
+@property (nonatomic, strong) UIView *albumArtwork;
 
 @property (nonatomic, strong) UIButton *pausePlay;
 @property (nonatomic, strong) UIButton *stopButton;
@@ -124,8 +124,12 @@
     _secondsRemaining.text = @"-0:00";
     [self.view addSubview:_secondsRemaining];
     
-    self.albumArtwork = [[UIImageView alloc]initWithFrame:CGRectMake(0, 180+20-5, screenBounds.size.width, screenBounds.size.height-(186+116))];
-    _albumArtwork.contentMode = UIViewContentModeScaleAspectFit;
+    self.albumArtwork = [[UIView alloc]initWithFrame:CGRectMake(0, 200, screenBounds.size.width, screenBounds.size.height-300)];
+    _albumArtwork.layer.contentsGravity = kCAGravityResizeAspect;
+   // _albumArtwork.contentMode = UIViewContentModeScaleAspectFit;
+    _albumArtwork.layer.cornerRadius = 5.0f;
+    _albumArtwork.layer.borderWidth = 1.0f;
+    _albumArtwork.layer.borderColor = [UIColor colorWithRed:105.0f green:54.0f blue:153.0f alpha:1.0f].CGColor;
     [self.view addSubview:_albumArtwork];
     
     float controlsWidth = screenBounds.size.width/3;
@@ -173,8 +177,10 @@
     _errorLabel.hidden = YES;
     _errorLabel.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:_errorLabel];
+    
+    [self.view sendSubviewToBack:_albumArtwork];
 
-    [kAppDelegate playFile:[kAppDelegate openFile]];
+    [kAppDelegate playFile:kAppDelegate.openFile];
     
     [self refreshLoopState];
     [MarqueeLabel controllerLabelsShouldAnimate:self];
@@ -409,7 +415,26 @@
 }
 
 - (void)setArtwork:(NSNotification *)notif {
-    _albumArtwork.image = [(UIImage *)notif.object imageByRoundingCornersWithRadius:10.0f];
+    
+    CGRect screenBounds = [[UIScreen mainScreen]bounds];
+    CGRect targetRect = CGRectMake(20, 200, screenBounds.size.width-20, screenBounds.size.height-300);
+    
+    UIImage *image = (UIImage *)notif.object;
+    
+    float ratio = 1;
+    
+    if (image.size.height > targetRect.size.height) {
+        ratio = (float)(image.size.height/targetRect.size.height);
+    } else if (image.size.width > targetRect.size.width) {
+        ratio = (float)(image.size.width/targetRect.size.width);
+    }
+    
+    CGPoint oldCenter = _albumArtwork.center;
+    
+    _albumArtwork.bounds = CGRectMake(0, 0, targetRect.size.width/ratio, targetRect.size.height/ratio);
+    _albumArtwork.center = oldCenter;
+    _albumArtwork.layer.contents = (id)image.CGImage;
+    //_albumArtwork.image = image;
 }
 
 - (void)setupNotifs {
