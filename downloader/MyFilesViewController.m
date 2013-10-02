@@ -248,37 +248,39 @@ static NSString *CellIdentifier = @"Cell";
 
 - (void)reindexFilelistIfNecessary {
     if (_filelist.count == 0) {
-        NSString *currentDir = [kAppDelegate managerCurrentDir];
-        NSString *docsDir = kDocsDir;
-        
-        NSArray *all = [[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil];
-        
-        self.filelist = [NSMutableArray arrayWithCapacity:all.count];
-        
-        NSMutableArray *dirs = [NSMutableArray array];
-        NSMutableArray *files = [NSMutableArray array];
-        
-        for (NSString *filename in all) {
-            NSString *full = [currentDir stringByAppendingPathComponent:filename];
-
-            if (isDirectory(full)) {
-                if ([currentDir isEqualToString:docsDir]) {
-                    if (![filename isEqualToString:@"Inbox"]) {
+        @autoreleasepool {
+            NSString *currentDir = [kAppDelegate managerCurrentDir];
+            NSString *docsDir = kDocsDir;
+            
+            NSArray *all = [[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil];
+            
+            self.filelist = [NSMutableArray arrayWithCapacity:all.count];
+            
+            NSMutableArray *dirs = [NSMutableArray array];
+            NSMutableArray *files = [NSMutableArray array];
+            
+            for (NSString *filename in all) {
+                NSString *full = [currentDir stringByAppendingPathComponent:filename];
+                
+                if (isDirectory(full)) {
+                    if ([currentDir isEqualToString:docsDir]) {
+                        if (![filename isEqualToString:@"Inbox"]) {
+                            [dirs addObject:filename];
+                        }
+                    } else {
                         [dirs addObject:filename];
                     }
                 } else {
-                    [dirs addObject:filename];
+                    [files addObject:filename];
                 }
-            } else {
-                [files addObject:filename];
             }
+            
+            [dirs sortUsingSelector:@selector(caseInsensitiveCompare:)];
+            [files sortUsingSelector:@selector(caseInsensitiveCompare:)];
+            
+            [_filelist addObjectsFromArray:dirs];
+            [_filelist addObjectsFromArray:files];
         }
-        
-        [dirs sortUsingSelector:@selector(caseInsensitiveCompare:)];
-        [files sortUsingSelector:@selector(caseInsensitiveCompare:)];
-        
-        [_filelist addObjectsFromArray:dirs];
-        [_filelist addObjectsFromArray:files];
     }
 }
 
@@ -657,9 +659,9 @@ static NSString *CellIdentifier = @"Cell";
             
             NSString *imageName = buttonData[index];
 
-            /*if ([imageName isEqualToString:@"bluetooth"] && [[BluetoothManager sharedManager]isTransferring]) {
+            if ([imageName isEqualToString:@"bluetooth"] && [[BTManager shared]isTransferring]) {
                 button.enabled = NO;
-            } else*/ if (disableDelete && [imageName isEqualToString:@"delete"]) {
+            } else if (disableDelete && [imageName isEqualToString:@"delete"]) {
                 button.enabled = NO;
             }
     

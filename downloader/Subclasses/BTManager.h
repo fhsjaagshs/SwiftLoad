@@ -16,6 +16,6 @@
 - (void)prepareForBackground;
 - (void)prepareForForeground;
 
-@property (nonatomic, assign) BOOL isCurrentlySending;
+@property (nonatomic, assign) BOOL isTransferring;
 
 @end

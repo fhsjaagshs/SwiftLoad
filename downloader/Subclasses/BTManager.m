@@ -68,25 +68,37 @@ static NSString * const kServiceType = @"SwiftBluetooth";
 }
 
 - (void)internal_sendFileAtPath:(NSString *)path {
+    __weak BTManager *weakself = self;
+    
+    self.isTransferring = YES;
+    
+    NSString *resourceName = path.lastPathComponent;
+    
     for (MCPeerID *peerID in _session.connectedPeers) {
-        NSProgress *progress = [_session sendResourceAtURL:[NSURL fileURLWithPath:path] withName:path.lastPathComponent toPeer:peerID withCompletionHandler:^(NSError *error) {
-            if (_sendingObjs[[peerID keyWithResourceName:path.lastPathComponent]]) {
-                [_sendingObjs removeObjectForKey:[peerID keyWithResourceName:path.lastPathComponent]];
+        NSProgress *progress = [_session sendResourceAtURL:[NSURL fileURLWithPath:path] withName:resourceName toPeer:peerID withCompletionHandler:^(NSError *error) {
+            if (weakself.sendingObjs[[peerID keyWithResourceName:resourceName]]) {
+                [weakself.sendingObjs removeObjectForKey:[peerID keyWithResourceName:resourceName]];
             }
             
-            if (_sendingObjs.count == 0) {
-                [_advertiserAssistant start];
+            if (weakself.sendingObjs.count == 0) {
+                [weakself.advertiserAssistant start];
+                self.isTransferring = NO;
             }
         }];
         
-        P2PTask *task = [P2PTask taskWithName:path.lastPathComponent progress:progress];
+        P2PTask *task = [P2PTask taskWithName:resourceName progress:progress];
         task.isSender = YES;
         [[TaskController sharedController]addTask:task];
-        _sendingObjs[[peerID keyWithResourceName:path.lastPathComponent]] = task;
+        _sendingObjs[[peerID keyWithResourceName:resourceName]] = task;
     }
 }
 
 - (void)sendFileAtPath:(NSString *)path {
+    
+    if (_isTransferring) {
+        return;
+    }
+    
     [_advertiserAssistant stop];
     
     if (_session.connectedPeers.count > 0) {
@@ -117,6 +129,8 @@ static NSString * const kServiceType = @"SwiftBluetooth";
 
 - (void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error {
     
+    self.isTransferring = NO;
+    
     P2PTask *task = (P2PTask *)_receivingObjs[[peerID keyWithResourceName:resourceName]];
     
     if (task) {
@@ -134,6 +148,7 @@ static NSString * const kServiceType = @"SwiftBluetooth";
 }
 
 - (void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress {
+    self.isTransferring = YES;
     P2PTask *task = [P2PTask taskWithName:resourceName progress:progress];
     task.isSender = NO;
     [[TaskController sharedController]addTask:task];
