@@ -29,6 +29,16 @@ static NSString * const kProgressAdvancedKeyPath = @"fractionCompleted";
     return _isSender?@"Sending...":@"Receiving...";
 }
 
+- (void)showSuccess {
+    NSLog(@"success");
+    [super showSuccess];
+}
+
+- (void)showFailure {
+    NSLog(@"failure");
+    [super showFailure];
+}
+
 + (P2PTask *)taskWithName:(NSString *)name progress:(NSProgress *)progress  {
     return [[[self class]alloc]initWithName:name progress:progress];
 }
@@ -53,7 +63,11 @@ static NSString * const kProgressAdvancedKeyPath = @"fractionCompleted";
                 [self showSuccess];
             }
         } else if ([keyPath isEqualToString:kProgressAdvancedKeyPath]) {
-            [self.delegate setProgress:_progress.fractionCompleted];
+            if (_progress.fractionCompleted == 1.0f) {
+                [self showSuccess];
+            } else {
+                [self.delegate setProgress:_progress.fractionCompleted];
+            }
         }
     }
 }

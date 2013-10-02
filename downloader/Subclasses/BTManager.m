@@ -71,17 +71,15 @@ static NSString * const kServiceType = @"SwiftBluetooth";
     for (MCPeerID *peerID in _session.connectedPeers) {
         NSProgress *progress = [_session sendResourceAtURL:[NSURL fileURLWithPath:path] withName:path.lastPathComponent toPeer:peerID withCompletionHandler:^(NSError *error) {
             
-            P2PTask *task = _sendingObjs[[peerID keyWithResourceName:path.lastPathComponent]];
-            
-            NSLog(@"%@",task);
-            
-            if (error) {
-                [task showFailure];
-            } else {
-                [task showSuccess];
-            }
-            
+            P2PTask *task = (P2PTask *)_sendingObjs[[peerID keyWithResourceName:path.lastPathComponent]];
+
             if (task) {
+                if (error) {
+                    [task showFailure];
+                } else {
+                    [task showSuccess];
+                }
+                
                 [_sendingObjs removeObjectForKey:[peerID keyWithResourceName:path.lastPathComponent]];
             }
             
@@ -128,20 +126,23 @@ static NSString * const kServiceType = @"SwiftBluetooth";
 
 - (void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error {
     
-    if (_sendingObjs.count == 0) {
-        [_advertiserAssistant start];
-    }
+    P2PTask *task = (P2PTask *)_receivingObjs[[peerID keyWithResourceName:resourceName]];
     
-    if (error) {
-        [(P2PTask *)_receivingObjs[[peerID keyWithResourceName:resourceName]] showFailure];
-    } else {
-        NSString *movedToPath = getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:resourceName]);
-        [[NSFileManager defaultManager]moveItemAtPath:localURL.path toPath:movedToPath error:nil];
-        [(P2PTask *)_receivingObjs[[peerID keyWithResourceName:resourceName]] showSuccess];
-    }
-    
-    if (_receivingObjs[[peerID keyWithResourceName:resourceName]]) {
+    if (task) {
+        
+        if (error) {
+            [task showFailure];
+        } else {
+            NSString *movedToPath = getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:resourceName]);
+            [[NSFileManager defaultManager]moveItemAtPath:localURL.path toPath:movedToPath error:nil];
+            [task showSuccess];
+        }
+        
         [_receivingObjs removeObjectForKey:[peerID keyWithResourceName:resourceName]];
+    }
+    
+    if (_receivingObjs.count == 0) {
+        [_advertiserAssistant start];
     }
 }
 

@@ -152,15 +152,18 @@ static NSString *CellIdentifier = @"Cell";
 
     for (NSIndexPath *indexPath in _theTableView.indexPathsForSelectedRows) {
         NSString *filename = _filelist[indexPath.row];
-        [_filelist removeObject:filename];
+        [_filelist removeObjectAtIndex:indexPath.row];
         NSString *currentPath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:filename];
         [[NSFileManager defaultManager]removeItemAtPath:currentPath error:nil];
-        [_theTableView deselectRowAtIndexPath:indexPath animated:NO];
     }
 
     [_theTableView beginUpdates];
     [_theTableView deleteRowsAtIndexPaths:_theTableView.indexPathsForSelectedRows withRowAnimation:UITableViewRowAnimationRight];
     [_theTableView endUpdates];
+    
+    for (NSIndexPath *indexPath in _theTableView.indexPathsForSelectedRows) {
+        [_theTableView deselectRowAtIndexPath:indexPath animated:NO];
+    }
     
     [[FilesystemMonitor sharedMonitor]startMonitoringDirectory:[kAppDelegate managerCurrentDir]];
     
