@@ -75,6 +75,7 @@ static NSString * const kServiceType = @"SwiftBluetooth";
     browserVC.maximumNumberOfPeers = 1;
     browserVC.minimumNumberOfPeers = 1;
     objc_setAssociatedObject(browserVC, "passed_path_swift", path, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [[UIViewController topViewController]presentViewController:browserVC animated:YES completion:nil];
 }
 
 - (void)browserViewControllerDidFinish:(MCBrowserViewController *)browserViewController {
@@ -95,12 +96,14 @@ static NSString * const kServiceType = @"SwiftBluetooth";
         task.isSender = YES;
         _sendingObjs[[peerID keyWithResourceName:path.lastPathComponent]] = task;
     }
+    [browserViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)browserViewControllerWasCancelled:(MCBrowserViewController *)browserViewController {
     if (_sendingObjs.count == 0) {
         [_advertiserAssistant start];
     }
+    [browserViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error {
