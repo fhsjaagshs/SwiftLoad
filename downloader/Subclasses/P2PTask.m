@@ -44,7 +44,7 @@ static NSString * const kProgressCompletedUnitCountKeyPath = @"completedUnitCoun
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if ([(NSProgress *)object isEqual:self]) {
+    if ([(NSProgress *)object isEqual:_progress]) {
         if ([keyPath isEqualToString:kProgressCancelledKeyPath]) {
             [self showFailure];
         } else if ([keyPath isEqualToString:kProgressCompletedUnitCountKeyPath]) {

@@ -73,7 +73,7 @@ static NSString * const kServiceType = @"SwiftBluetooth";
             
             P2PTask *task = _sendingObjs[[peerID keyWithResourceName:path.lastPathComponent]];
             
-            NSLog(@"%@",error);
+            NSLog(@"%@",task);
             
             if (error) {
                 [task showFailure];
@@ -92,6 +92,7 @@ static NSString * const kServiceType = @"SwiftBluetooth";
         
         P2PTask *task = [P2PTask taskWithName:path.lastPathComponent progress:progress];
         task.isSender = YES;
+        [[TaskController sharedController]addTask:task];
         _sendingObjs[[peerID keyWithResourceName:path.lastPathComponent]] = task;
     }
 }
@@ -145,9 +146,9 @@ static NSString * const kServiceType = @"SwiftBluetooth";
 }
 
 - (void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress {
-    NSLog(@"Receiving: %@",resourceName);
     P2PTask *task = [P2PTask taskWithName:resourceName progress:progress];
     task.isSender = NO;
+    [[TaskController sharedController]addTask:task];
     _receivingObjs[[peerID keyWithResourceName:resourceName]] = task;
     [_advertiserAssistant stop];
 }
