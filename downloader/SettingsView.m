@@ -78,6 +78,7 @@ static NSString * const kSettingsTableViewCellID = @"settingsTableViewCellIdenti
             [_theTableView reloadData];
             [DropboxBrowserViewController clearDatabase];
         } else {
+            [DropboxBrowserViewController clearDatabase];
             [[DBSession sharedSession]linkFromController:self];
         }
 

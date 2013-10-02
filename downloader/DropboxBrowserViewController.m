@@ -95,7 +95,9 @@ static NSString *CellIdentifier = @"dbcell";
 
 - (void)dropboxAuthenticationSucceeded {
     if ([[DBSession sharedSession]isLinked]) {
+        [DropboxBrowserViewController clearDatabase];
         [_refreshControl beginRefreshing];
+        [_theTableView setContentOffset:CGPointMake(0, -1*(_theTableView.contentInset.top)) animated:YES];
         [self loadUserID];
     }
 }
