@@ -20,6 +20,10 @@ static NSString * const kProgressCompletedUnitCountKeyPath = @"completedUnitCoun
 
 @implementation P2PTask
 
+- (BOOL)canStop {
+    return NO;
+}
+
 - (NSString *)verb {
     return _isSender?@"Sending...":@"Receiving...";
 }
@@ -40,12 +44,12 @@ static NSString * const kProgressCompletedUnitCountKeyPath = @"completedUnitCoun
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([(NSProgress *)object isEqual:self]) {
         if ([keyPath isEqualToString:kProgressCancelledKeyPath]) {
-           // [_delegate progressDidCancel:self];
+            [self showFailure];
         } else if ([keyPath isEqualToString:kProgressCompletedUnitCountKeyPath]) {
-            if (self.progress.completedUnitCount == self.progress.totalUnitCount) {
-               // [_delegate progressDidFinish:self];
+            if (_progress.completedUnitCount == _progress.totalUnitCount) {
+                [self showSuccess];
             } else {
-                // [_delegate progressDidProgress:self];
+                [self.delegate setProgress:_progress.fractionCompleted];
             }
         }
     }

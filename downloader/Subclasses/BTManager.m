@@ -8,68 +8,11 @@
 
 #import "BTManager.h"
 #import <MultipeerConnectivity/MultipeerConnectivity.h>
+#import <objc/runtime.h>
 
-static NSString * const kProgressCancelledKeyPath = @"cancelled";
-static NSString * const kProgressCompletedUnitCountKeyPath = @"completedUnitCount";
+static NSString * const kServiceType = @"SwiftBluetooth";
 
-@protocol BTProgressDelegate;
-
-@interface BTProgress : NSObject
-
-+ (BTProgress *)progressWithName:(NSString *)name progress:(NSProgress *)progress andDelegate:(id<BTProgressDelegate>)aDelegate;
-
-@property (nonatomic, strong) NSProgress *progress;
-@property (nonatomic, weak) id<BTProgressDelegate> delegate;
-
-@end
-
-@protocol BTProgressDelegate <NSObject>
-
-@optional
-- (void)progressDidFinish:(BTProgress *)progress;
-- (void)progressDidCancel:(BTProgress *)progress;
-- (void)progressDidProgress:(BTProgress *)progress;
-
-@end
-
-@implementation BTProgress
-
-+ (BTProgress *)progressWithName:(NSString *)name progress:(NSProgress *)progress andDelegate:(id<BTProgressDelegate>)aDelegate {
-    return [[[self class]alloc]initWithName:name progress:progress andDelegate:aDelegate];
-}
-
-- (instancetype)initWithName:(NSString *)name progress:(NSProgress *)progress andDelegate:(id<BTProgressDelegate>)aDelegate {
-    self = [super init];
-    if (self) {
-        self.
-        self.progress = progress;
-    }
-    return self;
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if ([(NSProgress *)object isEqual:self]) {
-        if ([keyPath isEqualToString:kProgressCancelledKeyPath]) {
-            [_delegate progressDidCancel:self];
-        } else if ([keyPath isEqualToString:kProgressCompletedUnitCountKeyPath]) {
-            if (self.progress.completedUnitCount == self.progress.totalUnitCount) {
-                [_delegate progressDidFinish:self];
-            } else {
-                [_delegate progressDidProgress:self];
-            }
-        }
-    }
-}
-
-- (void)dealloc {
-    [_progress removeObserver:self forKeyPath:kProgressCancelledKeyPath];
-    [_progress removeObserver:self forKeyPath:kProgressCompletedUnitCountKeyPath];
-    self.progress = nil;
-}
-
-@end
-
-@interface BTManager () <MCSessionDelegate, BTProgressDelegate>
+@interface BTManager () <MCSessionDelegate, MCBrowserViewControllerDelegate>
 
 @property (nonatomic, strong) MCSession *session;
 @property (nonatomic, strong) MCAdvertiserAssistant *advertiserAssistant;
@@ -96,30 +39,44 @@ static NSString * const kProgressCompletedUnitCountKeyPath = @"completedUnitCoun
         self.receivingObjs = [NSMutableDictionary dictionary];
         self.session = [[MCSession alloc]initWithPeer:[[MCPeerID alloc]initWithDisplayName:[[UIDevice currentDevice]systemName]] securityIdentity:nil encryptionPreference:MCEncryptionRequired];
         _session.delegate = self;
-        self.advertiserAssistant = [[MCAdvertiserAssistant alloc]initWithServiceType:@"SwiftBluetooth" discoveryInfo:nil session:_session];
+        self.advertiserAssistant = [[MCAdvertiserAssistant alloc]initWithServiceType:kServiceType discoveryInfo:nil session:_session];
         [_advertiserAssistant start];
     }
     return self;
 }
 
-- (BOOL)sendFileAtPath:(NSString *)path {
+- (void)sendFileAtPath:(NSString *)path {
+    MCNearbyServiceBrowser *browser = [[MCNearbyServiceBrowser alloc]initWithPeer:_session.myPeerID serviceType:kServiceType];
+    MCBrowserViewController *browserVC = [[MCBrowserViewController alloc]initWithBrowser:browser session:_session];
+    browserVC.delegate = self;
+    browserVC.maximumNumberOfPeers = 1;
+    browserVC.minimumNumberOfPeers = 1;
+    objc_setAssociatedObject(browserVC, "passed_path_swift", path, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (void)browserViewControllerDidFinish:(MCBrowserViewController *)browserViewController {
+    NSString *path = (NSString *)objc_getAssociatedObject(browserViewController, "passed_path_swift");
     
-    // show connector
-    // do shit
+    void (^completionHandler)(NSError *error) = ^(NSError *error) {
+        [_sendingObjs removeObjectForKey:path.lastPathComponent];
+        if (_sendingCompletionHandler) {
+            _sendingCompletionHandler(error);
+        }
+    };
     
     for (MCPeerID *peerID in _session.connectedPeers) {
-        NSProgress *progress = [_session sendResourceAtURL:[NSURL URLWithString:path] withName:path.lastPathComponent toPeer:nil withCompletionHandler:^(NSError *error) {
-            [_sendingObjs removeObjectForKey:path.lastPathComponent];
-            if (_sendingCompletionHandler) {
-                _sendingCompletionHandler(error);
-            }
-        }];
-        
+        NSProgress *progress = [_session sendResourceAtURL:[NSURL URLWithString:path] withName:path.lastPathComponent toPeer:nil withCompletionHandler:completionHandler];
         P2PTask *task = [P2PTask taskWithName:path.lastPathComponent progress:progress];
         task.isSender = YES;
         _sendingObjs[path.lastPathComponent] = task;
     }
-    return _session.connectedPeers.count > 0;
+}
+
+- (void)browserViewControllerWasCancelled:(MCBrowserViewController *)browserViewController {
+    [_sendingObjs removeAllObjects]; // maybe this ain't a good idea
+    if (_sendingCompletionHandler) {
+        _sendingCompletionHandler([NSError errorWithDomain:@"com.natesymer.swift.multipeer" code:1 userInfo:@{ NSLocalizedDescriptionKey:@"Multipeer connectivity failed", @"broswerViewController":browserViewController}]);
+    }
 }
 
 - (void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error {

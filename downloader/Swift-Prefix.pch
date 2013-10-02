@@ -68,7 +68,6 @@
 
     #import "UnzippingTask.h"
     #import "CompressionTask.h"
-    #import "BluetoothTask.h"
     #import "DropboxLinkTask.h"
 
     #import "P2PTask.h"
@@ -83,7 +82,6 @@
 
     #import "HTTPServer.h"
     #import "DAVConnection.h"
-    #import "BluetoothManager.h"
     #import "BTManager.h"
 
     #import "DocumentViewController.h"

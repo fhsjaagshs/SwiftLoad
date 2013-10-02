@@ -12,7 +12,7 @@
 
 + (BTManager *)shared;
 
-- (BOOL)sendFileAtPath:(NSString *)path;
+- (void)sendFileAtPath:(NSString *)path;
 
 @property (nonatomic, copy) void(^sendingCompletionHandler)(NSError *error);
 @property (nonatomic, copy) void(^receivingCompletionHandler)(NSError *error, NSString *path);

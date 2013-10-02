@@ -32,7 +32,6 @@
 		F11C403513F82FE00077F5D1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F11C403413F82FE00077F5D1 /* CoreGraphics.framework */; };
 		F11C403613F830720077F5D1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F11C403213F82FD10077F5D1 /* Foundation.framework */; };
 		F11C403713F830780077F5D1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F11C403013F82FB40077F5D1 /* UIKit.framework */; };
-		F11EE83417A6CFFC007DF21A /* BluetoothTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F11EE83317A6CFFC007DF21A /* BluetoothTask.m */; };
 		F11FE417145F8218008ECC7E /* TextEditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F11FE415145F8218008ECC7E /* TextEditorViewController.m */; };
 		F125335917F504CE006D3D51 /* arrow_disclosure.png in Resources */ = {isa = PBXBuildFile; fileRef = F125335517F504CE006D3D51 /* arrow_disclosure.png */; };
 		F125335A17F504CE006D3D51 /* arrow_disclosure_highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = F125335617F504CE006D3D51 /* arrow_disclosure_highlighted.png */; };
@@ -47,7 +46,7 @@
 		F13979A616E78F4E00F8B61B /* ArrowLeft@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A216E78F4E00F8B61B /* ArrowLeft@2x.png */; };
 		F13979A716E78F4E00F8B61B /* ArrowRight.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A316E78F4E00F8B61B /* ArrowRight.png */; };
 		F13979A816E78F4E00F8B61B /* ArrowRight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A416E78F4E00F8B61B /* ArrowRight@2x.png */; };
-		F13BECF4179604380012E4B4 /* PeerPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = F13BECF3179604380012E4B4 /* PeerPicker.m */; };
+		F13AD3C517FBB1BE000FAEB4 /* MultipeerConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F13AD3C417FBB1BE000FAEB4 /* MultipeerConnectivity.framework */; };
 		F1434B3E179B21C1001A672C /* UITableView+CoolRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = F1434B3D179B21C1001A672C /* UITableView+CoolRefresh.m */; };
 		F1444581145A04A30026CDB7 /* PictureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F144457F145A04A30026CDB7 /* PictureViewController.m */; };
 		F145023B1781181700096202 /* DropboxDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = F145023A1781181700096202 /* DropboxDownload.m */; };
@@ -85,7 +84,6 @@
 		F1693C5116DFABA6006E3739 /* UIViewController+AutoNib.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C4D16DFABA6006E3739 /* UIViewController+AutoNib.m */; };
 		F1693C5D16DFAC0E006E3739 /* MIMEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C5816DFAC0E006E3739 /* MIMEUtils.m */; };
 		F1693C5E16DFAC0E006E3739 /* NetworkUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C5A16DFAC0E006E3739 /* NetworkUtils.m */; };
-		F172BC7D1794B59300AC1483 /* BluetoothManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BC7C1794B59300AC1483 /* BluetoothManager.m */; };
 		F172BCC31794EC4500AC1483 /* DDData.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BC811794EC4500AC1483 /* DDData.m */; };
 		F172BCC41794EC4500AC1483 /* DDNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BC831794EC4500AC1483 /* DDNumber.m */; };
 		F172BCC51794EC4500AC1483 /* DDRange.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BC851794EC4500AC1483 /* DDRange.m */; };
@@ -153,7 +151,6 @@
 		F1AE31BB17BDC3C0005D3EE6 /* play_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = F1AE31B917BDC3BF005D3EE6 /* play_pressed.png */; };
 		F1AE31BC17BDC3C0005D3EE6 /* play_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1AE31BA17BDC3C0005D3EE6 /* play_pressed@2x.png */; };
 		F1B1C1E417B29C1800B6164C /* MarqueeLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B1C1E317B29C1800B6164C /* MarqueeLabel.m */; };
-		F1B2C0FC17961A0E00AD5A04 /* PeerPickerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F1B2C0FB17961A0E00AD5A04 /* PeerPickerCell.m */; };
 		F1BA8C7E17728500007AAF85 /* BGProcFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BA8C7D17728500007AAF85 /* BGProcFactory.m */; };
 		F1BC30CA17715DF300DAFA0A /* Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BC30C917715DF300DAFA0A /* Hack.m */; };
 		F1BE07E4176F7A1100C4F038 /* Download.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BE07E3176F7A1100C4F038 /* Download.m */; };
@@ -276,8 +273,6 @@
 		F11C403213F82FD10077F5D1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F11C403413F82FE00077F5D1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		F11C405913F83CA20077F5D1 /* MyFilesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyFilesViewController.h; sourceTree = "<group>"; };
-		F11EE83217A6CFFC007DF21A /* BluetoothTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BluetoothTask.h; sourceTree = "<group>"; };
-		F11EE83317A6CFFC007DF21A /* BluetoothTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BluetoothTask.m; sourceTree = "<group>"; };
 		F11FE414145F8218008ECC7E /* TextEditorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextEditorViewController.h; sourceTree = "<group>"; };
 		F11FE415145F8218008ECC7E /* TextEditorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextEditorViewController.m; sourceTree = "<group>"; };
 		F125335517F504CE006D3D51 /* arrow_disclosure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrow_disclosure.png; path = Images/arrow_disclosure.png; sourceTree = "<group>"; };
@@ -298,8 +293,7 @@
 		F13979A216E78F4E00F8B61B /* ArrowLeft@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ArrowLeft@2x.png"; path = "Images/ArrowLeft@2x.png"; sourceTree = "<group>"; };
 		F13979A316E78F4E00F8B61B /* ArrowRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ArrowRight.png; path = Images/ArrowRight.png; sourceTree = "<group>"; };
 		F13979A416E78F4E00F8B61B /* ArrowRight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ArrowRight@2x.png"; path = "Images/ArrowRight@2x.png"; sourceTree = "<group>"; };
-		F13BECF2179604380012E4B4 /* PeerPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeerPicker.h; sourceTree = "<group>"; };
-		F13BECF3179604380012E4B4 /* PeerPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeerPicker.m; sourceTree = "<group>"; };
+		F13AD3C417FBB1BE000FAEB4 /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
 		F1434B3C179B21C1001A672C /* UITableView+CoolRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+CoolRefresh.h"; sourceTree = "<group>"; };
 		F1434B3D179B21C1001A672C /* UITableView+CoolRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+CoolRefresh.m"; sourceTree = "<group>"; };
 		F144457E145A04A30026CDB7 /* PictureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PictureViewController.h; sourceTree = "<group>"; };
@@ -365,8 +359,6 @@
 		F1693C5816DFAC0E006E3739 /* MIMEUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MIMEUtils.m; sourceTree = "<group>"; };
 		F1693C5916DFAC0E006E3739 /* NetworkUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkUtils.h; sourceTree = "<group>"; };
 		F1693C5A16DFAC0E006E3739 /* NetworkUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkUtils.m; sourceTree = "<group>"; };
-		F172BC7B1794B59300AC1483 /* BluetoothManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BluetoothManager.h; sourceTree = "<group>"; };
-		F172BC7C1794B59300AC1483 /* BluetoothManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BluetoothManager.m; sourceTree = "<group>"; };
 		F172BC801794EC4500AC1483 /* DDData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDData.h; sourceTree = "<group>"; };
 		F172BC811794EC4500AC1483 /* DDData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDData.m; sourceTree = "<group>"; };
 		F172BC821794EC4500AC1483 /* DDNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDNumber.h; sourceTree = "<group>"; };
@@ -477,8 +469,6 @@
 		F1AE31BA17BDC3C0005D3EE6 /* play_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "play_pressed@2x.png"; path = "Images/Audio Player/play_pressed@2x.png"; sourceTree = "<group>"; };
 		F1B1C1E217B29C1800B6164C /* MarqueeLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarqueeLabel.h; sourceTree = "<group>"; };
 		F1B1C1E317B29C1800B6164C /* MarqueeLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarqueeLabel.m; sourceTree = "<group>"; };
-		F1B2C0FA17961A0E00AD5A04 /* PeerPickerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeerPickerCell.h; sourceTree = "<group>"; };
-		F1B2C0FB17961A0E00AD5A04 /* PeerPickerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeerPickerCell.m; sourceTree = "<group>"; };
 		F1BA8C7C17728500007AAF85 /* BGProcFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BGProcFactory.h; sourceTree = "<group>"; };
 		F1BA8C7D17728500007AAF85 /* BGProcFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BGProcFactory.m; sourceTree = "<group>"; };
 		F1BC30C817715DF300DAFA0A /* Hack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Hack.h; path = ../Hack.h; sourceTree = "<group>"; };
@@ -623,6 +613,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F13AD3C517FBB1BE000FAEB4 /* MultipeerConnectivity.framework in Frameworks */,
 				F153EAA417E50EA100896BB0 /* StoreKit.framework in Frameworks */,
 				F150D6B2177F5B9400E4C094 /* libsqlite3.dylib in Frameworks */,
 				F1C0CEFC1661AEC6001B1B42 /* libz.1.2.5.dylib in Frameworks */,
@@ -724,6 +715,7 @@
 		F119CEF613F46DA6007D67E4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F13AD3C417FBB1BE000FAEB4 /* MultipeerConnectivity.framework */,
 				F150D6B1177F5B9400E4C094 /* libsqlite3.dylib */,
 				F166BC1814E21973003E5A07 /* libxml2.dylib */,
 				F1C0CEFB1661AEC6001B1B42 /* libz.1.2.5.dylib */,
@@ -825,21 +817,6 @@
 			name = Hamburger;
 			sourceTree = "<group>";
 		};
-		F13BECF917960D790012E4B4 /* Bluetooth */ = {
-			isa = PBXGroup;
-			children = (
-				F13BECF2179604380012E4B4 /* PeerPicker.h */,
-				F13BECF3179604380012E4B4 /* PeerPicker.m */,
-				F1B2C0FA17961A0E00AD5A04 /* PeerPickerCell.h */,
-				F1B2C0FB17961A0E00AD5A04 /* PeerPickerCell.m */,
-				F172BC7B1794B59300AC1483 /* BluetoothManager.h */,
-				F172BC7C1794B59300AC1483 /* BluetoothManager.m */,
-				F1C9BAFF17FA41BE004275D8 /* BTManager.h */,
-				F1C9BB0017FA41BE004275D8 /* BTManager.m */,
-			);
-			name = Bluetooth;
-			sourceTree = "<group>";
-		};
 		F14333E516F610DE00B279F9 /* SwipeToReveal */ = {
 			isa = PBXGroup;
 			children = (
@@ -918,13 +895,14 @@
 		F1693C5F16DFAC59006E3739 /* Subclasses */ = {
 			isa = PBXGroup;
 			children = (
-				F13BECF917960D790012E4B4 /* Bluetooth */,
 				F18D19C017A5A46B009A8D07 /* Tasks */,
 				F1283AFE1780A79F006D8A79 /* UI */,
 				F1BC30C817715DF300DAFA0A /* Hack.h */,
 				F1BC30C917715DF300DAFA0A /* Hack.m */,
 				F10CBC581707D6E700C82AFB /* DroppinBadassBlocks.h */,
 				F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */,
+				F1C9BAFF17FA41BE004275D8 /* BTManager.h */,
+				F1C9BB0017FA41BE004275D8 /* BTManager.m */,
 				F1BA8C7C17728500007AAF85 /* BGProcFactory.h */,
 				F1BA8C7D17728500007AAF85 /* BGProcFactory.m */,
 				F19FD8AB17ACDB2400B60C3B /* NetworkActivityController.h */,
@@ -1115,8 +1093,6 @@
 				F1681E8E17A5BE9B00ACAAD0 /* UnzippingTask.m */,
 				F1681E9017A5C28D00ACAAD0 /* CompressionTask.h */,
 				F1681E9117A5C28D00ACAAD0 /* CompressionTask.m */,
-				F11EE83217A6CFFC007DF21A /* BluetoothTask.h */,
-				F11EE83317A6CFFC007DF21A /* BluetoothTask.m */,
 				F1A871AC17FB09EF00B1D9EF /* P2PTask.h */,
 				F1A871AD17FB09EF00B1D9EF /* P2PTask.m */,
 				F1038BB317B1ECB100AE918E /* DropboxLinkTask.h */,
@@ -1549,7 +1525,6 @@
 				F1C939B417F326C400754D5D /* DBSession+iOS.m in Sources */,
 				F1C939CD17F326C400754D5D /* NSString+Dropbox.m in Sources */,
 				F137F3481791FC5A008FCFD7 /* Hamburger.m in Sources */,
-				F172BC7D1794B59300AC1483 /* BluetoothManager.m in Sources */,
 				F172BCC31794EC4500AC1483 /* DDData.m in Sources */,
 				F172BCC41794EC4500AC1483 /* DDNumber.m in Sources */,
 				F1C939B617F326C400754D5D /* DBJSON.m in Sources */,
@@ -1590,8 +1565,6 @@
 				F172BCE11794EC4500AC1483 /* WebSocket.m in Sources */,
 				F172BCE41794EC6700AC1483 /* HTTPConnection.m in Sources */,
 				F1C939C417F326C400754D5D /* MPOAuthCredentialConcreteStore.m in Sources */,
-				F13BECF4179604380012E4B4 /* PeerPicker.m in Sources */,
-				F1B2C0FC17961A0E00AD5A04 /* PeerPickerCell.m in Sources */,
 				F1434B3E179B21C1001A672C /* UITableView+CoolRefresh.m in Sources */,
 				F130452F179C594F00D7DB4D /* Appirater.m in Sources */,
 				F1304534179C5E6A00D7DB4D /* FilesystemMonitor.m in Sources */,
@@ -1602,7 +1575,6 @@
 				F1681E8F17A5BE9B00ACAAD0 /* UnzippingTask.m in Sources */,
 				F1681E9217A5C28D00ACAAD0 /* CompressionTask.m in Sources */,
 				F1C939A717F326C400754D5D /* DBAccountInfo.m in Sources */,
-				F11EE83417A6CFFC007DF21A /* BluetoothTask.m in Sources */,
 				F163C4E617AB508D007AB612 /* DashedLineView.m in Sources */,
 				F163C4E917AB59B1007AB612 /* CircularProgressView.m in Sources */,
 				F19FD8AD17ACDB2500B60C3B /* NetworkActivityController.m in Sources */,
