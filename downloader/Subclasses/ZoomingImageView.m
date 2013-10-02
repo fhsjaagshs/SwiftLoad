@@ -50,10 +50,7 @@
 }
 
 - (void)zoomOut {
-    [self zoomToRect:self.bounds animated:YES];
-    self.zoomScale = self.minimumZoomScale;
-    [self setNeedsLayout];
-    [self resetImage];
+    [self setZoomScale:self.minimumZoomScale animated:YES];
 }
 
 - (CGRect)boundsWithContentInsets {

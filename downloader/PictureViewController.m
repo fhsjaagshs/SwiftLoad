@@ -31,14 +31,13 @@
     _zoomingImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     _zoomingImageView.decelerationRate = UIScrollViewDecelerationRateFast;
     [self.view addSubview:_zoomingImageView];
-    [self.view bringSubviewToFront:_zoomingImageView];
     
     self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
     _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]];
+    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:kAppDelegate.openFile.lastPathComponent];
     topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
-    [_navBar pushNavigationItem:topItem animated:YES];
+    [_navBar pushNavigationItem:topItem animated:NO];
     [self.view addSubview:_navBar];
     
     self.toolBar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, screenBounds.size.height-44, screenBounds.size.width, 44)];
@@ -48,9 +47,9 @@
     self.nextImg = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"ArrowRight"] style:UIBarButtonItemStylePlain target:self action:@selector(nextImage)];
     self.prevImg = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"ArrowLeft"] style:UIBarButtonItemStylePlain target:self action:@selector(previousImage)];
     
-    self.toolBar.items = @[space,_prevImg,space,_nextImg,space];
     [self.view addSubview:_toolBar];
-    [self.view bringSubviewToFront:_toolBar];
+    
+    _toolBar.items = @[space,_prevImg,space,_nextImg,space];
     
     UITapGestureRecognizer *tt = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imageViewWasDoubleTapped:)];
     [tt setNumberOfTapsRequired:2];
@@ -66,7 +65,7 @@
     
     NSArray *imageFiles = [self imageFiles];
     
-    self.imageNumber = [imageFiles indexOfObject:[kAppDelegate openFile].lastPathComponent];
+    self.imageNumber = [imageFiles indexOfObject:kAppDelegate.openFile.lastPathComponent];
     
     if (imageFiles.count == 1) {
         [_nextImg setEnabled:NO];
@@ -81,19 +80,17 @@
         [_nextImg setEnabled:NO];
     }
 
-    _zoomingImageView.image = [UIImage imageWithContentsOfFile:[kAppDelegate openFile]];
+    _zoomingImageView.image = [UIImage imageWithContentsOfFile:kAppDelegate.openFile];
 }
 
 - (NSArray *)imageFiles {
-    NSString *currentDir = [kAppDelegate managerCurrentDir];
     NSArray *extensions = @[@"tiff", @"tif", @"jpg", @"jpeg", @"gif", @"png", @"bmp", @"BMPf", @"ico", @"cur", @"xbm"];
-    NSArray *dirContents = [[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil];
-    NSArray *imageFiles = [[dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension.lowercaseString IN %@", extensions]]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];;
-    return imageFiles;
+    NSArray *dirContents = [[NSFileManager defaultManager]contentsOfDirectoryAtPath:kAppDelegate.managerCurrentDir error:nil];
+    return [[dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension.lowercaseString IN %@", extensions]]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
 }
 
 - (void)addToTheRoll {
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:[kAppDelegate window] animated:YES];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:kAppDelegate.window animated:YES];
     hud.mode = MBProgressHUDModeText;
     hud.labelText = @"Working...";
     
