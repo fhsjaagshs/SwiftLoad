@@ -8,7 +8,7 @@
 
 #import "DocumentViewController.h"
 
-@interface DocumentViewController ()
+@interface DocumentViewController () <UIWebViewDelegate>
 
 @property (nonatomic, strong) UIActionSheet *popupQuery;
 @property (nonatomic, strong) UIWebView *webView;
@@ -20,13 +20,6 @@
 - (void)loadView {
     [super loadView];
     CGRect screenBounds = [[UIScreen mainScreen]bounds];
-    UINavigationBar *bar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
-    bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[kAppDelegate openFile].lastPathComponent];
-    topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
-    topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
-    [bar pushNavigationItem:topItem animated:NO];
-    [self.view addSubview:bar];
     
     self.webView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 64, screenBounds.size.width, screenBounds.size.height-64)];
     _webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -36,8 +29,16 @@
     _webView.dataDetectorTypes = UIDataDetectorTypeLink;
     _webView.layer.rasterizationScale = [[UIScreen mainScreen]scale];
     _webView.layer.shouldRasterize = YES;
-    _webView.clipsToBounds = NO;
+    _webView.scrollView.clipsToBounds = NO;
     [self.view addSubview:_webView];
+    
+    UINavigationBar *bar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
+    bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[kAppDelegate openFile].lastPathComponent];
+    topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
+    topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
+    [bar pushNavigationItem:topItem animated:NO];
+    [self.view addSubview:bar];
 
     NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:[kAppDelegate openFile]] cachePolicy:NSURLCacheStorageAllowedInMemoryOnly timeoutInterval:30.0f];
     [_webView loadRequest:req];
