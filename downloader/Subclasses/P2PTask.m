@@ -10,6 +10,7 @@
 
 static NSString * const kProgressCancelledKeyPath = @"cancelled";
 static NSString * const kProgressCompletedUnitCountKeyPath = @"completedUnitCount";
+static NSString * const kProgressAdvancedKeyPath = @"fractionCompleted";
 
 @interface P2PTask ()
 
@@ -50,9 +51,9 @@ static NSString * const kProgressCompletedUnitCountKeyPath = @"completedUnitCoun
         } else if ([keyPath isEqualToString:kProgressCompletedUnitCountKeyPath]) {
             if (_progress.completedUnitCount == _progress.totalUnitCount) {
                 [self showSuccess];
-            } else {
-                [self.delegate setProgress:_progress.fractionCompleted];
             }
+        } else if ([keyPath isEqualToString:kProgressAdvancedKeyPath]) {
+            [self.delegate setProgress:_progress.fractionCompleted];
         }
     }
 }
