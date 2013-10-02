@@ -68,18 +68,10 @@ static NSString * const kServiceType = @"SwiftBluetooth";
 }
 
 - (void)internal_sendFileAtPath:(NSString *)path {
+    NSLog(@"%@",_session.connectedPeers);
     for (MCPeerID *peerID in _session.connectedPeers) {
         NSProgress *progress = [_session sendResourceAtURL:[NSURL fileURLWithPath:path] withName:path.lastPathComponent toPeer:peerID withCompletionHandler:^(NSError *error) {
-            
-            P2PTask *task = (P2PTask *)_sendingObjs[[peerID keyWithResourceName:path.lastPathComponent]];
-
-            if (task) {
-                if (error) {
-                    [task showFailure];
-                } else {
-                    [task showSuccess];
-                }
-                
+            if (_sendingObjs[[peerID keyWithResourceName:path.lastPathComponent]]) {
                 [_sendingObjs removeObjectForKey:[peerID keyWithResourceName:path.lastPathComponent]];
             }
             
@@ -131,11 +123,11 @@ static NSString * const kServiceType = @"SwiftBluetooth";
     if (task) {
         
         if (error) {
-            [task showFailure];
+           // [task showFailure];
         } else {
             NSString *movedToPath = getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:resourceName]);
             [[NSFileManager defaultManager]moveItemAtPath:localURL.path toPath:movedToPath error:nil];
-            [task showSuccess];
+          //  [task showSuccess];
         }
         
         [_receivingObjs removeObjectForKey:[peerID keyWithResourceName:resourceName]];

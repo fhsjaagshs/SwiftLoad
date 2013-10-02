@@ -59,7 +59,10 @@ float const kClearOutDelayTask = 0.6f;
     
     self.delegate = nil;
     
+    NSLog(@"lolwha??");
+    
     if ([self shouldClearAutomatically]) {
+        NSLog(@"Clearing: %@",self);
         [[TaskController sharedController]removeTask:self];
         [[NSNotificationCenter defaultCenter]postNotificationName:kHamburgerTaskUpdateNotification object:nil];
     }

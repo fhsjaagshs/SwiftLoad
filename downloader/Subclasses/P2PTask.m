@@ -9,7 +9,6 @@
 #import "P2PTask.h"
 
 static NSString * const kProgressCancelledKeyPath = @"cancelled";
-static NSString * const kProgressCompletedUnitCountKeyPath = @"completedUnitCount";
 static NSString * const kProgressAdvancedKeyPath = @"fractionCompleted";
 
 @interface P2PTask ()
@@ -49,32 +48,33 @@ static NSString * const kProgressAdvancedKeyPath = @"fractionCompleted";
         self.name = name;
         self.progress = progress;
         [_progress addObserver:self forKeyPath:kProgressCancelledKeyPath options:NSKeyValueObservingOptionNew context:NULL];
-        [_progress addObserver:self forKeyPath:kProgressCompletedUnitCountKeyPath options:NSKeyValueObservingOptionNew context:NULL];
+        [_progress addObserver:self forKeyPath:kProgressAdvancedKeyPath options:NSKeyValueObservingOptionNew context:NULL];
     }
     return self;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([(NSProgress *)object isEqual:_progress]) {
-        if ([keyPath isEqualToString:kProgressCancelledKeyPath]) {
-            [self showFailure];
-        } else if ([keyPath isEqualToString:kProgressCompletedUnitCountKeyPath]) {
-            if (_progress.completedUnitCount == _progress.totalUnitCount) {
-                [self showSuccess];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            @autoreleasepool {
+                if ([keyPath isEqualToString:kProgressCancelledKeyPath]) {
+                    [self showFailure];
+                } else if ([keyPath isEqualToString:kProgressAdvancedKeyPath]) {
+                    if (_progress.fractionCompleted == 1.0f) {
+                        NSLog(@"FactionCompleted == 1.0f");
+                        [self showSuccess];
+                    } else {
+                        [self.delegate setProgress:_progress.fractionCompleted];
+                    }
+                }
             }
-        } else if ([keyPath isEqualToString:kProgressAdvancedKeyPath]) {
-            if (_progress.fractionCompleted == 1.0f) {
-                [self showSuccess];
-            } else {
-                [self.delegate setProgress:_progress.fractionCompleted];
-            }
-        }
+        });
     }
 }
 
 - (void)dealloc {
     [_progress removeObserver:self forKeyPath:kProgressCancelledKeyPath];
-    [_progress removeObserver:self forKeyPath:kProgressCompletedUnitCountKeyPath];
+    [_progress removeObserver:self forKeyPath:kProgressAdvancedKeyPath];
     self.progress = nil;
 }
 
