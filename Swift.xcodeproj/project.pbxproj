@@ -128,6 +128,7 @@
 		F19BB51C16E006CA0081C95B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F19BB51916E006CA0081C95B /* main.m */; };
 		F19FD8AD17ACDB2500B60C3B /* NetworkActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = F19FD8AC17ACDB2500B60C3B /* NetworkActivityController.m */; };
 		F1A72948149876040049DBB6 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A72947149876040049DBB6 /* GameKit.framework */; };
+		F1A871AE17FB09EF00B1D9EF /* P2PTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F1A871AD17FB09EF00B1D9EF /* P2PTask.m */; };
 		F1A923FE140D4DDD003ACDAB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A923FD140D4DDD003ACDAB /* QuartzCore.framework */; };
 		F1AE31A517BDBC1E005D3EE6 /* back_button.png in Resources */ = {isa = PBXBuildFile; fileRef = F1AE319117BDBC1E005D3EE6 /* back_button.png */; };
 		F1AE31A617BDBC1E005D3EE6 /* back_button_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = F1AE319217BDBC1E005D3EE6 /* back_button_pressed.png */; };
@@ -449,6 +450,8 @@
 		F19FD8AB17ACDB2400B60C3B /* NetworkActivityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkActivityController.h; sourceTree = "<group>"; };
 		F19FD8AC17ACDB2500B60C3B /* NetworkActivityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkActivityController.m; sourceTree = "<group>"; };
 		F1A72947149876040049DBB6 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		F1A871AC17FB09EF00B1D9EF /* P2PTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = P2PTask.h; sourceTree = "<group>"; };
+		F1A871AD17FB09EF00B1D9EF /* P2PTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = P2PTask.m; sourceTree = "<group>"; };
 		F1A923FD140D4DDD003ACDAB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F1AE319117BDBC1E005D3EE6 /* back_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = back_button.png; path = "Images/Audio Player/back_button.png"; sourceTree = "<group>"; };
 		F1AE319217BDBC1E005D3EE6 /* back_button_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = back_button_pressed.png; path = "Images/Audio Player/back_button_pressed.png"; sourceTree = "<group>"; };
@@ -1114,6 +1117,8 @@
 				F1681E9117A5C28D00ACAAD0 /* CompressionTask.m */,
 				F11EE83217A6CFFC007DF21A /* BluetoothTask.h */,
 				F11EE83317A6CFFC007DF21A /* BluetoothTask.m */,
+				F1A871AC17FB09EF00B1D9EF /* P2PTask.h */,
+				F1A871AD17FB09EF00B1D9EF /* P2PTask.m */,
 				F1038BB317B1ECB100AE918E /* DropboxLinkTask.h */,
 				F1038BB417B1ECB100AE918E /* DropboxLinkTask.m */,
 			);
@@ -1485,6 +1490,7 @@
 				F11FE417145F8218008ECC7E /* TextEditorViewController.m in Sources */,
 				F149A685149176E60038F1FC /* MoviePlayerViewController.m in Sources */,
 				F166BBC414E2171A003E5A07 /* WebDAVViewController.m in Sources */,
+				F1A871AE17FB09EF00B1D9EF /* P2PTask.m in Sources */,
 				F1C939C517F326C400754D5D /* MPOAuthSignatureParameter.m in Sources */,
 				F1C939B017F326C400754D5D /* DBQuota.m in Sources */,
 				9BFF29FA15387C67007ED9B1 /* ioapi.c in Sources */,

@@ -71,6 +71,8 @@
     #import "BluetoothTask.h"
     #import "DropboxLinkTask.h"
 
+    #import "P2PTask.h"
+
     #import "Download.h"
     #import "DropboxDownload.h"
     #import "HTTPDownload.h"

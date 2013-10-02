@@ -73,7 +73,8 @@ static NSString * const kProgressCompletedUnitCountKeyPath = @"completedUnitCoun
 
 @property (nonatomic, strong) MCSession *session;
 @property (nonatomic, strong) MCAdvertiserAssistant *advertiserAssistant;
-@property (nonatomic, strong) NSMutableDictionary *progressObjs;
+@property (nonatomic, strong) NSMutableDictionary *sendingObjs;
+@property (nonatomic, strong) NSMutableDictionary *receivingObjs;
 
 @end
 
@@ -91,7 +92,8 @@ static NSString * const kProgressCompletedUnitCountKeyPath = @"completedUnitCoun
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.progressObjs = [NSMutableDictionary dictionary];
+        self.sendingObjs = [NSMutableDictionary dictionary];
+        self.receivingObjs = [NSMutableDictionary dictionary];
         self.session = [[MCSession alloc]initWithPeer:[[MCPeerID alloc]initWithDisplayName:[[UIDevice currentDevice]systemName]] securityIdentity:nil encryptionPreference:MCEncryptionRequired];
         _session.delegate = self;
         self.advertiserAssistant = [[MCAdvertiserAssistant alloc]initWithServiceType:@"SwiftBluetooth" discoveryInfo:nil session:_session];
@@ -101,18 +103,27 @@ static NSString * const kProgressCompletedUnitCountKeyPath = @"completedUnitCoun
 }
 
 - (BOOL)sendFileAtPath:(NSString *)path {
-    for (MCPeerID *perrID in _session.connectedPeers) {
-        [_session sendResourceAtURL:[NSURL URLWithString:path] withName:path.lastPathComponent toPeer:nil withCompletionHandler:^(NSError *error) {
+    
+    // show connector
+    // do shit
+    
+    for (MCPeerID *peerID in _session.connectedPeers) {
+        NSProgress *progress = [_session sendResourceAtURL:[NSURL URLWithString:path] withName:path.lastPathComponent toPeer:nil withCompletionHandler:^(NSError *error) {
+            [_sendingObjs removeObjectForKey:path.lastPathComponent];
             if (_sendingCompletionHandler) {
                 _sendingCompletionHandler(error);
             }
         }];
+        
+        P2PTask *task = [P2PTask taskWithName:path.lastPathComponent progress:progress];
+        task.isSender = YES;
+        _sendingObjs[path.lastPathComponent] = task;
     }
     return _session.connectedPeers.count > 0;
 }
 
 - (void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error {
-    [_progressObjs removeObjectForKey:resourceName];
+    [_receivingObjs removeObjectForKey:resourceName];
     if (error) {
         if (_receivingCompletionHandler) {
             _receivingCompletionHandler(error, nil);
@@ -127,8 +138,9 @@ static NSString * const kProgressCompletedUnitCountKeyPath = @"completedUnitCoun
 }
 
 - (void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress {
-    BTProgress *btprogress = [BTProgress progressWithName:resourceName progress:progress andDelegate:self];
-    _progressObjs[resourceName] = btprogress;
+    P2PTask *task = [P2PTask taskWithName:resourceName progress:progress];
+    task.isSender = NO;
+    _receivingObjs[resourceName] = task;
 }
 
 // These cats ain't implemented
