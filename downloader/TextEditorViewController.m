@@ -161,8 +161,7 @@
         if (buttonIndex == 0) {
             [kAppDelegate sendFileInEmail:file];
         } else if (buttonIndex == 1) {
-            BluetoothTask *task = [BluetoothTask taskWithFile:file];
-            [[TaskController sharedController]addTask:task];
+            [[BTManager shared]sendFileAtPath:kAppDelegate.openFile];
         } else if (buttonIndex == 2) {
             DropboxUpload *task = [DropboxUpload uploadWithFile:file];
             [[TaskController sharedController]addTask:task];

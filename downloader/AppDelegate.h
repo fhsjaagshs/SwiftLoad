@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#define kAppDelegate (AppDelegate *)[[UIApplication sharedApplication]delegate]
+#define kAppDelegate ((AppDelegate *)[[UIApplication sharedApplication]delegate])
 #define kDocsDir [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 #define kLibDir [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 #define kCachesDir [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0]

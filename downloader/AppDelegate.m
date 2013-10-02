@@ -408,24 +408,14 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     [FilesystemMonitor sharedMonitor];
     [BGProcFactory sharedFactory];
     [TaskController sharedController];
-    [BluetoothManager sharedManager];
+    [BTManager shared];
     [NetworkActivityController sharedController];
-    
-    [[BluetoothManager sharedManager]setStartedBlock:^{
-        if (![[BluetoothManager sharedManager]isSender]) {
-            BluetoothTask *task = [BluetoothTask receiverTaskWithFilename:[[BluetoothManager sharedManager]getFilename]];
-            [[TaskController sharedController]addTask:task];
-        }
-    }];
     
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryPlayback error:nil];
     [[UIApplication sharedApplication]beginReceivingRemoteControlEvents];
     [self becomeFirstResponder];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleRouteChange:) name:AVAudioSessionRouteChangeNotification object:[AVAudioSession sharedInstance]];
-    
-    // ybpwmfq2z1jmaxi
-    // ua6hjow7hxx0y3a
     
     DBSession *session = [[DBSession alloc]initWithAppKey:@"ybpwmfq2z1jmaxi" appSecret:@"ua6hjow7hxx0y3a" root:kDBRootDropbox];
 	session.delegate = self;
@@ -448,11 +438,11 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    [[BluetoothManager sharedManager]prepareForBackground];
+    [[BTManager shared]prepareForBackground];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application  {
-    [[BluetoothManager sharedManager]prepareForForeground];
+    [[BTManager shared]prepareForForeground];
     [Appirater appEnteredForeground:YES];
 }
 

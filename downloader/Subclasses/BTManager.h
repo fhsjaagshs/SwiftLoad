@@ -13,8 +13,9 @@
 + (BTManager *)shared;
 
 - (void)sendFileAtPath:(NSString *)path;
+- (void)prepareForBackground;
+- (void)prepareForForeground;
 
-@property (nonatomic, copy) void(^sendingCompletionHandler)(NSError *error);
-@property (nonatomic, copy) void(^receivingCompletionHandler)(NSError *error, NSString *path);
+@property (nonatomic, assign) BOOL isCurrentlySending;
 
 @end

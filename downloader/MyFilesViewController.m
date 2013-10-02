@@ -654,9 +654,9 @@ static NSString *CellIdentifier = @"Cell";
             
             NSString *imageName = buttonData[index];
 
-            if ([imageName isEqualToString:@"bluetooth"] && [[BluetoothManager sharedManager]isTransferring]) {
+            /*if ([imageName isEqualToString:@"bluetooth"] && [[BluetoothManager sharedManager]isTransferring]) {
                 button.enabled = NO;
-            } else if (disableDelete && [imageName isEqualToString:@"delete"]) {
+            } else*/ if (disableDelete && [imageName isEqualToString:@"delete"]) {
                 button.enabled = NO;
             }
     
@@ -698,8 +698,7 @@ static NSString *CellIdentifier = @"Cell";
         [[TaskController sharedController]addTask:task];
         [_currentlySwipedCell hideWithAnimation:YES];
     } else if (number == 2) {
-        BluetoothTask *task = [BluetoothTask taskWithFile:file];
-        [[TaskController sharedController]addTask:task];
+        [[BTManager shared]sendFileAtPath:file];
         [_currentlySwipedCell hideWithAnimation:YES];
     } else if (number == 3) {
         [ad sendFileInEmail:file];
