@@ -67,23 +67,19 @@ static NSString * const kServiceType = @"SwiftBluetooth";
     [_advertiserAssistant start];
 }
 
-- (void)sendFileAtPath:(NSString *)path {
-    [_advertiserAssistant stop];
-    MCNearbyServiceBrowser *browser = [[MCNearbyServiceBrowser alloc]initWithPeer:_session.myPeerID serviceType:kServiceType];
-    MCBrowserViewController *browserVC = [[MCBrowserViewController alloc]initWithBrowser:browser session:_session];
-    browserVC.delegate = self;
-    browserVC.maximumNumberOfPeers = 1;
-    browserVC.minimumNumberOfPeers = 1;
-    objc_setAssociatedObject(browserVC, "passed_path_swift", path, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    [[UIViewController topViewController]presentViewController:browserVC animated:YES completion:nil];
-}
-
-- (void)browserViewControllerDidFinish:(MCBrowserViewController *)browserViewController {
-    NSString *path = (NSString *)objc_getAssociatedObject(browserViewController, "passed_path_swift");
-    
+- (void)internal_sendFileAtPath:(NSString *)path {
     for (MCPeerID *peerID in _session.connectedPeers) {
-        NSProgress *progress = [_session sendResourceAtURL:[NSURL URLWithString:path] withName:path.lastPathComponent toPeer:nil withCompletionHandler:^(NSError *error) {
-            if (_sendingObjs[[peerID keyWithResourceName:path.lastPathComponent]]) {
+        NSProgress *progress = [_session sendResourceAtURL:[NSURL URLWithString:path] withName:path.lastPathComponent toPeer:peerID withCompletionHandler:^(NSError *error) {
+            
+            P2PTask *task = _sendingObjs[[peerID keyWithResourceName:path.lastPathComponent]];
+            
+            if (error) {
+                [task showFailure];
+            } else {
+                [task showSuccess];
+            }
+            
+            if (task) {
                 [_sendingObjs removeObjectForKey:[peerID keyWithResourceName:path.lastPathComponent]];
             }
             
@@ -96,6 +92,27 @@ static NSString * const kServiceType = @"SwiftBluetooth";
         task.isSender = YES;
         _sendingObjs[[peerID keyWithResourceName:path.lastPathComponent]] = task;
     }
+}
+
+- (void)sendFileAtPath:(NSString *)path {
+    [_advertiserAssistant stop];
+    
+    if (_session.connectedPeers.count > 0) {
+        [self internal_sendFileAtPath:path];
+    } else {
+        MCNearbyServiceBrowser *browser = [[MCNearbyServiceBrowser alloc]initWithPeer:_session.myPeerID serviceType:kServiceType];
+        MCBrowserViewController *browserVC = [[MCBrowserViewController alloc]initWithBrowser:browser session:_session];
+        browserVC.delegate = self;
+        browserVC.maximumNumberOfPeers = 1;
+        browserVC.minimumNumberOfPeers = 1;
+        objc_setAssociatedObject(browserVC, "passed_path_swift", path, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        [[UIViewController topViewController]presentViewController:browserVC animated:YES completion:nil];
+    }
+}
+
+- (void)browserViewControllerDidFinish:(MCBrowserViewController *)browserViewController {
+    NSString *path = (NSString *)objc_getAssociatedObject(browserViewController, "passed_path_swift");
+    [self internal_sendFileAtPath:path];
     [browserViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
