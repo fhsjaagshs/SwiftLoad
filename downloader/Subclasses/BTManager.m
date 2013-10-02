@@ -51,7 +51,7 @@ static NSString * const kServiceType = @"SwiftBluetooth";
     if (self) {
         self.sendingObjs = [NSMutableDictionary dictionary];
         self.receivingObjs = [NSMutableDictionary dictionary];
-        self.session = [[MCSession alloc]initWithPeer:[[MCPeerID alloc]initWithDisplayName:[[UIDevice currentDevice]systemName]] securityIdentity:nil encryptionPreference:MCEncryptionRequired];
+        self.session = [[MCSession alloc]initWithPeer:[[MCPeerID alloc]initWithDisplayName:[[UIDevice currentDevice]name]] securityIdentity:nil encryptionPreference:MCEncryptionRequired];
         _session.delegate = self;
         self.advertiserAssistant = [[MCAdvertiserAssistant alloc]initWithServiceType:kServiceType discoveryInfo:nil session:_session];
         [_advertiserAssistant start];
