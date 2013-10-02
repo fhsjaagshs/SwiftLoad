@@ -37,6 +37,8 @@ static NSString * const kProgressCompletedUnitCountKeyPath = @"completedUnitCoun
     if (self) {
         self.name = name;
         self.progress = progress;
+        [_progress addObserver:self forKeyPath:kProgressCancelledKeyPath options:NSKeyValueObservingOptionNew context:NULL];
+        [_progress addObserver:self forKeyPath:kProgressCompletedUnitCountKeyPath options:NSKeyValueObservingOptionNew context:NULL];
     }
     return self;
 }
