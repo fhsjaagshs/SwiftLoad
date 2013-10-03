@@ -125,6 +125,9 @@ static NSString *CellIdentifier = @"Cell";
         [self presentViewController:[DropboxBrowserViewController viewControllerWhite] animated:YES completion:nil];
     } else if (index == 3) {
         [self presentViewController:[SettingsView viewControllerWhite] animated:YES completion:nil];
+    } else if (index == 4) {
+        kAppDelegate.openFile = kAppDelegate.nowPlayingFile;
+        [self presentViewController:[AudioPlayerViewController viewControllerWhite] animated:YES completion:nil];
     }
 }
 

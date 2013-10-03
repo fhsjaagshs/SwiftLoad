@@ -125,7 +125,7 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return (section == 0)?4:[[TaskController sharedController]numberOfTasks];
+    return (section == 0)?(kAppDelegate.nowPlayingFile != nil)?5:4:[[TaskController sharedController]numberOfTasks];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -138,7 +138,7 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifierHamburger];
         
         if (cell == nil) {
-            cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifierHamburger];
+            cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kCellIdentifierHamburger];
             cell.textLabel.backgroundColor = [UIColor whiteColor];
             cell.textLabel.highlightedTextColor = [UIColor blackColor];
             cell.textLabel.textAlignment = NSTextAlignmentCenter;
@@ -148,6 +148,8 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
             cell.backgroundColor = [UIColor clearColor];
         }
         
+        cell.detailTextLabel.text = nil;
+        
         if (indexPath.row == 0) {
             cell.textLabel.text = @"Download URL";
         } else if (indexPath.row == 1) {
@@ -156,6 +158,9 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
             cell.textLabel.text = @"Browse Dropbox";
         } else if (indexPath.row == 3) {
             cell.textLabel.text = @"Settings";
+        } else if (indexPath.row == 4) {
+            cell.textLabel.text = @"Now Playing";
+            cell.detailTextLabel.text = [[MPNowPlayingInfoCenter defaultCenter]nowPlayingInfo][MPMediaItemPropertyTitle];
         }
         
         return cell;
