@@ -8,12 +8,15 @@
 
 #import "Hamburger.h"
 
+static NSString * const kHamburgerTableUpdateNotification = @"kHamburgerTableUpdateNotification";
+
 NSString * const kHamburgerTaskUpdateNotification = @"kHamburgerTaskUpdateNotification";
+NSString * const kHamburgerNowPlayingUpdateNotification = @"kHamburgerNowPlayingUpdateNotification";
 static NSString *kCellIdentifierHamburger = @"hamburgertext";
 static NSString * const kCellIdentifierHamburgerSeparator = @"hamburgersep";
 static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 
-@interface HamburgerView : UIView <UITableViewDataSource, UITableViewDelegate>
+@interface HamburgerView () <UITableViewDataSource, UITableViewDelegate>
 
 + (HamburgerView *)view;
 
@@ -95,6 +98,10 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 
 @implementation HamburgerView
 
++ (void)reloadCells {
+    [[NSNotificationCenter defaultCenter]postNotificationName:kHamburgerTableUpdateNotification object:nil];
+}
+
 + (HamburgerView *)view {
     return [[[self class]alloc]init];
 }
@@ -102,7 +109,6 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 - (id)init {
     self = [super init];
     if (self) {
-        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(tasksChanged) name:kHamburgerTaskUpdateNotification object:nil];
         self.userInteractionEnabled = YES;
         self.backgroundColor = [UIColor clearColor];
         self.frame = CGRectMake(0, 0, 250, [[UIScreen mainScreen]bounds].size.height);
@@ -116,12 +122,10 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
         _theTableView.separatorInset = UIEdgeInsetsMake(0, 50, 0, 50);
         _theTableView.tableFooterView = [UIView new];
         [self addSubview:_theTableView];
+        
+        [[NSNotificationCenter defaultCenter]addObserver:_theTableView selector:@selector(reloadData) name:kHamburgerTableUpdateNotification object:nil];
     }
     return self;
-}
-
-- (void)tasksChanged {
-    [_theTableView reloadData];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

@@ -9,8 +9,15 @@
 #import <UIKit/UIKit.h>
 
 extern NSString * const kHamburgerTaskUpdateNotification;
+extern NSString * const kHamburgerNowPlayingUpdateNotification;
 
 @protocol HamburgerViewDelegate;
+
+@interface HamburgerView : UIView
+
++ (void)reloadCells;
+
+@end
 
 @interface HamburgerButtonItem : UIBarButtonItem
 
