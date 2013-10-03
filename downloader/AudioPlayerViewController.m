@@ -14,7 +14,7 @@
 @property (nonatomic, strong) UILabel *secondsRemaining;
 @property (nonatomic, strong) UILabel *secondsElapsed;
 
-@property (nonatomic, strong) UIView *albumArtwork;
+@property (nonatomic, strong) UIImageView *albumArtwork;
 
 @property (nonatomic, strong) UIButton *pausePlay;
 @property (nonatomic, strong) UIButton *stopButton;
@@ -124,12 +124,12 @@
     _secondsRemaining.text = @"-0:00";
     [self.view addSubview:_secondsRemaining];
     
-    self.albumArtwork = [[UIView alloc]initWithFrame:CGRectMake(0, 200, screenBounds.size.width, screenBounds.size.height-300)];
-    _albumArtwork.layer.contentsGravity = kCAGravityResizeAspect;
-   // _albumArtwork.contentMode = UIViewContentModeScaleAspectFit;
+    self.albumArtwork = [[UIImageView alloc]initWithFrame:CGRectMake(0, 200, screenBounds.size.width, screenBounds.size.height-300)];
+    _albumArtwork.contentMode = UIViewContentModeScaleAspectFit;
+    _albumArtwork.layer.masksToBounds = YES;
     _albumArtwork.layer.cornerRadius = 5.0f;
     _albumArtwork.layer.borderWidth = 1.0f;
-    _albumArtwork.layer.borderColor = [UIColor colorWithRed:105.0f green:54.0f blue:153.0f alpha:1.0f].CGColor;
+    _albumArtwork.layer.borderColor = [UIColor colorWithRed:105.0f/255.0f green:54.0f/255.0f blue:153.0f/255.0f alpha:1.0f].CGColor;
     [self.view addSubview:_albumArtwork];
     
     float controlsWidth = screenBounds.size.width/3;
@@ -421,20 +421,20 @@
     
     UIImage *image = (UIImage *)notif.object;
     
-    float ratio = 1;
-    
-    if (image.size.height > targetRect.size.height) {
-        ratio = (float)(image.size.height/targetRect.size.height);
-    } else if (image.size.width > targetRect.size.width) {
-        ratio = (float)(image.size.width/targetRect.size.width);
-    }
-    
     CGPoint oldCenter = _albumArtwork.center;
     
-    _albumArtwork.bounds = CGRectMake(0, 0, targetRect.size.width/ratio, targetRect.size.height/ratio);
+    _albumArtwork.bounds = CGRectMake(0, 0, image.size.width, image.size.height);
+    
+    if (image.size.height > targetRect.size.height) {
+        float ratio = (image.size.height/targetRect.size.height);
+        _albumArtwork.bounds = CGRectMake(0, 0, image.size.width/ratio, targetRect.size.height);
+    } else if (image.size.width > targetRect.size.width) {
+        float ratio = (image.size.width/targetRect.size.width);
+        _albumArtwork.bounds = CGRectMake(0, 0, targetRect.size.width, image.size.height/ratio);
+    }
+    
     _albumArtwork.center = oldCenter;
-    _albumArtwork.layer.contents = (id)image.CGImage;
-    //_albumArtwork.image = image;
+    _albumArtwork.image = image;
 }
 
 - (void)setupNotifs {
