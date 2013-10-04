@@ -89,6 +89,10 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
         }
     }
     
+    if (artworkImages.count == 0) {
+        [artworkImages addObject:[UIImage imageNamed:@"albumartwork_placeholder"]];
+    }
+    
     return artworkImages;
 }
 
@@ -156,6 +160,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     if (![file isEqualToString:_nowPlayingFile]) {
         [_audioPlayer stop];
         self.audioPlayer = [[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:file] error:&playingError];
+        [_audioPlayer addObserver:self forKeyPath:@"playing" options:NSKeyValueObservingOptionNew context:nil];
         _audioPlayer.delegate = self;
     }
     
@@ -208,8 +213,8 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
 
     [_audioPlayer stop];
     self.audioPlayer = [[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:newFile] error:&playingError];
+    [_audioPlayer addObserver:self forKeyPath:@"playing" options:NSKeyValueObservingOptionNew context:nil];
     _audioPlayer.delegate = self;
-    _audioPlayer.numberOfLoops = [[NSUserDefaults standardUserDefaults]boolForKey:@"loop"]?-1:0;
     [AudioPlayerViewController notif_setLoop];
     
     __weak AppDelegate *weakself = self;
@@ -254,7 +259,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     [_audioPlayer stop];
     self.audioPlayer = [[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:newFile] error:&playingError];
     _audioPlayer.delegate = self;
-    _audioPlayer.numberOfLoops = [[NSUserDefaults standardUserDefaults]boolForKey:@"loop"]?-1:0;
+    [_audioPlayer addObserver:self forKeyPath:@"playing" options:NSKeyValueObservingOptionNew context:nil];
     [AudioPlayerViewController notif_setLoop];
     
     __weak AppDelegate *weakself = self;
@@ -313,6 +318,17 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
         } else {
             _audioPlayer.currentTime = 0;
             [_audioPlayer play];
+            [AudioPlayerViewController notif_setPausePlayTitlePause];
+        }
+    }
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"playing"]) {
+        NSLog(@"observed");
+        if (_audioPlayer.isPlaying) {
+            [AudioPlayerViewController notif_setPausePlayTitlePlay];
+        } else {
             [AudioPlayerViewController notif_setPausePlayTitlePause];
         }
     }
