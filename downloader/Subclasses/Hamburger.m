@@ -10,7 +10,6 @@
 
 static NSString * const kHamburgerTableUpdateNotification = @"kHamburgerTableUpdateNotification";
 
-NSString * const kHamburgerTaskUpdateNotification = @"kHamburgerTaskUpdateNotification";
 NSString * const kHamburgerNowPlayingUpdateNotification = @"kHamburgerNowPlayingUpdateNotification";
 static NSString *kCellIdentifierHamburger = @"hamburgertext";
 static NSString * const kCellIdentifierHamburgerSeparator = @"hamburgersep";

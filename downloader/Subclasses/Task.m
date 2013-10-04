@@ -59,12 +59,9 @@ float const kClearOutDelayTask = 0.6f;
     
     self.delegate = nil;
     
-    NSLog(@"lolwha??");
-    
     if ([self shouldClearAutomatically]) {
-        NSLog(@"Clearing: %@",self);
         [[TaskController sharedController]removeTask:self];
-        [[NSNotificationCenter defaultCenter]postNotificationName:kHamburgerTaskUpdateNotification object:nil];
+        [HamburgerView reloadCells];
     }
 }
 
@@ -79,7 +76,7 @@ float const kClearOutDelayTask = 0.6f;
     self.complete = NO;
     self.succeeded = NO;
     [self startBackgroundTask];
-    [[NSNotificationCenter defaultCenter]postNotificationName:kHamburgerTaskUpdateNotification object:nil];
+    [HamburgerView reloadCells];
 }
 
 - (void)showFailure {
