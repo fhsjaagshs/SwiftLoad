@@ -228,6 +228,8 @@
         [ad setNowPlayingFile:nil];
     }
     
+    [HamburgerView reloadCells];
+    
     [self stopUpdatingTime];
     
     [ad setOpenFile:nil];
@@ -415,26 +417,27 @@
 }
 
 - (void)setArtwork:(NSNotification *)notif {
-    
-    CGRect screenBounds = [[UIScreen mainScreen]bounds];
-    CGRect targetRect = CGRectMake(20, 200, screenBounds.size.width-20, screenBounds.size.height-300);
-    
-    UIImage *image = (UIImage *)notif.object;
-    
-    CGPoint oldCenter = _albumArtwork.center;
-    
-    _albumArtwork.bounds = CGRectMake(0, 0, image.size.width, image.size.height);
-    
-    if (image.size.height > targetRect.size.height) {
-        float ratio = (image.size.height/targetRect.size.height);
-        _albumArtwork.bounds = CGRectMake(0, 0, image.size.width/ratio, targetRect.size.height);
-    } else if (image.size.width > targetRect.size.width) {
-        float ratio = (image.size.width/targetRect.size.width);
-        _albumArtwork.bounds = CGRectMake(0, 0, targetRect.size.width, image.size.height/ratio);
+    @autoreleasepool {
+        CGRect screenBounds = [[UIScreen mainScreen]bounds];
+        CGRect targetRect = CGRectMake(20, 200, screenBounds.size.width-20, screenBounds.size.height-300);
+        
+        UIImage *image = (UIImage *)notif.object;
+        
+        CGPoint oldCenter = _albumArtwork.center;
+        
+        _albumArtwork.bounds = CGRectMake(0, 0, image.size.width, image.size.height);
+        
+        if (image.size.height > targetRect.size.height) {
+            float ratio = (image.size.height/targetRect.size.height);
+            _albumArtwork.bounds = CGRectMake(0, 0, image.size.width/ratio, targetRect.size.height);
+        } else if (image.size.width > targetRect.size.width) {
+            float ratio = (image.size.width/targetRect.size.width);
+            _albumArtwork.bounds = CGRectMake(0, 0, targetRect.size.width, image.size.height/ratio);
+        }
+        
+        _albumArtwork.center = oldCenter;
+        _albumArtwork.image = image;
     }
-    
-    _albumArtwork.center = oldCenter;
-    _albumArtwork.image = image;
 }
 
 - (void)setupNotifs {

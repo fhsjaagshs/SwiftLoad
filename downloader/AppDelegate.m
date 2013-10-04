@@ -55,7 +55,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     return path;
 }
 
-@interface AppDelegate () <AVAudioPlayerDelegate, DBSessionDelegate>
+@interface AppDelegate () <PPAudioPlayerDelegate, DBSessionDelegate>
 
 @end
 
@@ -146,12 +146,8 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     if (!_audioPlayer.isPlaying) {
         [_audioPlayer play];
         self.nowPlayingFile = [_openFile copy];
-        [AudioPlayerViewController notif_setPausePlayTitlePause];
-        [AudioPlayerViewController notif_setShouldUpdateTime:YES];
     } else {
         [_audioPlayer pause];
-        [AudioPlayerViewController notif_setPausePlayTitlePlay];
-        [AudioPlayerViewController notif_setShouldUpdateTime:NO];
     }
 }
 
@@ -159,11 +155,12 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     NSError *playingError = nil;
     
     if (![file isEqualToString:_nowPlayingFile]) {
-        [_audioPlayer stop];
-        self.audioPlayer = [[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:file] error:&playingError];
-        [_audioPlayer addObserver:self forKeyPath:@"playing" options:NSKeyValueObservingOptionNew context:nil];
+        self.audioPlayer = [[PPAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:file] error:&playingError];
         _audioPlayer.delegate = self;
     }
+    
+    [self loadMetadataForFile:file];
+    self.nowPlayingFile = file;
     
     __weak AppDelegate *weakself = self;
     
@@ -173,11 +170,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
                 [weakself.audioPlayer prepareToPlay];
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     @autoreleasepool {
-                        [AudioPlayerViewController notif_setPausePlayTitlePause];
-                        weakself.nowPlayingFile = file;
                         [weakself.audioPlayer play];
-                        
-                        [self loadMetadataForFile:file];
                     }
                 });
             }
@@ -212,13 +205,14 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     
     NSError *playingError = nil;
 
-    [_audioPlayer stop];
-    self.audioPlayer = [[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:newFile] error:&playingError];
-    [_audioPlayer addObserver:self forKeyPath:@"playing" options:NSKeyValueObservingOptionNew context:nil];
+    self.audioPlayer = [[PPAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:newFile] error:&playingError];
     _audioPlayer.delegate = self;
     [AudioPlayerViewController notif_setLoop];
     
     __weak AppDelegate *weakself = self;
+    
+    [self loadMetadataForFile:newFile];
+    self.nowPlayingFile = newFile;
     
     if (!playingError) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -226,11 +220,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
                 [weakself.audioPlayer prepareToPlay];
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     @autoreleasepool {
-                        [AudioPlayerViewController notif_setPausePlayTitlePause];
-                        weakself.nowPlayingFile = newFile;
                         [weakself.audioPlayer play];
-                        
-                        [self loadMetadataForFile:newFile];
                     }
                 });
             }
@@ -259,26 +249,23 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     [self setOpenFile:newFile];
     
     NSError *playingError = nil;
-    
-    [_audioPlayer stop];
-    self.audioPlayer = [[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:newFile] error:&playingError];
+
+    self.audioPlayer = [[PPAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:newFile] error:&playingError];
     _audioPlayer.delegate = self;
-    [_audioPlayer addObserver:self forKeyPath:@"playing" options:NSKeyValueObservingOptionNew context:nil];
     [AudioPlayerViewController notif_setLoop];
     
-    __weak AppDelegate *weakself = self;
+    self.nowPlayingFile = newFile;
+    [self loadMetadataForFile:newFile];
     
+    __weak AppDelegate *weakself = self;
+
     if (!playingError) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             @autoreleasepool {
                 [weakself.audioPlayer prepareToPlay];
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     @autoreleasepool {
-                        [AudioPlayerViewController notif_setPausePlayTitlePause];
-                        weakself.nowPlayingFile = newFile;
                         [weakself.audioPlayer play];
-                        
-                        [self loadMetadataForFile:newFile];
                     }
                 });
             }
@@ -294,7 +281,6 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     if ([notif.userInfo[AVAudioSessionRouteChangeReasonKey]intValue] == AVAudioSessionRouteChangeReasonOldDeviceUnavailable) {
         if (_audioPlayer.isPlaying) {
             [_audioPlayer pause];
-            [AudioPlayerViewController notif_setPausePlayTitlePlay];
         }
     }
 }
@@ -302,14 +288,12 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
 - (void)audioPlayerBeginInterruption:(AVAudioPlayer *)player {
     if (_audioPlayer.isPlaying) {
         [_audioPlayer pause];
-        [AudioPlayerViewController notif_setPausePlayTitlePlay];
     }
 }
 
 - (void)audioPlayerEndInterruption:(AVAudioPlayer *)player withOptions:(NSUInteger)flags {
     if (!_audioPlayer.isPlaying) {
         [_audioPlayer play];
-        [AudioPlayerViewController notif_setPausePlayTitlePause];
     } else {
         [AudioPlayerViewController notif_setPausePlayTitlePlay];
     }
@@ -324,20 +308,23 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
         } else {
             _audioPlayer.currentTime = 0;
             [_audioPlayer play];
-            [AudioPlayerViewController notif_setPausePlayTitlePause];
         }
     }
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if ([keyPath isEqualToString:@"playing"]) {
-        NSLog(@"observed");
-        if (_audioPlayer.isPlaying) {
-            [AudioPlayerViewController notif_setPausePlayTitlePlay];
-        } else {
-            [AudioPlayerViewController notif_setPausePlayTitlePause];
-        }
-    }
+- (void)audioPlayerDidStop:(PPAudioPlayer *)audioPlayer {
+    [AudioPlayerViewController notif_setPausePlayTitlePlay];
+    [AudioPlayerViewController notif_setShouldUpdateTime:NO];
+}
+
+- (void)audioPlayerDidPause:(PPAudioPlayer *)audioPlayer {
+    [AudioPlayerViewController notif_setPausePlayTitlePlay];
+    [AudioPlayerViewController notif_setShouldUpdateTime:NO];
+}
+
+- (void)audioPlayerDidPlay:(PPAudioPlayer *)audioPlayer {
+    [AudioPlayerViewController notif_setPausePlayTitlePause];
+    [AudioPlayerViewController notif_setShouldUpdateTime:YES];
 }
 
 - (void)sendFileInEmail:(NSString *)file {
@@ -403,17 +390,15 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
 }
 
 - (void)sessionDidReceiveAuthorizationFailure:(DBSession *)session userId:(NSString *)userId {
-    [UIAlertView showAlertWithTitle:@"Dropbox Authentication Failed" andMessage:@"Please try reauthenticating in Settings"];
+    [UIAlertView showAlertWithTitle:@"Dropbox Authentication Failed" andMessage:@"Please try linking your account in the in-app settings"];
 }
 
 - (void)remoteControlReceivedWithEvent:(UIEvent *)event {
     if (event.type == UIEventTypeRemoteControl) {
         if (event.subtype == UIEventSubtypeRemoteControlPlay) {
             [_audioPlayer play];
-            [AudioPlayerViewController notif_setPausePlayTitlePause];
         } else if (event.subtype == UIEventSubtypeRemoteControlPause) {
             [_audioPlayer pause];
-            [AudioPlayerViewController notif_setPausePlayTitlePlay];
         } else if (event.subtype == UIEventSubtypeRemoteControlTogglePlayPause) {
             [self togglePlayPause];
         } else if (event.subtype == UIEventSubtypeRemoteControlNextTrack) {
@@ -461,6 +446,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     [[BTManager shared]prepareForBackground];
+    [AudioPlayerViewController notif_setShouldUpdateTime:NO];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application  {

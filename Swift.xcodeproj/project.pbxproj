@@ -21,6 +21,7 @@
 		F1038BB517B1ECB100AE918E /* DropboxLinkTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F1038BB417B1ECB100AE918E /* DropboxLinkTask.m */; };
 		F106ABDE17ADE5120076E57F /* DropboxUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = F106ABDD17ADE5120076E57F /* DropboxUpload.m */; };
 		F106ABE117ADE54A0076E57F /* Upload.m in Sources */ = {isa = PBXBuildFile; fileRef = F106ABE017ADE54A0076E57F /* Upload.m */; };
+		F10B4D3017FE4DAD0047E57D /* PPAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = F10B4D2F17FE4DAD0047E57D /* PPAudioPlayer.m */; };
 		F10CBC5A1707D6E700C82AFB /* DroppinBadassBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */; };
 		F10CBC5D17080C6600C82AFB /* DropboxBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */; };
 		F1122A76142E4E8B00A04CC6 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */; };
@@ -256,6 +257,8 @@
 		F106ABDD17ADE5120076E57F /* DropboxUpload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxUpload.m; sourceTree = "<group>"; };
 		F106ABDF17ADE54A0076E57F /* Upload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Upload.h; sourceTree = "<group>"; };
 		F106ABE017ADE54A0076E57F /* Upload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Upload.m; sourceTree = "<group>"; };
+		F10B4D2E17FE4DAD0047E57D /* PPAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PPAudioPlayer.h; sourceTree = "<group>"; };
+		F10B4D2F17FE4DAD0047E57D /* PPAudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PPAudioPlayer.m; sourceTree = "<group>"; };
 		F10CBC581707D6E700C82AFB /* DroppinBadassBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DroppinBadassBlocks.h; path = ../Categories/DroppinBadassBlocks.h; sourceTree = "<group>"; };
 		F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DroppinBadassBlocks.m; path = ../Categories/DroppinBadassBlocks.m; sourceTree = "<group>"; };
 		F10CBC5B17080C6600C82AFB /* DropboxBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxBrowserViewController.h; sourceTree = "<group>"; };
@@ -915,6 +918,8 @@
 				F14B819C1788E2D300ADEF99 /* SimpleKeychain.m */,
 				F1304532179C5E6A00D7DB4D /* FilesystemMonitor.h */,
 				F1304533179C5E6A00D7DB4D /* FilesystemMonitor.m */,
+				F10B4D2E17FE4DAD0047E57D /* PPAudioPlayer.h */,
+				F10B4D2F17FE4DAD0047E57D /* PPAudioPlayer.m */,
 			);
 			path = Subclasses;
 			sourceTree = "<group>";
@@ -1499,6 +1504,7 @@
 				F1693C5116DFABA6006E3739 /* UIViewController+AutoNib.m in Sources */,
 				F1C939CB17F326C400754D5D /* NSURLResponse+Encoding.m in Sources */,
 				F1693C5D16DFAC0E006E3739 /* MIMEUtils.m in Sources */,
+				F10B4D3017FE4DAD0047E57D /* PPAudioPlayer.m in Sources */,
 				F1693C5E16DFAC0E006E3739 /* NetworkUtils.m in Sources */,
 				F19BB51C16E006CA0081C95B /* main.m in Sources */,
 				F1847BBB16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m in Sources */,

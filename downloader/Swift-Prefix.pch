@@ -43,6 +43,8 @@
     #import "BGProcFactory.h"
     #import "NetworkActivityController.h"
 
+    #import "PPAudioPlayer.h"
+
     #import "ZoomingImageView.h"
     #import "ContentOffsetWatchdog.h"
     #import "CircularProgressView.h"
