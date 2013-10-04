@@ -139,6 +139,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     }
     
     [[MPNowPlayingInfoCenter defaultCenter]setNowPlayingInfo:songInfo];
+    [HamburgerView reloadCells];
 }
 
 - (void)togglePlayPause {
@@ -166,23 +167,23 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     
     __weak AppDelegate *weakself = self;
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        @autoreleasepool {
-            [weakself.audioPlayer prepareToPlay];
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                @autoreleasepool {
-                    [AudioPlayerViewController notif_setPausePlayTitlePause];
-                    weakself.nowPlayingFile = file;
-                    [weakself.audioPlayer play];
-                }
-            });
-        }
-    });
-    
     if (!playingError) {
-        [self loadMetadataForFile:file];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            @autoreleasepool {
+                [weakself.audioPlayer prepareToPlay];
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    @autoreleasepool {
+                        [AudioPlayerViewController notif_setPausePlayTitlePause];
+                        weakself.nowPlayingFile = file;
+                        [weakself.audioPlayer play];
+                        
+                        [self loadMetadataForFile:file];
+                    }
+                });
+            }
+        });
     }
-    
+
     [AudioPlayerViewController notif_setLoop];
     [AudioPlayerViewController notif_setControlsHidden:(playingError != nil)];
     [AudioPlayerViewController notif_setShouldUpdateTime:(playingError == nil)];
@@ -219,20 +220,23 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     
     __weak AppDelegate *weakself = self;
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        @autoreleasepool {
-            [weakself.audioPlayer prepareToPlay];
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                @autoreleasepool {
-                    [AudioPlayerViewController notif_setPausePlayTitlePause];
-                    weakself.nowPlayingFile = newFile;
-                    [weakself.audioPlayer play];
-                }
-            });
-        }
-    });
+    if (!playingError) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            @autoreleasepool {
+                [weakself.audioPlayer prepareToPlay];
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    @autoreleasepool {
+                        [AudioPlayerViewController notif_setPausePlayTitlePause];
+                        weakself.nowPlayingFile = newFile;
+                        [weakself.audioPlayer play];
+                        
+                        [self loadMetadataForFile:newFile];
+                    }
+                });
+            }
+        });
+    }
     
-    [self loadMetadataForFile:newFile];
     [AudioPlayerViewController notif_setSongTitleText:newFile.lastPathComponent];
     [AudioPlayerViewController notif_setControlsHidden:(playingError != nil)];
     [AudioPlayerViewController notif_setShouldUpdateTime:(playingError == nil)];
@@ -264,20 +268,22 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     
     __weak AppDelegate *weakself = self;
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        @autoreleasepool {
-            [weakself.audioPlayer prepareToPlay];
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                @autoreleasepool {
-                    [weakself.audioPlayer play];
-                    [AudioPlayerViewController notif_setPausePlayTitlePause];
-                    weakself.nowPlayingFile = newFile;
-                }
-            });
-        }
-    });
-    
-    [self loadMetadataForFile:newFile];
+    if (!playingError) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            @autoreleasepool {
+                [weakself.audioPlayer prepareToPlay];
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    @autoreleasepool {
+                        [AudioPlayerViewController notif_setPausePlayTitlePause];
+                        weakself.nowPlayingFile = newFile;
+                        [weakself.audioPlayer play];
+                        
+                        [self loadMetadataForFile:newFile];
+                    }
+                });
+            }
+        });
+    }
     
     [AudioPlayerViewController notif_setSongTitleText:newFile.lastPathComponent];
     [AudioPlayerViewController notif_setControlsHidden:(playingError != nil)];
