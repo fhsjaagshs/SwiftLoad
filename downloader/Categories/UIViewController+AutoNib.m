@@ -34,7 +34,7 @@
 }
 
 + (instancetype)topViewController {
-    UIViewController *topController = [[UIApplication sharedApplication]keyWindow].rootViewController;
+    UIViewController *topController = [([[UIApplication sharedApplication]windows][0]) rootViewController]; // [[UIApplication sharedApplication]keyWindow] returns a UIActionWindow when a UIAlertView or UIActionSheet is shown, not your app's window
     
     while (topController.presentedViewController) {
         topController = topController.presentedViewController;
