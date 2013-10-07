@@ -67,7 +67,7 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([keyPath isEqualToString:@"contentOffset"]) {
         if (_mode == WatchdogModeNormal) {
-            if (_scrollView.isDragging) {
+            if (_scrollView.isDragging && !_scrollView.isDecelerating) {
                 if (_scrollView.contentOffset.y < -35-_scrollView.contentInset.top) {
                     if ([_delegate respondsToSelector:@selector(shouldTripWatchdog:)]) {
                         if ([_delegate shouldTripWatchdog:self] && [_delegate respondsToSelector:@selector(watchdogWasTripped:)]) {

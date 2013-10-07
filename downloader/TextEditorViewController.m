@@ -131,15 +131,15 @@
 - (void)keyboardWasShown:(NSNotification*)aNotification {
     BOOL isLandscape = UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication]statusBarOrientation]);
     CGSize kbSize = [[aNotification userInfo][UIKeyboardFrameBeginUserInfoKey]CGRectValue].size;
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(64, 0, isLandscape?kbSize.width:kbSize.height, 0);
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(_theTextView.contentInset.top, 0, isLandscape?kbSize.width:kbSize.height, 0);
     
     _theTextView.contentInset = contentInsets;
     _theTextView.scrollIndicatorInsets = contentInsets;
 }
 
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification {
-    _theTextView.contentInset = UIEdgeInsetsZero;
-    _theTextView.scrollIndicatorInsets = UIEdgeInsetsZero;
+    _theTextView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0);
+    _theTextView.scrollIndicatorInsets = _theTextView.contentInset;
 }
 
 - (void)textViewDidChange:(UITextView *)textView {
