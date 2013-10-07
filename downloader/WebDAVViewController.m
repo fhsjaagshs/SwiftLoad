@@ -105,34 +105,35 @@
         [self killServer];
     }
     
-    if (_httpServer) {
-        return;
+    if (!_httpServer) {
+        self.httpServer = [[HTTPServer alloc]init];
+        [_httpServer setType:@"_http._tcp."];
+        [_httpServer setConnectionClass:[PasswdWebDAVConnection class]];
+        [_httpServer setPort:8080];
+        [_httpServer setName:[[UIDevice currentDevice]name]];
+        [_httpServer setDocumentRoot:kDocsDir];
     }
-
-    self.httpServer = [[HTTPServer alloc]init];
-    [_httpServer setType:@"_http._tcp."];
-    [_httpServer setConnectionClass:[PasswdWebDAVConnection class]];
-    [_httpServer setPort:8080];
-    [_httpServer setName:[[UIDevice currentDevice]name]];
-	[_httpServer setDocumentRoot:kDocsDir];
     
-    NSError *error;
-    [_httpServer start:&error];
-	if (error != nil) {
-        _urlLabel.text = @"Error starting server";
-        _onLabel.text = @"WebDAV server is OFF";
-	} else {
-        NSString *rawIP = [NetworkUtils getIPAddress];
-        if (rawIP.length == 0) {
+    if (!_httpServer.isRunning) {
+        NSError *error;
+        [_httpServer start:&error];
+        if (error) {
             _urlLabel.text = @"Unable to establish server";
             _onLabel.text = @"WebDAV server is OFF";
         } else {
-            _onLabel.text = @"WebDAV server is ON";
-            [self.urlLabel setText:[NSString stringWithFormat:@"http://%@:8080/",rawIP]];
-            [UIApplication sharedApplication].idleTimerDisabled = YES;
+            NSString *rawIP = [NetworkUtils getIPAddress];
+            if (rawIP.length == 0) {
+                _urlLabel.text = @"Unable to establish server";
+                _onLabel.text = @"WebDAV server is OFF";
+            } else {
+                _onLabel.text = @"WebDAV server is ON";
+                [_urlLabel setText:[NSString stringWithFormat:@"http://%@:8080/",rawIP]];
+                [UIApplication sharedApplication].idleTimerDisabled = YES;
+            }
         }
     }
-    [self performSelector:@selector(createServer) withObject:nil afterDelay:_httpServer.isRunning?30.0:5.0];
+    
+    [self performSelector:@selector(createServer) withObject:nil afterDelay:_httpServer.isRunning?30.0f:5.0f];
 }
 
 - (void)close {

@@ -20,10 +20,10 @@ static NSString *CellIdentifier = @"dbcell";
 
 - (NSString *)fhs_normalize {
     if (![[self substringFromIndex:1]isEqualToString:@"/"]) {
-        return [[self lowercaseString]stringByAppendingString:@"/"];
+        return [self.lowercaseString stringByAppendingString:@"/"];
     }
-    return [self lowercaseString];
-}       
+    return self.lowercaseString;
+}
 
 @end
 
