@@ -216,6 +216,7 @@
     [_prevTrack setHidden:hide];
     [_nxtTrack setHidden:hide];
     [_volumeView setHidden:hide];
+    [_albumArtwork setHidden:hide];
     [_errorLabel setHidden:!hide];
 }
 
