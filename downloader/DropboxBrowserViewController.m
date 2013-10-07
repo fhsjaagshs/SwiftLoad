@@ -108,10 +108,14 @@ static NSString *CellIdentifier = @"dbcell";
         [_refreshControl beginRefreshing];
         [_theTableView setContentOffset:CGPointMake(0, -1*(_theTableView.contentInset.top)) animated:YES];
         [self loadUserID];
-    } else if (_shouldPromptForLinkage) {
-        self.shouldPromptForLinkage = NO;
-        if (![[DBSession sharedSession]isLinked]) {
-            [[DBSession sharedSession]linkFromController:self];
+    } else {
+        if (_shouldPromptForLinkage) {
+            self.shouldPromptForLinkage = NO;
+            if (![[DBSession sharedSession]isLinked]) {
+                [[DBSession sharedSession]linkFromController:self];
+            }
+        } else {
+            [self close];
         }
     }
 }
