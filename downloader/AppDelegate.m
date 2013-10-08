@@ -89,10 +89,6 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
         }
     }
     
-    if (artworkImages.count == 0) {
-        [artworkImages addObject:[UIImage imageNamed:@"albumartwork_placeholder"]];
-    }
-    
     return artworkImages;
 }
 
@@ -124,20 +120,22 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     
     NSDictionary *songInfo = [@{ MPMediaItemPropertyArtist:artist, MPMediaItemPropertyTitle:title, MPMediaItemPropertyAlbumTitle:album } mutableCopy];
     
-    NSArray *artworkImages = [self artworksForFileAtPath:file];
-
-    [AudioPlayerViewController notif_setAlbumArt:nil];
-    
-    if (artworkImages.count > 0) {
-        @autoreleasepool {
-            UIImage *image = artworkImages[0];
-            if (image != nil) {
-                [AudioPlayerViewController notif_setAlbumArt:image];
-                [songInfo setValue:[[MPMediaItemArtwork alloc]initWithImage:image] forKey:MPMediaItemPropertyArtwork];
+    @autoreleasepool {
+        NSArray *artworkImages = [self artworksForFileAtPath:file];
+        
+        if (artworkImages.count > 0) {
+            @autoreleasepool {
+                UIImage *image = artworkImages[0];
+                if (image != nil) {
+                    [AudioPlayerViewController notif_setAlbumArt:image];
+                    [songInfo setValue:[[MPMediaItemArtwork alloc]initWithImage:image] forKey:MPMediaItemPropertyArtwork];
+                }
             }
+        } else {
+            [AudioPlayerViewController notif_setAlbumArt:[UIImage imageNamed:@"albumartwork_placeholder"]];
         }
     }
-    
+
     [[MPNowPlayingInfoCenter defaultCenter]setNowPlayingInfo:songInfo];
     [HamburgerView reloadCells];
 }
@@ -452,6 +450,9 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
 - (void)applicationWillEnterForeground:(UIApplication *)application  {
     [[BTManager shared]prepareForForeground];
     [Appirater appEnteredForeground:YES];
+    if (_audioPlayer.isPlaying) {
+        [AudioPlayerViewController notif_setShouldUpdateTime:YES];
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

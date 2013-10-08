@@ -358,7 +358,8 @@
 }
 
 - (void)togglePaused {
-    [self startUpdatingTime];
+    
+    [self updateTime];
     
     AppDelegate *ad = kAppDelegate;
     
@@ -366,11 +367,13 @@
         [ad.audioPlayer pause];
         [_pausePlay setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
         [_pausePlay setImage:[UIImage imageNamed:@"play_pressed"] forState:UIControlStateHighlighted];
+        [self stopUpdatingTime];
     } else {
         [ad.audioPlayer play];
         [_pausePlay setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
         [_pausePlay setImage:[UIImage imageNamed:@"pause_pressed"] forState:UIControlStateHighlighted];
         [ad setNowPlayingFile:ad.openFile];
+        [self startUpdatingTime];
     }
 }
 
