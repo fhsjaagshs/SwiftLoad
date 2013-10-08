@@ -42,24 +42,30 @@
     [super stop];
 }
 
-- (void)resumeFromFailure {
-    self.isResuming = YES;
-    
-    [self startBackgroundTask];
-    
-    NSDictionary *attributes = [[NSFileManager defaultManager]attributesOfItemAtPath:self.temporaryPath error:nil];
-    self.downloadedBytes = [attributes[NSFileSize] floatValue];
-    
-    NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:_url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30.0];
-    [theRequest setHTTPMethod:@"GET"];
-    [theRequest setValue:[NSString stringWithFormat:@"bytes=%f-",_fileSize] forHTTPHeaderField:@"Range"];
-    
-    if ([NSURLConnection canHandleRequest:theRequest]) {
-        self.connection = [[NSURLConnection alloc]initWithRequest:theRequest delegate:self startImmediately:NO];
-        [_connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
-        [_connection start];
-    } else {
-        [self showFailure];
+- (void)resumeFromFailureIfNecessary {
+    if (self.complete && !self.succeeded) {
+        self.isResuming = YES;
+
+        [self startBackgroundTask];
+        
+        [self.delegate reset];
+        
+        NSDictionary *attributes = [[NSFileManager defaultManager]attributesOfItemAtPath:self.temporaryPath error:nil];
+        self.downloadedBytes = [attributes[NSFileSize] floatValue];
+        
+        [self.delegate setProgress:((_fileSize == -1)?1:(_downloadedBytes/_fileSize))];
+        
+        NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:_url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30.0f];
+        [theRequest setHTTPMethod:@"GET"];
+        [theRequest setValue:[NSString stringWithFormat:@"bytes=%f-",_downloadedBytes] forHTTPHeaderField:@"Range"];
+        
+        if ([NSURLConnection canHandleRequest:theRequest]) {
+            self.connection = [[NSURLConnection alloc]initWithRequest:theRequest delegate:self startImmediately:NO];
+            [_connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+            [_connection start];
+        } else {
+            [self showFailure];
+        }
     }
 }
 
@@ -100,14 +106,16 @@
     [_handle seekToEndOfFile];
     [_handle writeData:receivedData];
     [_handle synchronizeFile];
-    [self.delegate setProgress:((_fileSize == -1)?1:((float)_downloadedBytes/(float)_fileSize))];
+    [self.delegate setProgress:((_fileSize == -1)?1:(_downloadedBytes/_fileSize))];
+    
+    // FOR DEBUGGING
+    if (!_isResuming && (_downloadedBytes/_fileSize) > 0.1f) {
+        [self showFailure];
+    }
 }
 
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    [_connection cancel];
-    [_handle closeFile];
-    self.downloadedBytes = 0;
-    self.fileSize = 0;
+- (void)showFailure {
+    [[NetworkActivityController sharedController]hideIfPossible];
     
     self.complete = YES;
     self.succeeded = NO;
@@ -117,11 +125,23 @@
     }
     
     [self cancelBackgroundTask];
+
+    [_connection cancel];
+    [_handle closeFile];
+}
+
+- (void)showSuccess {
+    [super showSuccess];
+    [_handle closeFile];
+    self.downloadedBytes = 0;
+    self.fileSize = 0;
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    [self showFailure];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)theConnection {
-    [_handle closeFile];
-    
     if (_downloadedBytes > 0) {
         [self showSuccess];
     } else {

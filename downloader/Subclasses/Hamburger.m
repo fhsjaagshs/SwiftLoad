@@ -201,20 +201,19 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 1) {
-        return nil;
-    }
-    
     return indexPath;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 1) {
+        NSLog(@"%ld",(long)indexPath.row);
         Task *task = [[TaskController sharedController]taskAtIndex:(int)indexPath.row];
         
+        NSLog(@"%@",task);
+        
         if ([task isKindOfClass:[HTTPDownload class]]) {
-            [(HTTPDownload *)task resumeFromFailure];
+            [(HTTPDownload *)task resumeFromFailureIfNecessary];
         }
     } else if (indexPath.section == 0) {
         if (_delegate && [_delegate respondsToSelector:@selector(hamburgerCellWasSelectedAtIndex:)]) {
