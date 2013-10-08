@@ -54,7 +54,6 @@
     #import "SwiftDisclosureCell.h"
     #import "SwipeCell.h"
     #import "DashedLineView.h"
-    #import "CustomVolumeView.h"
 
     #import "MBProgressHUD.h"
     #import "MarqueeLabel.h"

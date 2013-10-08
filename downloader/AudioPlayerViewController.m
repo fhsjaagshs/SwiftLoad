@@ -21,7 +21,7 @@
 @property (nonatomic, strong) UIButton *nxtTrack;
 @property (nonatomic, strong) UIButton *prevTrack;
 
-@property (nonatomic, strong) CustomVolumeView *volumeView;
+@property (nonatomic, strong) MPVolumeView *volumeView;
 
 @property (nonatomic, strong) MarqueeLabel *artistLabel;
 @property (nonatomic, strong) MarqueeLabel *titleLabel;
@@ -155,7 +155,13 @@
     [_nxtTrack addTarget:kAppDelegate action:@selector(skipToNextTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_nxtTrack];
     
-    self.volumeView = [[CustomVolumeView alloc]initWithFrame:CGRectMake(30, screenBounds.size.height-85, screenBounds.size.width-60, 25)];
+    self.volumeView = [[MPVolumeView alloc]initWithFrame:CGRectMake(30, screenBounds.size.height-85, screenBounds.size.width-60, 25)];
+    _volumeView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+    [_volumeView setMinimumVolumeSliderImage:[UIImage imageNamed:@"trackImage"] forState:UIControlStateNormal];
+    [_volumeView setMaximumVolumeSliderImage:[UIImage imageNamed:@"trackImage"] forState:UIControlStateNormal];
+    [_volumeView setVolumeThumbImage:[UIImage imageNamed:@"scrubber_volume"] forState:UIControlStateNormal];
+    [_volumeView setVolumeThumbImage:[UIImage imageNamed:@"scrubber_volume"] forState:UIControlStateHighlighted];
+    [_volumeView setRouteButtonImage:[[_volumeView routeButtonImageForState:UIControlStateNormal]imageFilledWith:[UIColor colorWithRed:105.0f/255.0f green:54.0f/255.0f blue:153.0f/255.0f alpha:0.0f]] forState:UIControlStateNormal];
     [self.view addSubview:_volumeView];
     
     self.loopControl = [TextToggleControl control];
