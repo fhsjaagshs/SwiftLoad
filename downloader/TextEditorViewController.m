@@ -148,27 +148,23 @@
 }
 
 - (void)showActionSheet:(id)sender {
-    
     if (_popupQuery && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         [_popupQuery dismissWithClickedButtonIndex:_popupQuery.cancelButtonIndex animated:YES];
         self.popupQuery = nil;
         return;
     }
-    
-    NSString *file = [kAppDelegate openFile];
-    
-    self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",file.lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-        if (buttonIndex == 0) {
-            [kAppDelegate sendFileInEmail:file];
-        } else if (buttonIndex == 1) {
+
+    self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",kAppDelegate.openFile.lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+        NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
+        
+        if ([title isEqualToString:kActionButtonNameEmail]) {
+            [kAppDelegate sendFileInEmail:kAppDelegate.openFile];
+        } else if ([title isEqualToString:kActionButtonNameP2P]) {
             [[BTManager shared]sendFileAtPath:kAppDelegate.openFile];
-        } else if (buttonIndex == 2) {
-            DropboxUpload *task = [DropboxUpload uploadWithFile:file];
-            [[TaskController sharedController]addTask:task];
+        } else if ([title isEqualToString:kActionButtonNameDBUpload]) {
+            [[TaskController sharedController]addTask:[DropboxUpload uploadWithFile:kAppDelegate.openFile]];
         }
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send via Bluetooth", @"Upload to Dropbox", nil];
-    
-    _popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:kActionButtonNameEmail, kActionButtonNameP2P, kActionButtonNameDBUpload, nil];
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         [_popupQuery showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];

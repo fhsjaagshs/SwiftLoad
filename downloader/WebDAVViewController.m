@@ -25,10 +25,16 @@
 - (NSString *)passwordForUser:(NSString *)username {
     NSDictionary *creds = [SimpleKeychain load:@"webdav_creds"];
     
+    if ([creds[@"username"]length] == 0) {
+        return nil;
+    }
+    
     if ([creds[@"username"]isEqualToString:username]) {
+        NSLog(@"username: %@",username);
         return creds[@"password"];
     }
-	return nil;
+    NSLog(@"WHOOPS");
+	return [NSString stringWithFormat:@"%d",arc4random()];
 }
 
 @end
@@ -96,6 +102,7 @@
     [_httpServer stop];
     [UIApplication sharedApplication].idleTimerDisabled = NO;
     _onLabel.text = @"WebDAV server is OFF";
+    _urlLabel.text = @"WebDAV server has been turned off";
 }
 
 - (void)createServer {

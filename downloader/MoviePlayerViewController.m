@@ -57,15 +57,13 @@
     [self.view addSubview:_bar];
     
     self.shouldUnpauseAudioPlayer = NO;
-    
-    AppDelegate *ad = kAppDelegate;
-    
-    if (ad.audioPlayer.isPlaying) {
-        [ad.audioPlayer pause];
+
+    if (kAppDelegate.audioPlayer.isPlaying) {
+        [kAppDelegate.audioPlayer pause];
         self.shouldUnpauseAudioPlayer = YES;
     }
 
-    self.moviePlayer = [[MPMoviePlayerController alloc]initWithContentURL:(_streamingUrl.absoluteString.length > 0)?_streamingUrl:[NSURL fileURLWithPath:[kAppDelegate openFile]]];
+    self.moviePlayer = [[MPMoviePlayerController alloc]initWithContentURL:(_streamingUrl.absoluteString.length > 0)?_streamingUrl:[NSURL fileURLWithPath:kAppDelegate.openFile]];
     _moviePlayer.scalingMode = MPMovieScalingModeAspectFit;
     _moviePlayer.repeatMode = MPMovieRepeatModeNone;
     [_moviePlayer.backgroundView removeFromSuperview];
@@ -110,18 +108,17 @@
         return;
     }
     
-    self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",[[kAppDelegate openFile]lastPathComponent]] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-        if (buttonIndex == 0) {
-            [kAppDelegate sendFileInEmail:[kAppDelegate openFile]];
-        } else if (buttonIndex == 1) {
+    self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",kAppDelegate.openFile.lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+        NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
+        
+        if ([title isEqualToString:kActionButtonNameEmail]) {
+            [kAppDelegate sendFileInEmail:kAppDelegate.openFile];
+        } else if ([title isEqualToString:kActionButtonNameP2P]) {
             [[BTManager shared]sendFileAtPath:kAppDelegate.openFile];
-        } else if (buttonIndex == 2) {
-            DropboxUpload *task = [DropboxUpload uploadWithFile:[kAppDelegate openFile]];
-            [[TaskController sharedController]addTask:task];
+        } else if ([title isEqualToString:kActionButtonNameDBUpload]) {
+            [[TaskController sharedController]addTask:[DropboxUpload uploadWithFile:kAppDelegate.openFile]];
         }
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send Via Bluetooth", @"Upload to Dropbox", nil];
-    
-    _popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:kActionButtonNameEmail, kActionButtonNameP2P, kActionButtonNameDBUpload, nil];
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         [_popupQuery showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];
