@@ -107,11 +107,6 @@
     [_handle writeData:receivedData];
     [_handle synchronizeFile];
     [self.delegate setProgress:((_fileSize == -1)?1:(_downloadedBytes/_fileSize))];
-    
-    // FOR DEBUGGING
-    if (!_isResuming && (_downloadedBytes/_fileSize) > 0.1f) {
-        [self showFailure];
-    }
 }
 
 - (void)showFailure {
