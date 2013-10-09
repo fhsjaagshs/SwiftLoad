@@ -42,6 +42,13 @@
     [super stop];
 }
 
+- (NSString *)verb {
+    if (self.complete && !self.succeeded) {
+        return @"Tap to retry";
+    }
+    return [super verb];
+}
+
 - (void)resumeFromFailureIfNecessary {
     if (self.complete && !self.succeeded) {
         self.isResuming = YES;
@@ -123,6 +130,7 @@
 
     [_connection cancel];
     [_handle closeFile];
+    [HamburgerView reloadCells];
 }
 
 - (void)showSuccess {
