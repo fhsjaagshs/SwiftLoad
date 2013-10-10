@@ -155,7 +155,7 @@
     [_nxtTrack addTarget:kAppDelegate action:@selector(skipToNextTrack) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_nxtTrack];
     
-    self.volumeView = [[MPVolumeView alloc]initWithFrame:CGRectMake(30, screenBounds.size.height-85, screenBounds.size.width-60, 25)];
+    self.volumeView = [[MPVolumeView alloc]initWithFrame:CGRectMake(30, screenBounds.size.height-95, screenBounds.size.width-60, 25)];
     _volumeView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     [_volumeView setMinimumVolumeSliderImage:[UIImage imageNamed:@"trackImage"] forState:UIControlStateNormal];
     [_volumeView setMaximumVolumeSliderImage:[UIImage imageNamed:@"trackImage"] forState:UIControlStateNormal];

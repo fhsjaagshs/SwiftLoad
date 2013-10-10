@@ -423,6 +423,13 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     [BTManager shared];
     [NetworkActivityController sharedController];
     
+    [Appirater setAppId:@"469762999"];
+    [Appirater setDaysUntilPrompt:5];
+    [Appirater setUsesUntilPrompt:10];
+    [Appirater setSignificantEventsUntilPrompt:-1];
+    [Appirater setTimeBeforeReminding:2];
+    [Appirater appLaunched:YES];
+
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryPlayback error:nil];
     [[UIApplication sharedApplication]beginReceivingRemoteControlEvents];
     [self becomeFirstResponder];
@@ -439,20 +446,15 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     _window.backgroundColor = [UIColor whiteColor];
     [_window makeKeyAndVisible];
     
-    [Appirater setAppId:@"469762999"];
-    [Appirater setDaysUntilPrompt:5];
-    [Appirater setUsesUntilPrompt:10];
-    [Appirater setSignificantEventsUntilPrompt:-1];
-    [Appirater setTimeBeforeReminding:2];
-    [Appirater appLaunched:YES];
-    
     [[UINavigationBar appearance]setBarTintColor:[UIColor whiteColor]];
     [[UIToolbar appearance]setBarTintColor:[UIColor whiteColor]];
-    //[[UINavigationBar appearance]setTintColor:[UIColor whiteColor]];
-    //[[UINavigationBar appearance]setBarTintColor:[UIColor colorWithRed:85.0f/255.0f green:34.0f/255.0f blue:123.0f/255.0f alpha:1.0f]];
-    //[[UINavigationBar appearance]setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
 
     return YES;
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application {
+    [[FilesystemMonitor sharedMonitor]invalidate];
+    [[BGProcFactory sharedFactory]endAllTasks];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -466,11 +468,6 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     if (_audioPlayer.isPlaying) {
         [AudioPlayerViewController notif_setShouldUpdateTime:YES];
     }
-}
-
-- (void)applicationWillTerminate:(UIApplication *)application {
-    [[FilesystemMonitor sharedMonitor]invalidate];
-    [[BGProcFactory sharedFactory]endAllTasks];
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {

@@ -39,13 +39,14 @@
     UIBarButtonItem *hideKeyboard = [[UIBarButtonItem alloc]initWithTitle:@"Hide" style:UIBarButtonItemStyleBordered target:self action:@selector(dismissKeyboard)];
     _toolBar.items = @[space, hideKeyboard];
     
-    self.theTextView = [[UITextView alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, screenBounds.size.height)];
+    self.theTextView = [[UITextView alloc]initWithFrame:screenBounds];
     _theTextView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _theTextView.delegate = self;
     _theTextView.inputAccessoryView = _toolBar;
     _theTextView.tintColor = [UIColor blueColor];
     _theTextView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0);
     _theTextView.scrollIndicatorInsets = _theTextView.contentInset;
+    _theTextView.clipsToBounds = NO;
     [self.view addSubview:_theTextView];
     [self.view bringSubviewToFront:_theTextView];
     
