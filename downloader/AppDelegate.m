@@ -438,6 +438,12 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     [Appirater setSignificantEventsUntilPrompt:-1];
     [Appirater setTimeBeforeReminding:2];
     [Appirater appLaunched:YES];
+    
+    [[UINavigationBar appearance]setBarTintColor:[UIColor whiteColor]];
+    [[UIToolbar appearance]setBarTintColor:[UIColor whiteColor]];
+    //[[UINavigationBar appearance]setTintColor:[UIColor whiteColor]];
+    //[[UINavigationBar appearance]setBarTintColor:[UIColor colorWithRed:85.0f/255.0f green:34.0f/255.0f blue:123.0f/255.0f alpha:1.0f]];
+    //[[UINavigationBar appearance]setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
 
     return YES;
 }
