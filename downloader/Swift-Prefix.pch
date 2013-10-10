@@ -20,6 +20,7 @@
 
     #import "Hack.h"
 
+    #import "UIApplication+AppWindow.h"
     #import "UIAlertView+QuickDisplay.h"
     #import "UIViewController+AutoNib.h"
     #import "UIAlertView+BlockExtensions.h"

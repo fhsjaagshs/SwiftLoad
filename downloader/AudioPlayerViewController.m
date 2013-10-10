@@ -307,34 +307,26 @@
     NSString *file = [kAppDelegate openFile];
     
     __weak AudioPlayerViewController *weakself = self;
-        
+    
     self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",file.lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-
-        if (buttonIndex == _popupQuery.cancelButtonIndex) {
-            return;
-        }
+        NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
         
-        if (buttonIndex == 0) {
+        if ([title isEqualToString:kActionButtonNameEmail]) {
             [kAppDelegate sendFileInEmail:file];
-        } else if (buttonIndex == 1) {
+        } else if ([title isEqualToString:kActionButtonNameP2P]) {
             [[BTManager shared]sendFileAtPath:file];
-        } else if (buttonIndex == 2) {
-            DropboxUpload *task = [DropboxUpload uploadWithFile:file];
-            [[TaskController sharedController]addTask:task];
-        } else if (buttonIndex == 3) {
-            EditID3ViewController *controller = [EditID3ViewController viewControllerWhite];
-            [weakself presentViewController:controller animated:YES completion:nil];
+        } else if ([title isEqualToString:kActionButtonNameDBUpload]) {
+            [[TaskController sharedController]addTask:[DropboxUpload uploadWithFile:file]];
+        } else if ([title isEqualToString:kActionButtonNameEditID3]) {
+            [weakself presentViewController:[EditID3ViewController viewControllerWhite] animated:YES completion:nil];
         }
-    } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"Email File", @"Send via Bluetooth", @"Upload to Dropbox", nil];
-    
-    _popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
-    
+    } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:kActionButtonNameEmail, kActionButtonNameP2P, kActionButtonNameDBUpload, kActionButtonNameEditID3, nil];
+
     if (_errorLabel.hidden && [file.pathExtension.lowercaseString isEqualToString:@"mp3"]) {
         [_popupQuery addButtonWithTitle:@"Edit Metadata"];
     }
     
     [_popupQuery addButtonWithTitle:@"Cancel"];
-    
     [_popupQuery setCancelButtonIndex:_popupQuery.numberOfButtons-1];
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {

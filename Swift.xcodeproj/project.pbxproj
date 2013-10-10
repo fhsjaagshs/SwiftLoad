@@ -126,7 +126,7 @@
 		F18D19CB17A5AB53009A8D07 /* TaskCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D19CA17A5AB53009A8D07 /* TaskCell.m */; };
 		F19BB51C16E006CA0081C95B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F19BB51916E006CA0081C95B /* main.m */; };
 		F19FD8AD17ACDB2500B60C3B /* NetworkActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = F19FD8AC17ACDB2500B60C3B /* NetworkActivityController.m */; };
-		F1A72948149876040049DBB6 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A72947149876040049DBB6 /* GameKit.framework */; };
+		F1A7817B1804E3A0006950CB /* UIApplication+AppWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = F1A7817A1804E3A0006950CB /* UIApplication+AppWindow.m */; };
 		F1A871AE17FB09EF00B1D9EF /* P2PTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F1A871AD17FB09EF00B1D9EF /* P2PTask.m */; };
 		F1A923FE140D4DDD003ACDAB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A923FD140D4DDD003ACDAB /* QuartzCore.framework */; };
 		F1AE31A517BDBC1E005D3EE6 /* back_button.png in Resources */ = {isa = PBXBuildFile; fileRef = F1AE319117BDBC1E005D3EE6 /* back_button.png */; };
@@ -446,6 +446,8 @@
 		F19FD8AB17ACDB2400B60C3B /* NetworkActivityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkActivityController.h; sourceTree = "<group>"; };
 		F19FD8AC17ACDB2500B60C3B /* NetworkActivityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkActivityController.m; sourceTree = "<group>"; };
 		F1A72947149876040049DBB6 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		F1A781791804E3A0006950CB /* UIApplication+AppWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+AppWindow.h"; sourceTree = "<group>"; };
+		F1A7817A1804E3A0006950CB /* UIApplication+AppWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+AppWindow.m"; sourceTree = "<group>"; };
 		F1A871AC17FB09EF00B1D9EF /* P2PTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = P2PTask.h; sourceTree = "<group>"; };
 		F1A871AD17FB09EF00B1D9EF /* P2PTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = P2PTask.m; sourceTree = "<group>"; };
 		F1A923FD140D4DDD003ACDAB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -625,7 +627,6 @@
 				F1D3A573157A8F9E00A2D141 /* Security.framework in Frameworks */,
 				F1122A76142E4E8B00A04CC6 /* MediaPlayer.framework in Frameworks */,
 				F149A6781491686D0038F1FC /* AudioToolbox.framework in Frameworks */,
-				F1A72948149876040049DBB6 /* GameKit.framework in Frameworks */,
 				F1F114C7142AA3F400199C3C /* CFNetwork.framework in Frameworks */,
 				F11C403513F82FE00077F5D1 /* CoreGraphics.framework in Frameworks */,
 				F1F114E3142AA73F00199C3C /* MobileCoreServices.framework in Frameworks */,
@@ -879,6 +880,8 @@
 				F1C4462F17E3510C004725FC /* DBRestClient+SpecificCancellation.m */,
 				F1538E2217E68D3300A0F158 /* UIAlertView+QuickDisplay.h */,
 				F1538E2317E68D3300A0F158 /* UIAlertView+QuickDisplay.m */,
+				F1A781791804E3A0006950CB /* UIApplication+AppWindow.h */,
+				F1A7817A1804E3A0006950CB /* UIApplication+AppWindow.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -1496,6 +1499,7 @@
 				F1693C4E16DFABA6006E3739 /* UIActionSheet+BlockExtensions.m in Sources */,
 				F1693C4F16DFABA6006E3739 /* UIAlertView+BlockExtensions.m in Sources */,
 				F1693C5016DFABA6006E3739 /* UIScrollView+ZoomToPoint.m in Sources */,
+				F1A7817B1804E3A0006950CB /* UIApplication+AppWindow.m in Sources */,
 				F1693C5116DFABA6006E3739 /* UIViewController+AutoNib.m in Sources */,
 				F1C939CB17F326C400754D5D /* NSURLResponse+Encoding.m in Sources */,
 				F1693C5D16DFAC0E006E3739 /* MIMEUtils.m in Sources */,

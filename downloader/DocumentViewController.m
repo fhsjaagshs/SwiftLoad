@@ -34,13 +34,13 @@
     
     UINavigationBar *bar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
     bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[kAppDelegate openFile].lastPathComponent];
+    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:kAppDelegate.openFile.lastPathComponent];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
     topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
     [bar pushNavigationItem:topItem animated:NO];
     [self.view addSubview:bar];
 
-    NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:[kAppDelegate openFile]] cachePolicy:NSURLCacheStorageAllowedInMemoryOnly timeoutInterval:30.0f];
+    NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:kAppDelegate.openFile] cachePolicy:NSURLCacheStorageAllowedInMemoryOnly timeoutInterval:30.0f];
     [_webView loadRequest:req];
 }
 
@@ -60,20 +60,26 @@
         return;
     }
     
-    self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",[kAppDelegate openFile].lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-        if (buttonIndex == 0) {
-            [kAppDelegate printFile:[kAppDelegate openFile]];
-        } else if (buttonIndex == 1) {
-            [kAppDelegate sendFileInEmail:[kAppDelegate openFile]];
-        } else if (buttonIndex == 2) {
-            [[BTManager shared]sendFileAtPath:[kAppDelegate openFile]];
-        } else if (buttonIndex == 3) {
-            DropboxUpload *task = [DropboxUpload uploadWithFile:[kAppDelegate openFile]];
-            [[TaskController sharedController]addTask:task];
+    self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",kAppDelegate.openFile.lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+        NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
+        
+        if ([title isEqualToString:kActionButtonNameEmail]) {
+            [kAppDelegate sendFileInEmail:kAppDelegate.openFile];
+        } else if ([title isEqualToString:kActionButtonNameP2P]) {
+            [[BTManager shared]sendFileAtPath:kAppDelegate.openFile];
+        } else if ([title isEqualToString:kActionButtonNameDBUpload]) {
+            [[TaskController sharedController]addTask:[DropboxUpload uploadWithFile:kAppDelegate.openFile]];
+        } else if ([title isEqualToString:kActionButtonNamePrint]) {
+            [kAppDelegate printFile:kAppDelegate.openFile];
         }
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Print", @"Email File", @"Send Via Bluetooth", @"Upload to Dropbox", nil];
+    } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:kActionButtonNameEmail, kActionButtonNameP2P, kActionButtonNameDBUpload, nil];
     
-    _popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+    if ([MIMEUtils isDocumentFile:kAppDelegate.openFile] || [MIMEUtils isImageFile:kAppDelegate.openFile]) {
+        [_popupQuery addButtonWithTitle:kActionButtonNamePrint];
+    }
+    
+    [_popupQuery addButtonWithTitle:@"Cancel"];
+    _popupQuery.cancelButtonIndex = _popupQuery.numberOfButtons-1;
     
     if (iPad) {
         [_popupQuery showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];

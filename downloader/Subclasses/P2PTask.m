@@ -21,16 +21,11 @@ static NSString * const kProgressAdvancedKeyPath = @"fractionCompleted";
 @implementation P2PTask
 
 - (BOOL)canStop {
-    return YES;
+    return NO;
 }
 
 - (NSString *)verb {
     return _isSender?@"Sending...":@"Receiving...";
-}
-
-- (void)stop {
-    [super stop];
-    [_progress cancel];
 }
 
 + (P2PTask *)taskWithName:(NSString *)name progress:(NSProgress *)progress  {

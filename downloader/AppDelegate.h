@@ -20,6 +20,13 @@
 extern NSString * const NSFileName;
 extern NSString * const kCopyListChangedNotification;
 
+extern NSString * const kActionButtonNameEmail;
+extern NSString * const kActionButtonNameP2P;
+extern NSString * const kActionButtonNameDBUpload;
+extern NSString * const kActionButtonNamePrint;
+extern NSString * const kActionButtonNameSavePhotoLibrary;
+extern NSString * const kActionButtonNameEditID3;
+
 BOOL isDirectory(NSString *filePath);
 float fileSize(NSString *filePath);
 

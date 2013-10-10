@@ -135,29 +135,28 @@
     }
     
     NSString *file = [kAppDelegate openFile];
-    NSString *fileName = file.lastPathComponent;
 
-    self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",fileName] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-        if (buttonIndex == 0) {
-            [kAppDelegate printFile:file];
-        } else if (buttonIndex == 1) {
+    self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",file.lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+        
+        NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
+        
+        if ([title isEqualToString:kActionButtonNameEmail]) {
             [kAppDelegate sendFileInEmail:file];
-        } else if (buttonIndex == 2) {
-            [[BTManager shared]sendFileAtPath:kAppDelegate.openFile];
-        } else if (buttonIndex == 3) {
-            DropboxUpload *task = [DropboxUpload uploadWithFile:kAppDelegate.openFile];
-            [[TaskController sharedController]addTask:task];
-        } else if (buttonIndex == 4) {
+        } else if ([title isEqualToString:kActionButtonNameP2P]) {
+            [[BTManager shared]sendFileAtPath:file];
+        } else if ([title isEqualToString:kActionButtonNameDBUpload]) {
+            [[TaskController sharedController]addTask:[DropboxUpload uploadWithFile:file]];
+        } else if ([title isEqualToString:kActionButtonNamePrint]) {
+            [kAppDelegate printFile:file];
+        } else if ([title isEqualToString:kActionButtonNameSavePhotoLibrary]) {
             if ([MIMEUtils isImageFile:file]) {
                 [self addToTheRoll];
             } else {
-                NSString *message = [NSString stringWithFormat:@"Swift was unable to add \"%@\" to the camera roll.",fileName];
+                NSString *message = [NSString stringWithFormat:@"Swift was unable to save %@ to the camera roll.",file.lastPathComponent];
                 [UIAlertView showAlertWithTitle:@"Import Failure" andMessage:message];
             }
         }
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Print", @"Email File", @"Send Via Bluetooth", @"Upload to Dropbox", @"Add to Photo Library", nil];
-    
-    _popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:kActionButtonNameEmail, kActionButtonNameP2P, kActionButtonNameDBUpload, kActionButtonNamePrint, kActionButtonNameSavePhotoLibrary, nil];
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         [_popupQuery showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];
@@ -180,7 +179,7 @@
             [_nextImg setEnabled:NO];
         }
         
-        NSString *newImagePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:newImageName];
+        NSString *newImagePath = [kAppDelegate.managerCurrentDir stringByAppendingPathComponent:newImageName];
         [kAppDelegate setOpenFile:newImagePath];
         _zoomingImageView.image = [UIImage imageWithContentsOfFile:newImagePath];
     }
@@ -199,7 +198,7 @@
     NSString *newImageName = imageFiles[_imageNumber];
     _navBar.topItem.title = newImageName;
     
-    NSString *newImagePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:newImageName];
+    NSString *newImagePath = [kAppDelegate.managerCurrentDir stringByAppendingPathComponent:newImageName];
     [kAppDelegate setOpenFile:newImagePath];
     _zoomingImageView.image = [UIImage imageWithContentsOfFile:newImagePath];
 }

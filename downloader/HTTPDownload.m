@@ -42,6 +42,13 @@
     [super stop];
 }
 
+- (NSString *)verb {
+    if (self.complete && !self.succeeded) {
+        return @"Tap to retry";
+    }
+    return [super verb];
+}
+
 - (void)resumeFromFailureIfNecessary {
     if (self.complete && !self.succeeded) {
         self.isResuming = YES;
@@ -107,11 +114,6 @@
     [_handle writeData:receivedData];
     [_handle synchronizeFile];
     [self.delegate setProgress:((_fileSize == -1)?1:(_downloadedBytes/_fileSize))];
-    
-    // FOR DEBUGGING
-    if (!_isResuming && (_downloadedBytes/_fileSize) > 0.1f) {
-        [self showFailure];
-    }
 }
 
 - (void)showFailure {
@@ -128,6 +130,7 @@
 
     [_connection cancel];
     [_handle closeFile];
+    [HamburgerView reloadCells];
 }
 
 - (void)showSuccess {

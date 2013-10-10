@@ -145,7 +145,7 @@ static NSString *CellIdentifier = @"Cell";
     
     for (NSIndexPath *indexPath in _theTableView.indexPathsForSelectedRows) {
         [_theTableView deselectRowAtIndexPath:indexPath animated:YES];
-        NSString *currentPath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:_filelist[indexPath.row]];
+        NSString *currentPath = [kAppDelegate.managerCurrentDir stringByAppendingPathComponent:_filelist[indexPath.row]];
         [_copiedList addObject:currentPath];
     }
 }
@@ -206,19 +206,16 @@ static NSString *CellIdentifier = @"Cell";
         } else if ([title isEqualToString:@"Paste"]) {
             [weakself pasteInLocation:[kAppDelegate managerCurrentDir]];
         } else if ([title isEqualToString:@"Delete"]) {
-            UIActionSheet *deleteConfirmation = [[UIActionSheet alloc]initWithTitle:@"Are you Sure?" completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+            UIActionSheet *deleteConfirmation = [[UIActionSheet alloc]initWithTitle:@"Are you sure you want to delete multiple items?" completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
                 if (buttonIndex == 0) {
                     [weakself deleteSelectedFiles];
                 }
             } cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Delete" otherButtonTitles:nil];
-            deleteConfirmation.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
             [deleteConfirmation showInView:self.view];
         }
         
         [weakself updateCopyButtonState];
     } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil];
-    
-    actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     
     if (_copiedList.count == 0) {
         [actionSheet addButtonWithTitle:@"Copy"];
@@ -232,7 +229,12 @@ static NSString *CellIdentifier = @"Cell";
     
     actionSheet.cancelButtonIndex = actionSheet.numberOfButtons-1;
     
-    [actionSheet showInView:self.view];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        CGRect frame = [_theCopyAndPasteButton.superview convertRect:_theCopyAndPasteButton.frame toView:[[UIApplication sharedApplication]appWindow]];
+        [actionSheet showFromRect:frame inView:[[UIApplication sharedApplication]appWindow] animated:YES];
+    } else {
+        [actionSheet showInView:self.view];
+    }
 }
 
 - (void)updateCopyButtonState {
@@ -436,8 +438,6 @@ static NSString *CellIdentifier = @"Cell";
             [self updateCopyButtonState];
         } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil];
         
-        actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
-        
         if (_copiedList.count > 0) {
             [actionSheet addButtonWithTitle:@"Compress Copied Items"];
         }
@@ -474,14 +474,19 @@ static NSString *CellIdentifier = @"Cell";
             detail.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
             [self presentViewController:detail animated:YES completion:nil];
         } else {
-            NSString *message = [NSString stringWithFormat:@"Swift cannot determine which editor to open \"%@\" in. Please select which viewer to open it in.",file.lastPathComponent];
+            NSString *message = [NSString stringWithFormat:@"Swift can't determine how to open %@.",file.lastPathComponent];
             
             UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
                 [self actionSheetAction:actionSheet buttonIndex:buttonIndex];
             } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Open in Text Editor", @"Open in Movie Player", @"Open in Picture Viewer", @"Open in Audio Player", @"Open in Document Viewer", @"Open In...", nil];
             
-            sheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
-            [sheet showInView:self.view];
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+                UITableViewCell *cell = [_theTableView cellForRowAtIndexPath:indexPath];
+                CGRect frame = [cell convertRect:cell.textLabel.frame toView:[[UIApplication sharedApplication]appWindow]];
+                [sheet showFromRect:frame inView:[[UIApplication sharedApplication]appWindow] animated:YES];
+            } else {
+                [sheet showInView:self.view];
+            }
         }
     }
     [_theTableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -512,7 +517,7 @@ static NSString *CellIdentifier = @"Cell";
         return YES;
     } else {
         [self reindexFilelistIfNecessary];
-        NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:_filelist[indexPath.row]];
+        NSString *file = [kAppDelegate.managerCurrentDir stringByAppendingPathComponent:_filelist[indexPath.row]];
         return isDirectory(file);
     }
 }
@@ -544,7 +549,7 @@ static NSString *CellIdentifier = @"Cell";
 
     [self reindexFilelistIfNecessary];
     
-    NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:_filelist[indexPath.row]];
+    NSString *file = [kAppDelegate.managerCurrentDir stringByAppendingPathComponent:_filelist[indexPath.row]];
     
     return isDirectory(file)?UITableViewCellEditingStyleDelete:UITableViewCellEditingStyleNone;
 }
@@ -564,7 +569,7 @@ static NSString *CellIdentifier = @"Cell";
                 
                 [[FilesystemMonitor sharedMonitor]invalidate];
                 
-                NSString *removePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:file];
+                NSString *removePath = [kAppDelegate.managerCurrentDir stringByAppendingPathComponent:file];
                 
                 [[NSFileManager defaultManager]removeItemAtPath:removePath error:nil];
                 
@@ -575,11 +580,10 @@ static NSString *CellIdentifier = @"Cell";
                 [weakself.theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
                 [weakself.theTableView endUpdates];
                 
-                [[FilesystemMonitor sharedMonitor]startMonitoringDirectory:[kAppDelegate managerCurrentDir]];
+                [[FilesystemMonitor sharedMonitor]startMonitoringDirectory:kAppDelegate.managerCurrentDir];
             }
             
         } cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"I'm sure, Delete" otherButtonTitles:nil];
-        popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
         [popupQuery showInView:self.view];
     }
 }
@@ -611,8 +615,7 @@ static NSString *CellIdentifier = @"Cell";
         vcontroller.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
         [self presentViewController:vcontroller animated:YES completion:nil];
     } else if (buttonIndex == 5) {
-        NSString *file = [kAppDelegate openFile];
-        self.docController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:file]];
+        self.docController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:kAppDelegate.openFile]];
 
         BOOL opened = NO;
         
@@ -623,7 +626,7 @@ static NSString *CellIdentifier = @"Cell";
         }
         
         if (!opened) {
-            [UIAlertView showAlertWithTitle:@"No External Viewers" andMessage:[NSString stringWithFormat:@"No installed applications are capable of opening %@.",file.lastPathComponent]];
+            [UIAlertView showAlertWithTitle:@"No External Viewers" andMessage:[NSString stringWithFormat:@"No installed applications are capable of opening %@.",kAppDelegate.openFile.lastPathComponent]];
         }
     }
     [_currentlySwipedCell hideWithAnimation:YES];
@@ -651,8 +654,8 @@ static NSString *CellIdentifier = @"Cell";
 
     NSArray *buttonData = @[@"action", @"dropbox", @"bluetooth", @"paperclip", @"delete"];
     
-    NSString *filePath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:cell.textLabel.text];
-    BOOL disableDelete = [filePath isEqualToString:[kAppDelegate nowPlayingFile]];
+    NSString *filePath = [kAppDelegate.managerCurrentDir stringByAppendingPathComponent:cell.textLabel.text];
+    BOOL disableDelete = [filePath isEqualToString:kAppDelegate.nowPlayingFile];
     
     for (int index = 0; index < buttonData.count; index++) {
         @autoreleasepool {
@@ -661,17 +664,17 @@ static NSString *CellIdentifier = @"Cell";
             button.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
             
             NSString *imageName = buttonData[index];
-
+            UIImage *grayImage = [UIImage imageNamed:imageName];
+            [button setTag:index+1];
+            [button addTarget:self action:@selector(touchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
+            [button setImage:grayImage forState:UIControlStateNormal];
+            
             if ([imageName isEqualToString:@"bluetooth"] && [[BTManager shared]isTransferring]) {
                 button.enabled = NO;
             } else if (disableDelete && [imageName isEqualToString:@"delete"]) {
                 button.enabled = NO;
             }
-    
-            UIImage *grayImage = [UIImage imageNamed:imageName];
-            [button setTag:index+1];
-            [button addTarget:self action:@selector(touchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
-            [button setImage:grayImage forState:UIControlStateNormal];
+            
             [backgroundView addSubview:button];
         }
     }
@@ -693,10 +696,10 @@ static NSString *CellIdentifier = @"Cell";
         UIActionSheet *popupQuery = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             [self actionSheetAction:actionSheet buttonIndex:buttonIndex];
         } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Open In Text Editor", @"Open In Movie Player", @"Open In Picture Viewer", @"Open In Audio Player", @"Open In Document Viewer", @"Open In...", nil];
-        popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            [popupQuery showFromRect:[_currentlySwipedCell.backgroundView convertRect:button.frame toView:self.view] inView:self.view animated:YES];
+            CGRect frame = [button convertRect:button.bounds toView:[[UIApplication sharedApplication]appWindow]];
+            [popupQuery showFromRect:frame inView:[[UIApplication sharedApplication]appWindow] animated:YES];
         } else {
             [popupQuery showInView:self.view];
             [_currentlySwipedCell hideWithAnimation:YES];
@@ -714,17 +717,15 @@ static NSString *CellIdentifier = @"Cell";
     } else if (number == 4) {
         
         __weak MyFilesViewController *weakself = self;
-        
-        NSString *message = [NSString stringWithFormat:@"Are you sure you want to delete %@?",file.lastPathComponent];
-        
-        UIActionSheet *popupQuery = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+
+        UIActionSheet *popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"Are you sure you want to delete %@?",file.lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             
             if (buttonIndex == actionSheet.destructiveButtonIndex) {
                 
                 [[FilesystemMonitor sharedMonitor]invalidate];
                 
-                NSIndexPath *indexPath = [_theTableView indexPathForCell:_currentlySwipedCell];
-
+                NSIndexPath *indexPath = [weakself.theTableView indexPathForCell:weakself.currentlySwipedCell];
+                
                 [weakself.currentlySwipedCell hideWithAnimation:NO];
                 
                 [weakself.filelist removeObjectAtIndex:indexPath.row];
@@ -734,12 +735,20 @@ static NSString *CellIdentifier = @"Cell";
                 [weakself.theTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
                 [weakself.theTableView endUpdates];
 
-                [[FilesystemMonitor sharedMonitor]startMonitoringDirectory:[kAppDelegate managerCurrentDir]];
+                [[FilesystemMonitor sharedMonitor]startMonitoringDirectory:kAppDelegate.managerCurrentDir];
             }
             
         } cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"I'm sure, Delete" otherButtonTitles:nil];
-        popupQuery.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
-        [popupQuery showInView:self.view];
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            CGRect frame = [button.superview convertRect:button.frame toView:[[UIApplication sharedApplication]appWindow]];
+            float movement = (button.bounds.size.width/2)-20;
+            frame.origin.x += movement;
+            frame.size.width -= movement;
+            [popupQuery showFromRect:frame inView:[[UIApplication sharedApplication]appWindow] animated:YES];
+        } else {
+            [popupQuery showInView:self.view];
+        }
     }
 }
 

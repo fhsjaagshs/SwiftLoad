@@ -9,6 +9,13 @@
 #import "AppDelegate.h"
 #include <sys/stat.h>
 
+NSString * const kActionButtonNameEmail = @"Attach to email";
+NSString * const kActionButtonNameP2P = @"Send to buddy";
+NSString * const kActionButtonNameDBUpload = @"Upload to Dropbox";
+NSString * const kActionButtonNamePrint = @"Print";
+NSString * const kActionButtonNameSavePhotoLibrary = @"Add to Photo Library";
+NSString * const kActionButtonNameEditID3 = @"Edit ";
+
 NSString * const NSFileName = @"NSFileName";
 NSString * const kCopyListChangedNotification = @"kCopyListChangedNotification";
 
