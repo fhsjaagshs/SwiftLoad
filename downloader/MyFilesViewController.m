@@ -662,6 +662,7 @@ static NSString *CellIdentifier = @"Cell";
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
             button.frame = CGRectMake(index*((backgroundView.bounds.size.width)/buttonData.count), 0, ((backgroundView.bounds.size.width)/buttonData.count), backgroundView.bounds.size.height);
             button.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
+            button.contentMode = UIViewContentModeCenter;
             
             NSString *imageName = buttonData[index];
             UIImage *grayImage = [UIImage imageNamed:imageName];
