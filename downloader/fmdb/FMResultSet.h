@@ -37,15 +37,15 @@
 
 /** Executed query */
 
-@property (atomic, strong) NSString *query;
+@property (atomic, retain) NSString *query;
 
 /** `NSMutableDictionary` mapping column names to numeric index */
 
-@property (weak, readonly) NSMutableDictionary *columnNameToIndexMap;
+@property (readonly) NSMutableDictionary *columnNameToIndexMap;
 
 /** `FMStatement` used by result set. */
 
-@property (atomic, strong) FMStatement *statement;
+@property (atomic, retain) FMStatement *statement;
 
 ///------------------------------------
 /// @name Creating and closing database
@@ -77,13 +77,19 @@
  You must always invoke `next` before attempting to access the values returned in a query, even if you're only expecting one.
 
  @return `YES` if row successfully retrieved; `NO` if end of result set reached
+ 
+ @see hasAnotherRow
  */
 
 - (BOOL)next;
 
-/** Does the result set have another row?
+/** Did the last call to `<next>` succeed in retrieving another row?
 
- @return `YES` if there is another row; `NO` if not.
+ @return `YES` if the last call to `<next>` succeeded in retrieving another record; `NO` if not.
+ 
+ @see next
+ 
+ @warning The `hasAnotherRow` method must follow a call to `<next>`. If the previous database interaction was something other than a call to `next`, then this method may return `NO`, whether there is another row of data or not.
  */
 
 - (BOOL)hasAnotherRow;

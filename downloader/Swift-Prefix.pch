@@ -16,11 +16,11 @@
     #import <AudioToolbox/AudioToolbox.h>
     #import <CommonCrypto/CommonCrypto.h>
 
-    #import "DropboxSDK.h"
+    #import <DropboxSDK/DropboxSDK.h>
 
     #import "Hack.h"
 
-    #import "UIApplication+AppWindow.h"
+    #import "UIApplication+Extensions.h"
     #import "UIAlertView+QuickDisplay.h"
     #import "UIViewController+AutoNib.h"
     #import "UIAlertView+BlockExtensions.h"
@@ -28,7 +28,6 @@
     #import "UIScrollView+ZoomToPoint.h"
     #import "MFMailComposeViewController+BlockExtensions.h"
     #import "NSString+mods.h"
-    #import "UIButton+SwiftLoad.h"
     #import "UIImage+Additions.h"
     #import "UITableView+CoolRefresh.h"
     #import "DBRestClient+SpecificCancellation.h"
@@ -61,7 +60,6 @@
 
     #import "DroppinBadassBlocks.h"
     #import "MIMEUtils.h"
-    #import "NetworkUtils.h"
     #import "ID3Editor.h"
 
     #import "Task.h"

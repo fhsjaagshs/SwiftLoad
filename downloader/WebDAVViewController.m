@@ -106,7 +106,7 @@
 }
 
 - (void)createServer {
-    if (![NetworkUtils isConnectedToWifi]) {
+    if (![UIApplication isConnectedToWifi]) {
         _onLabel.text = @"WebDAV server is OFF";
         _urlLabel.text = @"You are not connected to WiFi";
         [self killServer];
@@ -128,7 +128,7 @@
             _urlLabel.text = @"Unable to establish server";
             _onLabel.text = @"WebDAV server is OFF";
         } else {
-            NSString *rawIP = [NetworkUtils getIPAddress];
+            NSString *rawIP = [UIApplication IPAddress];
             if (rawIP.length == 0) {
                 _urlLabel.text = @"Unable to establish server";
                 _onLabel.text = @"WebDAV server is OFF";

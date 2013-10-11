@@ -38,7 +38,10 @@
         }
         @finally {}
     }
-    if (keyData) CFRelease(keyData);
+    
+    if (keyData) {
+        CFRelease(keyData);
+    }
     return ret;
 }
 

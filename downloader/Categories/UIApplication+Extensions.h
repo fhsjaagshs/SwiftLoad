@@ -1,5 +1,5 @@
 //
-//  UIApplication+AppWindow.h
+//  UIApplication+Extension.h
 //  Swift
 //
 //  Created by Nathaniel Symer on 10/8/13.
@@ -8,8 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIApplication (AppWindow)
+@interface UIApplication (Extensions)
 
 - (UIWindow *)appWindow;
+
++ (NSString *)IPAddress;
++ (BOOL)isConnectedToWifi;
++ (BOOL)isConnectedToInternet;
 
 @end

@@ -1,12 +1,12 @@
 //
-//  NetworkUtils.m
-//  SwiftLoad
+//  UIApplication+Extensions.m
+//  Swift
 //
-//  Created by Nathaniel Symer on 10/29/12.
-//  Copyright (c) 2012 Nathaniel Symer. All rights reserved.
+//  Created by Nathaniel Symer on 10/8/13.
+//  Copyright (c) 2013 Nathaniel Symer. All rights reserved.
 //
 
-#import "NetworkUtils.h"
+#import "UIApplication+Extensions.h"
 
 #include <ifaddrs.h>
 #include <arpa/inet.h>
@@ -15,9 +15,13 @@
 #import <netdb.h>
 #include <SystemConfiguration/SCNetworkReachability.h>
 
-@implementation NetworkUtils
+@implementation UIApplication (Extensions)
 
-+ (NSString *)getIPAddress {
+- (UIWindow *)appWindow {
+    return (self.windows)[0];
+}
+
++ (NSString *)IPAddress {
     NSString *address = @"";
     struct ifaddrs *interfaces = NULL;
     struct ifaddrs *temp_addr = NULL;
@@ -49,8 +53,10 @@
     SCNetworkReachabilityRef reachability = SCNetworkReachabilityCreateWithAddress(kCFAllocatorDefault, (const struct sockaddr*)&zeroAddress);
     if(reachability != NULL) {
         SCNetworkReachabilityFlags flags;
-        if (SCNetworkReachabilityGetFlags(reachability, &flags)) {
-            
+        BOOL flagsRetrieved = SCNetworkReachabilityGetFlags(reachability, &flags);
+        CFRelease(reachability);
+        
+        if (flagsRetrieved) {
             if ((flags & kSCNetworkReachabilityFlagsReachable) == 0) {
                 return NO;
             }
@@ -58,7 +64,6 @@
             if ((flags & kSCNetworkReachabilityFlagsConnectionRequired) == 0) {
                 return YES;
             }
-            
             
             if ((((flags & kSCNetworkReachabilityFlagsConnectionOnDemand ) != 0) || (flags & kSCNetworkReachabilityFlagsConnectionOnTraffic) != 0)) {
                 if ((flags & kSCNetworkReachabilityFlagsInterventionRequired) == 0) {
@@ -80,8 +85,10 @@
     SCNetworkReachabilityRef reachability = SCNetworkReachabilityCreateWithAddress(kCFAllocatorDefault, (const struct sockaddr*)&zeroAddress);
     if (reachability) {
         SCNetworkReachabilityFlags flags;
-        if (SCNetworkReachabilityGetFlags(reachability, &flags)) {
-            
+        BOOL flagsRetrieved = SCNetworkReachabilityGetFlags(reachability, &flags);
+        CFRelease(reachability);
+        
+        if (flagsRetrieved) {
             if ((flags & kSCNetworkReachabilityFlagsReachable) == 0) {
                 return NO;
             }

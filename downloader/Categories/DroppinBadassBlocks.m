@@ -7,7 +7,7 @@
 //
 
 #import "DroppinBadassBlocks.h"
-#import "DBRestClient.h"
+#import <DropboxSDK/DBRestClient.h>
 
 @interface DroppinBadassBlocks () <DBRestClientDelegate>
 

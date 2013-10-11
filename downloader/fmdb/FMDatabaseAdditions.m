@@ -8,7 +8,6 @@
 
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
-#import "FMDatabasePool.h"
 
 @interface FMDatabase (PrivateStuff)
 - (FMResultSet *)executeQuery:(NSString *)sql withArgumentsInArray:(NSArray*)arrayArgs orDictionary:(NSDictionary *)dictionaryArgs orVAList:(va_list)args;

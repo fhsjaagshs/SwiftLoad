@@ -14,7 +14,6 @@
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
     void (^block)(MFMailComposeViewController *controller, MFMailComposeResult result, NSError *error) = objc_getAssociatedObject(self, "blockCallbackMail");
     block(controller, result, error);
-    //Block_release(block);
 }
 
 - (id)initWithCompletionHandler:(void (^)(MFMailComposeViewController *controller, MFMailComposeResult result, NSError *error))block {
@@ -42,7 +41,6 @@
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result {
     void (^block)(MFMessageComposeViewController *controller, MessageComposeResult result) = objc_getAssociatedObject(self, "blockCallbackMessage");
     block(controller, result);
-   // Block_release(block);
 }
 
 
