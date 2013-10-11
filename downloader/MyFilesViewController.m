@@ -652,7 +652,7 @@ static NSString *CellIdentifier = @"Cell";
     backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     backgroundView.backgroundColor = [UIColor darkGrayColor];
 
-    NSArray *buttonData = @[@"action", @"dropbox", @"bluetooth", @"paperclip", @"delete"];
+    NSArray *buttonData = @[@"action", @"dropbox", @"p2p", @"paperclip", @"delete"];
     
     NSString *filePath = [kAppDelegate.managerCurrentDir stringByAppendingPathComponent:cell.textLabel.text];
     BOOL disableDelete = [filePath isEqualToString:kAppDelegate.nowPlayingFile];

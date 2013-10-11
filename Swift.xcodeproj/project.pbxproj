@@ -82,6 +82,8 @@
 		F134EF131807904000626481 /* clipboard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F134EF111807904000626481 /* clipboard@2x.png */; };
 		F134EF161807904C00626481 /* hamburger.png in Resources */ = {isa = PBXBuildFile; fileRef = F134EF141807904C00626481 /* hamburger.png */; };
 		F134EF171807904C00626481 /* hamburger@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F134EF151807904C00626481 /* hamburger@2x.png */; };
+		F134EF1A1807974F00626481 /* p2p.png in Resources */ = {isa = PBXBuildFile; fileRef = F134EF181807974F00626481 /* p2p.png */; };
+		F134EF1B1807974F00626481 /* p2p@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F134EF191807974F00626481 /* p2p@2x.png */; };
 		F137F3481791FC5A008FCFD7 /* Hamburger.m in Sources */ = {isa = PBXBuildFile; fileRef = F137F3471791FC5A008FCFD7 /* Hamburger.m */; };
 		F13979A516E78F4E00F8B61B /* ArrowLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A116E78F4E00F8B61B /* ArrowLeft.png */; };
 		F13979A616E78F4E00F8B61B /* ArrowLeft@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A216E78F4E00F8B61B /* ArrowLeft@2x.png */; };
@@ -104,7 +106,6 @@
 		F1538E2417E68D3300A0F158 /* UIAlertView+QuickDisplay.m in Sources */ = {isa = PBXBuildFile; fileRef = F1538E2317E68D3300A0F158 /* UIAlertView+QuickDisplay.m */; };
 		F153EAA417E50EA100896BB0 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F153EAA317E50EA100896BB0 /* StoreKit.framework */; };
 		F15507D5176EAFE50024FF03 /* action@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F15507D4176EAFE50024FF03 /* action@2x.png */; };
-		F15507D7176EB0290024FF03 /* bluetooth@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F15507D6176EB0290024FF03 /* bluetooth@2x.png */; };
 		F15507D9176EB04D0024FF03 /* delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F15507D8176EB04D0024FF03 /* delete@2x.png */; };
 		F15507DC176EB0A90024FF03 /* dropbox@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F15507DA176EB0A90024FF03 /* dropbox@2x.png */; };
 		F15507DD176EB0A90024FF03 /* paperclip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F15507DB176EB0A90024FF03 /* paperclip@2x.png */; };
@@ -211,7 +212,6 @@
 		F1E397EC17B9F8A8002BBD6F /* ID3Editor.mm in Sources */ = {isa = PBXBuildFile; fileRef = F1E397EB17B9F8A8002BBD6F /* ID3Editor.mm */; };
 		F1E9F7861773FDF300EC345C /* DisclosureButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F1E9F7851773FDF300EC345C /* DisclosureButton.m */; };
 		F1EB833C16D808AA009D7D2D /* action.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833116D808AA009D7D2D /* action.png */; };
-		F1EB833D16D808AA009D7D2D /* bluetooth.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833216D808AA009D7D2D /* bluetooth.png */; };
 		F1EB833F16D808AA009D7D2D /* delete.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833416D808AA009D7D2D /* delete.png */; };
 		F1EB834116D808AA009D7D2D /* dropbox.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833616D808AA009D7D2D /* dropbox.png */; };
 		F1EB834516D808AA009D7D2D /* paperclip.png in Resources */ = {isa = PBXBuildFile; fileRef = F1EB833A16D808AA009D7D2D /* paperclip.png */; };
@@ -370,6 +370,8 @@
 		F134EF111807904000626481 /* clipboard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "clipboard@2x.png"; path = "Images/clipboard@2x.png"; sourceTree = "<group>"; };
 		F134EF141807904C00626481 /* hamburger.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = hamburger.png; path = Images/hamburger.png; sourceTree = "<group>"; };
 		F134EF151807904C00626481 /* hamburger@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "hamburger@2x.png"; path = "Images/hamburger@2x.png"; sourceTree = "<group>"; };
+		F134EF181807974F00626481 /* p2p.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = p2p.png; path = Images/p2p.png; sourceTree = "<group>"; };
+		F134EF191807974F00626481 /* p2p@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "p2p@2x.png"; path = "Images/p2p@2x.png"; sourceTree = "<group>"; };
 		F137F3461791FC5A008FCFD7 /* Hamburger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hamburger.h; sourceTree = "<group>"; };
 		F137F3471791FC5A008FCFD7 /* Hamburger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Hamburger.m; sourceTree = "<group>"; };
 		F13979A116E78F4E00F8B61B /* ArrowLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ArrowLeft.png; path = Images/ArrowLeft.png; sourceTree = "<group>"; };
@@ -406,7 +408,6 @@
 		F153EAA217E50D8900896BB0 /* Swift.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = Swift.entitlements; path = ../Swift.entitlements; sourceTree = "<group>"; };
 		F153EAA317E50EA100896BB0 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		F15507D4176EAFE50024FF03 /* action@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "action@2x.png"; path = "Images/action@2x.png"; sourceTree = "<group>"; };
-		F15507D6176EB0290024FF03 /* bluetooth@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bluetooth@2x.png"; path = "Images/bluetooth@2x.png"; sourceTree = "<group>"; };
 		F15507D8176EB04D0024FF03 /* delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "delete@2x.png"; path = "Images/delete@2x.png"; sourceTree = "<group>"; };
 		F15507DA176EB0A90024FF03 /* dropbox@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "dropbox@2x.png"; path = "Images/dropbox@2x.png"; sourceTree = "<group>"; };
 		F15507DB176EB0A90024FF03 /* paperclip@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "paperclip@2x.png"; path = "Images/paperclip@2x.png"; sourceTree = "<group>"; };
@@ -581,7 +582,6 @@
 		F1E9F7841773FDF300EC345C /* DisclosureButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisclosureButton.h; sourceTree = "<group>"; };
 		F1E9F7851773FDF300EC345C /* DisclosureButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisclosureButton.m; sourceTree = "<group>"; };
 		F1EB833116D808AA009D7D2D /* action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = action.png; path = Images/action.png; sourceTree = "<group>"; };
-		F1EB833216D808AA009D7D2D /* bluetooth.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bluetooth.png; path = Images/bluetooth.png; sourceTree = "<group>"; };
 		F1EB833416D808AA009D7D2D /* delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = delete.png; path = Images/delete.png; sourceTree = "<group>"; };
 		F1EB833616D808AA009D7D2D /* dropbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dropbox.png; path = Images/dropbox.png; sourceTree = "<group>"; };
 		F1EB833A16D808AA009D7D2D /* paperclip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = paperclip.png; path = Images/paperclip.png; sourceTree = "<group>"; };
@@ -916,8 +916,8 @@
 			children = (
 				F1EB833116D808AA009D7D2D /* action.png */,
 				F15507D4176EAFE50024FF03 /* action@2x.png */,
-				F1EB833216D808AA009D7D2D /* bluetooth.png */,
-				F15507D6176EB0290024FF03 /* bluetooth@2x.png */,
+				F134EF181807974F00626481 /* p2p.png */,
+				F134EF191807974F00626481 /* p2p@2x.png */,
 				F1EB833416D808AA009D7D2D /* delete.png */,
 				F15507D8176EB04D0024FF03 /* delete@2x.png */,
 				F1EB833616D808AA009D7D2D /* dropbox.png */,
@@ -1366,7 +1366,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F1EB833C16D808AA009D7D2D /* action.png in Resources */,
-				F1EB833D16D808AA009D7D2D /* bluetooth.png in Resources */,
 				F1EB833F16D808AA009D7D2D /* delete.png in Resources */,
 				F1EB834116D808AA009D7D2D /* dropbox.png in Resources */,
 				F1EB834516D808AA009D7D2D /* paperclip.png in Resources */,
@@ -1376,7 +1375,6 @@
 				F13979A816E78F4E00F8B61B /* ArrowRight@2x.png in Resources */,
 				F15507D5176EAFE50024FF03 /* action@2x.png in Resources */,
 				F134EF121807904000626481 /* clipboard.png in Resources */,
-				F15507D7176EB0290024FF03 /* bluetooth@2x.png in Resources */,
 				F15507D9176EB04D0024FF03 /* delete@2x.png in Resources */,
 				F125335917F504CE006D3D51 /* arrow_disclosure.png in Resources */,
 				F125336A17F50A89006D3D51 /* Images.xcassets in Resources */,
@@ -1384,6 +1382,7 @@
 				F15507DD176EB0A90024FF03 /* paperclip@2x.png in Resources */,
 				F125335A17F504CE006D3D51 /* arrow_disclosure_highlighted.png in Resources */,
 				F172BCC61794EC4500AC1483 /* About.txt in Resources */,
+				F134EF1B1807974F00626481 /* p2p@2x.png in Resources */,
 				F134EF171807904C00626481 /* hamburger@2x.png in Resources */,
 				F172BCD01794EC4500AC1483 /* README.txt in Resources */,
 				F1AE31A517BDBC1E005D3EE6 /* back_button.png in Resources */,
@@ -1401,6 +1400,7 @@
 				F1AE31B117BDBC1E005D3EE6 /* next_button_pressed@2x.png in Resources */,
 				F134EF0E1807902E00626481 /* albumartwork_placeholder.png in Resources */,
 				F1AE31B217BDBC1E005D3EE6 /* next_button@2x.png in Resources */,
+				F134EF1A1807974F00626481 /* p2p.png in Resources */,
 				F1AE31B317BDBC1E005D3EE6 /* pause.png in Resources */,
 				F125335C17F504CE006D3D51 /* arrow_disclosure@2x.png in Resources */,
 				F1AE31B417BDBC1E005D3EE6 /* pause_pressed.png in Resources */,
