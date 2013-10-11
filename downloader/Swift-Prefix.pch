@@ -16,7 +16,7 @@
     #import <AudioToolbox/AudioToolbox.h>
     #import <CommonCrypto/CommonCrypto.h>
 
-    #import <DropboxSDK/DropboxSDK.h>
+    #import "DropboxSDK.h"
 
     #import "Hack.h"
 
