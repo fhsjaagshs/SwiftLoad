@@ -320,14 +320,7 @@
         } else if ([title isEqualToString:kActionButtonNameEditID3]) {
             [weakself presentViewController:[EditID3ViewController viewControllerWhite] animated:YES completion:nil];
         }
-    } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:kActionButtonNameEmail, kActionButtonNameP2P, kActionButtonNameDBUpload, kActionButtonNameEditID3, nil];
-
-    if (_errorLabel.hidden && [file.pathExtension.lowercaseString isEqualToString:@"mp3"]) {
-        [_popupQuery addButtonWithTitle:@"Edit Metadata"];
-    }
-    
-    [_popupQuery addButtonWithTitle:@"Cancel"];
-    [_popupQuery setCancelButtonIndex:_popupQuery.numberOfButtons-1];
+    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:kActionButtonNameEmail, kActionButtonNameP2P, kActionButtonNameDBUpload, kActionButtonNameEditID3, nil];
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         [_popupQuery showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];

@@ -14,7 +14,7 @@ NSString * const kActionButtonNameP2P = @"Send to buddy";
 NSString * const kActionButtonNameDBUpload = @"Upload to Dropbox";
 NSString * const kActionButtonNamePrint = @"Print";
 NSString * const kActionButtonNameSavePhotoLibrary = @"Add to Photo Library";
-NSString * const kActionButtonNameEditID3 = @"Edit ";
+NSString * const kActionButtonNameEditID3 = @"Edit Metadata";
 
 NSString * const NSFileName = @"NSFileName";
 NSString * const kCopyListChangedNotification = @"kCopyListChangedNotification";
