@@ -73,7 +73,7 @@
 }
 
 - (BOOL)isAudioFile {
-    NSArray *fileTypes = @[@"mp3", @"wav", @"m4a", @"aac", @"pcm"];
+    NSArray *fileTypes = @[@"mp3", @"wav", @"m4a", @"aac"];
     return [fileTypes containsObject:self.pathExtension.lowercaseString];
 }
 

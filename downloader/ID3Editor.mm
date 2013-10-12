@@ -20,15 +20,15 @@
     NSString *album = @(f.tag()->album().toCString());
     
     if (artist.length == 0) {
-        artist = @"-";
+        artist = @"";
     }
     
     if (title.length == 0) {
-        title = @"-";
+        title = @"";
     }
     
     if (album.length == 0) {
-        album = @"-";
+        album = @"";
     }
     
     return @{

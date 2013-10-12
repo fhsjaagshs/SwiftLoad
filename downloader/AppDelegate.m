@@ -104,39 +104,23 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     NSString *artist = id3[@"artist"];
     NSString *title = id3[@"title"];
     NSString *album = id3[@"album"];
-    NSString *metadata = [NSString stringWithFormat:@"%@\n%@\n%@",artist,title,album];
+    NSString *metadata = [NSString stringWithFormat:@"%@\n%@\n%@",(artist.length == 0)?@"-":artist,(title.length == 0)?@"-":title,(album.length == 0)?@"-":album];
     [AudioPlayerViewController notif_setInfoFieldText:metadata];
     
-    if ([artist isEqualToString:@"-"]) {
-        artist = @"";
-    }
-    
-    if ([title isEqualToString:@"-"]) {
-        title = @"";
-    }
-    
-    if ([album isEqualToString:@"-"]) {
-        album = @"";
-    }
-    
     if (artist.length == 0 && title.length == 0 && album.length == 0) {
-        artist = @"";
         title = file.lastPathComponent;
-        album = @"";
     }
     
-    NSDictionary *songInfo = [@{ MPMediaItemPropertyArtist:artist, MPMediaItemPropertyTitle:title, MPMediaItemPropertyAlbumTitle:album } mutableCopy];
+    NSMutableDictionary *songInfo = [@{ MPMediaItemPropertyArtist:artist, MPMediaItemPropertyTitle:title, MPMediaItemPropertyAlbumTitle:album } mutableCopy];
     
     @autoreleasepool {
         NSArray *artworkImages = [self artworksForFileAtPath:file];
         
         if (artworkImages.count > 0) {
-            @autoreleasepool {
-                UIImage *image = artworkImages[0];
-                if (image != nil) {
-                    [AudioPlayerViewController notif_setAlbumArt:image];
-                    [songInfo setValue:[[MPMediaItemArtwork alloc]initWithImage:image] forKey:MPMediaItemPropertyArtwork];
-                }
+            UIImage *image = (UIImage *)artworkImages[0];
+            if (image != nil) {
+                [AudioPlayerViewController notif_setAlbumArt:image];
+                [songInfo setValue:[[MPMediaItemArtwork alloc]initWithImage:image] forKey:MPMediaItemPropertyArtwork];
             }
         } else {
             [AudioPlayerViewController notif_setAlbumArt:[UIImage imageNamed:@"albumartwork_placeholder"]];
@@ -154,6 +138,12 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     } else {
         [_audioPlayer pause];
     }
+}
+
+- (NSArray *)audioFiles {
+    NSArray *extensions = @[@"mp3", @"wav", @"m4a", @"aac"];
+    NSArray *dirContents = [[NSFileManager defaultManager]contentsOfDirectoryAtPath:_nowPlayingFile.stringByDeletingLastPathComponent error:nil];
+    return [[dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension.lowercaseString IN %@",extensions]]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
 }
 
 - (void)playFile:(NSString *)file {
@@ -194,10 +184,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
         return;
     }
     
-    NSString *currentDir = [_nowPlayingFile stringByDeletingLastPathComponent];
-    NSArray *extensions = @[@"mp3", @"wav", @"m4a", @"aac", @"pcm"];
-    NSArray *dirContents = [[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil];
-    NSArray *audioFiles = [[dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension.lowercaseString IN %@", extensions]]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+    NSArray *audioFiles = [self audioFiles];
 
     int nextIndex = (int)[audioFiles indexOfObject:_nowPlayingFile.lastPathComponent]-1;
     
@@ -205,7 +192,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
         nextIndex = (int)audioFiles.count-1;
     }
     
-    NSString *newFile = [currentDir stringByAppendingPathComponent:audioFiles[nextIndex]];
+    NSString *newFile = [_nowPlayingFile.stringByDeletingLastPathComponent stringByAppendingPathComponent:audioFiles[nextIndex]];
     [self setOpenFile:newFile];
     
     NSError *playingError = nil;
@@ -238,10 +225,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
 }
 
 - (void)skipToNextTrack {
-    NSString *currentDir = [_nowPlayingFile stringByDeletingLastPathComponent];
-    NSArray *extensions = @[@"mp3", @"wav", @"m4a", @"aac", @"pcm"];
-    NSArray *dirContents = [[NSFileManager defaultManager]contentsOfDirectoryAtPath:currentDir error:nil];
-    NSArray *audioFiles = [[dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension.lowercaseString IN %@", extensions]]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+    NSArray *audioFiles = [self audioFiles];
 
     int maxIndex = (int)audioFiles.count-1;
     int nextIndex = (int)[audioFiles indexOfObject:_nowPlayingFile.lastPathComponent]+1;
@@ -250,7 +234,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
         nextIndex = 0;
     }
 
-    NSString *newFile = [currentDir stringByAppendingPathComponent:audioFiles[nextIndex]];
+    NSString *newFile = [_nowPlayingFile.stringByDeletingLastPathComponent stringByAppendingPathComponent:audioFiles[nextIndex]];
     [self setOpenFile:newFile];
     
     NSError *playingError = nil;

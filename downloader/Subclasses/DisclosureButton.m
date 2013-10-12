@@ -16,9 +16,16 @@
 }
 
 + (DisclosureButton *)button {
-    DisclosureButton *ret = [[[self class]alloc]initWithFrame:CGRectMake(0, 0, 44, 44)];
-    ret.backgroundColor = [UIColor clearColor];
-    return ret;
+    return [[[self class]alloc]initWithFrame:CGRectMake(0, 0, 44, 44)];
+}
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.backgroundColor = [UIColor clearColor];
+        self.opaque = NO;
+    }
+    return self;
 }
 
 - (void)setHighlighted:(BOOL)highlighted {
