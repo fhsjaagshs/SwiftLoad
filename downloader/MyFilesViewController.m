@@ -451,25 +451,23 @@ static NSString *CellIdentifier = @"Cell";
         
         ad.openFile = file;
         
-        BOOL isHTML = [MIMEUtils isHTMLFile:file];
-        
-        if ([MIMEUtils isAudioFile:file]) {
+        if ([file isAudioFile]) {
             AudioPlayerViewController *audio = [AudioPlayerViewController viewController];
             audio.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
             [self presentViewController:audio animated:YES completion:nil];
-        } else if ([MIMEUtils isImageFile:file]) {
+        } else if ([file isImageFile]) {
             PictureViewController *pView = [PictureViewController viewController];
             pView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
             [self presentViewController:pView animated:YES completion:nil];
-        } else if ([MIMEUtils isTextFile:file] && !isHTML) {
+        } else if ([file isTextFile] && ![file isHTMLFile]) {
             TextEditorViewController *textEditor = [TextEditorViewController viewController];
             textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
             [self presentViewController:textEditor animated:YES completion:nil];
-        } else if ([MIMEUtils isVideoFile:file]) {
+        } else if ([file isVideoFile]) {
             MoviePlayerViewController *moviePlayer = [MoviePlayerViewController viewController];
             moviePlayer.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
             [self presentViewController:moviePlayer animated:YES completion:nil];
-        } else if ([MIMEUtils isDocumentFile:file] || isHTML) {
+        } else if ([file isDocumentFile] || [file isHTMLFile]) {
             DocumentViewController *detail = [DocumentViewController viewController];
             detail.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
             [self presentViewController:detail animated:YES completion:nil];

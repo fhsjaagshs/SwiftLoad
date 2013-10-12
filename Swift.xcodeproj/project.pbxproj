@@ -17,6 +17,7 @@
 		9BFF2A0C15387C6E007ED9B1 /* ZipReadStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0615387C6E007ED9B1 /* ZipReadStream.m */; };
 		9BFF2A0D15387C6E007ED9B1 /* ZipWriteStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BFF2A0815387C6E007ED9B1 /* ZipWriteStream.m */; };
 		F1038BB517B1ECB100AE918E /* DropboxLinkTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F1038BB417B1ECB100AE918E /* DropboxLinkTask.m */; };
+		F104B6231809799400B9E1A6 /* NSString+MIME.m in Sources */ = {isa = PBXBuildFile; fileRef = F104B6221809799400B9E1A6 /* NSString+MIME.m */; };
 		F106ABDE17ADE5120076E57F /* DropboxUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = F106ABDD17ADE5120076E57F /* DropboxUpload.m */; };
 		F106ABE117ADE54A0076E57F /* Upload.m in Sources */ = {isa = PBXBuildFile; fileRef = F106ABE017ADE54A0076E57F /* Upload.m */; };
 		F10B4D3017FE4DAD0047E57D /* PPAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = F10B4D2F17FE4DAD0047E57D /* PPAudioPlayer.m */; };
@@ -120,7 +121,6 @@
 		F1693C4F16DFABA6006E3739 /* UIAlertView+BlockExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C4916DFABA6006E3739 /* UIAlertView+BlockExtensions.m */; };
 		F1693C5016DFABA6006E3739 /* UIScrollView+ZoomToPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C4B16DFABA6006E3739 /* UIScrollView+ZoomToPoint.m */; };
 		F1693C5116DFABA6006E3739 /* UIViewController+AutoNib.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C4D16DFABA6006E3739 /* UIViewController+AutoNib.m */; };
-		F1693C5D16DFAC0E006E3739 /* MIMEUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F1693C5816DFAC0E006E3739 /* MIMEUtils.m */; };
 		F172BCC31794EC4500AC1483 /* DDData.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BC811794EC4500AC1483 /* DDData.m */; };
 		F172BCC41794EC4500AC1483 /* DDNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BC831794EC4500AC1483 /* DDNumber.m */; };
 		F172BCC51794EC4500AC1483 /* DDRange.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BC851794EC4500AC1483 /* DDRange.m */; };
@@ -247,6 +247,8 @@
 		9BFF2A0815387C6E007ED9B1 /* ZipWriteStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZipWriteStream.m; sourceTree = "<group>"; };
 		F1038BB317B1ECB100AE918E /* DropboxLinkTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxLinkTask.h; sourceTree = "<group>"; };
 		F1038BB417B1ECB100AE918E /* DropboxLinkTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxLinkTask.m; sourceTree = "<group>"; };
+		F104B6211809799400B9E1A6 /* NSString+MIME.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MIME.h"; sourceTree = "<group>"; };
+		F104B6221809799400B9E1A6 /* NSString+MIME.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MIME.m"; sourceTree = "<group>"; };
 		F106ABDC17ADE5120076E57F /* DropboxUpload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxUpload.h; sourceTree = "<group>"; };
 		F106ABDD17ADE5120076E57F /* DropboxUpload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxUpload.m; sourceTree = "<group>"; };
 		F106ABDF17ADE54A0076E57F /* Upload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Upload.h; sourceTree = "<group>"; };
@@ -433,8 +435,6 @@
 		F1693C4B16DFABA6006E3739 /* UIScrollView+ZoomToPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+ZoomToPoint.m"; sourceTree = "<group>"; };
 		F1693C4C16DFABA6006E3739 /* UIViewController+AutoNib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+AutoNib.h"; sourceTree = "<group>"; };
 		F1693C4D16DFABA6006E3739 /* UIViewController+AutoNib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+AutoNib.m"; sourceTree = "<group>"; };
-		F1693C5716DFAC0E006E3739 /* MIMEUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MIMEUtils.h; sourceTree = "<group>"; };
-		F1693C5816DFAC0E006E3739 /* MIMEUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MIMEUtils.m; sourceTree = "<group>"; };
 		F172BC801794EC4500AC1483 /* DDData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDData.h; sourceTree = "<group>"; };
 		F172BC811794EC4500AC1483 /* DDData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDData.m; sourceTree = "<group>"; };
 		F172BC821794EC4500AC1483 /* DDNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDNumber.h; sourceTree = "<group>"; };
@@ -631,7 +631,6 @@
 			children = (
 				F1DA5247176E8181009A43CD /* Libraries */,
 				F1693C4516DFABA6006E3739 /* Categories */,
-				F1693C5216DFAC0E006E3739 /* Utility Classes */,
 				F1693C5F16DFAC59006E3739 /* Subclasses */,
 			);
 			name = "Custom Classes";
@@ -971,17 +970,10 @@
 				F1538E2317E68D3300A0F158 /* UIAlertView+QuickDisplay.m */,
 				F1A781791804E3A0006950CB /* UIApplication+Extensions.h */,
 				F1A7817A1804E3A0006950CB /* UIApplication+Extensions.m */,
+				F104B6211809799400B9E1A6 /* NSString+MIME.h */,
+				F104B6221809799400B9E1A6 /* NSString+MIME.m */,
 			);
 			path = Categories;
-			sourceTree = "<group>";
-		};
-		F1693C5216DFAC0E006E3739 /* Utility Classes */ = {
-			isa = PBXGroup;
-			children = (
-				F1693C5716DFAC0E006E3739 /* MIMEUtils.h */,
-				F1693C5816DFAC0E006E3739 /* MIMEUtils.m */,
-			);
-			path = "Utility Classes";
 			sourceTree = "<group>";
 		};
 		F1693C5F16DFAC59006E3739 /* Subclasses */ = {
@@ -1472,7 +1464,6 @@
 				F1693C5016DFABA6006E3739 /* UIScrollView+ZoomToPoint.m in Sources */,
 				F1A7817B1804E3A0006950CB /* UIApplication+Extensions.m in Sources */,
 				F1693C5116DFABA6006E3739 /* UIViewController+AutoNib.m in Sources */,
-				F1693C5D16DFAC0E006E3739 /* MIMEUtils.m in Sources */,
 				F10B4D3017FE4DAD0047E57D /* PPAudioPlayer.m in Sources */,
 				F19BB51C16E006CA0081C95B /* main.m in Sources */,
 				F1847BBB16E538C600006C25 /* MFMailComposeViewController+BlockExtensions.m in Sources */,
@@ -1535,6 +1526,7 @@
 				F1C7103617EE01D3008683E0 /* SwiftDisclosureCell.m in Sources */,
 				F134EEEC180781A300626481 /* NSURL+MPURLParameterAdditions.m in Sources */,
 				F172BCD81794EC4500AC1483 /* HTTPDataResponse.m in Sources */,
+				F104B6231809799400B9E1A6 /* NSString+MIME.m in Sources */,
 				F172BCD91794EC4500AC1483 /* HTTPDynamicFileResponse.m in Sources */,
 				F172BCDA1794EC4500AC1483 /* HTTPErrorResponse.m in Sources */,
 				F172BCDB1794EC4500AC1483 /* HTTPFileResponse.m in Sources */,

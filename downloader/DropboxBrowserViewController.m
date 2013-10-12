@@ -354,7 +354,6 @@ static NSString *CellIdentifier = @"dbcell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
     NSDictionary *fileDict = _currentPathItems[indexPath.row];
-    NSString *filename = fileDict[NSFileName];
     
     NSString *filetype = (NSString *)fileDict[NSFileType];
     
@@ -364,28 +363,27 @@ static NSString *CellIdentifier = @"dbcell";
         [self refreshStateWithAnimationStyle:UITableViewRowAnimationLeft];
     } else {
         __weak DropboxBrowserViewController *weakself = self;
-        UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:filename completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-            
-            NSString *filePath = [weakself.navBar.topItem.title stringByAppendingPathComponent:fileDict[NSFileName]];
-            
-            if (buttonIndex == 0) {
-                DropboxDownload *dl = [DropboxDownload downloadWithPath:filePath];
-                [[TaskController sharedController]addTask:dl];
-            } else if (buttonIndex == 1) {
-                DropboxLinkTask *task = [DropboxLinkTask taskWithFilepath:filePath];
-                [[TaskController sharedController]addTask:task];
-            } else if (buttonIndex == 2 && [MIMEUtils isVideoFile:fileDict[NSFileName]]) {
-                [DroppinBadassBlocks loadStreamableURLForFile:filePath andCompletionBlock:^(NSURL *url, NSString *path, NSError *error) {
-                    if (!error) {
-                        [weakself presentViewController:[MoviePlayerViewController moviePlayerWithURL:url] animated:YES completion:nil];
-                    } else {
-                        [UIAlertView showAlertWithTitle:@"Failed to Stream File" andMessage:error.localizedDescription];
-                    }
-                }];
+        UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:fileDict[NSFileName] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+            if (buttonIndex != actionSheet.cancelButtonIndex) {
+                NSString *filePath = [weakself.navBar.topItem.title stringByAppendingPathComponent:fileDict[NSFileName]];
+                
+                if (buttonIndex == 0) {
+                    [[TaskController sharedController]addTask:[DropboxDownload downloadWithPath:filePath]];
+                } else if (buttonIndex == 1) {
+                    [[TaskController sharedController]addTask:[DropboxLinkTask taskWithFilepath:filePath]];
+                } else if (buttonIndex == 2 && filePath.isVideoFile) {
+                    [DroppinBadassBlocks loadStreamableURLForFile:filePath andCompletionBlock:^(NSURL *url, NSString *path, NSError *error) {
+                        if (!error) {
+                            [weakself presentViewController:[MoviePlayerViewController moviePlayerWithURL:url] animated:YES completion:nil];
+                        } else {
+                            [UIAlertView showAlertWithTitle:@"Failed to Stream File" andMessage:error.localizedDescription];
+                        }
+                    }];
+                }
             }
         } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"Download", @"Get Link", nil];
         
-        if ([MIMEUtils isVideoFile:filename]) {
+        if ([fileDict[NSFileName] isVideoFile]) {
             [actionSheet addButtonWithTitle:@"Stream"];
         }
         

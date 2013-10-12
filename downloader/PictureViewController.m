@@ -149,7 +149,7 @@
         } else if ([title isEqualToString:kActionButtonNamePrint]) {
             [kAppDelegate printFile:file];
         } else if ([title isEqualToString:kActionButtonNameSavePhotoLibrary]) {
-            if ([MIMEUtils isImageFile:file]) {
+            if ([file isImageFile]) {
                 [self addToTheRoll];
             } else {
                 NSString *message = [NSString stringWithFormat:@"Swift was unable to save %@ to the camera roll.",file.lastPathComponent];

@@ -338,7 +338,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
             [controller dismissViewControllerAnimated:YES completion:nil];
         }];
         [controller setSubject:@"Your file"];
-        [controller addAttachmentData:[NSData dataWithContentsOfFile:file] mimeType:[MIMEUtils fileMIMEType:file] fileName:[file lastPathComponent]];
+        [controller addAttachmentData:[NSData dataWithContentsOfFile:file] mimeType:file.MIMEType fileName:file.lastPathComponent];
         [controller setMessageBody:@"" isHTML:NO];
         [[UIViewController topViewController]presentViewController:controller animated:YES completion:nil];
     } else {
@@ -497,21 +497,18 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
             NSString *file = [kDocsDir stringByAppendingPathComponent:filesInIndexDir[0]];
             self.openFile = file;
 
-            BOOL isHTML = [MIMEUtils isHTMLFile:file];
-            
-            if ([MIMEUtils isAudioFile:file]) {
+            if (file.isAudioFile) {
                 [[UIViewController topViewController]presentViewController:[AudioPlayerViewController viewControllerWhite] animated:YES completion:nil];
-            } else if ([MIMEUtils isImageFile:file]) {
+            } else if (file.isImageFile) {
                 [[UIViewController topViewController]presentViewController:[PictureViewController viewControllerWhite] animated:YES completion:nil];
-            } else if ([MIMEUtils isTextFile:file] && !isHTML) {
+            } else if (file.isTextFile && !file.isHTMLFile) {
                 [[UIViewController topViewController]presentViewController:[TextEditorViewController viewControllerWhite] animated:YES completion:nil];
-            } else if ([MIMEUtils isVideoFile:file]) {
+            } else if (file.isVideoFile) {
                 [[UIViewController topViewController]presentViewController:[MoviePlayerViewController viewControllerWhite] animated:YES completion:nil];
-            } else if ([MIMEUtils isDocumentFile:file] || isHTML) {
+            } else if (file.isDocumentFile || file.isHTMLFile) {
                 [[UIViewController topViewController]presentViewController:[DocumentViewController viewControllerWhite] animated:YES completion:nil];
             }
         }
-
     } else {
         if ([[DBSession sharedSession]handleOpenURL:url]) {
             [[NSNotificationCenter defaultCenter]postNotificationName:[[DBSession sharedSession]isLinked]?@"db_auth_success":@"db_auth_failure" object:nil];

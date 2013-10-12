@@ -74,7 +74,7 @@
         }
     } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:kActionButtonNameEmail, kActionButtonNameP2P, kActionButtonNameDBUpload, nil];
     
-    if ([MIMEUtils isDocumentFile:kAppDelegate.openFile] || [MIMEUtils isImageFile:kAppDelegate.openFile]) {
+    if ([kAppDelegate.openFile isDocumentFile] || [kAppDelegate.openFile isImageFile]) {
         [_popupQuery addButtonWithTitle:kActionButtonNamePrint];
     }
     
