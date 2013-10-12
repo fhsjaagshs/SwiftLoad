@@ -374,7 +374,7 @@ static NSString *CellIdentifier = @"dbcell";
                 } else if (buttonIndex == 2 && filePath.isVideoFile) {
                     [DroppinBadassBlocks loadStreamableURLForFile:filePath andCompletionBlock:^(NSURL *url, NSString *path, NSError *error) {
                         if (!error) {
-                            [weakself presentViewController:[MoviePlayerViewController moviePlayerWithURL:url] animated:YES completion:nil];
+                            [weakself presentViewController:[MoviePlayerViewController moviePlayerWithStreamingURL:url] animated:YES completion:nil];
                         } else {
                             [UIAlertView showAlertWithTitle:@"Failed to Stream File" andMessage:error.localizedDescription];
                         }

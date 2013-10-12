@@ -20,6 +20,7 @@
 + (instancetype)viewController {
     UIViewController *vc = [[[self class]alloc]init];
     vc.view.backgroundColor = [UIColor clearColor];
+    vc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
     return vc;
 }
 

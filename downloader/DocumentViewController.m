@@ -60,7 +60,7 @@
         return;
     }
     
-    self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",kAppDelegate.openFile.lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+    self.popupQuery = [[UIActionSheet alloc]initWithTitle:nil completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
         
         if ([title isEqualToString:kActionButtonNameEmail]) {
@@ -74,7 +74,7 @@
         }
     } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:kActionButtonNameEmail, kActionButtonNameP2P, kActionButtonNameDBUpload, nil];
     
-    if ([kAppDelegate.openFile isDocumentFile] || [kAppDelegate.openFile isImageFile]) {
+    if (kAppDelegate.openFile.isDocumentFile || kAppDelegate.openFile.isImageFile) {
         [_popupQuery addButtonWithTitle:kActionButtonNamePrint];
     }
     

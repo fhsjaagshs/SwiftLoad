@@ -451,30 +451,18 @@ static NSString *CellIdentifier = @"Cell";
         
         ad.openFile = file;
         
-        if ([file isAudioFile]) {
-            AudioPlayerViewController *audio = [AudioPlayerViewController viewController];
-            audio.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-            [self presentViewController:audio animated:YES completion:nil];
-        } else if ([file isImageFile]) {
-            PictureViewController *pView = [PictureViewController viewController];
-            pView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-            [self presentViewController:pView animated:YES completion:nil];
-        } else if ([file isTextFile] && ![file isHTMLFile]) {
-            TextEditorViewController *textEditor = [TextEditorViewController viewController];
-            textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-            [self presentViewController:textEditor animated:YES completion:nil];
-        } else if ([file isVideoFile]) {
-            MoviePlayerViewController *moviePlayer = [MoviePlayerViewController viewController];
-            moviePlayer.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-            [self presentViewController:moviePlayer animated:YES completion:nil];
-        } else if ([file isDocumentFile] || [file isHTMLFile]) {
-            DocumentViewController *detail = [DocumentViewController viewController];
-            detail.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-            [self presentViewController:detail animated:YES completion:nil];
+        if (file.isAudioFile) {
+            [self presentViewController:[AudioPlayerViewController viewController] animated:YES completion:nil];
+        } else if (file.isImageFile) {
+            [self presentViewController:[PictureViewController viewController] animated:YES completion:nil];
+        } else if (file.isTextFile && !file.isHTMLFile) {
+            [self presentViewController:[TextEditorViewController viewController] animated:YES completion:nil];
+        } else if (file.isVideoFile) {
+            [self presentViewController:[MoviePlayerViewController viewController] animated:YES completion:nil];
+        } else if (file.isDocumentFile || file.isHTMLFile) {
+            [self presentViewController:[DocumentViewController viewController] animated:YES completion:nil];
         } else {
-            NSString *message = [NSString stringWithFormat:@"Swift can't determine how to open %@.",file.lastPathComponent];
-            
-            UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+            UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"Unable to open %@.",file.lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
                 [self actionSheetAction:actionSheet buttonIndex:buttonIndex];
             } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Open in Text Editor", @"Open in Movie Player", @"Open in Picture Viewer", @"Open in Audio Player", @"Open in Document Viewer", @"Open In...", nil];
             
@@ -593,25 +581,15 @@ static NSString *CellIdentifier = @"Cell";
     }
     
     if (buttonIndex == 0) {
-        TextEditorViewController *textEditor = [TextEditorViewController viewController];
-        textEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-        [self presentViewController:textEditor animated:YES completion:nil];
+        [self presentViewController:[TextEditorViewController viewController] animated:YES completion:nil];
     } else if (buttonIndex == 1) {
-        MoviePlayerViewController *moviePlayer = [MoviePlayerViewController viewController];
-        moviePlayer.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-        [self presentViewController:moviePlayer animated:YES completion:nil];
+        [self presentViewController:[MoviePlayerViewController viewController] animated:YES completion:nil];
     } else if (buttonIndex == 2) {
-        PictureViewController *pView = [PictureViewController viewController];
-        pView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-        [self presentViewController:pView animated:YES completion:nil];
+        [self presentViewController:[PictureViewController viewController] animated:YES completion:nil];
     } else if (buttonIndex == 3) {
-        AudioPlayerViewController *acontroller = [AudioPlayerViewController viewController];
-        acontroller.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-        [self presentViewController:acontroller animated:YES completion:nil];
+        [self presentViewController:[AudioPlayerViewController viewController] animated:YES completion:nil];
     } else if (buttonIndex == 4) {
-        DocumentViewController *vcontroller = [DocumentViewController viewController];
-        vcontroller.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-        [self presentViewController:vcontroller animated:YES completion:nil];
+        [self presentViewController:[DocumentViewController viewController] animated:YES completion:nil];
     } else if (buttonIndex == 5) {
         self.docController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:kAppDelegate.openFile]];
 

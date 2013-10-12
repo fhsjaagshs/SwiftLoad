@@ -92,24 +92,24 @@
 - (void)addToTheRoll {
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:kAppDelegate.window animated:YES];
     hud.mode = MBProgressHUDModeText;
-    hud.labelText = @"Working...";
+    hud.labelText = @"Saving...";
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @autoreleasepool {
-            UIImage *image = [UIImage imageWithContentsOfFile:[kAppDelegate openFile]];
+            UIImage *image = [UIImage imageWithContentsOfFile:kAppDelegate.openFile];
             UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
             
             [NSThread sleepForTimeInterval:0.5f];
 
             dispatch_sync(dispatch_get_main_queue(), ^{
                 @autoreleasepool {
-                    NSString *fileName = [[kAppDelegate openFile]lastPathComponent];
+                    NSString *fileName = kAppDelegate.openFile.lastPathComponent;
                     
                     if (fileName.length > 14) {
                         fileName = [[fileName substringToIndex:11]stringByAppendingString:@"..."];
                     }
                     
-                    hud.labelText = @"Imported";
+                    hud.labelText = @"Saved!";
                     hud.detailsLabelText = fileName;
                     
                     [hud hide:YES afterDelay:1.0f];
@@ -133,12 +133,11 @@
         self.popupQuery = nil;
         return;
     }
-    
-    NSString *file = [kAppDelegate openFile];
 
-    self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",file.lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+    self.popupQuery = [[UIActionSheet alloc]initWithTitle:nil completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         
         NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
+        NSString *file = kAppDelegate.openFile;
         
         if ([title isEqualToString:kActionButtonNameEmail]) {
             [kAppDelegate sendFileInEmail:file];
@@ -152,7 +151,7 @@
             if ([file isImageFile]) {
                 [self addToTheRoll];
             } else {
-                NSString *message = [NSString stringWithFormat:@"Swift was unable to save %@ to the camera roll.",file.lastPathComponent];
+                NSString *message = [NSString stringWithFormat:@"Unable to save %@ to the camera roll.",file.lastPathComponent];
                 [UIAlertView showAlertWithTitle:@"Import Failure" andMessage:message];
             }
         }

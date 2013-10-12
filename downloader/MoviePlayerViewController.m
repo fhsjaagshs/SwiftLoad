@@ -23,16 +23,15 @@
 
 @implementation MoviePlayerViewController
 
-+ (MoviePlayerViewController *)moviePlayerWithURL:(NSURL *)url {
-    MoviePlayerViewController *vc = [[MoviePlayerViewController alloc]initWithURL:url];
-    vc.view.backgroundColor = [UIColor clearColor];
-    return vc;
++ (MoviePlayerViewController *)moviePlayerWithStreamingURL:(NSURL *)url {
+    return [[[self class]alloc]initWithStreamingURL:url];
 }
 
-- (instancetype)initWithURL:(NSURL *)url {
+- (instancetype)initWithStreamingURL:(NSURL *)url {
     self = [super init];
     if (self) {
         self.streamingUrl = url;
+        self.view.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
@@ -108,7 +107,7 @@
         return;
     }
     
-    self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",kAppDelegate.openFile.lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+    self.popupQuery = [[UIActionSheet alloc]initWithTitle:nil completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
         NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
         
         if ([title isEqualToString:kActionButtonNameEmail]) {
