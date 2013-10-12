@@ -10,7 +10,6 @@
 
 @interface TextEditorViewController () <UITextViewDelegate>
 
-@property (nonatomic, strong) UIActionSheet *popupQuery;
 @property (nonatomic, strong) UITextView *theTextView;
 @property (nonatomic, strong) UINavigationBar *navBar;
 @property (nonatomic, strong) UIToolbar *toolBar;
@@ -28,7 +27,7 @@
     CGRect screenBounds = [[UIScreen mainScreen]bounds];
     self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
     _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]];
+    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:self.openFile.lastPathComponent];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
     topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
     [_navBar pushNavigationItem:topItem animated:NO];
@@ -61,7 +60,7 @@
         self.theEncoding = NSUTF8StringEncoding;
     }
     
-    [_theTextView.text writeToFile:[kAppDelegate openFile] atomically:YES encoding:_theEncoding error:nil];
+    [_theTextView.text writeToFile:self.openFile atomically:YES encoding:_theEncoding error:nil];
     [self hideSaveButton];
 }
 
@@ -71,14 +70,12 @@
     int numberOfEncodings = sizeof(encodingsToTest)/sizeof(NSStringEncoding);
     
     NSString *stringToReturn = nil;
-    
-    NSString *filePath = [kAppDelegate openFile];
-    
+
     for (int i = 0; i < numberOfEncodings; i++) {
         
         NSStringEncoding currentEndcoding = encodingsToTest[i];
         
-        NSString *testString = [NSString stringWithContentsOfFile:filePath encoding:currentEndcoding error:nil];
+        NSString *testString = [NSString stringWithContentsOfFile:self.openFile encoding:currentEndcoding error:nil];
 
         if (testString.length > 0 && testString != nil) {
             stringToReturn = testString;
@@ -120,7 +117,6 @@
     __weak TextEditorViewController *weakself = self;
     [self dismissViewControllerAnimated:YES completion:^{
         [weakself dismissKeyboard];
-        [kAppDelegate setOpenFile:nil];
     }];
 }
 
@@ -148,30 +144,20 @@
     self.hasEdited = YES;
 }
 
+- (void)actionSheet:(UIActionSheet *)actionSheet selectedIndex:(NSUInteger)buttonIndex {
+    NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
+    
+    if ([title isEqualToString:kActionButtonNameEmail]) {
+        [kAppDelegate sendFileInEmail:self.openFile];
+    } else if ([title isEqualToString:kActionButtonNameP2P]) {
+        [[BTManager shared]sendFileAtPath:self.openFile];
+    } else if ([title isEqualToString:kActionButtonNameDBUpload]) {
+        [[TaskController sharedController]addTask:[DropboxUpload uploadWithFile:self.openFile]];
+    }
+}
+
 - (void)showActionSheet:(id)sender {
-    if (_popupQuery && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [_popupQuery dismissWithClickedButtonIndex:_popupQuery.cancelButtonIndex animated:YES];
-        self.popupQuery = nil;
-        return;
-    }
-
-    self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",kAppDelegate.openFile.lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-        NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
-        
-        if ([title isEqualToString:kActionButtonNameEmail]) {
-            [kAppDelegate sendFileInEmail:kAppDelegate.openFile];
-        } else if ([title isEqualToString:kActionButtonNameP2P]) {
-            [[BTManager shared]sendFileAtPath:kAppDelegate.openFile];
-        } else if ([title isEqualToString:kActionButtonNameDBUpload]) {
-            [[TaskController sharedController]addTask:[DropboxUpload uploadWithFile:kAppDelegate.openFile]];
-        }
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:kActionButtonNameEmail, kActionButtonNameP2P, kActionButtonNameDBUpload, nil];
-
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [_popupQuery showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];
-    } else {
-        [_popupQuery showInView:self.view];
-    }
+    [self showActionSheetFromBarButtonItem:(UIBarButtonItem *)sender withButtonTitles:@[kActionButtonNameEmail, kActionButtonNameP2P, kActionButtonNameDBUpload]];
 }
 
 - (void)loadText {
@@ -185,7 +171,6 @@
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @autoreleasepool {
-        
             NSString *fileContents = [weakself getStringFromFile];
             
             dispatch_sync(dispatch_get_main_queue(), ^{
@@ -196,7 +181,6 @@
                     [hud hide:YES];
                 }
             });
-        
         }
     });
 }

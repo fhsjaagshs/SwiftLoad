@@ -22,6 +22,8 @@
 		F104B65E18099CAF00B9E1A6 /* disclosure_highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = F104B65A18099CAF00B9E1A6 /* disclosure_highlighted.png */; };
 		F104B65F18099CAF00B9E1A6 /* disclosure_highlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F104B65B18099CAF00B9E1A6 /* disclosure_highlighted@2x.png */; };
 		F104B66018099CAF00B9E1A6 /* disclosure@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F104B65C18099CAF00B9E1A6 /* disclosure@2x.png */; };
+		F104B6631809D19800B9E1A6 /* SwiftGenericViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F104B6621809D19800B9E1A6 /* SwiftGenericViewController.m */; };
+		F104B6651809D53100B9E1A6 /* Swift.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = F104B6641809D53100B9E1A6 /* Swift.entitlements */; };
 		F106ABDE17ADE5120076E57F /* DropboxUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = F106ABDD17ADE5120076E57F /* DropboxUpload.m */; };
 		F106ABE117ADE54A0076E57F /* Upload.m in Sources */ = {isa = PBXBuildFile; fileRef = F106ABE017ADE54A0076E57F /* Upload.m */; };
 		F10B4D3017FE4DAD0047E57D /* PPAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = F10B4D2F17FE4DAD0047E57D /* PPAudioPlayer.m */; };
@@ -253,6 +255,9 @@
 		F104B65A18099CAF00B9E1A6 /* disclosure_highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = disclosure_highlighted.png; path = Images/disclosure_highlighted.png; sourceTree = "<group>"; };
 		F104B65B18099CAF00B9E1A6 /* disclosure_highlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "disclosure_highlighted@2x.png"; path = "Images/disclosure_highlighted@2x.png"; sourceTree = "<group>"; };
 		F104B65C18099CAF00B9E1A6 /* disclosure@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "disclosure@2x.png"; path = "Images/disclosure@2x.png"; sourceTree = "<group>"; };
+		F104B6611809D19800B9E1A6 /* SwiftGenericViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwiftGenericViewController.h; path = ../SwiftGenericViewController.h; sourceTree = "<group>"; };
+		F104B6621809D19800B9E1A6 /* SwiftGenericViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwiftGenericViewController.m; path = ../SwiftGenericViewController.m; sourceTree = "<group>"; };
+		F104B6641809D53100B9E1A6 /* Swift.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Swift.entitlements; path = Packaging/Swift.entitlements; sourceTree = SOURCE_ROOT; };
 		F106ABDC17ADE5120076E57F /* DropboxUpload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxUpload.h; sourceTree = "<group>"; };
 		F106ABDD17ADE5120076E57F /* DropboxUpload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxUpload.m; sourceTree = "<group>"; };
 		F106ABDF17ADE54A0076E57F /* Upload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Upload.h; sourceTree = "<group>"; };
@@ -407,7 +412,6 @@
 		F15277CF13F4B08800338673 /* DocumentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentViewController.m; sourceTree = "<group>"; };
 		F1538E2217E68D3300A0F158 /* UIAlertView+QuickDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+QuickDisplay.h"; sourceTree = "<group>"; };
 		F1538E2317E68D3300A0F158 /* UIAlertView+QuickDisplay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+QuickDisplay.m"; sourceTree = "<group>"; };
-		F153EAA217E50D8900896BB0 /* Swift.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = Swift.entitlements; path = ../Swift.entitlements; sourceTree = "<group>"; };
 		F153EAA317E50EA100896BB0 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		F15507D4176EAFE50024FF03 /* action@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "action@2x.png"; path = "Images/action@2x.png"; sourceTree = "<group>"; };
 		F15507D8176EB04D0024FF03 /* delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "delete@2x.png"; path = "Images/delete@2x.png"; sourceTree = "<group>"; };
@@ -997,6 +1001,8 @@
 				F1304533179C5E6A00D7DB4D /* FilesystemMonitor.m */,
 				F10B4D2E17FE4DAD0047E57D /* PPAudioPlayer.h */,
 				F10B4D2F17FE4DAD0047E57D /* PPAudioPlayer.m */,
+				F104B6611809D19800B9E1A6 /* SwiftGenericViewController.h */,
+				F104B6621809D19800B9E1A6 /* SwiftGenericViewController.m */,
 			);
 			path = Subclasses;
 			sourceTree = "<group>";
@@ -1190,7 +1196,7 @@
 		F19BB51816E006680081C95B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				F153EAA217E50D8900896BB0 /* Swift.entitlements */,
+				F104B6641809D53100B9E1A6 /* Swift.entitlements */,
 				F19BB51916E006CA0081C95B /* main.m */,
 				F19BB51A16E006CA0081C95B /* Swift-Info.plist */,
 				F19BB51B16E006CA0081C95B /* Swift-Prefix.pch */,
@@ -1410,6 +1416,7 @@
 				F1D083AD17BF09B1003E6700 /* trackImage@2x.png in Resources */,
 				F134EF0F1807902E00626481 /* albumartwork_placeholder@2x.png in Resources */,
 				F1D083B017BF0EBF003E6700 /* scrubber_volume.png in Resources */,
+				F104B6651809D53100B9E1A6 /* Swift.entitlements in Resources */,
 				F1D083B117BF0EBF003E6700 /* scrubber_volume@2x.png in Resources */,
 				F1D6257717C45D3700CA002A /* file_icon.png in Resources */,
 				F1D6257817C45D3700CA002A /* file_icon@2x.png in Resources */,
@@ -1530,6 +1537,7 @@
 				F172BCD91794EC4500AC1483 /* HTTPDynamicFileResponse.m in Sources */,
 				F172BCDA1794EC4500AC1483 /* HTTPErrorResponse.m in Sources */,
 				F172BCDB1794EC4500AC1483 /* HTTPFileResponse.m in Sources */,
+				F104B6631809D19800B9E1A6 /* SwiftGenericViewController.m in Sources */,
 				F172BCDC1794EC4500AC1483 /* HTTPRedirectResponse.m in Sources */,
 				F172BCDD1794EC4500AC1483 /* DAVConnection.m in Sources */,
 				F172BCDE1794EC4500AC1483 /* DAVResponse.m in Sources */,

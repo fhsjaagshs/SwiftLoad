@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface EditID3ViewController : UIViewController
+@interface EditID3ViewController : SwiftGenericViewController
 
 @end

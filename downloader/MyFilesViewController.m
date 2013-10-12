@@ -126,8 +126,7 @@ static NSString *CellIdentifier = @"Cell";
     } else if (index == 3) {
         [self presentViewController:[SettingsView viewControllerWhite] animated:YES completion:nil];
     } else if (index == 4) {
-        kAppDelegate.openFile = kAppDelegate.nowPlayingFile;
-        [self presentViewController:[AudioPlayerViewController viewControllerWhite] animated:YES completion:nil];
+        [self presentViewController:[AudioPlayerViewController viewControllerWhiteWithFilepath:kAppDelegate.nowPlayingFile] animated:YES completion:nil];
     }
 }
 
@@ -452,11 +451,11 @@ static NSString *CellIdentifier = @"Cell";
         ad.openFile = file;
         
         if (file.isAudioFile) {
-            [self presentViewController:[AudioPlayerViewController viewController] animated:YES completion:nil];
+            [self presentViewController:[AudioPlayerViewController viewControllerWithFilepath:file] animated:YES completion:nil];
         } else if (file.isImageFile) {
-            [self presentViewController:[PictureViewController viewController] animated:YES completion:nil];
+            [self presentViewController:[PictureViewController viewControllerWithFilepath:file] animated:YES completion:nil];
         } else if (file.isTextFile && !file.isHTMLFile) {
-            [self presentViewController:[TextEditorViewController viewController] animated:YES completion:nil];
+            [self presentViewController:[TextEditorViewController viewControllerWithFilepath:file] animated:YES completion:nil];
         } else if (file.isVideoFile) {
             [self presentViewController:[MoviePlayerViewController viewController] animated:YES completion:nil];
         } else if (file.isDocumentFile || file.isHTMLFile) {

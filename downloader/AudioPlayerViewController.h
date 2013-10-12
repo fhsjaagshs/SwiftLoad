@@ -8,13 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AudioPlayerViewController : UIViewController
+@interface AudioPlayerViewController : SwiftGenericViewController
 
 @property (nonatomic, assign) BOOL shouldStopCounter;
 @property (nonatomic, assign) BOOL notInPlayerView;
 @property (nonatomic, assign) BOOL isGoing;
 @property (nonatomic, assign) BOOL isLooped;
 
++ (void)notif_setOpenFile:(NSString *)openFile;
 + (void)notif_setPausePlayTitlePlay;
 + (void)notif_setPausePlayTitlePause;
 + (void)notif_setLoop;

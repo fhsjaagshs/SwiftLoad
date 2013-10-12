@@ -134,10 +134,14 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
 - (void)togglePlayPause {
     if (!_audioPlayer.isPlaying) {
         [_audioPlayer play];
-        self.nowPlayingFile = [_openFile copy];
     } else {
         [_audioPlayer pause];
     }
+}
+
+- (void)setNowPlayingFile:(NSString *)nowPlayingFile {
+    _nowPlayingFile = nowPlayingFile;
+    [AudioPlayerViewController notif_setOpenFile:nowPlayingFile];
 }
 
 - (NSArray *)audioFiles {
@@ -193,7 +197,6 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     }
     
     NSString *newFile = [_nowPlayingFile.stringByDeletingLastPathComponent stringByAppendingPathComponent:audioFiles[nextIndex]];
-    [self setOpenFile:newFile];
     
     NSError *playingError = nil;
 
@@ -235,7 +238,6 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     }
 
     NSString *newFile = [_nowPlayingFile.stringByDeletingLastPathComponent stringByAppendingPathComponent:audioFiles[nextIndex]];
-    [self setOpenFile:newFile];
     
     NSError *playingError = nil;
 

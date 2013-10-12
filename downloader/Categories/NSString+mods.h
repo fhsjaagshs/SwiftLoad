@@ -12,6 +12,7 @@
 
 + (NSString *)fileSizePrettify:(float)fileSize;
 
+- (NSString *)strip;
 - (CGFloat)withWithFont:(UIFont *)font;
 - (CGFloat)widthForHeight:(float)height font:(UIFont *)font;
 - (NSString *)percentSanitize;
@@ -21,7 +22,6 @@
 - (BOOL)containsString:(NSString *)otherString;
 - (NSString *)stringByTrimmingExtraInternalSpacing;
 - (NSString *)stringBySanitizingForFilename;
-- (NSString *)stringByTrimmingWhitespace;
 - (NSString *)stringByAppendingPathComponent_URLSafe:(NSString *)str;
 - (NSString *)stringByDeletingLastPathComponent_URLSafe;
 - (NSString *)stringByDeletingPathExtension_URLSafe;

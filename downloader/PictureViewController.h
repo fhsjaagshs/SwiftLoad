@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PictureViewController : UIViewController
+@interface PictureViewController : SwiftGenericViewController
 
 @end

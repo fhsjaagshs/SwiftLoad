@@ -169,6 +169,10 @@ static NSString * const kID3EditorCellID = @"kID3EditorCellID";
     [self close];
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    return self.openFile.lastPathComponent;
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }

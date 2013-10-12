@@ -10,7 +10,6 @@
 
 @interface PictureViewController ()
 
-@property (nonatomic, strong) UIActionSheet *popupQuery;
 @property (nonatomic, strong) ZoomingImageView *zoomingImageView;
 @property (nonatomic, strong) UIBarButtonItem *prevImg;
 @property (nonatomic, strong) UIBarButtonItem *nextImg;
@@ -34,7 +33,7 @@
     
     self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
     _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:kAppDelegate.openFile.lastPathComponent];
+    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:self.openFile.lastPathComponent];
     topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
     [_navBar pushNavigationItem:topItem animated:NO];
@@ -65,7 +64,7 @@
     
     NSArray *imageFiles = [self imageFiles];
     
-    self.imageNumber = [imageFiles indexOfObject:kAppDelegate.openFile.lastPathComponent];
+    self.imageNumber = [imageFiles indexOfObject:self.openFile.lastPathComponent];
     
     if (imageFiles.count == 1) {
         [_nextImg setEnabled:NO];
@@ -80,7 +79,7 @@
         [_nextImg setEnabled:NO];
     }
 
-    _zoomingImageView.image = [UIImage imageWithContentsOfFile:kAppDelegate.openFile];
+    _zoomingImageView.image = [UIImage imageWithContentsOfFile:self.openFile];
 }
 
 - (NSArray *)imageFiles {
@@ -96,14 +95,14 @@
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @autoreleasepool {
-            UIImage *image = [UIImage imageWithContentsOfFile:kAppDelegate.openFile];
+            UIImage *image = [UIImage imageWithContentsOfFile:self.openFile];
             UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
             
             [NSThread sleepForTimeInterval:0.5f];
 
             dispatch_sync(dispatch_get_main_queue(), ^{
                 @autoreleasepool {
-                    NSString *fileName = kAppDelegate.openFile.lastPathComponent;
+                    NSString *fileName = self.openFile.lastPathComponent;
                     
                     if (fileName.length > 14) {
                         fileName = [[fileName substringToIndex:11]stringByAppendingString:@"..."];
@@ -120,48 +119,35 @@
 }
 
 - (void)close {
-    [self dismissViewControllerAnimated:YES completion:nil];
-    [[UIApplication sharedApplication]setStatusBarHidden:NO];
-    [kAppDelegate setOpenFile:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        [[UIApplication sharedApplication]setStatusBarHidden:NO];
+    }];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet selectedIndex:(NSUInteger)buttonIndex {
+    NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
+    
+    if ([title isEqualToString:kActionButtonNameEmail]) {
+        [kAppDelegate sendFileInEmail:self.openFile];
+    } else if ([title isEqualToString:kActionButtonNameP2P]) {
+        [[BTManager shared]sendFileAtPath:self.openFile];
+    } else if ([title isEqualToString:kActionButtonNameDBUpload]) {
+        [[TaskController sharedController]addTask:[DropboxUpload uploadWithFile:self.openFile]];
+    } else if ([title isEqualToString:kActionButtonNamePrint]) {
+        [kAppDelegate printFile:self.openFile];
+    } else if ([title isEqualToString:kActionButtonNameSavePhotoLibrary]) {
+        if (self.openFile.isImageFile) {
+            [self addToTheRoll];
+        } else {
+            NSString *message = [NSString stringWithFormat:@"Unable to save %@ to the camera roll.",self.openFile.lastPathComponent];
+            [UIAlertView showAlertWithTitle:@"Import Failure" andMessage:message];
+        }
+    }
 }
 
 // Action in reverse is Noitca
 - (void)showActionSheet:(id)sender {
-    
-    if (_popupQuery && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [_popupQuery dismissWithClickedButtonIndex:_popupQuery.cancelButtonIndex animated:YES];
-        self.popupQuery = nil;
-        return;
-    }
-
-    self.popupQuery = [[UIActionSheet alloc]initWithTitle:nil completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-        
-        NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
-        NSString *file = kAppDelegate.openFile;
-        
-        if ([title isEqualToString:kActionButtonNameEmail]) {
-            [kAppDelegate sendFileInEmail:file];
-        } else if ([title isEqualToString:kActionButtonNameP2P]) {
-            [[BTManager shared]sendFileAtPath:file];
-        } else if ([title isEqualToString:kActionButtonNameDBUpload]) {
-            [[TaskController sharedController]addTask:[DropboxUpload uploadWithFile:file]];
-        } else if ([title isEqualToString:kActionButtonNamePrint]) {
-            [kAppDelegate printFile:file];
-        } else if ([title isEqualToString:kActionButtonNameSavePhotoLibrary]) {
-            if ([file isImageFile]) {
-                [self addToTheRoll];
-            } else {
-                NSString *message = [NSString stringWithFormat:@"Unable to save %@ to the camera roll.",file.lastPathComponent];
-                [UIAlertView showAlertWithTitle:@"Import Failure" andMessage:message];
-            }
-        }
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:kActionButtonNameEmail, kActionButtonNameP2P, kActionButtonNameDBUpload, kActionButtonNamePrint, kActionButtonNameSavePhotoLibrary, nil];
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [_popupQuery showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];
-    } else {
-        [_popupQuery showInView:self.view];
-    }
+    [self showActionSheetFromBarButtonItem:(UIBarButtonItem *)sender withButtonTitles:@[kActionButtonNameEmail, kActionButtonNameP2P, kActionButtonNameDBUpload, kActionButtonNamePrint, kActionButtonNameSavePhotoLibrary]];
 }
 
 - (void)nextImage {
@@ -179,7 +165,7 @@
         }
         
         NSString *newImagePath = [kAppDelegate.managerCurrentDir stringByAppendingPathComponent:newImageName];
-        [kAppDelegate setOpenFile:newImagePath];
+        self.openFile = newImagePath;
         _zoomingImageView.image = [UIImage imageWithContentsOfFile:newImagePath];
     }
 }
@@ -198,7 +184,7 @@
     _navBar.topItem.title = newImageName;
     
     NSString *newImagePath = [kAppDelegate.managerCurrentDir stringByAppendingPathComponent:newImageName];
-    [kAppDelegate setOpenFile:newImagePath];
+    self.openFile = newImagePath;
     _zoomingImageView.image = [UIImage imageWithContentsOfFile:newImagePath];
 }
 

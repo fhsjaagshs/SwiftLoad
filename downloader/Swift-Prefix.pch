@@ -84,6 +84,8 @@
     #import "DAVConnection.h"
     #import "BTManager.h"
 
+    #import "SwiftGenericViewController.h"
+
     #import "DocumentViewController.h"
     #import "AudioPlayerViewController.h"
     #import "PictureViewController.h"

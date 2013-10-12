@@ -32,8 +32,6 @@
 
 @property (nonatomic, strong) TextToggleControl *loopControl;
 
-@property (nonatomic, strong) UIActionSheet *popupQuery;
-
 @end
 
 @implementation AudioPlayerViewController
@@ -53,7 +51,7 @@
 
 - (void)loadView {
     [super loadView];
-    
+
     [self setupNotifs];
     
     CGRect screenBounds = [[UIScreen mainScreen]bounds];
@@ -61,7 +59,7 @@
     
     self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
     _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:[[kAppDelegate openFile]lastPathComponent]];
+    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:self.openFile.lastPathComponent];
     topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
     [_navBar pushNavigationItem:topItem animated:YES];
@@ -238,8 +236,6 @@
     [HamburgerView reloadCells];
     
     [self stopUpdatingTime];
-    
-    [ad setOpenFile:nil];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -296,37 +292,22 @@
     _secondsRemaining.text = [NSString stringWithFormat:@"-%d:%@%d",remainingMinutes,((remainingSeconds < 10)?@"0":@""),remainingSeconds];
 }
 
+- (void)actionSheet:(UIActionSheet *)actionSheet selectedIndex:(NSUInteger)buttonIndex {
+    NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
+    
+    if ([title isEqualToString:kActionButtonNameEmail]) {
+        [kAppDelegate sendFileInEmail:self.openFile];
+    } else if ([title isEqualToString:kActionButtonNameP2P]) {
+        [[BTManager shared]sendFileAtPath:self.openFile];
+    } else if ([title isEqualToString:kActionButtonNameDBUpload]) {
+        [[TaskController sharedController]addTask:[DropboxUpload uploadWithFile:self.openFile]];
+    } else if ([title isEqualToString:kActionButtonNameEditID3]) {
+        [self presentViewController:[EditID3ViewController viewControllerWhiteWithFilepath:self.openFile] animated:YES completion:nil];
+    }
+}
+
 - (void)showActionSheet:(id)sender {
-    
-    if (_popupQuery && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [_popupQuery dismissWithClickedButtonIndex:_popupQuery.cancelButtonIndex animated:YES];
-        self.popupQuery = nil;
-        return;
-    }
-        
-    NSString *file = [kAppDelegate openFile];
-    
-    __weak AudioPlayerViewController *weakself = self;
-    
-    self.popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",file.lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-        NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
-        
-        if ([title isEqualToString:kActionButtonNameEmail]) {
-            [kAppDelegate sendFileInEmail:file];
-        } else if ([title isEqualToString:kActionButtonNameP2P]) {
-            [[BTManager shared]sendFileAtPath:file];
-        } else if ([title isEqualToString:kActionButtonNameDBUpload]) {
-            [[TaskController sharedController]addTask:[DropboxUpload uploadWithFile:file]];
-        } else if ([title isEqualToString:kActionButtonNameEditID3]) {
-            [weakself presentViewController:[EditID3ViewController viewControllerWhite] animated:YES completion:nil];
-        }
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:kActionButtonNameEmail, kActionButtonNameP2P, kActionButtonNameDBUpload, kActionButtonNameEditID3, nil];
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [_popupQuery showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];
-    } else {
-        [_popupQuery showInView:self.view];
-    }
+    [self showActionSheetFromBarButtonItem:(UIBarButtonItem *)sender withButtonTitles:@[kActionButtonNameEmail, kActionButtonNameP2P, kActionButtonNameDBUpload, kActionButtonNameEditID3]];
 }
 
 - (void)sliderChanged {
@@ -363,7 +344,6 @@
         [ad.audioPlayer play];
         [_pausePlay setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
         [_pausePlay setImage:[UIImage imageNamed:@"pause_pressed"] forState:UIControlStateHighlighted];
-        [ad setNowPlayingFile:ad.openFile];
         [self startUpdatingTime];
     }
 }
@@ -435,6 +415,10 @@
     }
 }
 
+- (void)setOpenFileNotif:(NSNotification *)notif {
+    self.openFile = (NSString *)notif.object;
+}
+
 - (void)setupNotifs {
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setPausePlayTitlePlay) name:@"setPausePlayTitlePlay" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setPausePlayTitlePause) name:@"setPausePlayTitlePause" object:nil];
@@ -445,6 +429,11 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(startUpdatingTime) name:@"updTime1" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(stopUpdatingTime) name:@"updTime2" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setArtwork:) name:@"setArtwork:" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setOpenFileNotif:) name:@"setOpenFile:" object:nil];
+}
+
++ (void)notif_setOpenFile:(NSString *)openFile {
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"setOpenFile:" object:openFile];
 }
 
 + (void)notif_setPausePlayTitlePlay {
