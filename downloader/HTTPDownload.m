@@ -65,6 +65,7 @@
         NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:_url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30.0f];
         [theRequest setHTTPMethod:@"GET"];
         [theRequest setValue:[NSString stringWithFormat:@"bytes=%f-",_downloadedBytes] forHTTPHeaderField:@"Range"];
+        [theRequest setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
         
         if ([NSURLConnection canHandleRequest:theRequest]) {
             self.connection = [[NSURLConnection alloc]initWithRequest:theRequest delegate:self startImmediately:NO];
@@ -81,6 +82,7 @@
     
     NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:_url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30.0];
     [theRequest setHTTPMethod:@"GET"];
+    [theRequest setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
 
     if ([NSURLConnection canHandleRequest:theRequest]) {
         self.connection = [[NSURLConnection alloc]initWithRequest:theRequest delegate:self startImmediately:NO];

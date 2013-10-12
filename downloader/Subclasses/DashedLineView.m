@@ -25,6 +25,7 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     CGContextSaveGState(context);
+    CGContextSetShouldAntialias(context, NO);
     
     CGFloat dashes[] = {5,5};
     

@@ -49,7 +49,8 @@
 }
 
 - (id)initWithUnzFileStruct:(unzFile)unzFile fileNameInZip:(NSString *)fileNameInZip {
-	if (self = [super init]) {
+    self = [super init];
+	if (self) {
 		_unzFile = unzFile;
 		_filenameInZip = fileNameInZip;
 	}
@@ -57,7 +58,7 @@
 }
 
 - (int)readDataWithBuffer:(NSMutableData *)buffer {
-	int err = (int)unzReadCurrentFile(_unzFile, buffer.mutableBytes, (int)buffer.length);
+	int err = unzReadCurrentFile(_unzFile, buffer.mutableBytes, (unsigned)buffer.length);
 	if (err < 0) {
 		NSString *reason = [NSString stringWithFormat:@"Error in reading \"%@\" in the zipfile",_filenameInZip];
 		@throw [ZipException exceptionWithReason:reason andError:err];

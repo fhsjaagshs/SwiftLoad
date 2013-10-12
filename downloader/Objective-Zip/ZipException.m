@@ -49,7 +49,6 @@
 	if (self) {
 		_error = 0;
 	}
-	
 	return self;
 }
 

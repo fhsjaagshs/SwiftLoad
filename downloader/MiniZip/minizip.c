@@ -47,12 +47,6 @@
 
 #include "zip.h"
 
-#ifdef _WIN32
-        #define USEWIN32IOAPI
-        #include "iowin32.h"
-#endif
-
-
 
 #define WRITEBUFFERSIZE (16384)
 #define MAXFILENAME (256)

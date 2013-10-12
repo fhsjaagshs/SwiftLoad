@@ -48,7 +48,8 @@
 }
 
 - (id)initWithZipFileStruct:(zipFile)zipFile fileNameInZip:(NSString *)fileNameInZip {
-	if (self = [super init]) {
+    self = [super init];
+	if (self) {
 		_zipFile = zipFile;
 		_filenameInZip = fileNameInZip;
 	}
@@ -56,7 +57,7 @@
 }
 
 - (void)writeData:(NSData *)data {
-	int err = zipWriteInFileInZip(_zipFile, data.bytes, (int)data.length);
+	int err = zipWriteInFileInZip(_zipFile, data.bytes, (unsigned int)data.length);
 	if (err < 0) {
 		NSString *reason = [NSString stringWithFormat:@"Error writing \"%@\" in the zipfile",_filenameInZip];
 		@throw [ZipException exceptionWithReason:reason andError:err];
