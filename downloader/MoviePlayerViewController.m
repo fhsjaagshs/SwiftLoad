@@ -13,7 +13,6 @@
 @property (nonatomic, assign) BOOL shouldUnpauseAudioPlayer;
 @property (nonatomic, strong) NSURL *streamingUrl;
 
-@property (nonatomic, strong) UIActionSheet *popupQuery;
 @property (nonatomic, strong) MPMoviePlayerController *moviePlayer;
 @property (nonatomic, strong) UINavigationBar *bar;
 
@@ -43,7 +42,7 @@
     
     self.bar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
     _bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:_streamingUrl?@"Loading...":[[kAppDelegate openFile]lastPathComponent]];
+    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:_streamingUrl?@"Loading...":self.openFile.lastPathComponent];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
     
     if (!_streamingUrl) {
@@ -62,7 +61,7 @@
         self.shouldUnpauseAudioPlayer = YES;
     }
 
-    self.moviePlayer = [[MPMoviePlayerController alloc]initWithContentURL:(_streamingUrl.absoluteString.length > 0)?_streamingUrl:[NSURL fileURLWithPath:kAppDelegate.openFile]];
+    self.moviePlayer = [[MPMoviePlayerController alloc]initWithContentURL:(_streamingUrl.absoluteString.length > 0)?_streamingUrl:[NSURL fileURLWithPath:self.openFile]];
     _moviePlayer.scalingMode = MPMovieScalingModeAspectFit;
     _moviePlayer.repeatMode = MPMovieRepeatModeNone;
     [_moviePlayer.backgroundView removeFromSuperview];
@@ -95,35 +94,23 @@
             [ad.audioPlayer prepareToPlay];
             [ad.audioPlayer play];
         }
-        ad.openFile = nil;
     }];
 }
 
-- (void)showActionSheet:(id)sender {
+- (void)actionSheet:(UIActionSheet *)actionSheet selectedIndex:(NSUInteger)buttonIndex {
+    NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
     
-    if (_popupQuery && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [_popupQuery dismissWithClickedButtonIndex:_popupQuery.cancelButtonIndex animated:YES];
-        self.popupQuery = nil;
-        return;
+    if ([title isEqualToString:kActionButtonNameEmail]) {
+        [kAppDelegate sendFileInEmail:self.openFile];
+    } else if ([title isEqualToString:kActionButtonNameP2P]) {
+        [[BTManager shared]sendFileAtPath:self.openFile];
+    } else if ([title isEqualToString:kActionButtonNameDBUpload]) {
+        [[TaskController sharedController]addTask:[DropboxUpload uploadWithFile:self.openFile]];
     }
-    
-    self.popupQuery = [[UIActionSheet alloc]initWithTitle:nil completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-        NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
-        
-        if ([title isEqualToString:kActionButtonNameEmail]) {
-            [kAppDelegate sendFileInEmail:kAppDelegate.openFile];
-        } else if ([title isEqualToString:kActionButtonNameP2P]) {
-            [[BTManager shared]sendFileAtPath:kAppDelegate.openFile];
-        } else if ([title isEqualToString:kActionButtonNameDBUpload]) {
-            [[TaskController sharedController]addTask:[DropboxUpload uploadWithFile:kAppDelegate.openFile]];
-        }
-    } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:kActionButtonNameEmail, kActionButtonNameP2P, kActionButtonNameDBUpload, nil];
+}
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [_popupQuery showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];
-    } else {
-        [_popupQuery showInView:self.view];
-    }
+- (void)showActionSheet:(id)sender {
+    [self showActionSheetFromBarButtonItem:(UIBarButtonItem *)sender withButtonTitles:@[kActionButtonNameEmail, kActionButtonNameP2P, kActionButtonNameDBUpload]];
 }
 
 - (void)moviePlayerDidFinish:(NSNotification *)notification {

@@ -27,13 +27,10 @@
     
     if ([creds[@"username"]length] == 0) {
         return nil;
-    }
-    
-    if ([creds[@"username"]isEqualToString:username]) {
-        NSLog(@"username: %@",username);
+    } else if ([creds[@"username"]isEqualToString:username]) {
         return creds[@"password"];
     }
-    NSLog(@"WHOOPS");
+
 	return [NSString stringWithFormat:@"%d",arc4random()];
 }
 

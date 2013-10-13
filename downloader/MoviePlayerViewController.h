@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MoviePlayerViewController : UIViewController
+@interface MoviePlayerViewController : SwiftGenericViewController
 
 + (MoviePlayerViewController *)moviePlayerWithStreamingURL:(NSURL *)url;
 

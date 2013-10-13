@@ -10,7 +10,6 @@
 
 @interface DocumentViewController () <UIWebViewDelegate>
 
-@property (nonatomic, strong) UIActionSheet *popupQuery;
 @property (nonatomic, strong) UIWebView *webView;
 
 @end
@@ -34,58 +33,36 @@
     
     UINavigationBar *bar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
     bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:kAppDelegate.openFile.lastPathComponent];
+    UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:self.openFile.lastPathComponent];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
     topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
     [bar pushNavigationItem:topItem animated:NO];
     [self.view addSubview:bar];
 
-    NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:kAppDelegate.openFile] cachePolicy:NSURLCacheStorageAllowedInMemoryOnly timeoutInterval:30.0f];
+    NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:self.openFile] cachePolicy:NSURLCacheStorageAllowedInMemoryOnly timeoutInterval:30.0f];
     [_webView loadRequest:req];
 }
 
 - (void)close {
-    [self dismissViewControllerAnimated:YES completion:^{
-        [kAppDelegate setOpenFile:nil];
-    }];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet selectedIndex:(NSUInteger)buttonIndex {
+    NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
+    
+    if ([title isEqualToString:kActionButtonNameEmail]) {
+        [kAppDelegate sendFileInEmail:self.openFile];
+    } else if ([title isEqualToString:kActionButtonNameP2P]) {
+        [[BTManager shared]sendFileAtPath:self.openFile];
+    } else if ([title isEqualToString:kActionButtonNameDBUpload]) {
+        [[TaskController sharedController]addTask:[DropboxUpload uploadWithFile:self.openFile]];
+    } else if ([title isEqualToString:kActionButtonNamePrint]) {
+        [kAppDelegate printFile:self.openFile];
+    }
 }
 
 - (void)showActionSheet:(id)sender {
-    
-    BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
-    
-    if (_popupQuery && iPad) {
-        [_popupQuery dismissWithClickedButtonIndex:_popupQuery.cancelButtonIndex animated:YES];
-        self.popupQuery = nil;
-        return;
-    }
-    
-    self.popupQuery = [[UIActionSheet alloc]initWithTitle:nil completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-        NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
-        
-        if ([title isEqualToString:kActionButtonNameEmail]) {
-            [kAppDelegate sendFileInEmail:kAppDelegate.openFile];
-        } else if ([title isEqualToString:kActionButtonNameP2P]) {
-            [[BTManager shared]sendFileAtPath:kAppDelegate.openFile];
-        } else if ([title isEqualToString:kActionButtonNameDBUpload]) {
-            [[TaskController sharedController]addTask:[DropboxUpload uploadWithFile:kAppDelegate.openFile]];
-        } else if ([title isEqualToString:kActionButtonNamePrint]) {
-            [kAppDelegate printFile:kAppDelegate.openFile];
-        }
-    } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:kActionButtonNameEmail, kActionButtonNameP2P, kActionButtonNameDBUpload, nil];
-    
-    if (kAppDelegate.openFile.isDocumentFile || kAppDelegate.openFile.isImageFile) {
-        [_popupQuery addButtonWithTitle:kActionButtonNamePrint];
-    }
-    
-    [_popupQuery addButtonWithTitle:@"Cancel"];
-    _popupQuery.cancelButtonIndex = _popupQuery.numberOfButtons-1;
-    
-    if (iPad) {
-        [_popupQuery showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];
-    } else {
-        [_popupQuery showInView:self.view];
-    }
+    [self showActionSheetFromBarButtonItem:(UIBarButtonItem *)sender withButtonTitles:@[kActionButtonNameEmail, kActionButtonNameP2P, kActionButtonNameDBUpload]];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {

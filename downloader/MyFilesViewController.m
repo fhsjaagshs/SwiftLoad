@@ -32,6 +32,8 @@ static NSString *CellIdentifier = @"Cell";
 
 @property (nonatomic, strong) UIDocumentInteractionController *docController;
 
+@property (nonatomic, strong) NSString *openFile;
+
 @end
 
 @implementation MyFilesViewController
@@ -352,15 +354,10 @@ static NSString *CellIdentifier = @"Cell";
 
 - (void)accessoryButtonPressed:(id)sender {
     UIButton *button = (UIButton *)sender;
-    CGPoint correctedPoint = [button convertPoint:button.bounds.origin toView:_theTableView];
+    CGPoint correctedPoint = [button convertPoint:button.center toView:_theTableView];
     NSIndexPath *indexPath = [_theTableView indexPathForRowAtPoint:correctedPoint];
-    NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:_filelist[indexPath.row]];
-    
-    [kAppDelegate setOpenFile:file];
-
-    FileInfoViewController *info = [FileInfoViewController viewController];
-    info.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-    [self presentViewController:info animated:YES completion:nil];
+    NSString *file = [kAppDelegate.managerCurrentDir stringByAppendingPathComponent:_filelist[indexPath.row]];
+    [self presentViewController:[FileInfoViewController viewControllerWithFilepath:file] animated:YES completion:nil];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -412,15 +409,13 @@ static NSString *CellIdentifier = @"Cell";
         [_theTableView reloadDataWithCoolAnimationType:CoolRefreshAnimationStyleForward];
         [_theTableView flashScrollIndicators];
     } else if ([file.pathExtension.lowercaseString isEqualToString:@"zip"]) {
-        ad.openFile = file;
-        
         UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"What would you like to do with %@?",file.lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             
             NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
             
             if ([title isEqualToString:@"Compress Copied Items"]) {
                 if (_copiedList.count > 0) {
-                    CompressionTask *task = [CompressionTask taskWithItems:_copiedList andZipFile:ad.openFile];
+                    CompressionTask *task = [CompressionTask taskWithItems:_copiedList andZipFile:file];
                     [[TaskController sharedController]addTask:task];
                 }
                 
@@ -447,9 +442,6 @@ static NSString *CellIdentifier = @"Cell";
         actionSheet.cancelButtonIndex = actionSheet.numberOfButtons-1;
         [actionSheet showInView:self.view];
     } else {
-        
-        ad.openFile = file;
-        
         if (file.isAudioFile) {
             [self presentViewController:[AudioPlayerViewController viewControllerWithFilepath:file] animated:YES completion:nil];
         } else if (file.isImageFile) {
@@ -457,10 +449,13 @@ static NSString *CellIdentifier = @"Cell";
         } else if (file.isTextFile && !file.isHTMLFile) {
             [self presentViewController:[TextEditorViewController viewControllerWithFilepath:file] animated:YES completion:nil];
         } else if (file.isVideoFile) {
-            [self presentViewController:[MoviePlayerViewController viewController] animated:YES completion:nil];
+            [self presentViewController:[MoviePlayerViewController viewControllerWithFilepath:file] animated:YES completion:nil];
         } else if (file.isDocumentFile || file.isHTMLFile) {
-            [self presentViewController:[DocumentViewController viewController] animated:YES completion:nil];
+            [self presentViewController:[DocumentViewController viewControllerWithFilepath:file] animated:YES completion:nil];
         } else {
+            
+            self.openFile = file;
+            
             UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"Unable to open %@.",file.lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
                 [self actionSheetAction:actionSheet buttonIndex:buttonIndex];
             } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Open in Text Editor", @"Open in Movie Player", @"Open in Picture Viewer", @"Open in Audio Player", @"Open in Document Viewer", @"Open In...", nil];
@@ -576,21 +571,22 @@ static NSString *CellIdentifier = @"Cell";
 - (void)actionSheetAction:(UIActionSheet *)actionSheet buttonIndex:(NSUInteger)buttonIndex {
     
     if (buttonIndex == actionSheet.cancelButtonIndex) {
+        self.openFile = nil;
         return;
     }
     
     if (buttonIndex == 0) {
-        [self presentViewController:[TextEditorViewController viewController] animated:YES completion:nil];
+        [self presentViewController:[TextEditorViewController viewControllerWithFilepath:self.openFile] animated:YES completion:nil];
     } else if (buttonIndex == 1) {
-        [self presentViewController:[MoviePlayerViewController viewController] animated:YES completion:nil];
+        [self presentViewController:[MoviePlayerViewController viewControllerWithFilepath:self.openFile] animated:YES completion:nil];
     } else if (buttonIndex == 2) {
-        [self presentViewController:[PictureViewController viewController] animated:YES completion:nil];
+        [self presentViewController:[PictureViewController viewControllerWithFilepath:self.openFile] animated:YES completion:nil];
     } else if (buttonIndex == 3) {
-        [self presentViewController:[AudioPlayerViewController viewController] animated:YES completion:nil];
+        [self presentViewController:[AudioPlayerViewController viewControllerWithFilepath:self.openFile] animated:YES completion:nil];
     } else if (buttonIndex == 4) {
-        [self presentViewController:[DocumentViewController viewController] animated:YES completion:nil];
+        [self presentViewController:[DocumentViewController viewControllerWithFilepath:self.openFile] animated:YES completion:nil];
     } else if (buttonIndex == 5) {
-        self.docController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:kAppDelegate.openFile]];
+        self.docController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:self.openFile]];
 
         BOOL opened = NO;
         
@@ -601,9 +597,10 @@ static NSString *CellIdentifier = @"Cell";
         }
         
         if (!opened) {
-            [UIAlertView showAlertWithTitle:@"No External Viewers" andMessage:[NSString stringWithFormat:@"No installed applications are capable of opening %@.",kAppDelegate.openFile.lastPathComponent]];
+            [UIAlertView showAlertWithTitle:@"No External Viewers" andMessage:[NSString stringWithFormat:@"No installed applications are capable of opening %@.",self.openFile.lastPathComponent]];
         }
     }
+    self.openFile = nil;
     [_currentlySwipedCell hideWithAnimation:YES];
 }
 
@@ -658,19 +655,18 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)touchUpInsideAction:(UIButton *)button {
-
-    AppDelegate *ad = kAppDelegate;
-    
-    NSString *file = [ad.managerCurrentDir stringByAppendingPathComponent:_currentlySwipedCell.textLabel.text];
-    ad.openFile = file;
+    NSString *file = [kAppDelegate.managerCurrentDir stringByAppendingPathComponent:_currentlySwipedCell.textLabel.text];
     
     long number = button.tag-1;
     
     if (number == 0) {
-        NSString *message = [NSString stringWithFormat:@"What would you like to do with %@?",file.lastPathComponent];
         
-        UIActionSheet *popupQuery = [[UIActionSheet alloc]initWithTitle:message completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-            [self actionSheetAction:actionSheet buttonIndex:buttonIndex];
+        self.openFile = file;
+        
+        __weak MyFilesViewController *weakself = self;
+        
+        UIActionSheet *popupQuery = [[UIActionSheet alloc]initWithTitle:file.lastPathComponent completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+            [weakself actionSheetAction:actionSheet buttonIndex:buttonIndex];
         } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Open In Text Editor", @"Open In Movie Player", @"Open In Picture Viewer", @"Open In Audio Player", @"Open In Document Viewer", @"Open In...", nil];
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
@@ -688,7 +684,7 @@ static NSString *CellIdentifier = @"Cell";
         [[BTManager shared]sendFileAtPath:file];
         [_currentlySwipedCell hideWithAnimation:YES];
     } else if (number == 3) {
-        [ad sendFileInEmail:file];
+        [kAppDelegate sendFileInEmail:file];
         [_currentlySwipedCell hideWithAnimation:YES];
     } else if (number == 4) {
         

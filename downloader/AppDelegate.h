@@ -13,9 +13,6 @@
 #define kLibDir [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 #define kCachesDir [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 #define fileDate(file) [[[NSFileManager defaultManager]attributesOfItemAtPath:file error:nil]fileModificationDate]
-#define NSUserDefaultsOFK(key) [[NSUserDefaults standardUserDefaults]objectForKey:key]
-#define NSUserDefaultsOFKKill(key) [[NSUserDefaults standardUserDefaults]removeObjectForKey:key]
-#define KILL_TIMER(q) if (q) {[q invalidate]; q=nil;}
 
 extern NSString * const NSFileName;
 extern NSString * const kCopyListChangedNotification;
@@ -36,10 +33,9 @@ NSString * getNonConflictingFilePathForPath(NSString *path);
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (nonatomic, strong) UIWindow *window;
-@property (nonatomic, strong) MyFilesViewController *viewController;
 
 // Audio Player
-@property (nonatomic, strong) AVAudioPlayer *audioPlayer;
+@property (nonatomic, strong) PPAudioPlayer *audioPlayer;
 @property (nonatomic, strong) NSString *nowPlayingFile;
 - (void)playFile:(NSString *)file;
 - (void)skipToPreviousTrack;
@@ -47,7 +43,6 @@ NSString * getNonConflictingFilePathForPath(NSString *path);
 - (void)togglePlayPause;
 
 // File tracking
-@property (nonatomic, strong) NSString *openFile;
 @property (nonatomic, strong) NSString *managerCurrentDir;
 
 // Printing, emailing, downloading

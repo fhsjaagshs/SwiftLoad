@@ -427,8 +427,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
 	[DBSession setSharedSession:session];
     
     self.window = [[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]];
-    self.viewController = [MyFilesViewController viewController];
-    _window.rootViewController = _viewController;
+    _window.rootViewController = [MyFilesViewController viewController];
     _window.backgroundColor = [UIColor whiteColor];
     [_window makeKeyAndVisible];
     
@@ -476,23 +475,22 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
             [[NSFileManager defaultManager]moveItemAtPath:oldLocation toPath:newLocation error:nil];
         }
 
-        // Attemp to remove it on the off chance that it actually works
+        // Attempt to remove it on the off chance that it actually works
         [[NSFileManager defaultManager]removeItemAtPath:inboxDir error:nil];
         
         if (filesInIndexDir.count > 0) {
             NSString *file = [kDocsDir stringByAppendingPathComponent:filesInIndexDir[0]];
-            self.openFile = file;
 
             if (file.isAudioFile) {
-                [[UIViewController topViewController]presentViewController:[AudioPlayerViewController viewControllerWhite] animated:YES completion:nil];
+                [[UIViewController topViewController]presentViewController:[AudioPlayerViewController viewControllerWhiteWithFilepath:file] animated:YES completion:nil];
             } else if (file.isImageFile) {
-                [[UIViewController topViewController]presentViewController:[PictureViewController viewControllerWhite] animated:YES completion:nil];
+                [[UIViewController topViewController]presentViewController:[PictureViewController viewControllerWhiteWithFilepath:file] animated:YES completion:nil];
             } else if (file.isTextFile && !file.isHTMLFile) {
-                [[UIViewController topViewController]presentViewController:[TextEditorViewController viewControllerWhite] animated:YES completion:nil];
+                [[UIViewController topViewController]presentViewController:[TextEditorViewController viewControllerWhiteWithFilepath:file] animated:YES completion:nil];
             } else if (file.isVideoFile) {
-                [[UIViewController topViewController]presentViewController:[MoviePlayerViewController viewControllerWhite] animated:YES completion:nil];
+                [[UIViewController topViewController]presentViewController:[MoviePlayerViewController viewControllerWhiteWithFilepath:file] animated:YES completion:nil];
             } else if (file.isDocumentFile || file.isHTMLFile) {
-                [[UIViewController topViewController]presentViewController:[DocumentViewController viewControllerWhite] animated:YES completion:nil];
+                [[UIViewController topViewController]presentViewController:[DocumentViewController viewControllerWhiteWithFilepath:file] animated:YES completion:nil];
             }
         }
     } else {

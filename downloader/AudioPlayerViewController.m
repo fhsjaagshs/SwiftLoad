@@ -184,7 +184,7 @@
     
     [self.view sendSubviewToBack:_albumArtwork];
 
-    [kAppDelegate playFile:kAppDelegate.openFile];
+    [kAppDelegate playFile:self.openFile];
     
     [self refreshLoopState];
     [MarqueeLabel controllerLabelsShouldAnimate:self];

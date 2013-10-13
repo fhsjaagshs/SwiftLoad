@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DocumentViewController : UIViewController
+@interface DocumentViewController : SwiftGenericViewController
 
 @end

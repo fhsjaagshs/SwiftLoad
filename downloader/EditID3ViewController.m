@@ -27,13 +27,13 @@ static NSString * const kID3EditorCellID = @"kID3EditorCellID";
 - (void)loadView {
     [super loadView];
     
-    CGRect screenBounds = [[UIScreen mainScreen]applicationFrame];
+    CGRect screenBounds = [[UIScreen mainScreen]bounds];
     
     UITableView *theTableView = [[UITableView alloc]initWithFrame:screenBounds style:UITableViewStyleGrouped];
     theTableView.dataSource = self;
     theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    theTableView.rowHeight = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)?60:44;
+    theTableView.rowHeight = 44;
     theTableView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0);
     theTableView.scrollIndicatorInsets = theTableView.contentInset;
     [self.view addSubview:theTableView];
@@ -98,22 +98,9 @@ static NSString * const kID3EditorCellID = @"kID3EditorCellID";
     [_titleField addTarget:_titleField action:@selector(resignFirstResponder) forControlEvents:UIControlEventEditingDidEndOnExit];
     [_albumField addTarget:_albumField action:@selector(resignFirstResponder) forControlEvents:UIControlEventEditingDidEndOnExit];
     
-    [self loadTags];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    if (!_hasGuidedUserToEdit) {
-        [_artistField becomeFirstResponder];
-        self.hasGuidedUserToEdit = YES;
-    }
-}
-
-- (void)loadTags {
-    
     self.tag = [NSMutableDictionary dictionary];
     
-    NSDictionary *id3 = [ID3Editor loadTagFromFile:[kAppDelegate openFile]];
+    NSDictionary *id3 = [ID3Editor loadTagFromFile:self.openFile];
     
     for (NSString *key in id3.allKeys) {
         NSString *value = id3[key];
@@ -130,33 +117,38 @@ static NSString * const kID3EditorCellID = @"kID3EditorCellID";
     _albumField.text = _tag[@"album"];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    if (!_hasGuidedUserToEdit) {
+        [_artistField becomeFirstResponder];
+        self.hasGuidedUserToEdit = YES;
+    }
+}
+
 - (void)close {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)writeTags {
-    
-    NSString *file = [kAppDelegate openFile];
-    
     if (![_artistField.text isEqualToString:_tag[@"artist"]]) {
-        [ID3Editor setArtist:_artistField.text forMP3AtPath:file];
+        [ID3Editor setArtist:_artistField.text forMP3AtPath:self.openFile];
         _tag[@"artist"] = _artistField.text;
     }
     
     if (![_titleField.text isEqualToString:_tag[@"title"]]) {
-        [ID3Editor setTitle:_titleField.text forMP3AtPath:file];
+        [ID3Editor setTitle:_titleField.text forMP3AtPath:self.openFile];
         _tag[@"title"] = _titleField.text;
     }
     
     if (![_albumField.text isEqualToString:_tag[@"album"]]) {
-        [ID3Editor setAlbum:_albumField.text forMP3AtPath:file];
+        [ID3Editor setAlbum:_albumField.text forMP3AtPath:self.openFile];
         _tag[@"album"] = _albumField.text;
     }
-    
+
     for (NSString *key in _tag.allKeys) {
         NSString *value = _tag[key];
         
-        if ([value isEqualToString:@""]) {
+        if (value.length == 0) {
             value = @"-";
         }
         

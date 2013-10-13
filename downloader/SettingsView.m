@@ -9,7 +9,7 @@
 #import "SettingsView.h"
 
 static NSString * const kJavaScriptBookmarklet = @"JavaScript:window.open(document.URL.replace('http://','swift://'));";
-static NSString * const kSettingsTableViewCellID = @"settingsTableViewCellIdentifier";
+static NSString * const kSettingsTableViewCellID = @"settingsTableViewCellID";
 
 @interface SettingsView () <DBSessionDelegate, DBRestClientDelegate, UITableViewDataSource, UITableViewDelegate>
 
@@ -76,12 +76,10 @@ static NSString * const kSettingsTableViewCellID = @"settingsTableViewCellIdenti
         if ([[DBSession sharedSession]isLinked]) {
             [[DBSession sharedSession]unlinkUserId:[[DBSession sharedSession]userIds][0]];
             [_theTableView reloadData];
-            [DropboxBrowserViewController clearDatabase];
         } else {
-            [DropboxBrowserViewController clearDatabase];
             [[DBSession sharedSession]linkFromController:self];
         }
-
+        [DropboxBrowserViewController clearDatabase];
     } else if (indexPath.row == 1) {
         UIAlertView *cav = [[UIAlertView alloc]initWithTitle:@"Install Bookmarklet?" message:@"This bookmarklet allows you to download any file open in Safari. Clicking \"Sure!\" will overwrite your clipboard's content." completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
             
