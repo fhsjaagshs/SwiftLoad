@@ -10,6 +10,11 @@
 
 @implementation NSString (MIME)
 
+- (NSString *)UTI {
+    CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)self.pathExtension.lowercaseString, nil);
+    return (__bridge NSString *)UTI;
+}
+
 - (NSString *)MIMEType {
     CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)self.pathExtension.lowercaseString, nil);
     CFStringRef MIMEType = UTTypeCopyPreferredTagWithClass(UTI, kUTTagClassMIMEType);

@@ -230,7 +230,6 @@
     if (!ad.audioPlayer.isPlaying) {
         [ad.audioPlayer stop];
         [ad setAudioPlayer:nil];
-        [ad setNowPlayingFile:nil];
     }
     
     [HamburgerView reloadCells];

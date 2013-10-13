@@ -128,7 +128,7 @@ static NSString *CellIdentifier = @"Cell";
     } else if (index == 3) {
         [self presentViewController:[SettingsView viewControllerWhite] animated:YES completion:nil];
     } else if (index == 4) {
-        [self presentViewController:[AudioPlayerViewController viewControllerWhiteWithFilepath:kAppDelegate.nowPlayingFile] animated:YES completion:nil];
+        [self presentViewController:[AudioPlayerViewController viewControllerWhiteWithFilepath:kAppDelegate.audioPlayer.url.path] animated:YES completion:nil];
     }
 }
 
@@ -181,8 +181,10 @@ static NSString *CellIdentifier = @"Cell";
         
         if (_isCut) {
             [[NSFileManager defaultManager]moveItemAtPath:oldPath toPath:newPath error:nil];
-            if ([oldPath isEqualToString:[kAppDelegate nowPlayingFile]]) {
-                [kAppDelegate setNowPlayingFile:newPath];
+            if ([oldPath isEqualToString:kAppDelegate.nowPlayingFile]) {
+                NSTimeInterval time = kAppDelegate.audioPlayer.currentTime;
+                [kAppDelegate playFile:newPath];
+                kAppDelegate.audioPlayer.currentTime = time;
             }
         } else {
             [[NSFileManager defaultManager]copyItemAtPath:oldPath toPath:newPath error:nil];
@@ -354,7 +356,7 @@ static NSString *CellIdentifier = @"Cell";
 
 - (void)accessoryButtonPressed:(id)sender {
     UIButton *button = (UIButton *)sender;
-    CGPoint correctedPoint = [button convertPoint:button.center toView:_theTableView];
+    CGPoint correctedPoint = [button.superview convertPoint:button.center toView:_theTableView];
     NSIndexPath *indexPath = [_theTableView indexPathForRowAtPoint:correctedPoint];
     NSString *file = [kAppDelegate.managerCurrentDir stringByAppendingPathComponent:_filelist[indexPath.row]];
     [self presentViewController:[FileInfoViewController viewControllerWithFilepath:file] animated:YES completion:nil];

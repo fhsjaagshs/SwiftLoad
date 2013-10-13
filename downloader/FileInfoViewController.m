@@ -85,7 +85,9 @@ static NSString * const kFileInfoCellIdentifier = @"kFileInfoCellIdentifier";
                     [[NSFileManager defaultManager]moveItemAtPath:self.openFile toPath:newFilePath error:nil];
                     
                     if ([kAppDelegate.nowPlayingFile isEqualToString:self.openFile]) {
-                        [kAppDelegate setNowPlayingFile:newFilePath];
+                        NSTimeInterval time = kAppDelegate.audioPlayer.currentTime;
+                        [kAppDelegate playFile:newFilePath];
+                        kAppDelegate.audioPlayer.currentTime = time;
                     }
                     
                     self.openFile = newFilePath;

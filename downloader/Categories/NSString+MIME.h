@@ -10,6 +10,7 @@
 
 @interface NSString (MIME)
 
+- (NSString *)UTI;
 - (NSString *)MIMEType;
 
 - (BOOL)isVideoFile;

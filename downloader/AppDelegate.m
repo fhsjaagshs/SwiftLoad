@@ -139,28 +139,27 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     }
 }
 
-- (void)setNowPlayingFile:(NSString *)nowPlayingFile {
-    _nowPlayingFile = nowPlayingFile;
-    [AudioPlayerViewController notif_setOpenFile:nowPlayingFile];
+- (NSString *)nowPlayingFile {
+    return _audioPlayer.url.path;
 }
 
 - (NSArray *)audioFiles {
     NSArray *extensions = @[@"mp3", @"wav", @"m4a", @"aac"];
-    NSArray *dirContents = [[NSFileManager defaultManager]contentsOfDirectoryAtPath:_nowPlayingFile.stringByDeletingLastPathComponent error:nil];
+    NSArray *dirContents = [[NSFileManager defaultManager]contentsOfDirectoryAtPath:self.nowPlayingFile.stringByDeletingLastPathComponent error:nil];
     return [[dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension.lowercaseString IN %@",extensions]]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
 }
 
 - (void)playFile:(NSString *)file {
     NSError *playingError = nil;
     
-    if (![file isEqualToString:_nowPlayingFile]) {
-        self.audioPlayer = [[PPAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:file] error:&playingError];
+    if (![file isEqualToString:self.nowPlayingFile]) {
+        self.audioPlayer = [[PPAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:file] fileTypeHint:file.UTI error:&playingError];
         _audioPlayer.delegate = self;
     }
     
     [self loadMetadataForFile:file];
-    self.nowPlayingFile = file;
-    
+    [AudioPlayerViewController notif_setOpenFile:file];
+
     __weak AppDelegate *weakself = self;
     
     if (!playingError) {
@@ -190,24 +189,24 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     
     NSArray *audioFiles = [self audioFiles];
 
-    int nextIndex = (int)[audioFiles indexOfObject:_nowPlayingFile.lastPathComponent]-1;
+    int nextIndex = (int)[audioFiles indexOfObject:self.nowPlayingFile.lastPathComponent]-1;
     
     if (nextIndex < 0) {
         nextIndex = (int)audioFiles.count-1;
     }
     
-    NSString *newFile = [_nowPlayingFile.stringByDeletingLastPathComponent stringByAppendingPathComponent:audioFiles[nextIndex]];
+    NSString *newFile = [self.nowPlayingFile.stringByDeletingLastPathComponent stringByAppendingPathComponent:audioFiles[nextIndex]];
     
     NSError *playingError = nil;
 
-    self.audioPlayer = [[PPAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:newFile] error:&playingError];
+    self.audioPlayer = [[PPAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:newFile] fileTypeHint:newFile.UTI error:&playingError];
     _audioPlayer.delegate = self;
     [AudioPlayerViewController notif_setLoop];
     
     __weak AppDelegate *weakself = self;
     
     [self loadMetadataForFile:newFile];
-    self.nowPlayingFile = newFile;
+    [AudioPlayerViewController notif_setOpenFile:newFile];
     
     if (!playingError) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -231,22 +230,22 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     NSArray *audioFiles = [self audioFiles];
 
     int maxIndex = (int)audioFiles.count-1;
-    int nextIndex = (int)[audioFiles indexOfObject:_nowPlayingFile.lastPathComponent]+1;
+    int nextIndex = (int)[audioFiles indexOfObject:self.nowPlayingFile.lastPathComponent]+1;
     
     if (nextIndex > maxIndex) {
         nextIndex = 0;
     }
 
-    NSString *newFile = [_nowPlayingFile.stringByDeletingLastPathComponent stringByAppendingPathComponent:audioFiles[nextIndex]];
+    NSString *newFile = [self.nowPlayingFile.stringByDeletingLastPathComponent stringByAppendingPathComponent:audioFiles[nextIndex]];
     
     NSError *playingError = nil;
 
-    self.audioPlayer = [[PPAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:newFile] error:&playingError];
+    self.audioPlayer = [[PPAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:newFile] fileTypeHint:newFile.UTI error:&playingError];
     _audioPlayer.delegate = self;
     [AudioPlayerViewController notif_setLoop];
-    
-    self.nowPlayingFile = newFile;
+
     [self loadMetadataForFile:newFile];
+    [AudioPlayerViewController notif_setOpenFile:newFile];
     
     __weak AppDelegate *weakself = self;
 

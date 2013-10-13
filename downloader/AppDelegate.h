@@ -36,7 +36,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path);
 
 // Audio Player
 @property (nonatomic, strong) PPAudioPlayer *audioPlayer;
-@property (nonatomic, strong) NSString *nowPlayingFile;
+- (NSString *)nowPlayingFile;
 - (void)playFile:(NSString *)file;
 - (void)skipToPreviousTrack;
 - (void)skipToNextTrack;
