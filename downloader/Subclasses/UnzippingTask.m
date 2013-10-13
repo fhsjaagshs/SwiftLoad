@@ -54,62 +54,75 @@
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @autoreleasepool {
-            ZipFile *unzipFile = [[ZipFile alloc]initWithFileName:_file mode:ZipFileModeUnzip];
-            NSArray *infos = [unzipFile listFileInZipInfos];
             
-            float unachivedBytes = 0;
-            float filesize = 0;
-            
-            for (FileInZipInfo *info in infos) {
-                filesize = filesize+info.length;
-            }
-            
-            for (FileInZipInfo *info in infos) {
+            @try {
+                ZipFile *unzipFile = [[ZipFile alloc]initWithFileName:_file mode:ZipFileModeUnzip];
+                NSArray *infos = [unzipFile listFileInZipInfos];
                 
-                [unzipFile locateFileInZip:info.name];
-                NSString *dirOfZip = [_file stringByDeletingLastPathComponent];
-                NSString *writeLocation = [dirOfZip stringByAppendingPathComponent:info.name];
-                NSString *slash = [info.name substringFromIndex:[info.name length]-1];
+                float unachivedBytes = 0;
+                float filesize = 0;
                 
-                if ([slash isEqualToString:@"/"]) {
-                    [[NSFileManager defaultManager]createDirectoryAtPath:writeLocation withIntermediateDirectories:NO attributes:nil error:nil];
-                } else {
-                    if (![[NSFileManager defaultManager]fileExistsAtPath:writeLocation]) {
-                        writeLocation = getNonConflictingFilePathForPath(writeLocation);
-                    }
+                for (FileInZipInfo *info in infos) {
+                    filesize = filesize+info.length;
+                }
+                
+                for (FileInZipInfo *info in infos) {
                     
-                    [[NSFileManager defaultManager]createFileAtPath:writeLocation contents:nil attributes:nil];
+                    [unzipFile locateFileInZip:info.name];
+                    NSString *dirOfZip = [_file stringByDeletingLastPathComponent];
+                    NSString *writeLocation = [dirOfZip stringByAppendingPathComponent:info.name];
+                    NSString *slash = [info.name substringFromIndex:[info.name length]-1];
                     
-                    NSFileHandle *file = [NSFileHandle fileHandleForWritingAtPath:writeLocation];
-                    
-                    ZipReadStream *read = [unzipFile readCurrentFileInZip];
-                    
-                    NSMutableData *buffer = [NSMutableData data];
-                    do {
-                        [buffer setLength:1024*1024];
-                        
-                        int bytesRead = [read readDataWithBuffer:buffer];
-                        if (bytesRead == 0) {
-                            break;
-                        } else {
-                            [buffer setLength:bytesRead];
-                            [file writeData:buffer];
-                            
-                            unachivedBytes = unachivedBytes+bytesRead;
-                            
-                            dispatch_sync(dispatch_get_main_queue(), ^{
-                                @autoreleasepool {
-                                    [self.delegate setProgress:(unachivedBytes/filesize)];
-                                }
-                            });
+                    if ([slash isEqualToString:@"/"]) {
+                        [[NSFileManager defaultManager]createDirectoryAtPath:writeLocation withIntermediateDirectories:NO attributes:nil error:nil];
+                    } else {
+                        if (![[NSFileManager defaultManager]fileExistsAtPath:writeLocation]) {
+                            writeLocation = getNonConflictingFilePathForPath(writeLocation);
                         }
-                    } while (YES);
-                    
-                    [file closeFile];
-                    [read finishedReading];
+                        
+                        [[NSFileManager defaultManager]createFileAtPath:writeLocation contents:nil attributes:nil];
+                        
+                        NSFileHandle *file = [NSFileHandle fileHandleForWritingAtPath:writeLocation];
+                        
+                        ZipReadStream *read = [unzipFile readCurrentFileInZip];
+                        
+                        NSMutableData *buffer = [NSMutableData data];
+                        do {
+                            [buffer setLength:1024*1024];
+                            
+                            int bytesRead = [read readDataWithBuffer:buffer];
+                            if (bytesRead == 0) {
+                                break;
+                            } else {
+                                [buffer setLength:bytesRead];
+                                [file writeData:buffer];
+                                
+                                unachivedBytes = unachivedBytes+bytesRead;
+                                
+                                dispatch_sync(dispatch_get_main_queue(), ^{
+                                    @autoreleasepool {
+                                        [self.delegate setProgress:(unachivedBytes/filesize)];
+                                    }
+                                });
+                            }
+                        } while (YES);
+                        
+                        [file closeFile];
+                        [read finishedReading];
+                    }
+                }
+                [unzipFile close];
+            }
+            @catch (NSException *exception) {
+                if ([exception.name isEqualToString:kZipExceptionName]) {
+                    [UIAlertView showAlertWithTitle:@"Failed to unzip" andMessage:[exception.reason stringByReplacingOccurrencesOfString:kDocsDir withString:@""]];
+                } else {
+                    @throw exception;
                 }
             }
-            [unzipFile close];
+            @finally {
+                // statements
+            }
         }
         dispatch_sync(dispatch_get_main_queue(), ^{
             @autoreleasepool {

@@ -33,6 +33,7 @@
 
 #import "ZipException.h"
 
+NSString * const kZipExceptionName = @"ZipException";
 
 @implementation ZipException
 
@@ -45,7 +46,7 @@
 }
 
 - (id)initWithReason:(NSString *)reason {
-    self = [super initWithName:@"ZipException" reason:reason userInfo:nil];
+    self = [super initWithName:kZipExceptionName reason:reason userInfo:nil];
 	if (self) {
 		_error = 0;
 	}
@@ -53,7 +54,7 @@
 }
 
 - (id)initWithError:(int)error reason:(NSString *)reason {
-    self = [super initWithName:@"ZipException" reason:reason userInfo:nil];
+    self = [super initWithName:kZipExceptionName reason:reason userInfo:nil];
 	if (self) {
 		_error = error;
 	}

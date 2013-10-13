@@ -33,6 +33,7 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString * const kZipExceptionName;
 
 @interface ZipException : NSException
 
