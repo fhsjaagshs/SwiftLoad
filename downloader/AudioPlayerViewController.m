@@ -40,7 +40,7 @@
     [super viewDidAppear:animated];
     [MarqueeLabel controllerViewAppearing:self];
     
-    if ([kAppDelegate audioPlayer].isPlaying) {
+    if (kAppDelegate.audioPlayer.isPlaying) {
         [_pausePlay setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
         [_pausePlay setImage:[UIImage imageNamed:@"pause_selected"] forState:UIControlStateHighlighted];
     } else {
@@ -99,8 +99,8 @@
     [self.view addSubview:_albumLabel];
     
     self.secondsElapsed = [[UILabel alloc]initWithFrame:CGRectMake(0, 114+5+20, 44, 23)];
-    _secondsElapsed.font = [UIFont boldSystemFontOfSize:15];
-    _secondsElapsed.textColor = [UIColor blackColor];
+    _secondsElapsed.font = [UIFont systemFontOfSize:15];
+    _secondsElapsed.textColor = [UIColor darkGrayColor];
     _secondsElapsed.backgroundColor = [UIColor clearColor];
     _secondsElapsed.textAlignment = NSTextAlignmentRight;
     _secondsElapsed.text = @"0:00";
@@ -115,8 +115,8 @@
     [self.view addSubview:_time];
     
     self.secondsRemaining = [[UILabel alloc]initWithFrame:CGRectMake(screenBounds.size.width-44, 114+5+20, 44, 23)];
-    _secondsRemaining.font = [UIFont boldSystemFontOfSize:15];
-    _secondsRemaining.textColor = [UIColor blackColor];
+    _secondsRemaining.font = [UIFont systemFontOfSize:15];
+    _secondsRemaining.textColor = [UIColor darkGrayColor];
     _secondsRemaining.backgroundColor = [UIColor clearColor];
     _secondsRemaining.textAlignment = NSTextAlignmentLeft;
     _secondsRemaining.text = @"-0:00";
@@ -193,7 +193,7 @@
 - (void)loopControlPressed {
     self.isLooped = _loopControl.on;
     [[NSUserDefaults standardUserDefaults]setBool:_isLooped forKey:@"loop"];
-    [kAppDelegate audioPlayer].numberOfLoops = _isLooped?-1:0;
+    kAppDelegate.audioPlayer.numberOfLoops = _isLooped?-1:0;
 }
 
 - (void)setLoopState:(BOOL)on {
@@ -203,7 +203,7 @@
 
 - (void)refreshLoopState {
     self.isLooped = [[NSUserDefaults standardUserDefaults]boolForKey:@"loop"];
-    [kAppDelegate audioPlayer].numberOfLoops = _isLooped?-1:0;
+    kAppDelegate.audioPlayer.numberOfLoops = _isLooped?-1:0;
     [_loopControl setOn:_isLooped];
 }
 
