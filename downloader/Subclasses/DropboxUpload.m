@@ -67,7 +67,6 @@
                     }
                     
                     if ([file.filename isEqualToString:_localPath.lastPathComponent]) {
-                        [[NetworkActivityController sharedController]show];
                         rev = file.rev;
                         break;
                     }

@@ -607,11 +607,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F13AD3C517FBB1BE000FAEB4 /* MultipeerConnectivity.framework in Frameworks */,
-				F153EAA417E50EA100896BB0 /* StoreKit.framework in Frameworks */,
 				F150D6B2177F5B9400E4C094 /* libsqlite3.dylib in Frameworks */,
 				F1C0CEFC1661AEC6001B1B42 /* libz.1.2.5.dylib in Frameworks */,
 				F166BC1914E21973003E5A07 /* libxml2.dylib in Frameworks */,
+				F13AD3C517FBB1BE000FAEB4 /* MultipeerConnectivity.framework in Frameworks */,
+				F153EAA417E50EA100896BB0 /* StoreKit.framework in Frameworks */,
 				F1D3A573157A8F9E00A2D141 /* Security.framework in Frameworks */,
 				F1122A76142E4E8B00A04CC6 /* MediaPlayer.framework in Frameworks */,
 				F149A6781491686D0038F1FC /* AudioToolbox.framework in Frameworks */,
