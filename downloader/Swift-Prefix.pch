@@ -82,7 +82,7 @@
 
     #import "HTTPServer.h"
     #import "DAVConnection.h"
-    #import "BTManager.h"
+    #import "P2PManager.h"
 
     #import "SwiftGenericViewController.h"
 

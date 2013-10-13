@@ -38,14 +38,12 @@
     [super start];
     self.temporaryPath = getNonConflictingFilePathForPath([NSTemporaryDirectory() stringByAppendingPathComponent:self.name]);
     [DroppinBadassBlocks loadFile:_path intoPath:self.temporaryPath withCompletionBlock:^(DBMetadata *metadata, NSError *error) {
-        NSLog(@"It finished");
         if (error) {
             [self showFailure];
         } else {
             [self showSuccess];
         }
     } andProgressBlock:^(float progress) {
-        NSLog(@"It progressed %f",progress);
         if (self.delegate) {
             [self.delegate setProgress:progress];
         }

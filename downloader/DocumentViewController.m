@@ -53,7 +53,7 @@
     if ([title isEqualToString:kActionButtonNameEmail]) {
         [kAppDelegate sendFileInEmail:self.openFile];
     } else if ([title isEqualToString:kActionButtonNameP2P]) {
-        [[BTManager shared]sendFileAtPath:self.openFile];
+        [[P2PManager shared]sendFileAtPath:self.openFile];
     } else if ([title isEqualToString:kActionButtonNameDBUpload]) {
         [[TaskController sharedController]addTask:[DropboxUpload uploadWithFile:self.openFile]];
     } else if ([title isEqualToString:kActionButtonNamePrint]) {

@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@interface BTManager : NSObject
+@interface P2PManager : NSObject
 
-+ (BTManager *)shared;
++ (P2PManager *)shared;
 
 - (void)sendFileAtPath:(NSString *)path;
 - (void)prepareForBackground;

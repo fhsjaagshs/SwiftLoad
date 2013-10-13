@@ -405,7 +405,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     [FilesystemMonitor sharedMonitor];
     [BGProcFactory sharedFactory];
     [TaskController sharedController];
-    [BTManager shared];
+    [P2PManager shared];
     [NetworkActivityController sharedController];
     
     [Appirater setAppId:@"469762999"];
@@ -442,12 +442,12 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    [[BTManager shared]prepareForBackground];
+    [[P2PManager shared]prepareForBackground];
     [AudioPlayerViewController notif_setShouldUpdateTime:NO];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application  {
-    [[BTManager shared]prepareForForeground];
+    [[P2PManager shared]prepareForForeground];
     [Appirater appEnteredForeground:YES];
     if (_audioPlayer.isPlaying) {
         [AudioPlayerViewController notif_setShouldUpdateTime:YES];

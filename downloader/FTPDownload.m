@@ -38,13 +38,6 @@
     return self;
 }
 
-- (void)killReadStream {
-    [_readStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    _readStream.delegate = nil;
-    [_readStream close];
-    self.readStream = nil;
-}
-
 - (void)stop {
     [self killReadStream];
     [_handle closeFile];
@@ -95,6 +88,13 @@
         default: {
         } break;
     }
+}
+
+- (void)killReadStream {
+    [_readStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    _readStream.delegate = nil;
+    [_readStream close];
+    self.readStream = nil;
 }
 
 - (void)downloadFileUsingFTP:(NSURL *)url {

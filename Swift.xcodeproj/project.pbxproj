@@ -197,7 +197,7 @@
 		F1C4463017E3510C004725FC /* DBRestClient+SpecificCancellation.m in Sources */ = {isa = PBXBuildFile; fileRef = F1C4462F17E3510C004725FC /* DBRestClient+SpecificCancellation.m */; };
 		F1C7103617EE01D3008683E0 /* SwiftDisclosureCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F1C7103517EE01D3008683E0 /* SwiftDisclosureCell.m */; };
 		F1C7A6B716E8178F0082D4D3 /* ZoomingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F1C7A6B616E8178F0082D4D3 /* ZoomingImageView.m */; };
-		F1C9BB0117FA41BE004275D8 /* BTManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F1C9BB0017FA41BE004275D8 /* BTManager.m */; };
+		F1C9BB0117FA41BE004275D8 /* P2PManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F1C9BB0017FA41BE004275D8 /* P2PManager.m */; };
 		F1CBF07917BA7667003563FD /* EditID3ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CBF07717BA7667003563FD /* EditID3ViewController.m */; };
 		F1D083A817BF081F003E6700 /* scrubber.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D083A617BF081F003E6700 /* scrubber.png */; };
 		F1D083A917BF081F003E6700 /* scrubber@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D083A717BF081F003E6700 /* scrubber@2x.png */; };
@@ -564,8 +564,8 @@
 		F1C7103517EE01D3008683E0 /* SwiftDisclosureCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwiftDisclosureCell.m; sourceTree = "<group>"; };
 		F1C7A6B516E8178F0082D4D3 /* ZoomingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoomingImageView.h; sourceTree = "<group>"; };
 		F1C7A6B616E8178F0082D4D3 /* ZoomingImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoomingImageView.m; sourceTree = "<group>"; };
-		F1C9BAFF17FA41BE004275D8 /* BTManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTManager.h; sourceTree = "<group>"; };
-		F1C9BB0017FA41BE004275D8 /* BTManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BTManager.m; sourceTree = "<group>"; };
+		F1C9BAFF17FA41BE004275D8 /* P2PManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = P2PManager.h; sourceTree = "<group>"; };
+		F1C9BB0017FA41BE004275D8 /* P2PManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = P2PManager.m; sourceTree = "<group>"; };
 		F1CBF07617BA7667003563FD /* EditID3ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditID3ViewController.h; sourceTree = "<group>"; };
 		F1CBF07717BA7667003563FD /* EditID3ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditID3ViewController.m; sourceTree = "<group>"; };
 		F1D083A617BF081F003E6700 /* scrubber.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = scrubber.png; path = "Images/Audio Player/scrubber.png"; sourceTree = "<group>"; };
@@ -989,8 +989,8 @@
 				F1BC30C917715DF300DAFA0A /* Hack.m */,
 				F10CBC581707D6E700C82AFB /* DroppinBadassBlocks.h */,
 				F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */,
-				F1C9BAFF17FA41BE004275D8 /* BTManager.h */,
-				F1C9BB0017FA41BE004275D8 /* BTManager.m */,
+				F1C9BAFF17FA41BE004275D8 /* P2PManager.h */,
+				F1C9BB0017FA41BE004275D8 /* P2PManager.m */,
 				F1BA8C7C17728500007AAF85 /* BGProcFactory.h */,
 				F1BA8C7D17728500007AAF85 /* BGProcFactory.m */,
 				F19FD8AB17ACDB2400B60C3B /* NetworkActivityController.h */,
@@ -1568,7 +1568,7 @@
 				F1E397E917B9F896002BBD6F /* TagLibAmalgam.cpp in Sources */,
 				F1E397EC17B9F8A8002BBD6F /* ID3Editor.mm in Sources */,
 				F134EEE2180781A300626481 /* MPOAuthAuthenticationMethod.m in Sources */,
-				F1C9BB0117FA41BE004275D8 /* BTManager.m in Sources */,
+				F1C9BB0117FA41BE004275D8 /* P2PManager.m in Sources */,
 				F1CBF07917BA7667003563FD /* EditID3ViewController.m in Sources */,
 				F1C4463017E3510C004725FC /* DBRestClient+SpecificCancellation.m in Sources */,
 				F14FE92517E3FC07005A1AB6 /* TextToggleControl.m in Sources */,

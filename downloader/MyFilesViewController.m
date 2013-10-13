@@ -644,7 +644,7 @@ static NSString *CellIdentifier = @"Cell";
             [button addTarget:self action:@selector(touchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
             [button setImage:grayImage forState:UIControlStateNormal];
             
-            if ([imageName isEqualToString:@"bluetooth"] && [[BTManager shared]isTransferring]) {
+            if ([imageName isEqualToString:@"bluetooth"] && [[P2PManager shared]isTransferring]) {
                 button.enabled = NO;
             } else if (disableDelete && [imageName isEqualToString:@"delete"]) {
                 button.enabled = NO;
@@ -683,7 +683,7 @@ static NSString *CellIdentifier = @"Cell";
         [[TaskController sharedController]addTask:task];
         [_currentlySwipedCell hideWithAnimation:YES];
     } else if (number == 2) {
-        [[BTManager shared]sendFileAtPath:file];
+        [[P2PManager shared]sendFileAtPath:file];
         [_currentlySwipedCell hideWithAnimation:YES];
     } else if (number == 3) {
         [kAppDelegate sendFileInEmail:file];

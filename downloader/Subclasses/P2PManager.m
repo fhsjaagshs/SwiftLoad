@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Nathaniel Symer. All rights reserved.
 //
 
-#import "BTManager.h"
+#import "P2PManager.h"
 #import <MultipeerConnectivity/MultipeerConnectivity.h>
 #import <objc/runtime.h>
 
@@ -26,7 +26,7 @@ static NSString * const kServiceType = @"SwiftBluetooth";
 
 @end
 
-@interface BTManager () <MCSessionDelegate, MCBrowserViewControllerDelegate>
+@interface P2PManager () <MCSessionDelegate, MCBrowserViewControllerDelegate>
 
 @property (nonatomic, strong) MCSession *session;
 @property (nonatomic, strong) MCAdvertiserAssistant *advertiserAssistant;
@@ -35,13 +35,13 @@ static NSString * const kServiceType = @"SwiftBluetooth";
 
 @end
 
-@implementation BTManager
+@implementation P2PManager
 
-+ (BTManager *)shared {
-    static BTManager *shared = nil;
++ (P2PManager *)shared {
+    static P2PManager *shared = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        shared = [[BTManager alloc]init];
+        shared = [[P2PManager alloc]init];
     });
     return shared;
 }
@@ -68,7 +68,7 @@ static NSString * const kServiceType = @"SwiftBluetooth";
 }
 
 - (void)internal_sendFileAtPath:(NSString *)path {
-    __weak BTManager *weakself = self;
+    __weak P2PManager *weakself = self;
     
     self.isTransferring = YES;
     
