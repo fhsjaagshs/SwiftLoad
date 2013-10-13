@@ -125,16 +125,17 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];
 }
 
-- (void)keyboardWasShown:(NSNotification*)aNotification {
+- (void)keyboardWasShown:(NSNotification *)aNotification {
     BOOL isLandscape = UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication]statusBarOrientation]);
-    CGSize kbSize = [[aNotification userInfo][UIKeyboardFrameBeginUserInfoKey]CGRectValue].size;
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(_theTextView.contentInset.top, 0, isLandscape?kbSize.width:kbSize.height, 0);
+    CGSize kbSize = [aNotification.userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    CGFloat offset = isLandscape?kbSize.width:kbSize.height;
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(_theTextView.contentInset.top, 0, offset, 0);
     
     _theTextView.contentInset = contentInsets;
     _theTextView.scrollIndicatorInsets = contentInsets;
 }
 
-- (void)keyboardWillBeHidden:(NSNotification*)aNotification {
+- (void)keyboardWillBeHidden:(NSNotification *)aNotification {
     _theTextView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0);
     _theTextView.scrollIndicatorInsets = _theTextView.contentInset;
 }
