@@ -42,16 +42,13 @@ static NSString *CellIdentifier = @"Cell";
     [super loadView];
     
     CGRect screenBounds = [[UIScreen mainScreen]bounds];
-    
-    HamburgerButtonItem *hamburger = [HamburgerButtonItem itemWithView:self.view];
-    [hamburger setDelegate:self];
 
     self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 20+44)];
     _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"/"];
     _editButton = [[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(editTable)];
     topItem.rightBarButtonItem = _editButton;
-    topItem.leftBarButtonItem = hamburger;
+    topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"hamburger"] style:UIBarButtonItemStylePlain target:self action:@selector(toggleState)];
     [_navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:_navBar];
     
@@ -99,6 +96,15 @@ static NSString *CellIdentifier = @"Cell";
     }];
     
     [[FilesystemMonitor sharedMonitor]startMonitoringDirectory:kDocsDir];
+}
+
+- (void)toggleState {
+    if ([[HamburgerView shared]superview]) {
+        [[HamburgerView shared]hide];
+    } else {
+        [[HamburgerView shared]addToView:self.view];
+        [[HamburgerView shared]show];
+    }
 }
 
 - (void)hamburgerCellWasSelectedAtIndex:(int)index {

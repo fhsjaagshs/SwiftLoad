@@ -33,7 +33,7 @@
     #import "DBRestClient+SpecificCancellation.h"
     #import "NSString+MIME.h"
 
-    #import "Hamburger.h"
+    #import "HamburgerView.h"
 
     #import "FMDatabase.h"
     #import "SimpleKeychain.h"

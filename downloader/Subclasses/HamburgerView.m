@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Nathaniel Symer. All rights reserved.
 //
 
-#import "Hamburger.h"
+#import "HamburgerView.h"
 
 static NSString * const kHamburgerTableUpdateNotification = @"kHamburgerTableUpdateNotification";
 
@@ -21,81 +21,23 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 
 @property (nonatomic, weak) id<HamburgerViewDelegate> delegate;
 @property (nonatomic, strong) UITableView *theTableView;
-@property (nonatomic, weak) HamburgerButtonItem *item;
 
-@end
-
-@interface HamburgerButtonItem ()
-
-@property (nonatomic, strong) HamburgerView *hamburgerView;
 @property (nonatomic, strong) UIButton *hideButton;
 @property (nonatomic, weak) UIView *viewToMove;
 @property (nonatomic, assign) BOOL originalOpacity;
 
 @end
 
-@implementation HamburgerButtonItem
-
-+ (HamburgerButtonItem *)itemWithView:(UIView *)viewToMove {
-    HamburgerButtonItem *item = [[HamburgerButtonItem alloc]initWithImage:[UIImage imageNamed:@"hamburger"] style:UIBarButtonItemStylePlain target:nil action:nil];
-    [item setTarget:item];
-    item.action = @selector(toggleState);
-    item.hamburgerView = [HamburgerView view];
-    item.hamburgerView.item = item;
-    item.hamburgerView.alpha = 0.0f;
-    item.viewToMove = viewToMove;
-    item.hideButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    item.hideButton.frame = item.viewToMove.bounds;
-    [item.hideButton addTarget:item action:@selector(hide) forControlEvents:UIControlEventTouchDown];
-    return item;
-}
-
-- (void)setDelegate:(id<HamburgerViewDelegate>)delegate {
-    [_hamburgerView setDelegate:delegate];
-}
-
-- (void)hide {
-    [UIView animateWithDuration:0.3f animations:^{
-        _viewToMove.layer.shadowOpacity = 0.0f;
-        _hamburgerView.alpha = 0.0f;
-        _viewToMove.frame = CGRectMake(0, _viewToMove.frame.origin.y, _viewToMove.frame.size.width, _viewToMove.frame.size.height);
-        UIView *statusBar = [[UIApplication sharedApplication]valueForKey:@"statusBar"]; // [@[@"status", @"Bar"] componentsJoinedByString:@""]
-        statusBar.transform = CGAffineTransformIdentity;
-    } completion:^(BOOL finished) {
-        [_hamburgerView removeFromSuperview];
-        [_hideButton removeFromSuperview];
-    }];
-}
-
-- (void)show {
-    UIWindow *mainWindow = [kAppDelegate window];
-    [mainWindow insertSubview:_hamburgerView belowSubview:_viewToMove];
-    [_viewToMove addSubview:_hideButton];
-    [UIView animateWithDuration:0.3f animations:^{
-        _hamburgerView.alpha = 1.0f;
-        _viewToMove.frame = CGRectMake(250, _viewToMove.frame.origin.y, _viewToMove.frame.size.width, _viewToMove.frame.size.height);
-        UIView *statusBar = [[UIApplication sharedApplication]valueForKey:@"statusBar"];
-        statusBar.transform = CGAffineTransformMakeTranslation(250, 0);
-    } completion:^(BOOL finished) {
-        [_hamburgerView setNeedsDisplay];
-    }];
-}
-
-- (void)toggleState {
-    if (_hamburgerView.superview) {
-        [self hide];
-    } else {
-        [self show];
-    }
-}
-
-- (void)dealloc {
-    [self setViewToMove:nil];
-}
-
-@end
-
 @implementation HamburgerView
+
++ (HamburgerView *)shared {
+    static HamburgerView *shared;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        shared = [[HamburgerView alloc]init];
+    });
+    return shared;
+}
 
 + (void)reloadCells {
     [[NSNotificationCenter defaultCenter]postNotificationName:kHamburgerTableUpdateNotification object:nil];
@@ -105,11 +47,12 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
     return [[[self class]alloc]init];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         self.userInteractionEnabled = YES;
         self.backgroundColor = [UIColor clearColor];
+        self.alpha = 0.0f;
         self.frame = CGRectMake(0, 0, 250, [[UIScreen mainScreen]bounds].size.height);
         self.theTableView = [[UITableView alloc]initWithFrame:self.bounds style:UITableViewStylePlain];
         _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -118,13 +61,45 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
         _theTableView.rowHeight = 44;
         _theTableView.dataSource = self;
         _theTableView.delegate = self;
-        _theTableView.separatorInset = UIEdgeInsetsMake(0, 50, 0, 50);
-        _theTableView.tableFooterView = [UIView new];
+        _theTableView.separatorInset = UIEdgeInsetsMake(0, 50, 0, 0);
         [self addSubview:_theTableView];
+        
+        self.hideButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_hideButton addTarget:self action:@selector(hide) forControlEvents:UIControlEventTouchDown];
         
         [[NSNotificationCenter defaultCenter]addObserver:_theTableView selector:@selector(reloadData) name:kHamburgerTableUpdateNotification object:nil];
     }
     return self;
+}
+
+- (void)addToView:(UIView *)view {
+    self.viewToMove = view;
+    _hideButton.frame = _viewToMove.bounds;
+    [self setNeedsLayout];
+}
+
+- (void)hide {
+    [UIView animateWithDuration:0.3f animations:^{
+        self.alpha = 0.0f;
+        _viewToMove.frame = CGRectMake(0, _viewToMove.frame.origin.y, _viewToMove.frame.size.width, _viewToMove.frame.size.height);
+        [(UIView *)[[UIApplication sharedApplication]valueForKey:@"statusBar"] setTransform:CGAffineTransformIdentity];
+    } completion:^(BOOL finished) {
+        [self removeFromSuperview];
+        [_hideButton removeFromSuperview];
+        self.viewToMove = nil;
+    }];
+}
+
+- (void)show {
+    [[[UIApplication sharedApplication]appWindow] insertSubview:self belowSubview:_viewToMove];
+    [_viewToMove addSubview:_hideButton];
+    [UIView animateWithDuration:0.3f animations:^{
+        self.alpha = 1.0f;
+        _viewToMove.frame = CGRectMake(250, _viewToMove.frame.origin.y, _viewToMove.frame.size.width, _viewToMove.frame.size.height);
+        [(UIView *)[[UIApplication sharedApplication]valueForKey:@"statusBar"] setTransform:CGAffineTransformMakeTranslation(250, 0)];
+    } completion:^(BOOL finished) {
+        [self setNeedsDisplay];
+    }];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -207,17 +182,14 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 1) {
-        NSLog(@"%ld",(long)indexPath.row);
         Task *task = [[TaskController sharedController]taskAtIndex:(int)indexPath.row];
-        
-        NSLog(@"%@",task);
-        
+
         if ([task isKindOfClass:[HTTPDownload class]]) {
             [(HTTPDownload *)task resumeFromFailureIfNecessary];
         }
     } else if (indexPath.section == 0) {
         if (_delegate && [_delegate respondsToSelector:@selector(hamburgerCellWasSelectedAtIndex:)]) {
-            [_item hide];
+            [self hide];
             [_delegate hamburgerCellWasSelectedAtIndex:(int)indexPath.row];
         }
     }
@@ -277,6 +249,7 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 }
 
 - (void)dealloc {
+    [self setViewToMove:nil];
     [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
 

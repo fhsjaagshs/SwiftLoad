@@ -16,13 +16,12 @@ extern NSString * const kHamburgerNowPlayingUpdateNotification;
 @interface HamburgerView : UIView
 
 + (void)reloadCells;
++ (HamburgerView *)shared;
 
-@end
+- (void)addToView:(UIView *)view;
 
-@interface HamburgerButtonItem : UIBarButtonItem
-
-- (void)setDelegate:(id<HamburgerViewDelegate>)delegate;
-+ (HamburgerButtonItem *)itemWithView:(UIView *)viewToMove;
+- (void)show;
+- (void)hide;
 
 @end
 

@@ -87,7 +87,7 @@
 		F134EF171807904C00626481 /* hamburger@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F134EF151807904C00626481 /* hamburger@2x.png */; };
 		F134EF1A1807974F00626481 /* p2p.png in Resources */ = {isa = PBXBuildFile; fileRef = F134EF181807974F00626481 /* p2p.png */; };
 		F134EF1B1807974F00626481 /* p2p@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F134EF191807974F00626481 /* p2p@2x.png */; };
-		F137F3481791FC5A008FCFD7 /* Hamburger.m in Sources */ = {isa = PBXBuildFile; fileRef = F137F3471791FC5A008FCFD7 /* Hamburger.m */; };
+		F137F3481791FC5A008FCFD7 /* HamburgerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F137F3471791FC5A008FCFD7 /* HamburgerView.m */; };
 		F13979A516E78F4E00F8B61B /* ArrowLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A116E78F4E00F8B61B /* ArrowLeft.png */; };
 		F13979A616E78F4E00F8B61B /* ArrowLeft@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A216E78F4E00F8B61B /* ArrowLeft@2x.png */; };
 		F13979A716E78F4E00F8B61B /* ArrowRight.png in Resources */ = {isa = PBXBuildFile; fileRef = F13979A316E78F4E00F8B61B /* ArrowRight.png */; };
@@ -379,8 +379,8 @@
 		F134EF151807904C00626481 /* hamburger@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "hamburger@2x.png"; path = "Images/hamburger@2x.png"; sourceTree = "<group>"; };
 		F134EF181807974F00626481 /* p2p.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = p2p.png; path = Images/p2p.png; sourceTree = "<group>"; };
 		F134EF191807974F00626481 /* p2p@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "p2p@2x.png"; path = "Images/p2p@2x.png"; sourceTree = "<group>"; };
-		F137F3461791FC5A008FCFD7 /* Hamburger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hamburger.h; sourceTree = "<group>"; };
-		F137F3471791FC5A008FCFD7 /* Hamburger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Hamburger.m; sourceTree = "<group>"; };
+		F137F3461791FC5A008FCFD7 /* HamburgerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HamburgerView.h; sourceTree = "<group>"; };
+		F137F3471791FC5A008FCFD7 /* HamburgerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HamburgerView.m; sourceTree = "<group>"; };
 		F13979A116E78F4E00F8B61B /* ArrowLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ArrowLeft.png; path = Images/ArrowLeft.png; sourceTree = "<group>"; };
 		F13979A216E78F4E00F8B61B /* ArrowLeft@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ArrowLeft@2x.png"; path = "Images/ArrowLeft@2x.png"; sourceTree = "<group>"; };
 		F13979A316E78F4E00F8B61B /* ArrowRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ArrowRight.png; path = Images/ArrowRight.png; sourceTree = "<group>"; };
@@ -906,8 +906,8 @@
 		F137F3451791DC70008FCFD7 /* Hamburger */ = {
 			isa = PBXGroup;
 			children = (
-				F137F3461791FC5A008FCFD7 /* Hamburger.h */,
-				F137F3471791FC5A008FCFD7 /* Hamburger.m */,
+				F137F3461791FC5A008FCFD7 /* HamburgerView.h */,
+				F137F3471791FC5A008FCFD7 /* HamburgerView.m */,
 				F163C4E417AB508D007AB612 /* DashedLineView.h */,
 				F163C4E517AB508D007AB612 /* DashedLineView.m */,
 			);
@@ -1506,7 +1506,7 @@
 				F14B819D1788E2D300ADEF99 /* SimpleKeychain.m in Sources */,
 				F134EEEB180781A300626481 /* NSString+URLEscapingAdditions.m in Sources */,
 				F168EDAF1790C61000C21D6F /* UIImage+Additions.m in Sources */,
-				F137F3481791FC5A008FCFD7 /* Hamburger.m in Sources */,
+				F137F3481791FC5A008FCFD7 /* HamburgerView.m in Sources */,
 				F172BCC31794EC4500AC1483 /* DDData.m in Sources */,
 				F134EEDA180781A300626481 /* DBJsonBase.m in Sources */,
 				F172BCC41794EC4500AC1483 /* DDNumber.m in Sources */,
