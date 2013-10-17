@@ -163,7 +163,7 @@ static NSString *CellIdentifier = @"Cell";
     for (NSIndexPath *indexPath in _theTableView.indexPathsForSelectedRows) {
         NSString *filename = _filelist[indexPath.row];
         [_filelist removeObjectAtIndex:indexPath.row];
-        NSString *currentPath = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:filename];
+        NSString *currentPath = [kAppDelegate.managerCurrentDir stringByAppendingPathComponent:filename];
         [[NSFileManager defaultManager]removeItemAtPath:currentPath error:nil];
     }
 
@@ -175,9 +175,7 @@ static NSString *CellIdentifier = @"Cell";
         [_theTableView deselectRowAtIndexPath:indexPath animated:NO];
     }
     
-    [[FilesystemMonitor sharedMonitor]startMonitoringDirectory:[kAppDelegate managerCurrentDir]];
-    
-    [self updateCopyButtonState];
+    [[FilesystemMonitor sharedMonitor]startMonitoringDirectory:kAppDelegate.managerCurrentDir];
 }
 
 - (void)pasteInLocation:(NSString *)location {
@@ -198,8 +196,45 @@ static NSString *CellIdentifier = @"Cell";
     }
     
     [_copiedList removeAllObjects];
+}
+
+- (void)showCompressionController {
+    UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Enter Archive Name" message:@"Name the archive the selected files will be compressed into." completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
+        if (buttonIndex == 1) {
+            NSString *name = [alertView textFieldAtIndex:0].text;
+            
+            if (name.length == 0) {
+                name = @"filename.zip";
+            }
+            
+            NSString *path = getNonConflictingFilePathForPath([kAppDelegate.managerCurrentDir stringByAppendingPathComponent:name]);
+            
+            [[NSFileManager defaultManager]createFileAtPath:path contents:nil attributes:nil];
+            
+            NSMutableArray *filesToCompress = [NSMutableArray array];
+            
+            for (NSIndexPath *indexPath in _theTableView.indexPathsForSelectedRows) {
+                [_theTableView deselectRowAtIndexPath:indexPath animated:YES];
+                NSString *currentPath = [kAppDelegate.managerCurrentDir stringByAppendingPathComponent:_filelist[indexPath.row]];
+                [filesToCompress addObject:currentPath];
+            }
+
+            CompressionTask *task = [CompressionTask taskWithItems:filesToCompress rootDirectory:[filesToCompress[0] stringByDeletingLastPathComponent] andZipFile:path];
+            [[TaskController sharedController]addTask:task];
+        }
+    } cancelButtonTitle:@"Cancel" otherButtonTitles:@"Compress", nil];
+    av.alertViewStyle = UIAlertViewStylePlainTextInput;
     
-    [self updateCopyButtonState];
+    UITextField *tv = [av textFieldAtIndex:0];
+    tv.returnKeyType = UIReturnKeyDone;
+    tv.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    tv.autocorrectionType = UITextAutocorrectionTypeNo;
+    tv.placeholder = @"filename.zip";
+    tv.clearButtonMode = UITextFieldViewModeWhileEditing;
+    
+    [av show];
+    
+    [_copiedList removeAllObjects];
 }
 
 - (void)showCopyPasteController {
@@ -221,6 +256,8 @@ static NSString *CellIdentifier = @"Cell";
                 }
             } cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Delete" otherButtonTitles:nil];
             [deleteConfirmation showInView:self.view];
+        } else if ([title isEqualToString:@"Compress"]) {
+            [self showCompressionController];
         }
         
         [weakself updateCopyButtonState];
@@ -229,6 +266,7 @@ static NSString *CellIdentifier = @"Cell";
     if (_copiedList.count == 0) {
         [actionSheet addButtonWithTitle:@"Copy"];
         [actionSheet addButtonWithTitle:@"Cut"];
+        [actionSheet addButtonWithTitle:@"Compress"];
         [actionSheet addButtonWithTitle:@"Delete"];
     } else {
         [actionSheet addButtonWithTitle:@"Paste"];
@@ -423,7 +461,6 @@ static NSString *CellIdentifier = @"Cell";
             
             if ([title isEqualToString:@"Compress Copied Items"]) {
                 if (_copiedList.count > 0) {
-                    NSLog(@"Copied List: %@",_copiedList);
                     CompressionTask *task = [CompressionTask taskWithItems:[_copiedList mutableCopy] rootDirectory:[_copiedList[0] stringByDeletingLastPathComponent] andZipFile:file];
                     [[TaskController sharedController]addTask:task];
                 }
