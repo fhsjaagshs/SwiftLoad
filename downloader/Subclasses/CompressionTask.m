@@ -28,14 +28,6 @@
         self.itemsToCompress = items;
         self.rootDirectory = rootDir;
         self.zipFileLocation = zipFile;
-        
-        NSString *origDir = rootDir;
-        NSString *dash = [origDir substringFromIndex:origDir.length-1];
-        
-        if (![dash isEqualToString:@"/"]) {
-            origDir = [origDir stringByAppendingString:@"/"];
-        }
-        
         self.name = zipFile.lastPathComponent;
     }
     return self;
@@ -57,9 +49,11 @@
 - (void)compress {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @autoreleasepool {
+
+            
             
             for (NSString *theFile in _itemsToCompress) {
-                
+
                 ZipFile *zipFile = [[ZipFile alloc]initWithFileName:_zipFileLocation mode:(fileSize(_zipFileLocation) == 0)?ZipFileModeCreate:ZipFileModeAppend];
                 
                 if (!isDirectory(theFile)) {
@@ -151,13 +145,7 @@
                         for (NSString *dir in dirsInDir) {
                             
                             NSString *dirRelative = [[dir relativePathFromPath:_rootDirectory]stringByAppendingString:@"/"];
-                            
-                            /*NSString *dirRelative = [dir stringByReplacingOccurrencesOfString:[currentDir stringByAppendingString:@"/"]withString:@""]; // gets current directory in zip
-                            
-                            if (![[dirRelative substringFromIndex:dirRelative.length-1] isEqualToString:@"/"]) {
-                                dirRelative = [dirRelative stringByAppendingString:@"/"];
-                            }*/
-                            
+
                             ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:dirRelative fileDate:fileDate(dir) compressionLevel:ZipCompressionLevelBest];
                             [stream1 writeData:[NSData dataWithContentsOfFile:dir]]; // okay not to chunk
                             [stream1 finishedWriting];
@@ -202,15 +190,14 @@
                         
                     } while (YES);
                 }
-                
                 [zipFile close];
-                
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    @autoreleasepool {
-                        [self showSuccess];
-                    }
-                });
             }
+            
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                @autoreleasepool {
+                    [self showSuccess];
+                }
+            });
         }
     });
 }

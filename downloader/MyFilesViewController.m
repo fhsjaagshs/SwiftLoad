@@ -445,8 +445,16 @@ static NSString *CellIdentifier = @"Cell";
             [actionSheet addButtonWithTitle:@"Compress Copied Items"];
         }
         
-        [actionSheet addButtonWithTitle:@"Decompress"];
-        [actionSheet addButtonWithTitle:@"Cancel"];
+        if (fileSize(file) > 0) {
+            [actionSheet addButtonWithTitle:@"Decompress"];
+        }
+        
+        if (actionSheet.numberOfButtons > 0) {
+            [actionSheet addButtonWithTitle:@"Cancel"];
+        } else {
+            actionSheet.title = @"Nothing to do with this zip file.";
+            [actionSheet addButtonWithTitle:@"OK"];
+        }
         
         actionSheet.cancelButtonIndex = actionSheet.numberOfButtons-1;
         [actionSheet showInView:self.view];
