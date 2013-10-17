@@ -63,23 +63,19 @@
                 float filesize = 0;
                 
                 for (FileInZipInfo *info in infos) {
-                    filesize = filesize+info.length;
+                    filesize += info.length;
                 }
                 
                 for (FileInZipInfo *info in infos) {
                     
                     [unzipFile locateFileInZip:info.name];
                     NSString *dirOfZip = [_file stringByDeletingLastPathComponent];
-                    NSString *writeLocation = [dirOfZip stringByAppendingPathComponent:info.name];
+                    NSString *writeLocation = getNonConflictingFilePathForPath([dirOfZip stringByAppendingPathComponent:info.name]);
                     NSString *slash = [info.name substringFromIndex:[info.name length]-1];
                     
                     if ([slash isEqualToString:@"/"]) {
                         [[NSFileManager defaultManager]createDirectoryAtPath:writeLocation withIntermediateDirectories:NO attributes:nil error:nil];
                     } else {
-                        if (![[NSFileManager defaultManager]fileExistsAtPath:writeLocation]) {
-                            writeLocation = getNonConflictingFilePathForPath(writeLocation);
-                        }
-                        
                         [[NSFileManager defaultManager]createFileAtPath:writeLocation contents:nil attributes:nil];
                         
                         NSFileHandle *file = [NSFileHandle fileHandleForWritingAtPath:writeLocation];

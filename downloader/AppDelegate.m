@@ -45,18 +45,18 @@ void fireFinishDLNotification(NSString *filename) {
 }
 
 NSString * getNonConflictingFilePathForPath(NSString *path) {
-    NSString *oldPath = path;
+    NSString *basePath = [path stringByDeletingPathExtension];
     NSString *ext = [path pathExtension];
     int appendNumber = 1;
     
     while ([[NSFileManager defaultManager]fileExistsAtPath:path]) {
-        path = [[oldPath stringByDeletingPathExtension]stringByAppendingString:[NSString stringWithFormat:@" - %d",appendNumber]];
+        path = [basePath stringByAppendingString:[NSString stringWithFormat:@" - %d",appendNumber]];
         
         if (ext.length > 0) {
             path = [path stringByAppendingPathExtension:ext];
         }
         
-        appendNumber = appendNumber+1;
+        appendNumber += 1;
     }
     
     return path;

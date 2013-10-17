@@ -12,20 +12,30 @@
 
 @property (nonatomic, strong) NSArray *itemsToCompress;
 @property (nonatomic, strong) NSString *zipFileLocation;
+@property (nonatomic, strong) NSString *rootDirectory;
 
 @end
 
 @implementation CompressionTask
 
-+ (CompressionTask *)taskWithItems:(NSArray *)items andZipFile:(NSString *)zipFile {
-    return [[[self class]alloc]initWithItems:items andZipFile:zipFile];
++ (CompressionTask *)taskWithItems:(NSArray *)items rootDirectory:(NSString *)rootDir andZipFile:(NSString *)zipFile {
+    return [[[self class]alloc]initWithItems:items rootDirectory:rootDir andZipFile:zipFile];
 }
 
-- (id)initWithItems:(NSArray *)items andZipFile:(NSString *)zipFile {
+- (instancetype)initWithItems:(NSArray *)items rootDirectory:(NSString *)rootDir andZipFile:(NSString *)zipFile {
     self = [super init];
     if (self) {
         self.itemsToCompress = items;
+        self.rootDirectory = rootDir;
         self.zipFileLocation = zipFile;
+        
+        NSString *origDir = rootDir;
+        NSString *dash = [origDir substringFromIndex:origDir.length-1];
+        
+        if (![dash isEqualToString:@"/"]) {
+            origDir = [origDir stringByAppendingString:@"/"];
+        }
+        
         self.name = zipFile.lastPathComponent;
     }
     return self;
@@ -47,21 +57,18 @@
 - (void)compress {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @autoreleasepool {
+            
             for (NSString *theFile in _itemsToCompress) {
-                NSString *currentDir = [kAppDelegate managerCurrentDir];
                 
-                BOOL isDirMe;
-                [[NSFileManager defaultManager]fileExistsAtPath:theFile isDirectory:&isDirMe];
-
                 ZipFile *zipFile = [[ZipFile alloc]initWithFileName:_zipFileLocation mode:(fileSize(_zipFileLocation) == 0)?ZipFileModeCreate:ZipFileModeAppend];
                 
-                if (!isDirMe) {
-                    ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:[theFile lastPathComponent] fileDate:fileDate(theFile) compressionLevel:ZipCompressionLevelBest];
+                if (!isDirectory(theFile)) {
+                    ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:theFile.lastPathComponent fileDate:fileDate(theFile) compressionLevel:ZipCompressionLevelBest];
                     
                     NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:theFile];
                     
                     do {
-                        int fsZ = fileSize(theFile);
+                        int fsZ = (int)fileSize(theFile);
                         int readLength = 1024*1024;
                         if (fsZ < readLength) {
                             readLength = fsZ;
@@ -79,7 +86,7 @@
                     [stream1 finishedWriting];
                 } else {
                     
-                    NSString *origDir = [theFile lastPathComponent];
+                    NSString *origDir = theFile.lastPathComponent;
                     NSString *dash = [origDir substringFromIndex:origDir.length-1];
                     
                     if (![dash isEqualToString:@"/"]) {
@@ -103,27 +110,23 @@
                     
                     [stream1 finishedWriting];
                     
-                    
                     NSArray *array = [[NSFileManager defaultManager]contentsOfDirectoryAtPath:theFile error:nil]; // a directory being added to a zip
                     
-                    NSMutableArray *dirsInDir = [[NSMutableArray alloc]init];
+                    NSMutableArray *dirsInDir = [NSMutableArray array];
                     
                     for (NSString *filename in array) {
                         NSString *thing = [theFile stringByAppendingPathComponent:filename];
                         
-                        BOOL shouldBeADir;
-                        BOOL shouldBeADirOne = [[NSFileManager defaultManager]fileExistsAtPath:thing isDirectory:&shouldBeADir];
-                        
-                        if (shouldBeADir && shouldBeADirOne) {
+                        if (isDirectory(thing)) {
                             [dirsInDir addObject:thing];
-                        } else if (shouldBeADirOne) {
-                            NSString *finalFN = [[theFile lastPathComponent]stringByAppendingPathComponent:filename];
-                            ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:finalFN fileDate:[NSDate dateWithTimeIntervalSinceNow:-86400.0] compressionLevel:ZipCompressionLevelBest];
+                        } else {
+                            NSString *finalFN = [theFile.lastPathComponent stringByAppendingPathComponent:filename];
+                            ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:finalFN fileDate:[NSDate dateWithTimeIntervalSinceNow:-86400.0f] compressionLevel:ZipCompressionLevelBest];
                             
                             NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:thing];
                             
                             do {
-                                int fsZ = fileSize(thing);
+                                int fsZ = (int)fileSize(thing);
                                 int readLength = 1024*1024;
                                 if (fsZ < readLength) {
                                     readLength = fsZ;
@@ -147,13 +150,13 @@
                     do {
                         for (NSString *dir in dirsInDir) {
                             
-                            NSString *dirRelative = [dir stringByReplacingOccurrencesOfString:[currentDir stringByAppendingString:@"/"]withString:@""]; // gets current directory in zip
+                            NSString *dirRelative = [[dir relativePathFromPath:_rootDirectory]stringByAppendingString:@"/"];
                             
-                            NSString *asdfasdf = [dirRelative substringFromIndex:dirRelative.length-1];
+                            /*NSString *dirRelative = [dir stringByReplacingOccurrencesOfString:[currentDir stringByAppendingString:@"/"]withString:@""]; // gets current directory in zip
                             
-                            if (![asdfasdf isEqualToString:@"/"]) {
+                            if (![[dirRelative substringFromIndex:dirRelative.length-1] isEqualToString:@"/"]) {
                                 dirRelative = [dirRelative stringByAppendingString:@"/"];
-                            }
+                            }*/
                             
                             ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:dirRelative fileDate:fileDate(dir) compressionLevel:ZipCompressionLevelBest];
                             [stream1 writeData:[NSData dataWithContentsOfFile:dir]]; // okay not to chunk
@@ -164,17 +167,12 @@
                             for (NSString *stringy in arrayZ) {
                                 
                                 NSString *lolz = [dir stringByAppendingPathComponent:stringy]; // stringy used to be dir
-                                
-                                BOOL dirIsMe;
-                                [[NSFileManager defaultManager]fileExistsAtPath:lolz isDirectory:&dirIsMe];
-                                
-                                if (dirIsMe) {
+
+                                if (isDirectory(lolz)) {
                                     [holdingArray addObject:lolz];
                                 } else {
                                     NSString *nameOfFile = [dirRelative stringByAppendingPathComponent:stringy];
                                     ZipWriteStream *stream1 = [zipFile writeFileInZipWithName:nameOfFile fileDate:fileDate(lolz) compressionLevel:ZipCompressionLevelBest];
-                                    
-                                    [[[NSFileManager defaultManager]attributesOfFileSystemForPath:lolz error:nil]fileCreationDate];
                                     
                                     NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:lolz];
                                     

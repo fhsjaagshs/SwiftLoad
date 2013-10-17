@@ -10,6 +10,8 @@
 
 @interface NSString (mods)
 
+- (NSString *)relativePathFromPath:(NSString *)fromPath;
+
 + (NSString *)fileSizePrettify:(float)fileSize;
 
 - (NSString *)strip;

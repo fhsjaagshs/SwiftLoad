@@ -423,7 +423,8 @@ static NSString *CellIdentifier = @"Cell";
             
             if ([title isEqualToString:@"Compress Copied Items"]) {
                 if (_copiedList.count > 0) {
-                    CompressionTask *task = [CompressionTask taskWithItems:_copiedList andZipFile:file];
+                    NSLog(@"Copied List: %@",_copiedList);
+                    CompressionTask *task = [CompressionTask taskWithItems:[_copiedList mutableCopy] rootDirectory:[_copiedList[0] stringByDeletingLastPathComponent] andZipFile:file];
                     [[TaskController sharedController]addTask:task];
                 }
                 

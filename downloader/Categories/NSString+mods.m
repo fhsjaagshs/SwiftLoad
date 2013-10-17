@@ -10,6 +10,18 @@
 
 @implementation NSString (mods)
 
+- (NSString *)relativePathFromPath:(NSString *)fromPath {
+    NSMutableArray *fpathcomps = [[fromPath componentsSeparatedByString:@"/"]mutableCopy];
+    NSMutableArray *selfcomps = [[self componentsSeparatedByString:@"/"]mutableCopy];
+    
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"length != 0"];
+    [fpathcomps filterUsingPredicate:pred];
+    [selfcomps filterUsingPredicate:pred];
+    
+    [selfcomps removeObjectsInArray:fpathcomps];
+    return [NSString stringWithFormat:@"/%@",[selfcomps componentsJoinedByString:@"/"]];
+}
+
 + (NSString *)fileSizePrettify:(float)fileSize {
     if (fileSize < 1024) {
         return [NSString stringWithFormat:@"%.0f Byte%@",fileSize,(fileSize > 1)?@"s":@""];
