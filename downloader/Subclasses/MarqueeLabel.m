@@ -291,21 +291,6 @@ typedef void (^animationCompletionBlock)(void);
         expectedLabelSize = [self.subLabel.attributedText boundingRectWithSize:maximumLabelSize
                                                                        options:0
                                                                        context:nil].size;
-    } else {
-        // Calculate on base string
-        
-        CGSize expectedLabelSize = CGSizeZero;
-        
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
-        expectedLabelSize = [(NSString *)self.subLabel.text boundingRectWithSize:maximumLabelSize
-                                                                         options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingTruncatesLastVisibleLine
-                                                                      attributes:@{NSFontAttributeName:self.font}
-                                                                         context:nil].size;
-#else
-        expectedLabelSize = [(NSString *)self.subLabel.text sizeWithFont:self.font
-                                                       constrainedToSize:maximumLabelSize
-                                                           lineBreakMode:NSLineBreakByClipping];
-#endif
     }
     
     expectedLabelSize.height = self.bounds.size.height;

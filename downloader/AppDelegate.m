@@ -417,7 +417,6 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
 
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryPlayback error:nil];
     [[UIApplication sharedApplication]beginReceivingRemoteControlEvents];
-    [self becomeFirstResponder];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleRouteChange:) name:AVAudioSessionRouteChangeNotification object:[AVAudioSession sharedInstance]];
     
@@ -430,8 +429,10 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
     _window.backgroundColor = [UIColor whiteColor];
     [_window makeKeyAndVisible];
     
-    [[UINavigationBar appearance]setBarTintColor:[UIColor whiteColor]];
-    [[UIToolbar appearance]setBarTintColor:[UIColor whiteColor]];
+    UIColor *tintColor = [UIColor colorWithWhite:1.0f alpha:0.9f];
+    
+    [[UINavigationBar appearance]setBarTintColor:tintColor];
+    [[UIToolbar appearance]setBarTintColor:tintColor];
 
     return YES;
 }

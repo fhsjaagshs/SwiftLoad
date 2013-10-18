@@ -40,11 +40,11 @@ UIColor * RGB(float red, float green, float blue) {
     
     CGImageRef newCGImage = CGBitmapContextCreateImage(context);
     UIImage *newImage = [UIImage imageWithCGImage:newCGImage scale:self.scale orientation:self.imageOrientation];
-    
     CGContextRestoreGState(context);
     UIGraphicsPopContext();
     
     CGColorSpaceRelease(colorSpace);
+    CFRelease(newCGImage);
     
     return newImage;
 }

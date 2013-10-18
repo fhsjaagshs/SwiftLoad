@@ -12,14 +12,20 @@
 
 - (NSString *)UTI {
     CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)self.pathExtension.lowercaseString, nil);
-    return (__bridge NSString *)UTI;
+    NSString *ret = (__bridge NSString *)UTI;
+    CFRelease(UTI);
+    return ret;
 }
 
 - (NSString *)MIMEType {
     CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)self.pathExtension.lowercaseString, nil);
     CFStringRef MIMEType = UTTypeCopyPreferredTagWithClass(UTI, kUTTagClassMIMEType);
     CFRelease(UTI);
-    return (__bridge NSString *)MIMEType;
+    
+    NSString *ret = (__bridge NSString *)MIMEType;
+    CFRelease(MIMEType);
+    
+    return ret;
 }
 
 - (BOOL)isVideoFile {

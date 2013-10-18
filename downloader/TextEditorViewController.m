@@ -53,6 +53,7 @@
     
     [self registerForKeyboardNotifications];
     [self loadText];
+    _theTextView.contentOffset = CGPointMake(0, -64);
 }
 
 - (void)saveText {
