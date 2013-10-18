@@ -32,6 +32,7 @@
 - (void)cancelBackgroundTask;
 
 - (NSString *)verb;
+- (BOOL)canSelect;
 
 @end
 

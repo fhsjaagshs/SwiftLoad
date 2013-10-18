@@ -97,6 +97,7 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
                             } completion:^(BOOL finished) {
                                 self.alpha = 0.0f;
                                 [self removeFromSuperview];
+                                [self setNeedsDisplay];
                                 [[UIApplication sharedApplication]appWindow].userInteractionEnabled = YES;
                             }];
                         }
@@ -120,7 +121,6 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 }
 
 - (void)showFromView:(UIView *)view {
-    
     self.viewToMove = view;
     _hideButton.frame = _viewToMove.bounds;
     [self setNeedsLayout];
@@ -187,6 +187,7 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
         task.delegate = cell;
         [cell setText:[task.name percentSanitize]];
         [cell setDetailText:[task verb]];
+        [cell setSelectionStyle:[[[TaskController sharedController]taskAtIndex:(int)indexPath.row]canSelect]?UITableViewCellSelectionStyleGray:UITableViewCellSelectionStyleNone];
         
         return cell;
     }
@@ -225,6 +226,13 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
     }
 
     [_theTableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([[TaskController sharedController]numberOfTasks] > 0) {
+        return [[[TaskController sharedController]taskAtIndex:(int)indexPath.row]canSelect]?indexPath:nil;
+    }
+    return indexPath;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {

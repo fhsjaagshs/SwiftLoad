@@ -30,6 +30,10 @@ float const kClearOutDelayTask = 0.6f;
     return YES;
 }
 
+- (BOOL)canSelect {
+    return NO;
+}
+
 - (void)handleBackgroundTaskExpiration {
     [self stop];
 }
@@ -77,6 +81,11 @@ float const kClearOutDelayTask = 0.6f;
     self.succeeded = NO;
     [self startBackgroundTask];
     [HamburgerView reloadCells];
+    
+    if (![[NSUserDefaults standardUserDefaults]boolForKey:@"taskShouldntFlash"]) {
+        [[HamburgerView shared]flashFromView:UIViewController.topViewController.view];
+        [[NSUserDefaults standardUserDefaults]setBool:YES forKey:@"taskShouldntFlash"];
+    }
 }
 
 - (void)showFailure {

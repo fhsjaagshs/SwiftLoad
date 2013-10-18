@@ -42,6 +42,10 @@
     [super stop];
 }
 
+- (BOOL)canSelect {
+    return self.complete;
+}
+
 - (NSString *)verb {
     if (self.complete && !self.succeeded) {
         return @"Tap to retry";
