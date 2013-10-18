@@ -104,8 +104,7 @@ static NSString *CellIdentifier = @"Cell";
     if ([[HamburgerView shared]superview]) {
         [[HamburgerView shared]hide];
     } else {
-        [[HamburgerView shared]addToView:self.view];
-        [[HamburgerView shared]show];
+        [[HamburgerView shared]showFromView:self.view];
     }
 }
 

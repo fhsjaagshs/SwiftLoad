@@ -71,10 +71,40 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
     return self;
 }
 
-- (void)addToView:(UIView *)view {
-    self.viewToMove = view;
-    _hideButton.frame = _viewToMove.bounds;
-    [self setNeedsLayout];
+- (BOOL)hamburgerViewVisible {
+    return self.superview != nil;
+}
+
+- (void)flashFromView:(UIView *)view {
+    if (!self.hamburgerViewVisible) {
+        [[[UIApplication sharedApplication]appWindow] insertSubview:self belowSubview:view];
+        [[UIApplication sharedApplication]appWindow].userInteractionEnabled = NO;
+        self.alpha = 1.0f;
+        [self setNeedsDisplay];
+        [UIView animateWithDuration:0.3f animations:^{
+            view.frame = CGRectMake(150, view.frame.origin.y, view.frame.size.width, view.frame.size.height);
+            [(UIView *)[[UIApplication sharedApplication]valueForKey:@"statusBar"] setTransform:CGAffineTransformMakeTranslation(150, 0)];
+        } completion:^(BOOL finished) {
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                @autoreleasepool {
+                    [NSThread sleepForTimeInterval:0.3f];
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        @autoreleasepool {
+                            [UIView animateWithDuration:0.3f animations:^{
+                                view.frame = CGRectMake(0, view.frame.origin.y, view.frame.size.width, view.frame.size.height);
+                                [(UIView *)[[UIApplication sharedApplication]valueForKey:@"statusBar"] setTransform:CGAffineTransformIdentity];
+                            } completion:^(BOOL finished) {
+                                self.alpha = 0.0f;
+                                [self removeFromSuperview];
+                                [[UIApplication sharedApplication]appWindow].userInteractionEnabled = YES;
+                            }];
+                        }
+                    });
+                }
+            });
+        }];
+    }
 }
 
 - (void)hide {
@@ -89,7 +119,12 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
     }];
 }
 
-- (void)show {
+- (void)showFromView:(UIView *)view {
+    
+    self.viewToMove = view;
+    _hideButton.frame = _viewToMove.bounds;
+    [self setNeedsLayout];
+    
     [[[UIApplication sharedApplication]appWindow] insertSubview:self belowSubview:_viewToMove];
     [_viewToMove addSubview:_hideButton];
     [UIView animateWithDuration:0.3f animations:^{
@@ -232,8 +267,10 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
         CGContextSetStrokeColorWithColor(context, [UIColor darkGrayColor].CGColor);
         CGContextSetLineWidth(context, 0.5);
         
-        CGContextMoveToPoint(context, self.bounds.size.width, self.bounds.size.height);
-        CGContextAddLineToPoint(context, self.bounds.size.width, 0);
+        float width = (_viewToMove == nil)?150:self.bounds.size.width;
+        
+        CGContextMoveToPoint(context, width, self.bounds.size.height);
+        CGContextAddLineToPoint(context, width, 0);
         
         CGContextStrokePath(context);
         

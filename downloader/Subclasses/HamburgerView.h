@@ -18,10 +18,11 @@ extern NSString * const kHamburgerNowPlayingUpdateNotification;
 + (void)reloadCells;
 + (HamburgerView *)shared;
 
-- (void)addToView:(UIView *)view;
-
-- (void)show;
+- (void)showFromView:(UIView *)view;
 - (void)hide;
+- (void)flashFromView:(UIView *)view;
+
+- (BOOL)hamburgerViewVisible;
 
 @property (nonatomic, weak) id<HamburgerViewDelegate> delegate;
 
