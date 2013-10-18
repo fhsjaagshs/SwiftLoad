@@ -19,7 +19,6 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 
 + (HamburgerView *)view;
 
-@property (nonatomic, weak) id<HamburgerViewDelegate> delegate;
 @property (nonatomic, strong) UITableView *theTableView;
 
 @property (nonatomic, strong) UIButton *hideButton;
@@ -173,10 +172,6 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
         return dashedLineView;
     }
     return nil;
-}
-
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    return indexPath;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

@@ -90,6 +90,8 @@ static NSString *CellIdentifier = @"Cell";
     
     __weak MyFilesViewController *weakself = self;
     
+    [[HamburgerView shared]setDelegate:self];
+    
     [[FilesystemMonitor sharedMonitor]setChangedHandler:^{
         [weakself.filelist removeAllObjects];
         [weakself.theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];

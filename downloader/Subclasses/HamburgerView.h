@@ -23,6 +23,8 @@ extern NSString * const kHamburgerNowPlayingUpdateNotification;
 - (void)show;
 - (void)hide;
 
+@property (nonatomic, weak) id<HamburgerViewDelegate> delegate;
+
 @end
 
 @protocol HamburgerViewDelegate <NSObject>
