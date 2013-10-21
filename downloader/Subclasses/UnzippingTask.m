@@ -70,7 +70,7 @@
                     
                     [unzipFile locateFileInZip:info.name];
                     NSString *dirOfZip = [_file stringByDeletingLastPathComponent];
-                    NSString *writeLocation = getNonConflictingFilePathForPath([dirOfZip stringByAppendingPathComponent:info.name]);
+                    NSString *writeLocation = deconflictPath([dirOfZip stringByAppendingPathComponent:info.name]);
                     NSString *slash = [info.name substringFromIndex:[info.name length]-1];
                     
                     if ([slash isEqualToString:@"/"]) {

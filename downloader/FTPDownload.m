@@ -98,7 +98,6 @@
 }
 
 - (void)downloadFileUsingFTP:(NSURL *)url {
-    
     self.name = url.absoluteString.lastPathComponent;
     
     CFReadStreamRef readStreamTemp = CFReadStreamCreateWithFTPURL(kCFAllocatorDefault, (__bridge CFURLRef)url);

@@ -135,7 +135,7 @@ static NSString * const kServiceType = @"SwiftBluetooth";
     
     if (task) {
         if (!error) {
-            NSString *movedToPath = getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:resourceName]);
+            NSString *movedToPath = deconflictPath([kDocsDir stringByAppendingPathComponent:resourceName]);
             [[NSFileManager defaultManager]moveItemAtPath:localURL.path toPath:movedToPath error:nil];
         }
         

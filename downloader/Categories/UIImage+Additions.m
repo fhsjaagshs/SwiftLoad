@@ -18,7 +18,7 @@ UIColor * RGB(float red, float green, float blue) {
     return RGBA(red, green, blue, 1.0f);
 }
 
-- (UIImage *)imageByRoundingCornersWithRadius:(float)radius {
+/*- (UIImage *)imageByRoundingCornersWithRadius:(float)radius {
     if (radius == 0.0f) {
         return self;
     }
@@ -47,7 +47,7 @@ UIColor * RGB(float red, float green, float blue) {
     CFRelease(newCGImage);
     
     return newImage;
-}
+}*/
 
 - (UIImage *)imageFilledWith:(UIColor *)color {
     CGImageRef cgimage = self.CGImage;

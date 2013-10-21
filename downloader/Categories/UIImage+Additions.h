@@ -14,7 +14,7 @@ UIColor * RGB(float red, float green, float blue);
 @interface UIImage (Additions)
 
 - (UIImage *)imageFilledWith:(UIColor *)color;
-- (UIImage *)imageByRoundingCornersWithRadius:(float)radius;
+//- (UIImage *)imageByRoundingCornersWithRadius:(float)radius;
 
 @end
 
