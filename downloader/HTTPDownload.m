@@ -105,7 +105,7 @@
     }
     
     if (!_isResuming) {
-        self.temporaryPath = getNonConflictingFilePathForPath([NSTemporaryDirectory() stringByAppendingPathComponent:[self.name percentSanitize]]);
+        self.temporaryPath = deconflictPath([NSTemporaryDirectory() stringByAppendingPathComponent:[self.name percentSanitize]]);
         [[NSFileManager defaultManager]createFileAtPath:self.temporaryPath contents:nil attributes:nil];
     }
     

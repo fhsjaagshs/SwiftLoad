@@ -36,7 +36,7 @@
 
 - (void)start {
     [super start];
-    self.temporaryPath = getNonConflictingFilePathForPath([NSTemporaryDirectory() stringByAppendingPathComponent:self.name]);
+    self.temporaryPath = deconflictPath([NSTemporaryDirectory() stringByAppendingPathComponent:self.name]);
     [DroppinBadassBlocks loadFile:_path intoPath:self.temporaryPath withCompletionBlock:^(DBMetadata *metadata, NSError *error) {
         if (error) {
             [self showFailure];

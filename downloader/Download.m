@@ -40,7 +40,7 @@
 - (void)showSuccess {
     [[NetworkActivityController sharedController]hideIfPossible];
 
-    NSString *targetPath = getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:[self.name percentSanitize]]);
+    NSString *targetPath = deconflictPath([kDocsDir stringByAppendingPathComponent:[self.name percentSanitize]]);
     [[NSFileManager defaultManager]moveItemAtPath:_temporaryPath toPath:targetPath error:nil];
     
     fireFinishDLNotification(self.name);
