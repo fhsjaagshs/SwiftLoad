@@ -44,7 +44,7 @@ void fireFinishDLNotification(NSString *filename) {
     [[UIApplication sharedApplication]presentLocalNotificationNow:notification];
 }
 
-NSString * getNonConflictingFilePathForPath(NSString *path) {
+NSString * deconflictPath(NSString *path) {
     NSString *basePath = [path stringByDeletingPathExtension];
     NSString *ext = [path pathExtension];
     int appendNumber = 1;
@@ -470,7 +470,7 @@ NSString * getNonConflictingFilePathForPath(NSString *path) {
         NSArray *filesInIndexDir = [[NSFileManager defaultManager]contentsOfDirectoryAtPath:inboxDir error:nil];
         
         for (NSString *filename in filesInIndexDir) {
-            NSString *newLocation = getNonConflictingFilePathForPath([kDocsDir stringByAppendingPathComponent:filename]);
+            NSString *newLocation = deconflictPath([kDocsDir stringByAppendingPathComponent:filename]);
             NSString *oldLocation = [inboxDir stringByAppendingPathComponent:filename];
             [[NSFileManager defaultManager]moveItemAtPath:oldLocation toPath:newLocation error:nil];
         }

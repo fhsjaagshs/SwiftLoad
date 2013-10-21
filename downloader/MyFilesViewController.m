@@ -160,14 +160,14 @@ static NSString *CellIdentifier = @"Cell";
 
 - (void)deleteSelectedFiles {
     [[FilesystemMonitor sharedMonitor]invalidate];
-
+    
     for (NSIndexPath *indexPath in _theTableView.indexPathsForSelectedRows) {
         NSString *filename = _filelist[indexPath.row];
         [_filelist removeObjectAtIndex:indexPath.row];
         NSString *currentPath = [kAppDelegate.managerCurrentDir stringByAppendingPathComponent:filename];
         [[NSFileManager defaultManager]removeItemAtPath:currentPath error:nil];
     }
-
+    
     [_theTableView beginUpdates];
     [_theTableView deleteRowsAtIndexPaths:_theTableView.indexPathsForSelectedRows withRowAnimation:UITableViewRowAnimationRight];
     [_theTableView endUpdates];
@@ -182,7 +182,7 @@ static NSString *CellIdentifier = @"Cell";
 - (void)pasteInLocation:(NSString *)location {
     
     for (NSString *oldPath in _copiedList) {
-        NSString *newPath = getNonConflictingFilePathForPath([location stringByAppendingPathComponent:oldPath.lastPathComponent]);
+        NSString *newPath = deconflictPath([location stringByAppendingPathComponent:oldPath.lastPathComponent]);
         
         if (_isCut) {
             [[NSFileManager defaultManager]moveItemAtPath:oldPath toPath:newPath error:nil];
@@ -200,6 +200,7 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)showCompressionController {
+    __weak MyFilesViewController *weakself = self;
     UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Enter Archive Name" message:@"Name the archive the selected files will be compressed into." completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
         if (buttonIndex == 1) {
             NSString *name = [alertView textFieldAtIndex:0].text;
@@ -208,15 +209,15 @@ static NSString *CellIdentifier = @"Cell";
                 name = @"filename.zip";
             }
             
-            NSString *path = getNonConflictingFilePathForPath([kAppDelegate.managerCurrentDir stringByAppendingPathComponent:name]);
+            NSString *path = deconflictPath([kAppDelegate.managerCurrentDir stringByAppendingPathComponent:name]);
             
             [[NSFileManager defaultManager]createFileAtPath:path contents:nil attributes:nil];
             
             NSMutableArray *filesToCompress = [NSMutableArray array];
             
-            for (NSIndexPath *indexPath in _theTableView.indexPathsForSelectedRows) {
-                [_theTableView deselectRowAtIndexPath:indexPath animated:YES];
-                NSString *currentPath = [kAppDelegate.managerCurrentDir stringByAppendingPathComponent:_filelist[indexPath.row]];
+            for (NSIndexPath *indexPath in weakself.theTableView.indexPathsForSelectedRows) {
+                [weakself.theTableView deselectRowAtIndexPath:indexPath animated:YES];
+                NSString *currentPath = [kAppDelegate.managerCurrentDir stringByAppendingPathComponent:weakself.filelist[indexPath.row]];
                 [filesToCompress addObject:currentPath];
             }
 
@@ -249,14 +250,19 @@ static NSString *CellIdentifier = @"Cell";
         } else if ([title isEqualToString:@"Cut"]) {
             [weakself copyFilesWithIsCut:YES];
         } else if ([title isEqualToString:@"Paste"]) {
-            [weakself pasteInLocation:[kAppDelegate managerCurrentDir]];
+            [weakself pasteInLocation:kAppDelegate.managerCurrentDir];
         } else if ([title isEqualToString:@"Delete"]) {
-            UIActionSheet *deleteConfirmation = [[UIActionSheet alloc]initWithTitle:@"Are you sure you want to delete multiple items?" completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
+            UIActionSheet *deleteConfirmation = [[UIActionSheet alloc]initWithTitle:@"Are you sure you want to delete the selected files?" completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
                 if (buttonIndex == 0) {
                     [weakself deleteSelectedFiles];
                 }
             } cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Delete" otherButtonTitles:nil];
-            [deleteConfirmation showInView:self.view];
+            
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+                [deleteConfirmation showFromRect:[[[UIApplication sharedApplication]appWindow] convertRect:weakself.theCopyAndPasteButton.frame fromView:weakself.theCopyAndPasteButton.superview] inView:[[UIApplication sharedApplication]appWindow] animated:YES];
+            } else {
+                [deleteConfirmation showInView:self.view];
+            }
         } else if ([title isEqualToString:@"Compress"]) {
             [self showCompressionController];
         }
@@ -286,7 +292,6 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)updateCopyButtonState {
-    
     if (!_theTableView.editing) {
         _theCopyAndPasteButton.hidden = YES;
         return;
@@ -339,7 +344,7 @@ static NSString *CellIdentifier = @"Cell";
 
 - (void)showFileCreationDialogue {
     UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Create File or Directory" message:@"" completionBlock:^(NSUInteger buttonIndex, UIAlertView *alertView) {
-        NSString *thingToBeCreated = getNonConflictingFilePathForPath([[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:[alertView textFieldAtIndex:0].text]);
+        NSString *thingToBeCreated = deconflictPath([kAppDelegate.managerCurrentDir stringByAppendingPathComponent:[alertView textFieldAtIndex:0].text]);
         
         if (buttonIndex == 1) {
             [[NSFileManager defaultManager]createFileAtPath:thingToBeCreated contents:nil attributes:nil];
@@ -365,16 +370,15 @@ static NSString *CellIdentifier = @"Cell";
     _navBar.topItem.title = [_navBar.topItem.title stringByDeletingLastPathComponent];
     [kAppDelegate setManagerCurrentDir:[kDocsDir stringByAppendingPathComponent:_navBar.topItem.title]];
     
-    [[FilesystemMonitor sharedMonitor]startMonitoringDirectory:[kAppDelegate managerCurrentDir]];
+    [[FilesystemMonitor sharedMonitor]startMonitoringDirectory:kAppDelegate.managerCurrentDir];
 }
 
 - (BOOL)shouldTripWatchdog:(ContentOffsetWatchdog *)watchdog {
-    
     if (_theTableView.editing) {
         return YES;
     }
     
-    return (![[kAppDelegate managerCurrentDir]isEqualToString:kDocsDir] && _watchdogCanGo);
+    return (![kAppDelegate.managerCurrentDir isEqualToString:kDocsDir] && _watchdogCanGo);
 }
 
 - (void)watchdogWasTripped:(ContentOffsetWatchdog *)watchdog {
@@ -408,7 +412,6 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
     [self reindexFilelistIfNecessary];
     
     SwipeCell *cell = (SwipeCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -420,15 +423,15 @@ static NSString *CellIdentifier = @"Cell";
     
     cell.delegate = self;
     
-    NSString *filesObjectAtIndex = _filelist[indexPath.row];
-    NSString *file = [[kAppDelegate managerCurrentDir]stringByAppendingPathComponent:filesObjectAtIndex];
+    NSString *filename = _filelist[indexPath.row];
+    NSString *file = [kAppDelegate.managerCurrentDir stringByAppendingPathComponent:filename];
     
-    cell.textLabel.text = filesObjectAtIndex;
+    cell.textLabel.text = filename;
 
     if (isDirectory(file)) {
-        cell.detailTextLabel.text = @"Directory";
         cell.imageView.image = [UIImage imageNamed:@"folder_icon"];
         cell.swipeEnabled = NO;
+        cell.detailTextLabel.text = @"Directory";
         cell.backgroundView = nil;
     } else {
         cell.imageView.image = [UIImage imageNamed:@"file_icon"];
@@ -444,6 +447,8 @@ static NSString *CellIdentifier = @"Cell";
     AppDelegate *ad = kAppDelegate;
     
     NSString *file = [ad.managerCurrentDir stringByAppendingPathComponent:_filelist[indexPath.row]];
+    
+    __weak MyFilesViewController *weakself = self;
 
     if (isDirectory(file)) {
         _navBar.topItem.title = [_navBar.topItem.title stringByAppendingPathComponent:file.lastPathComponent];
@@ -461,14 +466,12 @@ static NSString *CellIdentifier = @"Cell";
             NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
             
             if ([title isEqualToString:@"Compress Copied Items"]) {
-                if (_copiedList.count > 0) {
-                    CompressionTask *task = [CompressionTask taskWithItems:[_copiedList mutableCopy] rootDirectory:[_copiedList[0] stringByDeletingLastPathComponent] andZipFile:file];
+                if (weakself.copiedList.count > 0) {
+                    CompressionTask *task = [CompressionTask taskWithItems:weakself.copiedList.mutableCopy rootDirectory:[weakself.copiedList[0] stringByDeletingLastPathComponent] andZipFile:file];
                     [[TaskController sharedController]addTask:task];
                 }
                 
                 [_copiedList removeAllObjects];
-                [self updateCopyButtonState];
-                
             } else if ([title isEqualToString:@"Decompress"]) {
                 if (fileSize(file) > 0) {
                     UnzippingTask *task = [UnzippingTask taskWithFile:file];
@@ -476,7 +479,7 @@ static NSString *CellIdentifier = @"Cell";
                 }
             }
             
-            [self updateCopyButtonState];
+            [weakself updateCopyButtonState];
         } cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil];
         
         if (_copiedList.count > 0) {
@@ -512,7 +515,7 @@ static NSString *CellIdentifier = @"Cell";
             self.openFile = file;
             
             UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"Unable to open %@.",file.lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
-                [self actionSheetAction:actionSheet buttonIndex:buttonIndex];
+                [weakself actionSheetAction:actionSheet buttonIndex:buttonIndex];
             } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Open in Text Editor", @"Open in Movie Player", @"Open in Picture Viewer", @"Open in Audio Player", @"Open in Document Viewer", @"Open In...", nil];
             
             if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
@@ -714,12 +717,12 @@ static NSString *CellIdentifier = @"Cell";
     
     long number = button.tag-1;
     
+    __weak MyFilesViewController *weakself = self;
+    
     if (number == 0) {
         
         self.openFile = file;
-        
-        __weak MyFilesViewController *weakself = self;
-        
+
         UIActionSheet *popupQuery = [[UIActionSheet alloc]initWithTitle:file.lastPathComponent completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             [weakself actionSheetAction:actionSheet buttonIndex:buttonIndex];
         } cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Open In Text Editor", @"Open In Movie Player", @"Open In Picture Viewer", @"Open In Audio Player", @"Open In Document Viewer", @"Open In...", nil];
@@ -729,11 +732,10 @@ static NSString *CellIdentifier = @"Cell";
             [popupQuery showFromRect:frame inView:[[UIApplication sharedApplication]appWindow] animated:YES];
         } else {
             [popupQuery showInView:self.view];
-            [_currentlySwipedCell hideWithAnimation:YES];
+            [weakself.currentlySwipedCell hideWithAnimation:YES];
         }
     } else if (number == 1) {
-        DropboxUpload *task = [DropboxUpload uploadWithFile:file];
-        [[TaskController sharedController]addTask:task];
+        [[TaskController sharedController]addTask:[DropboxUpload uploadWithFile:file]];
         [_currentlySwipedCell hideWithAnimation:YES];
     } else if (number == 2) {
         [[P2PManager shared]sendFileAtPath:file];
@@ -742,9 +744,6 @@ static NSString *CellIdentifier = @"Cell";
         [kAppDelegate sendFileInEmail:file];
         [_currentlySwipedCell hideWithAnimation:YES];
     } else if (number == 4) {
-        
-        __weak MyFilesViewController *weakself = self;
-
         UIActionSheet *popupQuery = [[UIActionSheet alloc]initWithTitle:[NSString stringWithFormat:@"Are you sure you want to delete %@?",file.lastPathComponent] completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
             
             if (buttonIndex == actionSheet.destructiveButtonIndex) {
@@ -781,11 +780,11 @@ static NSString *CellIdentifier = @"Cell";
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     [_currentlySwipedCell hideWithAnimation:YES];
-    [(Hack *)[UIApplication sharedApplication]setShouldWatchTouches:YES];
+    [(Hack *)[Hack sharedApplication]setShouldWatchTouches:YES];
 }
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
-    [(Hack *)[UIApplication sharedApplication]setShouldWatchTouches:NO];
+    [(Hack *)[Hack sharedApplication]setShouldWatchTouches:NO];
 }
 
 - (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView {

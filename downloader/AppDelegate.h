@@ -28,7 +28,7 @@ BOOL isDirectory(NSString *filePath);
 float fileSize(NSString *filePath);
 
 void fireFinishDLNotification(NSString *filename);
-NSString * getNonConflictingFilePathForPath(NSString *path);
+NSString * deconflictPath(NSString *path);
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
