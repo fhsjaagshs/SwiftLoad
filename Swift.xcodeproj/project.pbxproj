@@ -127,7 +127,6 @@
 		F172BCC31794EC4500AC1483 /* DDData.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BC811794EC4500AC1483 /* DDData.m */; };
 		F172BCC41794EC4500AC1483 /* DDNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BC831794EC4500AC1483 /* DDNumber.m */; };
 		F172BCC51794EC4500AC1483 /* DDRange.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BC851794EC4500AC1483 /* DDRange.m */; };
-		F172BCC61794EC4500AC1483 /* About.txt in Resources */ = {isa = PBXBuildFile; fileRef = F172BC871794EC4500AC1483 /* About.txt */; };
 		F172BCC71794EC4500AC1483 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BC891794EC4500AC1483 /* GCDAsyncSocket.m */; };
 		F172BCD11794EC4500AC1483 /* HTTPAuthenticationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BC9D1794EC4500AC1483 /* HTTPAuthenticationRequest.m */; };
 		F172BCD21794EC4500AC1483 /* HTTPMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = F172BCA01794EC4500AC1483 /* HTTPMessage.m */; };
@@ -440,7 +439,6 @@
 		F172BC831794EC4500AC1483 /* DDNumber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDNumber.m; sourceTree = "<group>"; };
 		F172BC841794EC4500AC1483 /* DDRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDRange.h; sourceTree = "<group>"; };
 		F172BC851794EC4500AC1483 /* DDRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDRange.m; sourceTree = "<group>"; };
-		F172BC871794EC4500AC1483 /* About.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = About.txt; sourceTree = "<group>"; };
 		F172BC881794EC4500AC1483 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
 		F172BC891794EC4500AC1483 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
 		F172BC9C1794EC4500AC1483 /* HTTPAuthenticationRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPAuthenticationRequest.h; sourceTree = "<group>"; };
@@ -992,6 +990,9 @@
 			children = (
 				F172BC7F1794EC4500AC1483 /* Categories */,
 				F172BC861794EC4500AC1483 /* CocoaAsyncSocket */,
+				F172BCA41794EC4500AC1483 /* Mime */,
+				F172BCAB1794EC4500AC1483 /* Responses */,
+				F172BCB81794EC4500AC1483 /* WebDAV */,
 				F172BC9C1794EC4500AC1483 /* HTTPAuthenticationRequest.h */,
 				F172BC9D1794EC4500AC1483 /* HTTPAuthenticationRequest.m */,
 				F172BCE21794EC6700AC1483 /* HTTPConnection.h */,
@@ -1004,9 +1005,6 @@
 				F172BCA31794EC4500AC1483 /* HTTPServer.m */,
 				F1270F6E1815B33900CEC7F7 /* DDLog.h */,
 				F1270F6F1815B33900CEC7F7 /* DDLog.m */,
-				F172BCA41794EC4500AC1483 /* Mime */,
-				F172BCAB1794EC4500AC1483 /* Responses */,
-				F172BCB81794EC4500AC1483 /* WebDAV */,
 				F172BCC11794EC4500AC1483 /* WebSocket.h */,
 				F172BCC21794EC4500AC1483 /* WebSocket.m */,
 			);
@@ -1029,7 +1027,6 @@
 		F172BC861794EC4500AC1483 /* CocoaAsyncSocket */ = {
 			isa = PBXGroup;
 			children = (
-				F172BC871794EC4500AC1483 /* About.txt */,
 				F172BC881794EC4500AC1483 /* GCDAsyncSocket.h */,
 				F172BC891794EC4500AC1483 /* GCDAsyncSocket.m */,
 			);
@@ -1328,7 +1325,6 @@
 				F125336A17F50A89006D3D51 /* Images.xcassets in Resources */,
 				F15507DC176EB0A90024FF03 /* dropbox@2x.png in Resources */,
 				F15507DD176EB0A90024FF03 /* paperclip@2x.png in Resources */,
-				F172BCC61794EC4500AC1483 /* About.txt in Resources */,
 				F134EF1B1807974F00626481 /* p2p@2x.png in Resources */,
 				F104B65E18099CAF00B9E1A6 /* disclosure_highlighted.png in Resources */,
 				F134EF171807904C00626481 /* hamburger@2x.png in Resources */,

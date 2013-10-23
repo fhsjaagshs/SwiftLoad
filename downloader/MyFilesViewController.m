@@ -720,7 +720,6 @@ static NSString *CellIdentifier = @"Cell";
     __weak MyFilesViewController *weakself = self;
     
     if (number == 0) {
-        
         self.openFile = file;
 
         UIActionSheet *popupQuery = [[UIActionSheet alloc]initWithTitle:file.lastPathComponent completionBlock:^(NSUInteger buttonIndex, UIActionSheet *actionSheet) {
