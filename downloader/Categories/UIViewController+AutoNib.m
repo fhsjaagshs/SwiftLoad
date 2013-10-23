@@ -44,14 +44,4 @@
     return topController;
 }
 
-- (void)adjustViewsForiOS7 {
-    if ([UIDevice currentDevice].systemVersion.floatValue >= 7.0f) {
-        for (UIView *view in self.view.subviews) {
-            CGRect rect = view.frame;
-            rect.origin.y += 20;
-            view.frame = rect;
-        }
-    }
-}
-
 @end

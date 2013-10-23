@@ -35,5 +35,4 @@
     [self zoomToRect:zoomRect animated:animated];
 }
 
-
 @end

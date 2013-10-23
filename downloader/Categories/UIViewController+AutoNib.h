@@ -17,6 +17,4 @@
 
 + (instancetype)topViewController;
 
-- (void)adjustViewsForiOS7;
-
 @end
