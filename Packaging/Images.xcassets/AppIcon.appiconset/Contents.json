@@ -3,7 +3,7 @@
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "icon-settings@2x-1.png",
+      "filename" : "icon-settings@2x.png",
       "scale" : "2x"
     },
     {
@@ -15,43 +15,43 @@
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "icon@2x.png",
+      "filename" : "icon-120.png",
       "scale" : "2x"
-    },
-    {
-      "size" : "29x29",
-      "idiom" : "ipad",
-      "filename" : "icon-settings.png",
-      "scale" : "1x"
     },
     {
       "size" : "29x29",
       "idiom" : "ipad",
       "filename" : "icon-settings@2x.png",
+      "scale" : "1x"
+    },
+    {
+      "size" : "29x29",
+      "idiom" : "ipad",
+      "filename" : "ipadsettings@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "40x40",
       "idiom" : "ipad",
-      "filename" : "icon-spotlight.png",
+      "filename" : "ipadspotlight.png",
       "scale" : "1x"
     },
     {
       "size" : "40x40",
       "idiom" : "ipad",
-      "filename" : "icon-spotlight@2x-1.png",
+      "filename" : "ipadspotlight@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "76x76",
       "idiom" : "ipad",
-      "filename" : "icon~iPad.png",
+      "filename" : "icon-ipad.png",
       "scale" : "1x"
     },
     {
       "size" : "76x76",
       "idiom" : "ipad",
-      "filename" : "icon~iPad@2x.png",
+      "filename" : "icon-ipad@2x.png",
       "scale" : "2x"
     }
   ],
