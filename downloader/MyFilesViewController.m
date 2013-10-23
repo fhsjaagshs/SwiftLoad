@@ -700,7 +700,7 @@ static NSString *CellIdentifier = @"Cell";
             [button addTarget:self action:@selector(touchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
             [button setImage:grayImage forState:UIControlStateNormal];
             
-            if ([imageName isEqualToString:@"bluetooth"] && [[P2PManager shared]isTransferring]) {
+            if ([imageName isEqualToString:@"p2p"] && [[P2PManager shared]isTransferring]) {
                 button.enabled = NO;
             } else if (disableDelete && [imageName isEqualToString:@"delete"]) {
                 button.enabled = NO;
