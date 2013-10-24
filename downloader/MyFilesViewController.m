@@ -45,6 +45,7 @@ static NSString *CellIdentifier = @"Cell";
 
     self.navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 20+44)];
     _navBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    _navBar.translucent = YES;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:@"/"];
     _editButton = [[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(editTable)];
     topItem.rightBarButtonItem = _editButton;

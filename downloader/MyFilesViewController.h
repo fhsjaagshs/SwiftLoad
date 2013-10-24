@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MyFilesViewController : WhiteStatusbarViewController
+@interface MyFilesViewController : UIViewController
 
 @property (nonatomic, assign) BOOL watchdogCanGo;
 

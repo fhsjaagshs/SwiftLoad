@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DropboxBrowserViewController : WhiteStatusbarViewController
+@interface DropboxBrowserViewController : UIViewController
 
 + (void)clearDatabase;
 

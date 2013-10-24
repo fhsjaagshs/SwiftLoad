@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SwiftGenericViewController : WhiteStatusbarViewController
+@interface SwiftGenericViewController : UIViewController
 
 @property (nonatomic, strong) NSString *openFile;
 
