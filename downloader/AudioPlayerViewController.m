@@ -23,10 +23,7 @@
 
 @property (nonatomic, strong) MPVolumeView *volumeView;
 
-//@property (nonatomic, strong) MarqueeLabel *artistLabel;
 @property (nonatomic, strong) MarqueeLabel *titleLabel;
-//@property (nonatomic, strong) MarqueeLabel *albumLabel;
-
 @property (nonatomic, strong) MarqueeLabel *artistAlbumLabel;
 
 @property (nonatomic, strong) UISlider *time;
@@ -93,15 +90,14 @@
     _secondsElapsed.font = [UIFont systemFontOfSize:15];
     _secondsElapsed.textColor = [UIColor darkGrayColor];
     _secondsElapsed.backgroundColor = [UIColor clearColor];
-    _secondsElapsed.textAlignment = NSTextAlignmentRight;
+    _secondsElapsed.textAlignment = NSTextAlignmentLeft;
     _secondsElapsed.text = @"0:00";
     [self.view addSubview:_secondsElapsed];
     
-    self.time = [[UISlider alloc]initWithFrame:CGRectMake(44, 64+10+20+20+10, screenBounds.size.width-88, 23)];
+    self.time = [[UISlider alloc]initWithFrame:CGRectMake(64, 64+10+20+20+10, screenBounds.size.width-128, 23)];
     [_time setMinimumTrackImage:[UIImage imageNamed:@"trackImage"] forState:UIControlStateNormal];
-    [_time setMaximumTrackImage:[UIImage imageNamed:@"trackImage"] forState:UIControlStateNormal];
-    [_time setThumbImage:[UIImage imageNamed:@"scrubber"] forState:UIControlStateHighlighted];
     [_time setThumbImage:[UIImage imageNamed:@"scrubber"] forState:UIControlStateNormal];
+    [_time setThumbImage:[UIImage imageNamed:@"scrubber"] forState:UIControlStateHighlighted];
     [_time addTarget:self action:@selector(sliderChanged) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:_time];
     
@@ -109,7 +105,7 @@
     _secondsRemaining.font = [UIFont systemFontOfSize:15];
     _secondsRemaining.textColor = [UIColor darkGrayColor];
     _secondsRemaining.backgroundColor = [UIColor clearColor];
-    _secondsRemaining.textAlignment = NSTextAlignmentLeft;
+    _secondsRemaining.textAlignment = NSTextAlignmentRight;
     _secondsRemaining.text = @"-0:00";
     [self.view addSubview:_secondsRemaining];
     
@@ -150,7 +146,7 @@
     [_volumeView setMaximumVolumeSliderImage:[UIImage imageNamed:@"trackImage"] forState:UIControlStateNormal];
     [_volumeView setVolumeThumbImage:[UIImage imageNamed:@"scrubber_volume"] forState:UIControlStateNormal];
     [_volumeView setVolumeThumbImage:[UIImage imageNamed:@"scrubber_volume"] forState:UIControlStateHighlighted];
-    [_volumeView setRouteButtonImage:[[_volumeView routeButtonImageForState:UIControlStateNormal]imageFilledWith:[UIColor colorWithRed:105.0f/255.0f green:54.0f/255.0f blue:153.0f/255.0f alpha:0.0f]] forState:UIControlStateNormal];
+    [_volumeView setRouteButtonImage:[[_volumeView routeButtonImageForState:UIControlStateNormal]imageFilledWith:[UIColor colorWithRed:105.0f/255.0f green:54.0f/255.0f blue:153.0f/255.0f alpha:1.0f]] forState:UIControlStateNormal];
     [self.view addSubview:_volumeView];
     
     self.loopControl = [TextToggleControl control];
@@ -368,13 +364,10 @@
 }
 
 - (void)setInfoFieldText:(NSNotification *)notif {
-    
     NSArray *components = [(NSString *)notif.object componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
 
     if (components.count > 0) {
-        //_artistLabel.text = (NSString *)components[0];
         _titleLabel.text = (NSString *)components[1];
-        //_albumLabel.text = (NSString *)components[2];
         _artistAlbumLabel.text = [NSString stringWithFormat:@"%@ - %@",(NSString *)components[0],(NSString *)components[2]];
     }
 }
