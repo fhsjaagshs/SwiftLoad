@@ -84,6 +84,7 @@
     #import "DAVConnection.h"
     #import "P2PManager.h"
 
+    #import "WhiteStatusbarViewController.h"
     #import "SwiftGenericViewController.h"
 
     #import "DocumentViewController.h"

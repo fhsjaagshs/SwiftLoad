@@ -202,6 +202,7 @@
 		F1D6257817C45D3700CA002A /* file_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D6257417C45D3700CA002A /* file_icon@2x.png */; };
 		F1D6257917C45D3700CA002A /* folder_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D6257517C45D3700CA002A /* folder_icon.png */; };
 		F1D6257A17C45D3700CA002A /* folder_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D6257617C45D3700CA002A /* folder_icon@2x.png */; };
+		F1DE1DF81818B61F00A1A610 /* WhiteStatusbarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1DE1DF71818B61F00A1A610 /* WhiteStatusbarViewController.m */; };
 		F1E397E917B9F896002BBD6F /* TagLibAmalgam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1E397E717B9F896002BBD6F /* TagLibAmalgam.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 		F1E397EC17B9F8A8002BBD6F /* ID3Editor.mm in Sources */ = {isa = PBXBuildFile; fileRef = F1E397EB17B9F8A8002BBD6F /* ID3Editor.mm */; };
 		F1E9F7861773FDF300EC345C /* DisclosureButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F1E9F7851773FDF300EC345C /* DisclosureButton.m */; };
@@ -557,6 +558,8 @@
 		F1D6257417C45D3700CA002A /* file_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "file_icon@2x.png"; path = "Images/file_icon@2x.png"; sourceTree = "<group>"; };
 		F1D6257517C45D3700CA002A /* folder_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = folder_icon.png; path = Images/folder_icon.png; sourceTree = "<group>"; };
 		F1D6257617C45D3700CA002A /* folder_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "folder_icon@2x.png"; path = "Images/folder_icon@2x.png"; sourceTree = "<group>"; };
+		F1DE1DF61818B61F00A1A610 /* WhiteStatusbarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteStatusbarViewController.h; sourceTree = "<group>"; };
+		F1DE1DF71818B61F00A1A610 /* WhiteStatusbarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhiteStatusbarViewController.m; sourceTree = "<group>"; };
 		F1E397E717B9F896002BBD6F /* TagLibAmalgam.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TagLibAmalgam.cpp; sourceTree = "<group>"; };
 		F1E397E817B9F896002BBD6F /* TagLibAmalgam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagLibAmalgam.h; sourceTree = "<group>"; };
 		F1E397EA17B9F8A8002BBD6F /* ID3Editor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ID3Editor.h; sourceTree = "<group>"; };
@@ -981,6 +984,8 @@
 				F10B4D2F17FE4DAD0047E57D /* PPAudioPlayer.m */,
 				F104B6611809D19800B9E1A6 /* SwiftGenericViewController.h */,
 				F104B6621809D19800B9E1A6 /* SwiftGenericViewController.m */,
+				F1DE1DF61818B61F00A1A610 /* WhiteStatusbarViewController.h */,
+				F1DE1DF71818B61F00A1A610 /* WhiteStatusbarViewController.m */,
 			);
 			path = Subclasses;
 			sourceTree = "<group>";
@@ -1412,6 +1417,7 @@
 				F134EED9180781A300626481 /* DBJSON.m in Sources */,
 				F134EEDE180781A300626481 /* NSString+DBJSON.m in Sources */,
 				F134EEEF180781A300626481 /* NSString+Dropbox.m in Sources */,
+				F1DE1DF81818B61F00A1A610 /* WhiteStatusbarViewController.m in Sources */,
 				F1693C4F16DFABA6006E3739 /* UIAlertView+BlockExtensions.m in Sources */,
 				F134EEE0180781A300626481 /* MPOAuthAPI.m in Sources */,
 				F1693C5016DFABA6006E3739 /* UIScrollView+ZoomToPoint.m in Sources */,

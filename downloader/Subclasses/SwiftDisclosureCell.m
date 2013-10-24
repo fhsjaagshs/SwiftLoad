@@ -29,6 +29,16 @@
     _disclosureButton.highlighted = NO;
 }
 
+- (void)setSelected:(BOOL)selected {
+    [super setSelected:selected];
+    _disclosureButton.highlighted = NO;
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+    _disclosureButton.highlighted = NO;
+}
+
 - (void)layoutSubviews {
     [super layoutSubviews];
     

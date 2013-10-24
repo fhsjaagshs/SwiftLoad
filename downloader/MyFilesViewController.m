@@ -53,13 +53,15 @@ static NSString *CellIdentifier = @"Cell";
     [self.view addSubview:_navBar];
     
     self.theTableView = [[UITableView alloc]initWithFrame:screenBounds style:UITableViewStylePlain];
-    _theTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _theTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     _theTableView.dataSource = self;
     _theTableView.delegate = self;
     _theTableView.contentInset = UIEdgeInsetsMake(20+44, 0, 0, 0);
     _theTableView.scrollIndicatorInsets = _theTableView.contentInset;
-    _theTableView.separatorInset = UIEdgeInsetsZero;
+    _theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    _theTableView.separatorInset = UIEdgeInsetsMake(0, 55, 0, 5);
+    _theTableView.separatorColor = [UIColor colorWithWhite:0.9f alpha:1.0f];
+    _theTableView.tableFooterView = [UIView new];
     [self.view addSubview:_theTableView];
     
     [self.view bringSubviewToFront:_navBar];
@@ -624,6 +626,10 @@ static NSString *CellIdentifier = @"Cell";
         } cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"I'm sure, Delete" otherButtonTitles:nil];
         [popupQuery showInView:self.view];
     }
+}
+
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [_theTableView footerViewForSection:0].hidden = YES;
 }
 
 - (void)actionSheetAction:(UIActionSheet *)actionSheet buttonIndex:(NSUInteger)buttonIndex {

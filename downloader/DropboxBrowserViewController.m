@@ -66,6 +66,10 @@ static NSString *CellIdentifier = @"dbcell";
     _theTableView.delegate = self;
     _theTableView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0);
     _theTableView.scrollIndicatorInsets = _theTableView.contentInset;
+    _theTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    _theTableView.separatorInset = UIEdgeInsetsMake(0, 55, 0, 5);
+    _theTableView.separatorColor = [UIColor colorWithWhite:0.9f alpha:1.0f];
+    _theTableView.tableFooterView = [UIView new];
     [self.view addSubview:_theTableView];
     
     self.refreshControl = [[UIRefreshControl alloc]init];

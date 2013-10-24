@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface WebDAVViewController : UIViewController
+@interface WebDAVViewController : WhiteStatusbarViewController
 
 @end
