@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SettingsView : UIViewController 
+@interface SettingsView : SwiftGenericViewController
 
 @end

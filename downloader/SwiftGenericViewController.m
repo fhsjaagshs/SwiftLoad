@@ -16,6 +16,10 @@
 
 @implementation SwiftGenericViewController
 
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
+
 + (instancetype)viewControllerWithFilepath:(NSString *)filepath {
     return [[[self class]alloc]initWithFilepath:filepath];
 }

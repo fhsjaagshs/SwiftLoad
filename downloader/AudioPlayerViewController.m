@@ -23,9 +23,11 @@
 
 @property (nonatomic, strong) MPVolumeView *volumeView;
 
-@property (nonatomic, strong) MarqueeLabel *artistLabel;
+//@property (nonatomic, strong) MarqueeLabel *artistLabel;
 @property (nonatomic, strong) MarqueeLabel *titleLabel;
-@property (nonatomic, strong) MarqueeLabel *albumLabel;
+//@property (nonatomic, strong) MarqueeLabel *albumLabel;
+
+@property (nonatomic, strong) MarqueeLabel *artistAlbumLabel;
 
 @property (nonatomic, strong) UISlider *time;
 @property (nonatomic, strong) UINavigationBar *navBar;
@@ -64,17 +66,17 @@
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
     [_navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:_navBar];
-    
-    self.artistLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, 64+10, screenBounds.size.width, 20) rate:50.0f andFadeLength:10.0f];
-    _artistLabel.animationDelay = 0.5f;
-    _artistLabel.marqueeType = MLContinuous;
-    _artistLabel.animationCurve = UIViewAnimationCurveLinear;
-    _artistLabel.numberOfLines = 1;
-    _artistLabel.textAlignment = NSTextAlignmentCenter;
-    _artistLabel.backgroundColor = [UIColor clearColor];
-    _artistLabel.textColor = [UIColor blackColor];
-    _artistLabel.font = [UIFont systemFontOfSize:15];
-    [self.view addSubview:_artistLabel];
+
+    self.artistAlbumLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, 64+10, screenBounds.size.width, 20) rate:50.0f andFadeLength:10.0f];
+    _artistAlbumLabel.animationDelay = 0.5f;
+    _artistAlbumLabel.marqueeType = MLContinuous;
+    _artistAlbumLabel.animationCurve = UIViewAnimationCurveLinear;
+    _artistAlbumLabel.numberOfLines = 1;
+    _artistAlbumLabel.textAlignment = NSTextAlignmentCenter;
+    _artistAlbumLabel.backgroundColor = [UIColor clearColor];
+    _artistAlbumLabel.textColor = [UIColor blackColor];
+    _artistAlbumLabel.font = [UIFont systemFontOfSize:15];
+    [self.view addSubview:_artistAlbumLabel];
     
     self.titleLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, 64+10+20, screenBounds.size.width, 20) rate:50.0f andFadeLength:10.0f];
     _titleLabel.animationDelay = 0.5f;
@@ -83,22 +85,11 @@
     _titleLabel.numberOfLines = 1;
     _titleLabel.textAlignment = NSTextAlignmentCenter;
     _titleLabel.backgroundColor = [UIColor clearColor];
-    _titleLabel.textColor = [UIColor blackColor];
+    _titleLabel.textColor = [UIColor colorWithRed:105.0f/255.0f green:54.0f/255.0f blue:153.0f/255.0f alpha:1.0f];
     _titleLabel.font = [UIFont boldSystemFontOfSize:15];
     [self.view addSubview:_titleLabel];
     
-    self.albumLabel = [[MarqueeLabel alloc]initWithFrame:CGRectMake(0, 64+10+(20*2), screenBounds.size.width, 20) rate:50.0f andFadeLength:10.0f];
-    _albumLabel.animationDelay = 0.5f;
-    _albumLabel.marqueeType = MLContinuous;
-    _albumLabel.animationCurve = UIViewAnimationCurveLinear;
-    _albumLabel.numberOfLines = 1;
-    _albumLabel.textAlignment = NSTextAlignmentCenter;
-    _albumLabel.backgroundColor = [UIColor clearColor];
-    _albumLabel.textColor = [UIColor blackColor];
-    _albumLabel.font = [UIFont systemFontOfSize:15];
-    [self.view addSubview:_albumLabel];
-    
-    self.secondsElapsed = [[UILabel alloc]initWithFrame:CGRectMake(0, 114+5+20, 44, 23)];
+    self.secondsElapsed = [[UILabel alloc]initWithFrame:CGRectMake(0, 64+10+20+20+10, 44, 23)];
     _secondsElapsed.font = [UIFont systemFontOfSize:15];
     _secondsElapsed.textColor = [UIColor darkGrayColor];
     _secondsElapsed.backgroundColor = [UIColor clearColor];
@@ -106,7 +97,7 @@
     _secondsElapsed.text = @"0:00";
     [self.view addSubview:_secondsElapsed];
     
-    self.time = [[UISlider alloc]initWithFrame:CGRectMake(44, 114+20, screenBounds.size.width-88, 23)];
+    self.time = [[UISlider alloc]initWithFrame:CGRectMake(44, 64+10+20+20+10, screenBounds.size.width-88, 23)];
     [_time setMinimumTrackImage:[UIImage imageNamed:@"trackImage"] forState:UIControlStateNormal];
     [_time setMaximumTrackImage:[UIImage imageNamed:@"trackImage"] forState:UIControlStateNormal];
     [_time setThumbImage:[UIImage imageNamed:@"scrubber"] forState:UIControlStateHighlighted];
@@ -114,7 +105,7 @@
     [_time addTarget:self action:@selector(sliderChanged) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:_time];
     
-    self.secondsRemaining = [[UILabel alloc]initWithFrame:CGRectMake(screenBounds.size.width-44, 114+5+20, 44, 23)];
+    self.secondsRemaining = [[UILabel alloc]initWithFrame:CGRectMake(screenBounds.size.width-44, 64+10+20+20+10, 44, 23)];
     _secondsRemaining.font = [UIFont systemFontOfSize:15];
     _secondsRemaining.textColor = [UIColor darkGrayColor];
     _secondsRemaining.backgroundColor = [UIColor clearColor];
@@ -214,9 +205,10 @@
     [_secondsElapsed setHidden:hide];
     [_loopControl setHidden:hide];
     [_stopButton setHidden:hide];
-    [_artistLabel setHidden:hide];
+  //  [_artistLabel setHidden:hide];
     [_titleLabel setHidden:hide];
-    [_albumLabel setHidden:hide];
+   // [_albumLabel setHidden:hide];
+    [_artistAlbumLabel setHidden:hide];
     [_prevTrack setHidden:hide];
     [_nxtTrack setHidden:hide];
     [_volumeView setHidden:hide];
@@ -380,9 +372,10 @@
     NSArray *components = [(NSString *)notif.object componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
 
     if (components.count > 0) {
-        _artistLabel.text = (NSString *)components[0];
+        //_artistLabel.text = (NSString *)components[0];
         _titleLabel.text = (NSString *)components[1];
-        _albumLabel.text = (NSString *)components[2];
+        //_albumLabel.text = (NSString *)components[2];
+        _artistAlbumLabel.text = [NSString stringWithFormat:@"%@ - %@",(NSString *)components[0],(NSString *)components[2]];
     }
 }
 

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MyFilesViewController : UIViewController
+@interface MyFilesViewController : SwiftGenericViewController
 
 @property (nonatomic, assign) BOOL watchdogCanGo;
 

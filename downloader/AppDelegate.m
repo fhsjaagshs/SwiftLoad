@@ -429,10 +429,16 @@ NSString * deconflictPath(NSString *path) {
     _window.backgroundColor = [UIColor whiteColor];
     [_window makeKeyAndVisible];
     
-    UIColor *tintColor = [UIColor colorWithWhite:1.0f alpha:0.9f];
+    //UIColor *tintColor = [UIColor colorWithWhite:1.0f alpha:0.9f];
+    UIColor *tintColor = [UIColor colorWithRed:105.0f/255.0f green:54.0f/255.0f blue:153.0f/255.0f alpha:0.9f];
     
     [[UINavigationBar appearance]setBarTintColor:tintColor];
     [[UIToolbar appearance]setBarTintColor:tintColor];
+    
+    [[UINavigationBar appearance]setTintColor:[UIColor whiteColor]];
+    [[UIToolbar appearance]setTintColor:[UIColor whiteColor]];
+    
+    [[UINavigationBar appearance]setTitleTextAttributes:@{ NSForegroundColorAttributeName: [UIColor whiteColor] }];
 
     return YES;
 }
