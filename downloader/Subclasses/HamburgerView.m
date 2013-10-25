@@ -211,12 +211,13 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     if (indexPath.section == 1) {
-        Task *task = [[TaskController sharedController]taskAtIndex:(int)indexPath.row];
-
-        if ([task isKindOfClass:[HTTPDownload class]]) {
-            [(HTTPDownload *)task resumeFromFailureIfNecessary];
+        if ([[TaskController sharedController]numberOfTasks] > 0) {
+            Task *task = [[TaskController sharedController]taskAtIndex:(int)indexPath.row];
+            
+            if ([task isKindOfClass:[HTTPDownload class]]) {
+                [(HTTPDownload *)task resumeFromFailureIfNecessary];
+            }
         }
     } else if (indexPath.section == 0) {
         if (_delegate && [_delegate respondsToSelector:@selector(hamburgerCellWasSelectedAtIndex:)]) {
@@ -229,8 +230,11 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([[TaskController sharedController]numberOfTasks] > 0) {
-        return [[[TaskController sharedController]taskAtIndex:(int)indexPath.row]canSelect]?indexPath:nil;
+    
+    if (indexPath.section == 1) {
+        if ([[TaskController sharedController]numberOfTasks] > 0) {
+            return [[[TaskController sharedController]taskAtIndex:(int)indexPath.row]canSelect]?indexPath:nil;
+        }
     }
     return indexPath;
 }
