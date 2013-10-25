@@ -77,6 +77,7 @@ static NSString * const kSettingsTableViewCellID = @"settingsTableViewCellID";
             [[DBSession sharedSession]unlinkUserId:[[DBSession sharedSession]userIds][0]];
             [_theTableView reloadData];
         } else {
+            [AppDelegate disableStyling];
             [[DBSession sharedSession]linkFromController:self];
         }
         [DropboxBrowserViewController clearDatabase];

@@ -41,6 +41,7 @@
     if ([[DBSession sharedSession]isLinked]) {
         [self carryOutUpload];
     } else {
+        [AppDelegate disableStyling];
         [[DBSession sharedSession]linkFromController:[UIViewController topViewController]];
     }
 }

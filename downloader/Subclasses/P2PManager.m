@@ -104,6 +104,7 @@ static NSString * const kServiceType = @"SwiftBluetooth";
     if (_session.connectedPeers.count > 0) {
         [self internal_sendFileAtPath:path];
     } else {
+        [AppDelegate disableStyling];
         MCNearbyServiceBrowser *browser = [[MCNearbyServiceBrowser alloc]initWithPeer:_session.myPeerID serviceType:kServiceType];
         MCBrowserViewController *browserVC = [[MCBrowserViewController alloc]initWithBrowser:browser session:_session];
         browserVC.delegate = self;
@@ -115,12 +116,14 @@ static NSString * const kServiceType = @"SwiftBluetooth";
 }
 
 - (void)browserViewControllerDidFinish:(MCBrowserViewController *)browserViewController {
+    [AppDelegate enableStyling];
     NSString *path = (NSString *)objc_getAssociatedObject(browserViewController, "passed_path_swift");
     [self internal_sendFileAtPath:path];
     [browserViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)browserViewControllerWasCancelled:(MCBrowserViewController *)browserViewController {
+    [AppDelegate enableStyling];
     if (_sendingObjs.count == 0) {
         [_advertiserAssistant start];
     }

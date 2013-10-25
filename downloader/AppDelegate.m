@@ -319,12 +319,14 @@ NSString * deconflictPath(NSString *path) {
 
 - (void)sendFileInEmail:(NSString *)file {
     if ([MFMailComposeViewController canSendMail]) {
+        [AppDelegate disableStyling];
         MFMailComposeViewController *controller = [[MFMailComposeViewController alloc]initWithCompletionHandler:^(MFMailComposeViewController *controller, MFMailComposeResult result, NSError *error) {
+            [AppDelegate enableStyling];
             [controller dismissViewControllerAnimated:YES completion:nil];
         }];
         [controller setSubject:@"Your file"];
         [controller addAttachmentData:[NSData dataWithContentsOfFile:file] mimeType:file.MIMEType fileName:file.lastPathComponent];
-        [controller setMessageBody:@"" isHTML:NO];
+        [controller setMessageBody:@"Sent using Swift" isHTML:NO];
         [[UIViewController topViewController]presentViewController:controller animated:YES completion:nil];
     } else {
         [UIAlertView showAlertWithTitle:@"Mail Unavailable" andMessage:@"In order to email files, you must set up an mail account in Settings."];
@@ -342,11 +344,13 @@ NSString * deconflictPath(NSString *path) {
     pic.printingItem = [NSURL fileURLWithPath:file];
     
     void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) = ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
+        [AppDelegate enableStyling];
         if (error) {
             [UIAlertView showAlertWithTitle:[NSString stringWithFormat:@"Error %ld",(long)error.code] andMessage:error.localizedDescription];
         }
     };
     
+    [AppDelegate disableStyling];
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         [pic presentFromRect:CGRectMake(716, 967, 44, 37) inView:[UIViewController topViewController].view animated:YES completionHandler:completionHandler];
     } else {
@@ -399,6 +403,28 @@ NSString * deconflictPath(NSString *path) {
     }
 }
 
++ (void)enableStyling {
+    UIColor *tintColor = [UIColor colorWithRed:105.0f/255.0f green:54.0f/255.0f blue:153.0f/255.0f alpha:0.9f];
+    
+    [[UINavigationBar appearance]setBarTintColor:tintColor];
+    [[UIToolbar appearance]setBarTintColor:tintColor];
+    
+    [[UINavigationBar appearance]setTintColor:[UIColor whiteColor]];
+    [[UIToolbar appearance]setTintColor:[UIColor whiteColor]];
+    
+    [[UINavigationBar appearance]setTitleTextAttributes:@{ NSForegroundColorAttributeName: [UIColor whiteColor] }];
+}
+
++ (void)disableStyling {
+    [[UINavigationBar appearance]setBarTintColor:nil];
+    [[UIToolbar appearance]setBarTintColor:nil];
+    
+    [[UINavigationBar appearance]setTintColor:nil];
+    [[UIToolbar appearance]setTintColor:nil];
+    
+    [[UINavigationBar appearance]setTitleTextAttributes:nil];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     // Trust me
@@ -429,16 +455,7 @@ NSString * deconflictPath(NSString *path) {
     _window.backgroundColor = [UIColor whiteColor];
     [_window makeKeyAndVisible];
     
-    //UIColor *tintColor = [UIColor colorWithWhite:1.0f alpha:0.9f];
-    UIColor *tintColor = [UIColor colorWithRed:105.0f/255.0f green:54.0f/255.0f blue:153.0f/255.0f alpha:0.9f];
-    
-    [[UINavigationBar appearance]setBarTintColor:tintColor];
-    [[UIToolbar appearance]setBarTintColor:tintColor];
-    
-    [[UINavigationBar appearance]setTintColor:[UIColor whiteColor]];
-    [[UIToolbar appearance]setTintColor:[UIColor whiteColor]];
-    
-    [[UINavigationBar appearance]setTitleTextAttributes:@{ NSForegroundColorAttributeName: [UIColor whiteColor] }];
+    [AppDelegate enableStyling];
 
     return YES;
 }
@@ -501,6 +518,7 @@ NSString * deconflictPath(NSString *path) {
         }
     } else {
         if ([[DBSession sharedSession]handleOpenURL:url]) {
+            [AppDelegate enableStyling];
             [[NSNotificationCenter defaultCenter]postNotificationName:[[DBSession sharedSession]isLinked]?@"db_auth_success":@"db_auth_failure" object:nil];
             return YES;
         } else {

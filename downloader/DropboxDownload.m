@@ -25,8 +25,18 @@
     if (self) {
         self.path = path;
         self.name = path.lastPathComponent;
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(dropboxAuthenticationSucceeded) name:@"db_auth_success" object:nil];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(dropboxAuthenticationFailed) name:@"db_auth_failure" object:nil];
     }
     return self;
+}
+
+- (void)dropboxAuthenticationSucceeded {
+    [self carryOutDownload];
+}
+
+- (void)dropboxAuthenticationFailed {
+    [self showFailure];
 }
 
 - (void)stop {
@@ -34,8 +44,7 @@
     [super stop];
 }
 
-- (void)start {
-    [super start];
+- (void)carryOutDownload {
     self.temporaryPath = deconflictPath([NSTemporaryDirectory() stringByAppendingPathComponent:self.name]);
     [DroppinBadassBlocks loadFile:_path intoPath:self.temporaryPath withCompletionBlock:^(DBMetadata *metadata, NSError *error) {
         if (error) {
@@ -48,6 +57,20 @@
             [self.delegate setProgress:progress];
         }
     }];
+}
+
+- (void)start {
+    [super start];
+    if ([[DBSession sharedSession]isLinked]) {
+        [self carryOutDownload];
+    } else {
+        [AppDelegate disableStyling];
+        [[DBSession sharedSession]linkFromController:[UIViewController topViewController]];
+    }
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
 
 @end

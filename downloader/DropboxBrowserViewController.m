@@ -116,6 +116,7 @@ static NSString *CellIdentifier = @"dbcell";
         if (_shouldPromptForLinkage) {
             self.shouldPromptForLinkage = NO;
             if (![[DBSession sharedSession]isLinked]) {
+                [AppDelegate disableStyling];
                 [[DBSession sharedSession]linkFromController:self];
             }
         } else {

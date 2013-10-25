@@ -34,6 +34,10 @@ NSString * deconflictPath(NSString *path);
 
 @property (nonatomic, strong) UIWindow *window;
 
+// styling
++ (void)enableStyling;
++ (void)disableStyling;
+
 // Audio Player
 @property (nonatomic, strong) PPAudioPlayer *audioPlayer;
 - (NSString *)nowPlayingFile;
