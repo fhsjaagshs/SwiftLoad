@@ -30,7 +30,6 @@
 		F10CBC5A1707D6E700C82AFB /* DroppinBadassBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC591707D6E700C82AFB /* DroppinBadassBlocks.m */; };
 		F10CBC5D17080C6600C82AFB /* DropboxBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */; };
 		F1122A76142E4E8B00A04CC6 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */; };
-		F112AD3B17EE9BE3002DE136 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = F112AD3A17EE9BE3002DE136 /* MBProgressHUD.m */; };
 		F115302B177FDB4F000513E1 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = F115302A177FDB4E000513E1 /* FMDatabasePool.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F118C74517713DAA00ED7384 /* ContentOffsetWatchdog.m in Sources */ = {isa = PBXBuildFile; fileRef = F118C74417713DAA00ED7384 /* ContentOffsetWatchdog.m */; };
 		F119CF0813F46DA6007D67E4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F119CF0713F46DA6007D67E4 /* AppDelegate.m */; };
@@ -261,8 +260,6 @@
 		F10CBC5B17080C6600C82AFB /* DropboxBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxBrowserViewController.h; sourceTree = "<group>"; };
 		F10CBC5C17080C6600C82AFB /* DropboxBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxBrowserViewController.m; sourceTree = "<group>"; };
 		F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
-		F112AD3917EE9BE3002DE136 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
-		F112AD3A17EE9BE3002DE136 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		F1153029177FDB4E000513E1 /* FMDatabasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabasePool.h; sourceTree = "<group>"; };
 		F115302A177FDB4E000513E1 /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePool.m; sourceTree = "<group>"; };
 		F118C74317713DAA00ED7384 /* ContentOffsetWatchdog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentOffsetWatchdog.h; sourceTree = "<group>"; };
@@ -752,8 +749,6 @@
 				F1E9F7851773FDF300EC345C /* DisclosureButton.m */,
 				F14FE92317E3FC07005A1AB6 /* TextToggleControl.h */,
 				F14FE92417E3FC07005A1AB6 /* TextToggleControl.m */,
-				F112AD3917EE9BE3002DE136 /* MBProgressHUD.h */,
-				F112AD3A17EE9BE3002DE136 /* MBProgressHUD.m */,
 				F1B1C1E217B29C1800B6164C /* MarqueeLabel.h */,
 				F1B1C1E317B29C1800B6164C /* MarqueeLabel.m */,
 				F118C74317713DAA00ED7384 /* ContentOffsetWatchdog.h */,
@@ -1394,7 +1389,6 @@
 				F134EEDD180781A300626481 /* NSObject+DBJSON.m in Sources */,
 				9BFF29FA15387C67007ED9B1 /* ioapi.c in Sources */,
 				9BFF29FB15387C67007ED9B1 /* mztools.c in Sources */,
-				F112AD3B17EE9BE3002DE136 /* MBProgressHUD.m in Sources */,
 				F134EED1180781A300626481 /* DBKeychain.m in Sources */,
 				9BFF29FC15387C67007ED9B1 /* unzip.c in Sources */,
 				9BFF29FD15387C67007ED9B1 /* zip.c in Sources */,

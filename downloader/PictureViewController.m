@@ -89,31 +89,10 @@
 }
 
 - (void)addToTheRoll {
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:kAppDelegate.window animated:YES];
-    hud.mode = MBProgressHUDModeText;
-    hud.labelText = @"Saving...";
-    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @autoreleasepool {
             UIImage *image = [UIImage imageWithContentsOfFile:self.openFile];
             UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
-            
-            [NSThread sleepForTimeInterval:0.5f];
-
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                @autoreleasepool {
-                    NSString *fileName = self.openFile.lastPathComponent;
-                    
-                    if (fileName.length > 14) {
-                        fileName = [[fileName substringToIndex:11]stringByAppendingString:@"..."];
-                    }
-                    
-                    hud.labelText = @"Saved!";
-                    hud.detailsLabelText = fileName;
-                    
-                    [hud hide:YES afterDelay:1.0f];
-                }
-            });
         }
     });
 }

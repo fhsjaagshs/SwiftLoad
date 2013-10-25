@@ -165,9 +165,20 @@
 - (void)loadText {
     _theTextView.hidden = YES;
     
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:[kAppDelegate window] animated:YES];
-    hud.mode = MBProgressHUDModeText;
-    hud.labelText = @"Loading...";
+    UIView *hud = nil;
+    
+    if (fileSize(self.openFile) > 1024*1024*512) { // if the open file is larger than half a megabyte
+        hud = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 100, 100)];
+        hud.layer.cornerRadius = 10;
+        hud.layer.opacity = 0.7f;
+        hud.center = self.view.center;
+        hud.backgroundColor = [UIColor darkGrayColor];
+        UIActivityIndicatorView *aiv = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        aiv.frame = hud.bounds;
+        [aiv startAnimating];
+        [hud addSubview:aiv];
+        [self.view addSubview:hud];
+    }
     
     __weak TextEditorViewController *weakself = self;
     
@@ -180,7 +191,7 @@
                     [weakself.theTextView setText:fileContents];
                     [weakself.theTextView setHidden:NO];
                     [weakself.view setBackgroundColor:[UIColor whiteColor]];
-                    [hud hide:YES];
+                    [hud removeFromSuperview];
                 }
             });
         }
