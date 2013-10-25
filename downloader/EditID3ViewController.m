@@ -155,8 +155,18 @@ static NSString * const kID3EditorCellID = @"kID3EditorCellID";
         _tag[key] = value;
     }
     
-    NSString *metadata = [NSString stringWithFormat:@"%@\n%@\n%@",_tag[@"artist"],_tag[@"title"],_tag[@"album"]];
+    NSString *artist = _tag[@"artist"];
+    NSString *title = _tag[@"title"];
+    NSString *album = _tag[@"album"];
+    
+    NSString *metadata = [NSString stringWithFormat:@"%@\n%@\n%@",artist,title,album];
     [AudioPlayerViewController notif_setInfoFieldText:metadata];
+    
+    NSMutableDictionary *songInfo = [[[MPNowPlayingInfoCenter defaultCenter]nowPlayingInfo]mutableCopy];
+    songInfo[MPMediaItemPropertyArtist] = artist;
+    songInfo[MPMediaItemPropertyTitle] = title;
+    songInfo[MPMediaItemPropertyAlbumTitle] = album;
+    [[MPNowPlayingInfoCenter defaultCenter]setNowPlayingInfo:songInfo];
     
     [self close];
 }

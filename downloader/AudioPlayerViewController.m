@@ -86,26 +86,27 @@
     _titleLabel.font = [UIFont boldSystemFontOfSize:15];
     [self.view addSubview:_titleLabel];
     
-    self.secondsElapsed = [[UILabel alloc]initWithFrame:CGRectMake(0, 64+10+20+20+10, 44, 23)];
+    self.secondsElapsed = [[UILabel alloc]initWithFrame:CGRectMake(0, 124, 50, 23)];
     _secondsElapsed.font = [UIFont systemFontOfSize:15];
     _secondsElapsed.textColor = [UIColor darkGrayColor];
     _secondsElapsed.backgroundColor = [UIColor clearColor];
-    _secondsElapsed.textAlignment = NSTextAlignmentLeft;
+    _secondsElapsed.textAlignment = NSTextAlignmentRight;
     _secondsElapsed.text = @"0:00";
     [self.view addSubview:_secondsElapsed];
     
-    self.time = [[UISlider alloc]initWithFrame:CGRectMake(64, 64+10+20+20+10, screenBounds.size.width-128, 23)];
+    self.time = [[UISlider alloc]initWithFrame:CGRectMake(55, 124, screenBounds.size.width-110, 23)];
     [_time setMinimumTrackImage:[UIImage imageNamed:@"trackImage"] forState:UIControlStateNormal];
+    [_time setMaximumTrackImage:[UIImage imageNamed:@"trackImage"] forState:UIControlStateNormal];
     [_time setThumbImage:[UIImage imageNamed:@"scrubber"] forState:UIControlStateNormal];
     [_time setThumbImage:[UIImage imageNamed:@"scrubber"] forState:UIControlStateHighlighted];
     [_time addTarget:self action:@selector(sliderChanged) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:_time];
     
-    self.secondsRemaining = [[UILabel alloc]initWithFrame:CGRectMake(screenBounds.size.width-44, 64+10+20+20+10, 44, 23)];
+    self.secondsRemaining = [[UILabel alloc]initWithFrame:CGRectMake(screenBounds.size.width-50, 124, 50, 23)];
     _secondsRemaining.font = [UIFont systemFontOfSize:15];
     _secondsRemaining.textColor = [UIColor darkGrayColor];
     _secondsRemaining.backgroundColor = [UIColor clearColor];
-    _secondsRemaining.textAlignment = NSTextAlignmentRight;
+    _secondsRemaining.textAlignment = NSTextAlignmentLeft;
     _secondsRemaining.text = @"-0:00";
     [self.view addSubview:_secondsRemaining];
     
@@ -150,7 +151,7 @@
     [self.view addSubview:_volumeView];
     
     self.loopControl = [TextToggleControl control];
-    _loopControl.frame = CGRectMake((screenBounds.size.width/2)-30, 160, 60, 30);
+    _loopControl.frame = CGRectMake((screenBounds.size.width/2)-30, 154, 60, 30);
     _loopControl.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     _loopControl.backgroundColor = [UIColor clearColor];
     [_loopControl addTarget:self action:@selector(loopControlPressed) forControlEvents:UIControlEventTouchUpInside];
@@ -368,7 +369,13 @@
 
     if (components.count > 0) {
         _titleLabel.text = (NSString *)components[1];
-        _artistAlbumLabel.text = [NSString stringWithFormat:@"%@ - %@",(NSString *)components[0],(NSString *)components[2]];
+        NSString *album = (NSString *)components[2];
+        
+        if (![album isEqualToString:@"-"]) {
+            _artistAlbumLabel.text = [NSString stringWithFormat:@"%@ - %@",(NSString *)components[0],album];
+        } else {
+            _artistAlbumLabel.text = (NSString *)components[0];
+        }
     }
 }
 
