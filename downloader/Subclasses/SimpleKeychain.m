@@ -29,7 +29,7 @@
     id ret = nil;
     
     CFDataRef keyData = NULL;
-    if (SecItemCopyMatching((__bridge  CFDictionaryRef)keychainQuery, (CFTypeRef *)&keyData) == noErr) {
+    if (SecItemCopyMatching((__bridge CFDictionaryRef)keychainQuery, (CFTypeRef *)&keyData) == noErr) {
         @try {
             ret = [NSKeyedUnarchiver unarchiveObjectWithData:(__bridge NSData *)keyData];
         }

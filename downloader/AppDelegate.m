@@ -404,7 +404,7 @@ NSString * deconflictPath(NSString *path) {
 }
 
 + (void)enableStyling {
-    UIColor *tintColor = [UIColor colorWithRed:105.0f/255.0f green:54.0f/255.0f blue:153.0f/255.0f alpha:0.9f];
+    UIColor *tintColor = [UIColor colorWithRed:105.0f/255.0f green:54.0f/255.0f blue:153.0f/255.0f alpha:1.0f];
     
     [[UINavigationBar appearance]setBarTintColor:tintColor];
     [[UIToolbar appearance]setBarTintColor:tintColor];

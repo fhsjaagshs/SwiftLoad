@@ -19,11 +19,7 @@
 - (void)startProcForKey:(NSString *)key andExpirationHandler:(void(^)())block {
     __block UIBackgroundTaskIdentifier identifier = [[UIApplication sharedApplication]beginBackgroundTaskWithExpirationHandler:^{
         block();
-        if (_core[key]) {
-            [_core removeObjectForKey:key];
-        }
-        [[UIApplication sharedApplication]endBackgroundTask:identifier];
-        identifier = UIBackgroundTaskInvalid;
+        [self endProcForKey:key];
     }];
     
     _core[key] = [NSString stringWithFormat:@"%lu",(unsigned long)identifier];
@@ -41,12 +37,17 @@
 }
 
 - (void)endAllTasks {
-    for (NSString *key in [[_core mutableCopy]allKeys]) {
-        [self endProcForKey:key];
+    for (NSString *key in _core.allKeys) {
+        UIBackgroundTaskIdentifier identifier = [_core[key]unsignedIntValue];
+        if (identifier != UIBackgroundTaskInvalid) {
+            [[UIApplication sharedApplication]endBackgroundTask:identifier];
+            identifier = UIBackgroundTaskInvalid;
+        }
     }
+    [_core removeAllObjects];
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         self.core = [NSMutableDictionary dictionary];
