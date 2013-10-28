@@ -12,7 +12,7 @@
 
 - (void)drawRect:(CGRect)rect {
     int rowHeight = self.bounds.size.height;
-    [[UIImage imageNamed:self.highlighted?@"disclosure_highlighted":@"disclosure"]drawInRect:CGRectMake(rowHeight/4, rowHeight/4, rowHeight/2, rowHeight/2)];
+    [[UIImage imageNamed:self.highlighted?@"disclosure_highlighted":@"disclosure"]drawInRect:CGRectMake((rowHeight-11)/2, (rowHeight-11)/2, 11, 11)];
 }
 
 + (DisclosureButton *)button {

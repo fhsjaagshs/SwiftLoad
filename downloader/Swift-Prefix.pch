@@ -25,7 +25,6 @@
     #import "UIViewController+AutoNib.h"
     #import "UIAlertView+BlockExtensions.h"
     #import "UIActionSheet+BlockExtensions.h"
-    #import "UIScrollView+ZoomToPoint.h"
     #import "MFMailComposeViewController+BlockExtensions.h"
     #import "NSString+mods.h"
     #import "UIImage+Additions.h"

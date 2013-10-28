@@ -45,7 +45,6 @@
     _theTextView.tintColor = [UIColor blueColor];
     _theTextView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0);
     _theTextView.scrollIndicatorInsets = _theTextView.contentInset;
-    _theTextView.clipsToBounds = NO;
     [self.view addSubview:_theTextView];
     [self.view bringSubviewToFront:_theTextView];
     

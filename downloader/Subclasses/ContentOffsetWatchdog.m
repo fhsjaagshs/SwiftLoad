@@ -35,7 +35,7 @@
         _statusLabel.font = [UIFont boldSystemFontOfSize:(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)?18:13];
 		_statusLabel.textColor = [UIColor darkGrayColor];
 		_statusLabel.shadowOffset = CGSizeZero;
-		_statusLabel.backgroundColor = [UIColor clearColor];
+		_statusLabel.backgroundColor = [UIColor whiteColor];
 		_statusLabel.textAlignment = NSTextAlignmentCenter;
 		[self addSubview:_statusLabel];
         

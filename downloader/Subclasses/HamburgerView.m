@@ -50,7 +50,7 @@ static NSString * const kCellIdentifierHamburgerTask = @"hamburgertask";
     self = [super init];
     if (self) {
         self.userInteractionEnabled = YES;
-        self.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = [UIColor whiteColor];
         self.alpha = 0.0f;
         self.frame = CGRectMake(0, 0, 250, [[UIScreen mainScreen]bounds].size.height);
         self.theTableView = [[UITableView alloc]initWithFrame:self.bounds style:UITableViewStylePlain];

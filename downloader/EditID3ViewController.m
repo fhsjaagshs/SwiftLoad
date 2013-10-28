@@ -193,6 +193,7 @@ static NSString * const kID3EditorCellID = @"kID3EditorCellID";
     
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kID3EditorCellID];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
     [cell.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
@@ -207,8 +208,6 @@ static NSString * const kID3EditorCellID = @"kID3EditorCellID";
         [cell.contentView addSubview:_albumField];
         _albumField.frame = cell.bounds;
     }
-    
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     return cell;
 }

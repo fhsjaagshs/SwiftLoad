@@ -13,6 +13,8 @@
 - (void)zoomOut;
 - (void)resetImage;
 
+- (void)zoomToPoint:(CGPoint)zoomPoint withScale:(CGFloat)scale animated:(BOOL)animated;
+
 @property (nonatomic, strong) UIImage *image;
 
 @end
