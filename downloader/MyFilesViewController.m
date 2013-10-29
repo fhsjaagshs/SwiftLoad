@@ -573,6 +573,7 @@ static NSString *CellIdentifier = @"Cell";
     
     for (SwipeCell *cell in _theTableView.visibleCells) {
         cell.swipeEnabled = !_theTableView.editing;
+        cell.disclosureButton.hidden = _theTableView.editing;
     }
     
     [self updateCopyButtonState];
