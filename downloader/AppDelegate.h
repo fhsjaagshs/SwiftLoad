@@ -33,6 +33,7 @@ NSString * deconflictPath(NSString *path);
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (nonatomic, strong) UIWindow *window;
+@property (nonatomic, strong) MyFilesViewController *viewController;
 
 // styling
 + (void)enableStyling;

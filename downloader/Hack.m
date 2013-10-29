@@ -15,7 +15,7 @@
         if (event.subtype == UIEventTypeTouches) {
             UITouch *touch = [[event touchesForWindow:self.keyWindow]anyObject];
             if (touch.phase == UITouchPhaseEnded) {
-                ((MyFilesViewController *)([[UIApplication sharedApplication]appWindow].rootViewController)).watchdogCanGo = YES;
+                kAppDelegate.viewController.watchdogCanGo = YES;
             }
         }
     }

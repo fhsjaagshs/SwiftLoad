@@ -457,7 +457,8 @@ NSString * deconflictPath(NSString *path) {
 	[DBSession setSharedSession:session];
     
     self.window = [[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]];
-    _window.rootViewController = [MyFilesViewController viewController];
+    self.viewController = [MyFilesViewController viewController];
+    _window.rootViewController = _viewController;
     _window.backgroundColor = [UIColor whiteColor];
     [_window makeKeyAndVisible];
     
