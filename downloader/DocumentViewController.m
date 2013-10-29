@@ -11,6 +11,7 @@
 @interface DocumentViewController () <UIWebViewDelegate>
 
 @property (nonatomic, strong) UIWebView *webView;
+@property (nonatomic, strong) UINavigationBar *bar;
 
 @end
 
@@ -31,13 +32,13 @@
     _webView.scrollView.clipsToBounds = NO;
     [self.view addSubview:_webView];
     
-    UINavigationBar *bar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
-    bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    self.bar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0, screenBounds.size.width, 64)];
+    _bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     UINavigationItem *topItem = [[UINavigationItem alloc]initWithTitle:self.openFile.lastPathComponent];
     topItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
     topItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
-    [bar pushNavigationItem:topItem animated:NO];
-    [self.view addSubview:bar];
+    [_bar pushNavigationItem:topItem animated:NO];
+    [self.view addSubview:_bar];
 
     NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:self.openFile] cachePolicy:NSURLCacheStorageAllowedInMemoryOnly timeoutInterval:30.0f];
     [_webView loadRequest:req];
