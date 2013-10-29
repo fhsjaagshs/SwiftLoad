@@ -202,9 +202,7 @@
     [_secondsElapsed setHidden:hide];
     [_loopControl setHidden:hide];
     [_stopButton setHidden:hide];
-  //  [_artistLabel setHidden:hide];
     [_titleLabel setHidden:hide];
-   // [_albumLabel setHidden:hide];
     [_artistAlbumLabel setHidden:hide];
     [_prevTrack setHidden:hide];
     [_nxtTrack setHidden:hide];
