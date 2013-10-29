@@ -287,6 +287,10 @@ static NSString *CellIdentifier = @"dbcell";
             
             NSMutableArray *array = [NSMutableArray array];
             
+            if (!_shouldMassInsert) {
+                [_database open];
+            }
+            
             for (DBDeltaEntry *entry in entries) {
                 DBMetadata *item = entry.metadata;
                 if (item) {
@@ -298,8 +302,12 @@ static NSString *CellIdentifier = @"dbcell";
                         } else {
                             [weakself addObjectToDatabase:item withLowercasePath:entry.lowercasePath];
                         }
-                    }  
+                    }
                 }
+            }
+            
+            if (!_shouldMassInsert) {
+                [_database close];
             }
             
             if (_shouldMassInsert) {

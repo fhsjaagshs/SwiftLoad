@@ -20,6 +20,18 @@
     return UIStatusBarStyleLightContent;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [[UINavigationBar appearance]setBackgroundColor:[[UINavigationBar appearance].barTintColor colorWithAlphaComponent:0.9f]];
+    [[UIToolbar appearance]setBackgroundColor:[[UIToolbar appearance].barTintColor colorWithAlphaComponent:0.9f]];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [[UINavigationBar appearance]setBackgroundColor:nil];
+    [[UIToolbar appearance]setBackgroundColor:nil];
+}
+
 + (instancetype)viewControllerWithFilepath:(NSString *)filepath {
     return [[[self class]alloc]initWithFilepath:filepath];
 }

@@ -419,9 +419,6 @@ NSString * deconflictPath(NSString *path) {
 
 + (void)disableStyling {
     
-    [[UINavigationBar appearance]setClipsToBounds:NO];
-    [[UIToolbar appearance]setClipsToBounds:NO];
-    
     [[UINavigationBar appearance]setBarTintColor:nil];
     [[UIToolbar appearance]setBarTintColor:nil];
     
