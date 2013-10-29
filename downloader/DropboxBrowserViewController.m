@@ -19,7 +19,7 @@ static NSString *CellIdentifier = @"dbcell";
 @implementation NSString (dropbox_browser)
 
 - (NSString *)fhs_normalize {
-    if (![[self substringFromIndex:1]isEqualToString:@"/"]) {
+    if (![[self substringFromIndex:self.length-1]isEqualToString:@"/"]) {
         return [self.lowercaseString stringByAppendingString:@"/"];
     }
     return self.lowercaseString;
@@ -175,7 +175,7 @@ static NSString *CellIdentifier = @"dbcell";
 - (void)loadContentsOfDirectory:(NSString *)string {
     [_currentPathItems removeAllObjects];
     [_database open];
-    FMResultSet *s = [_database executeQuery:@"SELECT * FROM dropbox_data where lowercasepath=? ORDER BY filename",string.lowercaseString.fhs_normalize];
+    FMResultSet *s = [_database executeQuery:@"SELECT * FROM dropbox_data WHERE lowercasepath=? ORDER BY filename",string.lowercaseString.fhs_normalize];
     while ([s next]) {
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
         dict[NSFileName] = [s stringForColumn:@"filename"];
@@ -197,7 +197,7 @@ static NSString *CellIdentifier = @"dbcell";
     [_database close];
 }
 
-- (void)removeItemWithLowercasePath:(NSString *)path andFilename:(NSString *)filename{
+- (void)removeItemWithLowercasePath:(NSString *)path andFilename:(NSString *)filename {
     [_database open];
     [_database executeUpdate:@"DELETE FROM dropbox_data WHERE lowercasepath=? AND filename=?",path.lowercaseString.fhs_normalize,filename];
     [_database close];
@@ -372,7 +372,7 @@ static NSString *CellIdentifier = @"dbcell";
     
     if ([filetype isEqualToString:(NSString *)NSFileTypeDirectory]) {
         _navBar.topItem.title = [_navBar.topItem.title stringByAppendingPathComponent:fileDict[NSFileName]];
-        [self loadContentsOfDirectory:[_navBar.topItem.title fhs_normalize]];
+        [self loadContentsOfDirectory:_navBar.topItem.title];
         [self refreshStateWithAnimationStyle:UITableViewRowAnimationLeft];
     } else {
         __weak DropboxBrowserViewController *weakself = self;
