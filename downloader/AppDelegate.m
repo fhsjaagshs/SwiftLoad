@@ -404,8 +404,9 @@ NSString * deconflictPath(NSString *path) {
 }
 
 + (void)enableStyling {
-   // UIColor *tintColor = [UIColor colorWithRed:105.0f/255.0f green:54.0f/255.0f blue:153.0f/255.0f alpha:1.0f];
-    UIColor *tintColor = [UIColor colorWithRed:135.0f/255.0f green:84.0f/255.0f blue:193.0f/255.0f alpha:1.0f];
+    // UIColor *tintColor = [UIColor colorWithRed:105.0f/255.0f green:54.0f/255.0f blue:153.0f/255.0f alpha:1.0f]; // original Roman Purple
+    // UIColor *tintColor = [UIColor colorWithRed:135.0f/255.0f green:84.0f/255.0f blue:193.0f/255.0f alpha:1.0f]; // before JMS's modifications
+    UIColor *tintColor = [UIColor colorWithRed:135.0f/255.0f green:94.0f/255.0f blue:203.0f/255.0f alpha:1.0f];
 
     [[UINavigationBar appearance]setBarTintColor:tintColor];
     [[UIToolbar appearance]setBarTintColor:tintColor];
