@@ -156,7 +156,7 @@ static NSString *CellIdentifier = @"dbcell";
             
             for (DBMetadata *item in array) {
                 NSString *filename = item.filename;
-                NSString *lowercasePath = [[item.path stringByDeletingLastPathComponent]fhs_normalize];
+                NSString *lowercasePath = item.path.stringByDeletingLastPathComponent.fhs_normalize;
                 int type = item.isDirectory?2:1;
                 int date = item.lastModifiedDate.timeIntervalSince1970;
                 long long size = item.totalBytes;
@@ -175,7 +175,7 @@ static NSString *CellIdentifier = @"dbcell";
 - (void)loadContentsOfDirectory:(NSString *)string {
     [_currentPathItems removeAllObjects];
     [_database open];
-    FMResultSet *s = [_database executeQuery:@"SELECT * FROM dropbox_data where lowercasepath=? ORDER BY filename",[string lowercaseString]];
+    FMResultSet *s = [_database executeQuery:@"SELECT * FROM dropbox_data where lowercasepath=? ORDER BY filename",string.lowercaseString.fhs_normalize];
     while ([s next]) {
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
         dict[NSFileName] = [s stringForColumn:@"filename"];
@@ -197,9 +197,9 @@ static NSString *CellIdentifier = @"dbcell";
     [_database close];
 }
 
-- (void)removeItemWithLowercasePath:(NSString *)path {
+- (void)removeItemWithLowercasePath:(NSString *)path andFilename:(NSString *)filename{
     [_database open];
-    [_database executeUpdate:@"DELETE FROM dropbox_data WHERE lowercasepath=?",path.lowercaseString];
+    [_database executeUpdate:@"DELETE FROM dropbox_data WHERE lowercasepath=? AND filename=?",path.lowercaseString.fhs_normalize,filename];
     [_database close];
 }
 
@@ -209,14 +209,14 @@ static NSString *CellIdentifier = @"dbcell";
     NSNumber *date = [NSNumber numberWithInt:item.lastModifiedDate.timeIntervalSince1970];
     NSNumber *size = [NSNumber numberWithLongLong:item.totalBytes];
     
-    FMResultSet *s = [_database executeQuery:@"SELECT type FROM dropbox_data WHERE filename=? and lowercasepath=? LIMIT 1",filename,lowercasePath];
+    FMResultSet *s = [_database executeQuery:@"SELECT * FROM dropbox_data WHERE filename=? and lowercasepath=? LIMIT 1",filename,lowercasePath.fhs_normalize];
     BOOL shouldUpdate = [s next];
     [s close];
-
+    
     if (shouldUpdate) {
-        [_database executeUpdate:@"UPDATE dropbox_data SET date=?,size=? WHERE filename=?,lowercasepath=?",date,size,filename,lowercasePath];
+        [_database executeUpdate:@"UPDATE dropbox_data SET date=?,size=? WHERE filename=?,lowercasepath=?",date,size,filename,lowercasePath.fhs_normalize];
     } else {
-        [_database executeUpdate:@"INSERT INTO dropbox_data (date,size,type,filename,lowercasepath) VALUES (?,?,?,?,?)",date,size,type,filename,lowercasePath];
+        [_database executeUpdate:@"INSERT INTO dropbox_data (date,size,type,filename,lowercasepath) VALUES (?,?,?,?,?)",date,size,type,filename,lowercasePath.fhs_normalize];
     }
 }
 
@@ -275,7 +275,7 @@ static NSString *CellIdentifier = @"dbcell";
             }
             
             if (shouldReset) {
-                NSLog(@"Resetting");
+                //NSLog(@"Resetting");
                 weakself.cursor = nil;
                 [weakself.currentPathItems removeAllObjects];
                 weakself.shouldMassInsert = YES;
@@ -295,12 +295,12 @@ static NSString *CellIdentifier = @"dbcell";
                 DBMetadata *item = entry.metadata;
                 if (item) {
                     if (item.isDeleted) {
-                        [weakself removeItemWithLowercasePath:entry.lowercasePath];
+                        [weakself removeItemWithLowercasePath:entry.lowercasePath.stringByDeletingLastPathComponent andFilename:item.filename];
                     } else {
                         if (_shouldMassInsert) {
                             [array addObject:item];
                         } else {
-                            [weakself addObjectToDatabase:item withLowercasePath:entry.lowercasePath];
+                            [weakself addObjectToDatabase:item withLowercasePath:entry.lowercasePath.stringByDeletingLastPathComponent]; // my lowercase path doesn't include the filename, Dropbox's does.
                         }
                     }
                 }
@@ -315,10 +315,10 @@ static NSString *CellIdentifier = @"dbcell";
             }
 
             if (hasMore) {
-                NSLog(@"Continuing");
+                //NSLog(@"Continuing");
                 [weakself updateFileListing];
             } else {
-                NSLog(@"done");
+                //NSLog(@"done");
                 weakself.refreshControl.attributedTitle = nil;
                 [weakself saveCursor];
                 weakself.shouldMassInsert = NO;
