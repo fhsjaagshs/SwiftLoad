@@ -84,6 +84,7 @@ static NSString *CellIdentifier = @"dbcell";
     topItem.leftBarButtonItem.enabled = NO;
     [_navBar pushNavigationItem:topItem animated:YES];
     [self.view addSubview:_navBar];
+    _navBar.barTintColor = [UIColor colorWithRed:61.0f/255.0f green:154.0f/255.0f blue:232.0f/255.0f alpha:1.0f];
 
     self.currentPathItems = [NSMutableArray array];
     
