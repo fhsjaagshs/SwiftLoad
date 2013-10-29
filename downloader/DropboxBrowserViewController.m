@@ -288,8 +288,8 @@ static NSString *CellIdentifier = @"dbcell";
             
             NSMutableArray *array = [NSMutableArray array];
             
-            if (!_shouldMassInsert) {
-                [_database open];
+            if (!weakself.shouldMassInsert) {
+                [weakself.database open];
             }
             
             for (DBDeltaEntry *entry in entries) {
@@ -298,7 +298,7 @@ static NSString *CellIdentifier = @"dbcell";
                     if (item.isDeleted) {
                         [weakself removeItemWithLowercasePath:entry.lowercasePath.stringByDeletingLastPathComponent andFilename:item.filename];
                     } else {
-                        if (_shouldMassInsert) {
+                        if (weakself.shouldMassInsert) {
                             [array addObject:item];
                         } else {
                             [weakself addObjectToDatabase:item withLowercasePath:entry.lowercasePath.stringByDeletingLastPathComponent]; // my lowercase path doesn't include the filename, Dropbox's does.
@@ -307,11 +307,11 @@ static NSString *CellIdentifier = @"dbcell";
                 }
             }
             
-            if (!_shouldMassInsert) {
+            if (!weakself.shouldMassInsert) {
                 [_database close];
             }
             
-            if (_shouldMassInsert) {
+            if (weakself.shouldMassInsert) {
                 [weakself batchInsert:array];
             }
 
