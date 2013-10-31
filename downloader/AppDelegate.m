@@ -275,18 +275,19 @@ NSString * deconflictPath(NSString *path) {
     }
 }
 
+// the audio player is paused by the OS at this point
 - (void)audioPlayerBeginInterruption:(AVAudioPlayer *)player {
     if (_audioPlayer.isPlaying) {
         [_audioPlayer pause];
     }
+    [AudioPlayerViewController notif_setPausePlayTitlePlay];
 }
 
 - (void)audioPlayerEndInterruption:(AVAudioPlayer *)player withOptions:(NSUInteger)flags {
     if (!_audioPlayer.isPlaying) {
         [_audioPlayer play];
-    } else {
-        [AudioPlayerViewController notif_setPausePlayTitlePlay];
     }
+    [AudioPlayerViewController notif_setPausePlayTitlePause];
 }
 
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
