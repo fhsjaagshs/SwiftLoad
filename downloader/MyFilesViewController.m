@@ -6,7 +6,6 @@
 //  Copyright 2011 Nathaniel Symer. All rights reserved.
 //
 
-
 #import "MyFilesViewController.h"
 #import "SwiftLoadCell.h"
 
