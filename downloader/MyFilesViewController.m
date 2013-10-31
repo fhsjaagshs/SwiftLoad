@@ -180,9 +180,7 @@ static NSString *CellIdentifier = @"Cell";
     [_theTableView deleteRowsAtIndexPaths:selectedIndeces withRowAnimation:UITableViewRowAnimationRight];
     [_theTableView endUpdates];
     
-    [_filelist removeAllObjects];
     [self reindexFilelistIfNecessary];
-    [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     
     for (NSIndexPath *indexPath in selectedIndeces) {
         [_theTableView deselectRowAtIndexPath:indexPath animated:NO];
