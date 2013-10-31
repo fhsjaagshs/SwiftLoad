@@ -96,6 +96,7 @@ static NSString *CellIdentifier = @"Cell";
     
     [[FilesystemMonitor sharedMonitor]setChangedHandler:^{
         [weakself.filelist removeAllObjects];
+        [weakself reindexFilelistIfNecessary];
         [weakself.theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     }];
     
@@ -163,18 +164,28 @@ static NSString *CellIdentifier = @"Cell";
 - (void)deleteSelectedFiles {
     [[FilesystemMonitor sharedMonitor]invalidate];
     
-    for (NSIndexPath *indexPath in _theTableView.indexPathsForSelectedRows) {
+    NSArray *selectedIndeces = _theTableView.indexPathsForSelectedRows;
+    
+    NSMutableIndexSet *indecesToDelete = [NSMutableIndexSet indexSet];
+    
+    for (NSIndexPath *indexPath in selectedIndeces) {
+        [indecesToDelete addIndex:indexPath.row];
         NSString *filename = _filelist[indexPath.row];
-        [_filelist removeObjectAtIndex:indexPath.row];
         NSString *currentPath = [kAppDelegate.managerCurrentDir stringByAppendingPathComponent:filename];
         [[NSFileManager defaultManager]removeItemAtPath:currentPath error:nil];
     }
     
+    [_filelist removeObjectsAtIndexes:indecesToDelete];
+    
     [_theTableView beginUpdates];
-    [_theTableView deleteRowsAtIndexPaths:_theTableView.indexPathsForSelectedRows withRowAnimation:UITableViewRowAnimationRight];
+    [_theTableView deleteRowsAtIndexPaths:selectedIndeces withRowAnimation:UITableViewRowAnimationRight];
     [_theTableView endUpdates];
     
-    for (NSIndexPath *indexPath in _theTableView.indexPathsForSelectedRows) {
+    [_filelist removeAllObjects];
+    [self reindexFilelistIfNecessary];
+    [_theTableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+    
+    for (NSIndexPath *indexPath in selectedIndeces) {
         [_theTableView deselectRowAtIndexPath:indexPath animated:NO];
     }
     
@@ -182,7 +193,6 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)pasteInLocation:(NSString *)location {
-    
     for (NSString *oldPath in _copiedList) {
         NSString *newPath = deconflictPath([location stringByAppendingPathComponent:oldPath.lastPathComponent]);
         
@@ -424,6 +434,7 @@ static NSString *CellIdentifier = @"Cell";
     }
     
     cell.delegate = self;
+    cell.disclosureButton.hidden = _theTableView.editing;
     
     NSString *filename = _filelist[indexPath.row];
     NSString *file = [kAppDelegate.managerCurrentDir stringByAppendingPathComponent:filename];
