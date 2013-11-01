@@ -248,6 +248,7 @@ typedef void (^animationCompletionBlock)(void);
         CGSize minimumLabelSize = CGSizeZero;
         
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
+        
         minimumLabelSize = [(NSString *)self.subLabel.text boundingRectWithSize:maxSize
                                                                          options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingTruncatesLastVisibleLine
                                                                       attributes:@{NSFontAttributeName:self.subLabel.font}

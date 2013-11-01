@@ -670,7 +670,7 @@ static NSString *CellIdentifier = @"Cell";
         }
         
         if (!opened) {
-            [UIAlertView showAlertWithTitle:@"No External Viewers" andMessage:[NSString stringWithFormat:@"No installed applications are capable of opening %@.",self.openFile.lastPathComponent]];
+            [UIAlertView showAlertWithTitle:@"No External Viewers" andMessage:[NSString stringWithFormat:@"No installed applications can %@.",self.openFile.lastPathComponent]];
         }
     }
     self.openFile = nil;
