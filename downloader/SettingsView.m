@@ -43,6 +43,10 @@ static NSString * const kSettingsTableViewCellID = @"settingsTableViewCellID";
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(dropboxAuthenticationFailed) name:@"db_auth_failure" object:nil];
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    return [NSString stringWithFormat:@"Swift v%@",[NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"]];
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
