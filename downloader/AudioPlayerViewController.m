@@ -172,8 +172,12 @@
     
     [self.view sendSubviewToBack:_albumArtwork];
 
-    [kAppDelegate playFile:self.openFile];
-    
+    if (![self.openFile isEqualToString:kAppDelegate.nowPlayingFile]) {
+        [kAppDelegate playFile:self.openFile];
+    } else {
+        [kAppDelegate warmAudioFileMetadata:self.openFile];
+    }
+ 
     [self refreshLoopState];
     [MarqueeLabel controllerLabelsShouldAnimate:self];
 }

@@ -149,18 +149,24 @@ NSString * deconflictPath(NSString *path) {
     return [[dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension.lowercaseString IN %@",extensions]]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
 }
 
+- (void)warmAudioFileMetadata:(NSString *)file {
+    [self loadMetadataForFile:file];
+    [AudioPlayerViewController notif_setOpenFile:file];
+    [AudioPlayerViewController notif_setLoop];
+}
+
 - (void)playFile:(NSString *)file {
     NSError *playingError = nil;
+    
+    [self loadMetadataForFile:file];
+    [AudioPlayerViewController notif_setOpenFile:file];
+    
+    __weak AppDelegate *weakself = self;
     
     if (![file isEqualToString:self.nowPlayingFile]) {
         self.audioPlayer = [[PPAudioPlayer alloc]initWithContentsOfURL:[NSURL fileURLWithPath:file] fileTypeHint:file.UTI error:&playingError];
         _audioPlayer.delegate = self;
     }
-    
-    [self loadMetadataForFile:file];
-    [AudioPlayerViewController notif_setOpenFile:file];
-
-    __weak AppDelegate *weakself = self;
     
     if (!playingError) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

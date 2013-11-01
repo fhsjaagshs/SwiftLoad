@@ -42,6 +42,7 @@ NSString * deconflictPath(NSString *path);
 // Audio Player
 @property (nonatomic, strong) PPAudioPlayer *audioPlayer;
 - (NSString *)nowPlayingFile;
+- (void)warmAudioFileMetadata:(NSString *)file;
 - (void)playFile:(NSString *)file;
 - (void)skipToPreviousTrack;
 - (void)skipToNextTrack;
