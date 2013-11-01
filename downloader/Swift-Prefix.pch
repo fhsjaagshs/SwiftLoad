@@ -12,9 +12,10 @@
     #import <MessageUI/MessageUI.h>
     #import <AVFoundation/AVFoundation.h>
     #import <MediaPlayer/MediaPlayer.h>
-    #import <GameKit/GameKit.h>
-    #import <AudioToolbox/AudioToolbox.h>
     #import <CommonCrypto/CommonCrypto.h>
+    #import <MultipeerConnectivity/MultipeerConnectivity.h>
+
+    #import <objc/runtime.h>
 
     #import "DropboxSDK.h"
 

@@ -7,8 +7,6 @@
 //
 
 #import "P2PManager.h"
-#import <MultipeerConnectivity/MultipeerConnectivity.h>
-#import <objc/runtime.h>
 
 static NSString * const kServiceType = @"SwiftBluetooth";
 
