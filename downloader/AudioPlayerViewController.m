@@ -212,13 +212,6 @@
 }
 
 - (void)close {
-    AppDelegate *ad = kAppDelegate;
-    
-    if (!ad.audioPlayer.isPlaying) {
-        [ad.audioPlayer stop];
-        [ad setAudioPlayer:nil];
-    }
-    
     [HamburgerView reloadCells];
     
     [self stopUpdatingTime];
