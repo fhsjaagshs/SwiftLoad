@@ -98,7 +98,6 @@
 		F1434B3E179B21C1001A672C /* UITableView+CoolRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = F1434B3D179B21C1001A672C /* UITableView+CoolRefresh.m */; };
 		F1444581145A04A30026CDB7 /* PictureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F144457F145A04A30026CDB7 /* PictureViewController.m */; };
 		F145023B1781181700096202 /* DropboxDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = F145023A1781181700096202 /* DropboxDownload.m */; };
-		F149A6781491686D0038F1FC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F149A6771491686D0038F1FC /* AudioToolbox.framework */; };
 		F149A685149176E60038F1FC /* MoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F149A683149176E60038F1FC /* MoviePlayerViewController.m */; };
 		F14B819D1788E2D300ADEF99 /* SimpleKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = F14B819C1788E2D300ADEF99 /* SimpleKeychain.m */; };
 		F14FE92517E3FC07005A1AB6 /* TextToggleControl.m in Sources */ = {isa = PBXBuildFile; fileRef = F14FE92417E3FC07005A1AB6 /* TextToggleControl.m */; };
@@ -118,6 +117,7 @@
 		F163C4E917AB59B1007AB612 /* CircularProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = F163C4E817AB59B1007AB612 /* CircularProgressView.m */; };
 		F166BBC414E2171A003E5A07 /* WebDAVViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F166BBC214E2171A003E5A07 /* WebDAVViewController.m */; };
 		F166BC1914E21973003E5A07 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F166BC1814E21973003E5A07 /* libxml2.dylib */; };
+		F16787131824580300C42310 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F16787121824580300C42310 /* AudioToolbox.framework */; };
 		F1681E8F17A5BE9B00ACAAD0 /* UnzippingTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F1681E8E17A5BE9B00ACAAD0 /* UnzippingTask.m */; };
 		F1681E9217A5C28D00ACAAD0 /* CompressionTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F1681E9117A5C28D00ACAAD0 /* CompressionTask.m */; };
 		F168EDAF1790C61000C21D6F /* UIImage+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = F168EDAE1790C61000C21D6F /* UIImage+Additions.m */; };
@@ -384,7 +384,6 @@
 		F144457F145A04A30026CDB7 /* PictureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PictureViewController.m; sourceTree = "<group>"; };
 		F14502391781181700096202 /* DropboxDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DropboxDownload.h; path = ../DropboxDownload.h; sourceTree = "<group>"; };
 		F145023A1781181700096202 /* DropboxDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DropboxDownload.m; path = ../DropboxDownload.m; sourceTree = "<group>"; };
-		F149A6771491686D0038F1FC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		F149A682149176E60038F1FC /* MoviePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoviePlayerViewController.h; sourceTree = "<group>"; };
 		F149A683149176E60038F1FC /* MoviePlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoviePlayerViewController.m; sourceTree = "<group>"; };
 		F14B819B1788E2D300ADEF99 /* SimpleKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleKeychain.h; sourceTree = "<group>"; };
@@ -416,6 +415,7 @@
 		F166BBC114E2171A003E5A07 /* WebDAVViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebDAVViewController.h; sourceTree = "<group>"; };
 		F166BBC214E2171A003E5A07 /* WebDAVViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebDAVViewController.m; sourceTree = "<group>"; };
 		F166BC1814E21973003E5A07 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		F16787121824580300C42310 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		F1681E8D17A5BE9B00ACAAD0 /* UnzippingTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnzippingTask.h; sourceTree = "<group>"; };
 		F1681E8E17A5BE9B00ACAAD0 /* UnzippingTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnzippingTask.m; sourceTree = "<group>"; };
 		F1681E9017A5C28D00ACAAD0 /* CompressionTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompressionTask.h; sourceTree = "<group>"; };
@@ -579,6 +579,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F16787131824580300C42310 /* AudioToolbox.framework in Frameworks */,
 				F150D6B2177F5B9400E4C094 /* libsqlite3.dylib in Frameworks */,
 				F1C0CEFC1661AEC6001B1B42 /* libz.1.2.5.dylib in Frameworks */,
 				F166BC1914E21973003E5A07 /* libxml2.dylib in Frameworks */,
@@ -586,7 +587,6 @@
 				F153EAA417E50EA100896BB0 /* StoreKit.framework in Frameworks */,
 				F1D3A573157A8F9E00A2D141 /* Security.framework in Frameworks */,
 				F1122A76142E4E8B00A04CC6 /* MediaPlayer.framework in Frameworks */,
-				F149A6781491686D0038F1FC /* AudioToolbox.framework in Frameworks */,
 				F1F114C7142AA3F400199C3C /* CFNetwork.framework in Frameworks */,
 				F11C403513F82FE00077F5D1 /* CoreGraphics.framework in Frameworks */,
 				F1F114E3142AA73F00199C3C /* MobileCoreServices.framework in Frameworks */,
@@ -679,6 +679,7 @@
 		F119CEF613F46DA6007D67E4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F16787121824580300C42310 /* AudioToolbox.framework */,
 				F150D6B1177F5B9400E4C094 /* libsqlite3.dylib */,
 				F166BC1814E21973003E5A07 /* libxml2.dylib */,
 				F1C0CEFB1661AEC6001B1B42 /* libz.1.2.5.dylib */,
@@ -687,7 +688,6 @@
 				9B50F4E51613C4CD0040F394 /* CoreMedia.framework */,
 				F1D3A572157A8F9E00A2D141 /* Security.framework */,
 				F1A72947149876040049DBB6 /* GameKit.framework */,
-				F149A6771491686D0038F1FC /* AudioToolbox.framework */,
 				F1122A75142E4E8B00A04CC6 /* MediaPlayer.framework */,
 				F1F114E4142AA74F00199C3C /* CoreGraphics.framework */,
 				F1F114E2142AA73F00199C3C /* MobileCoreServices.framework */,
@@ -1513,7 +1513,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1547,7 +1547,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 3;
