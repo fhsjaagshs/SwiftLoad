@@ -25,5 +25,7 @@
 + (void)notif_setShouldUpdateTime:(BOOL)flag;
 + (void)notif_setAlbumArt:(UIImage *)art;
 
++ (instancetype)viewControllerFromHamburgerWithFilepath:(NSString *)filepath;
+
 @end
 

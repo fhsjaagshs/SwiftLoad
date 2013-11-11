@@ -31,6 +31,8 @@
 
 @property (nonatomic, strong) TextToggleControl *loopControl;
 
+@property (nonatomic, assign) BOOL isFromHamburger;
+
 @end
 
 @implementation AudioPlayerViewController
@@ -46,6 +48,12 @@
         [_pausePlay setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
         [_pausePlay setImage:[UIImage imageNamed:@"play_selected"] forState:UIControlStateHighlighted];
     }
+}
+
++ (instancetype)viewControllerFromHamburgerWithFilepath:(NSString *)filepath {
+    AudioPlayerViewController *viewController = [self viewControllerWhiteWithFilepath:filepath];
+    viewController.isFromHamburger = YES;
+    return viewController;
 }
 
 - (void)loadView {

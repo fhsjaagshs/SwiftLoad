@@ -137,7 +137,7 @@ static NSString *CellIdentifier = @"Cell";
     } else if (index == 3) {
         [self presentViewController:[SettingsView viewControllerWhite] animated:YES completion:nil];
     } else if (index == 4) {
-        [self presentViewController:[AudioPlayerViewController viewControllerWhiteWithFilepath:kAppDelegate.audioPlayer.url.path] animated:YES completion:nil];
+        [self presentViewController:[AudioPlayerViewController viewControllerFromHamburgerWithFilepath:kAppDelegate.audioPlayer.url.path] animated:YES completion:nil];
     }
 }
 
